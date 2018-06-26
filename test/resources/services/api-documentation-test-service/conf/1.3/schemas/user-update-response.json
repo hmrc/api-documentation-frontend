@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "User update",
+  "type": "object",
+  "properties": {
+    "message": {
+      "description": "A message",
+      "type": "string",
+      "example": "User updated"
+    }
+  }
+}

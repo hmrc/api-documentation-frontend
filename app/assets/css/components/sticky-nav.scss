@@ -1,0 +1,101 @@
+/* .side-nav overrides till get changes in to frontend-assets */
+
+// Override original styles
+.side-nav__list--selected,
+.side-nav__list--selected:hover {
+  a.side-nav__link {
+    color: #2e8aca;
+
+    &:visited {
+      color: #4c2c92;
+    }
+
+    background-color: white;
+  }
+}
+
+// Re-implement restricting to immediate children
+.side-nav__list--selected,
+.side-nav__list--selected:hover {
+  > .side-nav__link {
+    color: white !important;
+    background-color: #005ea5 !important;
+  }
+}
+
+// Submenu styles
+ul.fixed-navigation__sub-list {
+  display: block;
+  border-left: 4px solid #bfc1c3;
+
+  > li.side-nav__list {
+    a:hover {
+      color: #2e8aca;
+      background-color: #dee0e2 !important;
+    }
+
+    &.side-nav__list--selected {
+      a:hover {
+        color: white !important;
+        background-color: #005ea5 !important;
+      }
+    }
+  }
+}
+
+// Hide sub-navs of NOT selected menu items
+.js-enabled .side-nav__list:not(.side-nav__list--selected) {
+  ul.fixed-navigation__sub-list {
+    display: none;
+  }
+}
+
+// Nav link styling
+.side-nav__link {
+  display: block;
+  position: relative;
+  border-radius: 0;
+  margin-bottom: 5px;
+
+  &:focus {
+    background-color: white;
+    outline: none;
+  }
+}
+
+.affix {
+    top: 20px;
+    width: 240px;
+    position: fixed;
+}
+
+.affix-bottom {
+    position: absolute;
+    bottom: 0px;
+}
+
+.sticky-nav__wrapper {
+  position: relative;
+  margin-top: 1.2em;
+}
+
+@media screen and (min-width: 0px) and (max-width: 640px) {
+  #fixed-navigation {
+    display: none;
+  }
+
+  .indent {
+    border-left-width: 1px;
+  }
+}
+
+// APIS-1127 - iOS touch scroll jittery fixed elements fix
+.side-nav__component {
+  background-color: white;
+  transform: translate3d(0px, 0px, 0px) translateZ(0);
+}
+
+// APIS-1198 - fix menu resize isssue, hide chevrons for in-page nav
+.side-nav__link.side-nav__link--in-page:after {
+    content: "";
+}

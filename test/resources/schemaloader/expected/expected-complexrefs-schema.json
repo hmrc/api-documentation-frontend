@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Business name",
+      "type": "string"
+    },
+    "components": {
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "Description of the activities of the business",
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "patternProperties": {
+    "^(/[^/]+)+$": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Business name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the activities of the business",
+          "type": "string"
+        }
+      }
+    }
+  }
+}
+

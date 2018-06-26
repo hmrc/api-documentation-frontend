@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "definitions": {
+        "tool": {
+            "description": "Describes a tool",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "$ref": "../externaltypes-schema.json#/definitions/description"
+                },
+                "components": {
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "description": {
+                                "$ref": "../externaltypes-schema.json#/definitions/description"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

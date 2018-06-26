@@ -1,0 +1,18 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "title" : "first post",
+    "description": "first post description",
+    "body": "first post body",
+    "createdBy": "user id",
+    "createdAt": "2016-10-07T12:15:43.511Z"
+  },
+  {
+    "id": "44665500-e29b-41d4-a716-550e84440000",
+    "title" : "second post",
+    "description": "second post description",
+    "body": "second post body",
+    "createdBy": "user id",
+    "createdAt": "2016-10-07T13:45:33.511Z"
+  }
+]

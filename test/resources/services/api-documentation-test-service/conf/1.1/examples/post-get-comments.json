@@ -1,0 +1,21 @@
+{
+  "id": "44665500-e29b-41d4-a716-550e84440000",
+  "postId": "550e8400-e29b-41d4-a716-446655440000",
+  "comments": [{
+    "comment": "I have something important to say about this",
+    "createdBy": "user1",
+    "createdAt": "2016-10-07T11:30:43.511Z"
+  }, {
+    "comment": "yes, well, I disagree wholeheartedly!",
+    "createdBy": "user2",
+    "createdAt": "2016-10-07T11:45:43.511Z"
+  }, {
+    "comment": "hmm well I disagree with your disagreement!",
+    "createdBy": "user3",
+    "createdAt": "2016-10-07T12:15:43.511Z"
+  }, {
+    "comment": "you sir are worse than hitler! I bid you good day!",
+    "createdBy": "user1",
+    "createdAt": "2016-10-07T12:16:43.511Z"
+  }]
+}

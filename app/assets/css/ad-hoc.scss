@@ -1,0 +1,178 @@
+// API Version drop down box - to be fixed
+#content {
+  position: relative;
+}
+
+.form-control-version {
+  font-size: 16px;
+  width: 90%;
+  margin: 0.333em 0 0 10%;
+}
+
+@media screen and (min-width: 0px) and (max-width: 640px) {
+  .form-control-version {
+    width: 100%;
+    margin: 0.333em 0;
+  }
+}
+
+
+
+// APIS-1076 - Temporary vertical alignment for Sandbox tables.
+.sandbox-data {
+  td {
+    vertical-align: top
+  }
+}
+
+
+
+// APIS-1079 - Add margin to bottom of bullets.
+.bullets + p {
+  margin-top: 1.2em;
+}
+
+
+
+// APIS-1066 - Override javascript added class hiding top mobile menu toggle
+.js .js-header-toggle.menu.js-hidden {
+  display: block !important;
+}
+
+
+.header__menu .header__menu__proposition-links {
+    float: none;
+}
+
+
+.header__menu__proposition-links {
+    margin-top: -2.2em;
+    .link-style {
+        color: #005ea5;
+        font-weight: normal;
+        text-decoration: underline;
+    }
+}
+
+.beta-banner .phase-tag {
+    background-color: #005ea5;
+}
+
+
+.header__menu__proposition--sub-header {
+    display: none;
+}
+
+
+@media (min-width: 769px) {
+  #global-header .header-proposition #proposition-links li {
+    float: left;
+    display: block;
+    width: auto;
+    padding: 0 15px 0 0;
+    border-bottom: 0;
+  }
+  #global-header .header-proposition #proposition-links li.desktop-only {
+    display: none;
+  }
+  #global-header .header-proposition #proposition-links li.clear-child {
+    clear: left;
+  }
+}
+
+@media (min-width: 801px) {
+  .header__menu__proposition--sub-header {
+      display: block;
+  }
+}
+
+// Put navigation inline
+@media (max-width: 640px) {
+.page-nav__item {
+    width: 50%;
+}
+
+.page-nav__link--previous {
+  padding: rem(14) 0 rem(14) rem(48);
+}
+
+.page-nav__link--next {
+  padding: rem(14) rem(48) rem(14) 0;
+}
+}
+
+// pagination
+.pagination {
+  border-top: 1px solid #bfc1c3;
+  border-bottom: none;
+  display: block;
+  margin: 2em 0 0;
+  padding-top: 20px;
+
+  li.previous {
+    float: left;
+    text-align: left;
+  }
+
+  li.next {
+    float: right;
+    text-align: right;
+  }
+}
+
+.fraud-header-name-col {
+  width: 40%;
+}
+
+.fraud-header-description-col {
+  width: 60%;
+}
+
+ol.connection-method-list {
+  list-style-type: upper-alpha;
+}
+
+// APIS-3257
+tbody {
+    vertical-align: top;
+}
+td {
+    vertical-align: baseline;
+}
+
+pre, code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.list-letter-lower {
+    list-style-type: lower-alpha;
+    padding-left: 20px;
+}
+
+.list-letter-upper {
+    list-style-type: upper-alpha;
+    padding-left: 20px;
+}
+
+// Show side navigation on monile phone - discuss with Rory about a better solution to this, a sub navigation responsive menu
+.side-nav {
+  display: block;
+}
+
+// remove arrows as they work poorly on a screenreader
+.side-nav__link:after {
+  content: "";
+}
+
+// Remove sub navigation right border on a mobile phone
+.side-nav {
+  border-right: none;
+}
+
+// Add sub navigation right border back in for desktop application. uses breakpoint defined in GOV UK frontend toolkit.
+@media(min-width: 769px) {
+  .side-nav {
+    border-right: 1px solid #bfc1c3;
+  }
+}

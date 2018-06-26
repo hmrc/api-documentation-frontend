@@ -1,0 +1,46 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.partials.HtmlPartial
+@import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.models._
+@import include._
+@import uk.gov.hmrc.urls.Link
+
+@(pageAttributes: PageAttributes, termsOfUsePartial: HtmlPartial)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+
+@failedToLoadTermsOfUse = {
+<div class="panel panel-border-wide">
+    <p>
+        The current Terms of Use could not be loaded.
+        Please <a href="@controllers.routes.DocumentationController.termsOfUsePage">try again</a> later.
+    </p>
+</div>
+}
+
+@apiMain(pageAttributes){
+    <header class="page-header">
+        <h1 class="flush--top">Terms of use</h1>
+    </header>
+
+    @termsOfUsePartial.successfulContentOrElse(failedToLoadTermsOfUse)
+
+    <div class="panel panel-border-wide">
+        <p>To agree to the terms of use for each of your applications, you must
+            <a href="@{applicationConfig.developerFrontendUrl}/developer/login">sign in</a> to your account.</p>
+    </div>
+}

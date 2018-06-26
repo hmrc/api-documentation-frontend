@@ -1,0 +1,28 @@
+.sandbox {
+    #global-header-bar,
+    .service-info,
+    .section--branded h2 {
+        border-color: #28A197;
+    }
+
+    .hero {
+        background-color: #28A197;
+    }
+    a.hero-button,
+    a.hero-button:link,
+    a.hero-button:visited {
+        color: #28A197;
+        background-image: none;
+        padding: .526315em .789473em .263157em;
+        -webkit-box-shadow: 0 2px 0 #1e7871;
+        -moz-box-shadow: 0 2px 0 #1e7871;
+        box-shadow: 0 2px 0 #1e7871;
+    }
+    @media only screen and (-webkit-min-device-pixel-ratio: 2), not all, only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+        a.hero-button {
+            background-image: none;
+        }
+    }
+
+
+}

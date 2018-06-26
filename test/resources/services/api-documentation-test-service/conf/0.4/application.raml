@@ -1,0 +1,15 @@
+#%RAML 1.0
+---
+title: Developer Forum
+version: 0.4
+
+protocols: [ HTTPS ]
+baseUri: https://api-documentation-test-service.hmrc.gov.uk/
+
+documentation:
+ - title: Overview
+   content: !include docs/overview.md
+ - title: Versioning
+   content: We use versions.
+
+mediaType: application/hal+json

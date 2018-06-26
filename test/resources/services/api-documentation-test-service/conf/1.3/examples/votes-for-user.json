@@ -1,0 +1,21 @@
+{
+  "userId": "user1",
+  "totalUp": 3,
+  "totalDown": 2,
+  "votes": [{
+    "postId": "375e3879-4259-4adb-9a91-926d92a0dc0a",
+    "up": true
+  }, {
+    "postId": "0b5af6b5-f784-4144-b2e9-37d570916e48",
+    "up": false
+  }, {
+    "postId": "8dcec218-56e9-4d54-be3c-ad5a554b6a1e",
+    "up": false
+  }, {
+    "postId": "0b1241d7-0444-4ec1-aaeb-2cee1ac25694",
+    "up": true
+  }, {
+    "postId": "5f0e7157-abd3-49c5-97fa-4948c3587b77",
+    "up": true
+  }]
+}

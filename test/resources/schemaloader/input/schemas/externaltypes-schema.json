@@ -1,0 +1,10 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "definitions": {
+        "description": {
+            "description": "Description of the activities of the business",
+            "type": "string"
+        }
+    }
+}
+

@@ -1,0 +1,76 @@
+#%RAML 1.0
+---
+title: Hello World
+version: 1.0
+
+protocols: [ HTTPS ]
+baseUri: https://helloworld.service.hmrc.gov.uk/
+
+documentation:
+ - title: Overview
+   content: !include docs/overview.md
+ - title: Versioning
+   content: !https://developer.service.hmrc.gov.uk/api-documentation/assets/common/docs/versioning.md
+ - title: Errors
+   content: !https://developer.service.hmrc.gov.uk/api-documentation/assets/common/docs/errors.md
+
+mediaType: application/hal+json
+
+uses:
+  sec: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/securitySchemes.raml
+  headers: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/headers.raml
+  annotations: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/annotations.raml
+  types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
+
+/hello:
+  /world:
+    get:
+      displayName: Say hello world
+      description: |
+        A simple example for integrating with an unrestricted service.
+
+        Any request to this endpoint initiates a 'Hello World' response.
+      is: [headers.acceptHeader]
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "message" : "Hello World"
+                }
+  /user:
+    get:
+      displayName: Say hello user
+      description: |
+        A simple example for integrating with a user-restricted service, using a OAuth 2.0 `access_token`.
+
+        Any authorised request to this endpoint initiates a 'Hello User' response.
+      is: [headers.acceptHeader]
+      (annotations.scope): "hello"
+      securedBy: [ sec.oauth_2_0: { scopes: [ "hello" ] } ]
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Hello User"
+                }
+  /application:
+    get:
+      displayName: Say hello application
+      description: |
+        A simple example for integrating with an application-restricted service, using your `server_token`.
+
+        Any authorised request to this endpoint initiates a 'Hello Application' response.
+      is: [headers.acceptHeader]
+      securedBy: [ sec.x-application ]
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Hello Application"
+                }

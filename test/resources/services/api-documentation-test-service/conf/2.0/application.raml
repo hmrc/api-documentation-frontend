@@ -1,0 +1,98 @@
+#%RAML 1.0
+---
+title: Developer Forum
+version: 2.0
+
+protocols: [ HTTPS ]
+baseUri: https://api-documentation-test-service.hmrc.gov.uk/
+
+documentation:
+ - title: Overview
+   content: !include docs/overview.md
+ - title: Versioning
+   content: We use versions.
+
+mediaType: application/xml
+
+uses:
+  sec: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/securitySchemes.raml
+  annotations: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/annotations.raml
+  types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
+
+types:
+  userIdType:
+    pattern: "^[A-Z]{3}-\\d{3}-[A-D]{3}$"
+
+/users:
+  (annotations.group):
+    name: Users
+    description: Manage forum users
+  post:
+    displayName: Create user
+    description: Create a new user
+    headers:
+      Location:
+        example: /users/{id}
+        description: Location of the created users
+        required: false
+    body:
+      application/xml:
+        example: !include examples/user-create.xml
+    responses:
+      201:
+  /{id}:
+    uriParameters:
+      id:
+        type: userIdType
+        description: The user's ID
+    get:
+      displayName: Get user
+      description: Get user details for the given ID
+      responses:
+        200:
+          body:
+            application/xml:
+              example: !include examples/user-get.xml
+        404:
+          body:
+            application/json:
+              description: User not found
+              example: |
+                {
+                  "code": NOT_FOUND,
+                  "message": "User not found"
+                }
+/returns:
+  (annotations.group):
+    name: Tax returns
+    description: Manage tax returns
+  get:
+    displayName: List returns by tax year
+    description:
+    queryParameters:
+      taxYearStart:
+        description: Starting tax year to list returns for
+        type: types.taxYear
+        example: 2014-15
+      taxYearEnd:
+        description: Ending tax year to list returns for
+        type: types.taxYear
+    responses:
+      200:
+  /{taxYear}:
+    uriParameters:
+      taxYear:
+        description: Tax year to get a return for
+        type: types.taxYear
+        example: 2014-15
+    get:
+      displayName: Get tax return
+      description: Get tax return for the given tax year
+      responses:
+        200:
+          body:
+            application/json:
+              type: !include schemas/get-tax-return-response.json
+              examples:
+                taxReturn:
+                  value: !include examples/get-tax-return-response.json

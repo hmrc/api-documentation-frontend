@@ -1,0 +1,21 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "user name",
+  "displayName": "display name",
+  "email": "user@example.com",
+  "profile": {
+    "active": true,
+    "failedLoginAttempts": 3,
+    "permissions": ["POST", "MODERATOR"],
+    "preferences": [
+      {
+        "name": "COLOUR",
+        "value": "RED"
+      },
+      {
+        "name": "ORIENTATION",
+        "value": "LANDSCAPE"
+      }
+    ]
+  }
+}

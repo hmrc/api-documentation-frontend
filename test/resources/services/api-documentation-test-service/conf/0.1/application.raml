@@ -1,0 +1,63 @@
+#%RAML 1.0
+---
+title: Developer Forum
+version: 0.1
+
+protocols: [ HTTPS ]
+baseUri: https://api-documentation-test-service.hmrc.gov.uk/
+
+documentation:
+ - title: Overview
+   content: !include docs/overview.md
+ - title: Versioning
+   content: We use versions.
+
+mediaType: application/hal+json
+
+uses:
+  sec: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/securitySchemes.raml
+
+annotationTypes:
+  config: object
+  group:
+    type: object
+    properties:
+      name: string
+      description: string
+
+/posts:
+  (group):
+    name: Posts
+    description: Manage forum posts
+  get:
+    description: get all the posts
+    body:
+      application/json:
+        example: !include examples/post-get-all.json
+  post:
+    description: create a new post
+    body:
+      application/json:
+        example: !include examples/post-create-req.json
+  put:
+    description: update a post
+    body:
+      application/json:
+        example: !include examples/post-update.json
+    responses:
+      200:
+        body:
+          application/json:
+            example: { "message": "Post updated" }
+      500:
+        body:
+          application/json:
+            example: { "message": "An error occurred, please try again" }
+  /{id}:
+    get:
+      description: get the specific post by id
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/post-create.json

@@ -1,0 +1,133 @@
+{
+  "apiDefinition": {
+    "serviceName": "api-example-microservice",
+    "serviceBaseUrl": "http://localhost:11111/microservice/api-example-microservice",
+    "name": "Hello World",
+    "description": "A 'hello world' example of an API on the HMRC Developer Hub.",
+    "context": "hello",
+    "versions": [
+      {
+        "version": "0.1",
+        "status": "RETIRED",
+        "endpoints": [
+          {
+            "uriPattern": "/world",
+            "endpointName": "Say Hello World",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED"
+          }
+        ]
+      },
+      {
+        "version": "0.2",
+        "status": "DEPRECATED",
+        "endpoints": [
+          {
+            "uriPattern": "/world",
+            "endpointName": "Say Hello World",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED"
+          }
+        ]
+      },
+      {
+        "version": "0.3",
+        "status": "DEPRECATED",
+        "endpoints": [
+          {
+            "uriPattern": "/world",
+            "endpointName": "Say Hello World",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED"
+          }
+        ]
+      },
+      {
+        "version": "1.0",
+        "status": "STABLE",
+        "endpoints": [
+          {
+            "uriPattern": "/world",
+            "endpointName": "Say Hello World",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED"
+          },
+          {
+            "uriPattern": "/user",
+            "endpointName": "Say Hello User",
+            "method": "GET",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "hello"
+          },
+          {
+            "uriPattern": "/application",
+            "endpointName": "Say Hello Application",
+            "method": "GET",
+            "authType": "APPLICATION",
+            "throttlingTier": "UNLIMITED"
+          }
+        ]
+      },
+      {
+        "version": "1.2",
+        "status": "BETA",
+        "endpoints": [
+          {
+            "uriPattern": "/world",
+            "endpointName": "Say Hello World",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED"
+          },
+          {
+            "uriPattern": "/user",
+            "endpointName": "Say Hello User",
+            "method": "GET",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "hello"
+          },
+          {
+            "uriPattern": "/application",
+            "endpointName": "Say Hello Application",
+            "method": "GET",
+            "authType": "APPLICATION",
+            "throttlingTier": "UNLIMITED"
+          }
+        ]
+      }
+    ]
+  },
+  "versionAccess": {
+    "0.1": {
+      "privacy": "PUBLIC",
+      "loggedIn": true,
+      "authorised": true
+    },
+    "0.2": {
+      "privacy": "PUBLIC",
+      "loggedIn": true,
+      "authorised": true
+    },
+    "0.3": {
+      "privacy": "PUBLIC",
+      "loggedIn": true,
+      "authorised": true
+    },
+    "1.0": {
+      "privacy": "PUBLIC",
+      "loggedIn": true,
+      "authorised": true
+    },
+    "1.2": {
+      "privacy": "PUBLIC",
+      "loggedIn": true,
+      "authorised": true
+    }
+  }
+}

@@ -1,0 +1,179 @@
+
+/* API Specific (Semantically) */
+
+// fonts - as per helper classes of same name & size
+$font-xxsmall: 14px;
+$font-xsmall: 16px;
+
+// spacing
+$base-spacing--tiny: .5em;
+
+// colors as per gov uk elements naming
+$grey-1: #6f777b;
+$grey-3: #dee0e2;
+$grey-4: #f8f8f8;
+$light-blue: #2b8cc4;
+$mellow-red: #df3034;
+$turquoise: #28a197;
+$grass-green: #85994b;
+
+
+// content style fixes
+ul + section {
+    margin-top: 1.5em;
+}
+ul + p.alert, p.alert + ul {
+    margin-top: 1.5em;
+}
+
+pre + p {
+  margin-top: 1.5em;
+}
+
+
+section > h2 {
+   margin-top: 1.5em !important;
+}
+
+// api-list
+.api-list__row {
+  padding: 0.5em;
+}
+
+.api-list__version {
+  margin-top: 0.5em;
+}
+
+
+
+// api accordions
+.api-accordion__row {
+  background-color: white;
+  padding: 0.5em 0 0.5em;
+}
+
+.api-accordion__row--fixed {
+  background-color: rgba(255, 255, 255, 0.95);
+  position: fixed;
+  top: 0;
+  visibility: hidden;
+  border-bottom: solid 1px $grey-3;
+}
+
+
+
+// Enpoints
+.endpoint_group {
+  margin-bottom: 50px;
+
+  table {
+    width: 100%;
+    table-layout: fixed;
+    word-wrap: break-word;
+  }
+}
+
+.endpoint {
+  margin-bottom: 10px;
+}
+
+
+// verbs
+.http-verb {
+  color: white;
+  border-radius: 5px;
+  padding: 0.2em 0.5em 0.1em;
+  margin-bottom: 0.2em;
+  margin-left: 0.4em;
+  font-size: 16px;
+}
+
+.http-verb--get {
+  background-color: $light-blue;
+}
+
+.http-verb--delete {
+  background-color: $mellow-red;
+}
+
+.http-verb--put {
+  background-color: $turquoise;
+}
+
+.http-verb--post {
+  background-color: $grass-green;
+}
+
+// ///////////////////////
+// Styles that will become API assets that need to be used in transition
+// ///////////////////////
+
+// Responsive tables for error content
+@media (max-width: 640px) {
+
+  .error-table {
+
+    th {
+      display: none;
+    }
+
+    tr {
+
+      display: flex;
+      flex-direction: column;;
+
+      td.description {
+        order: 2;
+        display: block;
+        width: 100%;
+      }
+
+      td.message {
+        order:1;
+        display: block;
+        width: 100%;
+        border-bottom: none;
+      }
+    }
+  }
+
+  .common-data-types {
+
+      th {
+        display: none;
+      }
+
+      tbody tr {
+        display: block;
+        border-bottom: 1px solid #bfc1c3;
+        padding: 0.5em 0;
+        &:last-child {
+          border: none;
+        }
+
+        td:before {
+          content: attr(data-heading);
+          font-weight: bold;
+          padding-bottom: 0.25em;
+          width: 6.5em;
+          white-space: nowrap;
+          display: block;
+        }
+
+        td {
+          border: none;
+          display: block;
+          padding: .5em 0;
+        }
+
+      }
+
+  }
+
+}
+
+
+
+
+
+

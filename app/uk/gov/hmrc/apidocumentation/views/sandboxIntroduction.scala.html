@@ -1,0 +1,63 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.models._
+@import include._
+
+@(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+
+@apiMain(pageAttributes) {
+    <h1 class="flush--top api_title heading-xlarge">Using the Sandbox</h1>
+
+    <nav role="navigation" aria-labelledby="usingTheSandbox" class="divider--bottom two-col-list full-width">
+        <div class="two-col-list__col two-col-list__col--left">
+            <ul class="two-col-list--padded">
+                <li>Introduction</li>
+                <li><a href="getting-started">Getting started</a></li>
+               </ul>
+        </div>
+
+        <div class="two-col-list__col two-col-list__col--right">
+            <ul class="two-col-list--padded">
+                <li><a href="stateful-behaviour">Stateful behaviour</a></li>
+                <li><a href="data-cleardown">Data clear down</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="section divider--bottom">
+        <h2 id="intro" class="heading-large">Introduction</h2>
+        <p>
+            The HMRC Developer Sandbox is a testing service that functions as a simulator of our
+            production environment. It allows integration testing of your application
+            with our APIs without affecting the production environment.
+        </p>
+        <h2 id="readmore" class="heading-medium">Read More</h2>
+        <p>Find out <a href="https://test-developer.service.hmrc.gov.uk/api-documentation/docs/api">which APIs are available</a>.</p>
+        <p>Familiarise yourself with <a href="https://test-developer.service.hmrc.gov.uk/api-documentation/docs/authorisation">authorisation</a>, especially the OAuth2.0 specification.</p>
+
+
+    </div>
+
+    <div class="page-nav">
+        <a class="page-nav__link page-nav__link--next"
+            title="Navigate to next part" rel="next" href="getting-started">
+        <span class="page-nav__label">Next</span>
+        <span class="page-nav__title">Getting started</span>
+        </a>
+    </div>
+}

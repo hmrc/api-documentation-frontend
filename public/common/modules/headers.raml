@@ -1,0 +1,20 @@
+#%RAML 1.0 Library
+
+usage: Collection of common headers
+
+traits:
+  acceptHeader:
+    headers:
+      Accept:
+        description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+        type: string
+        required: true
+        example: application/vnd.hmrc.1.0+json
+
+  contentHeader:
+    headers:
+      Content-Type:
+        description: Specifies the format of the request body, which must be JSON.
+        type: string
+        required: true
+        example: application/json

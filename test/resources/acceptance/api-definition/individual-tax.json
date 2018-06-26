@@ -1,0 +1,23 @@
+{
+  "serviceName": "individual-tax",
+  "serviceBaseUrl": "http://individual-tax.api",
+  "name": "Individual Tax",
+  "description": "The Individual Tax API provides tax–based services, such as retrieval of annual personal and employment-related tax liabilities and refunds.",
+  "context": "individual-tax",
+  "versions": [
+    {
+      "version": "1.0",
+      "status": "STABLE",
+      "endpoints": [
+        {
+          "uriPattern": "/sa/{utr}/annual-summary/{taxYear}",
+          "endpointName": "Fetch Annual Tax Summary",
+          "method": "GET",
+          "authType": "USER",
+          "throttlingTier": "UNLIMITED",
+          "scope": "read:individual-tax"
+        }
+      ]
+    }
+  ]
+}

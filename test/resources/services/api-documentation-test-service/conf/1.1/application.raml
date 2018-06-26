@@ -1,0 +1,228 @@
+#%RAML 1.0
+---
+title: Developer Forum
+version: 1.1
+
+protocols: [ HTTPS ]
+baseUri: https://api-documentation-test-service.hmrc.gov.uk/
+
+documentation:
+ - title: Overview
+   content: !include docs/overview.md
+ - title: Versioning
+   content: We use versions.
+
+mediaType: application/hal+json
+
+uses:
+  sec: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/securitySchemes.raml
+  headers: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/headers.raml
+
+
+annotationTypes:
+  config: object
+  group:
+    type: object
+    properties:
+      name: string
+      description: string
+  fieldOptionalityUnknown: nil
+
+traits:
+  commonHeaders:
+    headers:
+      Accept:
+        description: API version
+        type: string
+        required: true
+        example: application/vnd.hmrc.1.0+json
+
+(fieldOptionalityUnknown):
+
+/users:
+  (group):
+    name: Users
+    description: Manage forum users
+  post:
+    description: create user
+    is: [headers.acceptHeader]
+    body:
+      application/json:
+        example: !include examples/user-create.json
+    responses:
+      200:
+        description: User created
+      500:
+        description: Failed to create user
+  put:
+    description: update the user details
+    is: [headers.acceptHeader]
+    body:
+      application/json:
+        schema: !include schemas/user-update-request.json
+        example: !include examples/user-update.json
+    responses:
+      201:
+        headers:
+          Location:
+            example: /users/{id}
+            description: Provides information about the location of a newly created resource. In this circumstance, the Location header should be sent with an HTTP status code of 201 or 202.
+          Content-Type:
+            example: text/html; charset=utf-8
+            description: The MIME type of this content
+        body:
+          application/json:
+            schema: !include schemas/user-update-response.json
+            example: { "message": "User updated" }
+      404:
+        headers:
+          Content-Security-Policy:
+            example: "default-src 'self' 'unsafe-inline' www.google-analytics.com data:"
+            description: Content Security Policy definition.
+        body:
+          application/json:
+            example: { "message": "User not found" }
+  /{id}:
+    get:
+      description: Get user details for the given id
+      is: [headers.acceptHeader]
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/user-get.json
+        404:
+          body:
+            application/json:
+              example: { "message": "User not found" }
+    delete:
+      description: delete the given user
+      is: [headers.acceptHeader]
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                { "message": "user deleted" }
+        404:
+          body:
+            application/json:
+              example: |
+                { "message": "unknown user" }
+
+/posts:
+  (group):
+    name: Posts
+    description: Manage forum posts
+  post:
+    description: create a new post
+    is: [headers.acceptHeader]
+    body:
+      application/json:
+        example: !include examples/post-create-req.json
+  put:
+    description: update a post
+    is: [headers.acceptHeader]
+    body:
+      application/json:
+        example: !include examples/post-update.json
+    responses:
+      200:
+        body:
+          application/json:
+            example: { "message": "Post updated" }
+      500:
+        body:
+          application/json:
+            example: { "message": "An error occurred, please try again" }
+  /{id}:
+    get:
+      description: get the specific post by id
+      is: [headers.acceptHeader]
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/post-create.json
+  /today:
+    get:
+      description: return all the posts for today
+      is: [headers.acceptHeader]
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/post-get-today.json
+  /week:
+    get:
+      description: return all the posts for the week
+      is: [headers.acceptHeader]
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/post-get-week.json
+  /user/{userId}:
+    get:
+      description: Get all the posts for a user
+      is: [headers.acceptHeader]
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/post-get-user.json
+        404:
+          body:
+            application/json:
+              example: { "message": "User has no posts" }
+
+/comments:
+  (group):
+    name: Comments
+    description: Manage forum comments
+  post:
+    description: post a new comment
+    is: [headers.acceptHeader]
+    body:
+      application/json:
+        example: !include examples/comment-create.json
+  put:
+    description: update a comment
+    is: [headers.acceptHeader]
+    body:
+      application/json:
+        example: !include examples/comment-update.json
+  /{postId}:
+    get:
+      description: get all the comments for a post
+      is: [headers.acceptHeader]
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/post-get-comments.json
+        404:
+          body:
+            application/json:
+              example: { "message": "Be the first to comment!" }
+    /{commentId}:
+      get:
+        description: get all revisions of a comment
+        is: [headers.acceptHeader]
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/comment-get.json
+      delete:
+        description: delete a comment from a post
+        is: [headers.acceptHeader]
+        responses:
+          200:
+            body:
+              application/json:
+                example: { "message": "Comment deleted" }
+          404:
+            body:
+              application/json:
+                example: { "message": "Comment not found to delete" }

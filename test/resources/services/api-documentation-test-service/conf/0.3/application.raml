@@ -1,0 +1,121 @@
+#%RAML 1.0
+---
+title: Developer Forum
+version: 0.3
+
+protocols: [ HTTPS ]
+baseUri: https://api-documentation-test-service.hmrc.gov.uk/
+
+documentation:
+ - title: Overview
+   content: !include docs/overview.md
+ - title: Versioning
+   content: We use versions.
+
+mediaType: application/hal+json
+
+annotationTypes:
+  config: object
+  group:
+    type: object
+    properties:
+      name: string
+      description: string
+
+/users:
+  (group):
+    name: Users
+    description: Manage forum users
+  post:
+    description: create user
+    body:
+      application/json:
+        example: !include examples/user-create.json
+    responses:
+      200:
+        description: User created
+      500:
+        description: Failed to create user
+  put:
+    description: update the user details
+    body:
+      application/json:
+        example: !include examples/user-update.json
+    responses:
+      200:
+        body:
+          application/json:
+            example: { "message": "User updated" }
+      404:
+        body:
+          application/json:
+            example: { "message": "User not found" }
+  /{id}:
+    get:
+      description: Get user details for the given id
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/user-get.json
+        404:
+          body:
+            application/json:
+              example: { "message": "User not found" }
+    delete:
+      description: delete the given user
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                { "message": "user deleted" }
+        404:
+          body:
+            application/json:
+              example: |
+                { "message": "unknown user" }
+
+/posts:
+  (group):
+    name: Posts
+    description: Manage forum posts
+  post:
+    description: create a new post
+    body:
+      application/json:
+        example: !include examples/post-create-req.json
+  put:
+    description: update a post
+    body:
+      application/json:
+        example: !include examples/post-update.json
+    responses:
+      200:
+        body:
+          application/json:
+            example: { "message": "Post updated" }
+      500:
+        body:
+          application/json:
+            example: { "message": "An error occurred, please try again" }
+  /{id}:
+    get:
+      description: get the specific post by id
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/post-create.json
+  /user/{userId}:
+    get:
+      description: Get all the posts for a user
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/post-get-user.json
+        404:
+          body:
+            application/json:
+              example: { "message": "User has no posts" }

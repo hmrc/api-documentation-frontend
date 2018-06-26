@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "type": "object",
+    "properties": {
+        "name": {
+            "description": "Business name",
+            "type": "string"
+        },
+        "components": {
+            "$ref": "complex/complextypes-schema.json#/definitions/tool/components"
+        }
+    },
+    "patternProperties": {
+        "^(/[^/]+)+$": {
+            "$ref": "norefs-schema.json"
+        }
+    }
+}
+

@@ -1,0 +1,24 @@
+
+/* New */
+
+// Border helpers
+.border__top-bottom {
+  border-top: 1px solid #bfc1c3;
+  border-bottom: 1px solid #bfc1c3;
+}
+
+.border__top-bottom + .border__top-bottom {
+  border-top: 0;
+}
+
+.border__top-bottom--open:first-of-type {
+  border-top: 0;
+}
+
+.border__top-bottom--open:last-of-type {
+  border-bottom: 0;
+}
+
+.border--light-grey {
+  border-color: #dee0e2;
+}

@@ -1,0 +1,69 @@
+{
+  "serviceName": "individual-employment",
+  "serviceBaseUrl": "http://individual-employment.api",
+  "name": "Individual Employment",
+  "description": "The Individual Employment API provides employment–based services, such as the retrieval of employment history.",
+  "context": "individual-employment",
+  "versions": [
+    {
+      "version": "1.0",
+      "status": "STABLE",
+      "endpoints": [
+        {
+          "uriPattern": "/sa/{utr}",
+          "endpointName": "Fetch Employment History 1.0",
+          "method": "GET",
+          "authType": "USER",
+          "throttlingTier": "UNLIMITED",
+          "scope": "read:individual-employment",
+          "queryParameters": [
+            {
+              "name": "taxYear",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2.0",
+      "status": "BETA",
+      "endpoints": [
+        {
+          "uriPattern": "/sa/{utr}",
+          "endpointName": "Fetch Employment History 2.0",
+          "method": "GET",
+          "authType": "USER",
+          "throttlingTier": "UNLIMITED",
+          "scope": "read:individual-employment",
+          "queryParameters": [
+            {
+              "name": "taxYear",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.5",
+      "status": "DEPRECATED",
+      "endpoints": [
+        {
+          "uriPattern": "/sa/{utr}",
+          "endpointName": "Fetch Employment History 0.5",
+          "method": "GET",
+          "authType": "USER",
+          "throttlingTier": "UNLIMITED",
+          "scope": "read:individual-employment",
+          "queryParameters": [
+            {
+              "name": "taxYear",
+              "required": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

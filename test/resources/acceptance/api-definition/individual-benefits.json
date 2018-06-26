@@ -1,0 +1,23 @@
+{
+  "serviceName": "individual-benefits",
+  "serviceBaseUrl": "http://individual-benefits.api",
+  "name": "Individual Benefits",
+  "description": "The Individual Benefits API provides benefit–based services, such as retrieval of benefits information.",
+  "context": "individual-benefits",
+  "versions": [
+    {
+      "version": "1.0",
+      "status": "BETA",
+      "endpoints": [
+        {
+          "uriPattern": "/sa/{utr}/annual-summary/{taxYear}",
+          "endpointName": "Fetch Annual Benefits Summary",
+          "method": "GET",
+          "authType": "USER",
+          "throttlingTier": "UNLIMITED",
+          "scope": "read:individual-benefits"
+        }
+      ]
+    }
+  ]
+}

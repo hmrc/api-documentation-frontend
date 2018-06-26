@@ -1,0 +1,21 @@
+
+/* New */
+
+// back to top
+.close-accordion,
+.back_to_top {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 2em;
+  text-align: right;
+}
+
+.close-accordion a[data-accordion-button] {
+  display: none;
+}
+
+.js-enabled {
+  .close-accordion a[data-accordion-button] {
+    display: inline;
+  }
+}
