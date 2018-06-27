@@ -34,7 +34,7 @@ $(function () {
   }
 
   function resizeMenu () {
-    $('ul.side-nav__component').css('width', $('.column-one-third').width());
+    $('ul.side-nav__component').css('width', $('.column-one-quarter').width());
   }
 
   function checkMenuActiveState (menuItems, scrollTop, atBottom) {
