@@ -19,6 +19,7 @@ package acceptance.uk.gov.hmrc.apidocumentation
 import java.util.logging.{Level, Logger}
 
 import cucumber.api.scala.{EN, ScalaDsl}
+import org.openqa.selenium
 import org.openqa.selenium._
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxProfile}
@@ -50,7 +51,7 @@ trait Env extends ScalaDsl with EN with Matchers {
     val driver: WebDriver = {
       val driver = new ChromeDriver()
       driver.manage().deleteAllCookies()
-      driver.manage().window().fullscreen()
+      driver.manage().window().setSize(new selenium.Dimension(1000, 1000))
       driver
     }
     driver

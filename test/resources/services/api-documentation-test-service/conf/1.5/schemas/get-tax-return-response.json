@@ -5,11 +5,11 @@
   "properties": {
     "taxYear": {
       "description": "The tax year that the return applies to",
-      "$ref": "https://developer.service.hmrc.gov.uk/api-documentation/assets/common/schemas/tax-year.json"
+      "type": "string"
     },
     "submissionDate": {
       "description": "Date that the return was submitted",
-      "$ref": "https://developer.service.hmrc.gov.uk/api-documentation/assets/common/schemas/full-date.json"
+      "type": "string"
     }
   }
 }
