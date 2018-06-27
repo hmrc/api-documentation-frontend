@@ -176,3 +176,17 @@ pre, code {
     border-right: 1px solid #bfc1c3;
   }
 }
+
+@media (min-width: 641px) {
+    .column-three-quarters {
+        float: left;
+        width: 75%;
+    }
+}
+
+.column-three-quarters {
+    padding: 0 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}

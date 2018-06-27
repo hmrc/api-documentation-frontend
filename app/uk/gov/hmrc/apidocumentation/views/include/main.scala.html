@@ -123,11 +123,11 @@
 @getHelpForm = @{uiHelpers.reportAProblemLink(applicationConfig.reportAProblemPartialUrl, applicationConfig.reportAProblemNonJSUrl)}
 
 @contentWithLeftNav = {
-    <div class="column-one-third">
+    <div class="column-one-quarter">
         @leftNav.getOrElse(HtmlFormat.empty)
         &nbsp;
     </div>
-    <div class="column-two-thirds">
+    <div class="column-three-quarters">
         <div id="content">
             @mainContentHeader
             @mainContent
@@ -138,7 +138,7 @@
 }
 
 @content = {
-    <div class="@if(fullWidthContent) {column-full} else {column-two-thirds}">
+    <div class="@if(fullWidthContent) {column-full} else {column-three-quarters}">
         <div id="content">
             @mainContentHeader
             @mainContent
@@ -165,10 +165,10 @@
             <div class="grid-row">@serviceInfo</div>
             @breadcrumbs.map { breadcrumbs =>
                 <div class="grid-row">
-                    <div class="column-two-thirds">
+                    <div class="column-three-quarters">
                         @partials.breadcrumbs(breadcrumbs.crumbs)
                     </div>
-                    <div class="column-one-third">
+                    <div class="column-one-quarter">
                         @additionalTopContent.getOrElse(HtmlFormat.empty)
                     </div>
                 </div>
