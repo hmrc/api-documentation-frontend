@@ -16,10 +16,14 @@
 
 package acceptance.uk.gov.hmrc.apidocumentation
 
+import java.util.logging.{Level, Logger}
+
 import cucumber.api.scala.{EN, ScalaDsl}
 import org.openqa.selenium._
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxProfile}
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.remote.DesiredCapabilities
 import org.scalatest.Matchers
 
 import scala.util.Try
@@ -34,25 +38,31 @@ trait Env extends ScalaDsl with EN with Matchers {
     case "local" => host = s"http://localhost:$port"
   }
 
-  lazy val driver: WebDriver = createWebDriver
-  lazy val createWebDriver: WebDriver = {
-    val targetBrowser = System.getProperty("browser", "chrome-local").toLowerCase
-    targetBrowser match {
-      case "chrome-local" => createChromeDriver()
-      case "firefox-local" => createFirefoxDriver()
-      case _ => throw new IllegalArgumentException(s"target browser $targetBrowser not recognised")
+  val webDriverConfig = Option(System.getenv("test_driver")).getOrElse("firefox")
+  val driver = if (webDriverConfig == "firefox") {
+    val driver: WebDriver with HasCapabilities = {
+      val profile = new FirefoxProfile
+      profile.setAcceptUntrustedCertificates(true)
+      new FirefoxDriver(profile)
     }
-  }
-
-  def createChromeDriver(): WebDriver = {
-    val driver = new ChromeDriver()
     driver
-  }
-
-  def createFirefoxDriver(): WebDriver = {
-    val profile = new FirefoxProfile
-    profile.setAcceptUntrustedCertificates(true)
-    new FirefoxDriver(profile)
+  } else if (webDriverConfig == "chrome"){
+    val driver: WebDriver = {
+      val driver = new ChromeDriver()
+      driver.manage().deleteAllCookies()
+      driver.manage().window().fullscreen()
+      driver
+    }
+    driver
+  } else {
+    val driver: WebDriver = {
+      val capabilities = DesiredCapabilities.htmlUnit()
+      capabilities.setJavascriptEnabled(true)
+      Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF)
+      Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter").setLevel(Level.OFF)
+      new HtmlUnitDriver(capabilities)
+    }
+    driver
   }
 
   sys addShutdownHook {
