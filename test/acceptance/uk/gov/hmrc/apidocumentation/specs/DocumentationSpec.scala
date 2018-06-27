@@ -126,7 +126,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       on(APIDocumentationPage)
 
       When("I select to view the API  Documentation Test documentation")
-      Given apiDocumentationTestServiceIsDeployed("api-documentation-test-service", "1.0")
+      apiDocumentationTestServiceVersionsIsDeployed()
       APIDocumentationPage.selectAPIDocumentationTestService()
 
       And("I select version 'v1.5 (Beta)")

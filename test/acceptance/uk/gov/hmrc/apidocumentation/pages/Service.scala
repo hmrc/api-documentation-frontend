@@ -127,7 +127,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
         ("Resources", "4")
       )
     forAll(navigationItems) { (navigationLink: String, number: String) =>
-      val expectedCSSSelector = cssSelector("ul.side-nav__component.affix-top > li:nth-of-type(" + number + ") > a").element
+      val expectedCSSSelector = cssSelector("nav.side-nav > ul > li:nth-of-type(" + number + ") > a").element
       expectedCSSSelector.text shouldBe navigationLink
     }
   }
