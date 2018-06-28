@@ -20,14 +20,14 @@
 @(headers: Seq[TypeDeclaration], version: String, caption: String, required: String)
 
 @if(headers.nonEmpty) {
-    <section id="request-headers" class="section flush--bottom">
-        <h4 class="heading-small first">@caption</h4>
-        <table class="table--align-top">
-            <caption class="table__caption--low-vis">
-                <div class="visuallyhidden">@caption Table</div>
+    <section id="request-headers" class="section">
+        <h4 class="heading-small">@caption</h4>
+        <table>
+            <caption>
+                <div class="visually-hidden">@caption Table</div>
             </caption>
             <thead>
-                <tr class="table__row--desktop-heading">
+                <tr>
                     <th>Name</th>
                     <th>Value</th>
                     <th>Description</th>
@@ -35,24 +35,24 @@
             </thead>
             <tbody>
                 @for(header <- headers) {
-                <tr class="table__row--responsive">
-                    <td data-heading="Name" class="table__detail--responsive">
-                        <div class="table__cell-contents--responsive">
-                            <div class="parameter-name">@Val(header.displayName)</div>
+                <tr>
+                    <td data-heading="Name">
+                        <div>
+                            <div class="font-small">@Val(header.displayName)</div>
                             @if(header.required) {
-                                <div class="parameter-required">required</div>
+                                <div class="font-xsmall orange-text">required</div>
                             } else {
-                                <div class="parameter-optional">optional</div>
+                                <div class="font-xsmall secondary-text">optional</div>
                             }
                         </div>
                     </td>
-                    <td data-heading="Value" class="table__detail--responsive">
-                        <div class="table__cell-contents--responsive">
+                    <td data-heading="Value">
+                        <div>
                             <p>@HeaderVal(header, version)</p>
                         </div>
                     </td>
-                    <td data-heading="Description" class="table__detail--responsive">
-                        <div class="table__cell-contents--responsive">
+                    <td data-heading="Description">
+                        <div>
                             @Markdown(header.description)
                         </div>
                     </td>

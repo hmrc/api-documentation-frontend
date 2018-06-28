@@ -30,9 +30,9 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   def breadCrumbText = cssSelector(".breadcrumb-nav").element.text
 
-  def errorsBackToTop = find(cssSelector("div.back_to_top.font-xsmall > a")).get
+  def errorsBackToTop = find(cssSelector("div.bold-small > a")).get
 
-  def resourcesBackToTop = find(cssSelector("#section > div.back_to_top > a")).get
+  def resourcesBackToTop = find(cssSelector("#section > div.bold-small > a")).get
 
   def applicationName = className("header__menu__proposition-name").element.text
 
@@ -56,7 +56,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
       val element = cssSelector(s"${ID}_get_accordion > div.persist-area > div:nth-of-type(1) > div.accordion__row__right.align--middle > a > span.http-verb.http-verb--get.float--right").webElement
       val act = new Actions(webDriver)
       act.moveToElement(element).click().perform()
-      find(cssSelector(s"$id-get > section:nth-of-type(1) > h4.first")).get.isDisplayed
+      find(cssSelector(s"$id-get > section:nth-of-type(1) > h4")).get.isDisplayed
       act.moveToElement(element).click().perform()
     }
   }
@@ -168,7 +168,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
 
   override def isCurrentPage: Boolean = find(className("page-header")).fold(false)(_.text == "Developer Forum API")
 
-  def LocationFieldOptional = find(cssSelector("div.parameter-optional")).get
+  def LocationFieldOptional = find(cssSelector("div.font-xsmall.secondary-text")).get
 
 
   def checkVersionSortOrder(): Unit = {

@@ -22,58 +22,56 @@
 
 @(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion])(implicit applicationConfig: ApplicationConfig)
 
-<div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="browse-panes section hard--top" aria-busy="false">
-    <div class="pane with-sort" id="section">
-        <div class="pane-inner">
-            <h1 id="title" class="heading-xlarge flush--top">
-		        @Val(raml.title) API
-            </h1>
+<div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section" aria-busy="false">
+    <div id="section">
+        <h1 id="title" class="heading-xlarge">
+            @Val(raml.title) API
+        </h1>
 
-            @for(version <- maybeVersion) {
-                <table>
-                    <col width="50%" />
-                    <col width="50%" />
-                    <tr><th><span class="bold-small">Version</span></th><td>@version.version</td></tr>
-                    <tr><th><span class="bold-small">Status</span></th><td>@version.displayedStatus</td></tr>
-                    @if(applicationConfig.showSandboxAvailability) {
-                    <tr><th><span class="bold-small">Available in Sandbox</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
-                    }
-                    @if(applicationConfig.showProductionAvailability) {
-                    <tr><th><span class="bold-small">Available in Production</span></th><td>@EndpointsAvailable(version.productionAvailability)</td></tr>
-                    }
-                </table>
-            }
+        @for(version <- maybeVersion) {
+            <table>
+                <col width="50%" />
+                <col width="50%" />
+                <tr><th><span class="bold-small">Version</span></th><td>@version.version</td></tr>
+                <tr><th><span class="bold-small">Status</span></th><td>@version.displayedStatus</td></tr>
+                @if(applicationConfig.showSandboxAvailability) {
+                <tr><th><span class="bold-small">Available in Sandbox</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
+                }
+                @if(applicationConfig.showProductionAvailability) {
+                <tr><th><span class="bold-small">Available in Production</span></th><td>@EndpointsAvailable(version.productionAvailability)</td></tr>
+                }
+            </table>
+        }
 
-            @for(doc <- raml.documentation){
-                <div class="section">
-                    <h2 id="@Slugify(doc.title)" class="heading-large">
-                      @Val(doc.title)
-                    </h2>
-
-                    <div>
-                      @Markdown(doc.content)
-                    </div>
-
-                </div>
-            }
-            <div class="back_to_top font-xsmall">
-                <a href="#">
-                    Back to top
-                </a>
-            </div>
-
+        @for(doc <- raml.documentation){
             <div class="section">
-                <h2 id="resources" class="heading-large">
-                    Resources
+                <h2 id="@Slugify(doc.title)" class="heading-large">
+                  @Val(doc.title)
                 </h2>
 
-                @for(resourceGroup <- GroupedResources(raml.resources)) {
-                    @resource_group(resourceGroup, raml, schemas)
-                }
+                <div>
+                  @Markdown(doc.content)
+                </div>
+
             </div>
+        }
+        <div class="bold-small">
+            <a href="#">
+                Back to top
+            </a>
         </div>
 
-        <div class="back_to_top">
+        <div class="section">
+            <h2 id="resources" class="heading-large">
+                Resources
+            </h2>
+
+            @for(resourceGroup <- GroupedResources(raml.resources)) {
+                @resource_group(resourceGroup, raml, schemas)
+            }
+        </div>
+
+        <div class="bold-small">
             <a href="#">
                 Back to top
             </a>

@@ -19,13 +19,15 @@
 @(fields: Seq[RequestResponseField], caption: String, fieldOptionalityKnown: Boolean)
 
 @if(fields.nonEmpty) {
-    <table class="table--align-top">
-        <caption class="table__caption--low-vis">
-            <div class="visuallyhidden">@caption</div>
+    <table>
+        <caption>
+            <div class="visually-hidden">@caption</div>
         </caption>
+        <col width="50%"/>
+        <col width="50%"/>
         <thead>
-            <tr class="table__row--desktop-heading">
-                <th class="table__col--1-2">Name</th>
+            <tr>
+                <th>Name</th>
                 <th>Description</th>
             </tr>
         </thead>
@@ -34,30 +36,30 @@
             <tr class="table__row--responsive
                     @if(field.depth == 0 || field.`type` == "object") {table__row--parent}
                 @if(field.depth > 0) {table__row--nested-@{field.depth}}">
-                <td data-heading="Name" class="table__detail--responsive table__col--1-2">
+                <td data-heading="Name" class="table__detail--responsive">
                     <div class="table__cell-contents--responsive">
-                        <div class="parameter-name">@{field.name}</div>
-                        <div class="parameter-type">@if(field.isArray) {array} else {@{field.`type`}}</div>
+                        <div class="font-small">@{field.name}</div>
+                        <div class="font-xsmall secondary-text">@if(field.isArray) {array} else {@{field.`type`}}</div>
                         @if(fieldOptionalityKnown) {
                             @if(field.required) {
-                                <div class="parameter-required">required</div>
+                                <div class="font-xsmall orange-text">required</div>
                             } else {
-                                <div class="parameter-optional">optional</div>
+                                <div class="font-xsmall secondary-text">optional</div>
                             }
                         }
                     </div>
                 </td>
-                <td data-heading="Description" class="table__detail--responsive">
-                    <div class="table__cell-contents--responsive">
+                <td data-heading="Description">
+                    <div>
                     @if(field.description.nonEmpty) {<p>@{field.description}</p>}
 
                     @field.typeId match {
-                        case "full-date" => { <p>Date in the format <code class="code--slim">YYYY-MM-DD</code></p> }
-                        case "tax-year" => { <p>Tax year in the format <code class="code--slim">YYYY-YY</code></p> }
+                        case "full-date" => { <p>Date in the format <code class="code">YYYY-MM-DD</code></p> }
+                        case "tax-year" => { <p>Tax year in the format <code class="code">YYYY-YY</code></p> }
                         case _ => {
                             @if(field.pattern.nonEmpty) {
-                                <p class="parameter-pattern">
-                                    Must conform to the regular expression <code class="code--slim">@{field.pattern}</code>
+                                <p>
+                                    Must conform to the regular expression <code class="code">@{field.pattern}</code>
                                 </p>
                             }
                         }
@@ -70,15 +72,15 @@
                         <div>
                             @for(enumValue <- field.enumValues) {
                                 <div>
-                                    <code class="code--slim">@{enumValue.name}</code>
+                                    <code class="code">@{enumValue.name}</code>
                                     @if(enumValue.description.isDefined) { - @{enumValue.description} }
                                 </div>
                             }
                         </div>
                     } else {
                         @if(field.example.nonEmpty) {
-                            <p class="parameter-example">
-                                For example: <code class="code--slim">@{field.example}</code>
+                            <p>
+                                For example: <code class="code">@{field.example}</code>
                             </p>
                         }
                     }
