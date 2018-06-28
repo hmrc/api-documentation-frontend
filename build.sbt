@@ -16,8 +16,6 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
-import scala.util.Properties.envOrElse
-
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = (project in file("."))
@@ -43,13 +41,11 @@ lazy val microservice = (project in file("."))
     )
   )
   .settings(playSettings: _*)
-  .settings(version := appVersion)
   .settings(scalaSettings: _*)
   .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
   .settings(
     targetJvm := "jvm-1.8",
-    shellPrompt := ShellPrompt(appVersion),
     libraryDependencies ++= appDependencies,
     parallelExecution in Test := false,
     fork in Test := false,
@@ -123,7 +119,6 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
   publishAllArtefacts
 
 lazy val appName = "api-documentation-frontend"
-lazy val appVersion = envOrElse("API_DOCUMENTATION_FRONTEND_VERSION", "999-SNAPSHOT")
 lazy val appDependencies: Seq[ModuleID] = allDeps
 
 lazy val compile = Seq(
