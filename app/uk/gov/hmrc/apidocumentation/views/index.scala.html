@@ -30,19 +30,7 @@
                 Register for an account
             </a>
             <span class="hero-alternative-action">
-              or
-
-                @if(applicationConfig.isExternalTestEnvironment) {
-
-                <a href="@controllers.routes.DocumentationController.sandboxIntroductionPage()">learn more</a> about the Developer Sandbox
-
-                } else {
-
-               <a href="@controllers.routes.DocumentationController.usingTheHubPage()">learn more</a> about the Developer Hub
-
-                }
-
-
+              or <a href="@controllers.routes.DocumentationController.usingTheHubPage()">learn more</a> about the Developer Hub
             </span>
         </div>
     </section>
