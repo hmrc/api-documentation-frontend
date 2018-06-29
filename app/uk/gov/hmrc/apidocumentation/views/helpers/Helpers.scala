@@ -149,7 +149,7 @@ object Markdown {
       .registerPlugins(new YumlPlugin, new WebSequencePlugin, new IncludePlugin)
       .setDecorator(new ExtDecorator()
         .addStyleClass("bullets", "ul")
-        .addStyleClass("code--slim", "code")
+        .addStyleClass("code", "code")
         .addStyleClass("heading-xlarge", "h1")
         .addStyleClass("heading-large", "h2")
         .addStyleClass("heading-medium", "h3")
