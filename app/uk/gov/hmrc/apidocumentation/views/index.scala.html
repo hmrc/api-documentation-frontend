@@ -47,7 +47,7 @@
 
 @main(title = applicationConfig.title,
     navTitle = Some(applicationConfig.title),
-    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(applicationConfig.isExternalTestEnvironment), navLinks)),
+    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(), navLinks)),
     serviceInfoContent = Some(userBanner),
     fullWidthBanner = Some(fullWidthBanner),
     fullWidthContent = true) {
@@ -80,9 +80,7 @@
                 <ul>
                     <li><a href="@applicationConfig.developerFrontendUrl/developer/applications/add">Add application</a></li>
                     <li><a href="@applicationConfig.developerFrontendUrl/developer/applications">Manage applications</a></li>
-                    @if(applicationConfig.isExternalTestEnvironment == false) {
                     <li><a href="@controllers.routes.DocumentationController.testingPage()">Testing in the sandbox</a></li>
-                    }
                     <li><a href="@applicationConfig.developerFrontendUrl/api-test-user">Create a test user</a></li>
                 </ul>
             </section>

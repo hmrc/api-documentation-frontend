@@ -55,14 +55,12 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     val homeBreadcrumb = Crumb("Home", controllers.routes.DocumentationController.indexPage().url)
     val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None).url)
     val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
-
-    val testServiceName = "HMRC Developer Hub Test"
     
     when(navigationService.headerNavigation()(any())).thenReturn(Future.successful(Seq(navLink)))
     when(navigationService.sidebarNavigation()).thenReturn(Future.successful(Seq(sidebarLink)))
     when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
     when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
-    when(appConfig.title).thenReturn(serviceName)
+    when(appConfig.title).thenReturn("HMRC Developer Hub")
     when(documentationService.defaultExpiration).thenReturn(1.hour)
     when(appConfig.hotjarEnabled) thenReturn None
     when(appConfig.hotjarId) thenReturn None
@@ -142,7 +140,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     def pageTitle(pagePurpose: String) = {
-      s"$pagePurpose - $testServiceName - GOV.UK"
+      s"$pagePurpose - HMRC Developer Hub - GOV.UK"
     }
 
 
@@ -152,7 +150,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the index page" in new Setup {
 
-      verifyPageRendered(underTest.indexPage()(request), serviceName, breadcrumbs = List.empty, sideNavLinkRendered = false)
+      verifyPageRendered(underTest.indexPage()(request), "HMRC Developer Hub", breadcrumbs = List.empty, sideNavLinkRendered = false)
 
     }
 
@@ -189,13 +187,6 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       when(underTest.appConfig.apiUrl).thenReturn("https://api.service.hmrc.gov.uk/")
       verifyPageRendered(underTest.referenceGuidePage()(request), pageTitle("Reference guide"),
         bodyContains = Seq("The base URL for sandbox APIs is:", "https://api.service.hmrc.gov.uk/"))
-    }
-
-    "display the reference guide page when ET" in new Setup {
-      when(underTest.appConfig.isExternalTestEnvironment).thenReturn(true)
-      when(underTest.appConfig.apiUrl).thenReturn("https://test-api.service.hmrc.gov.uk/")
-      verifyPageRendered(underTest.referenceGuidePage()(request), pageTitle("Reference guide"),
-        bodyContains = Seq("The base URL for sandbox APIs is:", "https://test-api.service.hmrc.gov.uk/"))
     }
 
     "display the using the hub page" in new Setup {

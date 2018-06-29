@@ -20,7 +20,11 @@
 
 @()(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
-@main(title = "Cookies") {
+@metaTitle = {
+    <meta name="description" content="@Messages("help.cookies.metatitle")">
+}
+
+@main(title = Messages("help.cookies.title"), metaTitle=Some(metaTitle)) {
     <div class="grid-row">
         <header class="page-header">
             <h1>Cookies</h1>

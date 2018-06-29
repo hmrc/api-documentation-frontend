@@ -50,11 +50,6 @@
     headScripts = Some(headScripts))
 
   <link rel="stylesheet" href='@routes.Assets.versioned("css/main.css")'>
-  @if(applicationConfig.isExternalTestEnvironment) {
-    <meta name="robots" content="noindex">
-    <meta name="googlebot" content="noindex">
-  }
-
 }
 
 @insideHeader = {
@@ -185,7 +180,7 @@
 
 @hmrcGovUkTemplate(
     title = Some(title),
-    bodyClasses = if(applicationConfig.isExternalTestEnvironment) { Some("sandbox") } else None)(head = head,
+    bodyClasses = None)(head = head,
     bodyEnd = bodyEnd,
     insideHeader = insideHeader,
     afterHeader = afterHeader,
