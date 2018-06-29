@@ -26,7 +26,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
   feature("Navigation across documentation") {
 
-    scenario("User is navigated to the top when Back to top link is clicked", Tag("NonSandboxTest")) {
+    scenario("User is navigated to the top when Back to top link is clicked") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -56,7 +56,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       }
     }
 
-    scenario("Cookie banner is displayed to the top of the page", Tag("NonSandboxTest")) {
+    scenario("Cookie banner is displayed to the top of the page") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -66,7 +66,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       APIDocumentationPage.cookieBannerLocation()
     }
 
-    scenario("Left menu options are displayed when selected an API", Tag("NonSandboxTest")) {
+    scenario("Left menu options are displayed when selected an API") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -82,7 +82,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       HelloWorldPage.assertLeftMenuIsDisplayed()
     }
 
-    scenario("User is navigated to the appropriate sections when user clicks on the sections on the left side", Tag("NonSandboxTest")) {
+    scenario("User is navigated to the appropriate sections when user clicks on the sections on the left side") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -98,7 +98,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       HelloWorldPage.waitUntilLinksGetToTheTopOfThePage()
     }
 
-    scenario("Dev Hub Name", Tag("NonSandboxTest")) {
+    scenario("Dev Hub Name") {
       val expectedApplicationName = "HMRC Developer Hub"
       Given("I have navigated to the Home page")
       Given apiServicesIsDeployed()
@@ -124,7 +124,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       HelloWorldPage.applicationName shouldBe expectedApplicationName
     }
 
-    scenario("Ensure back to the top link only exists after Errors section", Tag("NonSandboxTest")) {
+    scenario("Ensure back to the top link only exists after Errors section") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)

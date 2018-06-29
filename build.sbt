@@ -83,24 +83,14 @@ lazy val microservice = (project in file("."))
   .configs(AcceptanceTest)
   .settings(inConfig(AcceptanceTest)(Defaults.testSettings): _*)
   .settings(
-    testOptions in AcceptanceTest := Seq(Tests.Filter(acceptanceTestFilter), Tests.Argument("-l", "SandboxTest")),
+    testOptions in AcceptanceTest := Seq(Tests.Filter(acceptanceTestFilter)),
     unmanagedSourceDirectories in AcceptanceTest := Seq((baseDirectory in AcceptanceTest).value / "test"),
     unmanagedResourceDirectories in AcceptanceTest := Seq((baseDirectory in AcceptanceTest).value / "test", (baseDirectory in AcceptanceTest).value / "target/web/public/test"),
     Keys.fork in AcceptanceTest := false,
     parallelExecution in AcceptanceTest := false,
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
-  .configs(SandboxTest)
-  .settings(inConfig(SandboxTest)(Defaults.testTasks): _*)
-  .settings(
-    testOptions in SandboxTest := Seq(Tests.Argument("-l", "NonSandboxTest"), Tests.Argument("-n", "SandboxTest"), Tests.Filter(sandboxFilter)),
-    unmanagedSourceDirectories in SandboxTest := Seq((baseDirectory in SandboxTest).value / "test"),
-    unmanagedResourceDirectories in SandboxTest := Seq((baseDirectory in SandboxTest).value / "test"),
-    unmanagedResourceDirectories in SandboxTest += baseDirectory(_ / "target/web/public/test").value,
-    Keys.fork in SandboxTest := false,
-    parallelExecution in SandboxTest := false,
-    addTestReportOption(SandboxTest, "sandbox-test-reports")
-  )
+
   .settings(scalaVersion := "2.11.11")
 lazy val allPhases = "tt->test;test->test;test->compile;compile->compile"
 lazy val allItPhases = "tit->it;it->it;it->compile;compile->compile"
@@ -108,7 +98,6 @@ lazy val AcceptanceTest = config("acceptance") extend Test
 lazy val EndToEndTest = config("endtoend") extend Test
 lazy val TemplateTest = config("tt") extend Test
 lazy val TemplateItTest = config("tit") extend IntegrationTest
-lazy val SandboxTest = config("sandbox") extend Test
 lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
 
   credentials += SbtCredentials,
@@ -158,8 +147,6 @@ lazy val allDeps = compile ++ test
 def acceptanceTestFilter(name: String): Boolean = name startsWith "acceptance"
 
 def endToEndFilter(name: String): Boolean = name startsWith "endtoend"
-
-def sandboxFilter(name: String): Boolean = !unitFilter(name)
 
 def unitFilter(name: String): Boolean = name startsWith "unit"
 
