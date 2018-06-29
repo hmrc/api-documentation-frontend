@@ -44,22 +44,9 @@ class NavigationServiceSpec extends UnitSpec with WithFakeApplication with Mocki
       val sidebarNavLinks = underTest.sidebarNavigation()
       sidebarNavLinks.size shouldBe 8
       sidebarNavLinks.head.href shouldBe "/api-documentation/docs/using-the-hub"
-      sidebarNavLinks.head.label shouldBe "Using the Unit Test Title"
+      sidebarNavLinks.head.label shouldBe "Using the Developer Hub"
       sidebarNavLinks(6).href shouldBe "/api-documentation/docs/terms-of-use"
       sidebarNavLinks(6).label shouldBe "Terms of use"
-    }
-    "should produce a reduced set of options in sandbox mode" in new Setup {
-      when(config.isExternalTestEnvironment).thenReturn(true)
-      val sidebarNavLinks = underTest.sidebarNavigation()
-      sidebarNavLinks.size shouldBe 4
-      sidebarNavLinks.head.label should be("Using the Sandbox")
-      sidebarNavLinks.head.href should be("/api-documentation/docs/sandbox/introduction")
-      sidebarNavLinks(1).label should be("API documentation")
-      sidebarNavLinks(1).href should be("/api-documentation/docs/api")
-      sidebarNavLinks(2).label should be("Reference guide")
-      sidebarNavLinks(2).href should be("/api-documentation/docs/reference-guide")
-      sidebarNavLinks(3).label should be("Making Tax Digital guide")
-      sidebarNavLinks(3).href should be("/api-documentation/docs/mtd")
     }
   }
 

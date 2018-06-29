@@ -23,7 +23,7 @@
 @main(title = applicationConfig.title,
     navTitle = Some(applicationConfig.title),
     navTitleLink = Some(Call("GET", "/api-documentation")),
-    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(applicationConfig.isExternalTestEnvironment)))) {
+    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks()))) {
 
     <h1>@heading</h1>
     <p>@message</p>

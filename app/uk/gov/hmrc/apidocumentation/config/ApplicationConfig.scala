@@ -41,10 +41,9 @@ class ApplicationConfig @Inject()(config: Configuration) extends ServicesConfig 
   lazy val securedCookie = config.getBoolean(s"$env.cookie.secure").getOrElse(true)
   lazy val ramlPreviewEnabled = config.getBoolean(s"$env.features.ramlPreview").getOrElse(false)
   lazy val ramlLoaderRewrites = buildRamlLoaderRewrites(config)
-  lazy val isExternalTestEnvironment = config.getBoolean("isExternalTestEnvironment").getOrElse(false)
   lazy val showProductionAvailability = config.getBoolean(s"$env.features.showProductionAvailability").getOrElse(false)
   lazy val showSandboxAvailability = config.getBoolean(s"$env.features.showSandboxAvailability").getOrElse(false)
-  lazy val title = if (isExternalTestEnvironment) "Developer Sandbox" else "Developer Hub"
+  lazy val title = "HMRC Developer Hub"
   lazy val isStubMode = env == "Stub"
   lazy val apiUrl = buildUrl("platform.api")
 

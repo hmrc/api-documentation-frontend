@@ -33,7 +33,6 @@ import scala.concurrent.Future
 class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConfig: ApplicationConfig) {
 
   val gettingStartedUrl = routes.DocumentationController.usingTheHubPage().url
-  val usingTheSandboxUrl = routes.DocumentationController.sandboxIntroductionPage().url
   val apiDocumentationUrl = routes.DocumentationController.apiIndexPage(None, None).url
   val referenceGuideUrl = routes.DocumentationController.referenceGuidePage().url
   val namingGuidelinesUrl = routes.DocumentationController.nameGuidelinesPage().url
@@ -44,7 +43,7 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
   val mtdIntroductionPageUrl = routes.DocumentationController.mtdIntroductionPage().url
 
   val sidebarNavigationLinks = Seq(
-    SidebarLink(label = s"Using the ${appConfig.title}", href = gettingStartedUrl,
+    SidebarLink(label = "Using the Developer Hub", href = gettingStartedUrl,
       subLinks = Seq(SidebarLink(label = "Application naming guidelines", href = namingGuidelinesUrl))),
     SidebarLink(label = "Authorisation", href = authorisationUri),
     SidebarLink(label = "Tutorials", href = tutorialsUri),
@@ -55,15 +54,7 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
     SidebarLink(label = "Making Tax Digital guides", href = mtdIntroductionPageUrl)
   )
 
-  def sidebarNavigationLinksForET(url: String) = Seq(
-    SidebarLink(label = "Using the Sandbox", href = url),
-    SidebarLink(label = "API documentation", href = apiDocumentationUrl),
-    SidebarLink(label = "Reference guide", href = referenceGuideUrl),
-    SidebarLink(label = "Making Tax Digital guide", href = mtdIntroductionPageUrl)
-  )
-
-  def sidebarNavigation() =
-    if (appConfig.isExternalTestEnvironment) sidebarNavigationLinksForET(usingTheSandboxUrl) else sidebarNavigationLinks
+  def sidebarNavigation() = sidebarNavigationLinks
 
 
   private def traverse(resources: Seq[Resource], accum: Seq[SidebarLink] = Seq.empty): Seq[SidebarLink] = {

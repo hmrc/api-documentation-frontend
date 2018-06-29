@@ -21,14 +21,10 @@ case class NavLink(label: String, href: String, truncate: Boolean = false)
 case class SidebarLink(label: String, href: String, subLinks: Seq[SidebarLink] = Seq.empty, showSubLinks: Boolean = false)
 
 case object StaticNavLinks {
-  def apply(isExternalTestEnvironment: Boolean) = {
-    val docUrl = isExternalTestEnvironment match {
-      case false => "/api-documentation/docs/using-the-hub"
-      case true => "/api-documentation/docs/sandbox/introduction"
-    }
+  def apply() = {
 
     Seq(
-      NavLink("Documentation", docUrl),
+      NavLink("Documentation", "/api-documentation/docs/using-the-hub"),
       NavLink("Applications", "/developer/applications"),
       NavLink("Support", "/developer/support"))
   }

@@ -16,7 +16,6 @@ cd $WORKSPACE
 
 echo "Start tests..."
 sbt clean coverage test acceptance:test coverageOff coverageReport
-sbt sandbox:test
 
 echo "Publish..."
 sbt dist-tgz publish

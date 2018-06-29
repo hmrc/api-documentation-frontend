@@ -24,17 +24,9 @@ class NavLinkSpec extends UnitSpec {
   "NavigationHelper" should {
 
     "return static navlinks for devhub" in {
-      StaticNavLinks(false) shouldBe
+      StaticNavLinks() shouldBe
         Seq(
           NavLink("Documentation", "/api-documentation/docs/using-the-hub"),
-          NavLink("Applications", "/developer/applications"),
-          NavLink("Support", "/developer/support"))
-    }
-
-    "return static navlinks for external test" in {
-      StaticNavLinks(true) shouldBe
-        Seq(
-          NavLink("Documentation", "/api-documentation/docs/sandbox/introduction"),
           NavLink("Applications", "/developer/applications"),
           NavLink("Support", "/developer/support"))
     }

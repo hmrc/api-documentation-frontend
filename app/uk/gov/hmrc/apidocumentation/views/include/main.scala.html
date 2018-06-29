@@ -50,11 +50,6 @@
     headScripts = Some(headScripts))
 
   <link rel="stylesheet" href='@routes.Assets.versioned("css/main.css")'>
-  @if(applicationConfig.isExternalTestEnvironment) {
-    <meta name="robots" content="noindex">
-    <meta name="googlebot" content="noindex">
-  }
-
 }
 
 @insideHeader = {
@@ -62,7 +57,7 @@
     metaTitle.get
 }
 @include.api_header_nav(
-    navTitle = navTitle.map(t => s"HMRC $t"),
+    navTitle = navTitle,
     navTitleLink = navTitleLink,
     navLinks = headerNavLinks)
 }
@@ -184,8 +179,8 @@
 }
 
 @hmrcGovUkTemplate(
-    title = Some(s"HMRC $title"),
-    bodyClasses = if(applicationConfig.isExternalTestEnvironment) { Some("sandbox") } else None)(head = head,
+    title = Some(title),
+    bodyClasses = None)(head = head,
     bodyEnd = bodyEnd,
     insideHeader = insideHeader,
     afterHeader = afterHeader,
