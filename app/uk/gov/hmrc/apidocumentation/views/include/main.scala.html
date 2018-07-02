@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 
-@(title: String,
+@(title: Option[String] = None,
     navTitle: Option[String] = None,
     navTitleLink: Option[play.api.mvc.Call] = None,
     headerNavLinks: Option[Html] = None,
@@ -179,7 +179,7 @@
 }
 
 @hmrcGovUkTemplate(
-    title = Some(title),
+    title = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     bodyClasses = None)(head = head,
     bodyEnd = bodyEnd,
     insideHeader = insideHeader,

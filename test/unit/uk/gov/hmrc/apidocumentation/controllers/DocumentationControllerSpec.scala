@@ -150,7 +150,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the index page" in new Setup {
 
-      verifyPageRendered(underTest.indexPage()(request), "HMRC Developer Hub", breadcrumbs = List.empty, sideNavLinkRendered = false)
+      verifyPageRendered(underTest.indexPage()(request), "HMRC Developer Hub - GOV.UK", breadcrumbs = List.empty, sideNavLinkRendered = false)
 
     }
 

@@ -20,8 +20,7 @@
 
 @(title: String, heading: String, message: String)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
-@main(title = applicationConfig.title,
-    navTitle = Some(applicationConfig.title),
+@main(navTitle = Some(applicationConfig.title),
     navTitleLink = Some(Call("GET", "/api-documentation")),
     headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks()))) {
 
