@@ -24,59 +24,53 @@
 @apiMain(pageAttributes) {
 
 
-        <header class="page-header">
-        <h1 class="flush--top">
-            Testing in the sandbox
-        </h1>
-        </header>
+    <h1 class="heading-large">Testing in the sandbox</h1>
+
+    <nav role="navigation" aria-labelledby="usingTheSandbox">
+        <div class="grid-row">
+            <div class="column-one-half">
+                <ul class="list">
+                            <li>1. Getting started</li>
+                            <li><a href="@controllers.routes.DocumentationController.testingStatefulBehaviourPage()">2. Stateful behaviour</a></li>
+                        </ul>
+                    </div>
+            <div class="column-one-half">
+                <ul class="list">
+                    <li><a href="@controllers.routes.DocumentationController.testingDataClearDownPage()">3. Data clear down</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <hr>
+
+    <h2 class="heading-medium">Getting started</h2>
+    <p>The sandbox environment is a simulator of our production environment. It allows integration testing of your application with our APIs without affecting the production environment.</p>
+    <p>As the sandbox environment is integrated with the production environment, you don't need a separate sandbox account.</p>
+    <h3 class="heading-small">1. Add an application</h3>
+    <p>Add a new sandbox application to use for testing.</p>
+    <h3 class="heading-small">2. Subscribe to an API</h3>
+    <p>You have to subscribe to an API so your application can access it. Subscribe via the API subscriptions tab.</p>
+    <h3 class="heading-small">3. Get sandbox credentials</h3>
+    <p>We issue your application with sandbox credentials which are available on the Credentials tab. These can only be used to access the sandbox environment.</p>
+    <h3 class="heading-small">4. Create a test user</h3>
+    <p>To test <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, you need to create one or more test users:</p>
+    <ul class="list list-bullet">
+        <li>use the <a href="/api-test-user">Create Test User Service</a> to manually create individuals or organisations with a default set of enrolments</li>
+        <li>use the <a href="/api-documentation/docs/api/service/api-platform-test-user">Create Test User API</a> to create a wider variety of test users including agents or if you use automated testing</li>
+    </ul>
+    <p>Each test user is unique, with its own user ID, password and tax identifiers (for example SA UTR and NINO for an individual). The test user details are generated automatically by us - you cannot choose them.</p>
+    <p>You can create as many test users as you like. Each new test user effectively provides a "clean" test environment. Test users can be shared across applications and between test team members, but they do have a <a href="@controllers.routes.DocumentationController.testingDataClearDownPage()">limited life span</a>.</p>
 
 
-    <nav role="navigation" aria-labelledby="usingTheSandbox" class="divider--bottom two-col-list full-width">
-        <div class="two-col-list__col two-col-list__col--left">
-            <ul class="two-col-list--padded">
-                        <li>1. Getting started</li>
-                        <li><a href="@controllers.routes.DocumentationController.testingStatefulBehaviourPage()">2. Stateful behaviour</a></li>
-                    </ul>
-                </div>
-        <div class="two-col-list__col two-col-list__col--right">
-            <ul class="two-col-list--padded">
-
-                        <li><a href="@controllers.routes.DocumentationController.testingDataClearDownPage()">3. Data clear down</a></li>
-                    </ul>
-                </div>
-        </nav>
-
-
-    <div class="section divider--bottom">
-        <h2 class="heading-large">Getting started</h2>
-        <p>The sandbox environment is a simulator of our production environment. It allows integration testing of your application with our APIs without affecting the production environment.</p>
-        <p>As the sandbox environment is integrated with the production environment, you don't need a separate sandbox account.</p>
-        <h3 class="heading-medium">1. Add an application</h3>
-        <p>Add a new sandbox application to use for testing.</p>
-        <h3 class="heading-medium">2. Subscribe to an API</h3>
-        <p>You have to subscribe to an API so your application can access it. Subscribe via the API subscriptions tab.</p>
-        <h3 class="heading-medium">3. Get sandbox credentials</h3>
-        <p>We issue your application with sandbox credentials which are available on the Credentials tab. These can only be used to access the sandbox environment.</p>
-        <h3 class="heading-medium">4. Create a test user</h3>
-        <p>To test <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, you need to create one or more test users:</p>
-        <ul class="list list-bullet">
-            <li>use the <a href="/api-test-user">Create Test User Service</a> to manually create individuals or organisations with a default set of enrolments</li>
-            <li>use the <a href="/api-documentation/docs/api/service/api-platform-test-user">Create Test User API</a> to create a wider variety of test users including agents or if you use automated testing</li>
+    <nav class="page-nav" role="navigation" aria-label="Pagination">
+        <ul class="group">
+            <li class="next">
+                <a class="page-nav__link page-nav__link--next" title="Navigate to next part" rel="next" href="@controllers.routes.DocumentationController.testingStatefulBehaviourPage()">
+                    <span class="page-nav__label">Next</span>
+                    <span class="page-nav__title">Stateful behaviour</span>
+                </a>
+            </li>
         </ul>
-        <p>Each test user is unique, with its own user ID, password and tax identifiers (for example SA UTR and NINO for an individual). The test user details are generated automatically by us - you cannot choose them.</p>
-        <p>You can create as many test users as you like. Each new test user effectively provides a "clean" test environment. Test users can be shared across applications and between test team members, but they do have a <a href="@controllers.routes.DocumentationController.testingDataClearDownPage()">limited life span</a>.</p>
-    </div>
-
-        <nav class="page-nav" role="navigation" aria-label="Pagination">
-            <ul class="group">
-                <li class="next">
-                    <a class="page-nav__link page-nav__link--next" title="Navigate to next part" rel="next" href="@controllers.routes.DocumentationController.testingStatefulBehaviourPage()">
-                        <span class="page-nav__label">Next</span>
-                        <span class="page-nav__title">Stateful behaviour</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
+    </nav>
 
 }

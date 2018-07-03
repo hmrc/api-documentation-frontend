@@ -23,50 +23,46 @@
 
 @apiMain(pageAttributes) {
 
-    <header class="page-header">
-        <h1 class="flush--top">
-            Testing in the sandbox
-        </h1>
-    </header>
+        <h1 class="heading-large">Testing in the sandbox</h1>
 
-    <nav role="navigation" aria-labelledby="usingTheSandbox" class="divider--bottom two-col-list full-width">
-        <div class="two-col-list__col two-col-list__col--left">
-            <ul class="two-col-list--padded">
-                        <li><a href="@controllers.routes.DocumentationController.testingPage()">Getting started</a></li>
-                        <li>Stateful behaviour</li>
-                    </ul>
-                </div>
-        <div class="two-col-list__col two-col-list__col--right">
-            <ul class="two-col-list--padded">
-
-                        <li><a href="@controllers.routes.DocumentationController.testingDataClearDownPage()">Data clear down</a></li>
-                    </ul>
-                </div>
-        </nav>
-
-        <div class="section flush--bottom">
-            <h2 class="heading-large">Stateful behaviour</h2>
-            <p>Some APIs on the sandbox are stateless - they return hard-coded happy path responses.</p>
-            <p>However, many APIs on the sandbox are stateful - they let you send test data through create (POST) or update (PUT) requests (or through an accompanying <a href="/api-documentation/docs/api#test-support-apis">Test Support API</a>) and then read back that same data through retrieval (GET) requests.</p>
-            <p>For stateful APIs where there is no way to clear down test data, the best way to start anew is to <a href="/api-test-user">create a new test user</a>.</p>
+    <nav role="navigation" aria-labelledby="usingTheSandbox">
+        <div class="grid-row">
+            <div class="column-one-half">
+                <ul class="list">
+                            <li><a href="@controllers.routes.DocumentationController.testingPage()">Getting started</a></li>
+                            <li>Stateful behaviour</li>
+                        </ul>
+                    </div>
+            <div class="column-one-half">
+                <ul class="list">
+                    <li><a href="@controllers.routes.DocumentationController.testingDataClearDownPage()">Data clear down</a></li>
+                </ul>
+            </div>
         </div>
+    </nav>
+    <hr>
 
-        <nav class="pagination" role="navigation" aria-label="Pagination">
-            <ul class="group">
-                <li class="previous">
-                    <a class="page-nav__link page-nav__link--previous" title="Navigate to previous part" rel="previous" href="@controllers.routes.DocumentationController.testingPage()">
-                        <span class="page-nav__label">Previous</span>
-                        <span class="page-nav__title">Getting started</span>
-                    </a>
-                </li>
-                <li class="next">
-                    <a class="page-nav__link page-nav__link--next" title="Navigate to next part" rel="next" href="@controllers.routes.DocumentationController.testingDataClearDownPage()">
-                        <span class="page-nav__label">Next</span>
-                        <span class="page-nav__title">Data cleardown</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+    <h2 class="heading-medium">Stateful behaviour</h2>
+    <p>Some APIs on the sandbox are stateless - they return hard-coded happy path responses.</p>
+    <p>However, many APIs on the sandbox are stateful - they let you send test data through create (POST) or update (PUT) requests (or through an accompanying <a href="/api-documentation/docs/api#test-support-apis">Test Support API</a>) and then read back that same data through retrieval (GET) requests.</p>
+    <p>For stateful APIs where there is no way to clear down test data, the best way to start anew is to <a href="/api-test-user">create a new test user</a>.</p>
+
+    <nav class="pagination" role="navigation" aria-label="Pagination">
+        <ul class="group">
+            <li class="previous">
+                <a class="page-nav__link page-nav__link--previous" title="Navigate to previous part" rel="previous" href="@controllers.routes.DocumentationController.testingPage()">
+                    <span class="page-nav__label">Previous</span>
+                    <span class="page-nav__title">Getting started</span>
+                </a>
+            </li>
+            <li class="next">
+                <a class="page-nav__link page-nav__link--next" title="Navigate to next part" rel="next" href="@controllers.routes.DocumentationController.testingDataClearDownPage()">
+                    <span class="page-nav__label">Next</span>
+                    <span class="page-nav__title">Data cleardown</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 
 
 }

@@ -24,38 +24,37 @@
 
 @apiMain(pageAttributes){
 
-    <header class="page-header">
-        <h1 class="flush--top">Reference guide</h1>
-    </header>
+    <h1 class="heading-large">Reference guide</h1>
 
-    <nav role="navigation" aria-labelledby="onThisPage" class="divider--bottom two-col-list full-width">
-        <h2 id="onThisPage" class="visuallyhidden">on this page</h2>
-
-        <div class="two-col-list__col two-col-list__col--left">
-            <ul class="two-col-list--padded">
-                <li><a href="#api-access">API access</a></li>
-                <li><a href="#network-access">Network access</a></li>
-                <li><a href="#common-data-types">Common data types</a></li>
-                <li><a href="#http-redirection">HTTP redirection</a></li>
-                <li><a href="#errors">Errors</a></li>
-                <li><a href="#rate-limiting">Rate limiting</a></li>
-            </ul>
-        </div>
-
-        <div class="two-col-list__col two-col-list__col--right">
-            <ul class="two-col-list--padded">
-                <li><a href="#scopes">Scopes</a></li>
-                <li><a href="#versioning">Versioning</a></li>
-                <li><a href="#fraud-prevention">Fraud prevention</a></li>
-                <li><a href="#redirect-uris">Redirect URIs</a></li>
-                <li><a href="#oauth-2.0-browser-support">OAuth 2.0 browser support</a></li>
-            </ul>
+    <nav role="navigation" aria-labelledby="onThisPage">
+        <h2 id="onThisPage" class="visually-hidden">on this page</h2>
+        <div class="grid-row">
+            <div class="column-one-half">
+                <ul class="list">
+                    <li><a href="#api-access">API access</a></li>
+                    <li><a href="#network-access">Network access</a></li>
+                    <li><a href="#common-data-types">Common data types</a></li>
+                    <li><a href="#http-redirection">HTTP redirection</a></li>
+                    <li><a href="#errors">Errors</a></li>
+                    <li><a href="#rate-limiting">Rate limiting</a></li>
+                </ul>
+            </div>
+            <div class="column-one-half">
+                <ul class="list">
+                    <li><a href="#scopes">Scopes</a></li>
+                    <li><a href="#versioning">Versioning</a></li>
+                    <li><a href="#fraud-prevention">Fraud prevention</a></li>
+                    <li><a href="#redirect-uris">Redirect URIs</a></li>
+                    <li><a href="#oauth-2.0-browser-support">OAuth 2.0 browser support</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
+    <hr>
 
-    <section id="api-access" class="section flush--bottom">
+    <section id="api-access">
 
-        <h2 class="heading-large">API access</h2>
+        <h2 class="heading-medium">API access</h2>
 
         <p>The base URL for sandbox APIs is:</p>
         <pre class="snippet--block">https://test-api.service.hmrc.gov.uk/</pre>
@@ -63,8 +62,8 @@
         <pre class="snippet--block">https://api.service.hmrc.gov.uk/</pre>
     </section>
 
-    <section id="network-access" class="section flush--bottom">
-        <h2 class="heading-large" name="common-data-types">Network access</h2>
+    <section id="network-access">
+        <h2 class="heading-medium" name="common-data-types">Network access</h2>
         <p>You might need to configure your network so your software can access our API Platform and the authorisation journey for
             <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.
             If your software is installed on end user devices, they might also need to configure their own network.</p>
@@ -79,21 +78,21 @@
         <pre class="snippet--block">www.tax.service.gov.uk</pre>
     </section>
 
-    <section id="common-data-types" class="section flush--bottom">
+    <section id="common-data-types">
 
-        <h2 class="heading-large">Common data types</h2>
+        <h2 class="heading-medium">Common data types</h2>
 
         <p>Our APIs use consistent formats for common data types. We use ISO standards including:</p>
 
-        <ul class="bullets">
+        <ul class="list list-bullet">
             <li>@Link.toExternalPage(url = "http://www.iso.org/iso/iso8601", value = Some("ISO 8601 (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:ISO 8601"))).toHtml Time and Date Format</li>
             <li>@Link.toExternalPage(url = "http://www.iso.org/iso/home/standards/currency_codes.htm", value = Some("ISO 4217 (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:ISO 4217"))).toHtml Currency Codes</li>
         </ul>
 
         <p>Some examples of common data types include:</p>
 
-        <table class="common-data-types">
-            <caption class="visuallyhidden">Examples of common data types</caption>
+        <table>
+            <caption class="visually-hidden">Examples of common data types</caption>
             <thead><tr>
                 <th>Type</th>
                 <th>Example</th>
@@ -103,42 +102,42 @@
                 <tr>
                     <td data-heading="Type"><span class="snippet--inline">date</span></td>
                     <td data-heading="Example">&quot;2015-09-08&quot;</td>
-                    <td class="description" data-heading="Description">Dates will be represented in the format YYYY-MM-DD.</td>
+                    <td data-heading="Description">Dates will be represented in the format YYYY-MM-DD.</td>
                 </tr>
                 <tr>
                     <td data-heading="Type"><span class="snippet--inline">timestamp</span></td>
                     <td data-heading="Example">&quot;2015-09-08T01:55:28+00:00&quot;</td>
-                    <td class="description" data-heading="Description">Timestamps will be represented in the format YYYY-MM-DDThh:mm:ss±hh:mm.</td>
+                    <td data-heading="Description">Timestamps will be represented in the format YYYY-MM-DDThh:mm:ss±hh:mm.</td>
                 </tr>
                 <tr>
                     <td data-heading="Type"><span class="snippet--inline">money</span></td>
                     <td data-heading="Example">123.45</td>
-                    <td class="description" data-heading="Description">Unless expressly documented, money will be represented with two decimal places and GBP currency.</td>
+                    <td data-heading="Description">Unless expressly documented, money will be represented with two decimal places and GBP currency.</td>
                 </tr>
                 <tr>
                     <td data-heading="Type"><span class="snippet--inline">NINO</span></td>
                     <td data-heading="Example">&quot;QQ123456A&quot;</td>
-                    <td class="description" data-heading="Description">A National Insurance number is made up of 2 letters, 6 numbers and a letter (A, B, C, or D).</td>
+                    <td data-heading="Description">A National Insurance number is made up of 2 letters, 6 numbers and a letter (A, B, C, or D).</td>
                 </tr>
             </tbody>
         </table>
     </section>
 
-    <section id="http-redirection" class="section flush--bottom">
-        <h2 class="heading-large">HTTP redirection</h2>
+    <section id="http-redirection">
+        <h2 class="heading-medium">HTTP redirection</h2>
         <p>Our API Platform uses HTTP redirection if resources move permanently or temporarily.<p>
         <p>Redirection responses have a <strong class="bold-small">Location</strong> header with the resource's new URI.</p>
     </section>
 
-    <section id="errors" class="section flush--bottom">
+    <section id="errors">
 
-        <h2 class="heading-large">Common API Errors</h2>
+        <h2 class="heading-medium">Common API Errors</h2>
 
         <section id="intro">
-            <p class="">
+            <p>
                 Error responses from APIs (but not the OAuth 2.0 <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a> procedure) have a 4xx or 5xx HTTP status code and a consistently formed JSON or XML body, including:
             </p>
-            <table class="content-table">
+            <table>
                 <colgroup>
                     <col width="15%">
                     <col width="20%">
@@ -151,13 +150,13 @@
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td><span class="code--slim">code</span></td>
-                    <td><span class="code--slim">string</span></td>
+                    <td><span class="code">code</span></td>
+                    <td><span class="code">string</span></td>
                     <td>A machine-readable error code. This is unique for each error scenario.</td>
                 </tr>
                 <tr>
-                    <td><span class="code--slim">message</span></td>
-                    <td><span class="code--slim">string</span></td>
+                    <td><span class="code">message</span></td>
+                    <td><span class="code">string</span></td>
                     <td>A human-readable explanation for the error.</td>
                 </tr>
                 </tbody>
@@ -170,7 +169,8 @@
 }
 </pre>
             <p>Multiple errors can also be returned in a single field called errors. For example:</p>
-            <pre class="snippet--block">{
+            <pre class="snippet--block">
+{
     "code": "BAD_REQUEST",
     "message": "Bad request",
     "errors": [
@@ -188,7 +188,8 @@
 }
 </pre>
             <p>Here is an example error response in XML format</p>
-            <pre class="snippet--block">&lt;error&gt;
+            <pre class="snippet--block">
+&lt;error&gt;
   &lt;code&gt;ACCOUNT_SUSPENDEDSA-100201&lt;/code&gt;
   &lt;message&gt;Account is temporarily suspended&lt;/message&gt;
   &lt;reactivationTimestamp&gt;1431448640718&lt;/reactivationTimestamp&gt;
@@ -199,28 +200,28 @@
         </section>
         <section id="401">
 
-            <h3 class="heading-small table-break">401 (Unauthorized)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">401 (Unauthorized)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">No OAuth token supplied for user-restricted or application-restricted resource</td>
-                    <td class="message"><span class="code--slim">MISSING_CREDENTIALS</span></td>
+                    <td>No OAuth token supplied for user-restricted or application-restricted resource</td>
+                    <td><span class="code">MISSING_CREDENTIALS</span></td>
                 </tr>
                 <tr>
-                    <td class="description">Invalid OAuth token supplied for user-restricted or application-restricted resource (including expired token)</td>
-                    <td class="message"><span class="code--slim">INVALID_CREDENTIALS</span></td>
+                    <td>Invalid OAuth token supplied for user-restricted or application-restricted resource (including expired token)</td>
+                    <td><span class="code">INVALID_CREDENTIALS</span></td>
                 </tr>
                 <tr>
-                    <td class="description">Supplied OAuth token not authorised to access data for given tax identifier(s)</td>
-                    <td class="message"><span class="code--slim">UNAUTHORIZED</span></td>
+                    <td>Supplied OAuth token not authorised to access data for given tax identifier(s)</td>
+                    <td><span class="code">UNAUTHORIZED</span></td>
                 </tr>
                 <tr>
-                    <td class="description">User-restricted API is being accessed with a server token</td>
-                    <td class="message"><span class="code--slim">INCORRECT_ACCESS_TOKEN_TYPE</span></td>
+                    <td>User-restricted API is being accessed with a server token</td>
+                    <td><span class="code">INCORRECT_ACCESS_TOKEN_TYPE</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -228,28 +229,28 @@
         </section>
         <section id="403">
 
-            <h3 class="heading-small table-break">403 (Forbidden)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">403 (Forbidden)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">Request done with HTTP</td>
-                    <td class="message"><span class="code--slim">HTTPS_REQUIRED</span></td>
+                    <td>Request done with HTTP</td>
+                    <td><span class="code">HTTPS_REQUIRED</span></td>
                 </tr>
                 <tr>
-                    <td class="description">Production tokens used for Beta API</td>
-                    <td class="message"><span class="code--slim">API_NOT_IN_PRODUCTION</span></td>
+                    <td>Production tokens used for Beta API</td>
+                    <td><span class="code">API_NOT_IN_PRODUCTION</span></td>
                 </tr>
                 <tr>
-                    <td class="description">The OAuth token's application is not subscribed to the API</td>
-                    <td class="message"><span class="code--slim">RESOURCE_FORBIDDEN</span></td>
+                    <td>The OAuth token's application is not subscribed to the API</td>
+                    <td><span class="code">RESOURCE_FORBIDDEN</span></td>
                 </tr>
                 <tr>
-                    <td class="description">The scope of the OAuth token is not sufficient to access the API</td>
-                    <td class="message"><span class="code--slim">INVALID_SCOPE</span></td>
+                    <td>The scope of the OAuth token is not sufficient to access the API</td>
+                    <td><span class="code">INVALID_SCOPE</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -258,20 +259,20 @@
 
         <section id="404">
 
-            <h3 class="heading-small table-break">404 (Not Found)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">404 (Not Found)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">No endpoint could be found in the API for the request path</td>
-                    <td class="message"><span class="code--slim">MATCHING_RESOURCE_NOT_FOUND</span></td>
+                    <td>No endpoint could be found in the API for the request path</td>
+                    <td><span class="code">MATCHING_RESOURCE_NOT_FOUND</span></td>
                 </tr>
                 <tr>
-                    <td class="description">No API could be found for the context</td>
-                    <td class="message"><span class="code--slim">NOT_FOUND</span></td>
+                    <td>No API could be found for the context</td>
+                    <td><span class="code">NOT_FOUND</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -280,16 +281,16 @@
 
         <section id="405">
 
-            <h3 class="heading-small table-break">405 (Method Not Allowed)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">405 (Method Not Allowed)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">Request method is not GET, PUT, POST, DELETE or OPTIONS</td>
-                    <td class="message"><span class="code--slim">METHOD_NOT_ALLOWED</span></td>
+                    <td>Request method is not GET, PUT, POST, DELETE or OPTIONS</td>
+                    <td><span class="code">METHOD_NOT_ALLOWED</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -297,16 +298,16 @@
         </section>
         <section id="406">
 
-            <h3 class="heading-small table-break">406 (Not Acceptable)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">406 (Not Acceptable)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">Missing or invalid Accept header</td>
-                    <td class="message"><span class="code--slim">ACCEPT_HEADER_INVALID</span></td>
+                    <td>Missing or invalid Accept header</td>
+                    <td><span class="code">ACCEPT_HEADER_INVALID</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -314,16 +315,16 @@
         </section>
         <section id="429">
 
-            <h3 class="heading-small table-break">429 (Too Many Requests)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">429 (Too Many Requests)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">The application has reached its maximum rate limit</td>
-                    <td class="message"><span class="code--slim">MESSAGE_THROTTLED_OUT</span></td>
+                    <td>The application has reached its maximum rate limit</td>
+                    <td><span class="code">MESSAGE_THROTTLED_OUT</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -331,16 +332,16 @@
         </section>
         <section id="500">
 
-            <h3 class="heading-small table-break">500 (Internal Server Error)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">500 (Internal Server Error)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">Internal server error</td>
-                    <td class="message"><span class="code--slim">INTERNAL_SERVER_ERROR</span></td>
+                    <td>Internal server error</td>
+                    <td><span class="code">INTERNAL_SERVER_ERROR</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -348,16 +349,16 @@
         </section>
         <section id="501">
 
-            <h3 class="heading-small table-break">501 (Not Implemented)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">501 (Not Implemented)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">API not implemented/deployed</td>
-                    <td class="message"><span class="code--slim">NOT_IMPLEMENTED</span></td>
+                    <td>API not implemented/deployed</td>
+                    <td><span class="code">NOT_IMPLEMENTED</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -365,20 +366,20 @@
         </section>
         <section id="503">
 
-            <h3 class="heading-small table-break">503 (Service Unavailable)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">503 (Service Unavailable)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">Service unavailable</td>
-                    <td class="message"><span class="code--slim">SERVER_ERROR</span></td>
+                    <td>Service unavailable</td>
+                    <td><span class="code">SERVER_ERROR</span></td>
                 </tr>
                 <tr>
-                    <td class="description">Scheduled maintenance</td>
-                    <td class="message"><span class="code--slim">SCHEDULED_MAINTENANCE</span></td>
+                    <td>Scheduled maintenance</td>
+                    <td><span class="code">SCHEDULED_MAINTENANCE</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -386,16 +387,16 @@
         </section>
         <section id="504">
 
-            <h3 class="heading-small table-break">504 (Gateway Timeout)</h3>
-            <table class="content-table error-table">
+            <h3 class="heading-small">504 (Gateway Timeout)</h3>
+            <table>
                 <thead><tr>
                     <th>Scenario</th>
                     <th width="40%">Code</th>
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td class="description">Request timed out</td>
-                    <td class="message"><span class="code--slim">GATEWAY_TIMEOUT</span></td>
+                    <td>Request timed out</td>
+                    <td><span class="code">GATEWAY_TIMEOUT</span></td>
                 </tr>
                 </tbody>
             </table>
@@ -405,32 +406,32 @@
 
 
             <p>You can find API-specific error responses in the <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None).url">API documentation</a>.</p>
-            <p class="panel-indent">Note that the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> process conforms with the error format specified in the OAuth 2.0 RFC. See <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a> for more information on the process.</p>
+            <p class="panel panel-berder-wide">Note that the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> process conforms with the error format specified in the OAuth 2.0 RFC. See <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a> for more information on the process.</p>
 
         </section>
 
     </section>
 
-    <section id="rate-limiting" class="section flush--bottom">
+    <section id="rate-limiting">
 
-        <h2 class="heading-large">Rate limiting</h2>
+        <h2 class="heading-medium">Rate limiting</h2>
 
         <p>We limit the number of requests each application can make. This protects our service against excessive use and Denial-of-Service attacks, and also encourages you to use our APIs efficiently.</p>
         <p>We set limits based on anticipated loads and peaks. Our standard limit is 150 requests per minute per application.</p>
-        <p>If you reach this limit you’ll get a <code class="code--slim">429 Too Many Requests</code> response code.</p>
+        <p>If you reach this limit you’ll get a <code class="code">429 Too Many Requests</code> response code.</p>
         <p>If you continually hit this rate limit, <a href="/developer/support">contact us</a> to discuss your application design and whether it’s appropriate to raise your rate limit. </p>
 
     </section>
 
-    <section id="scopes" class="section flush--bottom">
+    <section id="scopes">
 
-        <h2 class="heading-large">Scopes</h2>
+        <h2 class="heading-medium">Scopes</h2>
 
         <p>When your application needs to access resources on behalf of a user, the Developer Hub uses the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
 
         <p>This authority is granted in terms of OAuth 2.0 ‘scopes’. Each 'scope' relates to one or more endpoints.</p>
 
-        <p>When your application requests an OAuth 2.0 <code class="code--slim">Bearer</code> token, it must specify the scope(s) which the token should be granted for.</p>
+        <p>When your application requests an OAuth 2.0 <code class="code">Bearer</code> token, it must specify the scope(s) which the token should be granted for.</p>
 
         <p>These are translated to human-readable descriptions that are shown to the user before they grant authority. This makes sure the user understands and gives access to your application.</p>
 
@@ -440,13 +441,13 @@
 
     </section>
 
-    <section id="versioning" class="section flush--bottom">
+    <section id="versioning">
 
-        <h2 class="heading-large">Versioning</h2>
+        <h2 class="heading-medium">Versioning</h2>
 
         <p>When an API changes in a way that's backwards-incompatible, the version of the API will be bumped.</p>
 
-        <p>You can request a specific version of an API by using an <code class="code--slim">Accept</code> header with a media type of:</p>
+        <p>You can request a specific version of an API by using an <code class="code">Accept</code> header with a media type of:</p>
 
         <pre class="snippet--block">application/vnd.hmrc.[version]+[content-type]</pre>
 
@@ -458,15 +459,15 @@
 
     </section>
 
-    <section id="fraud-prevention" class="section flush--bottom">
+    <section id="fraud-prevention">
 
-        <h2 class="heading-large">Fraud prevention</h2>
+        <h2 class="heading-medium">Fraud prevention</h2>
 
         <p>To prevent fraud, HMRC records certain types of audit data. Our APIs provide consistent headers that you can use to pass additional audit data to us.</p>
 
         <p>These headers can influence the processing of the API call, or support prosecutions for tax or duty fraud.</p>
 
-        <h3 class="heading-small table-break">Compulsory Information</h3>
+        <h3 class="heading-small">Compulsory Information</h3>
 
         <p>Supplying header information for all our APIs will become compulsory - so we recommend designing it into your applications now.</p>
 
@@ -475,7 +476,7 @@
             <a href="/api-documentation/docs/api">API documentation</a>.
         </p>
 
-        <h3 class="heading-small table-break">Header Contents</h3>
+        <h3 class="heading-small">Header Contents</h3>
 
         <p>
             Header contents must use the character set USASCII, with other characters URL encoded as in
@@ -496,23 +497,23 @@
 
         <p>In the header definitions table:</p>
 
-        <p><code class="code--slim">Gov-Vendor-*</code> names identify the third-party software application so we can detect anomalies related to the intermediary.</p>
+        <p><code class="code">Gov-Vendor-*</code> names identify the third-party software application so we can detect anomalies related to the intermediary.</p>
 
-        <p><code class="code--slim">Gov-Client-*</code> names identify the physical machine that the user is sitting at so we can attribute the API call to a person.</p>
+        <p><code class="code">Gov-Client-*</code> names identify the physical machine that the user is sitting at so we can attribute the API call to a person.</p>
 
-        <p><code class="code--slim">Gov-Client-Browser-*</code> names are only relevant to applications where the client is a web browser.</p>
+        <p><code class="code">Gov-Client-Browser-*</code> names are only relevant to applications where the client is a web browser.</p>
 
 
         <table id="headerDef">
-            <caption class="visuallyhidden">Header definitions</caption>
+            <caption class="visually-hidden">Header definitions</caption>
             <colgroup>
-                <col class="fraud-header-name-col">
-                <col class="fraud-header-description-col">
+                <col width="40%">
+                <col width="60%">
             </colgroup>
             <thead>
                 <tr>
-                    <th class="fraud-header-name-col">Name</th>
-                    <th class="fraud-header-description-col">Description</th>
+                    <th>Name</th>
+                    <th>Description</th>
                 </tr>
             </thead>
             <tbody>
@@ -520,14 +521,14 @@
                     <td class="snippet--inline">Gov-Client-Public-IP</td>
                     <td>
                         <p>The public IP address of the originating client machine.</p>
-                        <p>For example, <code class="code--slim">198.51.100.0</code></p>
+                        <p>For example, <code class="code">198.51.100.0</code></p>
                     </td>
                 </tr>
                 <tr>
                     <td class="snippet--inline">Gov-Client-Public-Port</td>
                     <td>
                         <p>The port component of the Gov-Client-Public-IP.</p>
-                        <p>For example, <code class="code--slim">12345</code></p>
+                        <p>For example, <code class="code">12345</code></p>
                     </td>
                 </tr>
                 <tr>
@@ -538,7 +539,7 @@
                             For an installed application of batch processes, this is the MAC address of the device’s network adapter.
                             For a web browser, this is a unique value stored in a long term cookie.
                         </p>
-                        <p>For example, <code class="code--slim">beec798b-b366-47fa-b1f8-92cede14a1ce</code></p>
+                        <p>For example, <code class="code">beec798b-b366-47fa-b1f8-92cede14a1ce</code></p>
                     </td>
                 </tr>
                 <tr>
@@ -550,9 +551,9 @@
                         </p>
                         <p>
                             For example,
-                            <code class="code--slim">alice_desktop</code>,
-                            <code class="code--slim">alice_online21</code> (for D)
-                            <code class="code--slim">user123</code> (for A - C or F)
+                            <code class="code">alice_desktop</code>,
+                            <code class="code">alice_online21</code> (for D)
+                            <code class="code">user123</code> (for A - C or F)
                         </p>
                     </td>
                 </tr>
@@ -560,35 +561,35 @@
                     <td class="snippet--inline">Gov-Client-Timezone</td>
                     <td>
                         <p>Timezone of the clock on the client machine.</p>
-                        <p>For example, <code class="code--slim">GMT+3</code></p>
+                        <p>For example, <code class="code">GMT+3</code></p>
                     </td>
                 </tr>
                 <tr>
                     <td class="snippet--inline">Gov-Client-Local-IP</td>
                     <td>
                         <p>Internal private IP address used by the client machine.</p>
-                        <p>For example, <code class="code--slim">10.1.2.3</code></p>
+                        <p>For example, <code class="code">10.1.2.3</code></p>
                     </td>
                 </tr>
                 <tr>
                     <td class="snippet--inline">Gov-Client-Screen-Resolution</td>
                     <td>
                         <p>Screen resolution of the client machine in pixels.</p>
-                        <p>For example, <code class="code--slim">1920x1080</code> (for A - E)</p>
+                        <p>For example, <code class="code">1920x1080</code> (for A - E)</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="snippet--inline">Gov-Client-Window-Size</td>
                     <td>
                         <p>Size of the application or browser window on the client machine in pixels.</p>
-                        <p>For example, <code class="code--slim">1256x803</code> (for A - E)</p>
+                        <p>For example, <code class="code">1256x803</code> (for A - E)</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="snippet--inline">Gov-Client-Colour-Depth</td>
                     <td>
                         <p>Colour depth of the client machine in bits per pixel.</p>
-                        <p>For example, <code class="code--slim">24</code> (for A-E)</p>
+                        <p>For example, <code class="code">24</code> (for A-E)</p>
                     </td>
                 </tr>
                 <tr>
@@ -599,8 +600,8 @@
                         <p>"&lt;OS Family&gt;/&lt;OS Version&gt; (&lt;Manufacturer&gt; &lt;Model&gt;)" (A to D &amp; F).</p>
                         <p>
                             For example,
-                            <code class="code--slim">Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)</code> (for E)<br>
-                            <code class="code--slim">Android/6.0.1 (Samsung Galaxy S4)</code> <br/>(for A - D &amp; F)
+                            <code class="code">Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)</code> (for E)<br>
+                            <code class="code">Android/6.0.1 (Samsung Galaxy S4)</code> <br/>(for A - D &amp; F)
                         </p>
                     </td>
                 </tr>
@@ -609,8 +610,8 @@
                     <td>
                         <p>List of installed browser plugins (E only).</p>
                         <p>For example,
-                            <code class="code--slim">Shockwave Flash</code>,
-                            <code class="code--slim">Chromium PDF Viewer</code>
+                            <code class="code">Shockwave Flash</code>,
+                            <code class="code">Chromium PDF Viewer</code>
                         </p>
                     </td>
                 </tr>
@@ -620,7 +621,10 @@
                         <p>User Agent value as reported by Javascript (E only).</p>
                         <p>
                             For example,
-                            <code class="code--slim">Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Mobile/7B405</code>
+                            <pre class="code">
+Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like
+Mac OS X; en-us) AppleWebKit/531.21.10
+(KHTML, like Gecko) Mobile/7B405</pre>
                         </p>
                     </td>
                 </tr>
@@ -630,7 +634,7 @@
                         <p>Whether the browser has set the Do Not Track flag or not, if the client machine is using a web browser (E only).</p>
                         <p>
                             For example,
-                            <code class="code--slim">false</code>
+                            <code class="code">false</code>
                         </p>
                     </td>
                 </tr>
@@ -656,7 +660,7 @@
                         </p>
                         <p>
                             For example,
-                            <code class="code--slim">SMS;2017-04-21T13:23:42Z;c672b8d1ef56ed28</code>
+                            <code class="code">SMS;2017-04-21T13:23:42Z;c672b8d1ef56ed28</code>
                         </p>
                     </td>
                 </tr>
@@ -677,8 +681,8 @@
                         </p>
                         <p>
                             For example,
-                            <code class="code--slim">1.2.3 build 4286</code> (for A, B and F)
-                            <code class="code--slim">2.2.2, v3.8</code> (for C, D and E)
+                            <code class="code">1.2.3 build 4286</code> (for A, B and F)
+                            <code class="code">2.2.2, v3.8</code> (for C, D and E)
                         </p>
                     </td>
                 </tr>
@@ -697,8 +701,8 @@
                         </p>
                         <p>
                             For example,
-                            <code class="code--slim">fa7c484c-d8cf-4f8a-a39c-54a2a4c04bc6</code> (for A, B, E and F)
-                            <code class="code--slim">01ecef0967a, app3</code> (for C and D)
+                            <code class="code">fa7c484c-d8cf-4f8a-a39c-54a2a4c04bc6</code> (for A, B, E and F)
+                            <code class="code">01ecef0967a, app3</code> (for C and D)
                         </p>
                     </td>
                 </tr>
@@ -715,7 +719,7 @@
                             This may be an IP address of a Web Application Firewall, or a DDOS Protection Service, or a load
                             balancer that the vendor’s DNS record resolves to.
                         </p>
-                        <p>For example, <code class="code--slim">203.0.113.6</code></p>
+                        <p>For example, <code class="code">203.0.113.6</code></p>
                     </td>
                 </tr>
                 <tr>
@@ -740,33 +744,33 @@
                         </p>
                         <p>
                             For more details on this header field, see IETF <a href="https://tools.ietf.org/html/rfc7239">RFC7239 (opens in a new tab)</a>.</p>
-                        <p>For example, <code class="code--slim">for=10.1.2.3;by=198.51.100.0</code></p>
+                        <p>For example, <code class="code">for=10.1.2.3;by=198.51.100.0</code></p>
                     </td>
                 </tr>
             </tbody>
         </table>
     </section>
 
-    <section id="redirect-uris" class="flush flush--bottom">
-        <h2 class="heading-large">Redirect URIs</h2>
+    <section id="redirect-uris">
+        <h2 class="heading-medium">Redirect URIs</h2>
         <p>We use redirect URIs to send the user back to your application after successful (or unsuccessful) authorisation,
             prior to your application accessing
             <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.</p>
         <p>You must specify one or more redirect URIs when you create your application, and also specify one redirect
             URI when you send your user to our authorisation endpoint. To protect your application from phishing attacks,
             the redirect URI used for authorisation must match one of those specified when you created your application.</p>
-        <h3 class="heading-medium">Examples</h3>
+        <h3 class="heading-small">Examples</h3>
         <p>Examples of valid (and invalid) redirect URIs are:</p>
         <table>
-            <caption class="visuallyhidden">Redirect Uris</caption>
+            <caption class="visually-hidden">Redirect Uris</caption>
             <colgroup>
-                <col class="redirect-uri-col">
-                <col class="redirect-uri-comments-col">
+                <col width="50%">
+                <col width="50%">
             </colgroup>
             <thead>
             <tr>
-                <th class="redirect-uri-col">Redirect URI</th>
-                <th class="redirect-uri-comments-col">Comments</th>
+                <th>Redirect URI</th>
+                <th>Comments</th>
             </tr>
             </thead>
             <tbody>
@@ -780,7 +784,9 @@
                     <br>
                     <br>When calling our authorisation endpoint, your redirect URI must be percent-encoded, for example:
                     <br>
-                    <br><code class="code--slim">https%3A%2F%2Fwww.example.com%2Fauth-redirect</code>
+                    <br><pre class="code">
+https%3A%2F%2Fwww.example.com%2Fauth-
+redirect</pre>
                 </td>
             </tr>
             <tr>
@@ -823,8 +829,8 @@
         </table>
     </section>
 
-    <section id="oauth-2.0-browser-support" class="flush flush--bottom">
-        <h2 class="heading-large">OAuth 2.0 browser support</h2>
+    <section id="oauth-2.0-browser-support">
+        <h2 class="heading-medium">OAuth 2.0 browser support</h2>
 
         <p>The OAuth 2.0 <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
 
@@ -832,7 +838,7 @@
             <a href="https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices#browsers-to-test-in">
                 Designing for different browsers and devices</a>, including mobile devices and tablets.
         </p>
-        <p class="panel-indent">If you are using the Microsoft Web Browser Control embedded browser for the
+        <p class="panel panel-border-wide">If you are using the Microsoft Web Browser Control embedded browser for the
             authorisation journey, be aware that by default this will operate in IE7 compatibility mode which we do not
             formally support. For details of one way to handle this, see
             <a href="https://blogs.msdn.microsoft.com/patricka/2015/01/12/controlling-webbrowser-control-compatibility/" target="_blank">

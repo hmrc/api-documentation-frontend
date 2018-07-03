@@ -23,58 +23,59 @@
 
 @apiMain(pageAttributes) {
 
-    <header class="page-header">
-        <h1 class="flush--top">Authorisation</h1>
-    </header>
+        <h1 class="heading-large">Authorisation</h1>
 
-    <nav role="navigation" aria-labelledby="onThisPage" class="divider--bottom two-col-list full-width">
-        <h2 id="onThisPage" class="visuallyhidden">on this page</h2>
+    <nav role="navigation" aria-labelledby="onThisPage">
+        <h2 id="onThisPage" class="visually-hidden">on this page</h2>
 
-        <div class="two-col-list__col two-col-list__col--left">
-            <ul class="two-col-list--padded">
-                <li>
-                    1. <a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a>
-                </li>
-                <li>
-                    2. <a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a>
-                </li>
-                <li>
-                    3. <span>Application-restricted endpoints</span>
-                </li>
-            </ul>
+        <div class="grid-row">
+            <div class="column-one-half">
+                <ul class="list">
+                    <li>
+                        1. <a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a>
+                    </li>
+                    <li>
+                        2. <a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a>
+                    </li>
+                    <li>
+                        3. Application-restricted endpoints
+                    </li>
+                </ul>
+            </div>
+
+            <div class="column-one-half">
+                <ul class="list">
+                    <li>
+                        4. <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a>
+                    </li>
+                    <li>
+                        5. <a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-
-        <div class="two-col-list__col two-col-list__col--right">
-            <ul class="two-col-list--padded">
-                <li>
-                    4. <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a>
-                </li>
-                <li>
-                    5. <a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a>
-                </li>
-            </ul>
-        </div>
-
     </nav>
 
-    <section id="application-restricted" class="section flush--bottom">
+    <hr>
 
-        <h2 class="heading-large">Application-restricted endpoints</h2>
+    <section id="application-restricted">
 
-        <p>These endpoints need a server token. This must be passed as an <code class="code--slim">Authorization</code>
-            header with type <code class="code--slim">Bearer</code>.</p>
+        <h2 class="heading-medium">Application-restricted endpoints</h2>
 
-        <h3 class="heading-medium">Example</h3>
+        <p>These endpoints need a server token. This must be passed as an <code class="code">Authorization</code>
+            header with type <code class="code">Bearer</code>.</p>
+
+        <h3 class="heading-small">Example</h3>
 
 <pre class="snippet--block">
 curl -H 'Authorization: Bearer [YOUR-SERVER-TOKEN]' \
 -H 'Accept: application/vnd.hmrc.1.0+json' \
 @{applicationConfig.apiUrl}hello/application'</pre>
 
-        <p>If you’ve already been issued a valid OAuth 2.0 <code class="code--slim">access_token</code>,
-            you can substitute this with a <code class="code--slim">server_token</code>.</p>
+        <p>If you’ve already been issued a valid OAuth 2.0 <code class="code">access_token</code>,
+            you can substitute this with a <code class="code">server_token</code>.</p>
 
-        <p class="indent">For a working example <a href="@controllers.routes.DocumentationController.tutorialsPage().url#app-restricted">see the application-restricted endpoint tutorial.</a></p>
+        <p class="panel panel-border-wide">For a working example <a href="@controllers.routes.DocumentationController.tutorialsPage().url#app-restricted">see the application-restricted endpoint tutorial.</a></p>
 
     </section>
 

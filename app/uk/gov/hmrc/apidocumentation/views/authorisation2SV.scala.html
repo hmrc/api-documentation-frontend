@@ -23,61 +23,58 @@
 
 @apiMain(pageAttributes) {
 
-<header class="page-header">
-    <h1 class="flush--top">Authorisation</h1>
-</header>
+    <h1 class="heading-large">Authorisation</h1>
 
-<nav role="navigation" aria-labelledby="onThisPage" class="divider--bottom two-col-list full-width">
-    <h2 id="onThisPage" class="visuallyhidden">on this page</h2>
+    <nav role="navigation" aria-labelledby="onThisPage">
+        <h2 id="onThisPage" class="visually-hidden">on this page</h2>
 
-    <div class="two-col-list__col two-col-list__col--left">
-        <ul class="two-col-list--padded">
-            <li>
-                1. <a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a>
-            </li>
-            <li>
-                2. <a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a>
-            </li>
-            <li>
-                3. <a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a>
-            </li>
-        </ul>
-    </div>
+        <div class="grid-row">
+            <div class="column-one-half">
+                <ul class="list">
+                    <li>
+                        1. <a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a>
+                    </li>
+                    <li>
+                        2. <a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a>
+                    </li>
+                    <li>
+                        3. <a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a>
+                    </li>
+                </ul>
+            </div>
 
-    <div class="two-col-list__col two-col-list__col--right">
-        <ul class="two-col-list--padded">
-            <li>
-                4. <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a>
-            </li>
-            <li>
-                5. <span>2-step verification</span>
-            </li>
-        </ul>
-    </div>
+            <div class="column-one-half">
+                <ul class="list">
+                    <li>
+                        4. <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a>
+                    </li>
+                    <li>
+                        5. 2-step verification
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-</nav>
+    <hr>
 
+    <section id="two-step-verification">
+            <h2 class="heading-medium" id="2sv">2-step verification</h2>
+            <p>2-step verification (2SV) is an extra security step that takes place during the process for getting an <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">OAuth 2.0 access token</a> for user-restricted endpoints.</p>
+            <p>It occurs immediately after the user has signed in, and requires them to have their mobile or landline phone to hand.</p>
+            <p>First time through, the user must register for 2SV. The options are:</p>
+            <ul class="list list-bullet">
+                <li><strong class="bold-small">mobile phone</strong> - 6-digit code via SMS</li>
+                <li><strong class="bold-small">landline</strong> - 6-digit code via voice message</li>
+                <li><strong class="bold-small">app</strong> - QR code displayed on-screen, to be scanned using a device running an authenticator app</li>
+            </ul>
+            <p>Second and subsequent times through, the user must complete 2SV using their chosen method. Because 2SV is part of the API authorisation process, users do not need to complete it every time they use an API, only when their token expires (after 18 months) or if they are granting access to additional scopes.</p>
+            <p>The following diagram illustrates the user journey:</p>
+            <center>
+                <img src="@routes.Assets.versioned("content/images/API-2SV-journey.png")" width="300" align="middle" alt="2 step verification user journey"/>
+            </center>
 
-
-<section id="two-step-verification">
-        <header>
-            <h2 class="heading-large" id="2sv">2-step verification</h2>
-        </header>
-        <p>2-step verification (2SV) is an extra security step that takes place during the process for getting an <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">OAuth 2.0 access token</a> for user-restricted endpoints.</p>
-        <p>It occurs immediately after the user has signed in, and requires them to have their mobile or landline phone to hand.</p>
-        <p>First time through, the user must register for 2SV. The options are:</p>
-        <ul class="bullets">
-            <li><strong class="bold-small">mobile phone</strong> - 6-digit code via SMS</li>
-            <li><strong class="bold-small">landline</strong> - 6-digit code via voice message</li>
-            <li><strong class="bold-small">app</strong> - QR code displayed on-screen, to be scanned using a device running an authenticator app</li>
-        </ul>
-        <p>Second and subsequent times through, the user must complete 2SV using their chosen method. Because 2SV is part of the API authorisation process, users do not need to complete it every time they use an API, only when their token expires (after 18 months) or if they are granting access to additional scopes.</p>
-        <p>The following diagram illustrates the user journey:</p>
-        <center>
-            <img src="@routes.Assets.versioned("content/images/API-2SV-journey.png")" width="300" align="middle" alt="2 step verification user journey">
-        </center>
-
-</section>
+    </section>
 
         <nav class="pagination" role="navigation" aria-label="Pagination">
             <ul class="group">

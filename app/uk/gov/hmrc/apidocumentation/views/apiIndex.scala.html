@@ -25,25 +25,24 @@
 
 @apiMain(pageAttributes) {
 
-    <header class="page-header">
-        <h1 class="flush--top heading-xlarge">API documentation</h1>
-    </header>
+        <h1 class="heading-large">API documentation</h1>
+
     <p>These are the RESTful APIs we offer on the Developer Hub.</p>
     <p>Separately we also offer <a href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a>.</p>
 
-    <h2 id="example-api">Example API</h2>
+    <h2 id="example-api" class="heading-medium">Example API</h2>
 
     @apiList(exampleApis, "example")
 
     <br/>
 
-    <h2 id="apis">APIs</h2>
+    <h2 id="apis" class="heading-medium">APIs</h2>
 
     @apiList(otherApis, "other")
 
     @if(testSupportApis.nonEmpty) {
         <br/>
-        <h2 id="test-support-apis">Test Support APIs</h2>
+        <h2 id="test-support-apis" class="heading-medium">Test Support APIs</h2>
         <p>These APIs are available solely for testing purposes, for example setting up test data.</p>
         @apiList(testSupportApis, "testSupport")
     }

@@ -21,11 +21,11 @@
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @apiMain(pageAttributes) {
-    <h1 class="flush--top api_title heading-xlarge">Making Tax Digital guides</h1>
+    <h1 class="heading-large">Making Tax Digital guides</h1>
 
 
     <p>The following Making Tax Digital for Business (MTDfB) guides are available to help software developers and designers understand how software needs to interact with HMRC systems and what it needs to do:</p>
-    <ul class="bullets">
+    <ul class="list list-bullet">
         <li><a href="@routes.Assets.versioned("content/documentation/mtdfb-sa-guide-for-vendors.pdf")" target="_blank">MTDfB Self Assessment Guide for Vendors (opens in a new tab)</a></li>
         <li><a href="@routes.Assets.versioned("content/documentation/mtdfb-vat-guide-for-vendors.pdf")" target="_blank">MTDfB VAT Guide for Vendors (opens in a new tab)</a></li>
     </ul>
