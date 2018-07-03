@@ -1,6 +1,6 @@
 # api-documentation-frontend
 
-Frontend for API documentation
+Frontend for API documentation - part of the Developer Hub
 
 ## Steps to run acceptance test
 
