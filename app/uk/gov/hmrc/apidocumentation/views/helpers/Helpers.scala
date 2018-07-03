@@ -148,7 +148,8 @@ object Markdown {
       .forceExtentedProfile
       .registerPlugins(new YumlPlugin, new WebSequencePlugin, new IncludePlugin)
       .setDecorator(new ExtDecorator()
-        .addStyleClass("bullets", "ul")
+        .addStyleClass("list list-bullet", "ul")
+        .addStyleClass("list list-number", "ol")
         .addStyleClass("code", "code")
         .addStyleClass("heading-xlarge", "h1")
         .addStyleClass("heading-large", "h2")
