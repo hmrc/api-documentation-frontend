@@ -31,7 +31,7 @@
 </div>
 }
 
-@main(title = s"${pageAttributes.title} - ${applicationConfig.title} - GOV.UK",
+@main(title = Some(pageAttributes.title),
     navTitle = Some(applicationConfig.title),
     navTitleLink = Some(Call("GET", "/api-documentation")),
     headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks())),
