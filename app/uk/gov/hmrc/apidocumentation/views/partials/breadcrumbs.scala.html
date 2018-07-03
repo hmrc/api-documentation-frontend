@@ -22,15 +22,14 @@
     @*
       Note: The crumbs are in reverse order. The current page is FIRST, the top level link is LAST.
     *@
-    <nav class="breadcrumb-nav breadcrumb-nav--slim" aria-label="Breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumbs">
         <ol itemscope itemtype="http://schema.org/BreadcrumbList">
             @defining(crumbs.tail) { linkableCrumbs =>
                 @linkableCrumbs.reverse.map { crumb =>
-                    <li class="breadcrumb-nav__item"><a href="@crumb.url">@crumb.name</a></li>
-                    <li class="breadcrumb-nav__item breadcrumb-nav__item--trail"></li>
+                    <li><a href="@crumb.url">@crumb.name</a></li>
                 }
             }
-            <li class="breadcrumb-nav__item">@crumbs.head.name</li>
+            <li>@crumbs.head.name</li>
         </ol>
     </nav>
 }

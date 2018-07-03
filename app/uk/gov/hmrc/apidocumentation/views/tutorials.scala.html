@@ -58,7 +58,7 @@
 <section id="before-you-start">
 
     <section id="before-you-start">
-        <h2 class="heading-medium" id="before-you-start">Before you start</h2>
+        <h2 class="heading-large" id="before-you-start">Before you start</h2>
         <p>All base URLs in these tutorials use the sandbox environment.</p>
         <p>All code snippets in these tutorials are in Java. They use:</p>
 
@@ -115,7 +115,7 @@
     </section>
         <section id="open-endpoint">
 
-            <h2 class="heading-medium" id="open-endpoint">Accessing an open endpoint</h2>
+            <h2 class="heading-large" id="open-endpoint">Accessing an open endpoint</h2>
 
             <p>In this example, you'll access the Hello World API ‘Hello World’ endpoint.</p>
 
@@ -126,7 +126,7 @@
 
             <section>
 
-                <h3 class="heading-small">Issue a GET request to <br>https://test-api.service.hmrc.gov.uk/hello/world</h3>
+                <h3 class="heading-medium">Issue a GET request to <br>https://test-api.service.hmrc.gov.uk/hello/world</h3>
 
                 <pre class="snippet--block">
 // construct the GET request for our Hello World endpoint
@@ -147,7 +147,7 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
         <section id="app-restricted">
 
-            <h2 class="heading-medium" id="application-restricted-endpoint">Accessing an application-restricted endpoint</h2>
+            <h2 class="heading-large" id="application-restricted-endpoint">Accessing an application-restricted endpoint</h2>
 
             <p>The Hello World API ‘Hello Application’ endpoint is application-restricted. You'll need a <code class="code">server_token</code>.</p>
 
@@ -159,7 +159,7 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
             <section>
 
-                <h3 class="heading-small">Issue a GET request to<br>https://test-api.service.hmrc.gov.uk/hello/application, passing your server token as an <code class="code">Authorization</code>
+                <h3 class="heading-medium">Issue a GET request to<br>https://test-api.service.hmrc.gov.uk/hello/application, passing your server token as an <code class="code">Authorization</code>
                     header with the type <code class="code">Bearer</code></h3>
 
                 <pre class="snippet--block">
@@ -185,7 +185,7 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
         <section id="user-restricted">
 
-            <h2 class="heading-medium" id="user-restricted-endpoint">Accessing a user-restricted endpoint</h2>
+            <h2 class="heading-large" id="user-restricted-endpoint">Accessing a user-restricted endpoint</h2>
 
             <p>In this example, you’ll request an <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth 2.0</a> <code class="code">access_token</code>.
                 You’ll then use it to access the Hello World API ‘Hello User’ endpoint.</p>
@@ -198,7 +198,7 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
             <section>
 
-                <h3 class="heading-small">1. Request an OAuth 2.0 authorisation code with the required scope</h3>
+                <h3 class="heading-medium">1. Request an OAuth 2.0 authorisation code with the required scope</h3>
 
                 <pre class="snippet--block">
 // replace with your application's client_id and client_secret
@@ -230,7 +230,7 @@ httpServletResponse.sendRedirect(request.getLocationUri());</pre>
 
             <section>
 
-                <h3 class="heading-small">2. Exchange the OAuth 2.0 authorisation code for an access token</h3>
+                <h3 class="heading-medium">2. Exchange the OAuth 2.0 authorisation code for an access token</h3>
 
                 <pre class="snippet--block">
 // extract the authorization code from the request querystring
@@ -264,7 +264,7 @@ Long expiresIn = response.getExpiresIn();</pre>
 
             <section>
 
-                <h3 class="heading-small">3. Issue a GET request to<br>https://test-api.service.hmrc.gov.uk/hello/user, passing your newly issued <code class="code">access_token</code>
+                <h3 class="heading-medium">3. Issue a GET request to<br>https://test-api.service.hmrc.gov.uk/hello/user, passing your newly issued <code class="code">access_token</code>
                     as an <code class="code">Authorization</code>
                     header with the type <code class="code">Bearer</code></h3>
 
@@ -290,7 +290,7 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
             <section>
 
-                <h3 class="heading-small">4. Refresh an expired OAuth 2.0 <code class="code">access_token</code></h3>
+                <h3 class="heading-medium">4. Refresh an expired OAuth 2.0 <code class="code">access_token</code></h3>
 
                 <p>This exchanges a <code class="code">refresh_token</code> for a new <code class="code">access_token</code>
                     (and a new <code class="code">refresh_token</code>).</p>

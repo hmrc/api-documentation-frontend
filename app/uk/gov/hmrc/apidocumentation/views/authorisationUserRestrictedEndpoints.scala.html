@@ -57,7 +57,7 @@
 
 <section id="user-restricted">
 
-    <h2 class="heading-medium">User-restricted endpoints</h2>
+    <h2 class="heading-large">User-restricted endpoints</h2>
 
     <p>These endpoints require specific authorisation from the end user. They generally give access to sensitive personal data.</p>
 
@@ -74,7 +74,7 @@
     <p>The access token expires every 4 hours and must be refreshed using a single-use refresh token. After 18 months you can no longer refresh the access token and the end user must grant authority again.</p>
 
     <section id="get-access-token">
-        <h3 class="heading-small">Getting an OAuth 2.0 access token</h3>
+        <h3 class="heading-medium">Getting an OAuth 2.0 access token</h3>
 
         <p>The authorisation user journey is an important part of our security. It is also subject to change without notice.</p>
 
@@ -92,7 +92,7 @@
 
             <h4 class="heading-small">1. Request authorisation</h4>
 
-            <ol class="list lower-letters">
+            <ol class="list list-letter-lower">
                 <li>Send your user to the <a href="#auth-endpoint-example">authorisation endpoint</a>.</li>
                 <li>We display a start page that explains the authorisation process.</li>
                 <li>We prompt the user to sign in using their Government Gateway account.</li>
@@ -493,7 +493,7 @@ curl --data
 
     <section>
 
-        <h3 class="heading-small">Requesting a new token</h3>
+        <h3 class="heading-medium">Requesting a new token</h3>
 
         <p>Unless revoked earlier by the user, or tampered with, the authorisation granted to your application expires after <strong class="bold-small">18 months</strong>, and you can no longer refresh the user's <span class="code">access_token</span>.</p>
 
@@ -511,14 +511,14 @@ curl --data
 
     <section>
 
-        <h3 class="heading-small">Revoking authority</h3>
+        <h3 class="heading-medium">Revoking authority</h3>
 
         <p>A user can revoke the authority granted to your application at any time using the <a href="https://www.tax.service.gov.uk/applications-manage-authority">Manage authorised applications online service</a>.</p>
 
     </section>
     <section>
 
-        <h3 class="heading-small">Agents with multiple accounts</h3>
+        <h3 class="heading-medium">Agents with multiple accounts</h3>
 
         <p>Some agent organisations have more than one Government Gateway account, and their client relationships are spread across those accounts. There are a few ways to handle this:</p>
 
@@ -531,7 +531,7 @@ curl --data
     </section>
     <section>
 
-        <h3 class="heading-small" id="installed-applications" name="installed-applications">OAuth 2.0 for installed applications</h3>
+        <h3 class="heading-medium" id="installed-applications" name="installed-applications">OAuth 2.0 for installed applications</h3>
 
         <p>Our OAuth 2.0 implementation supports applications that are installed on a user's device, as long as it can access the system browser or an embedded browser.</p>
 
@@ -564,7 +564,7 @@ curl --data
     </section>
     <section>
 
-        <h3 class="heading-small">Managing your client secret</h3>
+        <h3 class="heading-medium">Managing your client secret</h3>
 
         <p>Your <span class="code">client_secret</span> is embedded in the source code of your application, and therefore isn't as secret as it would otherwise be.</p>
 

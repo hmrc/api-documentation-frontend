@@ -54,7 +54,7 @@
 
     <section id="api-access">
 
-        <h2 class="heading-medium">API access</h2>
+        <h2 class="heading-large">API access</h2>
 
         <p>The base URL for sandbox APIs is:</p>
         <pre class="snippet--block">https://test-api.service.hmrc.gov.uk/</pre>
@@ -63,7 +63,7 @@
     </section>
 
     <section id="network-access">
-        <h2 class="heading-medium" name="common-data-types">Network access</h2>
+        <h2 class="heading-large" name="common-data-types">Network access</h2>
         <p>You might need to configure your network so your software can access our API Platform and the authorisation journey for
             <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.
             If your software is installed on end user devices, they might also need to configure their own network.</p>
@@ -80,7 +80,7 @@
 
     <section id="common-data-types">
 
-        <h2 class="heading-medium">Common data types</h2>
+        <h2 class="heading-large">Common data types</h2>
 
         <p>Our APIs use consistent formats for common data types. We use ISO standards including:</p>
 
@@ -124,14 +124,14 @@
     </section>
 
     <section id="http-redirection">
-        <h2 class="heading-medium">HTTP redirection</h2>
+        <h2 class="heading-large">HTTP redirection</h2>
         <p>Our API Platform uses HTTP redirection if resources move permanently or temporarily.<p>
         <p>Redirection responses have a <strong class="bold-small">Location</strong> header with the resource's new URI.</p>
     </section>
 
     <section id="errors">
 
-        <h2 class="heading-medium">Common API Errors</h2>
+        <h2 class="heading-large">Common API Errors</h2>
 
         <section id="intro">
             <p>
@@ -200,7 +200,7 @@
         </section>
         <section id="401">
 
-            <h3 class="heading-small">401 (Unauthorized)</h3>
+            <h3 class="heading-medium">401 (Unauthorized)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -229,7 +229,7 @@
         </section>
         <section id="403">
 
-            <h3 class="heading-small">403 (Forbidden)</h3>
+            <h3 class="heading-medium">403 (Forbidden)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -259,7 +259,7 @@
 
         <section id="404">
 
-            <h3 class="heading-small">404 (Not Found)</h3>
+            <h3 class="heading-medium">404 (Not Found)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -281,7 +281,7 @@
 
         <section id="405">
 
-            <h3 class="heading-small">405 (Method Not Allowed)</h3>
+            <h3 class="heading-medium">405 (Method Not Allowed)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -298,7 +298,7 @@
         </section>
         <section id="406">
 
-            <h3 class="heading-small">406 (Not Acceptable)</h3>
+            <h3 class="heading-medium">406 (Not Acceptable)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -315,7 +315,7 @@
         </section>
         <section id="429">
 
-            <h3 class="heading-small">429 (Too Many Requests)</h3>
+            <h3 class="heading-medium">429 (Too Many Requests)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -332,7 +332,7 @@
         </section>
         <section id="500">
 
-            <h3 class="heading-small">500 (Internal Server Error)</h3>
+            <h3 class="heading-medium">500 (Internal Server Error)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -349,7 +349,7 @@
         </section>
         <section id="501">
 
-            <h3 class="heading-small">501 (Not Implemented)</h3>
+            <h3 class="heading-medium">501 (Not Implemented)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -366,7 +366,7 @@
         </section>
         <section id="503">
 
-            <h3 class="heading-small">503 (Service Unavailable)</h3>
+            <h3 class="heading-medium">503 (Service Unavailable)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -387,7 +387,7 @@
         </section>
         <section id="504">
 
-            <h3 class="heading-small">504 (Gateway Timeout)</h3>
+            <h3 class="heading-medium">504 (Gateway Timeout)</h3>
             <table>
                 <thead><tr>
                     <th>Scenario</th>
@@ -414,7 +414,7 @@
 
     <section id="rate-limiting">
 
-        <h2 class="heading-medium">Rate limiting</h2>
+        <h2 class="heading-large">Rate limiting</h2>
 
         <p>We limit the number of requests each application can make. This protects our service against excessive use and Denial-of-Service attacks, and also encourages you to use our APIs efficiently.</p>
         <p>We set limits based on anticipated loads and peaks. Our standard limit is 150 requests per minute per application.</p>
@@ -425,7 +425,7 @@
 
     <section id="scopes">
 
-        <h2 class="heading-medium">Scopes</h2>
+        <h2 class="heading-large">Scopes</h2>
 
         <p>When your application needs to access resources on behalf of a user, the Developer Hub uses the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
 
@@ -443,7 +443,7 @@
 
     <section id="versioning">
 
-        <h2 class="heading-medium">Versioning</h2>
+        <h2 class="heading-large">Versioning</h2>
 
         <p>When an API changes in a way that's backwards-incompatible, the version of the API will be bumped.</p>
 
@@ -461,13 +461,13 @@
 
     <section id="fraud-prevention">
 
-        <h2 class="heading-medium">Fraud prevention</h2>
+        <h2 class="heading-large">Fraud prevention</h2>
 
         <p>To prevent fraud, HMRC records certain types of audit data. Our APIs provide consistent headers that you can use to pass additional audit data to us.</p>
 
         <p>These headers can influence the processing of the API call, or support prosecutions for tax or duty fraud.</p>
 
-        <h3 class="heading-small">Compulsory Information</h3>
+        <h3 class="heading-medium">Compulsory Information</h3>
 
         <p>Supplying header information for all our APIs will become compulsory - so we recommend designing it into your applications now.</p>
 
@@ -476,7 +476,7 @@
             <a href="/api-documentation/docs/api">API documentation</a>.
         </p>
 
-        <h3 class="heading-small">Header Contents</h3>
+        <h3 class="heading-medium">Header Contents</h3>
 
         <p>
             Header contents must use the character set USASCII, with other characters URL encoded as in
@@ -752,14 +752,14 @@ Mac OS X; en-us) AppleWebKit/531.21.10
     </section>
 
     <section id="redirect-uris">
-        <h2 class="heading-medium">Redirect URIs</h2>
+        <h2 class="heading-large">Redirect URIs</h2>
         <p>We use redirect URIs to send the user back to your application after successful (or unsuccessful) authorisation,
             prior to your application accessing
             <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.</p>
         <p>You must specify one or more redirect URIs when you create your application, and also specify one redirect
             URI when you send your user to our authorisation endpoint. To protect your application from phishing attacks,
             the redirect URI used for authorisation must match one of those specified when you created your application.</p>
-        <h3 class="heading-small">Examples</h3>
+        <h3 class="heading-medium">Examples</h3>
         <p>Examples of valid (and invalid) redirect URIs are:</p>
         <table>
             <caption class="visually-hidden">Redirect Uris</caption>
@@ -830,7 +830,7 @@ redirect</pre>
     </section>
 
     <section id="oauth-2.0-browser-support">
-        <h2 class="heading-medium">OAuth 2.0 browser support</h2>
+        <h2 class="heading-large">OAuth 2.0 browser support</h2>
 
         <p>The OAuth 2.0 <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
 
