@@ -42,14 +42,6 @@ class MainTemplateSpec extends PlaySpec with MockitoSugar {
       renderedHtml.body must not include "<meta name=\"robots\" content=\"noindex\">"
       renderedHtml.body must not include "<meta name=\"googlebot\" content=\"noindex\">"
     }
-    "render with no indexing meta tags when in ET mode" in new TestCase {
-      given(mockApplicationConfig.hotjarEnabled) willReturn Some(false)
-      given(mockApplicationConfig.hotjarId) willReturn None
-      given(mockApplicationConfig.isExternalTestEnvironment).willReturn(true)
-      val renderedHtml = views.html.index.render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
-      renderedHtml.body must include("<meta name=\"robots\" content=\"noindex\">")
-      renderedHtml.body must include("<meta name=\"googlebot\" content=\"noindex\">")
-    }
   }
 }
 

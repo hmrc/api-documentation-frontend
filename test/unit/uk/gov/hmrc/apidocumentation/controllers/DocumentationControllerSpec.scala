@@ -54,14 +54,13 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
     val homeBreadcrumb = Crumb("Home", controllers.routes.DocumentationController.indexPage().url)
     val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None).url)
-    val usingTheHubBreadcrumb = Crumb("Using the Unit Test Title", controllers.routes.DocumentationController.usingTheHubPage().url)
+    val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
     
     when(navigationService.headerNavigation()(any())).thenReturn(Future.successful(Seq(navLink)))
     when(navigationService.sidebarNavigation()).thenReturn(Future.successful(Seq(sidebarLink)))
-    when(navigationService.sidebarNavigationLinksForET(any())).thenReturn(Future.successful(Seq(sidebarLink)))
     when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
     when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
-    when(appConfig.title).thenReturn("Unit Test Title")
+    when(appConfig.title).thenReturn("HMRC Developer Hub")
     when(documentationService.defaultExpiration).thenReturn(1.hour)
     when(appConfig.hotjarEnabled) thenReturn None
     when(appConfig.hotjarId) thenReturn None
@@ -105,7 +104,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
-      verifyPageRendered(actualPage, "HMRC Unit Test Title - Hello World", breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))
+      verifyPageRendered(actualPage, pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))
       verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v${version} (${apiStatus})")
     }
 
@@ -140,6 +139,10 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(failed(exception))
     }
 
+    def pageTitle(pagePurpose: String) = {
+      s"$pagePurpose - HMRC Developer Hub - GOV.UK"
+    }
+
 
   }
 
@@ -147,7 +150,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the index page" in new Setup {
 
-      verifyPageRendered(underTest.indexPage()(request), "HMRC Unit Test Title", breadcrumbs = List.empty, sideNavLinkRendered = false)
+      verifyPageRendered(underTest.indexPage()(request), "HMRC Developer Hub - GOV.UK", breadcrumbs = List.empty, sideNavLinkRendered = false)
 
     }
 
@@ -157,84 +160,41 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       val actualPage = await(actualPageFuture)
       status(actualPage) shouldBe 200
       bodyOf(actualPage) should include("Cookies")
-      bodyOf(actualPage) should include("HMRC Developer Hub - Cookies")
+      bodyOf(actualPage) should include(pageTitle("Cookies"))
     }
 
     "display the testing page" in new Setup {
-      verifyPageRendered(underTest.testingPage()(request), "HMRC Unit Test Title - Testing in the sandbox")
+      verifyPageRendered(underTest.testingPage()(request), pageTitle("Testing in the sandbox"))
     }
 
     "display the tutorials page" in new Setup {
-      verifyPageRendered(underTest.tutorialsPage()(request), "HMRC Unit Test Title - Tutorials")
+      verifyPageRendered(underTest.tutorialsPage()(request), pageTitle("Tutorials"))
     }
 
     "display the authorisation page" in new Setup {
-      verifyPageRendered(underTest.authorisationPage()(request), "HMRC Unit Test Title - Authorisation")
+      verifyPageRendered(underTest.authorisationPage()(request), pageTitle("Authorisation"))
     }
 
     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
       when(developerFrontendConnector.fetchTermsOfUsePartial()(any()))
         .thenReturn(Future.successful(HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))))
 
-      verifyPageRendered(underTest.termsOfUsePage()(request), "HMRC Unit Test Title - Terms Of Use",
+      verifyPageRendered(underTest.termsOfUsePage()(request), pageTitle("Terms Of Use"),
         bodyContains = Seq("blah blah blah"))
     }
 
     "display the reference guide page" in new Setup {
       when(underTest.appConfig.apiUrl).thenReturn("https://api.service.hmrc.gov.uk/")
-      verifyPageRendered(underTest.referenceGuidePage()(request), "HMRC Unit Test Title - Reference guide",
+      verifyPageRendered(underTest.referenceGuidePage()(request), pageTitle("Reference guide"),
         bodyContains = Seq("The base URL for sandbox APIs is:", "https://api.service.hmrc.gov.uk/"))
     }
 
-    "display the reference guide page when ET" in new Setup {
-      when(underTest.appConfig.isExternalTestEnvironment).thenReturn(true)
-      when(underTest.appConfig.apiUrl).thenReturn("https://test-api.service.hmrc.gov.uk/")
-      verifyPageRendered(underTest.referenceGuidePage()(request), "HMRC Unit Test Title - Reference guide",
-        bodyContains = Seq("The base URL for sandbox APIs is:", "https://test-api.service.hmrc.gov.uk/"))
-    }
-
     "display the using the hub page" in new Setup {
-      verifyPageRendered(underTest.usingTheHubPage()(request), "HMRC Unit Test Title - Using the Unit Test Title")
+      verifyPageRendered(underTest.usingTheHubPage()(request), pageTitle("Using the Developer Hub"))
     }
 
     "display the naming guidelines page" in new Setup {
-      verifyPageRendered(underTest.nameGuidelinesPage()(request), "HMRC Unit Test Title - Application naming guidelines", breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb))
-    }
-
-    "not display the sandbox introduction page when not ET" in new Setup {
-      verifyNotFoundPageRendered(underTest.sandboxIntroductionPage()(request))
-    }
-
-    "not display the sandbox getting started page when not ET" in new Setup {
-      verifyNotFoundPageRendered(underTest.sandboxGettingStartedPage()(request))
-    }
-
-    "not display the sandbox data clearout page when not ET" in new Setup {
-      verifyNotFoundPageRendered(underTest.sandboxDataCleardownPage()(request))
-    }
-
-    "not display the sandbox stateful behaviour page when ET" in new Setup {
-      verifyNotFoundPageRendered(underTest.sandboxStatefulBehaviourPage()(request))
-    }
-
-    "display the sandbox introduction page when ET" in new Setup {
-      when(underTest.appConfig.isExternalTestEnvironment).thenReturn(true)
-      verifyPageRendered(underTest.sandboxIntroductionPage()(request), "HMRC Unit Test Title - Introduction")
-    }
-
-    "display the sandbox getting started page when ET" in new Setup {
-      when(underTest.appConfig.isExternalTestEnvironment).thenReturn(true)
-      verifyPageRendered(underTest.sandboxGettingStartedPage()(request), "HMRC Unit Test Title - Getting Started")
-    }
-
-    "display the sandbox data clearout page when ET" in new Setup {
-      when(underTest.appConfig.isExternalTestEnvironment).thenReturn(true)
-      verifyPageRendered(underTest.sandboxDataCleardownPage()(request), "HMRC Unit Test Title - Data clear down")
-    }
-
-    "display the sandbox stateful behaviour page when ET" in new Setup {
-      when(underTest.appConfig.isExternalTestEnvironment).thenReturn(true)
-      verifyPageRendered(underTest.sandboxStatefulBehaviourPage()(request), "HMRC Unit Test Title - Stateful behaviour")
+      verifyPageRendered(underTest.nameGuidelinesPage()(request), pageTitle("Application naming guidelines"), breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb))
     }
   }
 
@@ -248,7 +208,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       val result = underTest.apiIndexPage(None, None)(request)
 
-      verifyPageRendered(result, "HMRC Unit Test Title - API Documentation", bodyContains = Seq("API documentation"))
+      verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
     }
 
     "display the error page when the documentationService throws an exception" in new Setup {
@@ -448,7 +408,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "render 200 page when feature switch on" in new Setup(ramlPreviewEnabled = true) {
       val result = underTest.previewApiDocumentation(None)(request)
-      verifyPageRendered(result, "HMRC Unit Test Title - API Documentation Preview")
+      verifyPageRendered(result, pageTitle("API Documentation Preview"))
     }
 
     "render 500 page when no URL supplied" in new Setup(ramlPreviewEnabled = true) {

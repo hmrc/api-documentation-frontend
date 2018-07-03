@@ -31,10 +31,10 @@
 </div>
 }
 
-@main(title = s"${applicationConfig.title} - ${pageAttributes.title}",
+@main(title = Some(pageAttributes.title),
     navTitle = Some(applicationConfig.title),
     navTitleLink = Some(Call("GET", "/api-documentation")),
-    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(applicationConfig.isExternalTestEnvironment))),
+    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks())),
     serviceInfoContent = Some(userBanner),
     contentHeader = pageAttributes.contentHeader,
     sidebar = None,

@@ -30,19 +30,7 @@
                 Register for an account
             </a>
             <span class="hero-alternative-action">
-              or
-
-                @if(applicationConfig.isExternalTestEnvironment) {
-
-                <a href="@controllers.routes.DocumentationController.sandboxIntroductionPage()">learn more</a> about the Developer Sandbox
-
-                } else {
-
-               <a href="@controllers.routes.DocumentationController.usingTheHubPage()">learn more</a> about the Developer Hub
-
-                }
-
-
+              or <a href="@controllers.routes.DocumentationController.usingTheHubPage()">learn more</a> about the Developer Hub
             </span>
         </div>
     </section>
@@ -57,9 +45,8 @@
     </div>
 }
 
-@main(title = applicationConfig.title,
-    navTitle = Some(applicationConfig.title),
-    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(applicationConfig.isExternalTestEnvironment), navLinks)),
+@main(navTitle = Some(applicationConfig.title),
+    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(), navLinks)),
     serviceInfoContent = Some(userBanner),
     fullWidthBanner = Some(fullWidthBanner),
     fullWidthContent = true) {
@@ -69,7 +56,7 @@
             <section class="section section--branded">
                 <h2>Get started</h2>
                 <ul>
-                    <li><a href="@controllers.routes.DocumentationController.usingTheHubPage()">Using the @applicationConfig.title</a></li>
+                    <li><a href="@controllers.routes.DocumentationController.usingTheHubPage()">Using the Developer Hub</a></li>
                     <li><a href="@controllers.routes.DocumentationController.authorisationPage()">Authorisation</a></li>
                     <li><a href="@controllers.routes.DocumentationController.tutorialsPage()">Tutorials</a></li>
                     <li><a href="@controllers.routes.DocumentationController.termsOfUsePage()">Terms of use</a></li>
@@ -92,9 +79,7 @@
                 <ul>
                     <li><a href="@applicationConfig.developerFrontendUrl/developer/applications/add">Add application</a></li>
                     <li><a href="@applicationConfig.developerFrontendUrl/developer/applications">Manage applications</a></li>
-                    @if(applicationConfig.isExternalTestEnvironment == false) {
                     <li><a href="@controllers.routes.DocumentationController.testingPage()">Testing in the sandbox</a></li>
-                    }
                     <li><a href="@applicationConfig.developerFrontendUrl/api-test-user">Create a test user</a></li>
                 </ul>
             </section>

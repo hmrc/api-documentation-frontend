@@ -19,7 +19,7 @@ Frontend for API documentation
    
 4. To execute test
    
-   4a  On chrome use command ```sbt acceptance:test -Dbrowser=chrome-local``` or just ```sbt acceptance:test```. This will run all test other than sandbox ones
+   4a  On chrome use command ```sbt acceptance:test -Dbrowser=chrome-local``` or just ```sbt acceptance:test```.
    
    4b. On firefox use command ```sbt acceptance:test -Dbrowser=firefox-local```
    
@@ -27,10 +27,6 @@ Frontend for API documentation
        A report will also be generated identifying any dependencies that need upgrading. This requires that
        you have defined CATALOGUE_DEPENDENCIES_URL as an environment variable pointing to the dependencies
        endpoint on the Tax Platform Catalogue's API.   
-
-   4d. To run the sandbox test use command sbt sandbox:test
-   
-   
 
 ## Current Known Issues
 
