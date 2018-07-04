@@ -150,9 +150,9 @@ object Markdown {
       .setDecorator(new ExtDecorator()
         .addStyleClass("bullets", "ul")
         .addStyleClass("code", "code")
-        .addStyleClass("heading-xlarge", "h1")
-        .addStyleClass("heading-large", "h2")
-        .addStyleClass("heading-medium", "h3")
+        .addStyleClass("heading-large", "h1")
+        .addStyleClass("heading-medium", "h2")
+        .addStyleClass("heading-small", "h3")
         .addStyleClass("heading-small", "h4"))
       .setCodeBlockEmitter(new CodeBlockEmitter)
 
