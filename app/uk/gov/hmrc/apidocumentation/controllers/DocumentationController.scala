@@ -45,8 +45,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   private lazy val cacheControlHeaders = "cache-control" -> s"public, max-age=${documentationService.defaultExpiration.toSeconds}"
   private val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
   private val apiDocCrumb = Crumb("API Documentation", routes.DocumentationController.apiIndexPage(None, None).url)
-  private val usingTheSandboxCrumb = Crumb("Using the Sandbox", routes.DocumentationController.sandboxIntroductionPage().url)
-  private val usingTheHubCrumb = Crumb(s"Using the ${appConfig.title}", routes.DocumentationController.usingTheHubPage().url)
+  private val usingTheHubCrumb = Crumb("Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url)
   private val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
   private val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
 
@@ -146,7 +145,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   }
 
   def usingTheHubPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(usingTheHub(pageAttributes(s"Using the ${appConfig.title}", routes.DocumentationController.usingTheHubPage().url, navLinks))))
+    Future.successful(Ok(usingTheHub(pageAttributes(s"Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url, navLinks))))
   }
 
   def mtdIntroductionPage() = headerNavigation { implicit request => navLinks =>
@@ -155,46 +154,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def referenceGuidePage() = headerNavigation { implicit request => navLinks =>
     Future.successful(Ok(reference(pageAttributes("Reference guide", routes.DocumentationController.referenceGuidePage().url, navLinks))))
-  }
-
-  def sandboxIntroductionPage() = headerNavigation { implicit request => navLinks =>
-    externalTestOnly {
-      Future.successful(Ok(sandboxIntroduction(pageAttributesForET(
-        "Introduction",
-        routes.DocumentationController.sandboxIntroductionPage().url,
-        navLinks,
-        Some(Breadcrumbs(usingTheSandboxCrumb, homeCrumb))))))
-    }
-  }
-
-  def sandboxGettingStartedPage() = headerNavigation { implicit request => navLinks =>
-    externalTestOnly {
-      Future.successful(Ok(sandboxGettingStarted(pageAttributesForET(
-        "Getting Started",
-        routes.DocumentationController.sandboxGettingStartedPage().url,
-        navLinks,
-        Some(Breadcrumbs(usingTheSandboxCrumb, homeCrumb))))))
-    }
-  }
-
-  def sandboxStatefulBehaviourPage() = headerNavigation { implicit request => navLinks =>
-    externalTestOnly {
-      Future.successful(Ok(sandboxStatefulBehaviour(pageAttributesForET(
-        "Stateful behaviour",
-        routes.DocumentationController.sandboxStatefulBehaviourPage().url,
-        navLinks,
-        Some(Breadcrumbs(usingTheSandboxCrumb, homeCrumb))))))
-    }
-  }
-
-  def sandboxDataCleardownPage() = headerNavigation { implicit request => navLinks =>
-    externalTestOnly {
-      Future.successful(Ok(sandboxDataCleardown(pageAttributesForET(
-        "Data clear down",
-        routes.DocumentationController.sandboxDataCleardownPage().url,
-        navLinks,
-        Some(Breadcrumbs(usingTheSandboxCrumb, homeCrumb))))))
-    }
   }
 
   def nameGuidelinesPage() = headerNavigation { implicit request => navLinks =>
@@ -402,11 +361,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     }
   }
 
-  private def externalTestOnly(body: => Future[Result])(implicit request: Request[AnyContent]) = {
-    if (appConfig.isExternalTestEnvironment) body
-    else Future(NotFound(ApplicationGlobal.notFoundTemplate))
-  }
-
   private def headerNavigation(f: Request[AnyContent] => Seq[NavLink] => Future[Result]): Action[AnyContent] = {
     Action.async { implicit request =>
       // We use a non-standard cookie which doesn't get propagated in the header carrier
@@ -424,11 +378,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   private def pageAttributes(title: String, url: String, headerNavLinks: Seq[NavLink], customBreadcrumbs: Option[Breadcrumbs] = None) = {
     val breadcrumbs = customBreadcrumbs.getOrElse(Breadcrumbs(Crumb(title, url), homeCrumb))
     apidocumentation.models.PageAttributes(title, breadcrumbs, headerNavLinks, navigationService.sidebarNavigation())
-  }
-
-  private def pageAttributesForET(title: String, url: String, headerNavLinks: Seq[NavLink], customBreadcrumbs: Option[Breadcrumbs] = None) = {
-    val breadcrumbs = customBreadcrumbs.getOrElse(Breadcrumbs(Crumb(title, url), homeCrumb))
-    PageAttributes(title, breadcrumbs, headerNavLinks, navigationService.sidebarNavigationLinksForET(url))
   }
 
   private def extractEmail(fut: Future[Option[Developer]])(implicit ec: ExecutionContext): Future[Option[String]] = {
