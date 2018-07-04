@@ -53,7 +53,7 @@ class HelpersSpec extends WordSpec with Matchers {
           |* one
           |* two""".stripMargin).body.replaceAll("\\s+", "") shouldEqual
         """<p>List:</p>
-          |<ul class="bullets"><li>one</li>
+          |<ul class="list list-bullet"><li>one</li>
           |<li>two</li>
           |</ul>""".stripMargin.replaceAll("\\s+", "")
     }

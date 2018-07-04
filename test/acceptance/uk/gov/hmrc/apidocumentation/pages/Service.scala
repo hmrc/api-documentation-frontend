@@ -30,9 +30,9 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   def breadCrumbText = cssSelector(".breadcrumbs").element.text
 
-  def errorsBackToTop = find(cssSelector("div.back_to_top.font-xsmall > a")).get
+  def errorsBackToTop = find(cssSelector("div.bold-small > a")).get
 
-  def resourcesBackToTop = find(cssSelector("#section > div.back_to_top > a")).get
+  def resourcesBackToTop = find(cssSelector("#section > div.bold-small > a")).get
 
   def applicationName = className("header__menu__proposition-name").element.text
 
@@ -53,10 +53,10 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
         ("#_say-hello-application", "#say-hello-application")
       )
     forAll(ids) { (ID: String, id: String) =>
-      val element = cssSelector(s"${ID}_get_accordion > div.persist-area > div:nth-of-type(1) > div.accordion__row__right.align--middle > a > span.http-verb.http-verb--get.float--right").webElement
+      val element = cssSelector(s"${ID}_get_accordion > div > div:nth-of-type(1) > div.accordion__row__right.align--middle > a > span.http-verb.http-verb--get.float--right").webElement
       val act = new Actions(webDriver)
       act.moveToElement(element).click().perform()
-      find(cssSelector(s"$id-get > section:nth-of-type(1) > h4.first")).get.isDisplayed
+      find(cssSelector(s"$id-get > section:nth-of-type(1) > h4")).get.isDisplayed
       act.moveToElement(element).click().perform()
     }
   }
@@ -73,7 +73,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     forAll(endpoints) { (id: String, endpointTitle: String, endpointRequestType: String, endpointUri: String) =>
       cssSelector(s"${id}_get_accordion .accordion__button").element.text shouldBe endpointTitle
       cssSelector(s"${id}_get_accordion .http-verb.http-verb--get.float--right").element.text shouldBe endpointRequestType
-      cssSelector(s"${id}_get_accordion .font-xxsmall").element.text shouldBe endpointUri
+      cssSelector(s"${id}_get_accordion .font-xsmall").element.text shouldBe endpointUri
     }
   }
 

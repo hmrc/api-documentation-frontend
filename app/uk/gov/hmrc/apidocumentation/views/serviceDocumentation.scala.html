@@ -26,47 +26,56 @@
 @(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ramlAndSchemas: RamlAndSchemas)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @topContent = {
-    <select class="form-control form-control-version"
-            id="version"
-            name="version"
-            value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version, None).url"
-            onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-        @for(v <- api.sortedActiveVersions;
-            a <- v.visibility;
-            if a.authorised) {
-            <option @if(v == currentVersion) {selected} value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url">v@v.version (@v.displayedStatus)</option>
-        }
-    </select>
+    <div class="form-group">
+        <select class="form-control form-control-version"
+                id="version"
+                name="version"
+                value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version, None).url"
+                onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+            @for(v <- api.sortedActiveVersions;
+                a <- v.visibility;
+                if a.authorised) {
+                <option @if(v == currentVersion) {selected} value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url">v@v.version (@v.displayedStatus)</option>
+            }
+        </select>
+    </div>
 }
 
 @apiMain(pageAttributes, topContent) {
     @if(currentVersion.status == APIStatus.ALPHA) {
-    <div class="section hard--top">
-        <div class="alert alert--info flush--top" role="alert">
-        <p class="alert__message">This version is in alpha - expect extensive breaking changes.</p>
+    <div class="section">
+        <div class="panel panel-border-wide" role="alert">
+            <p>This version is in alpha - expect extensive breaking changes.</p>
         </div>
     </div>
     }
 
     @if(currentVersion.status == APIStatus.BETA || currentVersion.status == APIStatus.PROTOTYPED) {
-    <div class="section hard--top">
-        <div class="alert alert--info flush--top" role="alert">
-        <p class="alert__message">This version is in beta - expect some breaking changes.</p>
+    <div class="section">
+        <div class="panel panel-border-wide" role="alert">
+            <p>This version is in beta - expect some breaking changes.</p>
         </div>
     </div>
     }
 
     @if(currentVersion.status == APIStatus.DEPRECATED) {
         @defining(Annotation(ramlAndSchemas.raml, "(deprecationMessage)")) { deprecationMessage =>
-        <div class="section hard--top">
-            <div class="alert alert--info flush--top" role="alert">
-                @if(deprecationMessage.nonEmpty) {
-                <p class="alert__message">@{deprecationMessage}</p>
-                } else {
-                <p class="alert__message">This version is deprecated - it’s going to be removed.</p>
-                }
+            <div class="section">
+                <div class="notice">
+                    <i class="icon icon-important">
+                        <span class="visually-hidden">Alert</span>
+                    </i>
+                    @if(deprecationMessage.nonEmpty) {
+                        <strong class="bold-small">
+                            @{deprecationMessage}.
+                        </strong>
+                    } else {
+                        <strong class="bold-small">
+                            This version is deprecated - it’s going to be removed.
+                        </strong>
+                    }
+                </div>
             </div>
-        </div>
         }
     }
 

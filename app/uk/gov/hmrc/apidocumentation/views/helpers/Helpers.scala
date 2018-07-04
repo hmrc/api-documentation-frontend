@@ -148,11 +148,12 @@ object Markdown {
       .forceExtentedProfile
       .registerPlugins(new YumlPlugin, new WebSequencePlugin, new IncludePlugin)
       .setDecorator(new ExtDecorator()
-        .addStyleClass("bullets", "ul")
-        .addStyleClass("code--slim", "code")
-        .addStyleClass("heading-xlarge", "h1")
-        .addStyleClass("heading-large", "h2")
-        .addStyleClass("heading-medium", "h3")
+        .addStyleClass("list list-bullet", "ul")
+        .addStyleClass("list list-number", "ol")
+        .addStyleClass("code", "code")
+        .addStyleClass("heading-large", "h1")
+        .addStyleClass("heading-medium", "h2")
+        .addStyleClass("heading-small", "h3")
         .addStyleClass("heading-small", "h4"))
       .setCodeBlockEmitter(new CodeBlockEmitter)
 
