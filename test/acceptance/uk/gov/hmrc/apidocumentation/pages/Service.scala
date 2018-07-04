@@ -168,7 +168,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
 
   override def isCurrentPage: Boolean = find(className("page-header")).fold(false)(_.text == "Developer Forum API")
 
-  def LocationFieldOptional = find(cssSelector("div.font-xsmall.secondary-text")).get
+  def LocationFieldOptional = find(cssSelector("div.parameter-optional")).get
 
 
   def checkVersionSortOrder(): Unit = {

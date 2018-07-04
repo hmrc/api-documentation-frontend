@@ -38,13 +38,13 @@
                 @if(field.depth > 0) {table__row--nested-@{field.depth}}">
                 <td data-heading="Name" class="table__detail--responsive">
                     <div class="table__cell-contents--responsive">
-                        <div class="font-small">@{field.name}</div>
-                        <div class="font-xsmall secondary-text">@if(field.isArray) {array} else {@{field.`type`}}</div>
+                        <div class="parameter-name">@{field.name}</div>
+                        <div class="parameter-type">@if(field.isArray) {array} else {@{field.`type`}}</div>
                         @if(fieldOptionalityKnown) {
                             @if(field.required) {
-                                <div class="font-xsmall orange-text">required</div>
+                                <div class="parameter-required">required</div>
                             } else {
-                                <div class="font-xsmall secondary-text">optional</div>
+                                <div class="parameter-optional">optional</div>
                             }
                         }
                     </div>

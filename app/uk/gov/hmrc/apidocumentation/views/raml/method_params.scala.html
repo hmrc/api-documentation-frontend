@@ -22,12 +22,12 @@
 <tr>
     <td data-heading="Name">
       <div>
-          <div class="font-small">@param.name</div>
-          <div class="font-xsmall secondary-text">@{param.baseTypeName}</div>
+          <div class="parameter-name">@param.name</div>
+          <div class="parameter-type">@{param.baseTypeName}</div>
           @if(param.required) {
-              <div class="font-xsmall orange-text">required</div>
+              <div class="parameter-required">required</div>
           } else {
-              <div class="font-xsmall secondary-text">optional</div>
+              <div class="parameter-optional">optional</div>
           }
       </div>
     </td>
