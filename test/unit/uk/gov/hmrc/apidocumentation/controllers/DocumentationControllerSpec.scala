@@ -92,11 +92,11 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     private def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
-      bodyOf(actualPage) should include(s"""<li class="breadcrumb-nav__item"><a href="${crumb.url}">${crumb.name}</a></li>""")
+      bodyOf(actualPage) should include(s"""<li><a href="${crumb.url}">${crumb.name}</a></li>""")
     }
 
     def verifyBreadcrumbEndpointRendered(actualPage: Result, crumbText: String) = {
-      bodyOf(actualPage) should include(s"""<li class="breadcrumb-nav__item">${crumbText}</li>""")
+      bodyOf(actualPage) should include(s"""<li>${crumbText}</li>""")
     }
 
     def verifyLinkToStableDocumentationRendered(actualPage: Result, service: String, version: String) = {

@@ -23,30 +23,29 @@
 
 @apiMain(pageAttributes) {
 
-    <header class="page-header">
-    <h1 class="flush--top">Testing in the sandbox</h1>
-    </header>
-    <nav role="navigation" aria-labelledby="usingTheSandbox" class="divider--bottom two-col-list full-width">
-        <div class="two-col-list__col two-col-list__col--left">
-            <ul class="two-col-list--padded">
-                <li><a href="@controllers.routes.DocumentationController.testingPage()">Getting started</a></li>
-                <li><a href="@controllers.routes.DocumentationController.testingStatefulBehaviourPage()">Stateful behaviour</a></li>
-            </ul>
-        </div>
+    <h1 class="heading-large">Testing in the sandbox</h1>
 
-        <div class="two-col-list__col two-col-list__col--right">
-            <ul class="two-col-list--padded">
-                <li>Data clear down</li>
-            </ul>
+    <nav role="navigation" aria-labelledby="usingTheSandbox">
+        <div class="grid-row">
+            <div class="column-one-half">
+                <ul class="list">
+                    <li><a href="@controllers.routes.DocumentationController.testingPage()">Getting started</a></li>
+                    <li><a href="@controllers.routes.DocumentationController.testingStatefulBehaviourPage()">Stateful behaviour</a></li>
+                </ul>
+            </div>
+            <div class="column-one-half">
+                <ul class="list">
+                    <li>Data clear down</li>
+                </ul>
+            </div>
         </div>
     </nav>
+    <hr>
 
-    <div class="section divider--bottom">
-        <h2 id="intro" class="heading-large">Data clear down</h2>
-        <p>
-            To maintain optimal performance of the environment, all test data in the sandbox is cleared down on the first and third Saturday of each month at around midnight GMT. After this time you will need to create new test users and data.
-        </p>
-    </div>
+    <h2 id="intro" class="heading-large">Data clear down</h2>
+    <p>
+        To maintain optimal performance of the environment, all test data in the sandbox is cleared down on the first and third Saturday of each month at around midnight GMT. After this time you will need to create new test users and data.
+    </p>
 
     <nav class="page-nav" role="navigation" aria-label="Page navigation">
         <ul>

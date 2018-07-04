@@ -26,14 +26,14 @@
 
 @main(title = Some(Messages("help.cookies.title")), metaTitle=Some(metaTitle)) {
     <div class="grid-row">
-        <header class="page-header">
-            <h1>Cookies</h1>
-        </header>
+
+        <h1 class="heading-large">Cookies</h1>
+
         <p>Find out more about <a href="https://www.gov.uk/help/cookies">how cookies are used on GOV.UK</a> and how to manage
             them.</p>
 
-        <h2 class="heading-large">@Messages("help.cookies.how_used.heading")</h2>
-        <h3 class="heading-medium">@Messages("help.cookies.how_used.sessions.heading")</h3>
+        <h2 class="heading-medium">@Messages("help.cookies.how_used.heading")</h2>
+        <h3 class="heading-small">@Messages("help.cookies.how_used.sessions.heading")</h3>
         <p>@Messages("help.cookies.how_used.sessions.info")</p>
         <table>
             <thead>
@@ -66,7 +66,7 @@
             </tr>
             </tbody>
         </table>
-            <h3 class="heading-medium">@Messages("help.cookies.how_used.intro_message.heading")</h3>
+            <h3 class="heading-small">@Messages("help.cookies.how_used.intro_message.heading")</h3>
                 <p>@Messages("help.cookies.how_used.intro_message.info")</p>
         <table>
             <thead>
@@ -84,7 +84,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 class="heading-medium">@Messages("help.cookies.user_research.heading")</h3>
+        <h3 class="heading-small">@Messages("help.cookies.user_research.heading")</h3>
         <p>@Messages("help.cookies.user_research.info")</p>
         <table>
             <thead>
@@ -103,16 +103,16 @@
             </tbody>
         </table>
 
-        <h3 class="heading-medium">@Messages("help.cookies.how_used.measuring_usage.heading")</h3>
+        <h3 class="heading-small">@Messages("help.cookies.how_used.measuring_usage.heading")</h3>
         <p>@Messages("help.cookies.how_used.measuring_usage.info")</p>
         <p>@Messages("help.cookies.how_used.measuring_usage.list_info")</p>
-        <ul class="bullets">
+        <ul class="list list-bullet">
             <li>@Messages("help.cookies.how_used.measuring_usage.list_item.1")</li>
             <li>@Messages("help.cookies.how_used.measuring_usage.list_item.2")</li>
             <li>@Messages("help.cookies.how_used.measuring_usage.list_item.3")</li>
         </ul>
         <p>@Messages("help.cookies.how_used.measuring_usage.paragraph.1")</p>
-        <div class="application-notice info-notice">
+        <div class="panel panel-border-wide">
             <p>@Messages("help.cookies.how_used.measuring_usage.notice")</p>
         </div>
         <table>
@@ -150,7 +150,7 @@
             Messages("help.cookies.how_used.measuring_usage.opt_out.link.url"), value =
             Some(Messages("help.cookies.how_used.measuring_usage.opt_out.link.text"))).toHtml))</p>
 
-        <h3 class="heading-medium">@Messages("help.cookies.hotjar")</h3>
+        <h3 class="heading-small">@Messages("help.cookies.hotjar")</h3>
         <div>
             <p>@Messages("help.cookies.hotjar.info")</p>
         </div>
@@ -198,7 +198,7 @@
         <p>You can opt-out from having Hotjar collect your information by <a
                 href="https://www.hotjar.com/opt-out" target="_blank">visiting their opt out page (link opens in a new tab)</a> clicking 'Disable Hotjar'.</p>
 
-         <h3 class="heading-medium">@Messages("help.cookies.optimizely")</h3>
+         <h3 class="heading-small">@Messages("help.cookies.optimizely")</h3>
         <div>
             <p>@Messages("help.cookies.optimizely.info")</p>
         </div>
@@ -226,7 +226,7 @@
         <p>You can opt out from having Optimizely collect your information by  <a
          href="https://www.optimizely.com/legal/opt-out/" target="_blank">visiting their opt out page (link opens in a new tab)</a> and entering our Developer Hub URL in their opt out form:<br><br><code>https://developer.service.hmrc.gov.uk/api-documentation</code> </p>
 
-        <h3 class="heading-medium">@Messages("help.cookies.sm")</h3>
+        <h3 class="heading-small">@Messages("help.cookies.sm")</h3>
        <p>We use <a
          href="http://www.surveymonkey.com/" target="_blank">SurveyMonkey (link opens in a new tab)</a> to collect responses to our survey. If you take part, SurveyMonkey saves cookies to your computer to track your progress.</p>
 

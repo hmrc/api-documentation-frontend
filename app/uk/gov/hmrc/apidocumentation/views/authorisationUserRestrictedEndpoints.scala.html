@@ -23,42 +23,39 @@
 
 @apiMain(pageAttributes) {
 
-<header class="page-header">
-    <h1 class="flush--top">Authorisation</h1>
-</header>
+    <h1 class="heading-large">Authorisation</h1>
 
-<nav role="navigation" aria-labelledby="onThisPage" class="divider--bottom two-col-list full-width">
-    <h2 id="onThisPage" class="visuallyhidden">on this page</h2>
+    <nav role="navigation" aria-labelledby="onThisPage">
+        <h2 id="onThisPage" class="visually-hidden">on this page</h2>
 
-    <div class="two-col-list__col two-col-list__col--left">
-        <ul class="two-col-list--padded">
-            <li>
-                1. <a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a>
-            </li>
-            <li>
-                2. <a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a>
-            </li>
-            <li>
-                3. <a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a>
-            </li>
-        </ul>
-    </div>
+        <div class="grid-row">
+            <div class="column-one-half">
+                <ul class="list">
+                    <li>
+                        1. <a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a>
+                    </li>
+                    <li>
+                        2. <a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a>
+                    </li>
+                    <li>
+                        3. <a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column-one-half">
+                <ul class="list">
+                    <li>
+                        4. <span>User-restricted endpoints</span>
+                    </li>
+                    <li>
+                        5. <a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-
-    <div class="two-col-list__col two-col-list__col--right">
-        <ul class="two-col-list--padded">
-            <li>
-                4. <span>User-restricted endpoints</span>
-            </li>
-            <li>
-                5. <a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a>
-            </li>
-        </ul>
-    </div>
-
-</nav>
-
-<section id="user-restricted" class="section flush--bottom">
+<section id="user-restricted">
 
     <h2 class="heading-large">User-restricted endpoints</h2>
 
@@ -83,7 +80,7 @@
 
         <div class="notice">
             <i class="icon icon-important">
-                <span class="visuallyhidden">Warning</span>
+                <span class="visually-hidden">Warning</span>
             </i>
             <strong class="bold-small">
                 You must not alter this journey in any way.
@@ -107,25 +104,22 @@
             <p>The following diagram illustrates the process:</p>
 
             <div class="text--center">
-                <picture>
                     <img srcset="@routes.Assets.versioned("content/images/api-user-auth-journey.svg")"
                     src="@routes.Assets.versioned("content/images/api-user-auth-journey.svg")"
-                    alt="API user auth journey" width="50%">
-                </picture>
+                    alt="API user auth journey" width="50%"/>
             </div>
 
             <h5 id="auth-endpoint-example" class="heading-small faded-text">Example</h5>
 
             <pre class="snippet--block">
-                    GET  https://test-api.service.hmrc.gov.uk/oauth/authorize?response_type=code
-                    &amp;client_id=[YOUR-CLIENT-ID]
-                    &amp;scope=[REQUESTED-SCOPE]
-                    &amp;state=[STATE]
-                    &amp;redirect_uri=[YOUR-REDIRECT-URI]
-            </pre>
+GET  https://test-api.service.hmrc.gov.uk/oauth/authorize?response_type=code
+&amp;client_id=[YOUR-CLIENT-ID]
+&amp;scope=[REQUESTED-SCOPE]
+&amp;state=[STATE]
+&amp;redirect_uri=[YOUR-REDIRECT-URI]</pre>
 
             <table>
-                <caption class="visuallyhidden">Authorise endpoint query parameters and descriptions</caption>
+                <caption class="visually-hidden">Authorise endpoint query parameters and descriptions</caption>
                 <thead>
                 <tr>
                     <th scope="col">Parameter</th>
@@ -134,23 +128,23 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><span class="code--slim">response_type</span></td>
+                    <td><span class="code">response_type</span></td>
                     <td>The OAuth 2.0 response type. Currently the only acceptable value is &quot;code&quot;.</td>
                 </tr>
                 <tr>
-                    <td><span class="code--slim">client_id</span></td>
+                    <td><span class="code">client_id</span></td>
                     <td>The Client ID of your application.</td>
                 </tr>
                 <tr>
-                    <td><span class="code--slim">scope</span></td>
+                    <td><span class="code">scope</span></td>
                     <td>A space-delimited list of scopes you  would like to have permission to access on behalf of your user.</td>
                 </tr>
                 <tr>
-                    <td><span class="code--slim">state</span> (optional)</td>
-                    <td>An opaque value used to maintain state between the request and callback and to prevent tampering as described in the <a href="https://tools.ietf.org/html/rfc6749#section-10.12" target="_blank">Oauth 2.0 specification (opens in a new tab)</a>. This is passed back to your application via the <span class="code--slim">redirect_uri</span>.</td>
+                    <td><span class="code">state</span> (optional)</td>
+                    <td>An opaque value used to maintain state between the request and callback and to prevent tampering as described in the <a href="https://tools.ietf.org/html/rfc6749#section-10.12" target="_blank">Oauth 2.0 specification (opens in a new tab)</a>. This is passed back to your application via the <span class="code">redirect_uri</span>.</td>
                 </tr>
                 <tr>
-                    <td><span class="code--slim">redirect_uri</span></td>
+                    <td><span class="code">redirect_uri</span></td>
                     <td>The URI that we use to send users back to your application after successful (or unsuccessful) authorisation.<br><br>
                         For more details see our <a href="@controllers.routes.DocumentationController.referenceGuidePage().url#redirect-uris">reference guide</a>.
                     </td>
@@ -161,7 +155,7 @@
             <h5 class="heading-small faded-text">Error codes</h5>
 
             <table>
-                <caption class="visuallyhidden">Error codes</caption>
+                <caption class="visually-hidden">Error codes</caption>
                 <thead>
                 <tr>
                     <th>Error scenario</th>
@@ -246,25 +240,25 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><span class="code--slim">code</span></td>
+                        <td><span class="code">code</span></td>
                         <td>The authorisation code, if authorisation is successful.<br><br>
                         This is a single-use token that expires 10 minutes after it's issued.</td>
                     </tr>
                     <tr>
-                        <td><span class="code--slim">state</span></td>
+                        <td><span class="code">state</span></td>
                         <td>The value of the state parameter you provided in the authorisation request, whether or not authorisation is successful.</td>
                     </tr>
                     <tr>
-                        <td><span class="code--slim">error</span></td>
-                        <td>Always <span class="code--slim">access_denied</span>, if authorisation failed.</td>
+                        <td><span class="code">error</span></td>
+                        <td>Always <span class="code">access_denied</span>, if authorisation failed.</td>
                     </tr>
                     <tr>
-                        <td><span class="code--slim">error_description</span></td>
+                        <td><span class="code">error_description</span></td>
                         <td>Human readable description of the error, if authorisation failed, for example, “user denied the authorization”.</td>
                     </tr>
                     <tr>
-                        <td><span class="code--slim">error_code</span></td>
-                        <td>Error code, if authorisation failed, for example, <span class="code--slim">USER_DENIED_AUTHORIZATION</span><br>
+                        <td><span class="code">error_code</span></td>
+                        <td>Error code, if authorisation failed, for example, <span class="code">USER_DENIED_AUTHORIZATION</span><br>
                         The full list of error codes can change over time, so we recommend you do not cater for specific error codes.</td>
                     </tr>
                 </tbody>
@@ -291,10 +285,10 @@ https://www.example.com?error=access_denied
 
             <h4 class="heading-small">3. Exchange authorisation code for access token</h4>
 
-            <p>When you get the authorisation code, your application must exchange this for an <span class="code--slim">access_token</span> <strong class="bold-small">within 10 minutes</strong> before it expires.
+            <p>When you get the authorisation code, your application must exchange this for an <span class="code">access_token</span> <strong class="bold-small">within 10 minutes</strong> before it expires.
             </p>
 
-            <p>Do this via a POST to our token endpoint using <span class=code--slim">grant_type</span> of <span class="code--slim">authorization_code</span>.</p>
+            <p>Do this via a POST to our token endpoint using <span class=code">grant_type</span> of <span class="code">authorization_code</span>.</p>
 
             <p>The response contains the access token used for calling the APIs and a refresh token used to obtain a new access token once the current one expires.</p>
 
@@ -303,8 +297,7 @@ https://www.example.com?error=access_denied
             <pre class="snippet--block">
 curl -X POST --data
 'client_secret=[YOUR-CLIENT-SECRET]&amp;client_id=[YOUR-CLIENT-ID]&amp;grant_type=authorization_code&amp;redirect_uri=[YOUR-REDIRECT-URI]&amp;code=[AUTHORIZATION-CODE]' \ https://test-api.service.hmrc.gov.uk/oauth/token
-
-            </pre>
+</pre>
 
             <h5 class="heading-small faded-text">Example response</h5>
 
@@ -316,12 +309,12 @@ curl -X POST --data
 "refresh_token": "unJkSs5cvs8CS9E4DLvTkNhcRBq9BwUPm23cr3pF",
 "scope": "read:employment"
 }
-            </pre>
+</pre>
 
             <h5 class="heading-small faded-text">Error codes</h5>
 
             <table>
-                <caption class="visuallyhidden">Error codes</caption>
+                <caption class="visually-hidden">Error codes</caption>
                 <thead>
                     <tr>
                         <th>Error scenario</th>
@@ -394,7 +387,7 @@ curl -X POST --data
 
             <h4 class="heading-small">4. Call an API</h4>
 
-            <p>You can now call an API using the <span class="code--slim">access_token</span> we issued. Do this with an Authorization header containing this <span class="code--slim">access_token</span> as an OAuth 2.0 Bearer Token with the correct API <a href="@controllers.routes.DocumentationController.referenceGuidePage()">scope</a>.</p>
+            <p>You can now call an API using the <span class="code">access_token</span> we issued. Do this with an Authorization header containing this <span class="code">access_token</span> as an OAuth 2.0 Bearer Token with the correct API <a href="@controllers.routes.DocumentationController.referenceGuidePage()">scope</a>.</p>
 
             <h5 class="heading-small faded-text">Example request</h5>
 
@@ -410,13 +403,13 @@ https://test-api.service.hmrc.gov.uk/oauth/token \
 
             <h4 class="heading-small">5. Refreshing an access token</h4>
 
-            <p>A user's <span class="code--slim">access_token</span> <strong class="bold-small">expires after 4 hours</strong>.</p>
+            <p>A user's <span class="code">access_token</span> <strong class="bold-small">expires after 4 hours</strong>.</p>
 
-            <p>If the user's <span class="code--slim">access_token</span> has expired, when your application calls an API it receives a response with an HTTP status code of <span class="code--slim">401 (Unauthorized)</span> and an error code of <span class="code--slim">INVALID_CREDENTIALS</span>.</p>
+            <p>If the user's <span class="code">access_token</span> has expired, when your application calls an API it receives a response with an HTTP status code of <span class="code">401 (Unauthorized)</span> and an error code of <span class="code">INVALID_CREDENTIALS</span>.</p>
 
-            <p>To refresh the <span class="code--slim">access_token</span>, submit the expired token’s corresponding <span class="code--slim">refresh_token</span> to our token endpoint using <span class="code--slim">grant_type</span> of <span class="code--slim">refresh_token</span>.</p>
+            <p>To refresh the <span class="code">access_token</span>, submit the expired token’s corresponding <span class="code">refresh_token</span> to our token endpoint using <span class="code">grant_type</span> of <span class="code">refresh_token</span>.</p>
 
-            <p>You can only use a <span class="code--slim">refresh_token</span> once. When you refresh an <span class="code--slim">access_token</span>, it invalidates the original <span class="code--slim">access_token</span> immediately if it has not already expired. </p>
+            <p>You can only use a <span class="code">refresh_token</span> once. When you refresh an <span class="code">access_token</span>, it invalidates the original <span class="code">access_token</span> immediately if it has not already expired. </p>
 
             <p>Therefore, be careful to avoid creating any race conditions when refreshing access tokens if your application supports concurrent API access.</p>
 
@@ -425,7 +418,7 @@ https://test-api.service.hmrc.gov.uk/oauth/token \
             <pre class="snippet--block">
 curl --data
 'client_secret=[YOUR-CLIENT-SECRET]&amp;client_id=[YOUR-CLIENT-ID]&amp;grant_type=refresh_token&amp;refresh_token=[REFRESH-TOKEN]' \https://test-api.service.hmrc.gov.uk/oauth/token
-            </pre>
+</pre>
 
             <h5 class="heading-small faded-text">Example response</h5>
 
@@ -439,7 +432,7 @@ curl --data
             <h5 class="heading-small faded-text">Error codes</h5>
 
             <table>
-                <caption class="visuallyhidden">Error codes</caption>
+                <caption class="visually-hidden">Error codes</caption>
                 <thead>
                     <tr>
                         <th>Error scenario</th>
@@ -502,9 +495,9 @@ curl --data
 
         <h3 class="heading-medium">Requesting a new token</h3>
 
-        <p>Unless revoked earlier by the user, or tampered with, the authorisation granted to your application expires after <strong class="bold-small">18 months</strong>, and you can no longer refresh the user's <span class="code--slim">access_token</span>.</p>
+        <p>Unless revoked earlier by the user, or tampered with, the authorisation granted to your application expires after <strong class="bold-small">18 months</strong>, and you can no longer refresh the user's <span class="code">access_token</span>.</p>
 
-        <p>If the user's <span class="code--slim">refresh_token</span> has expired, when your application calls our token endpoint, it receives a response with an HTTP status code of 400 (Bad Request) and an error code of <span class="code--slim">invalid_request</span>.</p>
+        <p>If the user's <span class="code">refresh_token</span> has expired, when your application calls our token endpoint, it receives a response with an HTTP status code of 400 (Bad Request) and an error code of <span class="code">invalid_request</span>.</p>
 
         <p>When this happens, your application must send the user back through the full process for <a href="#get-access-token">Getting an OAuth 2.0 access token</a>.</p>
 
@@ -542,15 +535,15 @@ curl --data
 
         <p>Our OAuth 2.0 implementation supports applications that are installed on a user's device, as long as it can access the system browser or an embedded browser.</p>
 
-        <p>The Redirect URI determines how the <span class="code--slim">authorization_code</span> is returned to your application.</p>
+        <p>The Redirect URI determines how the <span class="code">authorization_code</span> is returned to your application.</p>
 
-        <p>Where your application is running on a remote web server, your Redirect URI returns the <span class="code--slim">authorization_code</span> to that server. You can then centrally manage your authorisation tokens.</p>
+        <p>Where your application is running on a remote web server, your Redirect URI returns the <span class="code">authorization_code</span> to that server. You can then centrally manage your authorisation tokens.</p>
 
         <p>In distributed applications, where your application is installed on a user's device and there's no centralised web server, you have the following options for a Redirect URI:</p>
 
         <h4 class="heading-small">http://localhost:[PORT]</h4>
 
-        <p>The <span class="code--slim">authorization_code</span> is returned to a web server running on the client at the specified port.</p>
+        <p>The <span class="code">authorization_code</span> is returned to a web server running on the client at the specified port.</p>
 
         <p>This isn’t suitable in some situations, such as where a firewall stops your client from listening on a HTTP port.</p>
 
@@ -558,9 +551,9 @@ curl --data
 
         <h4 class="heading-small">urn:ietf:wg:oauth:2.0:oob</h4>
 
-        <p>The <span class="code--slim">authorization_code</span> is rendered in the title of a HTML page where you can parse the DOM to retrieve the code. You can then programmatically close the window before the user sees the rendered web page.</p>
+        <p>The <span class="code">authorization_code</span> is rendered in the title of a HTML page where you can parse the DOM to retrieve the code. You can then programmatically close the window before the user sees the rendered web page.</p>
 
-        <p>If your application can't parse the DOM or close the window, the HTML page renders the <span class="code--slim">authorization_code</span> along with a message asking the user to copy the code and paste it into your application, before closing the window.</p>
+        <p>If your application can't parse the DOM or close the window, the HTML page renders the <span class="code">authorization_code</span> along with a message asking the user to copy the code and paste it into your application, before closing the window.</p>
 
         <h4 class="heading-small">urn:ietf:wg:oauth:2.0:oob:auto</h4>
 
@@ -573,9 +566,9 @@ curl --data
 
         <h3 class="heading-medium">Managing your client secret</h3>
 
-        <p>Your <span class="code--slim">client_secret</span> is embedded in the source code of your application, and therefore isn't as secret as it would otherwise be.</p>
+        <p>Your <span class="code">client_secret</span> is embedded in the source code of your application, and therefore isn't as secret as it would otherwise be.</p>
 
-        <p>You should consider a rotation strategy for your <span class="code--slim">client_secret</span>, so that secrets are periodically rolled over to a new value. To support this the sandbox environment lets you simultaneously support multiple <span class="code--slim">client_secret</span> values for a single application.</p>
+        <p>You should consider a rotation strategy for your <span class="code">client_secret</span>, so that secrets are periodically rolled over to a new value. To support this the sandbox environment lets you simultaneously support multiple <span class="code">client_secret</span> values for a single application.</p>
 
     </section>
 
