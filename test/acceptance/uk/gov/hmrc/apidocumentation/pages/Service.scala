@@ -28,7 +28,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   override def isCurrentPage: Boolean = find(id("title")).fold(false)(_.text == "Hello World API")
 
-  def breadCrumbText = cssSelector(".breadcrumb-nav").element.text
+  def breadCrumbText = cssSelector(".breadcrumbs").element.text
 
   def errorsBackToTop = find(cssSelector("div.back_to_top.font-xsmall > a")).get
 
