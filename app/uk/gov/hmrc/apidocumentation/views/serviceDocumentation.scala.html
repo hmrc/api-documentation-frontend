@@ -44,26 +44,16 @@
 @apiMain(pageAttributes, topContent) {
     @if(currentVersion.status == APIStatus.ALPHA) {
     <div class="section">
-        <div class="notice">
-            <i class="icon icon-important">
-                <span class="visually-hidden">Alert</span>
-            </i>
-            <strong class="bold-small">
-                This version is in alpha - expect extensive breaking changes.
-            </strong>
+        <div class="panel panel-border-wide" role="alert">
+            <p>This version is in alpha - expect extensive breaking changes.</p>
         </div>
     </div>
     }
 
     @if(currentVersion.status == APIStatus.BETA || currentVersion.status == APIStatus.PROTOTYPED) {
     <div class="section">
-        <div class="notice">
-            <i class="icon icon-important">
-                <span class="visually-hidden">Alert</span>
-            </i>
-            <strong class="bold-small">
-                This version is in beta - expect some breaking changes.
-            </strong>
+        <div class="panel panel-border-wide" role="alert">
+            <p>This version is in beta - expect some breaking changes.</p>
         </div>
     </div>
     }
