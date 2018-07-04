@@ -35,9 +35,9 @@
             </thead>
             <tbody>
                 @for(header <- headers) {
-                <tr>
-                    <td data-heading="Name">
-                        <div>
+                <tr class="table__row--responsive">
+                    <td data-heading="Name" class="table__detail--responsive">
+                        <div class="table__cell-contents--responsive">
                             <div class="parameter-name">@Val(header.displayName)</div>
                             @if(header.required) {
                                 <div class="parameter-required">required</div>
@@ -46,13 +46,13 @@
                             }
                         </div>
                     </td>
-                    <td data-heading="Value">
-                        <div>
+                    <td data-heading="Value" class="table__detail--responsive">
+                        <div class="table__cell-contents--responsive">
                             <p>@HeaderVal(header, version)</p>
                         </div>
                     </td>
-                    <td data-heading="Description">
-                        <div>
+                    <td data-heading="Description" class="table__detail--responsive">
+                        <div class="table__cell-contents--responsive">
                             @Markdown(header.description)
                         </div>
                     </td>

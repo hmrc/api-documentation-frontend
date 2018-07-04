@@ -19,9 +19,9 @@
 @(params: Seq[MethodParameter])
 
 @for(param <- params){
-<tr>
-    <td data-heading="Name">
-      <div>
+<tr class="table__row--responsive">
+    <td data-heading="Name" class="table__detail--responsive>
+      <div class="table__cell-contents--responsive">
           <div class="parameter-name">@param.name</div>
           <div class="parameter-type">@{param.baseTypeName}</div>
           @if(param.required) {
@@ -31,8 +31,8 @@
           }
       </div>
     </td>
-    <td data-heading="Description">
-      <div>
+    <td data-heading="Description" class="table__detail--responsive">
+      <div class="table__cell-contents--responsive">
           @Markdown(param.description)
 
           @param.typeName match {
