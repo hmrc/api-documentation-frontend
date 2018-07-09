@@ -16,17 +16,17 @@
 
 package unit.uk.gov.hmrc.apidocumentation.views.include
 
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import junit.framework.TestCase
-import uk.gov.hmrc.apidocumentation.models.NavLink
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
 import play.api.i18n.Messages
 import play.api.mvc.Request
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models.NavLink
 import uk.gov.hmrc.apidocumentation.views
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class HotjarTemplateSpec extends PlaySpec with MockitoSugar {
+class HotjarTemplateSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
 
   val pageTitle = "pageTitle"
   val navLinks = Seq[NavLink]()
@@ -41,8 +41,8 @@ class HotjarTemplateSpec extends PlaySpec with MockitoSugar {
       given(mockApplicationConfig.hotjarId) willReturn Some(123)
 
       val renderedHtml = views.html.index.render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
-      renderedHtml.body must include("hotjar")
-      renderedHtml.body must include("hjid:123")
+      renderedHtml.body should include("hotjar")
+      renderedHtml.body should include("hjid:123")
     }
 
     "render without hotjar script when hotjar id is not defined and hotjar feature is disabled" in new TestCase {
@@ -50,8 +50,8 @@ class HotjarTemplateSpec extends PlaySpec with MockitoSugar {
       given(mockApplicationConfig.hotjarId) willReturn None
 
       val renderedHtml = views.html.index.render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
-      renderedHtml.body must not include "hotjar"
-      renderedHtml.body must not include "hjid:"
+      renderedHtml.body should not include "hotjar"
+      renderedHtml.body should not include "hjid:"
     }
 
     "render without hotjar script when hotjar id is not defined and hotjar feature is enabled" in new TestCase {
@@ -59,8 +59,8 @@ class HotjarTemplateSpec extends PlaySpec with MockitoSugar {
       given(mockApplicationConfig.hotjarId) willReturn None
 
       val renderedHtml = views.html.index.render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
-      renderedHtml.body must not include "hotjar"
-      renderedHtml.body must not include "hjid:"
+      renderedHtml.body should not include "hotjar"
+      renderedHtml.body should not include "hjid:"
     }
 
     "render without hotjar script when hotjar id is defined and hotjar feature is disabled" in new TestCase {
@@ -68,8 +68,8 @@ class HotjarTemplateSpec extends PlaySpec with MockitoSugar {
       given(mockApplicationConfig.hotjarId) willReturn Some(123)
 
       val renderedHtml = views.html.index.render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
-      renderedHtml.body must not include "hotjar"
-      renderedHtml.body must not include "hjid:"
+      renderedHtml.body should not include "hotjar"
+      renderedHtml.body should not include "hjid:"
     }
   }
 }
