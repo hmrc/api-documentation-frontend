@@ -16,9 +16,11 @@
 
 package unit.uk.gov.hmrc.apidocumentation.models
 
-import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.Json
+import uk.gov.hmrc.apidocumentation.models.JsonSchema
+
+import scala.collection.immutable.ListMap
 
 class JsonSchemaSpec extends WordSpec with Matchers {
 
@@ -73,7 +75,7 @@ class JsonSchemaSpec extends WordSpec with Matchers {
           |}
         """.stripMargin)
 
-      actual shouldBe JsonSchema(`type` = Some("object"), properties = Map(
+      actual shouldBe JsonSchema(`type` = Some("object"), properties = ListMap(
         "name" -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
         "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))
       ))
@@ -109,9 +111,9 @@ class JsonSchemaSpec extends WordSpec with Matchers {
         """.stripMargin)
 
       actual shouldBe JsonSchema(`type` = Some("object"),
-        properties = Map(
+        properties = ListMap(
           "name" -> JsonSchema(description = Some("Business name"), `type` = Some("object"),
-            properties = Map(
+            properties = ListMap(
               "registeredName" -> JsonSchema(description = Some("The registered name for the business"), `type` = Some("string")),
               "tradingName" -> JsonSchema(description = Some("The name the business trades by"), `type` = Some("string"))
             )
@@ -141,7 +143,7 @@ class JsonSchemaSpec extends WordSpec with Matchers {
         """.stripMargin)
 
       actual shouldBe JsonSchema(`type` = Some("object"),
-        patternProperties = Map("[A-Z0-9]{4}-[A-Z0-9]{5}" -> JsonSchema(description = Some("First"), `type` = Some("string")),
+        patternProperties = ListMap("[A-Z0-9]{4}-[A-Z0-9]{5}" -> JsonSchema(description = Some("First"), `type` = Some("string")),
           "\\d{5}-\\d{2}" -> JsonSchema(description = Some("Second"), `type` = Some("string")))
       )
     }
@@ -167,7 +169,7 @@ class JsonSchemaSpec extends WordSpec with Matchers {
         """.stripMargin)
 
       actual shouldBe JsonSchema(`type` = Some("object"),
-        properties = Map("name" -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
+        properties = ListMap("name" -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
           "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))),
         required = Seq("name")
       )
@@ -209,7 +211,7 @@ class JsonSchemaSpec extends WordSpec with Matchers {
           |}
         """.stripMargin)
 
-      actual shouldBe JsonSchema(definitions = Map(
+      actual shouldBe JsonSchema(definitions = ListMap(
         "name" -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
         "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))
       ))
@@ -236,10 +238,10 @@ class JsonSchemaSpec extends WordSpec with Matchers {
         """.stripMargin)
 
       actual shouldBe JsonSchema(`type` = Some("object"),
-        properties = Map(
+        properties = ListMap(
           "name" -> JsonSchema(ref = Some("#/definitions/name"))
         ),
-        definitions = Map(
+        definitions = ListMap(
           "name" -> JsonSchema(description = Some("Business name"), `type` = Some("string"))
         )
       )

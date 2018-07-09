@@ -23,6 +23,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
 
 import scala.collection.JavaConversions._
+import scala.collection.immutable.ListMap
 import scala.io.Source
 
 class SchemaService {
@@ -74,7 +75,7 @@ class SchemaService {
       jsonPointer.dropWhile(_ == '/').split("/")
     }
 
-    def resolveRefsInSubschemas(subschemas: Map[String, JsonSchema], basePath: String, enclosingSchema: JsonSchema): Map[String, JsonSchema] = {
+    def resolveRefsInSubschemas(subschemas: ListMap[String, JsonSchema], basePath: String, enclosingSchema: JsonSchema): ListMap[String, JsonSchema] = {
       subschemas.map { case (name, subSchema) =>
         name -> resolveRefs(subSchema, basePath, enclosingSchema)
       }

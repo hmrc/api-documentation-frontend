@@ -16,17 +16,17 @@
 
 package unit.uk.gov.hmrc.apidocumentation.views.include
 
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.views
 import junit.framework.TestCase
-import uk.gov.hmrc.apidocumentation.models.NavLink
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
 import play.api.i18n.Messages
 import play.api.mvc.Request
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models.NavLink
+import uk.gov.hmrc.apidocumentation.views
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class MainTemplateSpec extends PlaySpec with MockitoSugar {
+class MainTemplateSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
 
   val pageTitle = "pageTitle"
   val navLinks = Seq[NavLink]()
@@ -39,8 +39,8 @@ class MainTemplateSpec extends PlaySpec with MockitoSugar {
       given(mockApplicationConfig.hotjarEnabled) willReturn Some(false)
       given(mockApplicationConfig.hotjarId) willReturn None
       val renderedHtml = views.html.index.render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
-      renderedHtml.body must not include "<meta name=\"robots\" content=\"noindex\">"
-      renderedHtml.body must not include "<meta name=\"googlebot\" content=\"noindex\">"
+      renderedHtml.body shouldNot include("<meta name=\"robots\" content=\"noindex\">")
+      renderedHtml.body shouldNot include("<meta name=\"googlebot\" content=\"noindex\">")
     }
   }
 }
