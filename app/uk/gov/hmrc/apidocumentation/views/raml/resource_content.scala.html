@@ -85,14 +85,14 @@
             <p>
                 This resource is
                 <a href = "/api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted</a>
-                - it requires an Authorization header containing an OAuth 2.0 Bearer Token with the <code class="code">{scope}</code> scope.
+                - it requires an Authorization header containing an OAuth 2.0 Bearer Token with the <code class="code--slim">{scope}</code> scope.
             </p>
         }
         case ("application", _) => {
             <p>
                 This resource is
                 <a href = "/api-documentation/docs/authorisation/application-restricted-endpoints">application-restricted</a>
-                - it requires an Authorization header containing a <code class="code">server_token</code> or an OAuth 2.0 Bearer Token.
+                - it requires an Authorization header containing a <code class="code--slim">server_token</code> or an OAuth 2.0 Bearer Token.
             </p>
         }
         case _ => {
@@ -111,7 +111,7 @@
             <section>
                 @if(example.description().isDefined){<strong>Scenario: @example.description()</strong>}
                 @if(example.documentation().isDefined){<p>@Markdown(example.documentation.get)</p>}
-                <pre class="code">@example.value()</pre>
+                <pre class="code--block">@example.value()</pre>
             </section>
         }
     </section>
@@ -125,13 +125,13 @@
         }
 
         <h4 class="heading-small">Response</h4>
-        <p>HTTP status: <code class="code">@HttpStatus(Val(resp.code))</code></p>
+        <p>HTTP status: <code class="code--slim">@HttpStatus(Val(resp.code))</code></p>
         @for(body <- resp.body) {
             @for(example <- BodyExamples(body)) {
                 <section>
                     @if(example.description().isDefined){@example.description()}
                     @if(example.documentation().isDefined){<p>@Markdown(example.documentation.get)</p>}
-                    <pre class="code">@example.value()</pre>
+                    <pre class="code--block">@example.value()</pre>
                 </section>
             }
         }

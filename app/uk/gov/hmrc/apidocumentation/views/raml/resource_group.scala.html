@@ -49,7 +49,7 @@
                                 @if(index == 0) {
                                     <div class="api-accordion__row">
                                             <!-- ! TODO: Need to highlight last part of path  -->
-                                        <code class="snippet--inline font-xsmall">@res.resourcePath</code>
+                                        <span class=""><code class="snippet--inline">@res.resourcePath</code></span>
                                     </div>
                                 }
                                 <div>
@@ -57,7 +57,7 @@
                                         <div>
                                             <a class="accordion__button no--underline" href="#@methodSlug" data-accordion-button role="button">
                                                 <i class="arrow arrow--right" data-accordion-arrow></i>
-                                                <span class="font-xsmall">@Val(method.displayName)</span>
+                                                <span class="font-xsmall underline">@Val(method.displayName)</span>
                                             </a>
                                         </div>
                                         <div class="accordion__row__right align--middle table__col--1-4">
