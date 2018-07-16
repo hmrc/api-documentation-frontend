@@ -56,14 +56,14 @@
         </div>
     </nav>
 
-    <hr>
+    <hr aria-hidden="true">
 
     <section id="application-restricted">
 
         <h2 class="heading-large">Application-restricted endpoints</h2>
 
-        <p>These endpoints need a server token. This must be passed as an <code class="code">Authorization</code>
-            header with type <code class="code">Bearer</code>.</p>
+        <p>These endpoints need a server token. This must be passed as an <code class="code--slim">Authorization</code>
+            header with type <code class="code--slim">Bearer</code>.</p>
 
         <h3 class="heading-medium">Example</h3>
 
@@ -72,8 +72,8 @@ curl -H 'Authorization: Bearer [YOUR-SERVER-TOKEN]' \
 -H 'Accept: application/vnd.hmrc.1.0+json' \
 @{applicationConfig.apiUrl}hello/application'</pre>
 
-        <p>If you’ve already been issued a valid OAuth 2.0 <code class="code">access_token</code>,
-            you can substitute this with a <code class="code">server_token</code>.</p>
+        <p>If you’ve already been issued a valid OAuth 2.0 <code class="code--slim">access_token</code>,
+            you can substitute this with a <code class="code--slim">server_token</code>.</p>
 
         <p class="panel panel-border-wide">For a working example <a href="@controllers.routes.DocumentationController.tutorialsPage().url#app-restricted">see the application-restricted endpoint tutorial.</a></p>
 

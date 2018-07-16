@@ -150,7 +150,7 @@ object Markdown {
       .setDecorator(new ExtDecorator()
         .addStyleClass("list list-bullet", "ul")
         .addStyleClass("list list-number", "ol")
-        .addStyleClass("code", "code")
+        .addStyleClass("code--slim", "code")
         .addStyleClass("heading-large", "h1")
         .addStyleClass("heading-medium", "h2")
         .addStyleClass("heading-small", "h3")

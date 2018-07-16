@@ -157,7 +157,7 @@
 
     <main id="wrapper" role="main">
         <div class="centered-content">
-            <div class="grid-row">@serviceInfo</div>
+            @serviceInfo
             @breadcrumbs.map { breadcrumbs =>
                 <div class="grid-row">
                     <div class="column-three-quarters">
@@ -169,7 +169,6 @@
                 </div>
             }
         </div>
-        <br>
         <div class="centered-content">
             <div class="grid-row sticky-nav_wrapper">
                 @if(leftNav.isDefined) { @contentWithLeftNav } else { @content }

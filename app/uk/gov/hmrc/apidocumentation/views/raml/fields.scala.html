@@ -19,15 +19,15 @@
 @(fields: Seq[RequestResponseField], caption: String, fieldOptionalityKnown: Boolean)
 
 @if(fields.nonEmpty) {
-    <table>
-        <caption>
+    <table class="table--align-top">
+        <caption class="table__caption--low-vis">
             <div class="visually-hidden">@caption</div>
         </caption>
         <col width="50%"/>
         <col width="50%"/>
         <thead>
-            <tr>
-                <th>Name</th>
+            <tr class="table__row--desktop-heading">
+                <th class="table__col--1-2">Name</th>
                 <th>Description</th>
             </tr>
         </thead>
@@ -36,7 +36,7 @@
             <tr class="table__row--responsive
                     @if(field.depth == 0 || field.`type` == "object") {table__row--parent}
                 @if(field.depth > 0) {table__row--nested-@{field.depth}}">
-                <td data-heading="Name" class="table__detail--responsive">
+                <td data-heading="Name" class="table__detail--responsive table__col--1-2">
                     <div class="table__cell-contents--responsive">
                         <div class="parameter-name">@{field.name}</div>
                         <div class="parameter-type">@if(field.isArray) {array} else {@{field.`type`}}</div>
@@ -54,12 +54,12 @@
                     @if(field.description.nonEmpty) {<p>@{field.description}</p>}
 
                     @field.typeId match {
-                        case "full-date" => { <p>Date in the format <code class="code">YYYY-MM-DD</code></p> }
-                        case "tax-year" => { <p>Tax year in the format <code class="code">YYYY-YY</code></p> }
+                        case "full-date" => { <p>Date in the format <code class="code--slim">YYYY-MM-DD</code></p> }
+                        case "tax-year" => { <p>Tax year in the format <code class="code--slim">YYYY-YY</code></p> }
                         case _ => {
                             @if(field.pattern.nonEmpty) {
                                 <p>
-                                    Must conform to the regular expression <code class="code">@{field.pattern}</code>
+                                    Must conform to the regular expression <code class="code--slim">@{field.pattern}</code>
                                 </p>
                             }
                         }
@@ -72,7 +72,7 @@
                         <div>
                             @for(enumValue <- field.enumValues) {
                                 <div>
-                                    <code class="code">@{enumValue.name}</code>
+                                    <code class="code--slim">@{enumValue.name}</code>
                                     @if(enumValue.description.isDefined) { - @{enumValue.description} }
                                 </div>
                             }
@@ -80,7 +80,7 @@
                     } else {
                         @if(field.example.nonEmpty) {
                             <p>
-                                For example: <code class="code">@{field.example}</code>
+                                For example: <code class="code--slim">@{field.example}</code>
                             </p>
                         }
                     }
