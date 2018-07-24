@@ -5,9 +5,9 @@ $(function () {
   var requireStickySideNav = $('*[data-sticky-left-nav]').length;
 
   function isMobile(mobileWidth) {
-  if(mobileWidth.matches)
-
-  { requireStickySideNav = 0; }
+     if(mobileWidth.matches) {
+        requireStickySideNav = 0;
+     }
   }
   isMobile(window.matchMedia("(max-width: 640px)"));
 
