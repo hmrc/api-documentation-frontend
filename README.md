@@ -32,3 +32,8 @@ Frontend for API documentation - part of the Developer Hub
 
 1. If you are planning to run test on Firefox use firefox version 46 or lower as selenium version 2.53.0 is not compatible to work with Firefox version 47. Old firefox
    releases can be downloaded from **https://ftp.mozilla.org/pub/firefox/releases/**
+
+## Testing approach
+
+* Unit tests should make up the majority of tests so that test coverage should drop marginally when run against only unit tests.
+* Acceptance tests should be a thin layer of coverage on happy paths only to ensure that journeys hang together.
