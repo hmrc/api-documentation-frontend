@@ -29,7 +29,6 @@ import scala.io.Source
 class SchemaService {
 
   def loadSchemas(basePath: String, raml: RAML): Map[String, JsonSchema] = {
-
     val schemas = for {
       resource <- raml.flattenedResources
       method <- resource.methods

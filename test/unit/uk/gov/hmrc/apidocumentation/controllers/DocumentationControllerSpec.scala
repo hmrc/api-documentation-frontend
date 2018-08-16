@@ -422,6 +422,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       val result = underTest.previewApiDocumentation(Some(url))(request)
       verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "Expected unit test failure")
     }
+
   }
 
   "bustCache" should {

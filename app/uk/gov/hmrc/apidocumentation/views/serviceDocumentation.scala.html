@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services.RAML
 
-@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ramlAndSchemas: RamlAndSchemas)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ramlAndSchemas: RamlAndSchemas, loggedIn: Boolean = false)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @topContent = {
     <div class="form-group">
@@ -79,5 +79,5 @@
         }
     }
 
-    @main(ramlAndSchemas.raml, ramlAndSchemas.schemas, Some(currentVersion))
+    @main(ramlAndSchemas.raml, ramlAndSchemas.schemas, Some(currentVersion), loggedIn)
 }

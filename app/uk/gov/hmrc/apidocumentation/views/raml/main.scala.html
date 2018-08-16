@@ -15,12 +15,13 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.models.DocsVisibility
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
-@import uk.gov.hmrc.apidocumentation.services.RAML
+@import uk.gov.hmrc.apidocumentation.services._
 @import scala.collection.JavaConversions._
 
-@(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion])(implicit applicationConfig: ApplicationConfig)
+@(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig)
 
 <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section" aria-busy="false">
     <div id="section">
@@ -43,7 +44,7 @@
             </table>
         }
 
-        @for(doc <- raml.documentation){
+        @for(doc <- raml.documentationForVersion(maybeVersion)) {
             <div class="section">
                 <h2 id="@Slugify(doc.title)" class="heading-large">
                   @Val(doc.title)
@@ -61,15 +62,32 @@
             </a>
         </div>
 
-        <div class="section">
-            <h2 id="resources" class="heading-large">
-                Resources
-            </h2>
+        @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.get.visibility))) { case (isPreview, visibility) =>
+            @if(isPreview || visibility == DocsVisibility.VISIBLE) {
+                <div class="section">
+                    <h2 id="resources" class="heading-large">
+                        Resources
+                    </h2>
 
-            @for(resourceGroup <- GroupedResources(raml.resources)) {
-                @resource_group(resourceGroup, raml, schemas)
+                    @for(resourceGroup <- GroupedResources(raml.resources)) {
+                        @resource_group(resourceGroup, raml, schemas)
+                    }
+                </div>
+            } else {
+                @if(visibility == DocsVisibility.OVERVIEW_ONLY) {
+                    <div class="section">
+                        <h2 id="read-more" class="heading-large">
+                            Read more
+                        </h2>
+                        <p>To see the complete documentation for this API and join the private trial,
+                            <a href="@{applicationConfig.developerFrontendUrl}/developer/support">contact support</a>.</p>
+                        @if(!loggedIn) {
+                            <p id="read-more-sign-in">If you have already joined, <a href="/developer/login">sign in</a>.</p>
+                        }
+                    </div>
+                }
             }
-        </div>
+        }
 
         <div class="bold-small float--right">
             <a href="#">

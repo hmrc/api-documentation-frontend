@@ -1,0 +1,43 @@
+#%RAML 1.0
+---
+title: Hello World
+version: 1.0
+
+protocols: [ HTTPS ]
+baseUri: https://localhost
+
+documentation:
+ - title: Overview
+   content: |
+     \# Overview
+
+     An overview
+ - title: Versioning
+   content: |
+     \# Versioning
+
+     Some versioning information
+ - title: Errors
+   content: |
+     \# Errors
+
+     Some error descriptions
+
+mediaType: application/hal+json
+
+/hello:
+  /world:
+    get:
+      displayName: Say hello world
+      description: |
+        A simple example for integrating with an unrestricted service.
+
+        Any request to this endpoint initiates a 'Hello World' response.
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "message" : "Hello World"
+                }

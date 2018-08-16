@@ -27,7 +27,7 @@ import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.config.{ApplicationConfig, ApplicationGlobal}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.services.{DocumentationService, NavigationService, PartialsService, RamlNotFoundException, RamlParseException}
+import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
@@ -35,6 +35,9 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
+
+
+
 
 class DocumentationController @Inject()(documentationService: DocumentationService, navigationService: NavigationService,
                                         partialsService: PartialsService,
@@ -224,12 +227,12 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   }
 
 
-  def renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean]) = headerNavigation { implicit request => navLinks =>
+  def renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean]): Action[AnyContent] = headerNavigation { implicit request =>navLinks =>
     (for {
       email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
       api <- documentationService.fetchExtendedApiDefinition(service, email)
       cacheBust = bustCache(appConfig.isStubMode, cacheBuster)
-      apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks)
+      apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, email)
     } yield {
       apiDocumentation
     }) recover {
@@ -248,7 +251,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   def bustCache(stubMode: Boolean, cacheBuster: Option[Boolean]) = stubMode || cacheBuster.getOrElse(false)
 
   private def doRenderApiDocumentation(service: String, version: String, cacheBuster: Boolean, apiOption: Option[ExtendedAPIDefinition],
-                               navLinks: Seq[NavLink])(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] = {
+                               navLinks: Seq[NavLink], email: Option[String])(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] = {
 
     def makePageAttributes(apiDefinition: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, sidebarLinks: Seq[SidebarLink]): PageAttributes = {
       val breadcrumbs = Breadcrumbs(
@@ -290,24 +293,25 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         apiDefinition)))
     }
 
-    def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion) =
+    def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false) =
       documentationService.fetchRAML(service, version, cacheBuster).map { ramlAndSchemas =>
         Ok(serviceDocumentation(
-          makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation(service, version, ramlAndSchemas.raml)),
+          makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation(service, selectedVersion, ramlAndSchemas.raml)),
           api,
           selectedVersion,
-          ramlAndSchemas)
+          ramlAndSchemas,
+          email.isDefined)
         ).withHeaders(cacheControlHeaders)
       }
 
     findVersion(apiOption) match {
-      case Some((api, selectedVersion, VersionVisibility(_, _, true))) if selectedVersion.status == APIStatus.RETIRED =>
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED =>
         renderRetiredVersionJumpPage(api, selectedVersion)
 
-      case Some((api, selectedVersion, VersionVisibility(_, _, true))) =>
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
         renderDocumentationPage(api, selectedVersion)
 
-      case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _))) =>
+      case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _))) =>
         redirectToLoginPage
 
       case _ =>

@@ -113,7 +113,7 @@ lazy val appDependencies: Seq[ModuleID] = allDeps
 lazy val compile = Seq(
   ws,
   cache,
-  "uk.gov.hmrc" %% "frontend-bootstrap" % "8.24.0",
+  "uk.gov.hmrc" %% "frontend-bootstrap" % "9.0.0",
   "uk.gov.hmrc" %% "url-builder" % "2.0.0",
   "uk.gov.hmrc" %% "http-metrics" % "1.2.0",
   "org.raml" % "raml-parser-2" % "1.0.13",
@@ -136,7 +136,7 @@ lazy val test = Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "test,it",
   "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
   "com.github.tomakehurst" % "wiremock" % "1.58" % "test,it",
-  "org.jsoup" % "jsoup" % "1.10.2" % "test,it",
+  "org.jsoup" % "jsoup" % "1.11.3" % "test,it",
   "jp.t2v" %% "play2-auth-test" % "0.14.2" % "test,it",
   "de.leanovate.play-mockws" %% "play-mockws" % "2.5.1" % "test"
 ).map(_.exclude("xalan", "xalan")
