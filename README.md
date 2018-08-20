@@ -37,3 +37,14 @@ Frontend for API documentation - part of the Developer Hub
 
 * Unit tests should make up the majority of tests so that test coverage should drop marginally when run against only unit tests.
 * Acceptance tests should be a thin layer of coverage on happy paths only to ensure that journeys hang together.
+
+## Running locally with dependencies
+
+To run locally use `./run_local_with_dependencies.sh` as well as starting any apis you want to see the documentation for in Dev mode. 
+
+Note: API definitions (`mongo -d api-definition -c api`) will need their `serviceBaseUrl` pointing to `http://localhost:<port>`:
+To update:
+
+```
+db.api.updateOne({ serviceName: “<your service name>” }, { $set: { serviceBaseUrl: “http://localhost:<port>” } })
+```
