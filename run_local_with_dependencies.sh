@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+sm --start API_DOCUMENTATION SERVICE_LOCATOR API_DEFINITION API_EXAMPLE_MICROSERVICE -f
+
+./run_local.sh
