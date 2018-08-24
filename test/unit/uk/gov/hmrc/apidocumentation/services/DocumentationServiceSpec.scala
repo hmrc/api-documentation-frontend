@@ -115,19 +115,19 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
       underTest.filterDefinitions(apis) shouldBe Seq(apiDefinition("gregorian-calendar").copy(requiresTrust = Some(false)))
     }
 
-    "return versions in expected order" ignore new Setup {
+    "return versions in expected order" in new Setup {
       val apis = Seq(apiDefinition("api-1", Seq(
         apiVersion("2.0", STABLE),
         apiVersion("3.0", BETA),
         apiVersion("1.0", DEPRECATED),
         apiVersion("2.5", BETA))))
 
-      underTest.filterDefinitions(apis).map(_.statusSortedActiveVersions) shouldBe Seq(apiDefinition("api-1", Seq(
+      underTest.filterDefinitions(apis).flatMap(_.statusSortedActiveVersions) shouldBe Seq(
         apiVersion("2.0", STABLE),
         apiVersion("3.0", BETA),
         apiVersion("2.5", BETA),
         apiVersion("1.0", DEPRECATED)
-      )))
+      )
     }
   }
 

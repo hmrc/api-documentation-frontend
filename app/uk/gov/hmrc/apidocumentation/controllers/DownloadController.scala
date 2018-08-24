@@ -67,10 +67,10 @@ class DownloadController @Inject()(documentationService: DocumentationService, d
         "access_uri" -> routes.DocumentationController.renderApiDocumentation(service, version, None).url))
 
     findVersion(apiOption) match {
-      case Some((api, _, VersionVisibility(APIAccessType.PRIVATE, false, _))) =>
+      case Some((api, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _))) =>
         redirectToLoginPage(api.serviceName)
 
-      case Some((api, selectedVersion, VersionVisibility(_, _, true))) =>
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
         downloadService.fetchResource(api.serviceName, selectedVersion.version, validResource)
 
       case _ =>

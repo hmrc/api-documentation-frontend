@@ -22,7 +22,7 @@ import org.raml.v2.api.model.v10.resources.Resource
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers.routes
-import uk.gov.hmrc.apidocumentation.models.{NavLink, SidebarLink}
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, NavLink, SidebarLink}
 import uk.gov.hmrc.apidocumentation.views.helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -69,16 +69,22 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
     }
   }
 
-  def apiSidebarNavigation(service: String, version: String, raml: RAML): Seq[SidebarLink] = {
-    val sections = raml.documentation.asScala.map { doc =>
+  def apiSidebarNavigation(service: String, version: ExtendedAPIVersion, raml: RAML): Seq[SidebarLink] = {
+    val sections = raml.documentationForVersion(Option(version)).map { doc =>
       SidebarLink(label = doc.title.value, href = s"#${Slugify(doc.title.value)}")
     }
 
-    val resources = SidebarLink(
-      label = "Resources",
-      href = s"#resources",
-      subLinks = traverse(raml.resources.asScala),
-      showSubLinks = true)
+    val resources = if (VersionDocsVisible(version.visibility) == DocsVisibility.OVERVIEW_ONLY) {
+      SidebarLink(
+        label = "Read more",
+        href = "#read-more")
+    } else {
+      SidebarLink(
+        label = "Resources",
+        href = "#resources",
+        subLinks = traverse(raml.resources.asScala),
+        showSubLinks = true)
+    }
 
     sections :+ resources
   }

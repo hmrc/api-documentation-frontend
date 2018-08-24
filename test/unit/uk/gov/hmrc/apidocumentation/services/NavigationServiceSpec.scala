@@ -16,17 +16,20 @@
 
 package unit.uk.gov.hmrc.apidocumentation.services
 
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.NavLink
 import org.mockito.Matchers._
 import org.mockito.Mockito._
+import org.raml.v2.api.model.v10.api.DocumentationItem
+import org.raml.v2.api.model.v10.system.types.AnnotableStringType
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
-import uk.gov.hmrc.apidocumentation.services.NavigationService
+import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
+import scala.collection.JavaConversions._
 import scala.concurrent.Future
 
 class NavigationServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
@@ -39,7 +42,7 @@ class NavigationServiceSpec extends UnitSpec with WithFakeApplication with Mocki
     val underTest = new NavigationService(connector, config)
   }
 
-  "navigationService" should {
+  "sidebarNavigation" should {
     "return sidebar navigation links" in new Setup {
       val sidebarNavLinks = underTest.sidebarNavigation()
       sidebarNavLinks.size shouldBe 8
@@ -48,9 +51,10 @@ class NavigationServiceSpec extends UnitSpec with WithFakeApplication with Mocki
       sidebarNavLinks(6).href shouldBe "/api-documentation/docs/terms-of-use"
       sidebarNavLinks(6).label shouldBe "Terms of use"
     }
+
   }
 
-  "navigationService" should {
+  "headerNavigation" should {
     "fetch and return header navigation links" in new Setup {
       when(config.developerFrontendUrl).thenReturn("http://localhost:9865")
       when(connector.fetchNavLinks()(any())).thenReturn(Future.successful(Seq(
@@ -65,14 +69,55 @@ class NavigationServiceSpec extends UnitSpec with WithFakeApplication with Mocki
       headerNavLinks.last.href shouldBe "http://localhost:9865/developer/login"
       headerNavLinks.last.label shouldBe "Sign in"
     }
-  }
 
-  "navigationService" should {
     "return empty header navigation links" in new Setup {
       when(connector.fetchNavLinks()(any())).thenReturn(Future.successful(Seq.empty[NavLink]))
       val headerNavLinks = await(underTest.headerNavigation())
       verify(connector, times(1)).fetchNavLinks()(any())
       headerNavLinks.size shouldBe 0
+    }
+  }
+
+  "apiSidebarNavigation" should {
+    val raml = mock[RAML]
+    val version = mock[ExtendedAPIVersion]
+    val service = "a test service"
+    val overviewTitle = mock[AnnotableStringType]
+    val overview = mock[DocumentationItem]
+
+    when(overviewTitle.value).thenReturn("Overview")
+    when(overview.title).thenReturn(overviewTitle)
+
+    "render documentation and resources links when the api is visible" in new Setup {
+      val documentation: Seq[DocumentationItem] = List(overview)
+      val visible = Some(VersionVisibility(APIAccessType.PUBLIC, loggedIn = true, authorised = true, isTrial = None))
+
+      when(version.visibility).thenReturn(visible)
+      when(raml.documentation).thenReturn(documentation)
+
+      val apiSidebarNavLinks = await(underTest.apiSidebarNavigation(service, version, raml))
+
+      apiSidebarNavLinks.size shouldBe 2
+      apiSidebarNavLinks.head.href shouldBe "#overview"
+      apiSidebarNavLinks.head.label shouldBe "Overview"
+      apiSidebarNavLinks.last.href shouldBe "#resources"
+      apiSidebarNavLinks.last.label shouldBe "Resources"
+    }
+
+    "render overview documentation and 'read more' links when the api is not visible" in new Setup {
+      val documentation: Seq[DocumentationItem] = List(overview)
+      val overviewOnly = Some(VersionVisibility(APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true)))
+
+      when(version.visibility).thenReturn(overviewOnly)
+      when(raml.documentation).thenReturn(documentation)
+
+      val apiSidebarNavLinks = await(underTest.apiSidebarNavigation(service, version, raml))
+
+      apiSidebarNavLinks.size shouldBe 2
+      apiSidebarNavLinks.head.href shouldBe "#overview"
+      apiSidebarNavLinks.head.label shouldBe "Overview"
+      apiSidebarNavLinks.last.href shouldBe "#read-more"
+      apiSidebarNavLinks.last.label shouldBe "Read more"
     }
   }
 }

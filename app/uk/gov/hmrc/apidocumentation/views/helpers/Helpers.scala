@@ -18,7 +18,7 @@ package uk.gov.hmrc.apidocumentation.views.helpers
 
 
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.apidocumentation.models.{APIAvailability, ErrorResponse}
+import uk.gov.hmrc.apidocumentation.models._
 import org.jboss.netty.handler.codec.http.HttpResponseStatus
 import org.raml.v2.api.model.v10.bodies.Response
 import org.raml.v2.api.model.v10.common.Annotable
@@ -28,6 +28,7 @@ import org.raml.v2.api.model.v10.resources.Resource
 import play.api.libs.json.Json
 import play.libs.XML
 import play.twirl.api.Html
+import uk.gov.hmrc.apidocumentation.models.DocsVisibility.DocsVisibility
 
 import scala.collection.JavaConversions._
 import scala.language.reflectiveCalls
@@ -334,8 +335,22 @@ object HttpStatus {
 }
 
 object EndpointsAvailable {
-  def apply(availability: Option[APIAvailability]): String = {
-    if (availability.fold(false)(a => a.endpointsEnabled && a.authorised)) "Yes"
-    else "No"
+  def apply(availability: Option[APIAvailability]): String = availability match {
+    case Some(APIAvailability(endpointsEnabled, access, _, authorised)) if endpointsEnabled => access.`type` match {
+      case APIAccessType.PUBLIC => "Yes"
+      case APIAccessType.PRIVATE if access.isTrial.getOrElse(false) => "Yes - private trial"
+      case APIAccessType.PRIVATE if authorised => "Yes"
+      case _ => "No"
+    }
+    case _ => "No"
+  }
+}
+
+object VersionDocsVisible {
+  def apply(availability: Option[VersionVisibility]): DocsVisibility = availability match {
+    case Some(VersionVisibility(APIAccessType.PUBLIC, _, _, _)) => DocsVisibility.VISIBLE                     // PUBLIC
+    case Some(VersionVisibility(APIAccessType.PRIVATE, true, true, _)) => DocsVisibility.VISIBLE              // PRIVATE, logged in, whitelisted (authorised)
+    case Some(VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
+    case _ => DocsVisibility.NOT_VISIBLE
   }
 }

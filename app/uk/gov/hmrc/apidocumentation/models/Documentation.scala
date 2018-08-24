@@ -26,7 +26,7 @@ object APIAccessType extends Enumeration {
   val PRIVATE, PUBLIC = Value
 }
 
-case class APIAccess(`type`: APIAccessType.Value)
+case class APIAccess(`type`: APIAccessType.Value, isTrial: Option[Boolean] = None)
 
 case class APIDefinition(
                           serviceName: String,
@@ -146,7 +146,7 @@ case class ExtendedAPIVersion(version: String,
                               endpoints: Seq[Endpoint],
                               productionAvailability: Option[APIAvailability],
                               sandboxAvailability: Option[APIAvailability]) {
-  def visibility = {
+  def visibility: Option[VersionVisibility] = {
     def highestAccess(production: APIAvailability, sandbox: APIAvailability) = {
       if(production.access.`type` == APIAccessType.PUBLIC) APIAccessType.PUBLIC
       else sandbox.access.`type`
@@ -158,18 +158,23 @@ case class ExtendedAPIVersion(version: String,
       production.authorised || sandbox.authorised
     }
 
+    def isInTrial(production: APIAvailability, sandbox: APIAvailability) = (production.access.isTrial, sandbox.access.isTrial) match {
+      case (Some(true), _) | (_, Some(true)) => Some(true)
+      case _ => None
+    }
+
     (productionAvailability, sandboxAvailability) match {
-      case (Some(production), None) => Some(VersionVisibility(production.access.`type`, production.loggedIn, production.authorised))
-      case (None, Some(sandbox)) => Some(VersionVisibility(sandbox.access.`type`, sandbox.loggedIn, sandbox.authorised))
-      case (Some(production), Some(sandbox)) =>
-        Some(VersionVisibility(highestAccess(production, sandbox), isLoggedIn(production, sandbox), isAuthorised(production, sandbox)))
+      case (Some(prod), None) => Some(VersionVisibility(prod.access.`type`, prod.loggedIn, prod.authorised, prod.access.isTrial))
+      case (None, Some(sandbox)) => Some(VersionVisibility(sandbox.access.`type`, sandbox.loggedIn, sandbox.authorised, sandbox.access.isTrial))
+      case (Some(prod), Some(sandbox)) =>
+        Some(VersionVisibility(highestAccess(prod, sandbox), isLoggedIn(prod, sandbox), isAuthorised(prod, sandbox), isInTrial(prod, sandbox)))
       case _ => None
     }
   }
 
   val displayedStatus = {
     val accessIndicator = visibility match {
-      case Some(VersionVisibility(APIAccessType.PRIVATE, _, _)) => "Private "
+      case Some(VersionVisibility(APIAccessType.PRIVATE, _, _, _)) => "Private "
       case _ => ""
     }
     status match {
@@ -184,7 +189,7 @@ case class ExtendedAPIVersion(version: String,
 
 case class APIAvailability(endpointsEnabled: Boolean, access: APIAccess, loggedIn: Boolean, authorised: Boolean)
 
-case class VersionVisibility(privacy: APIAccessType.APIAccessType, loggedIn: Boolean, authorised: Boolean)
+case class VersionVisibility(privacy: APIAccessType.APIAccessType, loggedIn: Boolean, authorised: Boolean, isTrial: Option[Boolean] = None)
 
 case class Endpoint(
                      endpointName: String,
@@ -239,3 +244,9 @@ case class ServiceDetails(serviceName: String, serviceUrl: String)
 case class RawDocumentationContent(contentType: String, content: String)
 
 case class ErrorResponse(code: Option[String] = None, message: Option[String] = None)
+
+object DocsVisibility extends Enumeration {
+
+  type DocsVisibility = Value
+  val VISIBLE, OVERVIEW_ONLY, NOT_VISIBLE = Value
+}

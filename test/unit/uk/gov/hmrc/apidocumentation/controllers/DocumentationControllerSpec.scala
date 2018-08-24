@@ -355,7 +355,18 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       versionOptionIsRendered(result, serviceName, "1.0") shouldBe(true)
     }
 
-    "not display the private API options when not logged in and (therefore) is not authorised" in new Setup {
+    "display the private API options when not logged in and is in trial" in new Setup {
+      theUserIsNotLoggedIn()
+      theDocumentationServiceWillReturnAnApiDefinition(
+        Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, true, true, Some(true))))
+      theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
+
+      val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+      versionOptionIsRendered(result, serviceName, "1.0") shouldBe(true)
+    }
+
+    "not display the private API options when not in trial, not logged in and (therefore) is not authorised" in new Setup {
       theUserIsNotLoggedIn()
       theDocumentationServiceWillReturnAnApiDefinition(
         Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, true, false)))
@@ -422,6 +433,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       val result = underTest.previewApiDocumentation(Some(url))(request)
       verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "Expected unit test failure")
     }
+
   }
 
   "bustCache" should {

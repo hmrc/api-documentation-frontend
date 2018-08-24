@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services.RAML
 
-@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ramlAndSchemas: RamlAndSchemas)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ramlAndSchemas: RamlAndSchemas, loggedIn: Boolean = false)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @topContent = {
     <div class="form-group">
@@ -33,8 +33,7 @@
                 value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version, None).url"
                 onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
             @for(v <- api.sortedActiveVersions;
-                a <- v.visibility;
-                if a.authorised) {
+                if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
                 <option @if(v == currentVersion) {selected} value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url">v@v.version (@v.displayedStatus)</option>
             }
         </select>
@@ -79,5 +78,5 @@
         }
     }
 
-    @main(ramlAndSchemas.raml, ramlAndSchemas.schemas, Some(currentVersion))
+    @main(ramlAndSchemas.raml, ramlAndSchemas.schemas, Some(currentVersion), loggedIn)
 }
