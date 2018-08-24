@@ -36,9 +36,6 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-
-
-
 class DocumentationController @Inject()(documentationService: DocumentationService, navigationService: NavigationService,
                                         partialsService: PartialsService,
                                         loggedInUserProvider: LoggedInUserProvider, val messagesApi: MessagesApi,
@@ -73,7 +70,8 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   }
 
   def testingStatefulBehaviourPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(testingStatefulBehaviour(pageAttributes("Stateful Behaviour", routes.DocumentationController.testingStatefulBehaviourPage().url, navLinks))))
+    val testingStatefulBehaviourUrl = routes.DocumentationController.testingStatefulBehaviourPage().url
+    Future.successful(Ok(testingStatefulBehaviour(pageAttributes("Stateful Behaviour", testingStatefulBehaviourUrl, navLinks))))
   }
 
   def testingDataClearDownPage() = headerNavigation { implicit request => navLinks =>
@@ -152,7 +150,8 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   }
 
   def mtdIntroductionPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(mtdIntroduction(pageAttributes("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url, navLinks))))
+    val introPageUrl = routes.DocumentationController.mtdIntroductionPage().url
+    Future.successful(Ok(mtdIntroduction(pageAttributes("The Making Tax Digital Programme", introPageUrl, navLinks))))
   }
 
   def referenceGuidePage() = headerNavigation { implicit request => navLinks =>
@@ -218,24 +217,21 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         Redirect(routes.DocumentationController.renderApiDocumentation(service, version.version, cacheBuster))
       }
     }) recover {
-      case e: NotFoundException =>
-        NotFound(ApplicationGlobal.notFoundTemplate)
+      case e: NotFoundException => NotFound(ApplicationGlobal.notFoundTemplate)
       case e: Throwable =>
         Logger.error("Could not load API Documentation service", e)
         InternalServerError(ApplicationGlobal.internalServerErrorTemplate)
     }
   }
 
-
-  def renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean]): Action[AnyContent] = headerNavigation { implicit request =>navLinks =>
+  def renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean]): Action[AnyContent] =
+    headerNavigation { implicit request =>navLinks =>
     (for {
       email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
       api <- documentationService.fetchExtendedApiDefinition(service, email)
       cacheBust = bustCache(appConfig.isStubMode, cacheBuster)
       apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, email)
-    } yield {
-      apiDocumentation
-    }) recover {
+    } yield apiDocumentation) recover {
       case e: NotFoundException =>
         Logger.info(s"Upstream request not found: ${e.getMessage}")
         NotFound(ApplicationGlobal.notFoundTemplate)
@@ -252,7 +248,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   private def doRenderApiDocumentation(service: String, version: String, cacheBuster: Boolean, apiOption: Option[ExtendedAPIDefinition],
                                navLinks: Seq[NavLink], email: Option[String])(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] = {
-
     def makePageAttributes(apiDefinition: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, sidebarLinks: Seq[SidebarLink]): PageAttributes = {
       val breadcrumbs = Breadcrumbs(
         Crumb(
@@ -261,10 +256,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         apiDocCrumb,
         homeCrumb)
 
-      apidocumentation.models.PageAttributes(title = apiDefinition.name,
-        breadcrumbs = breadcrumbs,
-        headerLinks = navLinks,
-        sidebarLinks = sidebarLinks)
+      apidocumentation.models.PageAttributes(apiDefinition.name, breadcrumbs, navLinks, sidebarLinks)
     }
 
     def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
@@ -274,8 +266,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         visibility <- apiVersion.visibility
       } yield (api, apiVersion, visibility)
 
-    def renderNotFoundPage =
-      Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+    def renderNotFoundPage = Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
 
     def redirectToLoginPage = {
       Logger.info(s"redirectToLogin - access_uri ${routes.DocumentationController.renderApiDocumentation(service, version, None).url}")
@@ -289,33 +280,22 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       val apiDefinition = api.userAccessibleApiDefinition
 
       Future.successful(Ok(retiredVersionJump(
-        makePageAttributes(apiDefinition, selectedVersion, navigationService.sidebarNavigation()),
-        apiDefinition)))
+        makePageAttributes(apiDefinition, selectedVersion, navigationService.sidebarNavigation()), apiDefinition)))
     }
 
     def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false) =
       documentationService.fetchRAML(service, version, cacheBuster).map { ramlAndSchemas =>
-        Ok(serviceDocumentation(
-          makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation(service, selectedVersion, ramlAndSchemas.raml)),
-          api,
-          selectedVersion,
-          ramlAndSchemas,
-          email.isDefined)
-        ).withHeaders(cacheControlHeaders)
+        val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation(service, selectedVersion, ramlAndSchemas.raml))
+        Ok(serviceDocumentation(attrs, api, selectedVersion, ramlAndSchemas, email.isDefined)).withHeaders(cacheControlHeaders)
       }
 
     findVersion(apiOption) match {
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED =>
         renderRetiredVersionJumpPage(api, selectedVersion)
-
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
-        renderDocumentationPage(api, selectedVersion)
-
-      case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _))) =>
-        redirectToLoginPage
-
-      case _ =>
-        renderNotFoundPage
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) => renderDocumentationPage(api, selectedVersion)
+      case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, false, _, Some(true)))) => renderDocumentationPage(api, selectedVersion)
+      case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _))) => redirectToLoginPage
+      case _ => renderNotFoundPage
     }
   }
 

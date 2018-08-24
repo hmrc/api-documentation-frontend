@@ -164,10 +164,10 @@ case class ExtendedAPIVersion(version: String,
     }
 
     (productionAvailability, sandboxAvailability) match {
-      case (Some(production), None) => Some(VersionVisibility(production.access.`type`, production.loggedIn, production.authorised, production.access.isTrial))
+      case (Some(prod), None) => Some(VersionVisibility(prod.access.`type`, prod.loggedIn, prod.authorised, prod.access.isTrial))
       case (None, Some(sandbox)) => Some(VersionVisibility(sandbox.access.`type`, sandbox.loggedIn, sandbox.authorised, sandbox.access.isTrial))
-      case (Some(production), Some(sandbox)) =>
-        Some(VersionVisibility(highestAccess(production, sandbox), isLoggedIn(production, sandbox), isAuthorised(production, sandbox), isInTrial(production, sandbox)))
+      case (Some(prod), Some(sandbox)) =>
+        Some(VersionVisibility(highestAccess(prod, sandbox), isLoggedIn(prod, sandbox), isAuthorised(prod, sandbox), isInTrial(prod, sandbox)))
       case _ => None
     }
   }
