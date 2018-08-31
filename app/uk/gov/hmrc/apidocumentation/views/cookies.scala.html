@@ -25,248 +25,245 @@
 }
 
 @main(title = Some(Messages("help.cookies.title")), metaTitle=Some(metaTitle)) {
-    <div class="grid-row">
+   <h1 class="heading-large">Cookies</h1>
 
-        <h1 class="heading-large">Cookies</h1>
+   <p>Find out more about <a href="https://www.gov.uk/help/cookies">how cookies are used on GOV.UK</a> and how to manage
+       them.</p>
 
-        <p>Find out more about <a href="https://www.gov.uk/help/cookies">how cookies are used on GOV.UK</a> and how to manage
-            them.</p>
+   <h2 class="heading-medium">@Messages("help.cookies.how_used.heading")</h2>
+   <h3 class="heading-small">@Messages("help.cookies.how_used.sessions.heading")</h3>
+   <p>@Messages("help.cookies.how_used.sessions.info")</p>
+   <table>
+       <thead>
+       <tr>
+           <th scope="col">@Messages("help.cookies.table.header.name")</th>
+           <th scope="col">@Messages("help.cookies.table.header.purpose")</th>
+           <th scope="col">@Messages("help.cookies.table.header.expires")</th>
+       </tr>
+       </thead>
+       <tbody>
+       <tr>
+           <td>@Messages("help.cookies.how_used.sessions.table.mdtp.name")</td>
+           <td>@Messages("help.cookies.how_used.sessions.table.mdtp.purpose")</td>
+           <td>@Messages("help.cookies.how_used.sessions.table.mdtp.expires")</td>
+       </tr>
+       <tr>
+           <td>@Messages("help.cookies.how_used.sessions.table.mdtpp.name")</td>
+           <td>@Messages("help.cookies.how_used.sessions.table.mdtpp.purpose")</td>
+           <td>@Messages("help.cookies.how_used.sessions.table.mdtpp.expires")</td>
+       </tr>
+       <tr>
+           <td>@Messages("help.cookies.how_used.sessions.table.mdtpdf.name")</td>
+           <td>@Messages("help.cookies.how_used.sessions.table.mdtpdf.purpose")</td>
+           <td>@Messages("help.cookies.how_used.sessions.table.mdtpdf.expires")</td>
+       </tr>
+       <tr>
+           <td>@Messages("help.cookies.how_used.sessions.table.PLAY_FLASH.name")</td>
+           <td>@Messages("help.cookies.how_used.sessions.table.PLAY_FLASH.purpose")</td>
+           <td>@Messages("help.cookies.how_used.sessions.table.PLAY_FLASH.expires")</td>
+       </tr>
+       </tbody>
+   </table>
+       <h3 class="heading-small">@Messages("help.cookies.how_used.intro_message.heading")</h3>
+           <p>@Messages("help.cookies.how_used.intro_message.info")</p>
+   <table>
+       <thead>
+           <tr>
+               <th scope="col">@Messages("help.cookies.table.header.name")</th>
+               <th scope="col">@Messages("help.cookies.table.header.purpose")</th>
+               <th scope="col">@Messages("help.cookies.table.header.expires")</th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr>
+               <td>@Messages("help.cookies.how_used.intro_message.table.seen_message.name")</td>
+               <td>@Messages("help.cookies.how_used.intro_message.table.seen_message.purpose")</td>
+               <td>@Messages("help.cookies.how_used.intro_message.table.seen_message.expires")</td>
+           </tr>
+       </tbody>
+   </table>
+   <h3 class="heading-small">@Messages("help.cookies.user_research.heading")</h3>
+   <p>@Messages("help.cookies.user_research.info")</p>
+   <table>
+       <thead>
+           <tr>
+               <th scope="col">@Messages("help.cookies.table.header.name")</th>
+               <th scope="col">@Messages("help.cookies.table.header.purpose")</th>
+               <th scope="col">@Messages("help.cookies.table.header.expires")</th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr>
+               <td>@Messages("help.cookies.user_research.intro_message.table.seen_message.name")</td>
+               <td>@Messages("help.cookies.user_research.intro_message.table.seen_message.purpose")</td>
+               <td>@Messages("help.cookies.user_research.intro_message.table.seen_message.expires")</td>
+           </tr>
+       </tbody>
+   </table>
 
-        <h2 class="heading-medium">@Messages("help.cookies.how_used.heading")</h2>
-        <h3 class="heading-small">@Messages("help.cookies.how_used.sessions.heading")</h3>
-        <p>@Messages("help.cookies.how_used.sessions.info")</p>
-        <table>
-            <thead>
-            <tr>
-                <th scope="col">@Messages("help.cookies.table.header.name")</th>
-                <th scope="col">@Messages("help.cookies.table.header.purpose")</th>
-                <th scope="col">@Messages("help.cookies.table.header.expires")</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>@Messages("help.cookies.how_used.sessions.table.mdtp.name")</td>
-                <td>@Messages("help.cookies.how_used.sessions.table.mdtp.purpose")</td>
-                <td>@Messages("help.cookies.how_used.sessions.table.mdtp.expires")</td>
-            </tr>
-            <tr>
-                <td>@Messages("help.cookies.how_used.sessions.table.mdtpp.name")</td>
-                <td>@Messages("help.cookies.how_used.sessions.table.mdtpp.purpose")</td>
-                <td>@Messages("help.cookies.how_used.sessions.table.mdtpp.expires")</td>
-            </tr>
-            <tr>
-                <td>@Messages("help.cookies.how_used.sessions.table.mdtpdf.name")</td>
-                <td>@Messages("help.cookies.how_used.sessions.table.mdtpdf.purpose")</td>
-                <td>@Messages("help.cookies.how_used.sessions.table.mdtpdf.expires")</td>
-            </tr>
-            <tr>
-                <td>@Messages("help.cookies.how_used.sessions.table.PLAY_FLASH.name")</td>
-                <td>@Messages("help.cookies.how_used.sessions.table.PLAY_FLASH.purpose")</td>
-                <td>@Messages("help.cookies.how_used.sessions.table.PLAY_FLASH.expires")</td>
-            </tr>
-            </tbody>
-        </table>
-            <h3 class="heading-small">@Messages("help.cookies.how_used.intro_message.heading")</h3>
-                <p>@Messages("help.cookies.how_used.intro_message.info")</p>
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">@Messages("help.cookies.table.header.name")</th>
-                    <th scope="col">@Messages("help.cookies.table.header.purpose")</th>
-                    <th scope="col">@Messages("help.cookies.table.header.expires")</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Messages("help.cookies.how_used.intro_message.table.seen_message.name")</td>
-                    <td>@Messages("help.cookies.how_used.intro_message.table.seen_message.purpose")</td>
-                    <td>@Messages("help.cookies.how_used.intro_message.table.seen_message.expires")</td>
-                </tr>
-            </tbody>
-        </table>
-        <h3 class="heading-small">@Messages("help.cookies.user_research.heading")</h3>
-        <p>@Messages("help.cookies.user_research.info")</p>
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">@Messages("help.cookies.table.header.name")</th>
-                    <th scope="col">@Messages("help.cookies.table.header.purpose")</th>
-                    <th scope="col">@Messages("help.cookies.table.header.expires")</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Messages("help.cookies.user_research.intro_message.table.seen_message.name")</td>
-                    <td>@Messages("help.cookies.user_research.intro_message.table.seen_message.purpose")</td>
-                    <td>@Messages("help.cookies.user_research.intro_message.table.seen_message.expires")</td>
-                </tr>
-            </tbody>
-        </table>
+   <h3 class="heading-small">@Messages("help.cookies.how_used.measuring_usage.heading")</h3>
+   <p>@Messages("help.cookies.how_used.measuring_usage.info")</p>
+   <p>@Messages("help.cookies.how_used.measuring_usage.list_info")</p>
+   <ul class="list list-bullet">
+       <li>@Messages("help.cookies.how_used.measuring_usage.list_item.1")</li>
+       <li>@Messages("help.cookies.how_used.measuring_usage.list_item.2")</li>
+       <li>@Messages("help.cookies.how_used.measuring_usage.list_item.3")</li>
+   </ul>
+   <p>@Messages("help.cookies.how_used.measuring_usage.paragraph.1")</p>
+   <div class="panel panel-border-wide">
+       <p>@Messages("help.cookies.how_used.measuring_usage.notice")</p>
+   </div>
+   <table>
+       <thead>
+           <tr>
+               <th scope="col">@Messages("help.cookies.table.header.name")</th>
+               <th scope="col">@Messages("help.cookies.table.header.purpose")</th>
+               <th scope="col">@Messages("help.cookies.table.header.expires")</th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gat.name")</td>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gat.purpose")</td>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gat.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gds.name")</td>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gds.purpose")</td>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gds.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.ga.name")</td>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.ga.purpose")</td>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.ga.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.nextpage.name")</td>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.nextpage.purpose")</td>
+               <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.nextpage.expires")</td>
+           </tr>
+       </tbody>
+   </table>
+   <p>@Html(Messages("help.cookies.how_used.measuring_usage.opt_out.info", Link.toExternalPage(url =
+       Messages("help.cookies.how_used.measuring_usage.opt_out.link.url"), value =
+       Some(Messages("help.cookies.how_used.measuring_usage.opt_out.link.text"))).toHtml))</p>
 
-        <h3 class="heading-small">@Messages("help.cookies.how_used.measuring_usage.heading")</h3>
-        <p>@Messages("help.cookies.how_used.measuring_usage.info")</p>
-        <p>@Messages("help.cookies.how_used.measuring_usage.list_info")</p>
-        <ul class="list list-bullet">
-            <li>@Messages("help.cookies.how_used.measuring_usage.list_item.1")</li>
-            <li>@Messages("help.cookies.how_used.measuring_usage.list_item.2")</li>
-            <li>@Messages("help.cookies.how_used.measuring_usage.list_item.3")</li>
-        </ul>
-        <p>@Messages("help.cookies.how_used.measuring_usage.paragraph.1")</p>
-        <div class="panel panel-border-wide">
-            <p>@Messages("help.cookies.how_used.measuring_usage.notice")</p>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">@Messages("help.cookies.table.header.name")</th>
-                    <th scope="col">@Messages("help.cookies.table.header.purpose")</th>
-                    <th scope="col">@Messages("help.cookies.table.header.expires")</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gat.name")</td>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gat.purpose")</td>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gat.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gds.name")</td>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gds.purpose")</td>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.gds.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.ga.name")</td>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.ga.purpose")</td>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.ga.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.nextpage.name")</td>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.nextpage.purpose")</td>
-                    <td>@Messages("help.cookies.how_used.measuring_usage.cookies_used.table.nextpage.expires")</td>
-                </tr>
-            </tbody>
-        </table>
-        <p>@Html(Messages("help.cookies.how_used.measuring_usage.opt_out.info", Link.toExternalPage(url =
-            Messages("help.cookies.how_used.measuring_usage.opt_out.link.url"), value =
-            Some(Messages("help.cookies.how_used.measuring_usage.opt_out.link.text"))).toHtml))</p>
+   <h3 class="heading-small">@Messages("help.cookies.hotjar")</h3>
+   <div>
+       <p>@Messages("help.cookies.hotjar.info")</p>
+   </div>
+   <table>
+       <thead>
+           <tr>
+               <th scope="col">@Messages("help.cookies.table.header.name")</th>
+               <th scope="col">@Messages("help.cookies.hotjar.table.header.purpose")</th>
+               <th scope="col">@Messages("help.cookies.table.header.expires")</th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr>
+               <td>@Messages("help.cookies.hotjar.table.1.namee")</td>
+               <td>@Messages("help.cookies.hotjar.table.1.purpose")</td>
+               <td>@Messages("help.cookies.hotjar.table.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.hotjar.table.2.name")</td>
+               <td>@Messages("help.cookies.hotjar.table.2.purpose")</td>
+               <td>@Messages("help.cookies.hotjar.table.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.hotjar.table.3.name")</td>
+               <td>@Messages("help.cookies.hotjar.table.3.purpose")</td>
+               <td>@Messages("help.cookies.hotjar.table.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.hotjar.table.4.namee")</td>
+               <td>@Messages("help.cookies.hotjar.table.4.purpose")</td>
+               <td>@Messages("help.cookies.hotjar.table.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.hotjar.table.5.name")</td>
+               <td>@Messages("help.cookies.hotjar.table.5.purpose")</td>
+               <td>@Messages("help.cookies.hotjar.table.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.hotjar.table.6.name")</td>
+               <td>@Messages("help.cookies.hotjar.table.6.purpose")</td>
+               <td>@Messages("help.cookies.hotjar.table.expires")</td>
+           </tr>
+       </tbody>
+   </table>
+   <p>You can opt-out from having Hotjar collect your information by <a
+           href="https://www.hotjar.com/opt-out" target="_blank">visiting their opt out page (opens in a new tab)</a> clicking 'Disable Hotjar'.</p>
 
-        <h3 class="heading-small">@Messages("help.cookies.hotjar")</h3>
-        <div>
-            <p>@Messages("help.cookies.hotjar.info")</p>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">@Messages("help.cookies.table.header.name")</th>
-                    <th scope="col">@Messages("help.cookies.hotjar.table.header.purpose")</th>
-                    <th scope="col">@Messages("help.cookies.table.header.expires")</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Messages("help.cookies.hotjar.table.1.namee")</td>
-                    <td>@Messages("help.cookies.hotjar.table.1.purpose")</td>
-                    <td>@Messages("help.cookies.hotjar.table.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.hotjar.table.2.name")</td>
-                    <td>@Messages("help.cookies.hotjar.table.2.purpose")</td>
-                    <td>@Messages("help.cookies.hotjar.table.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.hotjar.table.3.name")</td>
-                    <td>@Messages("help.cookies.hotjar.table.3.purpose")</td>
-                    <td>@Messages("help.cookies.hotjar.table.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.hotjar.table.4.namee")</td>
-                    <td>@Messages("help.cookies.hotjar.table.4.purpose")</td>
-                    <td>@Messages("help.cookies.hotjar.table.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.hotjar.table.5.name")</td>
-                    <td>@Messages("help.cookies.hotjar.table.5.purpose")</td>
-                    <td>@Messages("help.cookies.hotjar.table.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.hotjar.table.6.name")</td>
-                    <td>@Messages("help.cookies.hotjar.table.6.purpose")</td>
-                    <td>@Messages("help.cookies.hotjar.table.expires")</td>
-                </tr>
-            </tbody>
-        </table>
-        <p>You can opt-out from having Hotjar collect your information by <a
-                href="https://www.hotjar.com/opt-out" target="_blank">visiting their opt out page (opens in a new tab)</a> clicking 'Disable Hotjar'.</p>
+    <h3 class="heading-small">@Messages("help.cookies.optimizely")</h3>
+   <div>
+       <p>@Messages("help.cookies.optimizely.info")</p>
+   </div>
+   <table>
+       <thead>
+           <tr>
+               <th scope="col">@Messages("help.cookies.table.header.name")</th>
+               <th scope="col">@Messages("help.cookies.optimizely.table.header.purpose")</th>
+               <th scope="col">@Messages("help.cookies.table.header.expires")</th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr>
+               <td>@Messages("help.cookies.optimizely.table.1.name")</td>
+               <td>@Messages("help.cookies.optimizely.table.1.purpose")</td>
+               <td>@Messages("help.cookies.optimizely.table.1.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.optimizely.table.2.name")</td>
+               <td>@Messages("help.cookies.optimizely.table.2.purpose")</td>
+               <td>@Messages("help.cookies.optimizely.table.2.expires")</td>
+           </tr>
+       </tbody>
+   </table>
+   <p>You can opt out from having Optimizely collect your information by  <a
+    href="https://www.optimizely.com/legal/opt-out/" target="_blank">visiting their opt out page (opens in a new tab)</a> and entering our Developer Hub URL in their opt out form:<br><br><code>https://developer.service.hmrc.gov.uk/api-documentation</code> </p>
 
-         <h3 class="heading-small">@Messages("help.cookies.optimizely")</h3>
-        <div>
-            <p>@Messages("help.cookies.optimizely.info")</p>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">@Messages("help.cookies.table.header.name")</th>
-                    <th scope="col">@Messages("help.cookies.optimizely.table.header.purpose")</th>
-                    <th scope="col">@Messages("help.cookies.table.header.expires")</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Messages("help.cookies.optimizely.table.1.name")</td>
-                    <td>@Messages("help.cookies.optimizely.table.1.purpose")</td>
-                    <td>@Messages("help.cookies.optimizely.table.1.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.optimizely.table.2.name")</td>
-                    <td>@Messages("help.cookies.optimizely.table.2.purpose")</td>
-                    <td>@Messages("help.cookies.optimizely.table.2.expires")</td>
-                </tr>
-            </tbody>
-        </table>
-        <p>You can opt out from having Optimizely collect your information by  <a
-         href="https://www.optimizely.com/legal/opt-out/" target="_blank">visiting their opt out page (opens in a new tab)</a> and entering our Developer Hub URL in their opt out form:<br><br><code>https://developer.service.hmrc.gov.uk/api-documentation</code> </p>
+   <h3 class="heading-small">@Messages("help.cookies.sm")</h3>
+  <p>We use <a
+    href="http://www.surveymonkey.com/" target="_blank">SurveyMonkey (opens in a new tab)</a> to collect responses to our survey. If you take part, SurveyMonkey saves cookies to your computer to track your progress.</p>
 
-        <h3 class="heading-small">@Messages("help.cookies.sm")</h3>
-       <p>We use <a
-         href="http://www.surveymonkey.com/" target="_blank">SurveyMonkey (opens in a new tab)</a> to collect responses to our survey. If you take part, SurveyMonkey saves cookies to your computer to track your progress.</p>
-
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">@Messages("help.cookies.table.header.name")</th>
-                    <th scope="col">@Messages("help.cookies.optimizely.table.header.purpose")</th>
-                    <th scope="col">@Messages("help.cookies.table.header.expires")</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Messages("help.cookies.sm.table.1.name")</td>
-                    <td>@Messages("help.cookies.sm.table.1.purpose")</td>
-                    <td>@Messages("help.cookies.sm.table.1.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.sm.table.2.name")</td>
-                    <td>@Messages("help.cookies.sm.table.2.purpose")</td>
-                    <td>@Messages("help.cookies.sm.table.2.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.sm.table.3.name")</td>
-                    <td>@Messages("help.cookies.sm.table.3.purpose")</td>
-                    <td>@Messages("help.cookies.sm.table.3.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.sm.table.4.name")</td>
-                    <td>@Messages("help.cookies.sm.table.4.purpose")</td>
-                    <td>@Messages("help.cookies.sm.table.4.expires")</td>
-                </tr>
-                <tr>
-                    <td>@Messages("help.cookies.sm.table.5.name")</td>
-                    <td>@Messages("help.cookies.sm.table.5.purpose")</td>
-                    <td>@Messages("help.cookies.sm.table.5.expires")</td>
-                </tr>
-            </tbody>
-        </table>
-        <p>You can find out more  <a
-                href="https://help.surveymonkey.com/articles/en_US/kb/About-the-cookies-we-use" target="_blank">about the cookies that SurveyMonkey uses (opens in a new tab)</a> and how to opt out.</p>
-    </div>
+   <table>
+       <thead>
+           <tr>
+               <th scope="col">@Messages("help.cookies.table.header.name")</th>
+               <th scope="col">@Messages("help.cookies.optimizely.table.header.purpose")</th>
+               <th scope="col">@Messages("help.cookies.table.header.expires")</th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr>
+               <td>@Messages("help.cookies.sm.table.1.name")</td>
+               <td>@Messages("help.cookies.sm.table.1.purpose")</td>
+               <td>@Messages("help.cookies.sm.table.1.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.sm.table.2.name")</td>
+               <td>@Messages("help.cookies.sm.table.2.purpose")</td>
+               <td>@Messages("help.cookies.sm.table.2.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.sm.table.3.name")</td>
+               <td>@Messages("help.cookies.sm.table.3.purpose")</td>
+               <td>@Messages("help.cookies.sm.table.3.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.sm.table.4.name")</td>
+               <td>@Messages("help.cookies.sm.table.4.purpose")</td>
+               <td>@Messages("help.cookies.sm.table.4.expires")</td>
+           </tr>
+           <tr>
+               <td>@Messages("help.cookies.sm.table.5.name")</td>
+               <td>@Messages("help.cookies.sm.table.5.purpose")</td>
+               <td>@Messages("help.cookies.sm.table.5.expires")</td>
+           </tr>
+       </tbody>
+   </table>
+   <p>You can find out more  <a
+           href="https://help.surveymonkey.com/articles/en_US/kb/About-the-cookies-we-use" target="_blank">about the cookies that SurveyMonkey uses (opens in a new tab)</a> and how to opt out.</p>
 }
