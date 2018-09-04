@@ -37,9 +37,11 @@
                 <tr><th><span class="bold-small">Status</span></th><td>@version.displayedStatus</td></tr>
                 @if(applicationConfig.showSandboxAvailability) {
                 <tr><th><span class="bold-small">Available in Sandbox</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
+                <tr><th><span class="bold-small">Sandbox base URL</span></th><td>https://test-api.service.hmrc.gov.uk/</td></tr>
                 }
                 @if(applicationConfig.showProductionAvailability) {
                 <tr><th><span class="bold-small">Available in Production</span></th><td>@EndpointsAvailable(version.productionAvailability)</td></tr>
+                <tr><th><span class="bold-small">Production base URL</span></th><td>https://api.service.hmrc.gov.uk/</td></tr>
                 }
             </table>
         }
