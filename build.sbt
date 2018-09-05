@@ -1,7 +1,7 @@
 import _root_.play.core.PlayVersion
 import _root_.play.sbt.PlayImport._
 import com.typesafe.sbt.digest.Import._
-import com.typesafe.sbt.uglify.Import._
+import com.typesafe.sbt.uglify.Import.{uglifyCompressOptions, _}
 import com.typesafe.sbt.web.Import._
 import net.ground5hark.sbt.concat.Import._
 import play.routes.compiler.InjectedRoutesGenerator
@@ -29,7 +29,7 @@ lazy val microservice = (project in file("."))
         (baseDirectory.value / "app" / "assets" / "javascripts") ** "*.js"
       )
     ),
-    UglifyKeys.compressOptions := Seq(
+    uglifyCompressOptions := Seq(
       "unused=true",
       "dead_code=true"
     ),
