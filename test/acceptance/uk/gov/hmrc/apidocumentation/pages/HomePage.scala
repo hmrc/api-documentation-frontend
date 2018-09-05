@@ -20,7 +20,7 @@ import acceptance.uk.gov.hmrc.apidocumentation.{Env, WebPage}
 
 object HomePage extends WebPage {
 
-  override val url = s"${Env.host}/api-documentation"
+  override val url = s"http://localhost:${Env.port}/api-documentation"
 
   override def isCurrentPage: Boolean = find(className("hero__heading-large")).fold(false)(_.text == "RESTful APIs for building smarter tax software")
 

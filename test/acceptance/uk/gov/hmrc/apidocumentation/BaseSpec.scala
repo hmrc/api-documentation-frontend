@@ -48,7 +48,7 @@ trait TestSpec extends FeatureSpec with BeforeAndAfterEach with BeforeAndAfterAl
 }
 
 trait BaseSpec extends TestSpec with OneServerPerSuite {
-  override lazy val port = 9680
+  override lazy val port = 6001
 
   implicit override lazy val app: Application =
     GuiceApplicationBuilder().configure("run.mode" -> "Stub").in(Mode.Prod).build()
