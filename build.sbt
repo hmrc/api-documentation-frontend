@@ -19,7 +19,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = (project in file("."))
-  .enablePlugins(Seq(_root_.play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
+  .enablePlugins(Seq(_root_.play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
   .settings(
     name := appName
   )
@@ -51,7 +51,8 @@ lazy val microservice = (project in file("."))
     fork in Test := false,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    routesGenerator := InjectedRoutesGenerator
+    routesGenerator := InjectedRoutesGenerator,
+    majorVersion := 0
   )
   .settings(playPublishingSettings: _*)
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)

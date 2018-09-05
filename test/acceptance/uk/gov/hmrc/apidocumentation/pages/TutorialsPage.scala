@@ -20,7 +20,7 @@ import acceptance.uk.gov.hmrc.apidocumentation.{Env, WebPage}
 
 object TutorialsPage extends WebPage {
 
-  override val url = s"${Env.host}/api-documentation/docs/tutorials"
+  override val url = s"http://localhost:${Env.port}/api-documentation/docs/tutorials"
 
   override def isCurrentPage: Boolean = find(className("page-header")).fold(false)(_.text == "Tutorials")
 

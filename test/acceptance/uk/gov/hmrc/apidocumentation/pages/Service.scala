@@ -24,7 +24,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 
 object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
-  override val url = s"${Env.host}/api-documentation/docs/api/service/api-example-microservice/1.0"
+  override val url = s"http://localhost:${Env.port}/api-documentation/docs/api/service/api-example-microservice/1.0"
 
   override def isCurrentPage: Boolean = find(id("title")).fold(false)(_.text == "Hello World API")
 
@@ -164,7 +164,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
 object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyChecks {
 
-  override val url = s"${Env.host}/api-documentation/docs/api/service/api-documentation-test-service/1.0"
+  override val url = s"http://localhost:${Env.port}/api-documentation/docs/api/service/api-documentation-test-service/1.0"
 
   override def isCurrentPage: Boolean = find(className("page-header")).fold(false)(_.text == "Developer Forum API")
 
@@ -214,7 +214,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
 }
 
 object CommonPage extends WebPage with TableDrivenPropertyChecks {
-  override val url = s"${Env.host}/api-documentation/docs/api/service/api-documentation-test-service/1.0"
+  override val url = s"http://localhost:${Env.port}/api-documentation/docs/api/service/api-documentation-test-service/1.0"
 
   def selectVersion(expectedVersion: String): Unit = {
     val versionDropDown = new Select(waitForElement(By.id("version")))

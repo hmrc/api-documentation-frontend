@@ -20,7 +20,7 @@ import acceptance.uk.gov.hmrc.apidocumentation.{Env, WebPage}
 
 object APIDocumentationPage extends WebPage {
 
-  override val url = s"${Env.host}/api-documentation/docs/api"
+  override val url = s"http://localhost:${Env.port}/api-documentation/docs/api"
 
   override def isCurrentPage: Boolean = find(className("heading-large")).fold(false)(_.text == "API documentation")
 
@@ -45,7 +45,7 @@ object APIDocumentationPage extends WebPage {
 
 object ReferenceGuidePage extends WebPage {
 
-  override val url = s"${Env.host}/api-documentation/docs/reference-guide"
+  override val url = s"http://localhost:${Env.port}/api-documentation/docs/reference-guide"
 
   override def isCurrentPage: Boolean = find(className("page-header")).fold(false)(_.text == "Reference guide")
 
@@ -58,7 +58,7 @@ object ReferenceGuidePage extends WebPage {
 
 object AuthorisationPage extends WebPage {
 
-  override val url = s"${Env.host}/api-documentation/docs/authorisation"
+  override val url = s"http://localhost:${Env.port}/api-documentation/docs/authorisation"
 
   override def isCurrentPage: Boolean = find(className("page-header")).fold(false)(_.text == "Authorisation")
 
@@ -71,7 +71,7 @@ object AuthorisationPage extends WebPage {
 
 object TestingPage extends WebPage {
 
-  override val url = s"${Env.host}/api-documentation/docs/testing"
+  override val url = s"http://localhost:${Env.port}/api-documentation/docs/testing"
 
   override def isCurrentPage: Boolean = find(className("page-header")).fold(false)(_.text == "Testing in the sandbox")
 
