@@ -43,7 +43,10 @@ trait Env {
   }
 
   def createRemoteChromeDriver() = {
-    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), DesiredCapabilities.chrome)
+    val driver = new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), DesiredCapabilities.chrome)
+    driver.manage().deleteAllCookies()
+    driver.manage().window().setSize(new Dimension(1280, 720))
+    driver
   }
 
   def createRemoteFirefoxDriver() = {
