@@ -88,6 +88,7 @@ trait ApiDefinition {
 
     def fetchFile(filename: String, contentType: String) = {
       val file = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$filename")).mkString
+      println(s"Creating wiremock stub for /apis/$serviceName/$version/documentation/$filename")
       stubFor(get(urlMatching(s"/apis/$serviceName/$version/documentation/$filename"))
         .willReturn(aResponse()
           .withStatus(200)
