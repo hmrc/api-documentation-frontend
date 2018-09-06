@@ -104,7 +104,7 @@ trait ApiDefinition {
 
       val listOfFiles: Seq[File] = smt match {
         case Success(s) =>
-          println("smt success")
+          println(s"smt success: $s")
           val dir = new File(s)
           if (dir.exists()) {
             println("dir exists")
