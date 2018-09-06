@@ -102,13 +102,18 @@ trait ApiDefinition {
 
       val listOfFiles: Seq[File] = smt match {
         case Success(s) =>
+          println("smt success")
           val dir = new File(s)
           if (dir.exists()) {
+            println("dir exists")
              dir.listFiles
                .filter(f => f.exists() && f.isFile)
                .toList
            }
-           else List.empty[File]
+           else {
+            println("In else - empty file")
+            List.empty[File]
+          }
         case Failure(f) => println("Does not exist"); List.empty[File]
       }
 
