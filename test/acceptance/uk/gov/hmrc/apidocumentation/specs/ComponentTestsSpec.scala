@@ -39,11 +39,6 @@ trait ComponentTestsSpec extends GivenWhenThen { baseSpec: BaseSpec =>
       And(message: String)
     }
   }
-
-  override def beforeEach() = {
-    baseSpec.webDriver.manage().deleteAllCookies()
-  }
-
 }
 
 
