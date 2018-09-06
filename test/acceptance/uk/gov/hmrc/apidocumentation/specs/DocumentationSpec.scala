@@ -170,9 +170,6 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       Given apiServicesIsDeployed()
       Given apiDocumentationTestServiceVersionsIsDeployed()
 
-      Thread.sleep(2000)
-      println(wireMockServer.listAllStubMappings().getMappings)
-
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)

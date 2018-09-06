@@ -100,6 +100,8 @@ trait ApiDefinition {
     def fetchJsonFile(path: String) = {
       val smt: Try[String] = Try(getClass.getResource(s"/services/$serviceName/conf/$version/$path").getPath)
 
+      println(s"Looking for: /services/$serviceName/conf/$version/$path")
+
       val listOfFiles: Seq[File] = smt match {
         case Success(s) =>
           println("smt success")
