@@ -92,13 +92,14 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     }
 
     scenario("Ensure the same version that is displayed on the API index page is also displayed by default when API Documentation Test Service is selected") {
-      Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
+      Given apiDocumentationTestServiceVersionsIsDeployed()
+
+      Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the API  Documentation Test documentation")
-      apiDocumentationTestServiceVersionsIsDeployed()
       APIDocumentationPage.selectAPIDocumentationTestService()
 
       Then("the default version 'v1.1 (Stable)' is displayed as selected")
@@ -106,13 +107,14 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     }
 
     scenario("Ensure all API versions are sorted correctly and can be viewed by the user") {
-      Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
+      Given apiDocumentationTestServiceVersionsIsDeployed()
+
+      Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the API  Documentation Test documentation")
-      apiDocumentationTestServiceVersionsIsDeployed()
       APIDocumentationPage.selectAPIDocumentationTestService()
 
       Then("all applicable API versions are displayed and sorted in the following order")
@@ -120,13 +122,14 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     }
 
     scenario("Optional header displays as 'required' in API docs") {
-      Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
+      Given apiDocumentationTestServiceVersionsIsDeployed()
+
+      Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the API  Documentation Test documentation")
-      apiDocumentationTestServiceVersionsIsDeployed()
       APIDocumentationPage.selectAPIDocumentationTestService()
 
       And("I select version 'v1.5 (Beta)")
@@ -158,17 +161,15 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     }
 
     scenario("Update API Version in the request header") {
-      Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
+      Given apiDocumentationTestServiceVersionsIsDeployed()
+
+      Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
-      println(wireMockServer.listAllStubMappings().getMappings)
-
       When("I select to view the API  Documentation Test documentation")
-      apiDocumentationTestServiceVersionsIsDeployed()
       APIDocumentationPage.selectAPIDocumentationTestService()
-
 
       And("I select version 'v1.1 (Stable)")
       CommonPage.selectVersion("v1.1 (Stable)")
