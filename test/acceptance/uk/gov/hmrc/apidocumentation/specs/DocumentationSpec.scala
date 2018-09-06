@@ -110,6 +110,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       Given apiServicesIsDeployed()
       Given apiDocumentationTestServiceVersionsIsDeployed()
 
+      println(wireMockServer.listAllStubMappings().getMappings)
+
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
@@ -124,6 +126,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     scenario("Optional header displays as 'required' in API docs") {
       Given apiServicesIsDeployed()
       Given apiDocumentationTestServiceVersionsIsDeployed()
+
+      println(wireMockServer.listAllStubMappings().getMappings)
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
@@ -163,6 +167,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     scenario("Update API Version in the request header") {
       Given apiServicesIsDeployed()
       Given apiDocumentationTestServiceVersionsIsDeployed()
+
+      println(wireMockServer.listAllStubMappings().getMappings)
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)

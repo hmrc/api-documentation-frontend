@@ -60,11 +60,4 @@ trait TableDrivenPropertyMocks extends TableDrivenPropertyChecks { cs: Component
       And.helloWorldIsDeployed("api-example-microservice", version)
     }
   }
-
-  def apiDocumentationTestServiceVersionsIsDeployed(versionTable:TableFor1[String]=Table("Versions", "0.1", "0.2", "0.3",
-    "0.4", "1.0", "1.1", "1.2","1.3", "1.5", "2.0")) {
-    forAll(versionTable) { version =>
-      And.apiDocumentationTestServiceIsDeployed("api-documentation-test-service", version)
-    }
-  }
 }
