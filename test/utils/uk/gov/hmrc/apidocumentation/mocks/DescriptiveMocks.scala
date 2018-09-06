@@ -45,6 +45,13 @@ trait DescriptiveMocks extends Stubs {
     fetchDefinitionExtended(serviceName)
     fetchDocRaml(serviceName, version)
   }
+
+  def apiDocumentationTestServiceVersionsIsDeployed() {
+    val versions = List("0.1", "0.2", "0.3", "0.4", "1.0", "1.1", "1.2","1.3", "1.5", "2.0")
+    versions.foreach { version =>
+      apiDocumentationTestServiceIsDeployed("api-documentation-test-service", version)
+    }
+  }
 }
 
 trait TableDrivenPropertyMocks extends TableDrivenPropertyChecks { cs: ComponentTestsSpec =>
@@ -60,6 +67,4 @@ trait TableDrivenPropertyMocks extends TableDrivenPropertyChecks { cs: Component
       And.apiDocumentationTestServiceIsDeployed("api-documentation-test-service", version)
     }
   }
-
-
 }
