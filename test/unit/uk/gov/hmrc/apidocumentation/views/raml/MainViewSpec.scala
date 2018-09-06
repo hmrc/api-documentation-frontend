@@ -43,30 +43,29 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
 
     def productionBaseUrl =
       dom.getElementsContainingOwnText("Production base URL").first.parent.nextElementSibling.text
-}
+  }
 
   private def renderAllDocumentation(page: Page) = {
     page.docHeadings shouldBe Set("Overview", "Versioning", "Errors", "Resources")
+  }
 
-  trait setup {
-    val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]
-    val ramlAndSchemas: RAML = new FileRamlLoader().load("test/resources/unit/raml/multiple-docs.raml").get
-    val schemas: Map[String, JsonSchema] = Map()
+  val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]
+  val ramlAndSchemas: RAML = new FileRamlLoader().load("test/resources/unit/raml/multiple-docs.raml").get
+  val schemas: Map[String, JsonSchema] = Map()
 
+  private def showEnvironmentAvailability(isAvailable: Boolean) = {
+    When(mockAppConfig.showSandboxAvailability).thenReturn(isAvailable)
+    When(mockAppConfig.showProductionAvailability).thenReturn(isAvailable)
+  }
 
-    private def showEnvironmentAvailability(isAvailable: Boolean) = {
-      When(mockAppConfig.showSandboxAvailability).thenReturn(isAvailable)
-      When(mockAppConfig.showProductionAvailability).thenReturn(isAvailable)
-    }
-
-    private def showBaseUrl = {
-      When(mockAppConfig.productionBaseUrl).thenReturn(Some("https://api.service.hmrc.gov.uk/"))
-      When(mockAppConfig.sandboxBaseUrl).thenReturn(Some("https://test-api.service.hmrc.gov.uk/"))
-    }
+  private def showBaseUrl = {
+    When(mockAppConfig.productionBaseUrl).thenReturn(Some("https://api.service.hmrc.gov.uk/"))
+    When(mockAppConfig.sandboxBaseUrl).thenReturn(Some("https://test-api.service.hmrc.gov.uk/"))
   }
 
   "main view" when {
     showEnvironmentAvailability(true)
+    showBaseUrl
 
     "api version is private, in trial and the user is logged in as a member of a whitelisted application" should {
 
@@ -86,8 +85,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         renderAllDocumentation(page)
       }
 
-      "render base url's" in new setup {
-        showBaseUrl
+      "render base urls" in {
         page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
       }
     }
