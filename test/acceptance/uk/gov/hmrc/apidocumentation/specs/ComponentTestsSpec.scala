@@ -16,11 +16,11 @@
 
 package acceptance.uk.gov.hmrc.apidocumentation.specs
 
-import acceptance.uk.gov.hmrc.apidocumentation.TestSpec
+import acceptance.uk.gov.hmrc.apidocumentation.BaseSpec
 import org.scalatest._
 import utils.uk.gov.hmrc.apidocumentation.mocks.DescriptiveMocks
 
-trait ComponentTestsSpec extends GivenWhenThen { ts: TestSpec =>
+trait ComponentTestsSpec extends GivenWhenThen { ts: BaseSpec =>
 
   object Given extends DescriptiveMocks {
     override def condition(message: String) {
