@@ -115,6 +115,7 @@ trait ApiDefinition {
       listOfFiles.foreach {
         r =>
           val file: String = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$path/${r.getName}")).mkString
+          println(s"Creating wiremock stub for /apis/$serviceName/$version/documentation/$path/${r.getName}")
           stubFor(get(urlMatching(s"/apis/$serviceName/$version/documentation/$path/${r.getName}"))
             .willReturn(aResponse()
               .withStatus(200)
