@@ -54,7 +54,7 @@
                 @if(applicationConfig.showProductionAvailability) {
                 <tr><th><span class="bold-small">Available in Production</span></th><td>@EndpointsAvailable(version.productionAvailability)</td></tr>
                 }
-                @if(applicationConfig.showProductionAvailability){
+                @if(showBaseUrl(version.productionAvailability)){
                 <tr><th><span class="bold-small">Production base URL</span></th><td>@applicationConfig.productionBaseUrl</td></tr>
                 }
 

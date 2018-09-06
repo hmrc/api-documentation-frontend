@@ -40,19 +40,29 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
 
     private def environmentAvailability(env: String) =
       dom.getElementsContainingOwnText(s"Available in ${env.capitalize}").first.parent.nextElementSibling.text
-  }
+
+    def productionBaseUrl =
+      dom.getElementsContainingOwnText("Production base URL").first.parent.nextElementSibling.text
+}
 
   private def renderAllDocumentation(page: Page) = {
     page.docHeadings shouldBe Set("Overview", "Versioning", "Errors", "Resources")
-  }
 
-  val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]
-  val ramlAndSchemas: RAML = new FileRamlLoader().load("test/resources/unit/raml/multiple-docs.raml").get
-  val schemas: Map[String, JsonSchema] = Map()
+  trait setup {
+    val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]
+    val ramlAndSchemas: RAML = new FileRamlLoader().load("test/resources/unit/raml/multiple-docs.raml").get
+    val schemas: Map[String, JsonSchema] = Map()
 
-  private def showEnvironmentAvailability(isAvailable: Boolean) = {
-    When(mockAppConfig.showSandboxAvailability).thenReturn(isAvailable)
-    When(mockAppConfig.showProductionAvailability).thenReturn(isAvailable)
+
+    private def showEnvironmentAvailability(isAvailable: Boolean) = {
+      When(mockAppConfig.showSandboxAvailability).thenReturn(isAvailable)
+      When(mockAppConfig.showProductionAvailability).thenReturn(isAvailable)
+    }
+
+    private def showBaseUrl = {
+      When(mockAppConfig.productionBaseUrl).thenReturn(Some("https://api.service.hmrc.gov.uk/"))
+      When(mockAppConfig.sandboxBaseUrl).thenReturn(Some("https://test-api.service.hmrc.gov.uk/"))
+    }
   }
 
   "main view" when {
@@ -74,6 +84,11 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
 
       "render full content" in {
         renderAllDocumentation(page)
+      }
+
+      "render base url's" in new setup {
+        showBaseUrl
+        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
       }
     }
 

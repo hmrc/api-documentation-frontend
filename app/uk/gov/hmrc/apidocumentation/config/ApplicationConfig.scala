@@ -45,7 +45,6 @@ class ApplicationConfig @Inject()(config: Configuration) extends ServicesConfig 
   lazy val showSandboxAvailability = config.getBoolean(s"$env.features.showSandboxAvailability").getOrElse(false)
   lazy val productionBaseUrl = config.getString("baseUrl.production")
   lazy val sandboxBaseUrl = config.getString("baseUrl.sandbox")
-
   lazy val title = "HMRC Developer Hub"
   lazy val isStubMode = env == "Stub"
   lazy val apiUrl = buildUrl("platform.api")
