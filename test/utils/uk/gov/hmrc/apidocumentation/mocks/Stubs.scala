@@ -17,6 +17,7 @@
 package utils.uk.gov.hmrc.apidocumentation.mocks
 
 import java.io.File
+import java.net.URLDecoder
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.Logger
@@ -105,7 +106,9 @@ trait ApiDefinition {
       val listOfFiles: Seq[File] = smt match {
         case Success(s) =>
           println(s"smt success: $s")
-          val dir = new File(s)
+          val dir = new File(URLDecoder.decode(s))
+
+          println(s"Dir abs path: ${dir.getAbsolutePath()}")
           if (dir.exists()) {
             println("dir exists")
              dir.listFiles
