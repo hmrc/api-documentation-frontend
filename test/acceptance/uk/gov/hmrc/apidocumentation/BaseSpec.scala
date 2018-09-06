@@ -18,38 +18,42 @@ package acceptance.uk.gov.hmrc.apidocumentation
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import org.openqa.selenium.WebDriver
 import org.scalatest._
-import org.scalatestplus.play.OneServerPerSuite
+import org.scalatestplus.play.guice.{GuiceFakeApplicationFactory, GuiceOneServerPerSuite}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.{Application, Mode}
 
-trait TestSpec extends FeatureSpec with BeforeAndAfterEach with BeforeAndAfterAll with Matchers with NavigationSugar {
+trait BaseSpec extends FeatureSpec with BeforeAndAfterEach with BeforeAndAfterAll with Matchers with NavigationSugar
+  with GuiceOneServerPerSuite with GuiceFakeApplicationFactory {
+
+  override lazy val port = Env.port
+  val stubPort = 11111
+  val stubHost = "localhost"
+
   implicit val webDriver: WebDriver = Env.driver
 
-  val stubHost = "localhost"
-  val stubPort = sys.env.getOrElse("WIREMOCK_PORT", "11111").toInt
-  val wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(stubPort))
+  var wireMockServer = new WireMockServer(wireMockConfig().port(stubPort))
+
+  override def fakeApplication(): Application = {
+    GuiceApplicationBuilder()
+      .configure("run.mode" -> "Stub")
+      .in(Mode.Prod)
+      .build()
+  }
 
   override def beforeAll() = {
-    if (!wireMockServer.isRunning) {
-      wireMockServer.start()
-    }
-
+    wireMockServer.start()
     WireMock.configureFor(stubHost, stubPort)
   }
 
   override def afterAll() = {
-    if (wireMockServer.isRunning) {
-      wireMockServer.stop()
-    }
+    wireMockServer.stop()
   }
-}
 
-trait BaseSpec extends TestSpec with OneServerPerSuite {
-  override lazy val port = 6001
-
-  implicit override lazy val app: Application =
-    GuiceApplicationBuilder().configure("run.mode" -> "Stub").in(Mode.Prod).build()
+  override def beforeEach() = {
+    webDriver.manage().deleteAllCookies()
+    WireMock.reset()
+  }
 }
