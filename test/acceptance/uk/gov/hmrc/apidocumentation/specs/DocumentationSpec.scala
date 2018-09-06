@@ -167,6 +167,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       apiDocumentationTestServiceVersionsIsDeployed()
       APIDocumentationPage.selectAPIDocumentationTestService()
 
+      println(wireMockServer.listAllStubMappings().getMappings)
+
       And("I select version 'v1.1 (Stable)")
       CommonPage.selectVersion("v1.1 (Stable)")
 
