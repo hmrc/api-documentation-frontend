@@ -23,16 +23,6 @@
 
 @(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig)
 
-@showBaseUrl(availability: Option[APIAvailability]) = @{
-    availability match {
-        case Some(APIAvailability(_, access, _, _)) => access.`type` match {
-            case APIAccessType.PUBLIC | APIAccessType.PRIVATE => true
-            case _ => false
-        }
-        case _ => false
-    }
-}
-
 <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section" aria-busy="false">
     <div id="section">
         <h1 id="title" class="heading-xlarge">
@@ -48,13 +38,13 @@
                 @if(applicationConfig.showSandboxAvailability) {
                 <tr><th><span class="bold-small">Available in Sandbox</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
                 }
-                @if(showBaseUrl(version.sandboxAvailability)) {
+                @if(ShowBaseURL(version.sandboxAvailability)) {
                 <tr><th><span class="bold-small">Sandbox base URL</span></th><td>@applicationConfig.sandboxBaseUrl/</td></tr>
                 }
                 @if(applicationConfig.showProductionAvailability) {
                 <tr><th><span class="bold-small">Available in Production</span></th><td>@EndpointsAvailable(version.productionAvailability)</td></tr>
                 }
-                @if(showBaseUrl(version.productionAvailability)){
+                @if(ShowBaseURL(version.productionAvailability)){
                 <tr><th><span class="bold-small">Production base URL</span></th><td>@applicationConfig.productionBaseUrl</td></tr>
                 }
 

@@ -38,14 +38,22 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     lazy val docHeadings: Set[String] = dom.getElementsByTag("h2").eachText.toSet
     lazy val callToSignIn: Option[Element] = Option(dom.getElementById("read-more-sign-in"))
 
+    private def elementExistsByText(elementType: String, elementText: String): Boolean = {
+      dom.select(elementType).exists(node => node.text.trim == elementText)
+    }
+
     private def environmentAvailability(env: String) =
       dom.getElementsContainingOwnText(s"Available in ${env.capitalize}").first.parent.nextElementSibling.text
 
     def productionBaseUrl =
       dom.getElementsContainingOwnText("Production base URL").first.parent.nextElementSibling.text
 
+    def showsProductionBaseUrl= elementExistsByText("span", "Production base URL")
+
     def sandboxBaseUrl =
       dom.getElementsContainingOwnText("Sandbox base URL").first.parent.nextElementSibling.text
+
+    def showsSandboxBaseUrl = elementExistsByText("span", "Sandbox base URL")
   }
 
   private def renderAllDocumentation(page: Page) = {
@@ -83,7 +91,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes - private trial"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
       }
 
@@ -158,7 +166,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
       }
 
@@ -186,12 +194,9 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.docHeadings shouldBe Set.empty
       }
 
-      // should not render the base url's when sandbox / prod availability is no.
-      // currently test failing as showBaseUrl is default to show each time
-
-      "render base urls" in {
-        page.sandboxBaseUrl shouldBe ""
-        page.productionBaseUrl shouldBe ""
+      "not render base urls" in {
+        page.showsSandboxBaseUrl shouldBe false
+        page.showsProductionBaseUrl shouldBe false
       }
     }
 
@@ -209,7 +214,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
       }
 
@@ -233,7 +238,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
       }
 
@@ -257,7 +262,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
       }
 
@@ -281,7 +286,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
       }
 
