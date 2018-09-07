@@ -334,15 +334,28 @@ object HttpStatus {
   }
 }
 
+object AvailabilityPhrase {
+  val yes = "Yes"
+  val yesPrivateTrial = "Yes - private trial"
+  val no = "No"
+}
+
 object EndpointsAvailable {
   def apply(availability: Option[APIAvailability]): String = availability match {
     case Some(APIAvailability(endpointsEnabled, access, _, authorised)) if endpointsEnabled => access.`type` match {
-      case APIAccessType.PUBLIC => "Yes"
-      case APIAccessType.PRIVATE if access.isTrial.getOrElse(false) => "Yes - private trial"
-      case APIAccessType.PRIVATE if authorised => "Yes"
-      case _ => "No"
+      case APIAccessType.PUBLIC => AvailabilityPhrase.yes
+      case APIAccessType.PRIVATE if access.isTrial.getOrElse(false) => AvailabilityPhrase.yesPrivateTrial
+      case APIAccessType.PRIVATE if authorised => AvailabilityPhrase.yes
+      case _ => AvailabilityPhrase.no
     }
-    case _ => "No"
+    case _ => AvailabilityPhrase.no
+  }
+}
+
+object ShowBaseURL {
+  def apply(availability: Option[APIAvailability]) =  EndpointsAvailable(availability) match {
+    case AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial => true
+    case _ => false
   }
 }
 

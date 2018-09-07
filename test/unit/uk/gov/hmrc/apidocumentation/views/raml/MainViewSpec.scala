@@ -38,8 +38,22 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     lazy val docHeadings: Set[String] = dom.getElementsByTag("h2").eachText.toSet
     lazy val callToSignIn: Option[Element] = Option(dom.getElementById("read-more-sign-in"))
 
+    private def elementExistsByText(elementType: String, elementText: String): Boolean = {
+      dom.select(elementType).exists(node => node.text.trim == elementText)
+    }
+
     private def environmentAvailability(env: String) =
       dom.getElementsContainingOwnText(s"Available in ${env.capitalize}").first.parent.nextElementSibling.text
+
+    def productionBaseUrl =
+      dom.getElementsContainingOwnText("Production base URL").first.parent.nextElementSibling.text
+
+    def showsProductionBaseUrl= elementExistsByText("span", "Production base URL")
+
+    def sandboxBaseUrl =
+      dom.getElementsContainingOwnText("Sandbox base URL").first.parent.nextElementSibling.text
+
+    def showsSandboxBaseUrl = elementExistsByText("span", "Sandbox base URL")
   }
 
   private def renderAllDocumentation(page: Page) = {
@@ -55,8 +69,17 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     When(mockAppConfig.showProductionAvailability).thenReturn(isAvailable)
   }
 
+  private val productionBaseUrl = "https://production.example.com/"
+  private val sandboxBaseUrl = "https://sandbox.example.com/"
+
+  private def showBaseUrl = {
+    When(mockAppConfig.productionBaseUrl).thenReturn(Some(productionBaseUrl))
+    When(mockAppConfig.sandboxBaseUrl).thenReturn(Some(sandboxBaseUrl))
+  }
+
   "main view" when {
     showEnvironmentAvailability(true)
+    showBaseUrl
 
     "api version is private, in trial and the user is logged in as a member of a whitelisted application" should {
 
@@ -64,7 +87,6 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val apiAccess = APIAccess(APIAccessType.PRIVATE, isTrial = Some(true))
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
-
       val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true, mockAppConfig))
 
       "render availability 'Yes - private trial'" in {
@@ -72,8 +94,13 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes - private trial"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
+      }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -95,6 +122,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.docHeadings shouldBe Set("Overview", "Read more")
         page.callToSignIn should not be 'defined
       }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
+      }
+
     }
 
     "api version is private, in trial and the user is not logged in" should {
@@ -115,6 +148,11 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.docHeadings shouldBe Set("Overview", "Read more")
         page.callToSignIn shouldBe 'defined
       }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
+      }
     }
 
     "api version is private, not in trial and the user is a member of a whitelisted application" should {
@@ -131,8 +169,13 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
+      }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -153,6 +196,11 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       "not render content" in {
         page.docHeadings shouldBe Set.empty
       }
+
+      "not render base urls" in {
+        page.showsSandboxBaseUrl shouldBe false
+        page.showsProductionBaseUrl shouldBe false
+      }
     }
 
     "api version is public, in trial and the user is a member of a whitelisted application" should {
@@ -169,8 +217,13 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
+      }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -188,8 +241,13 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
+      }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -207,8 +265,13 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
+      }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -226,8 +289,13 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionAvailability shouldBe "Yes"
       }
 
-      "render full content" in {
+      "render full documentation" in {
         renderAllDocumentation(page)
+      }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
   }

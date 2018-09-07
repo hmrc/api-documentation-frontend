@@ -38,9 +38,16 @@
                 @if(applicationConfig.showSandboxAvailability) {
                 <tr><th><span class="bold-small">Available in Sandbox</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
                 }
+                @if(ShowBaseURL(version.sandboxAvailability)) {
+                <tr><th><span class="bold-small">Sandbox base URL</span></th><td>@applicationConfig.sandboxBaseUrl/</td></tr>
+                }
                 @if(applicationConfig.showProductionAvailability) {
                 <tr><th><span class="bold-small">Available in Production</span></th><td>@EndpointsAvailable(version.productionAvailability)</td></tr>
                 }
+                @if(ShowBaseURL(version.productionAvailability)){
+                <tr><th><span class="bold-small">Production base URL</span></th><td>@applicationConfig.productionBaseUrl</td></tr>
+                }
+
             </table>
         }
 
