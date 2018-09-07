@@ -69,9 +69,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     When(mockAppConfig.showProductionAvailability).thenReturn(isAvailable)
   }
 
+  private val productionBaseUrl = "https://production.example.com/"
+  private val sandboxBaseUrl = "https://sandbox.example.com/"
+
   private def showBaseUrl = {
-    When(mockAppConfig.productionBaseUrl).thenReturn(Some("https://api.service.hmrc.gov.uk/"))
-    When(mockAppConfig.sandboxBaseUrl).thenReturn(Some("https://test-api.service.hmrc.gov.uk"))
+    When(mockAppConfig.productionBaseUrl).thenReturn(Some(productionBaseUrl))
+    When(mockAppConfig.sandboxBaseUrl).thenReturn(Some(sandboxBaseUrl))
   }
 
   "main view" when {
@@ -96,8 +99,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
-        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -121,8 +124,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
-        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
 
     }
@@ -147,8 +150,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
-        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -171,8 +174,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
-        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -219,8 +222,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
-        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -243,8 +246,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
-        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -267,8 +270,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
-        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
 
@@ -291,8 +294,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
-        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
   }
