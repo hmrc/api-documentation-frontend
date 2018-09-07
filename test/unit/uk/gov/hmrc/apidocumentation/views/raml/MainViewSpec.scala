@@ -99,7 +99,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl
         page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
@@ -124,7 +124,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl
         page.productionBaseUrl shouldBe productionBaseUrl
       }
 
@@ -150,7 +150,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl
         page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
@@ -174,7 +174,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl
         page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
@@ -222,7 +222,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl
         page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
@@ -246,7 +246,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl
         page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
@@ -270,7 +270,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl
         page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
@@ -294,7 +294,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl + "/"
+        page.sandboxBaseUrl shouldBe sandboxBaseUrl
         page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
