@@ -43,6 +43,9 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
 
     def productionBaseUrl =
       dom.getElementsContainingOwnText("Production base URL").first.parent.nextElementSibling.text
+
+    def sandboxBaseUrl =
+      dom.getElementsContainingOwnText("Sandbox base URL").first.parent.nextElementSibling.text
   }
 
   private def renderAllDocumentation(page: Page) = {
@@ -60,7 +63,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
 
   private def showBaseUrl = {
     When(mockAppConfig.productionBaseUrl).thenReturn(Some("https://api.service.hmrc.gov.uk/"))
-    When(mockAppConfig.sandboxBaseUrl).thenReturn(Some("https://test-api.service.hmrc.gov.uk/"))
+    When(mockAppConfig.sandboxBaseUrl).thenReturn(Some("https://test-api.service.hmrc.gov.uk"))
   }
 
   "main view" when {
@@ -73,7 +76,6 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val apiAccess = APIAccess(APIAccessType.PRIVATE, isTrial = Some(true))
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
-
       val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true, mockAppConfig))
 
       "render availability 'Yes - private trial'" in {
@@ -86,6 +88,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
+        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
         page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
       }
     }
@@ -108,6 +111,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.docHeadings shouldBe Set("Overview", "Read more")
         page.callToSignIn should not be 'defined
       }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
+        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+      }
+
     }
 
     "api version is private, in trial and the user is not logged in" should {
@@ -128,6 +137,11 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.docHeadings shouldBe Set("Overview", "Read more")
         page.callToSignIn shouldBe 'defined
       }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
+        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+      }
     }
 
     "api version is private, not in trial and the user is a member of a whitelisted application" should {
@@ -146,6 +160,11 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
 
       "render full content" in {
         renderAllDocumentation(page)
+      }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
+        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
       }
     }
 
@@ -166,6 +185,14 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       "not render content" in {
         page.docHeadings shouldBe Set.empty
       }
+
+      // should not render the base url's when sandbox / prod availability is no.
+      // currently test failing as showBaseUrl is default to show each time
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe ""
+        page.productionBaseUrl shouldBe ""
+      }
     }
 
     "api version is public, in trial and the user is a member of a whitelisted application" should {
@@ -184,6 +211,11 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
 
       "render full content" in {
         renderAllDocumentation(page)
+      }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
+        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
       }
     }
 
@@ -204,6 +236,11 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       "render full content" in {
         renderAllDocumentation(page)
       }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
+        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+      }
     }
 
     "api version is public, not in trial and the user is a member of a whitelisted application" should {
@@ -223,6 +260,11 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       "render full content" in {
         renderAllDocumentation(page)
       }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
+        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
+      }
     }
 
     "api version is public, not in trial and the user is not a member of a whitelisted application" should {
@@ -241,6 +283,11 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
 
       "render full content" in {
         renderAllDocumentation(page)
+      }
+
+      "render base urls" in {
+        page.sandboxBaseUrl shouldBe "https://test-api.service.hmrc.gov.uk/"
+        page.productionBaseUrl shouldBe "https://api.service.hmrc.gov.uk/"
       }
     }
   }
