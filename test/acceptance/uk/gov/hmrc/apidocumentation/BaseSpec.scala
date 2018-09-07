@@ -44,18 +44,15 @@ trait BaseSpec extends FeatureSpec with BeforeAndAfterEach with BeforeAndAfterAl
   }
 
   override def beforeAll() = {
-    println("Starting WM")
     wireMockServer.start()
     WireMock.configureFor(stubHost, stubPort)
   }
 
   override def afterAll() = {
-    println("Stopping WM")
     wireMockServer.stop()
   }
 
   override def beforeEach() = {
-    println(s"Wiremock Running - ${wireMockServer.isRunning}, on port ${wireMockServer.port()}")
     webDriver.manage().deleteAllCookies()
     WireMock.reset()
   }
