@@ -89,7 +89,6 @@ trait ApiDefinition {
 
     def fetchFile(filename: String, contentType: String) = {
       val file = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$filename")).mkString
-      println(s"Creating wiremock stub for /apis/$serviceName/$version/documentation/$filename")
       stubFor(get(urlMatching(s"/apis/$serviceName/$version/documentation/$filename"))
         .willReturn(aResponse()
           .withStatus(200)
@@ -101,31 +100,24 @@ trait ApiDefinition {
     def fetchJsonFile(path: String) = {
       val smt: Try[String] = Try(getClass.getResource(s"/services/$serviceName/conf/$version/$path").getPath)
 
-      println(s"Looking for: /services/$serviceName/conf/$version/$path")
-
       val listOfFiles: Seq[File] = smt match {
         case Success(s) =>
-          println(s"smt success: $s")
           val dir = new File(URLDecoder.decode(s))
 
-          println(s"Dir abs path: ${dir.getAbsolutePath()}")
           if (dir.exists()) {
-            println("dir exists")
              dir.listFiles
                .filter(f => f.exists() && f.isFile)
                .toList
            }
            else {
-            println("In else - empty file")
             List.empty[File]
           }
-        case Failure(f) => println("Does not exist"); List.empty[File]
+        case Failure(f) => List.empty[File]
       }
 
       listOfFiles.foreach {
         r =>
           val file: String = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$path/${r.getName}")).mkString
-          println(s"Creating wiremock stub for /apis/$serviceName/$version/documentation/$path/${r.getName}")
           stubFor(get(urlMatching(s"/apis/$serviceName/$version/documentation/$path/${r.getName}"))
             .willReturn(aResponse()
               .withStatus(200)
