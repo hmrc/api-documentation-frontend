@@ -117,6 +117,7 @@ lazy val compile = Seq(
   "uk.gov.hmrc" %% "frontend-bootstrap" % "9.0.0",
   "uk.gov.hmrc" %% "url-builder" % "2.0.0",
   "uk.gov.hmrc" %% "http-metrics" % "1.2.0",
+  "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
   "org.raml" % "raml-parser-2" % "1.0.13",
   "uk.gov.hmrc" %% "play-partials" % "6.1.0",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",

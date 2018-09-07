@@ -29,10 +29,11 @@ import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers
 import uk.gov.hmrc.apidocumentation.controllers.DocumentationController
 import uk.gov.hmrc.apidocumentation.models.{Crumb, RamlAndSchemas, TestEndpoint, _}
-import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService, RAML, RamlNotFoundException, RamlParseException}
+import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService, RAML}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.Future
 import scala.concurrent.Future.failed

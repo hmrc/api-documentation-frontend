@@ -21,7 +21,7 @@ import org.raml.v2.api.model.v10.resources.Resource
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, DocsVisibility, ExtendedAPIVersion, VersionVisibility}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConversions._ 
 
 package object services {
   type RAML = Api
