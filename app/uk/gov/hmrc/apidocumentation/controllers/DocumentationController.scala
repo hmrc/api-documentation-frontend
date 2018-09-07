@@ -32,6 +32,7 @@ import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}

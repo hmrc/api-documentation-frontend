@@ -35,7 +35,7 @@ package uk.gov.hmrc.apidocumentation
 import com.google.inject.{AbstractModule, Provides}
 import play.api.mvc.EssentialFilter
 import uk.gov.hmrc.apidocumentation.config._
-import uk.gov.hmrc.apidocumentation.services.RamlLoader
+import uk.gov.hmrc.ramltools.loaders.RamlLoader
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.http.metrics.{Metrics, PlayMetrics}
 

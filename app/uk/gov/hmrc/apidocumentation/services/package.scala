@@ -17,19 +17,16 @@
 package uk.gov.hmrc.apidocumentation
 
 import org.raml.v2.api.model.v10.api.{Api, DocumentationItem}
-import org.raml.v2.api.model.v10.resources.Resource
-import uk.gov.hmrc.apidocumentation.models.{APIAccessType, DocsVisibility, ExtendedAPIVersion, VersionVisibility}
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 
 import scala.collection.JavaConversions._
 
 package object services {
+
   type RAML = Api
 
-  implicit class RichRAML(val x: Api) {
-    def flattenedResources() = {
-      flatten(x.resources().toList)
-    }
+  implicit class RicherRAML(val x: Api) {
 
     def documentationForVersion(version: Option[ExtendedAPIVersion]): Seq[DocumentationItem] = versionVisibility(version) match {
       case DocsVisibility.VISIBLE => x.documentation.toSeq
@@ -37,14 +34,10 @@ package object services {
       case _ => Seq.empty
     }
 
-    private def flatten(resources: List[Resource], acc: List[Resource]=Nil): List[Resource] = resources match {
-      case head :: tail => flatten(head.resources.toList ++ tail, acc :+ head)
-      case _ => acc
-    }
-
     private def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
       case Some(v) => VersionDocsVisible(v.visibility)
       case _ => DocsVisibility.VISIBLE
     }
   }
+
 }

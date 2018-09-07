@@ -21,6 +21,7 @@ import java.net.URI
 import org.raml.v2.api.model.v10.methods.Method
 import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
+import uk.gov.hmrc.ramltools.Implicits._
 
 import scala.collection.JavaConversions._
 import scala.collection.immutable.ListMap
@@ -46,7 +47,7 @@ class SchemaService {
 
   private def fetchSchema(basePath: String, schemaPath: String): JsonSchema = {
 
-    val schemaLocation = if(URI.create(schemaPath).isAbsolute) {
+    val schemaLocation = if (URI.create(schemaPath).isAbsolute) {
       schemaPath
     } else {
       URI.create(s"${basePath}/${schemaPath}").normalize.toString
@@ -66,7 +67,7 @@ class SchemaService {
 
   private def parseSchema(schema: String, basePath: String): JsonSchema = {
     val jsonSchema = Json.parse(schema).as[JsonSchema]
-    if(schema.contains("$ref")) resolveRefs(jsonSchema, basePath, jsonSchema) else jsonSchema
+    if (schema.contains("$ref")) resolveRefs(jsonSchema, basePath, jsonSchema) else jsonSchema
   }
 
   private def resolveRefs(schema: JsonSchema, basePath: String, enclosingSchema: JsonSchema): JsonSchema = {
