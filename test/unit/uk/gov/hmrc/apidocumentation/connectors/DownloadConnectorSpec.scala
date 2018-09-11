@@ -17,6 +17,7 @@
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
 import mockws.MockWS
+import play.api.http.Status._
 import play.api.mvc.{Action, Results}
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException, NotFoundException}
@@ -49,7 +50,7 @@ class DownloadConnectorSpec extends ConnectorSpec {
     "return resource when found" in new Setup {
 
       val result = await(connector.fetch(serviceName, version, "some/resource"))
-      result.header.status shouldBe 200
+      result.header.status shouldBe OK
     }
 
     "throw NotFoundException when not found" in new Setup {
