@@ -18,39 +18,19 @@ package unit.uk.gov.hmrc.apidocumentation.connectors
 
 import java.net.URLEncoder
 
-import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import uk.gov.hmrc.apidocumentation.config.{ApiDocumentationFrontendAuditConnector, WSHttp}
-import uk.gov.hmrc.apidocumentation.models.{APIAccess, APIAccessType, VersionVisibility}
-import org.scalatest.BeforeAndAfterEach
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.apidocumentation.connectors.APIDocumentationConnector
+import uk.gov.hmrc.apidocumentation.models.{APIAccessType, VersionVisibility}
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.http.metrics.{API, NoopMetrics}
-import uk.gov.hmrc.play.test.UnitSpec
 
-class APIDocumentationConnectorSpec extends UnitSpec with ScalaFutures with BeforeAndAfterEach with GuiceOneAppPerSuite {
-
-  val apiDocumentationPort = sys.env.getOrElse("WIREMOCK", "11114").toInt
-  var apiDocumentationHost = "localhost"
-  val apiDocumentationUrl = s"http://$apiDocumentationHost:$apiDocumentationPort"
-  val wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(apiDocumentationPort))
+class APIDocumentationConnectorSpec extends ConnectorSpec {
+  val apiDocumentationUrl = s"http://$wiremockHost:$wiremockPort"
 
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val connector = new APIDocumentationConnector(new WSHttp(ApiDocumentationFrontendAuditConnector), NoopMetrics)
-  }
-
-  override def beforeEach() {
-    wireMockServer.start()
-    WireMock.configureFor(apiDocumentationHost, apiDocumentationPort)
-  }
-
-  override def afterEach() {
-    wireMockServer.stop()
+    val connector = new APIDocumentationConnector(WSHttp(ApiDocumentationFrontendAuditConnector), NoopMetrics)
   }
 
   "api" should {
