@@ -38,7 +38,7 @@ trait BaseSpec extends FeatureSpec with BeforeAndAfterEach with BeforeAndAfterAl
 
   override def fakeApplication(): Application = {
     GuiceApplicationBuilder()
-      .configure("run.mode" -> "Stub")
+      .configure("run.mode" -> "Test")
       .in(Mode.Prod)
       .build()
   }

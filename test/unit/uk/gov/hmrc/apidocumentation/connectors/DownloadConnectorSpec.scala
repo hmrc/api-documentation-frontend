@@ -17,21 +17,14 @@
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
 import mockws.MockWS
-import org.scalatest.BeforeAndAfterEach
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.{Action, Results}
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.NoopMetrics
-import uk.gov.hmrc.play.test.UnitSpec
 
 
-class DownloadConnectorSpec extends UnitSpec with ScalaFutures with BeforeAndAfterEach with GuiceOneAppPerSuite {
-
-  val apiDocumentationPort = sys.env.getOrElse("WIREMOCK", "11114").toInt
-  var apiDocumentationHost = "localhost"
-  val apiDocumentationUrl = s"http://$apiDocumentationHost:$apiDocumentationPort"
+class DownloadConnectorSpec extends ConnectorSpec {
+  val apiDocumentationUrl = s"http://$wiremockHost:$wiremockPort"
 
   val serviceName = "hello-world"
   val version = "1.0"
@@ -56,7 +49,7 @@ class DownloadConnectorSpec extends UnitSpec with ScalaFutures with BeforeAndAft
     "return resource when found" in new Setup {
 
       val result = await(connector.fetch(serviceName, version, "some/resource"))
-      result.header.status shouldBe (200)
+      result.header.status shouldBe 200
     }
 
     "throw NotFoundException when not found" in new Setup {

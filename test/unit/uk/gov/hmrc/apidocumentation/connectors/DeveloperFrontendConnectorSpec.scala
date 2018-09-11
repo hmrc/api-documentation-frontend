@@ -16,42 +16,23 @@
 
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
-import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{verify => verifyMockServer, _}
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import uk.gov.hmrc.apidocumentation.config.{ApiDocumentationFrontendAuditConnector, WSHttp}
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.apidocumentation.models._
-import org.scalatest.BeforeAndAfterEach
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.twirl.api.Html
+import uk.gov.hmrc.apidocumentation.config.{ApiDocumentationFrontendAuditConnector, WSHttp}
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.{API, NoopMetrics}
 import uk.gov.hmrc.play.partials.HtmlPartial
-import uk.gov.hmrc.play.test.UnitSpec
 
-class DeveloperFrontendConnectorSpec extends UnitSpec with ScalaFutures with BeforeAndAfterEach with GuiceOneAppPerSuite {
-  val developerFrontendPort = sys.env.getOrElse("WIREMOCK", "11115").toInt
-  var developerFrontendHost = "localhost"
-  val developerFrontendUrl = s"http://$developerFrontendHost:$developerFrontendPort"
-  val wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(developerFrontendPort))
+class DeveloperFrontendConnectorSpec extends ConnectorSpec {
+  val developerFrontendUrl = s"http://$wiremockHost:$wiremockPort"
 
   trait Setup {
-    val connector = new DeveloperFrontendConnector(new WSHttp(ApiDocumentationFrontendAuditConnector), NoopMetrics)
-  }
-
-  override def beforeEach() {
-    wireMockServer.start()
-    WireMock.configureFor(developerFrontendHost, developerFrontendPort)
-  }
-
-  override def afterEach() {
-    wireMockServer.stop()
+    val connector = new DeveloperFrontendConnector(WSHttp(ApiDocumentationFrontendAuditConnector), NoopMetrics)
   }
 
   "api" should {
