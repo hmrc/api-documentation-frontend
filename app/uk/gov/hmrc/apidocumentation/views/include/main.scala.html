@@ -91,13 +91,10 @@
 }
 
 @banner = {
-    <div class ="banner">
-        @breadcrumbs.map {crumbs =>
-            @partials.breadcrumbs(crumbs.crumbs)
-        }
-        @serviceInfoContent
-
-    </div>
+    @breadcrumbs.map {crumbs =>
+        @partials.breadcrumbs(crumbs.crumbs)
+    }
+    @serviceInfoContent
 }
 
 @serviceInfo = {
