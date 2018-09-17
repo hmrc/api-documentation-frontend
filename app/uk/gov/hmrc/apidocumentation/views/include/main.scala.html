@@ -90,22 +90,20 @@
     </ul>
 }
 
-@betaBanner = {
-@uiLayouts.betaBanner(
-    userLoggedIn = false,
-    betaFeedbackUrl = applicationConfig.betaFeedbackUrl,
-    betaFeedbackUnauthenticatedUrl = applicationConfig.betaFeedbackUnauthenticatedUrl,
-    showFeedbackLinkInBetaBanner = true,
-    noBorder = fullWidthBanner.isDefined)
+@banner = {
+    @breadcrumbs.map {crumbs =>
+        @partials.breadcrumbs(crumbs.crumbs)
+    }
+    @serviceInfoContent
 }
 
 @serviceInfo = {
     @if(fullWidthBanner.isEmpty) {
         @uiLayouts.serviceInfo(
-            betaBanner = betaBanner,
+            betaBanner = banner,
             includeGridWrapper = false,
             includeHMRCBranding = false,
-            serviceInfoContent = serviceInfoContent)
+            serviceInfoContent = None)
     }
 }
 
@@ -147,7 +145,7 @@
 
     @if(fullWidthBanner.isDefined) {
         <div class="centered-content">
-            @betaBanner
+            @banner
             @serviceInfoContent.getOrElse(HtmlFormat.empty)
         </div>
         <section class="full-width-banner">
@@ -158,16 +156,6 @@
     <main id="wrapper" role="main">
         <div class="centered-content">
             @serviceInfo
-            @breadcrumbs.map { breadcrumbs =>
-                <div class="grid-row">
-                    <div class="column-three-quarters">
-                        @partials.breadcrumbs(breadcrumbs.crumbs)
-                    </div>
-                    <div class="column-one-quarter">
-                        @additionalTopContent.getOrElse(HtmlFormat.empty)
-                    </div>
-                </div>
-            }
         </div>
         <div class="centered-content">
             <div class="grid-row sticky-nav_wrapper">

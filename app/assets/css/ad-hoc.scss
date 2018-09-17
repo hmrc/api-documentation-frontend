@@ -32,6 +32,14 @@
   margin-top: 1.2em;
 }
 
+.service-info {
+  .header__menu__proposition-links {
+    margin-top: 0em;
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+  }
+}
+
 
 
 // APIS-1066 - Override javascript added class hiding top mobile menu toggle
@@ -60,7 +68,8 @@
 
 
 .header__menu__proposition--sub-header {
-    display: none;
+    width: 25%;
+    display: inline;
 }
 
 
@@ -82,7 +91,8 @@
 
 @media (min-width: 801px) {
   .header__menu__proposition--sub-header {
-      display: block;
+      width: 25%;
+      display: inline;
   }
 }
 
@@ -197,4 +207,9 @@ pre, code {
 
 .underline {
   text-decoration: underline !important;
+}
+
+.breadcrumbs {
+  width: 75%;
+  display: inline-block;
 }
