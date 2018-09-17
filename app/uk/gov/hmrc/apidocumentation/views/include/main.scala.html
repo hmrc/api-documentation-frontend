@@ -90,12 +90,7 @@
     </ul>
 }
 
-@banner = {
-    @breadcrumbs.map {crumbs =>
-        @partials.breadcrumbs(crumbs.crumbs)
-    }
-    @serviceInfoContent
-}
+@banner = {}
 
 @serviceInfo = {
     @if(fullWidthBanner.isEmpty) {
@@ -103,7 +98,7 @@
             betaBanner = banner,
             includeGridWrapper = false,
             includeHMRCBranding = false,
-            serviceInfoContent = None)
+            serviceInfoContent = serviceInfoContent)
     }
 }
 
@@ -156,6 +151,17 @@
     <main id="wrapper" role="main">
         <div class="centered-content">
             @serviceInfo
+
+            @breadcrumbs.map { breadcrumbs =>
+                <div class="grid-row">
+                    <div class="column-three-quarters">
+                        @partials.breadcrumbs(breadcrumbs.crumbs)
+                    </div>
+                    <div class="column-one-quarter">
+                        @additionalTopContent.getOrElse(HtmlFormat.empty)
+                    </div>
+                </div>
+            }
         </div>
         <div class="centered-content">
             <div class="grid-row sticky-nav_wrapper">
