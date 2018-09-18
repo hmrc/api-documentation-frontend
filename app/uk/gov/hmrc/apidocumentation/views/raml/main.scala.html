@@ -27,7 +27,6 @@
 @topContent = {
     @for(api <- maybeApi) {
         @for(version <- maybeVersion) {
-        <div class="form-group">
             <select class="form-control form-control-version"
                     id="version"
                     name="version"
@@ -38,7 +37,6 @@
                 <option @if(v == version) {selected} value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url">v@v.version (@v.displayedStatus)</option>
                 }
             </select>
-        </div>
         }
     }
 }
