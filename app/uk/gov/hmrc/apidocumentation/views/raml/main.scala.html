@@ -16,12 +16,32 @@
 
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models.DocsVisibility
+@import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services._
 @import scala.collection.JavaConversions._
 
-@(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig)
+@(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig)
+
+@topContent = {
+    @for(api <- maybeApi) {
+        @for(version <- maybeVersion) {
+        <div class="form-group">
+            <select class="form-control form-control-version"
+                    id="version"
+                    name="version"
+                    value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, version.version, None).url"
+                    onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                @for(v <- api.sortedActiveVersions;
+                if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
+                <option @if(v == version) {selected} value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url">v@v.version (@v.displayedStatus)</option>
+                }
+            </select>
+        </div>
+        }
+    }
+}
 
 <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section" aria-busy="false">
     <div id="section">
@@ -33,8 +53,7 @@
             <table>
                 <col width="50%" />
                 <col width="50%" />
-                <tr><th><span class="bold-small">Version</span></th><td>@version.version</td></tr>
-                <tr><th><span class="bold-small">Status</span></th><td>@version.displayedStatus</td></tr>
+                <tr><th><span class="bold-small">Version</span></th><td>@topContent</td></tr>
                 @if(applicationConfig.showSandboxAvailability) {
                 <tr><th><span class="bold-small">Available in Sandbox</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
                 }
