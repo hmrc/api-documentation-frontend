@@ -50,7 +50,9 @@
 
 
 .header__menu__proposition-links {
-    margin-top: -2.2em;
+  padding-top: 0.75em;
+  padding-bottom: 0.75em;
+
     .link-style {
         color: #005ea5;
         font-weight: normal;
@@ -66,8 +68,6 @@
 .header__menu__proposition--sub-header {
     display: inline-block;
     float: right;
-    padding-top: 0.75em;
-    padding-bottom: 0.75em;
 }
 
 
@@ -79,9 +79,11 @@
     padding: 0 15px 0 0;
     border-bottom: 0;
   }
+
   #global-header .header-proposition #proposition-links li.desktop-only {
     display: none;
   }
+
   #global-header .header-proposition #proposition-links li.clear-child {
     clear: left;
   }
@@ -91,8 +93,6 @@
   .header__menu__proposition--sub-header {
     display: inline-block;
     float: right;
-    padding-top: 0.75em;
-    padding-bottom: 0.75em;
     width: 25%;
   }
 }
