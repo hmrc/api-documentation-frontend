@@ -87,7 +87,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val apiAccess = APIAccess(APIAccessType.PRIVATE, isTrial = Some(true))
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
-      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true, mockAppConfig))
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), None, loggedIn = true, mockAppConfig))
 
       "render availability 'Yes - private trial'" in {
         page.sandboxAvailability shouldBe "Yes - private trial"
@@ -111,7 +111,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true, mockAppConfig))
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), None, loggedIn = true, mockAppConfig))
 
       "render availability 'Yes - private trial'" in {
         page.sandboxAvailability shouldBe "Yes - private trial"
@@ -137,7 +137,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = false, mockAppConfig))
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), None, loggedIn = false, mockAppConfig))
 
       "render availability 'Yes - private trial'" in {
         page.sandboxAvailability shouldBe "Yes - private trial"
@@ -162,7 +162,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true, mockAppConfig))
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), None, loggedIn = true, mockAppConfig))
 
       "render availability 'Yes - private trial" in {
         page.sandboxAvailability shouldBe "Yes"
@@ -186,7 +186,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true, mockAppConfig))
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), None, loggedIn = true, mockAppConfig))
 
       "render 'No'" in {
         page.sandboxAvailability shouldBe "No"
@@ -210,7 +210,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true, mockAppConfig))
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), None, loggedIn = true, mockAppConfig))
 
       "render availability 'Yes'" in {
         page.sandboxAvailability shouldBe "Yes"
@@ -234,7 +234,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true,  mockAppConfig))
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), None, loggedIn = true,  mockAppConfig))
 
       "render availability 'Yes'" in {
         page.sandboxAvailability shouldBe "Yes"
@@ -258,7 +258,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true, mockAppConfig))
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), None, loggedIn = true, mockAppConfig))
 
       "render availability 'Yes'" in {
         page.sandboxAvailability shouldBe "Yes"
@@ -282,7 +282,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), loggedIn = true, mockAppConfig))
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, Some(version), None, loggedIn = true, mockAppConfig))
 
       "render availability: 'Yes'" in {
         page.sandboxAvailability shouldBe "Yes"

@@ -54,7 +54,7 @@
     @if(result.isSuccess) {
         @for(ramlAndSchemas <- result.get) {
             <h2 class="divider--bottom">Generated Content</h2>
-            @main(ramlAndSchemas.raml, ramlAndSchemas.schemas, None)
+            @main(ramlAndSchemas.raml, ramlAndSchemas.schemas, None, None)
         }
     }
 }
