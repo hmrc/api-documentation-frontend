@@ -33,8 +33,6 @@
 .service-info {
   .header__menu__proposition-links {
     margin-top: 0em;
-    padding-top: 0.75em;
-    padding-bottom: 0.75em;
   }
 }
 
@@ -66,8 +64,10 @@
 
 
 .header__menu__proposition--sub-header {
-    width: 25%;
-    display: inline;
+    display: inline-block;
+    float: right;
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
 }
 
 
@@ -89,8 +89,11 @@
 
 @media (min-width: 801px) {
   .header__menu__proposition--sub-header {
-      width: 25%;
-      display: inline;
+    display: inline-block;
+    float: right;
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+    width: 25%;
   }
 }
 
