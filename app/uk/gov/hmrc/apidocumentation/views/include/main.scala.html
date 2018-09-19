@@ -91,10 +91,10 @@
 }
 
 @banner = {
-        @breadcrumbs.map {crumbs =>
-            @partials.breadcrumbs(crumbs.crumbs)
-        }
-@serviceInfoContent}
+    @breadcrumbs.map {crumbs =>
+        @partials.breadcrumbs(crumbs.crumbs)
+    }
+}
 
 @serviceInfo = {
     @if(fullWidthBanner.isEmpty) {
@@ -102,7 +102,8 @@
             betaBanner = banner,
             includeGridWrapper = false,
             includeHMRCBranding = false,
-            serviceInfoContent = None)
+            serviceInfoContent = serviceInfoContent
+        )
     }
 }
 
@@ -126,7 +127,7 @@
             @sidebar
         </div>
     </div>
-@getHelpForm
+    @getHelpForm
 }
 
 @content = {

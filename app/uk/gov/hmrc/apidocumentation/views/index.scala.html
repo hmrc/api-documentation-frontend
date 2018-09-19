@@ -37,11 +37,21 @@
 </header>
 }
 
-@main(navTitle = Some(applicationConfig.title),
+@userBanner = {
+    <div class="header__menu__proposition--sub-header">
+        <ul class="header__menu__proposition-links">
+            @partials.headerNavLinks(navLinks, anchorClass=Some("link-style"))
+        </ul>
+    </div>
+}
+
+@main(
+    navTitle = Some(applicationConfig.title),
     headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(), navLinks)),
-    serviceInfoContent = None,
+    serviceInfoContent = Some(userBanner),
     fullWidthBanner = Some(fullWidthBanner),
-    fullWidthContent = true) {
+    fullWidthContent = true
+) {
 
     <div class="grid-row">
         <div class="column-one-third">
