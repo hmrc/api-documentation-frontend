@@ -4,7 +4,7 @@ Frontend for API documentation - part of the Developer Hub
 
 ## Steps to run acceptance test
 
-[**Note**: Acceptance tests will fail if they are running at the same time as api-documentation-frontend.]
+[**Note**: Acceptance and Unit tests will fail if they are running at the same time as api-documentation-frontend.]
 
 1. Run Assets Frontend using command ```sm --start ASSETS_FRONTEND``` where HMRC projects have been checked out.
 
