@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import include._
+@import partials.pagination
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
@@ -47,22 +48,8 @@
     <p>However, many APIs on the sandbox are stateful - they let you send test data through create (POST) or update (PUT) requests (or through an accompanying <a href="/api-documentation/docs/api#test-support-apis">Test Support API</a>) and then read back that same data through retrieval (GET) requests.</p>
     <p>For stateful APIs where there is no way to clear down test data, the best way to start anew is to <a href="/api-test-user">create a new test user</a>.</p>
 
-    <nav class="pagination" role="navigation" aria-label="Pagination">
-        <ul class="group">
-            <li class="previous">
-                <a class="page-nav__link page-nav__link--previous" title="Navigate to previous part" rel="previous" href="@controllers.routes.DocumentationController.testingPage()">
-                    <span class="page-nav__label">Previous</span>
-                    <span class="page-nav__title">Getting started</span>
-                </a>
-            </li>
-            <li class="next">
-                <a class="page-nav__link page-nav__link--next" title="Navigate to next part" rel="next" href="@controllers.routes.DocumentationController.testingDataClearDownPage()">
-                    <span class="page-nav__label">Next</span>
-                    <span class="page-nav__title">Data cleardown</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
+    @pagination(
+        previous = Some(Pagination("Getting started", controllers.routes.DocumentationController.testingPage().url)),
+        next = Some(Pagination("Data cleardown", controllers.routes.DocumentationController.testingDataClearDownPage().url)))
 
 }

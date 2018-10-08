@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import include._
+@import partials.pagination
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
@@ -76,15 +77,6 @@
 
     </section>
 
-        <nav class="pagination" role="navigation" aria-label="Pagination">
-            <ul class="group">
-                <li class="previous">
-                    <a class="page-nav__link page-nav__link--previous" title="Navigate to previous part" rel="previous" href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">
-                        <span class="page-nav__label">Previous</span>
-                        <span class="page-nav__title">User-restricted endpoints</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+       @pagination(previous = Some(Pagination("User-restricted endpoints", controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url)))
 
 }

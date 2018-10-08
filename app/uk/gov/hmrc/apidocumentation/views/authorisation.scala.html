@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import include._
+@import partials.pagination
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
@@ -107,22 +108,6 @@
 
 
 
-        <nav class="pagination" role="navigation" aria-label="Pagination">
-            <ul class="group">
-                <li class="next">
-                    <a class="page-nav__link page-nav__link--next" title="Navigate to next part" rel="next" href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">
-                        <span class="page-nav__label">Next</span>
-                        <span class="page-nav__title">Open access endpoints</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        @pagination(next = Some(Pagination("Open access endpoints", controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url)))
 
     }
-
-
-
-
-
-
-

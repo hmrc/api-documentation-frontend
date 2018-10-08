@@ -1,0 +1,52 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.models.Pagination
+
+@(previous: Option[Pagination] = None, next: Option[Pagination] = None)
+
+<nav class="gem-c-pagination" role="navigation" aria-label="Pagination">
+  <ul class="gem-c-pagination--list">
+    @previous.map { case Pagination(text, href) =>
+      <li class="gem-c-pagination__item gem-c-pagination__item--previous">
+        <a class="gem-c-pagination__link" title="Navigate to previous part" rel="previous" href="@href">
+          <span class="gem-c-pagination__link-title">
+            <svg class="gem-c-pagination__link-icon" xmlns="http://www.w3.org/2000/svg" height="13" width="17" viewBox="0 0 17 13">
+              <path fill="currentColor" d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+            </svg>
+            <span class="gem-c-pagination__link-text">Previous</span>
+          </span>
+          <span class="visually-hidden">:</span>
+          <span class="gem-c-pagination__link-label">@text</span>
+        </a>
+      </li>
+    }
+    @next.map { case Pagination(text, href) =>
+      <li class="gem-c-pagination__item gem-c-pagination__item--next">
+        <a class="gem-c-pagination__link" title="Navigate to next part" rel="next" href="@href">
+          <span class="gem-c-pagination__link-title">
+            <svg class="gem-c-pagination__link-icon" xmlns="http://www.w3.org/2000/svg" height="13" width="17" viewBox="0 0 17 13">
+              <path fill="currentColor" d="m10.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+            </svg>
+            <span class="gem-c-pagination__link-text">Next</span>
+          </span>
+          <span class="visually-hidden">:</span>
+          <span class="gem-c-pagination__link-label">@text</span>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

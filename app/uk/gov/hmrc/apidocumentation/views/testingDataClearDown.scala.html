@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import include._
+@import partials.pagination
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
@@ -47,16 +48,6 @@
         To maintain optimal performance of the environment, all test data in the sandbox is cleared down on the first and third Saturday of each month at around midnight GMT. After this time you will need to create new test users and data.
     </p>
 
-    <nav class="page-nav" role="navigation" aria-label="Page navigation">
-        <ul>
-            <li class="page-nav__item page-nav__item--previous">
-                <a class="page-nav__link page-nav__link--previous"
-                title="Navigate to previous part" rel="prev" href="@controllers.routes.DocumentationController.testingStatefulBehaviourPage()">
-                    <span class="page-nav__label">Previous</span>
-                    <span class="page-nav__title">Stateful Behaviour</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    @pagination(previous = Some(Pagination("Stateful behaviour", controllers.routes.DocumentationController.testingStatefulBehaviourPage().url)))
 
 }

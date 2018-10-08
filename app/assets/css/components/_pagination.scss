@@ -1,0 +1,61 @@
+.gem-c-pagination {
+  $gutter: 3rem;
+  $gutter-half: $gutter / 2;
+  $line-height: 1.25;
+  $link-colour: #005ea5;
+  $canvas-colour: #f8f8f8;
+
+  display: block;
+  margin-top: $gutter;
+  margin-bottom: $gutter;
+  margin-left: -$gutter-half;
+  margin-right: -$gutter-half;
+
+  &__item {
+    font-size: 16px;
+    list-style: none;
+  }
+
+  &__link {
+    display: block;
+    padding: $gutter-half;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:visited {
+      color: $link-colour;
+    }
+
+    &:hover,
+    &:active {
+      background-color: $canvas-colour;
+    }
+
+    &-title {
+      display: block;
+    }
+
+    &-text {
+      font-weight: bold;
+      font-size: 2rem;
+      margin-left: $gutter / 3;
+    }
+
+    &-icon {
+      font-size: 24px;
+      line-height: $line-height;
+      display: inline-block;
+      margin-bottom: 1px;
+      height: .482em;
+      width: .63em;
+    }
+
+    &-label {
+      display: inline-block;
+      margin-top: 0.1em;
+      text-decoration: underline;
+      margin-left: $gutter;
+    }
+  }
+}
