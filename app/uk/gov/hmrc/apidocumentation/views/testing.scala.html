@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import include._
+@import partials.pagination
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
@@ -61,16 +62,6 @@
     <p>Each test user is unique, with its own user ID, password and tax identifiers (for example SA UTR and NINO for an individual). The test user details are generated automatically by us - you cannot choose them.</p>
     <p>You can create as many test users as you like. Each new test user effectively provides a "clean" test environment. Test users can be shared across applications and between test team members, but they do have a <a href="@controllers.routes.DocumentationController.testingDataClearDownPage()">limited life span</a>.</p>
 
-
-    <nav class="page-nav" role="navigation" aria-label="Pagination">
-        <ul class="group">
-            <li class="next">
-                <a class="page-nav__link page-nav__link--next" title="Navigate to next part" rel="next" href="@controllers.routes.DocumentationController.testingStatefulBehaviourPage()">
-                    <span class="page-nav__label">Next</span>
-                    <span class="page-nav__title">Stateful behaviour</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    @pagination(next = Some(Pagination("Stateful behaviour", controllers.routes.DocumentationController.testingStatefulBehaviourPage().url)))
 
 }

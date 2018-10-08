@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import include._
+@import partials.pagination
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
@@ -575,25 +576,8 @@ https://test-api.service.hmrc.gov.uk/oauth/token
 
 </section>
 
+   @pagination(
+        previous = Some(Pagination("Application-restricted endpoints", controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url)),
+        next = Some(Pagination("2-step verification", controllers.routes.DocumentationController.authorisation2SVPage().url)))
 
-
-
-
-    <nav class="pagination" role="navigation" aria-label="Pagination">
-        <ul class="group">
-            <li class="previous">
-                <a class="page-nav__link page-nav__link--previous"
-                   title="Navigate to previous part" rel="previous" href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">
-                    <span class="page-nav__label">Previous</span>
-                    <span class="page-nav__title">Application-restricted endpoints</span>
-                </a>
-            </li>
-            <li class="next">
-                <a class="page-nav__link page-nav__link--next" title="Navigate to next part" rel="next" href="@controllers.routes.DocumentationController.authorisation2SVPage().url">
-                    <span class="page-nav__label">Next</span>
-                    <span class="page-nav__title">2-step verification</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
     }

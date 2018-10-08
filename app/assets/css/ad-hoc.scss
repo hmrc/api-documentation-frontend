@@ -103,40 +103,6 @@
   }
 }
 
-// Put navigation inline
-@media (max-width: 640px) {
-.page-nav__item {
-    width: 50%;
-}
-
-.page-nav__link--previous {
-  padding: rem(14) 0 rem(14) rem(48);
-}
-
-.page-nav__link--next {
-  padding: rem(14) rem(48) rem(14) 0;
-}
-}
-
-// pagination
-.pagination {
-  border-top: 1px solid #bfc1c3;
-  border-bottom: none;
-  display: block;
-  margin: 2em 0 0;
-  padding-top: 20px;
-
-  li.previous {
-    float: left;
-    text-align: left;
-  }
-
-  li.next {
-    float: right;
-    text-align: right;
-  }
-}
-
 .fraud-header-name-col {
   width: 40%;
 }

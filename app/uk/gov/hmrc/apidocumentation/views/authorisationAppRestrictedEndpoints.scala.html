@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import include._
+@import partials.pagination
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
@@ -79,21 +80,8 @@ curl -H 'Authorization: Bearer [YOUR-SERVER-TOKEN]' \
 
     </section>
 
-    <nav class="pagination" role="navigation" aria-label="Pagination">
-        <ul class="group">
-            <li class="previous">
-                <a class="page-nav__link page-nav__link--previous"
-                title="Navigate to previous part" rel="previous" href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">
-                    <span class="page-nav__label">Previous</span>
-                    <span class="page-nav__title">Open access endpoints</span>
-                </a>
-            </li>
-            <li class="next">
-                <a class="page-nav__link page-nav__link--next" title="Navigate to next part" rel="next" href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">
-                    <span class="page-nav__label">Next</span>
-                    <span class="page-nav__title">User-restricted endpoints</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+   @pagination(
+        previous = Some(Pagination("Open access endpoints", controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url)),
+        next = Some(Pagination("User-restricted endpoints", controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url)))
+
 }
