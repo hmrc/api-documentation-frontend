@@ -22,7 +22,7 @@ object APIDocumentationPage extends WebPage {
 
   override val url = s"http://localhost:${Env.port}/api-documentation/docs/api"
 
-  override def isCurrentPage: Boolean = find(className("heading-large")).fold(false)(_.text == "API documentation")
+  override def isCurrentPage: Boolean = find(className("heading-xlarge")).fold(false)(_.text == "API documentation")
 
   def cookieBannerLocation() {
     val location = id("global-cookie-message").element.location.toString

@@ -114,7 +114,7 @@ lazy val appDependencies: Seq[ModuleID] = allDeps
 lazy val compile = Seq(
   ws,
   cache,
-  "uk.gov.hmrc" %% "frontend-bootstrap" % "9.0.0",
+  "uk.gov.hmrc" %% "frontend-bootstrap" % "10.5.0",
   "uk.gov.hmrc" %% "url-builder" % "2.0.0",
   "uk.gov.hmrc" %% "http-metrics" % "1.2.0",
   "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
@@ -128,7 +128,7 @@ lazy val compile = Seq(
 lazy val test = Seq(
   "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
   "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it",
-  "uk.gov.hmrc" %% "hmrctest" % "3.0.0" % "test,it",
+  "uk.gov.hmrc" %% "hmrctest" % "3.1.0" % "test,it",
   "junit" % "junit" % "4.12" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
   "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
