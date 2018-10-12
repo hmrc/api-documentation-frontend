@@ -128,8 +128,12 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       bodyOf(result).contains(navLink.href) && bodyOf(result).contains(navLink.label)
     }
 
-    def versionOptionIsRendered(result: Result, service: String, version: String) = {
-      bodyOf(result).contains(s"""<option selected value="/api-documentation/docs/api/service/${service}/${version}">""")
+    def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
+      val body = bodyOf(result)
+
+      println(body)
+
+      bodyOf(result).contains(s"""<option selected value="/api-documentation/docs/api/service/$service/$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
     }
 
     def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
@@ -347,57 +351,68 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the private API options when logged in and user has access to it" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true)))
+
+      val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true)
+
+      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
-      versionOptionIsRendered(result, serviceName, "1.0") shouldBe(true)
+      versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
     }
 
     "display the private API options when not logged in and is in trial" in new Setup {
       theUserIsNotLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false, isTrial = Some(true))))
+
+      val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false, isTrial = Some(true))
+
+      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
-      versionOptionIsRendered(result, serviceName, "1.0") shouldBe(true)
+      versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
     }
 
     "display the private API options when logged in and is in trial but the user is not authorised" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))))
+
+      val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
+
+      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
-      versionOptionIsRendered(result, serviceName, "1.0") shouldBe(true)
+      versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
     }
 
     "display the private API options when logged in and is in trial and the user is authorised" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))))
+
+      val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
+
+      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
+
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
-      versionOptionIsRendered(result, serviceName, "1.0") shouldBe(true)
+      versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
     }
 
     "not display the private API options when not in trial, not logged in and (therefore) is not authorised" in new Setup {
       theUserIsNotLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false)))
+
+      val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false)
+
+      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
-      versionOptionIsRendered(result, serviceName, "1.0") shouldBe(false)
+      versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe false
     }
 
     "display the not found page when the API is private and the logged in user does not have access to it" in new Setup {
