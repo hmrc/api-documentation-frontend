@@ -129,10 +129,6 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
-      val body = bodyOf(result)
-
-      println(body)
-
       bodyOf(result).contains(s"""<option selected value="/api-documentation/docs/api/service/$service/$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
     }
 
@@ -381,7 +377,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
 
       theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
-      theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
+      theDocumentationServiceWillFetchRaml(mockRamlAndSchemaAdded aria labels for version and status drop downs)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
