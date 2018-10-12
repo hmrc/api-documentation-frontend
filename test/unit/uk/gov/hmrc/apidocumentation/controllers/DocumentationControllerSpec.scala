@@ -377,7 +377,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
 
       theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
-      theDocumentationServiceWillFetchRaml(mockRamlAndSchemaAdded aria labels for version and status drop downs)
+      theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
