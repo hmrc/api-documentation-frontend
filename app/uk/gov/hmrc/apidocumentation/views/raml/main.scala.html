@@ -30,11 +30,12 @@
             <select class="form-control form-control-version"
                     id="version"
                     name="version"
+                    aria-labelledby="version-label"
                     value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, version.version, None).url"
                     onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
                 @for(v <- api.sortedActiveVersions;
                 if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
-                <option @if(v == version) {selected} value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url">v@v.version (@v.displayedStatus)</option>
+                    <option @if(v == version) {selected} value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url" aria-label="Select to view documentation for v@v.version (@v.displayedStatus)">v@v.version (@v.displayedStatus)</option>
                 }
             </select>
         }
@@ -51,7 +52,7 @@
             <table>
                 <col width="50%" />
                 <col width="50%" />
-                <tr><th><label for="version" class="bold-small">Version and status</label></th><td>@topContent</td></tr>
+                <tr><th><label id="version-label" for="version" class="bold-small" aria-label="Choose a version and status">Version and status</label></th><td>@topContent</td></tr>
                 @if(applicationConfig.showSandboxAvailability) {
                 <tr><th><span class="bold-small">Available in Sandbox</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
                 }
