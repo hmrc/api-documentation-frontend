@@ -298,5 +298,13 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
         page.productionBaseUrl shouldBe productionBaseUrl
       }
     }
+
+    "previewing RAML" should {
+      val page = Page(views.html.raml.main.render(ramlAndSchemas, schemas, None, None, loggedIn = true, mockAppConfig))
+
+      "render full documentation" in {
+        renderAllDocumentation(page)
+      }
+    }
   }
 }
