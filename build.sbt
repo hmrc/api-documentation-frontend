@@ -114,7 +114,7 @@ lazy val appDependencies: Seq[ModuleID] = allDeps
 lazy val compile = Seq(
   ws,
   cache,
-  "uk.gov.hmrc" %% "frontend-bootstrap" % "10.5.0",
+  "uk.gov.hmrc" %% "frontend-bootstrap" % "10.6.0",
   "uk.gov.hmrc" %% "url-builder" % "2.0.0",
   "uk.gov.hmrc" %% "http-metrics" % "1.2.0",
   "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
