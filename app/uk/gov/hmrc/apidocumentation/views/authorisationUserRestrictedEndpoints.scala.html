@@ -296,7 +296,7 @@ GET https://www.example.com?error=access_denied
             <h5 class="heading-small faded-text">Example request</h5>
 
             <pre class="snippet--block">
-curl -X POST --data
+curl -X POST --data \
 'client_secret=[YOUR-CLIENT-SECRET]&amp;client_id=[YOUR-CLIENT-ID]&amp;grant_type=authorization_code&amp;redirect_uri=[YOUR-REDIRECT-URI]&amp;code=[AUTHORIZATION-CODE]' \
 https://test-api.service.hmrc.gov.uk/oauth/token
 </pre>
@@ -417,7 +417,7 @@ curl -X GET https://test-api.service.hmrc.gov.uk/oauth/token \
             <h5 class="heading-small faded-text">Example request</h5>
 
             <pre class="snippet--block">
-curl -X POST --data
+curl -X POST --data \
 'client_secret=[YOUR-CLIENT-SECRET]&amp;client_id=[YOUR-CLIENT-ID]&amp;grant_type=refresh_token&amp;refresh_token=[REFRESH-TOKEN]' \
 https://test-api.service.hmrc.gov.uk/oauth/token
 </pre>
