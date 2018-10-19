@@ -45,15 +45,15 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     private def environmentAvailability(env: String) =
       dom.getElementsContainingOwnText(s"Available in ${env.capitalize}").first.parent.nextElementSibling.text
 
-    def productionBaseUrl =
+    def productionApiBaseUrl =
       dom.getElementsContainingOwnText("Production base URL").first.parent.nextElementSibling.text
 
-    def showsProductionBaseUrl= elementExistsByText("span", "Production base URL")
+    def showsproductionApiBaseUrl= elementExistsByText("span", "Production base URL")
 
-    def sandboxBaseUrl =
+    def sandboxApiBaseUrl =
       dom.getElementsContainingOwnText("Sandbox base URL").first.parent.nextElementSibling.text
 
-    def showsSandboxBaseUrl = elementExistsByText("span", "Sandbox base URL")
+    def showssandboxApiBaseUrl = elementExistsByText("span", "Sandbox base URL")
   }
 
   private def renderAllDocumentation(page: Page) = {
@@ -69,12 +69,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     When(mockAppConfig.showProductionAvailability).thenReturn(isAvailable)
   }
 
-  private val productionBaseUrl = "https://production.example.com/"
-  private val sandboxBaseUrl = "https://sandbox.example.com/"
+  private val productionApiBaseUrl = "https://production.example.com/"
+  private val sandboxApiBaseUrl = "https://sandbox.example.com/"
 
   private def showBaseUrl = {
-    When(mockAppConfig.productionBaseUrl).thenReturn(Some(productionBaseUrl))
-    When(mockAppConfig.sandboxBaseUrl).thenReturn(Some(sandboxBaseUrl))
+    When(mockAppConfig.productionApiBaseUrl).thenReturn(productionApiBaseUrl)
+    When(mockAppConfig.sandboxApiBaseUrl).thenReturn(sandboxApiBaseUrl)
   }
 
   "main view" when {
@@ -99,8 +99,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl
-        page.productionBaseUrl shouldBe productionBaseUrl
+        page.sandboxApiBaseUrl shouldBe sandboxApiBaseUrl
+        page.productionApiBaseUrl shouldBe productionApiBaseUrl
       }
     }
 
@@ -124,8 +124,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl
-        page.productionBaseUrl shouldBe productionBaseUrl
+        page.sandboxApiBaseUrl shouldBe sandboxApiBaseUrl
+        page.productionApiBaseUrl shouldBe productionApiBaseUrl
       }
 
     }
@@ -150,8 +150,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl
-        page.productionBaseUrl shouldBe productionBaseUrl
+        page.sandboxApiBaseUrl shouldBe sandboxApiBaseUrl
+        page.productionApiBaseUrl shouldBe productionApiBaseUrl
       }
     }
 
@@ -174,8 +174,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl
-        page.productionBaseUrl shouldBe productionBaseUrl
+        page.sandboxApiBaseUrl shouldBe sandboxApiBaseUrl
+        page.productionApiBaseUrl shouldBe productionApiBaseUrl
       }
     }
 
@@ -198,8 +198,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "not render base urls" in {
-        page.showsSandboxBaseUrl shouldBe false
-        page.showsProductionBaseUrl shouldBe false
+        page.showssandboxApiBaseUrl shouldBe false
+        page.showsproductionApiBaseUrl shouldBe false
       }
     }
 
@@ -222,8 +222,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl
-        page.productionBaseUrl shouldBe productionBaseUrl
+        page.sandboxApiBaseUrl shouldBe sandboxApiBaseUrl
+        page.productionApiBaseUrl shouldBe productionApiBaseUrl
       }
     }
 
@@ -246,8 +246,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl
-        page.productionBaseUrl shouldBe productionBaseUrl
+        page.sandboxApiBaseUrl shouldBe sandboxApiBaseUrl
+        page.productionApiBaseUrl shouldBe productionApiBaseUrl
       }
     }
 
@@ -270,8 +270,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl
-        page.productionBaseUrl shouldBe productionBaseUrl
+        page.sandboxApiBaseUrl shouldBe sandboxApiBaseUrl
+        page.productionApiBaseUrl shouldBe productionApiBaseUrl
       }
     }
 
@@ -294,8 +294,8 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
       }
 
       "render base urls" in {
-        page.sandboxBaseUrl shouldBe sandboxBaseUrl
-        page.productionBaseUrl shouldBe productionBaseUrl
+        page.sandboxApiBaseUrl shouldBe sandboxApiBaseUrl
+        page.productionApiBaseUrl shouldBe productionApiBaseUrl
       }
     }
 

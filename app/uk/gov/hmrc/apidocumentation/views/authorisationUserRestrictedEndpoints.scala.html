@@ -115,7 +115,7 @@
             <h5 id="auth-endpoint-example" class="heading-small faded-text">Example</h5>
 
             <pre class="snippet--block">
-GET  https://test-api.service.hmrc.gov.uk/oauth/authorize?response_type=code
+GET  @{applicationConfig.sandboxApiBaseUrl}/oauth/authorize?response_type=code
 &amp;client_id=[YOUR-CLIENT-ID]
 &amp;scope=[REQUESTED-SCOPE]
 &amp;state=[STATE]
@@ -298,7 +298,7 @@ GET https://www.example.com?error=access_denied
             <pre class="snippet--block">
 curl -X POST --data \
 'client_secret=[YOUR-CLIENT-SECRET]&amp;client_id=[YOUR-CLIENT-ID]&amp;grant_type=authorization_code&amp;redirect_uri=[YOUR-REDIRECT-URI]&amp;code=[AUTHORIZATION-CODE]' \
-https://test-api.service.hmrc.gov.uk/oauth/token
+@{applicationConfig.sandboxApiBaseUrl}/oauth/token
 </pre>
 
             <h5 class="heading-small faded-text">Example response</h5>
@@ -394,7 +394,7 @@ https://test-api.service.hmrc.gov.uk/oauth/token
             <h5 class="heading-small faded-text">Example request</h5>
 
             <pre class="snippet--block">
-curl -X GET https://test-api.service.hmrc.gov.uk/oauth/token \
+curl -X GET @{applicationConfig.sandboxApiBaseUrl}/oauth/token \
 -H ‘Accept: application/vnd.hmrc.1.0+json’ \
 -H ‘Authorization: Bearer [ACCESS-TOKEN]’</pre>
 
@@ -419,7 +419,7 @@ curl -X GET https://test-api.service.hmrc.gov.uk/oauth/token \
             <pre class="snippet--block">
 curl -X POST --data \
 'client_secret=[YOUR-CLIENT-SECRET]&amp;client_id=[YOUR-CLIENT-ID]&amp;grant_type=refresh_token&amp;refresh_token=[REFRESH-TOKEN]' \
-https://test-api.service.hmrc.gov.uk/oauth/token
+@{applicationConfig.sandboxApiBaseUrl}/oauth/token
 </pre>
 
             <h5 class="heading-small faded-text">Example response</h5>

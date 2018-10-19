@@ -126,13 +126,13 @@
 
             <section>
 
-                <h3 class="heading-medium">Issue a GET request to <br>https://test-api.service.hmrc.gov.uk/hello/world</h3>
+                <h3 class="heading-medium">Issue a GET request to <br>@{applicationConfig.sandboxApiBaseUrl}/hello/world</h3>
 
                 <pre class="snippet--block">
 // construct the GET request for our Hello World endpoint
 HttpClient client = HttpClientBuilder.create().build();
 HttpGet request = new HttpGet(
-  "https://test-api.service.hmrc.gov.uk/hello/world");
+  "@{applicationConfig.sandboxApiBaseUrl}/hello/world");
 request.addHeader("Accept", "application/vnd.hmrc.1.0+json");
 
 // execute the request
@@ -160,7 +160,7 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
             <section>
 
-                <h3 class="heading-medium">Issue a GET request to<br>https://test-api.service.hmrc.gov.uk/hello/application, passing your server token as an <code class="code--slim">Authorization</code>
+                <h3 class="heading-medium">Issue a GET request to<br>@{applicationConfig.sandboxApiBaseUrl}/hello/application, passing your server token as an <code class="code--slim">Authorization</code>
                     header with the type <code class="code--slim">Bearer</code></h3>
 
                 <pre class="snippet--block">
@@ -170,7 +170,7 @@ String serverToken = "YOUR-SERVER-TOKEN";
 // construct the GET request for our Hello Application endpoint
 HttpClient client = HttpClientBuilder.create().build();
 HttpGet request = new HttpGet(
-  "https://test-api.service.hmrc.gov.uk/hello/application");
+  "@{applicationConfig.sandboxApiBaseUrl}/hello/application");
 request.addHeader("Accept", "application/vnd.hmrc.1.0+json");
 request.addHeader("Authorization", "Bearer "+serverToken);
 
@@ -211,7 +211,7 @@ String redirectUri = "https://www.example.com/redirect";
 
 // construct the OAuth 2.0 Authorize request
 OAuthClientRequest request = OAuthClientRequest
-  .authorizationLocation("https://test-api.service.hmrc.gov.uk/oauth/authorize")
+  .authorizationLocation("@{applicationConfig.sandboxApiBaseUrl}/oauth/authorize")
   .setResponseType("code")
   .setClientId(clientId)
   .setScope(scope)
@@ -245,7 +245,7 @@ OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 
 // construct OAuth 2.0 Token request for the authorization code
 OAuthClientRequest request = OAuthClientRequest
-  .tokenLocation("https://test-api.service.hmrc.gov.uk/oauth/token")
+  .tokenLocation("@{applicationConfig.sandboxApiBaseUrl}/oauth/token")
   .setGrantType(GrantType.AUTHORIZATION_CODE)
   .setClientId(clientId)
   .setClientSecret(clientSecret)
@@ -266,7 +266,7 @@ Long expiresIn = response.getExpiresIn();</pre>
 
             <section>
 
-                <h3 class="heading-medium">3. Issue a GET request to<br>https://test-api.service.hmrc.gov.uk/hello/user, passing your newly issued <code class="code--slim">access_token</code>
+                <h3 class="heading-medium">3. Issue a GET request to<br>@{applicationConfig.sandboxApiBaseUrl}/hello/user, passing your newly issued <code class="code--slim">access_token</code>
                     as an <code class="code--slim">Authorization</code>
                     header with the type <code class="code--slim">Bearer</code></h3>
 
@@ -274,7 +274,7 @@ Long expiresIn = response.getExpiresIn();</pre>
 // construct the GET request for our Hello User endpoint
 HttpClient client = HttpClientBuilder.create().build();
 HttpGet request = new HttpGet(
-  "https://test-api.service.hmrc.gov.uk/hello/user");
+  "@{applicationConfig.sandboxApiBaseUrl}/hello/user");
 request.addHeader("Accept", "application/vnd.hmrc.1.0+json");
 request.addHeader("Authorization", "Bearer "+accessToken);
 
@@ -308,7 +308,7 @@ OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 
 // construct OAuth 2.0 Token request for the authorization code
 OAuthClientRequest request = OAuthClientRequest
-  .tokenLocation("https://test-api.service.hmrc.gov.uk/oauth/token")
+  .tokenLocation("@{applicationConfig.sandboxApiBaseUrl}/oauth/token")
   .setGrantType(GrantType.REFRESH_TOKEN)
   .setClientId(clientId)
   .setClientSecret(clientSecret)
