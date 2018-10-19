@@ -219,5 +219,6 @@ object CommonPage extends WebPage with TableDrivenPropertyChecks {
   def selectVersion(expectedVersion: String): Unit = {
     val versionDropDown = new Select(waitForElement(By.id("version")))
     versionDropDown.selectByVisibleText(expectedVersion)
+    versionDropDown.getFirstSelectedOption.submit()
   }
 }
