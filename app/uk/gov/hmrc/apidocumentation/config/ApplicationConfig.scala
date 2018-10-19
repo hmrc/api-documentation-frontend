@@ -43,19 +43,22 @@ class ApplicationConfig @Inject()(config: Configuration) extends ServicesConfig 
   lazy val ramlLoaderRewrites = buildRamlLoaderRewrites(config)
   lazy val showProductionAvailability = config.getBoolean(s"$env.features.showProductionAvailability").getOrElse(false)
   lazy val showSandboxAvailability = config.getBoolean(s"$env.features.showSandboxAvailability").getOrElse(false)
-  lazy val productionBaseUrl = config.getString("baseUrl.production")
-  lazy val sandboxBaseUrl = config.getString("baseUrl.sandbox")
+  lazy val productionApiHost = config.getString("platform.production.api.host")
+  lazy val productionWwwHost = config.getString("platform.production.www.host")
+  lazy val productionApiBaseUrl = apiBaseUrl("platform.production.api")
+  lazy val sandboxApiHost = config.getString("platform.sandbox.api.host")
+  lazy val sandboxWwwHost = config.getString("platform.sandbox.www.host")
+  lazy val sandboxApiBaseUrl = apiBaseUrl("platform.sandbox.api")
   lazy val title = "HMRC Developer Hub"
   lazy val isStubMode = env == "Stub"
-  lazy val apiUrl = buildUrl("platform.api")
 
   private def buildRamlLoaderRewrites(config: Configuration): Map[String, String] = {
     Map(config.getString(s"$env.ramlLoaderUrlRewrite.from").getOrElse("") ->
       config.getString(s"$env.ramlLoaderUrlRewrite.to").getOrElse(""))
   }
 
-  private def buildUrl(key: String) = {
-    (config.getString(s"$env.$key.protocol"), config.getString(s"$env.$key.host")) match {
+  private def apiBaseUrl(key: String) = {
+    (config.getString(s"$key.protocol"), config.getString(s"$key.host")) match {
       case (Some(protocol), Some(host)) => s"$protocol://$host"
       case (None, Some(host)) => s"https://$host"
       case _ => ""

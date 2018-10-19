@@ -185,9 +185,9 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     "display the reference guide page" in new Setup {
-      when(underTest.appConfig.apiUrl).thenReturn("https://api.service.hmrc.gov.uk/")
+      when(underTest.appConfig.productionApiBaseUrl).thenReturn("https://api.service.hmrc.gov.uk")
       verifyPageRendered(underTest.referenceGuidePage()(request), pageTitle("Reference guide"),
-        bodyContains = Seq("The base URL for sandbox APIs is:", "https://api.service.hmrc.gov.uk/"))
+        bodyContains = Seq("The base URL for sandbox APIs is:", "https://api.service.hmrc.gov.uk"))
     }
 
     "display the using the hub page" in new Setup {
@@ -203,7 +203,6 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "render the API List" in new Setup {
       theUserIsLoggedIn()
-      when(underTest.appConfig.apiUrl).thenReturn("https://some-url.service.hmrc.gov.uk/")
       when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
         .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
 

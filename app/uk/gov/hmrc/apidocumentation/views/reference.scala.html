@@ -57,9 +57,9 @@
         <h2 class="heading-large">API access</h2>
 
         <p>The base URL for sandbox APIs is:</p>
-        <pre class="snippet--block">https://test-api.service.hmrc.gov.uk/</pre>
+        <pre class="snippet--block">@applicationConfig.sandboxApiBaseUrl</pre>
         <p>The base URL for production APIs is:</p>
-        <pre class="snippet--block">https://api.service.hmrc.gov.uk/</pre>
+        <pre class="snippet--block">@applicationConfig.productionApiBaseUrl</pre>
     </section>
 
     <section id="network-access">
@@ -72,12 +72,12 @@
         <p>Configure your proxy to allow full access to the following domains, including HTTP GET, POST, PUT and DELETE.</p>
         <p>For testing in sandbox:</p>
         <pre class="snippet--block">
-test-api.service.hmrc.gov.uk
-test-www.tax.service.gov.uk</pre>
+@applicationConfig.sandboxApiHost
+@applicationConfig.sandboxWwwHost</pre>
         <p>For production use:</p>
         <pre class="snippet--block">
-api.service.hmrc.gov.uk
-www.tax.service.gov.uk</pre>
+@applicationConfig.productionApiHost
+@applicationConfig.productionWwwHost</pre>
     </section>
 
     <section id="common-data-types">
