@@ -186,3 +186,18 @@ pre, code {
   width: 70%;
   display: inline-block;
 }
+
+.version-container {
+  vertical-align: middle;
+
+  form {
+    display: flex;
+    justify-content: space-between;
+    width: auto;
+
+    select {
+      margin-right: 1rem;
+      width: 100%;
+    }
+  }
+}
