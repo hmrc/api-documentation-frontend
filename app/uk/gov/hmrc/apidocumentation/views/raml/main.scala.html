@@ -27,15 +27,15 @@
 @topContent = {
     @for(api <- maybeApi) {
         @for(version <- maybeVersion) {
-        <form id="version-select" method="get" action="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, version.version, None).url">
+        <form id="version-select" method="get" action="@controllers.routes.DocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
             <select class="form-control form-control-version"
                     id="version"
                     name="version"
                     aria-labelledby="version-label"
-                    value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, version.version, None).url">
+                    value="@version.version">
                 @for(v <- api.sortedActiveVersions;
                 if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
-                    <option @if(v == version) {selected} value="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url" aria-label="Select to view documentation for v@v.version (@v.displayedStatus)">v@v.version (@v.displayedStatus)</option>
+                    <option @if(v == version) {selected} value="@v.version" aria-label="Select to view documentation for v@v.version (@v.displayedStatus)">v@v.version (@v.displayedStatus)</option>
                 }
             </select>
             <button type="submit" class="button">View</button>
