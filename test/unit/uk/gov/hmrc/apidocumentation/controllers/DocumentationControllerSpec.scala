@@ -20,6 +20,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
+import play.api.http.Status._
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 import play.twirl.api.Html
@@ -196,6 +197,12 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the naming guidelines page" in new Setup {
       verifyPageRendered(underTest.nameGuidelinesPage()(request), pageTitle("Application naming guidelines"), breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb))
+    }
+
+    "redirect to the test users test data and stateful behaviour page" in new Setup {
+      val result = await(underTest.testingStatefulBehaviourPage()(request))
+      status(result) shouldBe MOVED_PERMANENTLY
+      result.header.headers.get("Location") shouldBe Some("/api-documentation/docs/testing/test-users-test-data-stateful-behaviour")
     }
   }
 

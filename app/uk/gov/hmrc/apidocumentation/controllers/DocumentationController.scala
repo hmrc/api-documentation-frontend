@@ -70,9 +70,13 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     Future.successful(Ok(testing(pageAttributes("Testing in the sandbox", routes.DocumentationController.testingPage().url, navLinks))))
   }
 
-  def testingStatefulBehaviourPage() = headerNavigation { implicit request => navLinks =>
-    val testingStatefulBehaviourUrl = routes.DocumentationController.testingStatefulBehaviourPage().url
-    Future.successful(Ok(testingStatefulBehaviour(pageAttributes("Stateful Behaviour", testingStatefulBehaviourUrl, navLinks))))
+  def testingStatefulBehaviourPage() = headerNavigation { implicit request =>navLinks =>
+    Future.successful(MovedPermanently(routes.DocumentationController.testUsersDataStatefulBehaviourPage().url))
+  }
+
+  def testUsersDataStatefulBehaviourPage() = headerNavigation { implicit request =>navLinks =>
+    val testUsersDataStatefulBehaviourUrl = routes.DocumentationController.testUsersDataStatefulBehaviourPage().url
+    Future.successful(Ok(testUsersDataStatefulBehaviour(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
   }
 
   def testingDataClearDownPage() = headerNavigation { implicit request => navLinks =>
