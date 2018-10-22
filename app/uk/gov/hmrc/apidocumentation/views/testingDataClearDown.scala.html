@@ -30,13 +30,13 @@
         <div class="grid-row">
             <div class="column-one-half">
                 <ul class="list">
-                    <li><a href="@controllers.routes.DocumentationController.testingPage()">1. Getting started</a></li>
-                    <li><a href="@controllers.routes.DocumentationController.testingStatefulBehaviourPage()">2. Stateful behaviour</a></li>
+                    <li><a href="@controllers.routes.DocumentationController.testingPage()">Getting started</a></li>
+                    <li><a href="@controllers.routes.DocumentationController.testUsersDataStatefulBehaviourPage()">Test users, test data and stateful behaviour</a></li>
                 </ul>
             </div>
             <div class="column-one-half">
                 <ul class="list">
-                    <li>3. Data clear down</li>
+                    <li>Data clear down</li>
                 </ul>
             </div>
         </div>
@@ -48,6 +48,6 @@
         To maintain optimal performance of the environment, all test data in the sandbox is cleared down on the first and third Saturday of each month at around midnight GMT. After this time you will need to create new test users and data.
     </p>
 
-    @pagination(previous = Some(Pagination("Stateful behaviour", controllers.routes.DocumentationController.testingStatefulBehaviourPage().url)))
+    @pagination(previous = Some(Pagination("Test users, test data and stateful behaviour", controllers.routes.DocumentationController.testUsersDataStatefulBehaviourPage().url)))
 
 }
