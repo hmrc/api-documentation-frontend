@@ -24,9 +24,10 @@
 
 @(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig)
 
-@topContent = {
+@renderGetApiVersionForm = {
     @for(api <- maybeApi) {
-        @for(version <- maybeVersion) {
+       @for(version <- maybeVersion) {
+       @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
         <form id="version-select" method="get" action="@controllers.routes.DocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
             <select class="form-control form-control-version"
                     id="version"
@@ -54,7 +55,7 @@
             <table>
                 <col width="50%" />
                 <col width="50%" />
-                <tr class="version-container"><th><label id="version-label" for="version" class="bold-small" aria-label="Choose a version and status">Version and status</label></th><td>@topContent</td></tr>
+                <tr class="version-container"><th><label id="version-label" for="version" class="bold-small" aria-label="Choose a version and status">Version and status</label></th><td>@renderGetApiVersionForm</td></tr>
                 @if(applicationConfig.showSandboxAvailability) {
                 <tr><th><span class="bold-small">Available in Sandbox</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
                 }
