@@ -129,7 +129,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
-      bodyOf(result).contains(s"""<option selected value="/api-documentation/docs/api/service/$service/$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
+      bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
     }
 
     def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
@@ -222,41 +222,56 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
   }
 
-  "redirectToCurrentApiDocumentation" should {
+  "redirectToApiDocumentation" must {
+    "when given a version" should {
+      val version = "2.0"
 
-    "redirect to the documentation page" in new Setup {
-      theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
-      val result = await(underTest.redirectToCurrentApiDocumentation(serviceName, Option(true))(request))
-      status(result) shouldBe 303
-      result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+      "redirect to the documentation page for the specified version" in new Setup {
+        theUserIsLoggedIn()
+        theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+        val result = await(underTest.redirectToApiDocumentation(serviceName, Some(version), Option(true))(request))
+        status(result) shouldBe 303
+        result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}?cacheBuster=true")
+      }
     }
 
-    "redirect to the documentation page for the latest accessible version" in new Setup {
-      theUserIsLoggedIn()
+    "when not given a version" should {
+      val version = None
 
-      val apiDefinition = ExtendedAPIDefinition(serviceName, "http://service", "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
-        Seq(
-          ExtendedAPIVersion("1.0", APIStatus.BETA, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-            Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
-            None),
-          ExtendedAPIVersion("1.1", APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-            Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
-            None)
-        ))
+      "redirect to the documentation page" in new Setup {
+        theUserIsLoggedIn()
+        theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+        val result = await(underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request))
+        status(result) shouldBe 303
+        result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+      }
 
-      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
-      val result = await(underTest.redirectToCurrentApiDocumentation("hello-world", Option(true))(request))
-      status(result) shouldBe 303
-      result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
-    }
+      "redirect to the documentation page for the latest accessible version" in new Setup {
+        theUserIsLoggedIn()
 
-    "display the not found page when invalid service specified" in new Setup {
-      theUserIsLoggedIn()
-      when(documentationService.fetchExtendedApiDefinition(any(), any())(any[HeaderCarrier]))
-        .thenReturn(Future.failed(new NotFoundException("Expected unit test failure")))
-      val result = underTest.redirectToCurrentApiDocumentation(serviceName, Option(true))(request)
-      verifyNotFoundPageRendered(result)
+        val apiDefinition = ExtendedAPIDefinition(serviceName, "http://service", "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+          Seq(
+            ExtendedAPIVersion("1.0", APIStatus.BETA, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
+              Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
+              None),
+            ExtendedAPIVersion("1.1", APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
+              Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
+              None)
+          ))
+
+        theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
+        val result = await(underTest.redirectToApiDocumentation("hello-world", version, Option(true))(request))
+        status(result) shouldBe 303
+        result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+      }
+
+      "display the not found page when invalid service specified" in new Setup {
+        theUserIsLoggedIn()
+        when(documentationService.fetchExtendedApiDefinition(any(), any())(any[HeaderCarrier]))
+          .thenReturn(Future.failed(new NotFoundException("Expected unit test failure")))
+        val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
+        verifyNotFoundPageRendered(result)
+      }
     }
   }
 
