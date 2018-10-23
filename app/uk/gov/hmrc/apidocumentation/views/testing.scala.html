@@ -53,12 +53,12 @@
     <h3 class="heading-medium">3. Get sandbox credentials</h3>
     <p>Get these from the manage credentials page. They are only valid for the sandbox environment.</p>
     <h3 class="heading-medium">4. Configure your application for sandbox</h3>
-    <p>Configure your application to make authorisation and API calls to sandbox endpoints using your sandbox credentials and the base URL <code class="code--slim">https://test-api.service.hmrc.gov.uk</code></p>
+    <p>Configure your application to make authorisation and API calls to sandbox endpoints using your sandbox credentials and the base URL <code class="code--slim">https://test-api.service.hmrc.gov.uk</code>.</p>
     <h3 class="heading-medium">5. Create test users and other test data</h3>
-    <p>To test <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, you need to create <a href="@controllers.routes.DocumentationController.testUsersDataStatefulBehaviourPage()">test users and potentially other test data</a> [link to “test users and data”].</p>
+    <p>To test <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, you need to create <a href="@controllers.routes.DocumentationController.testUsersDataStatefulBehaviourPage()">test users and potentially other test data</a>.</p>
     <h3 class="heading-medium">6. Test the authorisation process</h3>
     <p>If you’re testing <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, trigger the authorisation process from your application:</p>
-    <ul>
+    <ul class="list list-bullet">
         <li>Sign in with the credentials for the test user you created. Note that sandbox doesn’t include 2-step verification or identity checks.</li>
         <li>Complete the journey by granting authority to your application.</li>
         <li>We will return control back to your application, which should then obtain an OAuth token for use in subsequent API calls.</li>
