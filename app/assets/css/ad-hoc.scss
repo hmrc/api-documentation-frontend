@@ -201,3 +201,15 @@ pre, code {
     }
   }
 }
+
+.section--branded {
+  a {
+    &:visited {
+      color: #005ea5;
+    }
+
+    &:hover {
+      color: #2b8cc4;
+    }
+  }
+}
