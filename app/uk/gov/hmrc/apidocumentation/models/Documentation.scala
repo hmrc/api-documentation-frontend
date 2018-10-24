@@ -16,12 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
+import play.api.libs.json._
 import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
 import uk.gov.hmrc.apidocumentation.models.HttpMethod.HttpMethod
 import uk.gov.hmrc.apidocumentation.models.APICategory._
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 
 import scala.collection.immutable.ListMap
 import scala.collection.mutable
+import scala.io.Source
 import scala.util.Try
 
 object APIAccessType extends Enumeration {
@@ -39,7 +42,8 @@ case class APIDefinition(
                           requiresTrust: Option[Boolean],
                           isTestSupport: Option[Boolean],
                           versions: Seq[APIVersion],
-                          categories: Option[Seq[APICategory]] = None) {
+                          categories: Option[Seq[APICategory]] = None,
+                          isXmlApi: Option[Boolean] = None) {
 
   require(versions.nonEmpty, s"API versions must not be empty! serviceName=${serviceName}")
 
@@ -77,7 +81,8 @@ object APIDefinition {
   }
 
   def groupedByCategory(apiDefinitions: Seq[APIDefinition], catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[APIDefinition]] = {
-    val categorised = apiDefinitions.foldLeft(mutable.Map(): mutable.Map[APICategory, Seq[APIDefinition]]) { (agg, apiDefinition) =>
+    val xmlApis = Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[APIDefinition]].map(_.copy(isXmlApi = Some(true)))
+    val categorised = (apiDefinitions ++ xmlApis).foldLeft(mutable.Map(): mutable.Map[APICategory, Seq[APIDefinition]]) { (agg, apiDefinition) =>
       apiDefinition.mappedCategories(catMap).map(category => agg.update(category, agg.get(category).getOrElse(Nil) ++ Seq(apiDefinition)))
       agg
     }

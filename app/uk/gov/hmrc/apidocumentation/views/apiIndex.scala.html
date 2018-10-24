@@ -24,6 +24,10 @@
 @(pageAttributes: PageAttributes,
         apisByCategory: Map[APICategory, Seq[APIDefinition]])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
+@documentationUrl(api: APIDefinition) = {
+  @controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
+}
+
 @apiMain(pageAttributes) {
 
     <h1 class="heading-xlarge">API documentation</h1>
@@ -38,16 +42,17 @@
                     <tr>
                         @if(index == 0) { <td class="api-group">@category.displayName</td> } else { <td></td> }
                         <td>
-                            <a class="accordion__button link--no-underline"
-                               href="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)">
-                              @api.name
-                            </a>
+                            <a class="accordion__button link--no-underline" href="@documentationUrl(api)">@api.name</a>
                         </td>
                         <td>
-                            @if(api.isTestSupport) {
+                            @if(api.isTestSupport.getOrElse(false)) {
                                 <strong class="service-tag service-tag--test">TEST SUPPORT API</strong>
                             } else {
+                                @if(api.isXmlApi.getOrElse(false)) {
+                                <strong class="service-tag service-tag--xml">XML API</strong>
+                                } else {
                                 <strong class="service-tag service-tag--api">REST API</strong>
+                                }
                             }
                         </td>
                     </tr>
