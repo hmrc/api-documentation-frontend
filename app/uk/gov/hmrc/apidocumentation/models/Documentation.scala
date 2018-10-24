@@ -18,7 +18,10 @@ package uk.gov.hmrc.apidocumentation.models
 
 import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
 import uk.gov.hmrc.apidocumentation.models.HttpMethod.HttpMethod
+import uk.gov.hmrc.apidocumentation.models.APICategory._
 
+import scala.collection.immutable.ListMap
+import scala.collection.mutable
 import scala.util.Try
 
 object APIAccessType extends Enumeration {
@@ -35,7 +38,8 @@ case class APIDefinition(
                           context: String,
                           requiresTrust: Option[Boolean],
                           isTestSupport: Option[Boolean],
-                          versions: Seq[APIVersion]) {
+                          versions: Seq[APIVersion],
+                          categories: Option[Seq[APICategory]] = None) {
 
   require(versions.nonEmpty, s"API versions must not be empty! serviceName=${serviceName}")
 
@@ -46,6 +50,11 @@ case class APIDefinition(
   lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
   lazy val defaultVersion = statusSortedActiveVersions.headOption
   lazy val hasActiveVersions = statusSortedActiveVersions.nonEmpty
+
+  def mappedCategories(catMap: Map[String, Seq[APICategory]] = categoryMap): Seq[APICategory] = categories match {
+    case Some(head :: tail) => head +: tail
+    case _ => catMap.get(context).getOrElse(Seq(OTHER))
+  }
 }
 
 object APIDefinition {
@@ -65,6 +74,15 @@ object APIDefinition {
       case `v2Status` => versionSorter(v1, v2)
       case _ => v1Status > v2Status
     }
+  }
+
+  def groupedByCategory(apiDefinitions: Seq[APIDefinition], catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[APIDefinition]] = {
+    val categorised = apiDefinitions.foldLeft(mutable.Map(): mutable.Map[APICategory, Seq[APIDefinition]]) { (agg, apiDefinition) =>
+      apiDefinition.mappedCategories(catMap).map(category => agg.update(category, agg.get(category).getOrElse(Nil) ++ Seq(apiDefinition)))
+      agg
+    }
+
+    ListMap(categorised.toSeq.sortBy(_._1): _*)
   }
 
   private val nonNumericOrPeriodRegex = "[^\\d^.]*"

@@ -20,6 +20,7 @@ import play.api.libs.json._
 
 package object JsonFormatters {
   implicit val formatHttpMethod = EnumJson.enumFormat(HttpMethod)
+  implicit val formatAPICategory = EnumJson.enumFormat(APICategory)
   implicit val formatAPIStatus = EnumJson.enumFormat(APIStatus)
   implicit val formatAPIAccessType = EnumJson.enumFormat(APIAccessType)
   implicit val formatAPIAccess = Json.format[APIAccess]

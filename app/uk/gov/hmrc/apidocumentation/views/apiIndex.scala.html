@@ -15,35 +15,44 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.models.APICategory._
+
 @import include._
 
 @(pageAttributes: PageAttributes,
-        exampleApis: Seq[APIDefinition],
-        otherApis: Seq[APIDefinition],
-        testSupportApis: Seq[APIDefinition])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+        apisByCategory: Map[APICategory, Seq[APIDefinition]])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @apiMain(pageAttributes) {
 
-        <h1 class="heading-xlarge">API documentation</h1>
+    <h1 class="heading-xlarge">API documentation</h1>
 
     <p>These are the RESTful APIs we offer on the Developer Hub.</p>
     <p>Separately we also offer <a href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a>.</p>
 
-    <h2 id="example-api" class="heading-large">Example API</h2>
-
-    @apiList(exampleApis, "example")
-
-    <br/>
-
-    <h2 id="apis" class="heading-large">APIs</h2>
-
-    @apiList(otherApis, "other")
-
-    @if(testSupportApis.nonEmpty) {
-        <br/>
-        <h2 id="test-support-apis" class="heading-large">Test Support APIs</h2>
-        <p>These APIs are available solely for testing purposes, for example setting up test data.</p>
-        @apiList(testSupportApis, "testSupport")
-    }
+    <table class="api-list">
+        @for((category, apis) <- apisByCategory) {
+            <tbody>
+                @for((api, index) <- apis.zipWithIndex) {
+                    <tr>
+                        @if(index == 0) { <td class="api-group">@category.displayName</td> } else { <td></td> }
+                        <td>
+                            <a class="accordion__button link--no-underline"
+                               href="@controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)">
+                              @api.name
+                            </a>
+                        </td>
+                        <td>
+                            @if(api.isTestSupport) {
+                                <strong class="service-tag service-tag--test">TEST SUPPORT API</strong>
+                            } else {
+                                <strong class="service-tag service-tag--api">REST API</strong>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+    </table>
 }

@@ -201,3 +201,48 @@ pre, code {
     }
   }
 }
+
+.api-list {
+  .api-group {
+    font-weight: 700;
+  }
+
+  .service-tag {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    margin-left: -1rem;
+    min-width: 145px;
+    padding: .5rem;
+    text-align: center;
+    width: 100%;
+
+    &--api {
+      background-color: #a3c5df;
+    }
+
+    &--e2e {
+      background-color: #e7a09e;
+    }
+
+    &--roadmap {
+      background-color: #c4ccaa;
+    }
+
+    &--test {
+      background-color: #c39ac2;
+    }
+
+    &--xml {
+      background-color: #fbe0af;
+    }
+  }
+
+  tbody {
+    border-top: 3px solid #bfc1c3;
+  }
+
+  tr {
+    border-top: 1px solid #bfc1c3;
+  }
+}

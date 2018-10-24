@@ -195,9 +195,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
               breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),
               headerLinks = navLinks,
               sidebarLinks = navigationService.sidebarNavigation()),
-            exampleApis = apis.filter(isExampleApiDefinition),
-            otherApis = apis.filterNot(isExampleApiDefinition).filterNot(isTestSupportApi),
-            testSupportApis = apis.filter(isTestSupportApi)
+            apisByCategory = APIDefinition.groupedByCategory(apis)
           ))
 
         }) recover {
@@ -377,9 +375,4 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   private def extractEmail(fut: Future[Option[Developer]])(implicit ec: ExecutionContext): Future[Option[String]] = {
     fut.map(opt => opt.map(dev => dev.email))
   }
-
-  private def isExampleApiDefinition(apiDef: APIDefinition): Boolean = apiDef.context.equals("hello")
-
-  private def isTestSupportApi(apiDef: APIDefinition): Boolean = apiDef.isTestSupport.getOrElse(false)
 }
-
