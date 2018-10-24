@@ -80,28 +80,31 @@ section > h2 {
 
 // verbs
 .http-verb {
-  color: white;
-  border-radius: 5px;
-  padding: 0.2em 0.5em 0.1em;
+  color: #0c0c0c;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
   margin-bottom: 0.2em;
   margin-left: 0.4em;
-  font-size: 16px;
+  min-width: 65px;
+  padding: 0.2em 0.5em 0.1em;
+  text-align: center;
 }
 
 .http-verb--get {
-  background-color:#005ea5;
+  background-color: #a3c5df;
 }
 
 .http-verb--delete {
-  background-color: $mellow-red;
+  background-color: #e7a09e;
 }
 
 .http-verb--put {
-  background-color:#912b88;
+  background-color: #c39ac2;
 }
 
 .http-verb--post {
-  background-color:#006435;
+  background-color: #c4ccaa;
 }
 
 // ///////////////////////
