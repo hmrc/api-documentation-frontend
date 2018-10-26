@@ -23,7 +23,6 @@ import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 
 import scala.collection.immutable.ListMap
-import scala.collection.mutable
 import scala.io.Source
 import scala.util.Try
 
@@ -81,10 +80,8 @@ object APIDefinition {
   }
 
   def groupedByCategory(apiDefinitions: Seq[APIDefinition], catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[APIDefinition]] = {
-    val xmlApis = Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[APIDefinition]].map(_.copy(isXmlApi = Some(true)))
-    val categorised = (apiDefinitions ++ xmlApis).foldLeft(mutable.Map(): mutable.Map[APICategory, Seq[APIDefinition]]) { (agg, apiDefinition) =>
-      apiDefinition.mappedCategories(catMap).map(category => agg.update(category, agg.get(category).getOrElse(Nil) ++ Seq(apiDefinition)))
-      agg
+    val categorised: Map[APICategory, Seq[APIDefinition]] = (apiDefinitions ++ xmlApiDefinitions).foldLeft(Map(): Map[APICategory, Seq[APIDefinition]]) {
+      (groupings, apiDefinition) => groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
     }
 
     ListMap(categorised.toSeq.sortBy(_._1): _*)
@@ -92,6 +89,8 @@ object APIDefinition {
 
   private val nonNumericOrPeriodRegex = "[^\\d^.]*"
   private val fallback = Array(1, 0, 0)
+
+  private lazy val xmlApiDefinitions = Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[APIDefinition]].map(_.copy(isXmlApi = Some(true)))
 }
 
 case class APIVersion(

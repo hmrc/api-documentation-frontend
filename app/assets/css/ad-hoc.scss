@@ -246,3 +246,27 @@ pre, code {
     border-top: 1px solid #bfc1c3;
   }
 }
+
+.filter-container {
+  padding: 4rem 2rem;
+  background: #f8f8f8;
+
+  .govuk-select {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 1.25;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 40px;
+    padding: 5px;
+    border: 2px solid #0b0c0c;
+    width: 100%;
+  }
+
+  .govuk-form-group {
+    margin-bottom: 2rem;
+  }
+}

@@ -15,7 +15,6 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.config._
-@import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.models.APICategory._
 
@@ -24,40 +23,15 @@
 @(pageAttributes: PageAttributes,
         apisByCategory: Map[APICategory, Seq[APIDefinition]])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
-@documentationUrl(api: APIDefinition) = {
-  @controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
-}
-
 @apiMain(pageAttributes) {
 
     <h1 class="heading-xlarge">API documentation</h1>
 
-    <p>These are the RESTful APIs we offer on the Developer Hub.</p>
-    <p>Separately we also offer <a href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a>.</p>
+    <p>View documentation for our current APIs, roadmaps of future APIs, and services guides on how APIs work together.</p>
 
-    <table class="api-list">
-        @for((category, apis) <- apisByCategory) {
-            <tbody>
-                @for((api, index) <- apis.zipWithIndex) {
-                    <tr>
-                        @if(index == 0) { <td class="api-group">@category.displayName</td> } else { <td></td> }
-                        <td>
-                            <a class="accordion__button link--no-underline" href="@documentationUrl(api)">@api.name</a>
-                        </td>
-                        <td>
-                            @if(api.isTestSupport.getOrElse(false)) {
-                                <strong class="service-tag service-tag--test">TEST SUPPORT API</strong>
-                            } else {
-                                @if(api.isXmlApi.getOrElse(false)) {
-                                <strong class="service-tag service-tag--xml">XML API</strong>
-                                } else {
-                                <strong class="service-tag service-tag--api">REST API</strong>
-                                }
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        }
-    </table>
+    @apiFilter(apisByCategory)
+
+    <h2 class="heading-large">API Documentation</h2>
+
+    @apiList(apisByCategory)
 }

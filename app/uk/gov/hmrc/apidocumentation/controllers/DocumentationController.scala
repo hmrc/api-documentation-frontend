@@ -45,7 +45,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   private lazy val cacheControlHeaders = "cache-control" -> s"public, max-age=${documentationService.defaultExpiration.toSeconds}"
   private val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
-  private val apiDocCrumb = Crumb("API Documentation", routes.DocumentationController.apiIndexPage(None, None).url)
+  private val apiDocCrumb = Crumb("API Documentation", routes.DocumentationController.apiIndexPage(None, None, None).url)
   private val usingTheHubCrumb = Crumb("Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url)
   private val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
   private val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
@@ -176,7 +176,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       Some(breadcrumbs)))))
   }
 
-  def apiIndexPage(service: Option[String], version: Option[String]) = headerNavigation { implicit request => navLinks =>
+  def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]) = headerNavigation { implicit request => navLinks =>
 
     val params = for (a <- service; b <- version) yield (a, b)
 
@@ -190,14 +190,17 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
           email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
           apis <- documentationService.fetchAPIs(email)
         } yield {
-          Ok(apiIndex(
-            apidocumentation.models.PageAttributes(title = "API Documentation",
+          val apisByCategory = APIDefinition.groupedByCategory(apis)
+          val pageAttributes = apidocumentation.models.PageAttributes(title = "API Documentation",
               breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),
               headerLinks = navLinks,
-              sidebarLinks = navigationService.sidebarNavigation()),
-            apisByCategory = APIDefinition.groupedByCategory(apis)
-          ))
+              sidebarLinks = navigationService.sidebarNavigation())
 
+          if (filter.isDefined) {
+            Ok(apisFiltered(pageAttributes, apisByCategory, filter.get))
+          } else {
+            Ok(apiIndex(pageAttributes, apisByCategory))
+          }
         }) recover {
           case e: Throwable =>
             Logger.error("Could not load API Documentation service", e)
