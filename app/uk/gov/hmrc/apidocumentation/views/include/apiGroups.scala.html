@@ -20,8 +20,11 @@
 
 @(apisByCategory: Map[APICategory, Seq[APIDefinition]])
 
-@documentationUrl(api: APIDefinition) = {
-  @controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
+@documentationUrl(api: APIDefinition) = @{
+  if (api.isXmlApi)
+    controllers.routes.DocumentationController.renderXmlApiDocumentation(api.context)
+  else
+    controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
 }
 
 <table class="api-list">

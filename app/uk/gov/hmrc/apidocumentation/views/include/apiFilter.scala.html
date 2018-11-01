@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.models.APICategory._
 
-@(apisByCategory: Map[APICategory, Seq[APIDefinition]], filter: Option[String] = None)
+@(apisByCategory: Map[APICategory, Seq[APIDefinition]], filter: Option[APICategory] = None)
 
 <div class="filter-container">
     <form method="GET" action="">
@@ -27,7 +27,7 @@
             <select class="govuk-select" id="service-filter" name="filter">
               <option disabled selected>Select a service</option>
               @for(service <- apisByCategory.keys.toSeq.sorted) {
-                 <option>@service.displayName</option>
+                 <option @if(filter.map(_.displayName) == Some(service.displayName)) { selected } value="@service.filter">@service.displayName</option>
               }
             </select>
         </div>

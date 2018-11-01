@@ -14,24 +14,21 @@
  * limitations under the License.
  *@
 
+@import play.api.mvc.Request
 @import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.models.APICategory._
+@import include.apiMain
+@import raml.main
+@import uk.gov.hmrc.apidocumentation.views.helpers._
+@import uk.gov.hmrc.apidocumentation.services.RAML
 
-@import include._
-
-@(pageAttributes: PageAttributes,
-        apisByCategory: Map[APICategory, Seq[APIDefinition]])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@(pageAttributes: PageAttributes, api: APIDefinition)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @apiMain(pageAttributes) {
+<h1 class="heading-xlarge">@api.name XML API</h1>
 
-    <h1 class="heading-xlarge">API documentation</h1>
+<p>@api.description This API is not part of the Making Tax Digital initiative.</p>
 
-    <p>View documentation for our current APIs, roadmaps of future APIs, and services guides on how APIs work together.</p>
-
-    @apiFilter(apisByCategory)
-
-    <h2 class="heading-large">API Documentation</h2>
-
-    @apiGroups(apisByCategory)
+<h2 class="heading-large"><a href="@applicationConfig.xmlApiBaseUrl@api.context">@api.name</a></h2>
 }

@@ -22,7 +22,7 @@
 @import include._
 
 @(pageAttributes: PageAttributes,
-        apisByCategory: Map[APICategory, Seq[APIDefinition]], filter: String)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+        apisByCategory: Map[APICategory, Seq[APIDefinition]], filter: Option[APICategory])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @documentationUrl(api: APIDefinition) = {
   @controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
@@ -34,11 +34,13 @@
 
     <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">View the full API list </a>
 
-    @apiFilter(apisByCategory, Some(filter))
- 
-    @defining(apisByCategory.filterKeys(_.displayName == filter)) { filteredApis => 
-        <p>@filteredApis.values.toSeq.flatten.length documents found in @filter</p>
+    @apiFilter(apisByCategory, filter)
 
-        @apiList(filteredApis)
+    @filter.map { f =>
+        @defining(apisByCategory.filterKeys(_.filter == f.filter)) { filteredApis =>
+            <p>@filteredApis.values.toSeq.flatten.length documents found in @f.displayName</p>
+
+            @apiGroups(filteredApis)
+        }
     }
 }

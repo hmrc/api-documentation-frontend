@@ -55,7 +55,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     val navLink = NavLink("Header Link", "/api-documentation/headerlink")
     val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
     val homeBreadcrumb = Crumb("Home", controllers.routes.DocumentationController.indexPage().url)
-    val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None).url)
+    val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None, None).url)
     val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
     
     when(navigationService.headerNavigation()(any())).thenReturn(Future.successful(Seq(navLink)))
@@ -213,7 +213,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
         .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
 
-      val result = underTest.apiIndexPage(None, None)(request)
+      val result = underTest.apiIndexPage(None, None, None)(request)
 
       verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
     }
@@ -223,7 +223,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
         .thenReturn(failed(new Exception("Expected unit test failure")))
 
-      val result = underTest.apiIndexPage(None, None)(request)
+      val result = underTest.apiIndexPage(None, None, None)(request)
 
       verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "Sorry, we’re experiencing technical difficulties")
     }

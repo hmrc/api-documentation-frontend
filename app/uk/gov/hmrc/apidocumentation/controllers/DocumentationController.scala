@@ -190,16 +190,20 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
           email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
           apis <- documentationService.fetchAPIs(email)
         } yield {
-          val apisByCategory = APIDefinition.groupedByCategory(apis)
           val pageAttributes = apidocumentation.models.PageAttributes(title = "API Documentation",
               breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),
               headerLinks = navLinks,
               sidebarLinks = navigationService.sidebarNavigation())
 
-          if (filter.isDefined) {
-            Ok(apisFiltered(pageAttributes, apisByCategory, filter.get))
+          if (appConfig.groupedDocumentationEnabled) {
+            val apisByCategory = APIDefinition.groupedByCategory(apis)
+
+            filter match {
+              case Some(f) => Ok(apisFiltered(pageAttributes, apisByCategory, APICategory.fromFilter(f)))
+              case _ => Ok(apiIndex(pageAttributes, apisByCategory))
+            }
           } else {
-            Ok(apiIndex(pageAttributes, apisByCategory))
+            Ok(apiListIndex(pageAttributes, apis.filter(isExampleApiDefinition), apis.filterNot(isExampleApiDefinition).filterNot(isTestSupportApi), apis.filter(isTestSupportApi)))
           }
         }) recover {
           case e: Throwable =>
@@ -356,6 +360,28 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     }
   }
 
+  def renderXmlApiDocumentation(context: String): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
+    if (appConfig.groupedDocumentationEnabled) {
+      def makePageAttributes(apiDefinition: APIDefinition): PageAttributes = {
+        val breadcrumbs = Breadcrumbs(
+          Crumb(
+            apiDefinition.name,
+            routes.DocumentationController.renderXmlApiDocumentation(apiDefinition.context).url),
+          apiDocCrumb,
+          homeCrumb)
+
+        apidocumentation.models.PageAttributes(apiDefinition.name, breadcrumbs, navLinks, navigationService.sidebarNavigation())
+      }
+
+      APIDefinition.xmlApiDefinitions.find(_.context == context) match {
+        case Some(xmlApiDefinition) => Future.successful(Ok(xmlDocumentation(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
+        case _ => Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+      }
+    } else {
+      Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+    }
+  }
+
   private def headerNavigation(f: Request[AnyContent] => Seq[NavLink] => Future[Result]): Action[AnyContent] = {
     Action.async { implicit request =>
       // We use a non-standard cookie which doesn't get propagated in the header carrier
@@ -378,4 +404,8 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   private def extractEmail(fut: Future[Option[Developer]])(implicit ec: ExecutionContext): Future[Option[String]] = {
     fut.map(opt => opt.map(dev => dev.email))
   }
+
+  private def isExampleApiDefinition(apiDef: APIDefinition): Boolean = apiDef.context.equals("hello")
+
+  private def isTestSupportApi(apiDef: APIDefinition): Boolean = apiDef.isTestSupport.getOrElse(false)
 }

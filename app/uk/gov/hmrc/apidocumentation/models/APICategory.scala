@@ -23,30 +23,32 @@ import scala.io.Source
 object APICategory extends Enumeration {
   type APICategory = Value
 
-  protected case class Val(displayName: String) extends super.Val
+  protected case class Val(displayName: String, filter: String) extends super.Val
   implicit def valueToAPICategoryVal(x: Value): Val = x.asInstanceOf[Val]
 
-  val EXAMPLE = Val("Example")
-  val AGENTS = Val("Agents")
-  val BUSINESS_RATES = Val("Business Rates")
-  val CORPORATION_TAX = Val("Corporation Tax")
-  val CUSTOMS = Val("Customs")
-  val ESTATES = Val("Estates")
-  val HELP_TO_SAVE = Val("Help to Save")
-  val INCOME_TAX_MTD = Val("Income Tax (Making Tax Digital)")
-  val LIFETIME_ISA = Val("Lifetime ISA")
-  val MARRIAGE_ALLOWANCE = Val("Marriage Allowance")
-  val NATIONAL_INSURANCE = Val("National Insurance")
-  val PAYE = Val("PAYE")
-  val PENSIONS = Val("Pensions")
-  val RELIEF_AT_SOURCE = Val("Relief at Source")
-  val SELF_ASSESSMENT = Val("Self Assessment")
-  val STAMP_DUTY = Val("Stamp Duty")
-  val TRUSTS = Val("Trusts")
-  val VAT = Val("VAT")
-  val VAT_MTD = Val("VAT (Making Tax Digital)")
+  val EXAMPLE = Val("Example", "example")
+  val AGENTS = Val("Agents", "agents")
+  val BUSINESS_RATES = Val("Business Rates", "business-rates")
+  val CORPORATION_TAX = Val("Corporation Tax", "corporation-tax")
+  val CUSTOMS = Val("Customs", "customs")
+  val ESTATES = Val("Estates", "estates")
+  val HELP_TO_SAVE = Val("Help to Save", "help-to-save")
+  val INCOME_TAX_MTD = Val("Income Tax (Making Tax Digital)", "income-tax")
+  val LIFETIME_ISA = Val("Lifetime ISA", "lifetime-isa")
+  val MARRIAGE_ALLOWANCE = Val("Marriage Allowance", "marriage-allowance")
+  val NATIONAL_INSURANCE = Val("National Insurance", "national-insurance")
+  val PAYE = Val("PAYE", "paye")
+  val PENSIONS = Val("Pensions", "pensions")
+  val RELIEF_AT_SOURCE = Val("Relief at Source", "relief-at-source")
+  val SELF_ASSESSMENT = Val("Self Assessment", "self-assessment")
+  val STAMP_DUTY = Val("Stamp Duty", "stamp-duty")
+  val TRUSTS = Val("Trusts", "trusts")
+  val VAT = Val("VAT", "vat")
+  val VAT_MTD = Val("VAT (Making Tax Digital)", "vat")
 
-  val OTHER = Val("Other")
+  val OTHER = Val("Other", "other")
+
+  def fromFilter(filter: String) = values.find(_.filter == filter)
 
   lazy val categoryMap: Map[String, Seq[APICategory]] =
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/categories.json")).mkString).as[Map[String, Seq[APICategory]]]
