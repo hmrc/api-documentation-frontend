@@ -28,7 +28,6 @@ object APICategory extends Enumeration {
 
   val EXAMPLE = Val("Example", "example")
   val AGENTS = Val("Agents", "agents")
-  val BUSINESS_RATES = Val("Business Rates", "business-rates")
   val CORPORATION_TAX = Val("Corporation Tax", "corporation-tax")
   val CUSTOMS = Val("Customs", "customs")
   val ESTATES = Val("Estates", "estates")
