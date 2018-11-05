@@ -226,7 +226,7 @@ class DocumentationSpec extends UnitSpec {
         CUSTOMS -> Seq(api1),
         PAYE -> Seq(api2))
 
-      val result = APIDefinition.groupedByCategory(Seq(api1, api2))
+      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq.empty)
 
       result shouldBe expected
     }
@@ -242,7 +242,7 @@ class DocumentationSpec extends UnitSpec {
         PAYE -> Seq(api2),
         VAT -> Seq(api1, api2))
 
-      val result = APIDefinition.groupedByCategory(Seq(api1, api2), categoryMap)
+      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -253,7 +253,7 @@ class DocumentationSpec extends UnitSpec {
       val categoryMap = Map("context3" -> Seq(CUSTOMS))
       val expected = Map(OTHER -> Seq(api1, api2))
 
-      val result = APIDefinition.groupedByCategory(Seq(api1, api2), categoryMap)
+      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -270,7 +270,28 @@ class DocumentationSpec extends UnitSpec {
         PAYE -> Seq(api2),
         VAT -> Seq(api1, api2))
 
-      val result = APIDefinition.groupedByCategory(Seq(api1, api2), categoryMap)
+      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq.empty, categoryMap)
+
+      result shouldBe expected
+    }
+
+    "should include XML API definitions" in {
+      val api1 = APIDefinition("serviceName", "name", "description", "context1", None, None, Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
+      val api2 = APIDefinition("serviceName", "name", "description", "context2", None, None, Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
+      val xmlApi1 = APIDefinition("serviceName", "name", "description", "xmlContext1", None, None, Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
+      val xmlApi2 = APIDefinition("serviceName", "name", "description", "xmlContext2", None, None, Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
+      val categoryMap = Map(
+        "context1" -> Seq(CUSTOMS, VAT),
+        "context2" -> Seq(PAYE, VAT),
+        "xmlContext1" -> Seq(PAYE),
+        "xmlContext2" -> Seq(VAT))
+
+      val expected = Map(
+        CUSTOMS -> Seq(api1),
+        PAYE -> Seq(api2, xmlApi1),
+        VAT -> Seq(api1, api2, xmlApi2))
+
+      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq(xmlApi1, xmlApi2), categoryMap)
 
       result shouldBe expected
     }

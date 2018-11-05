@@ -79,8 +79,8 @@ object APIDefinition {
     }
   }
 
-  def groupedByCategory(apiDefinitions: Seq[APIDefinition], catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[APIDefinition]] = {
-    val categorised: Map[APICategory, Seq[APIDefinition]] = (apiDefinitions ++ xmlApiDefinitions).foldLeft(Map(): Map[APICategory, Seq[APIDefinition]]) {
+  def groupedByCategory(apiDefinitions: Seq[APIDefinition], xmlDefinitions: Seq[APIDefinition] = xmlApiDefinitions, catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[APIDefinition]] = {
+    val categorised: Map[APICategory, Seq[APIDefinition]] = (apiDefinitions ++ xmlDefinitions).foldLeft(Map(): Map[APICategory, Seq[APIDefinition]]) {
       (groupings, apiDefinition) => groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
     }
 
