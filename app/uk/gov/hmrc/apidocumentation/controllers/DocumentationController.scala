@@ -177,6 +177,10 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   }
 
   def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]) = headerNavigation { implicit request => navLinks =>
+    def pageAttributes(title: String = "API Documentation") = apidocumentation.models.PageAttributes(title,
+      breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),
+      headerLinks = navLinks,
+      sidebarLinks = navigationService.sidebarNavigation())
 
     val params = for (a <- service; b <- version) yield (a, b)
 
@@ -190,20 +194,15 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
           email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
           apis <- documentationService.fetchAPIs(email)
         } yield {
-          val pageAttributes = apidocumentation.models.PageAttributes(title = "API Documentation",
-              breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),
-              headerLinks = navLinks,
-              sidebarLinks = navigationService.sidebarNavigation())
-
           if (appConfig.groupedDocumentationEnabled) {
             val apisByCategory = APIDefinition.groupedByCategory(apis)
 
             filter match {
-              case Some(f) => Ok(apisFiltered(pageAttributes, apisByCategory, APICategory.fromFilter(f)))
-              case _ => Ok(apiIndex(pageAttributes, apisByCategory))
+              case Some(f) => Ok(apisFiltered(pageAttributes("Filtered API Documentation"), apisByCategory, APICategory.fromFilter(f)))
+              case _ => Ok(apiIndex(pageAttributes(), apisByCategory))
             }
           } else {
-            Ok(apiListIndex(pageAttributes, apis.filter(isExampleApiDefinition), apis.filterNot(isExampleApiDefinition).filterNot(isTestSupportApi), apis.filter(isTestSupportApi)))
+            Ok(apiListIndex(pageAttributes(), apis.filter(isExampleApiDefinition), apis.filterNot(isExampleApiDefinition).filterNot(isTestSupportApi), apis.filter(isTestSupportApi)))
           }
         }) recover {
           case e: Throwable =>

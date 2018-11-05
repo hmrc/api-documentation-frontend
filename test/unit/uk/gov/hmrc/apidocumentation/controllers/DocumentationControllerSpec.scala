@@ -42,7 +42,7 @@ import scala.concurrent.duration._
 
 class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with WithFakeApplication {
 
-  class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup{
+  class Setup(ramlPreviewEnabled: Boolean = false, groupedDocumentationEnabled: Boolean = false) extends ControllerCommonSetup{
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
     val navigationService = mock[NavigationService]
     val partialsService = new PartialsService(developerFrontendConnector)
@@ -66,6 +66,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     when(documentationService.defaultExpiration).thenReturn(1.hour)
     when(appConfig.hotjarEnabled) thenReturn None
     when(appConfig.hotjarId) thenReturn None
+    when(appConfig.groupedDocumentationEnabled).thenReturn(groupedDocumentationEnabled)
 
     val underTest = new DocumentationController(documentationService, navigationService, partialsService,
       loggedInUserProvider, messagesApi, appConfig)
@@ -206,26 +207,75 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
   }
 
-  "apiIndexPage" should {
+  "apiIndexPage" must {
+    "when grouped documentation is disabled" should {
+      "render the API List" in new Setup(groupedDocumentationEnabled = false) {
+        theUserIsLoggedIn()
 
-    "render the API List" in new Setup {
-      theUserIsLoggedIn()
-      when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
-        .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+        when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
+          .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
 
-      val result = underTest.apiIndexPage(None, None, None)(request)
+        val result = underTest.apiIndexPage(None, None, None)(request)
 
-      verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
+        verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
+      }
+
+      "ignore the provided filter and render the API list" in new Setup(groupedDocumentationEnabled = false) {
+        theUserIsLoggedIn()
+
+        when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
+          .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+
+        val result = underTest.apiIndexPage(None, None, Some("vat"))(request)
+
+        verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
+      }
+
+      "display the error page when the documentationService throws an exception" in new Setup(groupedDocumentationEnabled = false) {
+        theUserIsLoggedIn()
+
+        when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
+          .thenReturn(failed(new Exception("Expected unit test failure")))
+
+        val result = underTest.apiIndexPage(None, None, None)(request)
+
+        verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "Sorry, we’re experiencing technical difficulties")
+      }
     }
 
-    "display the error page when the documentationService throws an exception" in new Setup {
-      theUserIsLoggedIn()
-      when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
-        .thenReturn(failed(new Exception("Expected unit test failure")))
+    "when grouped documentation is enabled" should {
+      "render the API List" in new Setup(groupedDocumentationEnabled = true) {
+        theUserIsLoggedIn()
 
-      val result = underTest.apiIndexPage(None, None, None)(request)
+        when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
+          .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
 
-      verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "Sorry, we’re experiencing technical difficulties")
+        val result = underTest.apiIndexPage(None, None, None)(request)
+
+        verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
+      }
+
+      "render the filtered API list" in new Setup(groupedDocumentationEnabled = true) {
+        theUserIsLoggedIn()
+
+        when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
+          .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+
+        val result = underTest.apiIndexPage(None, None, Some("vat"))(request)
+
+        verifyPageRendered(result, pageTitle("Filtered API Documentation"), bodyContains = Seq("Filtered API documentation", "1 document found in", "VAT"))
+      }
+
+      "display the error page when the documentationService throws an exception" in new Setup(groupedDocumentationEnabled = true) {
+        theUserIsLoggedIn()
+
+        when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
+          .thenReturn(failed(new Exception("Expected unit test failure")))
+
+        val result = underTest.apiIndexPage(None, None, None)(request)
+
+        verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "Sorry, we’re experiencing technical difficulties")
+      }
     }
   }
 
@@ -518,6 +568,38 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       val actualPage = await(result)
       actualPage.header.status shouldBe 200
       bodyOf(actualPage) should include regex s"aaa.*ddd.*www.*zzz"
+    }
+  }
+
+  "renderXmlApiDocumentation" must {
+    "when grouped documentation is disabled" should {
+      "return 404 not found" in new Setup(groupedDocumentationEnabled = false) {
+        theUserIsLoggedIn()
+
+        val result = underTest.renderXmlApiDocumentation("VAT")(request)
+
+        status(result) shouldBe NOT_FOUND
+      }
+    }
+
+    "when grouped documentation is enabled" should {
+      "render the XML API landing page when the XML API definition exists" in new Setup(groupedDocumentationEnabled = true) {
+        theUserIsLoggedIn()
+
+        val name = "Charities Online"
+        val result = underTest.renderXmlApiDocumentation(name)(request)
+
+        verifyPageRendered(result, pageTitle(name), bodyContains = Seq(name))
+      }
+
+      "return 404 not found when the XML API definition does not exist" in new Setup(groupedDocumentationEnabled = true) {
+        theUserIsLoggedIn()
+
+        val name = "Fake XML API name"
+        val result = underTest.renderXmlApiDocumentation(name)(request)
+
+        status(result) shouldBe NOT_FOUND
+      }
     }
   }
 }
