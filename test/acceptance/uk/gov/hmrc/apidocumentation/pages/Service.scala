@@ -53,7 +53,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
         ("#_say-hello-application", "#say-hello-application")
       )
     forAll(ids) { (ID: String, id: String) =>
-      val element = cssSelector(s"${ID}_get_accordion > div > div:nth-of-type(1) > div.accordion__row__right.align--middle > a > span.http-verb.http-verb--get.float--right").webElement
+      val element = cssSelector(s"${ID}_get_accordion > div > div:nth-of-type(1) > div.accordion__row__right.align--middle > span.http-verb.http-verb--get.float--right").webElement
       val act = new Actions(webDriver)
       act.moveToElement(element).click().perform()
       find(cssSelector(s"$id-get > section:nth-of-type(1) > h4")).get.isDisplayed

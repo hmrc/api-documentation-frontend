@@ -61,11 +61,9 @@
                                             </a>
                                         </div>
                                         <div class="accordion__row__right align--middle table__col--1-4">
-                                            <a href="#@methodSlug" data-accordion-button role="button">
-                                                <span class="http-verb http-verb--@method.method().toLowerCase float--right">
-                                                    @method.method().toUpperCase
-                                                </span>
-                                            </a>
+                                            <span class="http-verb http-verb--@method.method().toLowerCase float--right">
+                                                @method.method().toUpperCase
+                                            </span>
                                         </div>
                                     </div>
                                     @defining(s"${Slugify(method.displayName)}-${method.method().toLowerCase}") { contentID =>
