@@ -56,7 +56,7 @@ case class APIDefinition(
 
   def mappedCategories(catMap: Map[String, Seq[APICategory]] = categoryMap): Seq[APICategory] = categories match {
     case Some(head :: tail) => head +: tail
-    case _ => catMap.get(context).getOrElse(Seq(OTHER))
+    case _ => catMap.get(name).getOrElse(Seq(OTHER))
   }
 }
 
