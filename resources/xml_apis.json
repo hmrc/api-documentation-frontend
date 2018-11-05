@@ -14,8 +14,8 @@
     "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
   },
   {
-    "serviceName": "Automatic Exchange of Information ",
-    "name": "Automatic Exchange of Information ",
+    "serviceName": "Automatic Exchange of Information",
+    "name": "Automatic Exchange of Information",
     "context": "/government/publications/foreign-account-tax-compliance-act-schema-and-supporting-documents",
     "description": "Find the schema and supporting documents for software developers who use Automatic Exchange of Information (AEOI).",
     "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]

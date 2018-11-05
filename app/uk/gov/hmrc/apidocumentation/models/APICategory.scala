@@ -39,6 +39,7 @@ object APICategory extends Enumeration {
   val NATIONAL_INSURANCE = Val("National Insurance", "national-insurance")
   val PAYE = Val("PAYE", "paye")
   val PENSIONS = Val("Pensions", "pensions")
+  val PRIVATE_GOVERNMENT = Val("Private Government", "private-government")
   val RELIEF_AT_SOURCE = Val("Relief at Source", "relief-at-source")
   val SELF_ASSESSMENT = Val("Self Assessment", "self-assessment")
   val STAMP_DUTY = Val("Stamp Duty", "stamp-duty")

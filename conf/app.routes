@@ -24,7 +24,7 @@ GET         /docs/api/service/:service                              @uk.gov.hmrc
 GET         /docs/api/service/:service/:version                     @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
 GET         /docs/api/preview                                       @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.previewApiDocumentation(url: Option[String])
 GET         /docs/api/testdata/:service/:version                    @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.fetchTestEndpointJson(service: String, version: String)
-GET         /docs/api/xml/:context                                  @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.renderXmlApiDocumentation(context: String)
+GET         /docs/api/xml/:name                                     @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.renderXmlApiDocumentation(name: String)
 GET         /docs/api/:service/:version/:endpoint                   @uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToApiDocumentationPage(service: String, version: String, endpoint: String)
 
 GET         /docs/help/cookies                                      @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.cookiesPage()

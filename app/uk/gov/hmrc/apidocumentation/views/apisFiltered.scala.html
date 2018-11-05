@@ -21,11 +21,11 @@
 
 @import include._
 
-@(pageAttributes: PageAttributes,
-        apisByCategory: Map[APICategory, Seq[APIDefinition]], filter: Option[APICategory])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@(pageAttributes: PageAttributes, apisByCategory: Map[APICategory, Seq[APIDefinition]], filter: Option[APICategory]
+    )(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @documentationUrl(api: APIDefinition) = {
-  @controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
+    @controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
 }
 
 @apiMain(pageAttributes) {
@@ -38,9 +38,11 @@
 
     @filter.map { f =>
         @defining(apisByCategory.filterKeys(_.filter == f.filter)) { filteredApis =>
-            <p>@filteredApis.values.toSeq.flatten.length documents found in @f.displayName</p>
+            @defining(filteredApis.values.toSeq.flatten.length) { numDocuments =>
+                <p>@numDocuments document@if(numDocuments != 1){s} found in <strong class="bold-small">@f.displayName</strong></p>
 
-            @apiGroups(filteredApis)
+                @apiGroups(filteredApis)
+            }
         }
     }
 }

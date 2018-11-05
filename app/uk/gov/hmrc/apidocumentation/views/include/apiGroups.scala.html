@@ -21,10 +21,20 @@
 @(apisByCategory: Map[APICategory, Seq[APIDefinition]])
 
 @documentationUrl(api: APIDefinition) = @{
-  if (api.isXmlApi)
-    controllers.routes.DocumentationController.renderXmlApiDocumentation(api.context)
+  if (api.isXmlApi.getOrElse(false))
+    controllers.routes.DocumentationController.renderXmlApiDocumentation(api.name)
   else
     controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
+}
+
+@documentationType(api: APIDefinition) = @{
+  if (api.isTestSupport.getOrElse(false)) {
+    ("test", "TEST SUPPORT API")
+  } else if (api.isXmlApi.getOrElse(false)) {
+    ("xml", "XML API")
+  } else {
+    ("api", "REST API")
+  }
 }
 
 <table class="api-list">
@@ -37,14 +47,8 @@
                         <a class="accordion__button link--no-underline" href="@documentationUrl(api)">@api.name</a>
                     </td>
                     <td>
-                        @if(api.isTestSupport.getOrElse(false)) {
-                            <strong class="service-tag service-tag--test">TEST SUPPORT API</strong>
-                        } else {
-                            @if(api.isXmlApi.getOrElse(false)) {
-                            <strong class="service-tag service-tag--xml">XML API</strong>
-                            } else {
-                            <strong class="service-tag service-tag--api">REST API</strong>
-                            }
+                        @defining(documentationType(api)) { case (modifier, name) =>
+                            <strong class="service-tag service-tag--@modifier">@name</strong>
                         }
                     </td>
                 </tr>

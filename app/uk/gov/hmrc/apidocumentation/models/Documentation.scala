@@ -93,6 +93,19 @@ object APIDefinition {
   def xmlApiDefinitions = Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[APIDefinition]].map(_.copy(isXmlApi = Some(true)))
 }
 
+class APIDefinitionLabel extends Enumeration {
+  type APIDefinitionLabel = Value
+
+  protected case class Val(displayName: String, modifier: String) extends super.Val
+  implicit def valueToAPIDefinitionLabelVal(x: Value): Val = x.asInstanceOf[Val]
+
+  val ROADMAP = Val("Roadmap", "roadmap")
+  val SERVICE_GUIDE = Val("Service Guide", "service-guide")
+  val REST_API = Val("REST API", "rest")
+  val TEST_SUPPORT_API = Val("Test Support API", "test")
+  val XML_API = Val("XML API", "xml")
+}
+
 case class APIVersion(
                        version: String,
                        access: Option[APIAccess],

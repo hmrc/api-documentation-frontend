@@ -360,7 +360,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     }
   }
 
-  def renderXmlApiDocumentation(context: String): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
+  def renderXmlApiDocumentation(name: String): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     if (appConfig.groupedDocumentationEnabled) {
       def makePageAttributes(apiDefinition: APIDefinition): PageAttributes = {
         val breadcrumbs = Breadcrumbs(
@@ -373,7 +373,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         apidocumentation.models.PageAttributes(apiDefinition.name, breadcrumbs, navLinks, navigationService.sidebarNavigation())
       }
 
-      APIDefinition.xmlApiDefinitions.find(_.context == context) match {
+      APIDefinition.xmlApiDefinitions.find(_.name == name) match {
         case Some(xmlApiDefinition) => Future.successful(Ok(xmlDocumentation(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
         case _ => Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
       }

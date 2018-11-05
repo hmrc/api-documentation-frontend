@@ -97,5 +97,5 @@
   "/government/collections/real-time-information-online-internet-submissions-support-for-software-developers": ["PAYE"],
   "/government/collections/self-assessment-online-support-for-software-developers": ["SELF_ASSESSMENT"],
   "/government/collections/stamp-taxes-online-support-for-software-developers": ["STAMP_DUTY"],
-  "/government/collections/vat-and-ec-sales-list-online-support-for-software-developers": ["VAT"]
+  "/government/collections/vat-and-ec-sales-list-online-support-for-software-developers": ["CUSTOMS", "VAT"]
 }
