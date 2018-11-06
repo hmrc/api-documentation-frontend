@@ -51,7 +51,7 @@ class APIFilterSpec extends UnitSpec {
     }
 
     "filter is provided" should {
-      "render the dropdown based on the provided categories" in new Setup {
+      "render the dropdown based on the provided categories" in new Setup(filter = Some(CUSTOMS)) {
         page.options.size shouldBe apisByCategory.keys.size + 1
       }
 
