@@ -586,17 +586,17 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       "render the XML API landing page when the XML API definition exists" in new Setup(groupedDocumentationEnabled = true) {
         theUserIsLoggedIn()
 
-        val name = "Charities Online"
-        val result = underTest.renderXmlApiDocumentation(name)(request)
+        val existingXmlApiName = "Charities Online"
+        val result = underTest.renderXmlApiDocumentation(existingXmlApiName)(request)
 
-        verifyPageRendered(result, pageTitle(name), bodyContains = Seq(name))
+        verifyPageRendered(result, pageTitle(existingXmlApiName), bodyContains = Seq(existingXmlApiName))
       }
 
       "return 404 not found when the XML API definition does not exist" in new Setup(groupedDocumentationEnabled = true) {
         theUserIsLoggedIn()
 
-        val name = "Fake XML API name"
-        val result = underTest.renderXmlApiDocumentation(name)(request)
+        val nonExistingXmlApiName = "Fake XML API name"
+        val result = underTest.renderXmlApiDocumentation(nonExistingXmlApiName)(request)
 
         status(result) shouldBe NOT_FOUND
       }

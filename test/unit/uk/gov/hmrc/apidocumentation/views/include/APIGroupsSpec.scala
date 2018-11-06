@@ -68,9 +68,9 @@ class APIGroupsSpec extends UnitSpec {
       page.tableHeadings.last.text shouldBe VAT.displayName
     }
 
-    "sort the definitions by their type" in new Setup {
+    "sort the definitions by their label" in new Setup {
       val classList = page.serviceTags.eachAttr("class").asScala.map(_.stripPrefix("service-tag service-tag--")).toSeq
-      classList shouldBe Seq("api", "api", "test", "test", "xml", "xml", "api", "api", "test", "test", "xml")
+      classList shouldBe Seq("rest", "rest", "test", "test", "xml", "xml", "rest", "rest", "test", "test", "xml")
     }
   }
 }
