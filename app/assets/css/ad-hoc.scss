@@ -217,12 +217,12 @@ pre, code {
     text-align: center;
     width: 100%;
 
-    &--api {
-      background-color: #a3c5df;
-    }
-
     &--e2e {
       background-color: #e7a09e;
+    }
+
+    &--rest {
+      background-color: #a3c5df;
     }
 
     &--roadmap {
