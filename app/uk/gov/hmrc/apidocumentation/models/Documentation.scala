@@ -20,6 +20,7 @@ import play.api.libs.json._
 import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
 import uk.gov.hmrc.apidocumentation.models.HttpMethod.HttpMethod
 import uk.gov.hmrc.apidocumentation.models.APICategory._
+import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 
 import scala.collection.immutable.ListMap
@@ -53,6 +54,13 @@ case class APIDefinition(
   lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
   lazy val defaultVersion = statusSortedActiveVersions.headOption
   lazy val hasActiveVersions = statusSortedActiveVersions.nonEmpty
+  lazy val label: APIDefinitionLabel = if (isTestSupport.getOrElse(false)) {
+    TEST_SUPPORT_API
+  } else if (isXmlApi.getOrElse(false)) {
+    XML_API
+  } else {
+    REST_API
+  }
 
   def mappedCategories(catMap: Map[String, Seq[APICategory]] = categoryMap): Seq[APICategory] = categories match {
     case Some(head :: tail) => head +: tail
@@ -91,19 +99,6 @@ object APIDefinition {
   private val fallback = Array(1, 0, 0)
 
   def xmlApiDefinitions = Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[APIDefinition]].map(_.copy(isXmlApi = Some(true)))
-}
-
-class APIDefinitionLabel extends Enumeration {
-  type APIDefinitionLabel = Value
-
-  protected case class Val(displayName: String, modifier: String) extends super.Val
-  implicit def valueToAPIDefinitionLabelVal(x: Value): Val = x.asInstanceOf[Val]
-
-  val ROADMAP = Val("Roadmap", "roadmap")
-  val SERVICE_GUIDE = Val("Service Guide", "service-guide")
-  val REST_API = Val("REST API", "rest")
-  val TEST_SUPPORT_API = Val("Test Support API", "test")
-  val XML_API = Val("XML API", "xml")
 }
 
 case class APIVersion(

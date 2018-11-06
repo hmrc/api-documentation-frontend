@@ -40,7 +40,7 @@
 <table class="api-list">
     @for((category, apis) <- apisByCategory) {
         <tbody>
-            @for((api, index) <- apis.zipWithIndex) {
+            @for((api, index) <- apis.sortBy(_.label).zipWithIndex) {
                 <tr>
                     @if(index == 0) { <td class="api-group">@category.displayName</td> } else { <td></td> }
                     <td>
