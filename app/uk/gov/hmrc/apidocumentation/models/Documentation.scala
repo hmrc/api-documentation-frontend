@@ -54,13 +54,10 @@ case class APIDefinition(
   lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
   lazy val defaultVersion = statusSortedActiveVersions.headOption
   lazy val hasActiveVersions = statusSortedActiveVersions.nonEmpty
-  lazy val label: APIDefinitionLabel = if (isTestSupport.getOrElse(false)) {
-    TEST_SUPPORT_API
-  } else if (isXmlApi.getOrElse(false)) {
-    XML_API
-  } else {
-    REST_API
-  }
+  lazy val label: APIDefinitionLabel =
+    if (isTestSupport.contains(true)) TEST_SUPPORT_API
+    else if (isXmlApi.contains(true)) XML_API
+    else REST_API
 
   def mappedCategories(catMap: Map[String, Seq[APICategory]] = categoryMap): Seq[APICategory] = categories match {
     case Some(head :: tail) => head +: tail
