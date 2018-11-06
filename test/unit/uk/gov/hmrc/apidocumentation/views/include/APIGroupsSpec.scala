@@ -18,11 +18,7 @@ package unit.uk.gov.hmrc.apidocumentation.views.include
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Mockito.{when => When}
-import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.OneAppPerSuite
 import play.twirl.api.HtmlFormat.Appendable
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, APIVersion}
 import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.APIStatus._
