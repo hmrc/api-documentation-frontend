@@ -202,14 +202,72 @@ pre, code {
   }
 }
 
-.section--branded {
-  a {
-    &:visited {
-      color: #005ea5;
+.api-list {
+  .api-group {
+    font-weight: 700;
+  }
+
+  .service-tag {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    margin-left: -1rem;
+    min-width: 145px;
+    padding: .5rem;
+    text-align: center;
+    width: 100%;
+
+    &--e2e {
+      background-color: #e7a09e;
     }
 
-    &:hover {
-      color: #2b8cc4;
+    &--rest {
+      background-color: #a3c5df;
     }
+
+    &--roadmap {
+      background-color: #c4ccaa;
+    }
+
+    &--test {
+      background-color: #c39ac2;
+    }
+
+    &--xml {
+      background-color: #fbe0af;
+    }
+  }
+
+  tbody {
+    border-top: 3px solid #bfc1c3;
+  }
+
+  tr {
+    border-top: 1px solid #bfc1c3;
+  }
+}
+
+.filter-container {
+  background: #f8f8f8;
+  margin: 3rem 0;
+  padding: 4rem 2rem;
+
+  .govuk-select {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 1.25;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 40px;
+    padding: 5px;
+    border: 2px solid #0b0c0c;
+    width: 100%;
+  }
+
+  .govuk-form-group {
+    margin-bottom: 2rem;
   }
 }

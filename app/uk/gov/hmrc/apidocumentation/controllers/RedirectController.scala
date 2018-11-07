@@ -23,7 +23,7 @@ import scala.concurrent.Future
 
 class RedirectController extends FrontendController {
   def redirectToDocumentationIndexPage() = {
-    val redirectTo = routes.DocumentationController.apiIndexPage(None, None).url
+    val redirectTo = routes.DocumentationController.apiIndexPage(None, None, None).url
     Action.async { implicit request => Future.successful(MovedPermanently(redirectTo)) }
   }
 

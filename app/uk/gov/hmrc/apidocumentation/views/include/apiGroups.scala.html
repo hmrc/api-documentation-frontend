@@ -1,0 +1,46 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.models.APICategory._
+
+@(apisByCategory: Map[APICategory, Seq[APIDefinition]])
+
+@documentationUrl(api: APIDefinition) = @{
+  if (api.isXmlApi.contains(true))
+    controllers.routes.DocumentationController.renderXmlApiDocumentation(api.name)
+  else
+    controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
+}
+
+<table class="api-list">
+    @for((category, apis) <- apisByCategory) {
+        <tbody>
+            @for((api, index) <- apis.sortBy(_.label).zipWithIndex) {
+                <tr>
+                    @if(index == 0) { <td class="api-group">@category.displayName</td> } else { <td></td> }
+                    <td>
+                        <a class="accordion__button link--no-underline" href="@documentationUrl(api)">@api.name</a>
+                    </td>
+                    <td>
+                        <strong class="service-tag service-tag--@api.label.modifier">@api.label.displayName</strong>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>

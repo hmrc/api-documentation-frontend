@@ -45,7 +45,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   private lazy val cacheControlHeaders = "cache-control" -> s"public, max-age=${documentationService.defaultExpiration.toSeconds}"
   private val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
-  private val apiDocCrumb = Crumb("API Documentation", routes.DocumentationController.apiIndexPage(None, None).url)
+  private val apiDocCrumb = Crumb("API Documentation", routes.DocumentationController.apiIndexPage(None, None, None).url)
   private val usingTheHubCrumb = Crumb("Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url)
   private val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
   private val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
@@ -176,7 +176,11 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       Some(breadcrumbs)))))
   }
 
-  def apiIndexPage(service: Option[String], version: Option[String]) = headerNavigation { implicit request => navLinks =>
+  def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]) = headerNavigation { implicit request => navLinks =>
+    def pageAttributes(title: String = "API Documentation") = apidocumentation.models.PageAttributes(title,
+      breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),
+      headerLinks = navLinks,
+      sidebarLinks = navigationService.sidebarNavigation())
 
     val params = for (a <- service; b <- version) yield (a, b)
 
@@ -190,16 +194,16 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
           email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
           apis <- documentationService.fetchAPIs(email)
         } yield {
-          Ok(apiIndex(
-            apidocumentation.models.PageAttributes(title = "API Documentation",
-              breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),
-              headerLinks = navLinks,
-              sidebarLinks = navigationService.sidebarNavigation()),
-            exampleApis = apis.filter(isExampleApiDefinition),
-            otherApis = apis.filterNot(isExampleApiDefinition).filterNot(isTestSupportApi),
-            testSupportApis = apis.filter(isTestSupportApi)
-          ))
+          if (appConfig.groupedDocumentationEnabled) {
+            val apisByCategory = APIDefinition.groupedByCategory(apis)
 
+            filter match {
+              case Some(f) => Ok(apisFiltered(pageAttributes("Filtered API Documentation"), apisByCategory, APICategory.fromFilter(f)))
+              case _ => Ok(apiIndex(pageAttributes(), apisByCategory))
+            }
+          } else {
+            Ok(apiListIndex(pageAttributes(), apis.filter(isExampleApiDefinition), apis.filterNot(isExampleApiDefinition).filterNot(isTestSupportApi), apis.filter(isTestSupportApi)))
+          }
         }) recover {
           case e: Throwable =>
             Logger.error("Could not load API Documentation service", e)
@@ -355,6 +359,28 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     }
   }
 
+  def renderXmlApiDocumentation(name: String): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
+    if (appConfig.groupedDocumentationEnabled) {
+      def makePageAttributes(apiDefinition: APIDefinition): PageAttributes = {
+        val breadcrumbs = Breadcrumbs(
+          Crumb(
+            apiDefinition.name,
+            routes.DocumentationController.renderXmlApiDocumentation(apiDefinition.context).url),
+          apiDocCrumb,
+          homeCrumb)
+
+        apidocumentation.models.PageAttributes(apiDefinition.name, breadcrumbs, navLinks, navigationService.sidebarNavigation())
+      }
+
+      APIDefinition.xmlApiDefinitions.find(_.name == name) match {
+        case Some(xmlApiDefinition) => Future.successful(Ok(xmlDocumentation(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
+        case _ => Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+      }
+    } else {
+      Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+    }
+  }
+
   private def headerNavigation(f: Request[AnyContent] => Seq[NavLink] => Future[Result]): Action[AnyContent] = {
     Action.async { implicit request =>
       // We use a non-standard cookie which doesn't get propagated in the header carrier
@@ -382,4 +408,3 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   private def isTestSupportApi(apiDef: APIDefinition): Boolean = apiDef.isTestSupport.getOrElse(false)
 }
-

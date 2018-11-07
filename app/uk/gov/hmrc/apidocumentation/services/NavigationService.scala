@@ -33,7 +33,7 @@ import scala.concurrent.Future
 class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConfig: ApplicationConfig) {
 
   val gettingStartedUrl = routes.DocumentationController.usingTheHubPage().url
-  val apiDocumentationUrl = routes.DocumentationController.apiIndexPage(None, None).url
+  val apiDocumentationUrl = routes.DocumentationController.apiIndexPage(None, None, None).url
   val referenceGuideUrl = routes.DocumentationController.referenceGuidePage().url
   val namingGuidelinesUrl = routes.DocumentationController.nameGuidelinesPage().url
   val authorisationUri =routes.DocumentationController.authorisationPage().url

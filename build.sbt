@@ -55,6 +55,7 @@ lazy val microservice = (project in file("."))
     majorVersion := 0
   )
   .settings(playPublishingSettings: _*)
+  .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
   .settings(testOptions in Test := Seq(Tests.Filter(unitFilter)))
   .configs(IntegrationTest)

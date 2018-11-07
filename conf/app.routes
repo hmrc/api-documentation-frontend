@@ -19,11 +19,12 @@ GET         /docs/authorisation/user-restricted-endpoints           @uk.gov.hmrc
 GET         /docs/authorisation/two-step-verification               @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisation2SVPage()
 
 GET         /docs/apiIndex                                          @uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToDocumentationIndexPage()
-GET         /docs/api                                               @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.apiIndexPage(service: Option[String], version: Option[String])
+GET         /docs/api                                               @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.apiIndexPage(service: Option[String], version: Option[String], filter: Option[String])
 GET         /docs/api/service/:service                              @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.redirectToApiDocumentation(service: String, version: Option[String], cacheBuster: Option[Boolean])
 GET         /docs/api/service/:service/:version                     @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
 GET         /docs/api/preview                                       @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.previewApiDocumentation(url: Option[String])
 GET         /docs/api/testdata/:service/:version                    @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.fetchTestEndpointJson(service: String, version: String)
+GET         /docs/api/xml/:name                                     @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.renderXmlApiDocumentation(name: String)
 GET         /docs/api/:service/:version/:endpoint                   @uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToApiDocumentationPage(service: String, version: String, endpoint: String)
 
 GET         /docs/help/cookies                                      @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.cookiesPage()

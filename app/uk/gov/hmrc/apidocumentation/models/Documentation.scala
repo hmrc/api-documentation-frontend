@@ -16,9 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
+import play.api.libs.json._
 import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
 import uk.gov.hmrc.apidocumentation.models.HttpMethod.HttpMethod
+import uk.gov.hmrc.apidocumentation.models.APICategory._
+import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 
+import scala.collection.immutable.ListMap
+import scala.io.Source
 import scala.util.Try
 
 object APIAccessType extends Enumeration {
@@ -35,7 +41,9 @@ case class APIDefinition(
                           context: String,
                           requiresTrust: Option[Boolean],
                           isTestSupport: Option[Boolean],
-                          versions: Seq[APIVersion]) {
+                          versions: Seq[APIVersion],
+                          categories: Option[Seq[APICategory]] = None,
+                          isXmlApi: Option[Boolean] = None) {
 
   require(versions.nonEmpty, s"API versions must not be empty! serviceName=${serviceName}")
 
@@ -46,6 +54,15 @@ case class APIDefinition(
   lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
   lazy val defaultVersion = statusSortedActiveVersions.headOption
   lazy val hasActiveVersions = statusSortedActiveVersions.nonEmpty
+  lazy val label: APIDefinitionLabel =
+    if (isTestSupport.contains(true)) TEST_SUPPORT_API
+    else if (isXmlApi.contains(true)) XML_API
+    else REST_API
+
+  def mappedCategories(catMap: Map[String, Seq[APICategory]] = categoryMap): Seq[APICategory] = categories match {
+    case Some(head :: tail) => head +: tail
+    case _ => catMap.get(name).getOrElse(Seq(OTHER))
+  }
 }
 
 object APIDefinition {
@@ -67,8 +84,18 @@ object APIDefinition {
     }
   }
 
+  def groupedByCategory(apiDefinitions: Seq[APIDefinition], xmlDefinitions: Seq[APIDefinition] = xmlApiDefinitions, catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[APIDefinition]] = {
+    val categorised: Map[APICategory, Seq[APIDefinition]] = (apiDefinitions ++ xmlDefinitions).foldLeft(Map(): Map[APICategory, Seq[APIDefinition]]) {
+      (groupings, apiDefinition) => groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
+    }
+
+    ListMap(categorised.toSeq.sortBy(_._1): _*)
+  }
+
   private val nonNumericOrPeriodRegex = "[^\\d^.]*"
   private val fallback = Array(1, 0, 0)
+
+  def xmlApiDefinitions = Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[APIDefinition]].map(_.copy(isXmlApi = Some(true)))
 }
 
 case class APIVersion(
