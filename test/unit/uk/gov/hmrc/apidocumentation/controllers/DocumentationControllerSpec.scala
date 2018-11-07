@@ -573,10 +573,20 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
   "renderXmlApiDocumentation" must {
     "when grouped documentation is disabled" should {
-      "return 404 not found" in new Setup(groupedDocumentationEnabled = false) {
+      "return 404 not found when the XML API definition exists" in new Setup(groupedDocumentationEnabled = false) {
         theUserIsLoggedIn()
 
-        val result = underTest.renderXmlApiDocumentation("VAT")(request)
+        val existingXmlApiName = "Charities Online"
+        val result = underTest.renderXmlApiDocumentation(existingXmlApiName)(request)
+
+        status(result) shouldBe NOT_FOUND
+      }
+
+      "return 404 not found when the XML API definition does not exist" in new Setup(groupedDocumentationEnabled = false) {
+        theUserIsLoggedIn()
+
+        val nonExistingXmlApiName = "Fake XML API name"
+        val result = underTest.renderXmlApiDocumentation(nonExistingXmlApiName)(request)
 
         status(result) shouldBe NOT_FOUND
       }
