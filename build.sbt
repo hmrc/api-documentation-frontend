@@ -57,7 +57,7 @@ lazy val microservice = (project in file("."))
   .settings(playPublishingSettings: _*)
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
-  .settings(testOptions in Test := Seq(Tests.Filter(unitFilter)))
+  .settings(testOptions in Test := Seq(Tests.Filter(unitFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT")))
   .configs(IntegrationTest)
   .settings(inConfig(TemplateItTest)(Defaults.itSettings): _*)
   .settings(
@@ -85,7 +85,7 @@ lazy val microservice = (project in file("."))
   .configs(AcceptanceTest)
   .settings(inConfig(AcceptanceTest)(Defaults.testSettings): _*)
   .settings(
-    testOptions in AcceptanceTest := Seq(Tests.Filter(acceptanceTestFilter)),
+    testOptions in AcceptanceTest := Seq(Tests.Filter(acceptanceTestFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     unmanagedSourceDirectories in AcceptanceTest := Seq((baseDirectory in AcceptanceTest).value / "test"),
     unmanagedResourceDirectories in AcceptanceTest := Seq((baseDirectory in AcceptanceTest).value / "test", (baseDirectory in AcceptanceTest).value / "target/web/public/test"),
     Keys.fork in AcceptanceTest := false,

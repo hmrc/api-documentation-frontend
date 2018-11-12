@@ -54,6 +54,7 @@ case class APIDefinition(
   lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
   lazy val defaultVersion = statusSortedActiveVersions.headOption
   lazy val hasActiveVersions = statusSortedActiveVersions.nonEmpty
+  lazy val isRestOrXmlApi = Seq(REST_API, XML_API).contains(label)
   lazy val label: APIDefinitionLabel =
     if (isTestSupport.contains(true)) TEST_SUPPORT_API
     else if (isXmlApi.contains(true)) XML_API
@@ -87,7 +88,7 @@ object APIDefinition {
   def groupedByCategory(apiDefinitions: Seq[APIDefinition], xmlDefinitions: Seq[APIDefinition] = xmlApiDefinitions, catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[APIDefinition]] = {
     val categorised: Map[APICategory, Seq[APIDefinition]] = (apiDefinitions ++ xmlDefinitions).foldLeft(Map(): Map[APICategory, Seq[APIDefinition]]) {
       (groupings, apiDefinition) => groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
-    }
+    }.filter(_._2.exists(_.isRestOrXmlApi))
 
     ListMap(categorised.toSeq.sortBy(_._1): _*)
   }
