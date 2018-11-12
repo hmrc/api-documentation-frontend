@@ -550,14 +550,13 @@
                     <td class="snippet--inline">Gov-Client-User-ID</td>
                     <td>
                         <p>
-                            The username that the customer used to sign in to the client machine, or the software vendor’s
-                            software or website.
+                            The identifier that the customer used to login to the client machine, and/or the software vendor’s software or website. Provide multiple identifiers as a comma-delimited list. Use N/A if no identifiers are available.
                         </p>
                         <p>
                             For example,
                             <code class="code--slim">alice_desktop</code>,
-                            <code class="code--slim">alice_online21</code> (for D)
-                            <code class="code--slim">user123</code> (for A - C or F)
+                            <code class="code--slim">alice_online21</code> (for method D)
+                            <code class="code--slim">user123</code> (for all other methods)
                         </p>
                     </td>
                 </tr>
@@ -578,41 +577,41 @@
                 <tr>
                     <td class="snippet--inline">Gov-Client-Screen-Resolution</td>
                     <td>
+                        <p>Methods A to E only.</p>
                         <p>Screen resolution of the client machine in pixels.</p>
-                        <p>For example, <code class="code--slim">1920x1080</code> (for A - E)</p>
+                        <p>For example, <code class="code--slim">1920x1080</code></p>
                     </td>
                 </tr>
                 <tr>
                     <td class="snippet--inline">Gov-Client-Window-Size</td>
                     <td>
+                        <p>Methods A to E only.</p>
                         <p>Size of the application or browser window on the client machine in pixels.</p>
-                        <p>For example, <code class="code--slim">1256x803</code> (for A - E)</p>
+                        <p>For example, <code class="code--slim">1256x803</code></p>
                     </td>
                 </tr>
                 <tr>
                     <td class="snippet--inline">Gov-Client-Colour-Depth</td>
                     <td>
+                        <p>Methods A to E only.</p>
                         <p>Colour depth of the client machine in bits per pixel.</p>
-                        <p>For example, <code class="code--slim">24</code> (for A-E)</p>
+                        <p>For example, <code class="code--slim">24</code></p>
                     </td>
                 </tr>
                 <tr>
                     <td class="snippet--inline">Gov-Client-User-Agent</td>
                     <td>
-                        <p>If the client machine is using a web browser (E), this is the User-Agent reported by the browser.</p>
-                        <p> If the client machine is running an installed application then this should be:</p>
-                        <p>"&lt;OS Family&gt;/&lt;OS Version&gt; (&lt;Manufacturer&gt; &lt;Model&gt;)" (A to D &amp; F).</p>
-                        <p>
-                            For example,
-                            <code class="code--slim">Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)</code> (for E)<br>
-                            <code class="code--slim">Android/6.0.1 (Samsung Galaxy S4)</code> <br/>(for A - D &amp; F)
-                        </p>
+                        <p>For methods A to D and F: "&lt;OS Family&gt;/&lt;OS Version&gt; (&lt;Manufacturer&gt; &lt;Model&gt;)"</p>
+                        <p>For example, <code class="code--slim">Android/6.0.1 (Samsung Galaxy S4)</code></p>
+                        <p>For method E: the User-Agent reported by the browser.</p>
+                        <p>For example, <code class="code--slim">Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)</code></p>
                     </td>
                 </tr>
                 <tr>
                     <td class="snippet--inline">Gov-Client-Browser-Plugins</td>
                     <td>
-                        <p>List of installed browser plugins (E only).</p>
+                        <p>Method E only.</p>
+                        <p>List of installed browser plugins.</p>
                         <p>For example,
                             <code class="code--slim">Shockwave Flash</code>,
                             <code class="code--slim">Chromium PDF Viewer</code>
@@ -622,7 +621,8 @@
                 <tr>
                     <td class="snippet--inline">Gov-Client-Browser-JS-User-Agent</td>
                     <td>
-                        <p>User Agent value as reported by Javascript (E only).</p>
+                        <p>Method E only.</p>
+                          <p>User Agent value as reported by Javascript.</p>
                         <p>
                             For example,
                             <pre class="code--block">
@@ -635,7 +635,8 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                 <tr>
                     <td class="snippet--inline">Gov-Client-Browser-Do-Not-Track</td>
                     <td>
-                        <p>Whether the browser has set the Do Not Track flag or not, if the client machine is using a web browser (E only).</p>
+                        <p>Method E only.</p>
+                        <p>Whether the browser has set the Do Not Track flag or not, if the client machine is using a web browser.</p>
                         <p>
                             For example,
                             <code class="code--slim">false</code>
@@ -645,10 +646,11 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                 <tr>
                     <td class="snippet--inline">Gov-Client-Multi-Factor</td>
                     <td>
+                        <p>Method E only.</p>
                         <p>
-                            Details about the multi-factor authorisation that the vendor requires their user to pass before
-                            using their application. This should be constructed as
-                            "&lt;type&gt;;&lt;UTC timestamp&gt;;&lt;unique reference (hashed or not)&gt;".
+                          Details about the multi-factor authorisation that the vendor requires their user to pass before
+                          using their application. This should be constructed as
+                          "&lt;type&gt;;&lt;UTC timestamp&gt;;&lt;unique reference (hashed or not)&gt;".
                         </p>
                         <p>
                                 &lt;type&gt; is a short, human readable tag describing the method of two factor authorization,
@@ -680,13 +682,13 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                             values are seen in the request.
                         </p>
                         <p>
-                            For example, in case C and D there will be an installed application (with a version), and a
+                            For example, for methods C and D there will be an installed application (with a version), and a
                             backend server (also with a version).
                         </p>
                         <p>
                             For example,
-                            <code class="code--slim">1.2.3 build 4286</code> (for A, B and F)
-                            <code class="code--slim">2.2.2, v3.8</code> (for C, D and E)
+                            <code class="code--slim">1.2.3 build 4286</code> (for methods A, B and F)
+                            <code class="code--slim">2.2.2, v3.8</code> (for methods C, D and E)
                         </p>
                     </td>
                 </tr>
@@ -705,8 +707,8 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                         </p>
                         <p>
                             For example,
-                            <code class="code--slim">fa7c484c-d8cf-4f8a-a39c-54a2a4c04bc6</code> (for A, B, E and F)
-                            <code class="code--slim">01ecef0967a, app3</code> (for C and D)
+                            <code class="code--slim">fa7c484c-d8cf-4f8a-a39c-54a2a4c04bc6</code> (for methods A, B, E and F)
+                            <code class="code--slim">01ecef0967a, app3</code> (for methods C and D)
                         </p>
                     </td>
                 </tr>
@@ -729,9 +731,9 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                 <tr>
                     <td class="snippet--inline">Forwarded</td>
                     <td>
+                        <p>Methods C to E.</p>
                         <p>The Forwarded header is created and appended to by any intermediary server that handles the
                             request in an unencrypted form. This should be a small list as most communications will be via HTTPS.
-                            This field is only valid for indirect options C, D and E.
                         </p>
                         <p>
                             If no value is defined, and the request came from the Gov-Client-Local-IP,
