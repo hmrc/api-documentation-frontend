@@ -275,7 +275,7 @@ class DocumentationSpec extends UnitSpec {
       result shouldBe expected
     }
 
-    "should include XML API definitions" in {
+    "include XML API definitions" in {
       val api1 = APIDefinition("serviceName", "name1", "description", "context1", None, None, Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
       val api2 = APIDefinition("serviceName", "name2", "description", "context2", None, None, Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
       val xmlApi1 = APIDefinition("serviceName", "xmlName1", "description", "xmlContext1", None, None, Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
@@ -294,6 +294,41 @@ class DocumentationSpec extends UnitSpec {
       val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq(xmlApi1, xmlApi2), categoryMap)
 
       result shouldBe expected
+    }
+
+    "include REST and Test Support APIS" in {
+      val restApi = APIDefinition("serviceName", "restApi", "description", "context1", None, None, Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
+      val testSupportApi = APIDefinition("serviceName", "testSupportApi", "description", "context2", None, isTestSupport = Some(true), Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
+      val categoryMap = Map(
+        "restApi" -> Seq(CUSTOMS),
+        "testSupportApi" -> Seq(CUSTOMS))
+      val expected = Map(CUSTOMS -> Seq(restApi, testSupportApi))
+
+      val result = APIDefinition.groupedByCategory(Seq(restApi, testSupportApi), Seq.empty, categoryMap)
+
+      result shouldBe expected
+    }
+
+    "include XML and Test Support APIS" in {
+      val xmlApi = APIDefinition("serviceName", "xmlApi", "description", "context1", None, None, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), None, isXmlApi = Some(true))
+      val testSupportApi = APIDefinition("serviceName", "testSupportApi", "description", "context2", None, isTestSupport = Some(true), Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
+      val categoryMap = Map(
+        "xmlApi" -> Seq(CUSTOMS),
+        "testSupportApi" -> Seq(CUSTOMS))
+      val expected = Map(CUSTOMS -> Seq(testSupportApi, xmlApi))
+
+      val result = APIDefinition.groupedByCategory(Seq(testSupportApi), Seq(xmlApi), categoryMap)
+
+      result shouldBe expected
+    }
+
+    "filter out categories without REST or XML APIs" in {
+      val testSupportApi = APIDefinition("serviceName", "name1", "description", "context1", None, isTestSupport = Some(true), Seq(APIVersion("1.0", None, STABLE, Seq.empty)))
+      val categoryMap = Map("name1" -> Seq(CUSTOMS, VAT))
+
+      val result = APIDefinition.groupedByCategory(Seq(testSupportApi), Seq.empty, categoryMap)
+
+      result shouldBe Map.empty
     }
   }
 
