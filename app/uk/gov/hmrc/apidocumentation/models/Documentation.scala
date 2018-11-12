@@ -54,7 +54,7 @@ case class APIDefinition(
   lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
   lazy val defaultVersion = statusSortedActiveVersions.headOption
   lazy val hasActiveVersions = statusSortedActiveVersions.nonEmpty
-  lazy val isRestOrXmlApi = Seq(REST_API, XML_API).exists(_ == label)
+  lazy val isRestOrXmlApi = Seq(REST_API, XML_API).contains(label)
   lazy val label: APIDefinitionLabel =
     if (isTestSupport.contains(true)) TEST_SUPPORT_API
     else if (isXmlApi.contains(true)) XML_API
