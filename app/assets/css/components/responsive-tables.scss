@@ -4,6 +4,7 @@
 .table--align-top {
   tr td {
     vertical-align: top;
+    font-size: 16px ;
   }
 }
 
@@ -18,6 +19,10 @@
   .table__detail--responsive:first-of-type {
     padding-left: 20px;
   }
+}
+
+.margin-top {
+    margin-top: 10px;
 }
 
 .table__row--nested-2 {

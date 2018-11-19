@@ -69,7 +69,7 @@
                         </p>
                         <div>
                             @for(enumValue <- field.enumValues) {
-                                <div>
+                                <div class="margin-top">
                                     <code class="code--slim">@{enumValue.name}</code>
                                     @if(enumValue.description.isDefined) { - @{enumValue.description} }
                                 </div>
