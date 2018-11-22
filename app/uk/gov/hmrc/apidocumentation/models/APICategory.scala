@@ -28,7 +28,9 @@ object APICategory extends Enumeration {
 
   val EXAMPLE = Val("Example", "example")
   val AGENTS = Val("Agents", "agents")
+  val BUSINESS_RATES = Val("Business Rates", "business-rates")
   val CHARITIES = Val("Charities", "charities")
+  val CONSTRUCTION_INDUSTRY_SCHEME = Val("Contruction Industry Scheme", "construction-industry-scheme")
   val CORPORATION_TAX = Val("Corporation Tax", "corporation-tax")
   val CUSTOMS = Val("Customs", "customs")
   val ESTATES = Val("Estates", "estates")
@@ -44,8 +46,8 @@ object APICategory extends Enumeration {
   val SELF_ASSESSMENT = Val("Self Assessment", "self-assessment")
   val STAMP_DUTY = Val("Stamp Duty", "stamp-duty")
   val TRUSTS = Val("Trusts", "trusts")
-  val VAT = Val("VAT", "vat")
   val VAT_MTD = Val("VAT (Making Tax Digital)", "vat")
+  val VAT = Val("VAT (XML)", "vat")
 
   val OTHER = Val("Other", "other")
 
