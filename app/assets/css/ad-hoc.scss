@@ -16,15 +16,6 @@
 
 
 
-// APIS-1076 - Temporary vertical alignment for Sandbox tables.
-.sandbox-data {
-  td {
-    vertical-align: top
-  }
-}
-
-
-
 // APIS-1079 - Add margin to bottom of bullets.
 .bullets + p {
   margin-top: 1.2em;
@@ -120,7 +111,7 @@ tbody {
     vertical-align: top;
 }
 td {
-    vertical-align: baseline;
+    vertical-align: top;
 }
 
 pre, code {

@@ -57,9 +57,9 @@
         <h2 class="heading-large">API access</h2>
 
         <p>The base URL for sandbox APIs is:</p>
-        <pre class="snippet--block">@applicationConfig.sandboxApiBaseUrl</pre>
+        <pre class="code--block">@applicationConfig.sandboxApiBaseUrl</pre>
         <p>The base URL for production APIs is:</p>
-        <pre class="snippet--block">@applicationConfig.productionApiBaseUrl</pre>
+        <pre class="code--block">@applicationConfig.productionApiBaseUrl</pre>
     </section>
 
     <section id="network-access">
@@ -71,11 +71,11 @@
             access in your proxy, not your firewall.</p>
         <p>Configure your proxy to allow full access to the following domains, including HTTP GET, POST, PUT and DELETE.</p>
         <p>For testing in sandbox:</p>
-        <pre class="snippet--block">
+        <pre class="code--block">
 @applicationConfig.sandboxApiHost
 @applicationConfig.sandboxWwwHost</pre>
         <p>For production use:</p>
-        <pre class="snippet--block">
+        <pre class="code--block">
 @applicationConfig.productionApiHost
 @applicationConfig.productionWwwHost</pre>
     </section>
@@ -102,23 +102,23 @@
             </tr></thead>
             <tbody>
                 <tr>
-                    <td data-heading="Type"><span class="snippet--inline">date</span></td>
-                    <td data-heading="Example">&quot;2015-09-08&quot;</td>
+                    <td data-heading="Type"><code class="code--slim">date</code></td>
+                    <td data-heading="Example"><code class="code--slim">2015-09-08</code></td>
                     <td data-heading="Description">Dates will be represented in the format YYYY-MM-DD.</td>
                 </tr>
                 <tr>
-                    <td data-heading="Type"><span class="snippet--inline">timestamp</span></td>
-                    <td data-heading="Example">&quot;2015-09-08T01:55:28+00:00&quot;</td>
+                    <td data-heading="Type"><code class="code--slim">timestamp</code></td>
+                    <td data-heading="Example"><code class="code--slim">2015-09-08T01:55:28+00:00</code></td>
                     <td data-heading="Description">Timestamps will be represented in the format YYYY-MM-DDThh:mm:ss±hh:mm.</td>
                 </tr>
                 <tr>
-                    <td data-heading="Type"><span class="snippet--inline">money</span></td>
-                    <td data-heading="Example">123.45</td>
+                    <td data-heading="Type"><code class="code--slim">money</code></td>
+                    <td data-heading="Example"><code class="code--slim">123.45</code></td>
                     <td data-heading="Description">Unless expressly documented, money will be represented with two decimal places and GBP currency.</td>
                 </tr>
                 <tr>
-                    <td data-heading="Type"><span class="snippet--inline">NINO</span></td>
-                    <td data-heading="Example">&quot;QQ123456A&quot;</td>
+                    <td data-heading="Type"><code class="code--slim">NINO</code></td>
+                    <td data-heading="Example"><code class="code--slim">QQ123456A</code></td>
                     <td data-heading="Description">A National Insurance number is made up of 2 letters, 6 numbers and a letter (A, B, C, or D).</td>
                 </tr>
             </tbody>
@@ -152,27 +152,27 @@
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td><span class="code--slim">code</span></td>
-                    <td><span class="code--slim">string</span></td>
+                    <td><code class="code--slim">code</code></td>
+                    <td><code class="code--slim">string</code></td>
                     <td>A machine-readable error code. This is unique for each error scenario.</td>
                 </tr>
                 <tr>
-                    <td><span class="code--slim">message</span></td>
-                    <td><span class="code--slim">string</span></td>
+                    <td><code class="code--slim">message</code></td>
+                    <td><code class="code--slim">string</code></td>
                     <td>A human-readable explanation for the error.</td>
                 </tr>
                 </tbody>
             </table>
             <br aria-hidden="true"/>
             <p>There might be other error-specific information (such as a list of fields that are in error). For example:</p>
-            <pre class="snippet--block">{
+            <pre class="code--block">{
   "code" : "ACCOUNT_SUSPENDEDSA-100201",
   "message" : "Account is temporarily suspended",
   "reactivationTimestamp" : 1431448640718
 }
 </pre>
             <p>Multiple errors can also be returned in a single field called errors. For example:</p>
-            <pre class="snippet--block">
+            <pre class="code--block">
 {
   "code": "BAD_REQUEST",
   "message": "Bad request",
@@ -191,7 +191,7 @@
 }
 </pre>
             <p>Here is an example error response in XML format</p>
-            <pre class="snippet--block">
+            <pre class="code--block">
 &lt;error&gt;
   &lt;code&gt;ACCOUNT_SUSPENDEDSA-100201&lt;/code&gt;
   &lt;message&gt;Account is temporarily suspended&lt;/message&gt;
@@ -212,19 +212,19 @@
                 <tbody>
                 <tr>
                     <td>No OAuth token supplied for user-restricted or application-restricted resource</td>
-                    <td><span class="code--slim">MISSING_CREDENTIALS</span></td>
+                    <td><code class="code--slim">MISSING_CREDENTIALS</code></td>
                 </tr>
                 <tr>
                     <td>Invalid OAuth token supplied for user-restricted or application-restricted resource (including expired token)</td>
-                    <td><span class="code--slim">INVALID_CREDENTIALS</span></td>
+                    <td><code class="code--slim">INVALID_CREDENTIALS</code></td>
                 </tr>
                 <tr>
                     <td>Supplied OAuth token not authorised to access data for given tax identifier(s)</td>
-                    <td><span class="code--slim">UNAUTHORIZED</span></td>
+                    <td><code class="code--slim">UNAUTHORIZED</code></td>
                 </tr>
                 <tr>
                     <td>User-restricted API is being accessed with a server token</td>
-                    <td><span class="code--slim">INCORRECT_ACCESS_TOKEN_TYPE</span></td>
+                    <td><code class="code--slim">INCORRECT_ACCESS_TOKEN_TYPE</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -241,19 +241,19 @@
                 <tbody>
                 <tr>
                     <td>Request done with HTTP</td>
-                    <td><span class="code--slim">HTTPS_REQUIRED</span></td>
+                    <td><code class="code--slim">HTTPS_REQUIRED</code></td>
                 </tr>
                 <tr>
                     <td>Production tokens used for Beta API</td>
-                    <td><span class="code--slim">API_NOT_IN_PRODUCTION</span></td>
+                    <td><code class="code--slim">API_NOT_IN_PRODUCTION</code></td>
                 </tr>
                 <tr>
                     <td>The OAuth token's application is not subscribed to the API</td>
-                    <td><span class="code--slim">RESOURCE_FORBIDDEN</span></td>
+                    <td><code class="code--slim">RESOURCE_FORBIDDEN</code></td>
                 </tr>
                 <tr>
                     <td>The scope of the OAuth token is not sufficient to access the API</td>
-                    <td><span class="code--slim">INVALID_SCOPE</span></td>
+                    <td><code class="code--slim">INVALID_SCOPE</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -271,11 +271,11 @@
                 <tbody>
                 <tr>
                     <td>No endpoint could be found in the API for the request path</td>
-                    <td><span class="code--slim">MATCHING_RESOURCE_NOT_FOUND</span></td>
+                    <td><code class="code--slim">MATCHING_RESOURCE_NOT_FOUND</code></td>
                 </tr>
                 <tr>
                     <td>No API could be found for the context</td>
-                    <td><span class="code--slim">NOT_FOUND</span></td>
+                    <td><code class="code--slim">NOT_FOUND</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -293,7 +293,7 @@
                 <tbody>
                 <tr>
                     <td>Request method is not GET, PUT, POST, DELETE or OPTIONS</td>
-                    <td><span class="code--slim">METHOD_NOT_ALLOWED</span></td>
+                    <td><code class="code--slim">METHOD_NOT_ALLOWED</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -310,7 +310,7 @@
                 <tbody>
                 <tr>
                     <td>Missing or invalid Accept header</td>
-                    <td><span class="code--slim">ACCEPT_HEADER_INVALID</span></td>
+                    <td><code class="code--slim">ACCEPT_HEADER_INVALID</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -327,7 +327,7 @@
                 <tbody>
                 <tr>
                     <td>The application has reached its maximum rate limit</td>
-                    <td><span class="code--slim">MESSAGE_THROTTLED_OUT</span></td>
+                    <td><code class="code--slim">MESSAGE_THROTTLED_OUT</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -344,7 +344,7 @@
                 <tbody>
                 <tr>
                     <td>Internal server error</td>
-                    <td><span class="code--slim">INTERNAL_SERVER_ERROR</span></td>
+                    <td><code class="code--slim">INTERNAL_SERVER_ERROR</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -361,7 +361,7 @@
                 <tbody>
                 <tr>
                     <td>API not implemented/deployed</td>
-                    <td><span class="code--slim">NOT_IMPLEMENTED</span></td>
+                    <td><code class="code--slim">NOT_IMPLEMENTED</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -378,11 +378,11 @@
                 <tbody>
                 <tr>
                     <td>Service unavailable</td>
-                    <td><span class="code--slim">SERVER_ERROR</span></td>
+                    <td><code class="code--slim">SERVER_ERROR</code></td>
                 </tr>
                 <tr>
                     <td>Scheduled maintenance</td>
-                    <td><span class="code--slim">SCHEDULED_MAINTENANCE</span></td>
+                    <td><code class="code--slim">SCHEDULED_MAINTENANCE</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -399,7 +399,7 @@
                 <tbody>
                 <tr>
                     <td>Request timed out</td>
-                    <td><span class="code--slim">GATEWAY_TIMEOUT</span></td>
+                    <td><code class="code--slim">GATEWAY_TIMEOUT</code></td>
                 </tr>
                 </tbody>
             </table>
@@ -453,11 +453,11 @@
 
         <p>You can request a specific version of an API by using an <code class="code--slim">Accept</code> header with a media type of:</p>
 
-        <pre class="snippet--block">application/vnd.hmrc.[version]+[content-type]</pre>
+        <pre class="code--block">application/vnd.hmrc.[version]+[content-type]</pre>
 
         <p>For example:</p>
 
-        <pre class="snippet--block">application/vnd.hmrc.1.0+json</pre>
+        <pre class="code--block">application/vnd.hmrc.1.0+json</pre>
 
         <p>Media types are specific to each resource, which lets them change separately from one another.</p>
 
@@ -522,21 +522,21 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Public-IP</td>
+                    <td><code class="code--slim">Gov-Client-Public-IP</code></td>
                     <td>
                         <p>The public IP address of the originating client machine.</p>
                         <p>For example, <code class="code--slim">198.51.100.0</code></p>
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Public-Port</td>
+                    <td><code class="code--slim">Gov-Client-Public-Port</code></td>
                     <td>
                         <p>The port component of the Gov-Client-Public-IP.</p>
                         <p>For example, <code class="code--slim">12345</code></p>
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Device-ID</td>
+                    <td><code class="code--slim">Gov-Client-Device-ID</code></td>
                     <td>
                         <p>
                             A consistent ID representing the originating client machine. This depends on the context.
@@ -547,7 +547,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-User-ID</td>
+                    <td><code class="code--slim">Gov-Client-User-ID</code></td>
                     <td>
                         <p>
                             The identifier that the customer used to login to the client machine, and/or the software vendor’s software or website. Provide multiple identifiers as a comma-delimited list. Use N/A if no identifiers are available.
@@ -561,21 +561,21 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Timezone</td>
+                    <td><code class="code--slim">Gov-Client-Timezone</code></td>
                     <td>
                         <p>Timezone of the clock on the client machine.</p>
                         <p>For example, <code class="code--slim">GMT+3</code></p>
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Local-IP</td>
+                    <td><code class="code--slim">Gov-Client-Local-IP</code></td>
                     <td>
                         <p>Internal private IP address used by the client machine.</p>
                         <p>For example, <code class="code--slim">10.1.2.3</code></p>
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Screen-Resolution</td>
+                    <td><code class="code--slim">Gov-Client-Screen-Resolution</code></td>
                     <td>
                         <p>Methods A to E only.</p>
                         <p>Screen resolution of the client machine in pixels.</p>
@@ -583,7 +583,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Window-Size</td>
+                    <td><code class="code--slim">Gov-Client-Window-Size</code></td>
                     <td>
                         <p>Methods A to E only.</p>
                         <p>Size of the application or browser window on the client machine in pixels.</p>
@@ -591,7 +591,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Colour-Depth</td>
+                    <td><code class="code--slim">Gov-Client-Colour-Depth</code></td>
                     <td>
                         <p>Methods A to E only.</p>
                         <p>Colour depth of the client machine in bits per pixel.</p>
@@ -599,7 +599,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-User-Agent</td>
+                    <td><code class="code--slim">Gov-Client-User-Agent</code></td>
                     <td>
                         <p>For methods A to D and F: "&lt;OS Family&gt;/&lt;OS Version&gt; (&lt;Manufacturer&gt; &lt;Model&gt;)"</p>
                         <p>For example, <code class="code--slim">Android/6.0.1 (Samsung Galaxy S4)</code></p>
@@ -608,7 +608,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Browser-Plugins</td>
+                    <td><code class="code--slim">Gov-Client-Browser-Plugins</code></td>
                     <td>
                         <p>Method E only.</p>
                         <p>List of installed browser plugins.</p>
@@ -619,7 +619,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Browser-JS-User-Agent</td>
+                    <td><code class="code--slim">Gov-Client-Browser-JS-User-Agent</code></td>
                     <td>
                         <p>Method E only.</p>
                           <p>User Agent value as reported by Javascript.</p>
@@ -633,7 +633,7 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Browser-Do-Not-Track</td>
+                    <td><code class="code--slim">Gov-Client-Browser-Do-Not-Track</code></td>
                     <td>
                         <p>Method E only.</p>
                         <p>Whether the browser has set the Do Not Track flag or not, if the client machine is using a web browser.</p>
@@ -644,7 +644,7 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Client-Multi-Factor</td>
+                    <td><code class="code--slim">Gov-Client-Multi-Factor</code></td>
                     <td>
                         <p>Method E only.</p>
                         <p>
@@ -671,7 +671,7 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Vendor-Version</td>
+                    <td><code class="code--slim">Gov-Vendor-Version</code></td>
                     <td>
                         <p>
                             The vendor’s software version.<br>
@@ -693,7 +693,7 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Vendor-Instance-ID</td>
+                    <td><code class="code--slim">Gov-Vendor-Instance-ID</code></td>
                     <td>
                         <p>
                             An identifier unique to a specific installation of the vendor’s software, either on a client
@@ -713,7 +713,7 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Gov-Vendor-Public-IP</td>
+                    <td><code class="code--slim">Gov-Vendor-Public-IP</code></td>
                     <td>
                         <p>The public IP address that the customer’s machine used to send requests to the software vendor.</p>
                         <p>
@@ -729,7 +729,7 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                     </td>
                 </tr>
                 <tr>
-                    <td class="snippet--inline">Forwarded</td>
+                    <td><code class="code--slim">Forwarded</code></td>
                     <td>
                         <p>Methods C to E.</p>
                         <p>The Forwarded header is created and appended to by any intermediary server that handles the
@@ -781,54 +781,52 @@ Mac OS X; en-us) AppleWebKit/531.21.10
             </thead>
             <tbody>
             <tr>
-                <td>https://www.example.com/auth-redirect</td>
+                <td><code class="code--slim">https://www.example.com/auth-redirect</code></td>
                 <td><strong class="bold-small">Valid</strong> - when creating your application, you can use the full redirect URI or a partial URI, for example:
                     <br>
-                    <br>https://www.example.com/auth-redirect
+                    <br><code class="code--slim">https://www.example.com/auth-redirect</code>
                     <br>
-                    <br>https://www.example.com
+                    <br><code class="code--slim">https://www.example.com</code>
                     <br>
                     <br>When calling our authorisation endpoint, your redirect URI must be percent-encoded, for example:
                     <br>
-                    <br><pre class="code--block">
-https%3A%2F%2Fwww.example.com%2Fauth-
-redirect</pre>
+                    <br><code class="code--slim">https%3A%2F%2Fwww.example.com%2Fauth-redirect</code>
                 </td>
             </tr>
             <tr>
-                <td>https://www.example.com:8080/auth-redirect</td>
+                <td><code class="code--slim">https://www.example.com:8080/auth-redirect</code></td>
                 <td><strong class="bold-small">Valid</strong> - includes a port number</td>
             </tr>
             <tr>
-                <td>http://www.example.com:8080/auth-redirect</td>
+                <td><code class="code--slim">http://www.example.com:8080/auth-redirect</code></td>
                 <td><strong class="bold-small">Invalid</strong> - uses HTTP, not HTTPS (HTTP is OK for installed applications - see example below)</td>
             </tr>
             <tr>
-                <td>/auth-redirect</td>
+                <td><code class="code--slim">/auth-redirect</code></td>
                 <td><strong class="bold-small">Invalid</strong> - is a relative URI, not an absolute URI</td>
             </tr>
             <tr>
-                <td>https://203.0.113.11/auth-redirect</td>
+                <td><code class="code--slim">https://203.0.113.11/auth-redirect</code></td>
                 <td><strong class="bold-small">Invalid</strong> - uses an IP address, not a DNS name</td>
             </tr>
             <tr>
-                <td>https://www.example.com:8080/auth-redirect?some_parameter=some_value</td>
+                <td><code class="code--slim">https://www.example.com:8080/auth-redirect?some_parameter=some_value</code></td>
                 <td><strong class="bold-small">Valid</strong> - includes a query component</td>
             </tr>
             <tr>
-                <td>https://www.example.com:8080/auth-redirect#some_fragment</td>
+                <td><code class="code--slim">https://www.example.com:8080/auth-redirect#some_fragment</code></td>
                 <td><strong class="bold-small">Invalid</strong> - includes a fragment component</td>
             </tr>
             <tr>
-                <td>http://localhost:8080</td>
+                <td><code class="code--slim">http://localhost:8080</code></td>
                 <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
             </tr>
             <tr>
-                <td>urn:ietf:wg:oauth:2.0:oob</td>
+                <td><code class="code--slim">urn:ietf:wg:oauth:2.0:oob</code></td>
                 <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
             </tr>
             <tr>
-                <td>urn:ietf:wg:oauth:2.0:oob:auto</td>
+                <td><code class="code--slim">urn:ietf:wg:oauth:2.0:oob:auto</code></td>
                 <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
             </tr>
             </tbody>

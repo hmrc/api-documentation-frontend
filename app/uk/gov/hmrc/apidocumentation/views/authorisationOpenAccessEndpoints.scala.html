@@ -24,38 +24,19 @@
 
 @apiMain(pageAttributes) {
 
-        <h1 class="heading-xlarge">Authorisation</h1>
+    <h1 class="heading-xlarge">Authorisation</h1>
 
     <nav role="navigation" aria-labelledby="onThisPage">
-        <h2 id="onThisPage" class="visually-hidden">on this page</h2>
-
-        <div class="grid-row">
-            <div class="column-one-half">
-                <ul class="list">
-                    <li>
-                        1. <a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a>
-                    </li>
-                    <li>
-                        2. Open access endpoints
-                    </li>
-                    <li>
-                        3. <a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="column-one-half">
-                <ul class="list">
-                    <li>
-                        4. <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a>
-                    </li>
-                    <li>
-                        5. <a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <h2 id="onThisPage" class="visually-hidden">On this page</h2>
+        <ul class="list">
+            <li><a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a></li>
+            <li>Open access endpoints</li>
+            <li><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
+            <li><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
+            <li><a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a></li>
+        </ul>
     </nav>
-
+    
     <hr aria-hidden="true">
 
     <section id="open-access">
@@ -66,12 +47,12 @@
 
         <h3>Example</h3>
 
-<pre class="snippet--block">
-curl -H 'Content-Type: application/vnd.hmrc.v1+json' \
-@{applicationConfig.productionApiBaseUrl}/hello/world
+<pre class="code--block">
+curl -H 'Accept: application/vnd.hmrc.1.0+json' \
+@{applicationConfig.sandboxApiBaseUrl}/hello/world
 </pre>
 
-        <p class="panel panel-border-wide">For a working example <a href="@controllers.routes.DocumentationController.tutorialsPage().url#open-endpoint">see the open access endpoint tutorial</a>.</p>
+        <p class="panel panel-border-wide">For a working example, see the <a href="@controllers.routes.DocumentationController.tutorialsPage().url#open-endpoint">open access endpoint tutorial</a>.</p>
 
 
     </section>

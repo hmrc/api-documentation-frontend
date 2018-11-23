@@ -24,37 +24,17 @@
 
     @apiMain(pageAttributes) {
 
-            <h1 class="heading-xlarge">Authorisation</h1>
+        <h1 class="heading-xlarge">Authorisation</h1>
 
         <nav role="navigation" aria-labelledby="onThisPage">
-            <h2 id="onThisPage" class="visually-hidden">on this page</h2>
-
-            <div class="grid-row">
-                <div class="column-one-half">
-                    <ul class="list">
-                        <li>
-                            1. Introduction
-                        </li>
-                        <li>
-                            2. <a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a>
-                        </li>
-                        <li>
-                            3. <a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="column-one-half">
-                    <ul class="list">
-                        <li>
-                            4. <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a>
-                        </li>
-                        <li>
-                            5. <a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <h2 id="onThisPage" class="visually-hidden">On this page</h2>
+            <ul class="list">
+                <li>Introduction</li>
+                <li><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
+                <li><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
+                <li><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
+                <li><a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a></li>
+            </ul>
         </nav>
 
         <hr aria-hidden="true">
@@ -90,11 +70,11 @@
                     </tr>
                     <tr>
                         <td scope="row">Application-restricted</td>
-                        <td><span class="code--slim">server_token</span></td>
+                        <td><code class="code--slim">server_token</code></td>
                     </tr>
                     <tr>
                         <td scope="row">User-restricted</td>
-                        <td>OAuth 2.0 <span class="code--slim">access_token</span></td>
+                        <td>OAuth 2.0 <code class="code--slim">access_token</code></td>
                     </tr>
                 </tbody>
             </table>

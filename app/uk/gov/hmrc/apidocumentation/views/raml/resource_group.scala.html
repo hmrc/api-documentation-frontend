@@ -48,7 +48,7 @@
                                 @if(index == 0) {
                                     <div class="api-accordion__row persist-method">
                                         @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
-                                            <code class="snippet--inline">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
+                                            <code class="code--slim">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
                                         }
                                     </div>
                                 }
