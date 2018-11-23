@@ -73,7 +73,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     forAll(endpoints) { (id: String, endpointTitle: String, endpointRequestType: String, endpointUri: String) =>
       cssSelector(s"${id}_get_accordion .accordion__button").element.text shouldBe endpointTitle
       cssSelector(s"${id}_get_accordion .http-verb.http-verb--get.float--right").element.text shouldBe endpointRequestType
-      cssSelector(s"${id}_get_accordion .snippet--inline").element.text shouldBe endpointUri
+      cssSelector(s"${id}_get_accordion .code--slim").element.text shouldBe endpointUri
     }
   }
 
