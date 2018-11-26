@@ -341,7 +341,7 @@ curl -X POST --data \
                 <caption class="visually-hidden">Error scenarios</caption>
                 <thead>
                     <tr>
-                        <th>Error scenario</th>
+                        <th class="table__col--1-4">Error scenario</th>
                         <th>HTTP status</th>
                         <th>Error code</th>
                         <th>Error message</th>
@@ -397,7 +397,7 @@ curl -X POST --data \
                         <td><code class="code--slim">redirect_uri is invalid</code></td>
                     </tr>
                     <tr>
-                        <td>Code is missing</td>
+                        <td>Code is missing (for example because authorisation failed in step 2)</td>
                         <td><code class="code--slim">400</code> (Bad Request)</td>
                         <td><code class="code--slim">invalid_request</code></td>
                         <td><code class="code--slim">code is required for given grant_type</code></td>
