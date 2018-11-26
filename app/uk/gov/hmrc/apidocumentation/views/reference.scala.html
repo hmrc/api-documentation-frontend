@@ -32,20 +32,21 @@
             <div class="column-one-half">
                 <ul class="list">
                     <li><a href="#api-access">API access</a></li>
-                    <li><a href="#network-access">Network access</a></li>
+                    <li><a href="#oauth-2.0-browser-support">Browser support for OAuth 2.0</a></li>
                     <li><a href="#common-data-types">Common data types</a></li>
-                    <li><a href="#http-redirection">HTTP redirection</a></li>
+                    <li><a href="#coding-in-the-open">Coding in the open</a></li>
                     <li><a href="#errors">Errors</a></li>
-                    <li><a href="#rate-limiting">Rate limiting</a></li>
+                    <li><a href="#fraud-prevention">Fraud prevention</a></li>
                 </ul>
             </div>
             <div class="column-one-half">
                 <ul class="list">
+                    <li><a href="#http-redirection">HTTP redirection</a></li>
+                    <li><a href="#network-access">Network access</a></li>
+                    <li><a href="#rate-limiting">Rate limiting</a></li>
+                    <li><a href="#redirect-uris">Redirect URIs</a></li>
                     <li><a href="#scopes">Scopes</a></li>
                     <li><a href="#versioning">Versioning</a></li>
-                    <li><a href="#fraud-prevention">Fraud prevention</a></li>
-                    <li><a href="#redirect-uris">Redirect URIs</a></li>
-                    <li><a href="#oauth-2.0-browser-support">OAuth 2.0 browser support</a></li>
                 </ul>
             </div>
         </div>
@@ -62,22 +63,27 @@
         <pre class="code--block">@applicationConfig.productionApiBaseUrl</pre>
     </section>
 
-    <section id="network-access">
-        <h2 class="heading-large" name="common-data-types">Network access</h2>
-        <p>You might need to configure your network so your software can access our API Platform and the authorisation journey for
-            <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.
-            If your software is installed on end user devices, they might also need to configure their own network.</p>
-        <p>We have fixed domain names, but cannot provide static IP addresses, so you need to configure your network
-            access in your proxy, not your firewall.</p>
-        <p>Configure your proxy to allow full access to the following domains, including HTTP GET, POST, PUT and DELETE.</p>
-        <p>For testing in sandbox:</p>
-        <pre class="code--block">
-@applicationConfig.sandboxApiHost
-@applicationConfig.sandboxWwwHost</pre>
-        <p>For production use:</p>
-        <pre class="code--block">
-@applicationConfig.productionApiHost
-@applicationConfig.productionWwwHost</pre>
+    <section id="oauth-2.0-browser-support">
+        <h2 class="heading-large">Browser support for OAuth 2.0</h2>
+
+        <p>The OAuth 2.0 <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
+
+            journey is designed to work with most modern browsers as per the list specified on
+            <a href="https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices#browsers-to-test-in">
+                Designing for different browsers and devices</a>, including mobile devices and tablets.
+        </p>
+        <p class="panel panel-border-wide">If you are using the Microsoft Web Browser Control embedded browser for the
+            authorisation journey, be aware that by default this will operate in IE7 compatibility mode which we do not
+            formally support. For details of one way to handle this, see
+            <a href="https://blogs.msdn.microsoft.com/patricka/2015/01/12/controlling-webbrowser-control-compatibility/" target="_blank">
+                Controlling WebBrowser Control Compatibility (opens in a new tab)</a>.
+        </p>
+    </section>
+
+    <section id="coding-in-the-open">
+        <h2 class="heading-large">Coding in the open</h2>
+        <p>The HMRC Developer Hub, the underlying API Platform and some of the APIs are coded in the open, as per the @Link.toExternalPage(url = "https://www.gov.uk/service-manual/service-standard/make-all-new-source-code-open", value = Some("GOV.UK Digital Service Standard (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:GOV.UK Digital Service Standard"))).toHtml.</p>
+        <p>The source code is available at @Link.toExternalPage(url = "https://github.com/hmrc", value = Some("https://github.com/hmrc (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:https://github.com/hmrc"))).toHtml. For more details, please <a href="/developer/support">contact us</a>.</p>
     </section>
 
     <section id="common-data-types">
@@ -125,20 +131,13 @@
         </table>
     </section>
 
-    <section id="http-redirection">
-        <h2 class="heading-large">HTTP redirection</h2>
-        <p>Our API Platform uses HTTP redirection if resources move permanently or temporarily.<p>
-        <p>Redirection responses have a <strong class="bold-small">Location</strong> header with the resource's new URI.</p>
-    </section>
-
     <section id="errors">
 
-        <h2 class="heading-large">Common API Errors</h2>
+        <h2 class="heading-large">Errors</h2>
 
         <section id="intro">
-            <p>
-                Error responses from APIs (but not the OAuth 2.0 <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a> procedure) have a 4xx or 5xx HTTP status code and a consistently formed JSON or XML body, including:
-            </p>
+            <p>Errors during the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation process</a> use the format specified in the OAuth 2.0 RFC.</p>
+            <p>Errors from APIs have a 4xx or 5xx HTTP status code and a consistently formed JSON or XML body, including:</p>
             <table>
                 <colgroup>
                     <col width="15%">
@@ -198,7 +197,10 @@
   &lt;reactivationTimestamp&gt;1431448640718&lt;/reactivationTimestamp&gt;
 &lt;/error&gt;
 </pre>
-            <p>These error responses are common across all APIs:</p>
+
+        <p>If the response body of an error is not in the above format or the OAuth 2.0 error format, the error has probably not come from us. One possible cause is a <a href="#network-access">network access issue</a>.</p>
+        <p>Some API errors are common across all APIs; others are API-specific.</p>
+        <p>The following tables list the common API errors. You can find API-specific errors in the <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
 
         </section>
         <section id="401">
@@ -211,11 +213,11 @@
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td>No OAuth token supplied for user-restricted or application-restricted resource</td>
+                    <td>No OAuth token supplied for user-restricted or application-restricted endpoint</td>
                     <td><code class="code--slim">MISSING_CREDENTIALS</code></td>
                 </tr>
                 <tr>
-                    <td>Invalid OAuth token supplied for user-restricted or application-restricted resource (including expired token)</td>
+                    <td>Invalid OAuth token supplied for user-restricted or application-restricted endpoint (including expired token)</td>
                     <td><code class="code--slim">INVALID_CREDENTIALS</code></td>
                 </tr>
                 <tr>
@@ -242,10 +244,6 @@
                 <tr>
                     <td>Request done with HTTP</td>
                     <td><code class="code--slim">HTTPS_REQUIRED</code></td>
-                </tr>
-                <tr>
-                    <td>Production tokens used for Beta API</td>
-                    <td><code class="code--slim">API_NOT_IN_PRODUCTION</code></td>
                 </tr>
                 <tr>
                     <td>The OAuth token's application is not subscribed to the API</td>
@@ -326,7 +324,7 @@
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td>The application has reached its maximum rate limit</td>
+                    <td>The application has reached its maximum <a href="#rate-limiting">rate limit</a></td>
                     <td><code class="code--slim">MESSAGE_THROTTLED_OUT</code></td>
                 </tr>
                 </tbody>
@@ -405,61 +403,6 @@
             </table>
 
         </section>
-        <br aria-hidden="true"/>
-        <section id="summary">
-
-
-            <p>You can find API-specific error responses in the <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
-            <p class="panel panel-border-wide">Note that the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> process conforms with the error format specified in the OAuth 2.0 RFC. See <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a> for more information on the process.</p>
-
-        </section>
-
-    </section>
-
-    <section id="rate-limiting">
-
-        <h2 class="heading-large">Rate limiting</h2>
-
-        <p>We limit the number of requests each application can make. This protects our service against excessive use and Denial-of-Service attacks, and also encourages you to use our APIs efficiently.</p>
-        <p>We set limits based on anticipated loads and peaks. Our standard limit is 150 requests per minute per application.</p>
-        <p>If you reach this limit you’ll get a <code class="code--slim">429 Too Many Requests</code> response code.</p>
-        <p>If you continually hit this rate limit, <a href="/developer/support">contact us</a> to discuss your application design and whether it’s appropriate to raise your rate limit. </p>
-
-    </section>
-
-    <section id="scopes">
-
-        <h2 class="heading-large">Scopes</h2>
-
-        <p>When your application needs to access resources on behalf of a user, the Developer Hub uses the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
-
-        <p>This authority is granted in terms of OAuth 2.0 ‘scopes’. Each 'scope' relates to one or more endpoints.</p>
-
-        <p>When your application requests an OAuth 2.0 <code class="code--slim">Bearer</code> token, it must specify the scope(s) which the token should be granted for.</p>
-
-        <p>These are translated to human-readable descriptions that are shown to the user before they grant authority. This makes sure the user understands and gives access to your application.</p>
-
-        <p>The scope for each user-restricted endpoint is defined in the <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
-
-        <p>For details about OAuth 2.0 and scopes, see <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>.</p>
-
-    </section>
-
-    <section id="versioning">
-
-        <h2 class="heading-large">Versioning</h2>
-
-        <p>When an API changes in a way that's backwards-incompatible, the version of the API will be bumped.</p>
-
-        <p>You can request a specific version of an API by using an <code class="code--slim">Accept</code> header with a media type of:</p>
-
-        <pre class="code--block">application/vnd.hmrc.[version]+[content-type]</pre>
-
-        <p>For example:</p>
-
-        <pre class="code--block">application/vnd.hmrc.1.0+json</pre>
-
-        <p>Media types are specific to each resource, which lets them change separately from one another.</p>
 
     </section>
 
@@ -477,7 +420,7 @@
 
         <p>
             To find out when supplying the data becomes compulsory for each API, read its
-            <a href="/api-documentation/docs/api">API documentation</a>.
+            <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.
         </p>
 
         <h3 class="heading-medium">Header Contents</h3>
@@ -524,237 +467,267 @@
                 <tr>
                     <td><code class="code--slim">Gov-Client-Public-IP</code></td>
                     <td>
-                        <p>The public IP address of the originating client machine.</p>
-                        <p>For example, <code class="code--slim">198.51.100.0</code></p>
+                        The public IP address of the originating client machine.
+                        <br/><br/>
+                        For example, <code class="code--slim">198.51.100.0</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Public-Port</code></td>
                     <td>
-                        <p>The port component of the Gov-Client-Public-IP.</p>
-                        <p>For example, <code class="code--slim">12345</code></p>
+                        The port component of the Gov-Client-Public-IP.
+                        <br/><br/>
+                        For example, <code class="code--slim">12345</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Device-ID</code></td>
                     <td>
-                        <p>
-                            A consistent ID representing the originating client machine. This depends on the context.
-                            For an installed application of batch processes, this is the MAC address of the device’s network adapter.
-                            For a web browser, this is a unique value stored in a long term cookie.
-                        </p>
-                        <p>For example, <code class="code--slim">beec798b-b366-47fa-b1f8-92cede14a1ce</code></p>
+                        A consistent ID representing the originating client machine. This depends on the context.
+                        For an installed application of batch processes, this is the MAC address of the device’s network adapter.
+                        For a web browser, this is a unique value stored in a long term cookie.
+                        <br/><br/>
+                        For example, <code class="code--slim">beec798b-b366-47fa-b1f8-92cede14a1ce</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-User-ID</code></td>
                     <td>
-                        <p>
-                            The identifier that the customer used to login to the client machine, and/or the software vendor’s software or website. Provide multiple identifiers as a comma-delimited list. Use N/A if no identifiers are available.
-                        </p>
-                        <p>
-                            For example,
-                            <code class="code--slim">alice_desktop</code>,
-                            <code class="code--slim">alice_online21</code> (for method D)
-                            <code class="code--slim">user123</code> (for all other methods)
-                        </p>
+                        The identifier that the customer used to login to the client machine, and/or the software vendor’s software or website. Provide multiple identifiers as a comma-delimited list. Use N/A if no identifiers are available.
+                        <br/><br/>
+                        For example,
+                        <code class="code--slim">alice_desktop</code>,
+                        <code class="code--slim">alice_online21</code> (for method D)
+                        <code class="code--slim">user123</code> (for all other methods)
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Timezone</code></td>
                     <td>
-                        <p>Timezone of the clock on the client machine.</p>
-                        <p>For example, <code class="code--slim">GMT+3</code></p>
+                        Timezone of the clock on the client machine.
+                        <br/><br/>
+                        For example, <code class="code--slim">GMT+3</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Local-IP</code></td>
                     <td>
-                        <p>Internal private IP address used by the client machine.</p>
-                        <p>For example, <code class="code--slim">10.1.2.3</code></p>
+                        Internal private IP address used by the client machine.
+                        <br/><br/>
+                        For example, <code class="code--slim">10.1.2.3</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Screen-Resolution</code></td>
                     <td>
-                        <p>Methods A to E only.</p>
-                        <p>Screen resolution of the client machine in pixels.</p>
-                        <p>For example, <code class="code--slim">1920x1080</code></p>
+                        Methods A to E only.
+                        <br/><br/>
+                        Screen resolution of the client machine in pixels.
+                        <br/><br/>
+                        For example, <code class="code--slim">1920x1080</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Window-Size</code></td>
                     <td>
-                        <p>Methods A to E only.</p>
-                        <p>Size of the application or browser window on the client machine in pixels.</p>
-                        <p>For example, <code class="code--slim">1256x803</code></p>
+                        Methods A to E only.
+                        <br/><br/>
+                        Size of the application or browser window on the client machine in pixels.
+                        <br/><br/>
+                        For example, <code class="code--slim">1256x803</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Colour-Depth</code></td>
                     <td>
-                        <p>Methods A to E only.</p>
-                        <p>Colour depth of the client machine in bits per pixel.</p>
-                        <p>For example, <code class="code--slim">24</code></p>
+                        Methods A to E only.
+                        <br/><br/>
+                        Colour depth of the client machine in bits per pixel.
+                        <br/><br/>
+                        For example, <code class="code--slim">24</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-User-Agent</code></td>
                     <td>
-                        <p>For methods A to D and F: "&lt;OS Family&gt;/&lt;OS Version&gt; (&lt;Manufacturer&gt; &lt;Model&gt;)"</p>
-                        <p>For example, <code class="code--slim">Android/6.0.1 (Samsung Galaxy S4)</code></p>
-                        <p>For method E: the User-Agent reported by the browser.</p>
-                        <p>For example, <code class="code--slim">Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)</code></p>
+                        For methods A to D and F: "&lt;OS Family&gt;/&lt;OS Version&gt; (&lt;Manufacturer&gt; &lt;Model&gt;)".
+                        <br/><br/>
+                        For example, <code class="code--slim">Android/6.0.1 (Samsung Galaxy S4)</code>
+                        <br/><br/>
+                        For method E: the User-Agent reported by the browser.
+                        <br/><br/>
+                        For example, <code class="code--slim">Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Browser-Plugins</code></td>
                     <td>
-                        <p>Method E only.</p>
-                        <p>List of installed browser plugins.</p>
-                        <p>For example,
-                            <code class="code--slim">Shockwave Flash</code>,
-                            <code class="code--slim">Chromium PDF Viewer</code>
-                        </p>
+                        Method E only.
+                        <br/><br/>
+                        List of installed browser plugins.
+                        <br/><br/>
+                        For example,
+                        <code class="code--slim">Shockwave Flash</code>,
+                        <code class="code--slim">Chromium PDF Viewer</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Browser-JS-User-Agent</code></td>
                     <td>
-                        <p>Method E only.</p>
-                          <p>User Agent value as reported by Javascript.</p>
-                        <p>
-                            For example,
-                            <pre class="code--block">
+                        Method E only.
+                        <br/><br/>
+                        User Agent value as reported by Javascript.
+                        <br/><br/>
+                        For example,
+                        <pre class="code--block">
 Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like
 Mac OS X; en-us) AppleWebKit/531.21.10
 (KHTML, like Gecko) Mobile/7B405</pre>
-                        </p>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Browser-Do-Not-Track</code></td>
                     <td>
-                        <p>Method E only.</p>
-                        <p>Whether the browser has set the Do Not Track flag or not, if the client machine is using a web browser.</p>
-                        <p>
-                            For example,
-                            <code class="code--slim">false</code>
-                        </p>
+                        Method E only.
+                        <br/><br/>
+                        Whether the browser has set the Do Not Track flag or not, if the client machine is using a web browser.
+                        <br/><br/>
+                        For example,
+                        <code class="code--slim">false</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Client-Multi-Factor</code></td>
                     <td>
-                        <p>Method E only.</p>
-                        <p>
-                          Details about the multi-factor authorisation that the vendor requires their user to pass before
-                          using their application. This should be constructed as
-                          "&lt;type&gt;;&lt;UTC timestamp&gt;;&lt;unique reference (hashed or not)&gt;".
-                        </p>
-                        <p>
-                                &lt;type&gt; is a short, human readable tag describing the method of two factor authorization,
-                                for example SMS, MOBILEAPP, or GOOGLEAUTH.
-                        </p>
-                        <p>
-                                &lt;UTC timestamp&gt; records the time of the last successful second factor prompt.
-                        </p>
-                        <p> &lt;unique reference&gt; identifies a single second factor, for example, a salted hash
-                            (securer version) of a phone number used for SMS or an identifier linked to a TOTP secret
-                            (not the secret itself). The intention is to recognise the same second factor being used
-                            across API calls.
-                        </p>
-                        <p>
-                            For example,
-                            <code class="code--slim">SMS;2017-04-21T13:23:42Z;c672b8d1ef56ed28</code>
-                        </p>
+                        Method E only.
+                        <br/><br/>
+                        Details about the multi-factor authorisation that the vendor requires their user to pass before
+                        using their application. This should be constructed as
+                        "&lt;type&gt;;&lt;UTC timestamp&gt;;&lt;unique reference (hashed or not)&gt;".
+                        <br/><br/>
+                        &lt;type&gt; is a short, human readable tag describing the method of two factor authorization,
+                        for example SMS, MOBILEAPP, or GOOGLEAUTH.
+                        <br/><br/>
+                        &lt;UTC timestamp&gt; records the time of the last successful second factor prompt.
+                        <br/><br/>
+                        &lt;unique reference&gt; identifies a single second factor, for example, a salted hash
+                        (securer version) of a phone number used for SMS or an identifier linked to a TOTP secret
+                        (not the secret itself). The intention is to recognise the same second factor being used
+                        across API calls.
+                        <br/><br/>
+                        For example,
+                        <code class="code--slim">SMS;2017-04-21T13:23:42Z;c672b8d1ef56ed28</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Vendor-Version</code></td>
                     <td>
-                        <p>
-                            The vendor’s software version.<br>
-                            This is the installed application version, or the software version of the backend Application Server.
-                        </p>
-                        <p>
-                            Where there are multiple versions, these should be appended as a comma delimited list as new
-                            values are seen in the request.
-                        </p>
-                        <p>
-                            For example, for methods C and D there will be an installed application (with a version), and a
-                            backend server (also with a version).
-                        </p>
-                        <p>
-                            For example,
-                            <code class="code--slim">1.2.3 build 4286</code> (for methods A, B and F)
-                            <code class="code--slim">2.2.2, v3.8</code> (for methods C, D and E)
-                        </p>
+                        The vendor’s software version.<br>
+                        This is the installed application version, or the software version of the backend Application Server.
+                        <br/><br/>
+                        Where there are multiple versions, these should be appended as a comma delimited list as new
+                        values are seen in the request.
+                        <br/><br/>
+                        For example, for methods C and D there will be an installed application (with a version), and a
+                        backend server (also with a version).
+                        <br/><br/>
+                        For example,
+                        <code class="code--slim">1.2.3 build 4286</code> (for methods A, B and F),
+                        <code class="code--slim">2.2.2, v3.8</code> (for methods C, D and E)
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Vendor-Instance-ID</code></td>
                     <td>
-                        <p>
-                            An identifier unique to a specific installation of the vendor’s software, either on a client
-                            device or on a backend Application Server.<br>
-                            This could be a license key, or else some value generated when the application is installed.
-                            This can be hashed.
-                        </p>
-                        <p>
-                            Where there are multiple instance IDs, these should be appended as a comma delimited list as new
-                            values are seen in the request.
-                        </p>
-                        <p>
-                            For example,
-                            <code class="code--slim">fa7c484c-d8cf-4f8a-a39c-54a2a4c04bc6</code> (for methods A, B, E and F)
-                            <code class="code--slim">01ecef0967a, app3</code> (for methods C and D)
-                        </p>
+                        An identifier unique to a specific installation of the vendor’s software, either on a client
+                        device or on a backend Application Server.<br>
+                        This could be a license key, or else some value generated when the application is installed.
+                        This can be hashed.
+                        <br/><br/>
+                        Where there are multiple instance IDs, these should be appended as a comma delimited list as new
+                        values are seen in the request.
+                        <br/><br/>
+                        For example,
+                        <code class="code--slim">fa7c484c-d8cf-4f8a-a39c-54a2a4c04bc6</code> (for methods A, B, E and F),
+                        <code class="code--slim">01ecef0967a, app3</code> (for methods C and D)
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Gov-Vendor-Public-IP</code></td>
                     <td>
-                        <p>The public IP address that the customer’s machine used to send requests to the software vendor.</p>
-                        <p>
-                            This will be the same as the Gov-Client-Local-IP for direct options A, B and F.<br>
-                            For other indirect options, C, D and E, it should be the first IP address that the client request
-                            hits within the vendor’s network.
-                        </p>
-                        <p>
-                            This may be an IP address of a Web Application Firewall, or a DDOS Protection Service, or a load
-                            balancer that the vendor’s DNS record resolves to.
-                        </p>
-                        <p>For example, <code class="code--slim">203.0.113.6</code></p>
+                        The public IP address that the customer’s machine used to send requests to the software vendor.
+                        <br/><br/>
+                        This will be the same as the Gov-Client-Local-IP for direct options A, B and F.
+                        <br/><br/>
+                        For other indirect options, C, D and E, it should be the first IP address that the client request
+                        hits within the vendor’s network.
+                        <br/><br/>
+                        This may be an IP address of a Web Application Firewall, or a DDOS Protection Service, or a load
+                        balancer that the vendor’s DNS record resolves to.
+                        <br/><br/>
+                        For example, <code class="code--slim">203.0.113.6</code>
                     </td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">Forwarded</code></td>
                     <td>
-                        <p>Methods C to E.</p>
-                        <p>The Forwarded header is created and appended to by any intermediary server that handles the
-                            request in an unencrypted form. This should be a small list as most communications will be via HTTPS.
-                        </p>
-                        <p>
-                            If no value is defined, and the request came from the Gov-Client-Local-IP,
-                            then add :<br> "for=&lt;Gov-Client-Local-IP&gt;;by=&lt;current IP&gt;"
-                        </p>
-                        <p>
-                            If no value is defined, and the request came from some other IP address (not the
-                            Gov-Client-Local-IP), then add :<br>
-                            "for=&lt;Gov-Client-Local-IP&gt;, for=&lt;IP request came from&gt;;by=&lt;current IP&gt;"
-                        </p>
-                        <p>
-                            If the value is defined, then append the following to the existing value :<br>
-                            ", for=&lt;IP request came from&gt;;by=&lt;current IP&gt;"
-                        </p>
-                        <p>
-                            For more details on this header field, see IETF <a href="https://tools.ietf.org/html/rfc7239" target="_blank">RFC7239 (opens in a new tab)</a>.</p>
-                        <p>For example, <code class="code--slim">for=10.1.2.3;by=198.51.100.0</code></p>
+                        Methods C to E.
+                        <br/><br/>
+                        The Forwarded header is created and appended to by any intermediary server that handles the
+                        request in an unencrypted form. This should be a small list as most communications will be via HTTPS.
+                        <br/><br/>
+                        If no value is defined, and the request came from the Gov-Client-Local-IP,
+                        then add :<br> "for=&lt;Gov-Client-Local-IP&gt;;by=&lt;current IP&gt;"
+                        <br/><br/>
+                        If no value is defined, and the request came from some other IP address (not the
+                        Gov-Client-Local-IP), then add :<br>
+                        "for=&lt;Gov-Client-Local-IP&gt;, for=&lt;IP request came from&gt;;by=&lt;current IP&gt;"
+                        <br/><br/>
+                        If the value is defined, then append the following to the existing value :<br>
+                        ", for=&lt;IP request came from&gt;;by=&lt;current IP&gt;"
+                        <br/><br/>
+                        For more details on this header field, see IETF <a href="https://tools.ietf.org/html/rfc7239" target="_blank">RFC7239 (opens in a new tab)</a>.
+                        <br/><br/>
+                        For example, <code class="code--slim">for=10.1.2.3;by=198.51.100.0</code>
                     </td>
                 </tr>
             </tbody>
         </table>
+    </section>
+
+    <section id="http-redirection">
+        <h2 class="heading-large">HTTP redirection</h2>
+        <p>Our API Platform uses HTTP redirection if endpoints move permanently or temporarily.<p>
+        <p>Redirection responses have a <strong class="bold-small">Location</strong> header with the endpoint's new URI.</p>
+    </section>
+
+    <section id="network-access">
+        <h2 class="heading-large">Network access</h2>
+        <p>You might need to configure your network so your software can access our API Platform and the authorisation journey for
+            <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.
+            If your software is installed on end user devices, they might also need to configure their own network.</p>
+        <p>We have fixed domain names, but cannot provide static IP addresses, so you need to configure your network
+            access in your proxy, not your firewall.</p>
+        <p>Configure your proxy to allow full access to the following domains, including HTTP GET, POST, PUT and DELETE.</p>
+        <p>For testing in sandbox:</p>
+        <pre class="code--block">
+@applicationConfig.sandboxApiHost
+@applicationConfig.sandboxWwwHost</pre>
+        <p>For production use:</p>
+        <pre class="code--block">
+@applicationConfig.productionApiHost
+@applicationConfig.productionWwwHost</pre>
+    </section>
+
+    <section id="rate-limiting">
+
+        <h2 class="heading-large">Rate limiting</h2>
+
+        <p>We limit the number of requests each application can make. This protects our service against excessive use and Denial-of-Service attacks, and also encourages you to use our APIs efficiently.</p>
+        <p>We set limits based on anticipated loads and peaks. Our standard limit is 150 requests per minute per application.</p>
+        <p>If you reach this limit you’ll get a response with an HTTP status of <code class="code--slim">429</code> (Too Many Requests).</p>
+        <p>If you continually hit this rate limit, <a href="/developer/support">contact us</a> to discuss your application design and whether it’s appropriate to raise your rate limit. </p>
+
     </section>
 
     <section id="redirect-uris">
@@ -833,20 +806,38 @@ Mac OS X; en-us) AppleWebKit/531.21.10
         </table>
     </section>
 
-    <section id="oauth-2.0-browser-support">
-        <h2 class="heading-large">OAuth 2.0 browser support</h2>
+    <section id="scopes">
 
-        <p>The OAuth 2.0 <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
+        <h2 class="heading-large">Scopes</h2>
 
-            journey is designed to work with most modern browsers as per the list specified on
-            <a href="https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices#browsers-to-test-in">
-                Designing for different browsers and devices</a>, including mobile devices and tablets.
-        </p>
-        <p class="panel panel-border-wide">If you are using the Microsoft Web Browser Control embedded browser for the
-            authorisation journey, be aware that by default this will operate in IE7 compatibility mode which we do not
-            formally support. For details of one way to handle this, see
-            <a href="https://blogs.msdn.microsoft.com/patricka/2015/01/12/controlling-webbrowser-control-compatibility/" target="_blank">
-                Controlling WebBrowser Control Compatibility (opens in a new tab)</a>.
-        </p>
+        <p>When your application needs to access API endpoints on behalf of a user, the Developer Hub uses the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
+
+        <p>This authority is granted in terms of OAuth 2.0 'scopes'. Each 'scope' relates to one or more endpoints.</p>
+
+        <p>When your application requests an OAuth 2.0 <code class="code--slim">Bearer</code> token, it must specify the scope(s) which the token should be granted for.</p>
+
+        <p>These are translated to human-readable descriptions that are shown to the user before they grant authority. This makes sure the user understands and gives access to your application.</p>
+
+        <p>The scope for each user-restricted endpoint is defined in the <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
+
+        <p>For details about OAuth 2.0 and scopes, see <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>.</p>
+
     </section>
+
+    <section id="versioning">
+
+        <h2 class="heading-large">Versioning</h2>
+
+        <p>Request the version of the API you want to use by including an <code class="code--slim">Accept</code> header with a media type of:</p>
+
+        <pre class="code--block">application/vnd.hmrc.[version]+[content-type]</pre>
+
+        <p>For example:</p>
+
+        <pre class="code--block">application/vnd.hmrc.1.0+json</pre>
+
+        <p>We release backwards-compatible changes in the same version, so you don't need to change your <code class="code--slim">Accept</code> header. We release backwards-incompatible changes in a new version, and you must change your <code class="code--slim">Accept</code> header to use it.</p>
+
+    </section>
+
 }
