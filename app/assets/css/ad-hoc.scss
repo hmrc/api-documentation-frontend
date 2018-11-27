@@ -139,6 +139,12 @@ pre, code {
   content: "";
 }
 
+// APIS-3807 - override hover style on left nav so it passes accessibility colour contrast tests
+.side-nav__link:hover {
+  background-color: #FFFFFF;
+  text-decoration: underline;
+}
+
 // Remove sub navigation right border on a mobile phone
 .side-nav {
   border-right: none;
