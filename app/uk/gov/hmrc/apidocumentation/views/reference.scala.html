@@ -680,10 +680,10 @@ Mac OS X; en-us) AppleWebKit/531.21.10
                         then add :<br> "for=&lt;Gov-Client-Local-IP&gt;;by=&lt;current IP&gt;"
                         <br/><br/>
                         If no value is defined, and the request came from some other IP address (not the
-                        Gov-Client-Local-IP), then add :<br>
+                        Gov-Client-Local-IP), then add:<br>
                         "for=&lt;Gov-Client-Local-IP&gt;, for=&lt;IP request came from&gt;;by=&lt;current IP&gt;"
                         <br/><br/>
-                        If the value is defined, then append the following to the existing value :<br>
+                        If the value is defined, then append the following to the existing value:<br>
                         ", for=&lt;IP request came from&gt;;by=&lt;current IP&gt;"
                         <br/><br/>
                         For more details on this header field, see IETF <a href="https://tools.ietf.org/html/rfc7239" target="_blank">RFC7239 (opens in a new tab)</a>.
@@ -738,6 +738,7 @@ Mac OS X; en-us) AppleWebKit/531.21.10
         <p>You must specify one or more redirect URIs when you create your application, and also specify one redirect
             URI when you send your user to our authorisation endpoint. To protect your application from phishing attacks,
             the redirect URI used for authorisation must match one of those specified when you created your application.</p>
+        <p>You can specify a maximum of five redirect URIs.</p>
         <h3 class="heading-medium">Examples</h3>
         <p>Examples of valid (and invalid) redirect URIs are:</p>
         <table>
