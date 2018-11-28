@@ -28,7 +28,9 @@
 @apiMain(pageAttributes) {
 <h1 class="heading-xlarge">@api.name XML API</h1>
 
-<p id="xml-api-description">@api.description This API is not part of the Making Tax Digital initiative.</p>
+<p id="xml-api-description">@api.description</p>
 
-<h2 class="heading-large"><a id="xml-api-link" href="@applicationConfig.xmlApiBaseUrl@api.context">@api.name</a></h2>
+<h2 class="heading-medium flush--top"><a id="xml-api-link" href="@applicationConfig.xmlApiBaseUrl@api.context">@api.name</a></h2>
+
+<p>For more information on how to use XML APIs, see <a href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">Dealing with HMRC: Software development for HMRC</a>
 }
