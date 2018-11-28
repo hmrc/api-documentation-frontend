@@ -141,7 +141,7 @@ pre, code {
 
 // APIS-3807 - override hover style on left nav so it passes accessibility colour contrast tests
 .side-nav__link:hover {
-  background-color: #FFFFFF;
+  background-color: #fff;
   text-decoration: underline;
 }
 
