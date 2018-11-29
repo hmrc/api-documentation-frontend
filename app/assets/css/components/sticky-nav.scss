@@ -11,6 +11,9 @@
     }
 
     background-color: white;
+    &:focus {
+      background-color: #ffbf47
+    }
   }
 }
 
@@ -31,7 +34,10 @@ ul.fixed-navigation__sub-list {
   > li.side-nav__list {
     a:hover {
       color: #2e8aca;
-      background-color: #dee0e2 !important;
+      background-color: #fff;
+      &:focus {
+        background-color: #ffbf47
+      }
     }
 
     &.side-nav__list--selected {
@@ -94,3 +100,15 @@ ul.fixed-navigation__sub-list {
 .side-nav__link.side-nav__link--in-page:after {
     content: "";
 }
+
+// APIS-3807 - override hover style on left nav so it passes accessibility colour contrast tests
+.side-nav__link:hover {
+  background-color: #fff;
+  text-decoration: underline;
+}
+
+// APIS-3807 - this bit makes sure that the :hover style doesn't override the :focus style
+.side-nav__link:focus {
+  background-color: #ffbf47;
+}
+
