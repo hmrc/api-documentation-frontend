@@ -38,7 +38,7 @@
     "serviceName": "Corporation Tax Online",
     "name": "Corporation Tax Online",
     "context": "/government/collections/corporation-tax-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Corporation Tax online service.",
+    "description": "Technical specifications for software developers working with the Corporation Tax online service. This API is not part of the Making Tax Digital initiative.",
     "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
   },
   {
@@ -108,7 +108,7 @@
     "serviceName": "Self Assessment Online",
     "name": "Self Assessment Online",
     "context": "/government/collections/self-assessment-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Self Assessment Online service.",
+    "description": "Technical specifications for software developers working with the Self Assessment Online service. This API is not part of the Making Tax Digital initiative.",
     "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
   },
   {
@@ -122,7 +122,7 @@
     "serviceName": "VAT and EC Sales List Online",
     "name": "VAT and EC Sales List Online",
     "context": "/government/collections/vat-and-ec-sales-list-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the VAT and EC Sales List Online service.",
+    "description": "Technical specifications for software developers working with the VAT and EC Sales List Online service. This API is not part of the Making Tax Digital initiative.",
     "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
   }
 ]

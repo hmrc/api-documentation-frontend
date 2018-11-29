@@ -30,7 +30,7 @@ object APICategory extends Enumeration {
   val AGENTS = Val("Agents", "agents")
   val BUSINESS_RATES = Val("Business Rates", "business-rates")
   val CHARITIES = Val("Charities", "charities")
-  val CONSTRUCTION_INDUSTRY_SCHEME = Val("Contruction Industry Scheme", "construction-industry-scheme")
+  val CONSTRUCTION_INDUSTRY_SCHEME = Val("Construction Industry Scheme", "construction-industry-scheme")
   val CORPORATION_TAX = Val("Corporation Tax", "corporation-tax")
   val CUSTOMS = Val("Customs", "customs")
   val ESTATES = Val("Estates", "estates")
