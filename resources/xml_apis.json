@@ -3,7 +3,7 @@
     "serviceName": "Agent Authorisation Online",
     "name": "Agent Authorisation Online",
     "context": "/government/collections/agent-authorisation-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Agent Authorisation Online service.",
+    "description": "Technical specifications for software developers working with the Agent Authorisation Online service. This API is not part of the Making Tax Digital initiative.",
     "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
   },
   {
