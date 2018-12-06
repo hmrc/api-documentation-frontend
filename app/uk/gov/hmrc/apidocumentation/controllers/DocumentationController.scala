@@ -176,6 +176,10 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       Some(breadcrumbs)))))
   }
 
+  def fraudPreventionPage() = headerNavigation { implicit request => navLinks =>
+    Future.successful(Ok(fraudPrevention(pageAttributes("Fraud prevention", routes.DocumentationController.fraudPreventionPage().url, navLinks))))
+  }
+
   def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]) = headerNavigation { implicit request => navLinks =>
     def pageAttributes(title: String = "API Documentation") = apidocumentation.models.PageAttributes(title,
       breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),

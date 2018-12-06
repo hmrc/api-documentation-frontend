@@ -45,7 +45,7 @@ class NavigationServiceSpec extends UnitSpec with WithFakeApplication with Mocki
   "sidebarNavigation" should {
     "return sidebar navigation links" in new Setup {
       val sidebarNavLinks = underTest.sidebarNavigation()
-      sidebarNavLinks.size shouldBe 8
+      sidebarNavLinks.size shouldBe 9
       sidebarNavLinks.head.href shouldBe "/api-documentation/docs/using-the-hub"
       sidebarNavLinks.head.label shouldBe "Using the Developer Hub"
       sidebarNavLinks(6).href shouldBe "/api-documentation/docs/terms-of-use"
