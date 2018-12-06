@@ -120,7 +120,7 @@ lazy val compile = Seq(
   "uk.gov.hmrc" %% "http-metrics" % "1.2.0",
   "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
   "org.raml" % "raml-parser-2" % "1.0.13",
-  "uk.gov.hmrc" %% "play-partials" % "6.1.0",
+  "uk.gov.hmrc" %% "play-partials" % "6.3.0",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
   "jp.t2v" %% "play2-auth" % "0.14.2",
   "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1"
@@ -129,7 +129,7 @@ lazy val compile = Seq(
 lazy val test = Seq(
   "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
   "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it",
-  "uk.gov.hmrc" %% "hmrctest" % "3.1.0" % "test,it",
+  "uk.gov.hmrc" %% "hmrctest" % "3.3.0" % "test,it",
   "junit" % "junit" % "4.12" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
   "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
