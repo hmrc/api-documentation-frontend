@@ -52,8 +52,8 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
     SidebarLink(label = "Testing in the sandbox", href = testingUri),
     SidebarLink(label = "Reference guide", href = referenceGuideUrl),
     SidebarLink(label = "Terms of use", href = termsOfUseUri),
-    SidebarLink(label = "Making Tax Digital guides", href = mtdIntroductionPageUrl),
-    SidebarLink(label = "Fraud prevention", href = fraudPreventionPageUrl)
+    SidebarLink(label = "Fraud prevention", href = fraudPreventionPageUrl),
+    SidebarLink(label = "Making Tax Digital guides", href = mtdIntroductionPageUrl)
   )
 
   def sidebarNavigation() = sidebarNavigationLinks
