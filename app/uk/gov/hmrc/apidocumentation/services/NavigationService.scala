@@ -41,6 +41,7 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
   val termsOfUseUri = routes.DocumentationController.termsOfUsePage().url
   val testingUri = routes.DocumentationController.testingPage().url
   val mtdIntroductionPageUrl = routes.DocumentationController.mtdIntroductionPage().url
+  val fraudPreventionPageUrl = routes.DocumentationController.fraudPreventionPage().url
 
   val sidebarNavigationLinks = Seq(
     SidebarLink(label = "Using the Developer Hub", href = gettingStartedUrl,
@@ -51,7 +52,8 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
     SidebarLink(label = "Testing in the sandbox", href = testingUri),
     SidebarLink(label = "Reference guide", href = referenceGuideUrl),
     SidebarLink(label = "Terms of use", href = termsOfUseUri),
-    SidebarLink(label = "Making Tax Digital guides", href = mtdIntroductionPageUrl)
+    SidebarLink(label = "Making Tax Digital guides", href = mtdIntroductionPageUrl),
+    SidebarLink(label = "Fraud prevention", href = fraudPreventionPageUrl)
   )
 
   def sidebarNavigation() = sidebarNavigationLinks

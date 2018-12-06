@@ -200,6 +200,10 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       verifyPageRendered(underTest.nameGuidelinesPage()(request), pageTitle("Application naming guidelines"), breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb))
     }
 
+    "display the fraud prevention page" in new Setup {
+      verifyPageRendered(underTest.fraudPreventionPage()(request), pageTitle("Fraud prevention"))
+    }
+
     "redirect to the test users test data and stateful behaviour page" in new Setup {
       val result = await(underTest.testingStatefulBehaviourPage()(request))
       status(result) shouldBe MOVED_PERMANENTLY

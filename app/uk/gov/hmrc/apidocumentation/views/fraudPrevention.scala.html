@@ -1,0 +1,550 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.urls.Link
+@import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.models._
+@import include._
+
+@(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+
+@apiMain(pageAttributes){
+  <div class="fraud-prevention">
+    <h1 class="heading-xlarge">Fraud prevention</h1>
+
+    <p class="bold-xsmall">Version 2.0 issued 07 December 2018</p>
+
+    <p>
+        Transaction Monitoring (TxM) is a key security approach adopted in the UK and globally.
+        Our approach is in line with National Cyber Security Centre (NCSC) and Cabinet Office
+        <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/271268/GPG_53_Transaction_Monitoring_issue_1-1_April_2013.pdf">recommended guidance</a> and industry good practice.</p>
+
+    <p>
+      We monitor transactions to protect taxpayers from infringement of their data by criminals or fraudsters.
+      Without the protection offered by TxM, personal data could be compromised, leading to fraud against taxpayers or the UK Exchequer.
+    </p>
+    <p>You must help us protect our users’ confidential data by sending us particular types of user audit data which we will record.</p>
+    <p>Our APIs provide HTTP headers that you can use to pass this audit data to us.</p>
+    <p>These headers can influence the processing of the API call, or support our prosecutions for tax or duty fraud.</p>
+
+    <h2 class="heading-large">Mandatory information</h2>
+    <p>Supplying header information for all our APIs will become mandatory - so we recommend designing it into your applications now.</p>
+    <p>To find out if header information is mandatory for an API that you use, read its <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
+
+    <h2 class="heading-large">Header contents</h2>
+    <p>Header contents must use the character set US-ASCII, with other characters percent encoded as in <a href="https://www.ietf.org/rfc/rfc3986.txt" target="_blank">RFC3986 (opens in a new tab)</a>.
+      Other restrictions on header values are shown under the individual header definitions.</p>
+    <p>The application connection method determines which headers we require:</p>
+
+    <ul class="no-bullet">
+      <li><span class="code--slim code--slim-large">MOBILE_APP_DIRECT</span><p>Installed mobile application connecting directly to HMRC</p></li>
+      <li><span class="code--slim code--slim-large">DESKTOP_APP_DIRECT</span><p>Installed desktop application connecting directly to HMRC<p></li>
+      <li><span class="code--slim code--slim-large">MOBILE_APP_VIA_SERVER</span><p>Installed mobile application connecting through intermediary servers to HMRC</p></li>
+      <li><span class="code--slim code--slim-large">DESKTOP_APP_VIA_SERVER</span><p>Installed desktop application connecting through intermediary servers to HMRC</p></li>
+      <li><span class="code--slim code--slim-large">WEB_APP_VIA_SERVER</span><p>Web application connecting through intermediary servers to HMRC</p></li>
+      <li><span class="code--slim code--slim-large">BATCH_PROCESS_DIRECT</span><p>Batch process connecting directly to HMRC</p></li>
+      <li><span class="code--slim code--slim-large">OTHER_DIRECT</span><p>The application connects directly to HMRC but the method does not fit into the architectures described above.</p></li>
+      <li><span class="code--slim code--slim-large">OTHER_VIA_SERVER</span><p>The application connects through intermediary servers to HMRC but the method does not fit into the architectures described above.</p></li>
+    </ul>
+
+    <p>Where multiple vendors are involved in managing the intermediary servers between a client and HMRC, the header contents must reflect information from all vendors.</p>
+
+    <h2 class="heading-large">Header guidance</h2>
+
+    <h3 class="heading-medium">Originating device</h3>
+    <p><i>Originating device</i> means the device that initiates an action.</p>
+    <p>In most connection methods, it’s most likely the device that is physically in the possession of the person initiating the requests.</p>
+    <p>In <span class="code--slim">BATCH_PROCESS_DIRECT</span>, it might be a vendor’s server.</p>
+    <p>In <span class="code--slim">DESKTOP_APP_DIRECT</span> or <span class="code--slim">DESKTOP_APP_VIA_SERVER</span>, it might be a hosted desktop environment accessed remotely by the user.</p>
+
+    <h3 class="heading-medium">Headers not required</h3>
+    <p>
+      If a header is not required for your connection method, then you can leave it out entirely when making your submission, or submit it with an empty header value.
+      You must not supply null values, for example, the following are not valid:
+      <ul>
+        <li><span class="code--slim">Gov-Client-User-IDs: null</span></li>
+        <li><span class="code--slim">Gov-Client-User-IDs: nil</span></li>
+        <li><span class="code--slim">Gov-Client-User-IDs: undefined</span></li>
+      </ul>
+    </p>
+
+    <h3 class="heading-medium">Header values cannot be collected</h3>
+    <p>In some cases, while the header itself is required for your connection method, we anticipate you might not be able to collect a value because:</p>
+
+    <ul class="list list-bullet">
+      <li>of operating system or platform restrictions</li>
+      <li>of security measures reasonably beyond your control</li>
+      <li>the header is not applicable, as called out explicitly by the header documentation</li>
+    </ul>
+
+    <p>Only in these cases, you must submit the header with an empty header value. You must not supply null values.</p>
+    <p>In all other cases, you must submit a valid value and not leave the header empty.</p>
+    <p>For example, an application connecting directly to HMRC might not be able to supply a username for Gov-Client-User-IDs if the operating system of the originating device has no concept of user accounts, so the header can be left empty as follows:</p>
+    <p class="code--slim">Gov-Client-User-IDs:</p>
+
+    <h3 class="heading-medium">Key-value encoding</h3>
+    <p>Whenever a header contains a key-value data structure, it must be in the form:</p>
+    <p class="code--slim">&lt;key-1&gt;=&lt;value-1&gt;&&lt;key-2&gt;=&lt;value-2&gt;&…</p>
+    <p>Whenever a key is applicable but has no applicable value, the key-value pair can be omitted, or the key can be included with an empty value.
+    <p>Keys and values must be <a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank">percent encoded (opens in a new tab)</a>.</p>
+    <p>The key-value pairs can be given in any order.</p>
+
+    <h3 class="heading-medium">List encoding</h3>
+    <p>Whenever a header contains a list, it must be of the form:</p>
+    <p class="code--slim">&lt;value-1&gt;,&lt;value-2&gt;,…</p>
+    <p>Values must be <a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank">percent encoded (opens in a new tab)</a>.
+    <p>Values must not be empty.</p>
+
+    <h2 class="heading-large">Header definitions</h2>
+    <hr>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Connection-Method</h3>
+      <p>A string representing the connection method used for the request.</p>
+      <p class="heading-small">One of:</p>
+
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <p class="heading-small">For example</p>
+      <pre class="code--block">Gov-Client-Connection-Method: DESKTOP_APP_VIA_SERVER</pre>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Public-IP</h3>
+      <p>The public IP address (IPv4 or IPv6) from which the originating device makes the request.</p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+
+      <ul>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Public-IP: 198.51.100.0</pre>
+      <pre class="code--block">Gov-Client-Public-IP: ABCD:EF01:2345:6789:ABCD:EF01:2345:6789</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Public-Port</h3>
+      <p>The public TCP port that the originating device uses when initiating the request.</p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Public-Port: 12345</pre>
+      <hr class="hr--code">
+
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Device-ID</h3>
+      <p>An identifier unique to an originating device. This should be generated by an application and persistently stored on the device. The identifier should not expire.</p>
+      <p>If an identifier cannot be persistently stored due to security restrictions, leave this header empty.</p>
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Device-ID: beec798b-b366-47fa-b1f8-92cede14a1ce</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-User-IDs</h3>
+      <p>A key-value data structure containing the user identifiers. The keys should indicate accounts the user holds.</p>
+      <p>
+          The <i>os</i> field should contain the identifier of the user signed in on the originating device.
+          Additional fields should contain the user’s identifiers with the vendor services involved in the request.
+      </p>
+      <p>If a user identifier cannot be accessed due to operating system permissions or security controls, then it can be left blank or omitted.</p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <p>In <span class="code--slim">DESKTOP_APP_VIA_SERVER</span> connection method, when there is a single vendor service involved in handling the request:</p>
+      <pre class="code--block">Gov-Client-User-IDs: os=alice_desktop&my-vendor-online-account=alice_online_account_user_id_with_vendor</pre>
+      <p>For example, in <span class="code--slim">DESKTOP_APP_VIA_SERVER</span> connection method, when the request passes through two vendor services:</p>
+      <pre class="code--block">Gov-Client-User-IDs: os=alice_desktop &my-vendor=alice_online_account_user_id_with_vendor&my-secondary-vendor=alice_online_account_user_id_with_secondary_vendor</pre>
+      <p>For example, in <span class="code--slim">DESKTOP_APP_DIRECT</span>, where there are no vendor accounts involved, or <span class="code--slim">BATCH_PROCESS_DIRECT</span> where there are no user devices involved and the originating device is the batch server:</p>
+      <pre class="code--block">Gov-Client-User-IDs: os=user123</pre>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Timezone</h3>
+      <p>The local timezone of the originating device, expressed as UTC±&lt;hh>:&lt;mm&gt;.</p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Timezone: UTC+01:00</pre>
+      <pre class="code--block">Gov-Client-Timezone: UTC-01:15</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Local-IPs</h3>
+      <p>
+        A list of all local IP addresses (IPv4 and IPv6) available to the originating device.
+        If local device IP addresses cannot be discovered – for example, through a web browser due to permissions or lack of WebRTC – then leave this header empty.
+      </p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Local-IPs: 10.1.2.3,10.3.4.2</pre>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Screens</h3>
+      <p>Information related to the originating device’s screens. The fields include:</p>
+      <p><span class="code--slim">width</span> is the reported width of the screen, in pixels</p>
+      <p><span class="code--slim">height</span> is the reported height of the screen, in pixels</p>
+      <p><span class="code--slim">scaling-factor</span> is the reported scaling factor of the screen.
+        For instance, high-pixel density screens might have a scaling factor of 2, whereas standard definition screens might report a scaling factor of 1.
+        If the scaling factor cannot be retrieved, leave this empty or omit it entirely.</p>
+      <p><span class="code--slim">colour-depth</span> is the colour depth of the screen, in bits.
+        If the colour depth cannot be retrieved, leave this empty or omit it entirely.</p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT<</li><br>
+                                                   <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+      </ul>
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Screens: width=1920&height=1080&scaling-factor=1&colour-depth=16,width=3000&height=2000&scaling-factor=1.25&colour-depth=</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Window-Size</h3>
+      <p>The number of pixels of the window on the originating device in which the user initiated (directly or indirectly) the API call to HMRC.</p>
+      <p>If the call was initiated by a background process, leave this header empty.</p>
+      <p>Should be displayed as a key-value data structure with width and height fields.</p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Window-Size: width=1256&height=803</pre>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-User-Agent</h3>
+      <p>An attempt to identify the operating system family, version, device manufacturer and model of the originating device.
+      <p>Reported in the format:</p>
+      <p class="code--slim">OS Family/OS Version+ (Device Manufacturer/Device Model+)</p>
+      <p>
+        If you cannot detect the exact version due to operating system constraints, but can detect several options, list all options.
+        Each value (OS Family, OS Version, Device Manufacturer and Device Model) must be percent encoded but not the separators themselves.
+        The separators are / ( ).
+      </p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-User-Agent: Windows/XP Windows/NT (Dell/XPS15 Dell/XPS13)</pre>
+      <p>If you cannot discover any information due to operating system constraints, leave the appropriate field blank as shown in the following examples:</p>
+      <pre class="code--block">Gov-Client-User-Agent: Windows/ (Dell/XPS15)</pre>
+      <pre class="code--block">Gov-Client-User-Agent: / (Dell/XPS15)</pre>
+      <pre class="code--block">Gov-Client-User-Agent: Windows/XP (/)</pre>
+      <pre class="code--block">Gov-Client-User-Agent: Windows/XP (/XPS15)</pre>
+      <pre class="code--block">Gov-Client-User-Agent: Windows/XP Windows/98 (/)</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Browser-Plugins</h3>
+      <p>
+        A list of browser plugins on the originating device.
+        If none can be discovered, due to browser restrictions or the lack of installed plugins, leave this header empty.
+      </p>
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Browser-Plugins: Shockwave%20Flash,Chromium%20PDF%20Viewer</pre>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Browser-JS-User-Agent</h3>
+      <p>JavaScript-reported user agent string from the originating device.</p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+      </ul>
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Browser-JS-User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Mobile/7B405</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Browser-Do-Not-Track</h3>
+      <p>Whether the Do Not Track option is enabled on the browser.</p>
+      <p>
+        It should be <span class="code--slim">true</span> if this option is enabled, <span class="code--slim">false</span> if it’s not.
+        If it cannot be collected because the browser does not have or expose this feature, you can leave the header empty.
+      </p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+      </ul>
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Browser-Do-Not-Track: false</pre>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-Multi-Factor</h3>
+      <p>
+        A list of key-value data structures containing details of the multi-factor authentication (MFA) statuses related to the API call.
+        For each key-value data structure, the applicable fields are:
+      </p>
+      <p><span class="code--slim">type</span> is a tag describing the MFA method being used. The possible values are:</p>
+      <ul class="list list-bullet">
+        <li><span class="code--slim">TOTP</span> - The MFA was performed by accepting a time-based one-time password code</li>
+        <li><span class="code--slim">AUTH_CODE</span> - The MFA was performed by sending an authorisation code to the user in some out-of-band channel, for example, by email or by SMS</li>
+        <li><span class="code--slim">OTHER</span> - A different MFA method was used than the available values</li>
+      </ul>
+      <p><span class="code--slim">timestamp</span> is a UTC timestamp in the format <span class="code--slim">yyyy-MM-ddThh:mmZ</span> recording the time of the last successful prompt for this factor.</p>
+      <p><span class="code--slim">unique-reference</span> identifies a single factor.
+        For example, a salted-and-hashed phone number used for SMS or an identifier linked to a TOTP secret – but not the secret itself.
+        The intention is to recognise the same factor being used across API calls.</p>
+      <p>If only a single factor (for example, username and password) is being used, leave this header empty.</p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Multi-Factor: type=AUTH_CODE&timestamp=2017-04-21T13%3A23%3A42Z&unique-reference=c672b8d1ef56ed28,type=TOTP&timestamp=2017-05-19T13%3A10%3A00Z&unique-reference=ac73430ffdfd9</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Vendor-Version</h3>
+      <p>A key-value data structure of software versions involved in handling a request:</p>
+      <p class="code--slim">&lt;software-name&gt;=&lt;version-number&gt;&&lt;software-name-2&gt;=&lt;version-number-2&gt;& …</p>
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <p>For <span class="code--slim">DESKTOP_APP_DIRECT</span> the header may be:
+        <pre class="code--block">Gov-Vendor-Version: my-desktop-software=1.2.3.build4286</pre>
+      <p>For <span class="code--slim">MOBILE_APP_VIA_SERVER</span>, the header may be:
+        <pre class="code--block">Gov-Vendor-Version: my-frontend-app=2.2.2&my-serverside-code=v3.8</pre>
+        <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Vendor-License-IDs</h3>
+      <p>A key-value data structure of hashed license keys relating to the vendor software initiating the API request on the originating device.</p>
+      <p class="code--slim">&lt;software-name&gt;=&lt;hashed-license-value&gt;&&lt;software-name-2&gt;=&lt;hashed-license-value&gt;& …</p>
+      <p>If there are no such licenses on the originating device, leave out the <span class="code--slim">&lt;hashed-license-value&gt;</span> or omit the field entirely.</p>
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Vendor-License-ID: my-licensed-software=8D7963490527D33716835EE7C195516D5E562E03B224E9B359836466EE40CDE1</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Vendor-Public-IP</h3>
+      <p>
+        The public IP address of the servers to which the originating device sent their requests.
+        This might be an IP address of a Web Application Firewall, a DDoS Protection Service, or a load balancer that the vendor's DNS record resolves to.
+      </p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Vendor-Public-IP: 203.0.113.6</pre>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-MAC-Addresses</h3>
+      <p>
+        The list of MAC addresses available on the originating device.
+        If you cannot retrieve them due to operating system restrictions, then leave the header empty.
+      </p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-MAC-Addresses: ea%3A43%3A1a%3A5d%3A21%3A45,10%3A12%3Acc%3Afa%3Aaa%3A32</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Vendor-Forwarded</h3>
+      <p>A list that details hops over the internet between services that terminate in TLS.</p>
+      <p>For each hop over the internet, a key-value data structure with a <i>by</i> and <i>for</i> field must be appended to the list.</p>
+      <p>The <i>by</i> field must be the server’s public IP address where it received the request.</p>
+      <p>The <i>for</i> field must be the requestor’s public IP address from which the vendor received the request.</p>
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+      <h4 class="heading-small">For example, if:</h4>
+      <ol class="list list-number">
+        <li>a request is first received by a web application firewall (WAF) service on <span class="code--slim">33.252.57.234</span>.
+          The WAF sees the request coming from <span class="code--slim">57.4.28.41</span>.
+          Subsequently, the WAF passes the request on to the vendor servers via HTTPS over the internet.
+        <li>the request is received by the server of vendor A on <span class="code--slim">188.87.76.95</span>, from the WAF-owned IP address <span class="code--slim">209.210.136.84</span>
+        <li>The services of vendor A issue a HTTP request as a result of the previous step to the services of vendor B on <span class="code--slim">176.30.57.118</span>, from vendor A owned IP <span class="code--slim">150.94.192.63</span>
+      </ol>
+      <p>then you should generate the following header:</p>
+      <pre class="code--block">Gov-Vendor-Forwarded: by=33.252.57.234&for=57.4.28.41,by=188.87.76.95&for=209.210.136.84,by=176.30.57.118&for=150.94.192.63</pre>
+      <hr class="hr--code">
+    </div>
+
+    <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+  </div>
+}
