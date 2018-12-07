@@ -4,3 +4,4 @@ leakDetectionExemptions:
  - ruleId: 'ip_addresses'
    filePaths:
       - '/app/uk/gov/hmrc/apidocumentation/views/reference.scala.html'
+      - '/app/uk/gov/hmrc/apidocumentation/views/fraudPrevention.scala.html'
