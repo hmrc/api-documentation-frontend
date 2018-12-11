@@ -457,8 +457,10 @@
             prior to your application accessing
             <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.</p>
         <p>You must specify one or more redirect URIs when you create your application, and also specify one redirect
-            URI when you send your user to our authorisation endpoint. To protect your application from phishing attacks,
-            the redirect URI used for authorisation must match one of those specified when you created your application.</p>
+            URI when you send your user to our authorisation endpoint.</p>
+        <p>To protect your application from phishing attacks,
+            the redirect URI you use for authorisation (in your call to <code class="code--slim">/oauth/authorize</code>) must match one of those you specified when you created your application.</p>
+        <p>Also, you must use the same redirect URI when exchanging your authorisation code for an access token (in your call to <code class="code--slim">/oauth/token</code>) that you used for authorisation (in your call to <code class="code--slim">/oauth/authorize</code>).</p>
         <p>You can specify a maximum of five redirect URIs.</p>
         <h3 class="heading-medium">Examples</h3>
         <p>Examples of valid (and invalid) redirect URIs are:</p>

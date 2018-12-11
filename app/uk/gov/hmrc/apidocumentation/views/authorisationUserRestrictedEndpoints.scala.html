@@ -83,7 +83,7 @@
             <h4 class="heading-small">1. Request authorisation</h4>
 
             <ol class="list list-letter-lower">
-                <li>Send your user to the <a href="#auth-endpoint-syntax">authorisation endpoint</a>.</li>
+                <li>Send your user to our <a href="#auth-endpoint-syntax">authorisation endpoint</a>.</li>
                 <li>We display a start page that explains the authorisation process.</li>
                 <li>We prompt the user to sign in using their Government Gateway account.</li>
                 <li>The user is taken through <a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-Step Verification (2SV)</a>.</li>
@@ -117,6 +117,8 @@ GET  @{applicationConfig.sandboxApiBaseUrl}/oauth/authorize?response_type=code
 &amp;state=30de877c-ee2f-15db-8314-0800200c9a66
 &amp;redirect_uri=https://www.example.com/auth-redirect</pre>
 
+            <br>
+
             <table>
                 <caption class="visually-hidden">Authorise endpoint query parameters and descriptions</caption>
                 <thead>
@@ -132,7 +134,7 @@ GET  @{applicationConfig.sandboxApiBaseUrl}/oauth/authorize?response_type=code
                 </tr>
                 <tr>
                     <td><code class="code--slim">client_id</code></td>
-                    <td>The Client ID of your application.</td>
+                    <td>The Client ID for your application.</td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">scope</code></td>
@@ -145,6 +147,7 @@ GET  @{applicationConfig.sandboxApiBaseUrl}/oauth/authorize?response_type=code
                 <tr>
                     <td><code class="code--slim">redirect_uri</code></td>
                     <td>The URI that we use to send users back to your application after successful (or unsuccessful) authorisation.<br><br>
+                        This must match one of the redirect URIs you specified when you created your application.<br><br> 
                         For more details see our <a href="@controllers.routes.DocumentationController.referenceGuidePage().url#redirect-uris">reference guide</a>.
                     </td>
                 </tr>
@@ -300,12 +303,15 @@ GET https://www.example.com?error=access_denied
 
             <h4 class="heading-small">3. Exchange authorisation code for access token</h4>
 
-            <p>When you get the authorisation code, your application must exchange this for an <code class="code--slim">access_token</code> <strong class="bold-small">within 10 minutes</strong> before it expires.
-            </p>
+            <p>When you get the authorisation code, you must exchange this for an access token <strong class="bold-small">within 10 minutes</strong> before it expires.</p>
 
-            <p>Do this via a POST to our token endpoint using <span class=code">grant_type</code> of <code class="code--slim">authorization_code</code>.</p>
+            <p>Do this via a POST to our token endpoint.</p>
 
-            <p>The response contains the access token used for calling the APIs and a refresh token used to obtain a new access token once the current one expires.</p>
+            <div class="panel panel-border-wide">
+                <p>
+                    Include the request parameters in the request body as a URL-encoded string, not as request headers.
+                </p>
+            </div>
 
             <h5 class="heading-small faded-text">Example request</h5>
 
@@ -314,6 +320,46 @@ curl -X POST --data \
 'client_secret=[YOUR-CLIENT-SECRET]&amp;client_id=[YOUR-CLIENT-ID]&amp;grant_type=authorization_code&amp;redirect_uri=[YOUR-REDIRECT-URI]&amp;code=[AUTHORIZATION-CODE]' \
 @{applicationConfig.sandboxApiBaseUrl}/oauth/token
 </pre>
+
+            <br>
+
+            <table>
+                <caption class="visually-hidden">Token endpoint request body parameters and descriptions</caption>
+                <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code class="code--slim">client_secret</code></td>
+                    <td>One of the client secrets for your application.</td>
+                </tr>
+                <tr>
+                    <td><code class="code--slim">client_id</code></td>
+                    <td>The Client ID for your application.</td>
+                </tr>
+                <tr>
+                    <td><code class="code--slim">grant_type</code></td>
+                    <td>The OAuth 2.0 grant type. Currently the only acceptable value is <code class="code--slim">authorization_code</code></td>
+                </tr>
+                <tr>
+                    <td><code class="code--slim">redirect_uri</code></td>
+                    <td>The same redirect URI you used to call the authorisation endpoint.<br><br>
+                        For more details see our <a href="@controllers.routes.DocumentationController.referenceGuidePage().url#redirect-uris">reference guide</a>.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code class="code--slim">code</code></td>
+                    <td>The authorisation code you received from us in the previous step.</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <br>
+
+            <p>The response contains the access token used for calling the APIs and a refresh token used to obtain a new access token once the current one expires.</p>
 
             <h5 class="heading-small faded-text">Example response</h5>
 
