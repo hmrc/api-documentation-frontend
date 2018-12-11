@@ -456,7 +456,7 @@
       <h3 class="code--slim code--slim-large bold">Gov-Vendor-License-IDs</h3>
       <p>A key-value data structure of hashed license keys relating to the vendor software initiating the API request on the originating device.</p>
       <p class="code--slim">&lt;software-name&gt;=&lt;hashed-license-value&gt;&&lt;software-name-2&gt;=&lt;hashed-license-value-2&gt;& …</p>
-      <p>If there are no such licenses on the originating device, leave out the <span class="code--slim">&lt;hashed-license-value&gt;</span> or omit the field entirely.</p>
+      <p>If there are no such licenses on the originating device, then leave the header empty.</p>
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
         <li class="code--slim">MOBILE_APP_DIRECT</li><br>
