@@ -53,7 +53,7 @@ class ControllerCommonSetup extends UnitSpec with ScalaFutures with MockitoSugar
   }
 
   def anXmlApiDefinition(name: String) =
-    XmlAPIDefinition(name, "description", "context")
+    XmlApiDocumentation(name, "description", "context")
 
   def aServiceGuide(name: String) =
     ServiceGuide(name, "context")

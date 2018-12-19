@@ -216,7 +216,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
             apis <- documentationService.fetchAPIs(email)
           } yield {
 
-            val apisByCategory = DocumentationType.groupedByCategory(apis, XmlAPIDefinition.xmlApiDefinitions, ServiceGuide.serviceGuides)
+            val apisByCategory = Documentation.groupedByCategory(apis, XmlApiDocumentation.xmlApiDefinitions, ServiceGuide.serviceGuides)
 
             filter match {
               case Some(f) => Ok(apisFiltered(pageAttributes("Filtered API Documentation"), apisByCategory, APICategory.fromFilter(f)))
@@ -384,7 +384,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def renderXmlApiDocumentation(name: String): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      def makePageAttributes(apiDefinition: DocumentationType): PageAttributes = {
+      def makePageAttributes(apiDefinition: Documentation): PageAttributes = {
         val breadcrumbs = Breadcrumbs(
           Crumb(
             apiDefinition.name,
@@ -395,7 +395,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         apidocumentation.models.PageAttributes(apiDefinition.name, breadcrumbs, navLinks, navigationService.sidebarNavigation())
       }
 
-      XmlAPIDefinition.xmlApiDefinitions.find(_.name == name) match {
+      XmlApiDocumentation.xmlApiDefinitions.find(_.name == name) match {
         case Some(xmlApiDefinition) => Future.successful(Ok(xmlDocumentation(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
         case _ => Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
       }

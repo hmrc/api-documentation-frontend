@@ -39,7 +39,7 @@ class APIGroupsSpec extends UnitSpec {
     APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), None)
 
   def anXmlApiDefinition(name: String) =
-    XmlAPIDefinition(name, "description", "context")
+    XmlApiDocumentation(name, "description", "context")
 
   def aServiceGuide(name: String) =
     ServiceGuide(name, "context")
@@ -59,7 +59,7 @@ class APIGroupsSpec extends UnitSpec {
       anApiDefinition("vatRestApi1"),
       anApiDefinition("vatTestSupport2", isTestSupport = Some(true)))
 
-    val apisByCategory: Map[APICategory, Seq[DocumentationType]] = Map(CUSTOMS -> customsApis, VAT -> vatApis)
+    val apisByCategory: Map[APICategory, Seq[Documentation]] = Map(CUSTOMS -> customsApis, VAT -> vatApis)
     val page = Page(views.html.include.apiGroups(apisByCategory))
   }
 

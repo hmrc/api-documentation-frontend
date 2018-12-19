@@ -28,12 +28,12 @@ import scala.collection.immutable.ListMap
 import scala.io.Source
 import scala.util.Try
 
-trait DocumentationType {
+trait Documentation {
 
   val name: String
   val context: String
   val categories: Option[Seq[APICategory]]
-  val label: APIDefinitionLabel
+  val label: DocumentationLabel
 
   def documentationUrl: String
 
@@ -46,14 +46,14 @@ trait DocumentationType {
 
 }
 
-object DocumentationType {
+object Documentation {
 
   def groupedByCategory(apiDefinitions: Seq[APIDefinition],
-                        xmlDefinitions: Seq[XmlAPIDefinition],
-                        endToEndGuides: Seq[ServiceGuide],
-                        catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[DocumentationType]] = {
-    val categorised: Map[APICategory, Seq[DocumentationType]] =
-      (apiDefinitions ++ xmlDefinitions ++ endToEndGuides).foldLeft(Map(): Map[APICategory, Seq[DocumentationType]]) {
+                        xmlDefinitions: Seq[XmlApiDocumentation],
+                        serviceGuides: Seq[ServiceGuide],
+                        catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[Documentation]] = {
+    val categorised: Map[APICategory, Seq[Documentation]] =
+      (apiDefinitions ++ xmlDefinitions ++ serviceGuides).foldLeft(Map(): Map[APICategory, Seq[Documentation]]) {
         (groupings, apiDefinition) =>
           groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
       }.filter(_._2.exists(_.isRestOrXmlApi))
@@ -62,25 +62,25 @@ object DocumentationType {
   }
 }
 
-case class XmlAPIDefinition(name: String, context: String, description: String, categories: Option[Seq[APICategory]] = None)
-  extends DocumentationType {
+case class XmlApiDocumentation(name: String, context: String, description: String, categories: Option[Seq[APICategory]] = None)
+  extends Documentation {
 
-  val label: APIDefinitionLabel = XML_API
+  val label: DocumentationLabel = XML_API
 
   def documentationUrl: String = routes.DocumentationController.renderXmlApiDocumentation(name).url
 }
 
-object XmlAPIDefinition {
-  implicit val format = Json.format[XmlAPIDefinition]
+object XmlApiDocumentation {
+  implicit val format = Json.format[XmlApiDocumentation]
 
-  def xmlApiDefinitions: Seq[XmlAPIDefinition] =
-    Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[XmlAPIDefinition]]
+  def xmlApiDefinitions: Seq[XmlApiDocumentation] =
+    Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[XmlApiDocumentation]]
 }
 
 case class ServiceGuide(name: String, context: String, categories: Option[Seq[APICategory]] = None)
-  extends DocumentationType {
+  extends Documentation {
 
-  val label: APIDefinitionLabel = SERVICE_GUIDE
+  val label: DocumentationLabel = SERVICE_GUIDE
 
   def documentationUrl: String = context
 }
@@ -108,7 +108,7 @@ case class APIDefinition(
                           requiresTrust: Option[Boolean],
                           isTestSupport: Option[Boolean],
                           versions: Seq[APIVersion],
-                          categories: Option[Seq[APICategory]] = None) extends DocumentationType {
+                          categories: Option[Seq[APICategory]] = None) extends Documentation {
 
   require(versions.nonEmpty, s"API versions must not be empty! serviceName=$serviceName")
 
@@ -119,7 +119,7 @@ case class APIDefinition(
   lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
   lazy val defaultVersion = statusSortedActiveVersions.headOption
   lazy val hasActiveVersions = statusSortedActiveVersions.nonEmpty
-  val label: APIDefinitionLabel = if(isTestSupport.contains(true)) TEST_SUPPORT_API else REST_API
+  val label: DocumentationLabel = if(isTestSupport.contains(true)) TEST_SUPPORT_API else REST_API
 
   def documentationUrl: String = routes.DocumentationController.renderApiDocumentation(serviceName, defaultVersion.get.version, None).url
 }

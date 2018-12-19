@@ -21,7 +21,7 @@
 @import include._
 
 @(pageAttributes: PageAttributes,
-        documentsByCategory: Map[APICategory, Seq[DocumentationType]])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+        documentsByCategory: Map[APICategory, Seq[Documentation]])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @apiMain(pageAttributes) {
 

@@ -226,7 +226,7 @@ class DocumentationSpec extends UnitSpec {
         CUSTOMS -> Seq(api1),
         PAYE -> Seq(api2))
 
-      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty)
+      val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty)
 
       result shouldBe expected
     }
@@ -242,7 +242,7 @@ class DocumentationSpec extends UnitSpec {
         PAYE -> Seq(api2),
         VAT -> Seq(api1, api2))
 
-      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, categoryMap)
+      val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -253,7 +253,7 @@ class DocumentationSpec extends UnitSpec {
       val categoryMap = Map("name3" -> Seq(CUSTOMS))
       val expected = Map(OTHER -> Seq(api1, api2))
 
-      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, categoryMap)
+      val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -270,7 +270,7 @@ class DocumentationSpec extends UnitSpec {
         PAYE -> Seq(api2),
         VAT -> Seq(api1, api2))
 
-      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, categoryMap)
+      val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -291,7 +291,7 @@ class DocumentationSpec extends UnitSpec {
         PAYE -> Seq(api2, xmlApi1),
         VAT -> Seq(api1, api2, xmlApi2))
 
-      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq(xmlApi1, xmlApi2), Seq.empty, categoryMap)
+      val result = Documentation.groupedByCategory(Seq(api1, api2), Seq(xmlApi1, xmlApi2), Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -304,7 +304,7 @@ class DocumentationSpec extends UnitSpec {
         "testSupportApi" -> Seq(CUSTOMS))
       val expected = Map(CUSTOMS -> Seq(restApi, testSupportApi))
 
-      val result = DocumentationType.groupedByCategory(Seq(restApi, testSupportApi), Seq.empty, Seq.empty, categoryMap)
+      val result = Documentation.groupedByCategory(Seq(restApi, testSupportApi), Seq.empty, Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -317,7 +317,7 @@ class DocumentationSpec extends UnitSpec {
         "testSupportApi" -> Seq(CUSTOMS))
       val expected = Map(CUSTOMS -> Seq(testSupportApi, xmlApi))
 
-      val result = DocumentationType.groupedByCategory(Seq(testSupportApi), Seq(xmlApi), Seq.empty, categoryMap)
+      val result = Documentation.groupedByCategory(Seq(testSupportApi), Seq(xmlApi), Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -330,7 +330,7 @@ class DocumentationSpec extends UnitSpec {
         "myServiceGuide" -> Seq(CUSTOMS))
       val expected = Map(CUSTOMS -> Seq(api, serviceGuide))
 
-      val result = DocumentationType.groupedByCategory(Seq(api), Seq.empty, Seq(serviceGuide), categoryMap)
+      val result = Documentation.groupedByCategory(Seq(api), Seq.empty, Seq(serviceGuide), categoryMap)
 
       result shouldBe expected
     }
@@ -340,7 +340,7 @@ class DocumentationSpec extends UnitSpec {
       val serviceGuide = aServiceGuide("serviceGuide")
       val categoryMap = Map("name1" -> Seq(CUSTOMS, VAT))
 
-      val result = DocumentationType.groupedByCategory(Seq(testSupportApi), Seq.empty, Seq(serviceGuide), categoryMap)
+      val result = Documentation.groupedByCategory(Seq(testSupportApi), Seq.empty, Seq(serviceGuide), categoryMap)
 
       result shouldBe Map.empty
     }
@@ -349,7 +349,7 @@ class DocumentationSpec extends UnitSpec {
       APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), categories)
 
     def anXmlApiDefinition(name: String, categories: Option[Seq[APICategory]] = None) =
-      XmlAPIDefinition(name, "description", "context", categories)
+      XmlApiDocumentation(name, "description", "context", categories)
 
     def aServiceGuide(name: String, categories: Option[Seq[APICategory]] = None) =
       ServiceGuide(name, "context", categories)
