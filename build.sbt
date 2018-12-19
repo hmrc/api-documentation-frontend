@@ -129,7 +129,8 @@ lazy val compile = Seq(
 lazy val test = Seq(
   "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
   "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it",
-  "uk.gov.hmrc" %% "hmrctest" % "3.3.0" % "test,it",
+//  hmrctest at 3.1.0 as higher versions appear to bring in flaky acceptance tests
+  "uk.gov.hmrc" %% "hmrctest" % "3.1.0" % "test,it",
   "junit" % "junit" % "4.12" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
   "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
