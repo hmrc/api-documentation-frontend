@@ -60,7 +60,7 @@ class APIGroupsSpec extends UnitSpec {
       anApiDefinition("vatTestSupport2", isTestSupport = Some(true)))
 
     val apisByCategory: Map[APICategory, Seq[Documentation]] = Map(CUSTOMS -> customsApis, VAT -> vatApis)
-    val page = Page(views.html.include.apiGroups(apisByCategory))
+    val page = Page(views.html.include.documentGroups(apisByCategory))
   }
 
   "API Groups view" should {

@@ -36,7 +36,7 @@ class APIFilterSpec extends UnitSpec {
     val apisByCategory: Map[APICategory, Seq[APIDefinition]] = Map(
       CUSTOMS -> Seq.empty,
       VAT -> Seq.empty)
-    val page = Page(views.html.include.apiFilter(apisByCategory, filter))
+    val page = Page(views.html.include.documentFilter(apisByCategory, filter))
   }
 
   "api filter" when {
