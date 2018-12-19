@@ -46,7 +46,7 @@
     <p>To find out if header information is mandatory for an API that you use, read its <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
 
     <h2 class="heading-large">Header contents</h2>
-    <p>Header contents must use the character set US-ASCII, with other characters percent encoded as in <a href="https://www.ietf.org/rfc/rfc3986.txt" target="_blank">RFC3986 (opens in a new tab)</a>.
+    <p>Header contents must use the character set US-ASCII, with other characters percent encoded as in <a href="https://www.ietf.org/rfc/rfc3986.txt" target="_blank" rel="noopener noreferrer">RFC3986 (opens in a new tab)</a>.
       Other restrictions on header values are shown under the individual header definitions.</p>
     <p>The application connection method determines which headers we require:</p>
 
@@ -100,13 +100,13 @@
     <p>Whenever a header contains a key-value data structure, it must be in the form:</p>
     <p class="code--slim">&lt;key-1&gt;=&lt;value-1&gt;&&lt;key-2&gt;=&lt;value-2&gt;&…</p>
     <p>Whenever a key is applicable but has no applicable value, the key-value pair can be omitted, or the key can be included with an empty value.
-    <p>Keys and values must be <a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank">percent encoded (opens in a new tab)</a>.</p>
+    <p>Keys and values must be <a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank" rel="noopener noreferrer">percent encoded (opens in a new tab)</a>.</p>
     <p>The key-value pairs can be given in any order.</p>
 
     <h3 class="heading-medium">List encoding</h3>
     <p>Whenever a header contains a list, it must be of the form:</p>
     <p class="code--slim">&lt;value-1&gt;,&lt;value-2&gt;,…</p>
-    <p>Values must be <a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank">percent encoded (opens in a new tab)</a>.
+    <p>Values must be <a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank" rel="noopener noreferrer">percent encoded (opens in a new tab)</a>.
     <p>Values must not be empty.</p>
 
     <h2 class="heading-large">Header definitions</h2>
