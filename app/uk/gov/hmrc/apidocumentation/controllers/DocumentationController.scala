@@ -41,7 +41,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
                                         partialsService: PartialsService,
                                         loggedInUserProvider: LoggedInUserProvider, val messagesApi: MessagesApi,
                                         implicit val appConfig: ApplicationConfig)
-    extends FrontendController with I18nSupport {
+  extends FrontendController with I18nSupport {
 
   private lazy val cacheControlHeaders = "cache-control" -> s"public, max-age=${documentationService.defaultExpiration.toSeconds}"
   private val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
@@ -62,35 +62,42 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     Future.successful(Ok(views.html.termsAndConditions()))
   }
 
-  def indexPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(index("Home", navLinks)))
+  def indexPage() = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(Ok(index("Home", navLinks)))
   }
 
-  def testingPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(testing(pageAttributes("Testing in the sandbox", routes.DocumentationController.testingPage().url, navLinks))))
+  def testingPage() = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(Ok(testing(pageAttributes("Testing in the sandbox", routes.DocumentationController.testingPage().url, navLinks))))
   }
 
-  def testingStatefulBehaviourPage() = headerNavigation { implicit request =>navLinks =>
-    Future.successful(MovedPermanently(routes.DocumentationController.testUsersDataStatefulBehaviourPage().url))
+  def testingStatefulBehaviourPage() = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(MovedPermanently(routes.DocumentationController.testUsersDataStatefulBehaviourPage().url))
   }
 
-  def testUsersDataStatefulBehaviourPage() = headerNavigation { implicit request =>navLinks =>
-    val testUsersDataStatefulBehaviourUrl = routes.DocumentationController.testUsersDataStatefulBehaviourPage().url
-    Future.successful(Ok(testUsersDataStatefulBehaviour(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
+  def testUsersDataStatefulBehaviourPage() = headerNavigation { implicit request =>
+    navLinks =>
+      val testUsersDataStatefulBehaviourUrl = routes.DocumentationController.testUsersDataStatefulBehaviourPage().url
+      Future.successful(Ok(testUsersDataStatefulBehaviour(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
   }
 
-  def testingDataClearDownPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(testingDataClearDown(pageAttributes("Data Clear Down", routes.DocumentationController.testingDataClearDownPage().url, navLinks))))
+  def testingDataClearDownPage() = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(Ok(testingDataClearDown(pageAttributes("Data Clear Down", routes.DocumentationController.testingDataClearDownPage().url, navLinks))))
   }
 
-  def tutorialsPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(tutorials(pageAttributes("Tutorials", routes.DocumentationController.tutorialsPage().url, navLinks))))
+  def tutorialsPage() = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(Ok(tutorials(pageAttributes("Tutorials", routes.DocumentationController.tutorialsPage().url, navLinks))))
   }
 
-  def termsOfUsePage() = headerNavigation { implicit request => navLinks =>
-    partialsService.termsOfUsePartial() map { termsOfUsePartial =>
-      Ok(termsOfUse(pageAttributes("Terms Of Use", routes.DocumentationController.termsOfUsePage().url, navLinks), termsOfUsePartial))
-    }
+  def termsOfUsePage() = headerNavigation { implicit request =>
+    navLinks =>
+      partialsService.termsOfUsePartial() map { termsOfUsePartial =>
+        Ok(termsOfUse(pageAttributes("Terms Of Use", routes.DocumentationController.termsOfUsePage().url, navLinks), termsOfUsePartial))
+      }
   }
 
   def authorisationPage() = headerNavigation { implicit request =>
@@ -98,122 +105,130 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       Future.successful(Ok(authorisation(pageAttributes("Authorisation", routes.DocumentationController.authorisationPage().url, navLinks))))
   }
 
-  def authorisation2SVPage() = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("2-step verification", routes.DocumentationController.authorisation2SVPage().url),
-      authCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(authorisation2SV(pageAttributes(
-      "2-step verification",
-      routes.DocumentationController.authorisation2SVPage().url,
-      navLinks,
-      Some(breadcrumbs)))))
+  def authorisation2SVPage() = headerNavigation { implicit request =>
+    navLinks =>
+      val breadcrumbs = Breadcrumbs(
+        Crumb("2-step verification", routes.DocumentationController.authorisation2SVPage().url),
+        authCrumb,
+        homeCrumb
+      )
+      Future.successful(Ok(authorisation2SV(pageAttributes(
+        "2-step verification",
+        routes.DocumentationController.authorisation2SVPage().url,
+        navLinks,
+        Some(breadcrumbs)))))
   }
 
-  def authorisationOpenAccessEndpointsPage() = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("Open Access Endpoints", routes.DocumentationController.authorisationOpenAccessEndpointsPage().url),
-      authCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(authorisationOpenAccessEndpoints(pageAttributes(
-      "Authorisation Introduction",
-      routes.DocumentationController.authorisationOpenAccessEndpointsPage().url,
-      navLinks,
-      Some(breadcrumbs)))))
+  def authorisationOpenAccessEndpointsPage() = headerNavigation { implicit request =>
+    navLinks =>
+      val breadcrumbs = Breadcrumbs(
+        Crumb("Open Access Endpoints", routes.DocumentationController.authorisationOpenAccessEndpointsPage().url),
+        authCrumb,
+        homeCrumb
+      )
+      Future.successful(Ok(authorisationOpenAccessEndpoints(pageAttributes(
+        "Authorisation Introduction",
+        routes.DocumentationController.authorisationOpenAccessEndpointsPage().url,
+        navLinks,
+        Some(breadcrumbs)))))
   }
 
-  def authorisationAppRestrictedEndpointsPage() = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("Application Restricted Endpoints", routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url),
-      authCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(authorisationAppRestrictedEndpoints(pageAttributes(
-      "Application Restricted Endpoints",
-      routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url,
-      navLinks,
-      Some(breadcrumbs)))))
+  def authorisationAppRestrictedEndpointsPage() = headerNavigation { implicit request =>
+    navLinks =>
+      val breadcrumbs = Breadcrumbs(
+        Crumb("Application Restricted Endpoints", routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url),
+        authCrumb,
+        homeCrumb
+      )
+      Future.successful(Ok(authorisationAppRestrictedEndpoints(pageAttributes(
+        "Application Restricted Endpoints",
+        routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url,
+        navLinks,
+        Some(breadcrumbs)))))
   }
 
-  def authorisationUserRestrictedEndpointsPage() = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("User Restricted Endpoints", routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url),
-      authCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(authorisationUserRestrictedEndpoints(pageAttributes(
-      "User Restricted Endpoints",
-      routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url,
-      navLinks,
-      Some(breadcrumbs)))))
+  def authorisationUserRestrictedEndpointsPage() = headerNavigation { implicit request =>
+    navLinks =>
+      val breadcrumbs = Breadcrumbs(
+        Crumb("User Restricted Endpoints", routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url),
+        authCrumb,
+        homeCrumb
+      )
+      Future.successful(Ok(authorisationUserRestrictedEndpoints(pageAttributes(
+        "User Restricted Endpoints",
+        routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url,
+        navLinks,
+        Some(breadcrumbs)))))
   }
 
-  def usingTheHubPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(usingTheHub(pageAttributes(s"Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url, navLinks))))
+  def usingTheHubPage() = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(Ok(usingTheHub(pageAttributes(s"Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url, navLinks))))
   }
 
-  def mtdIntroductionPage() = headerNavigation { implicit request => navLinks =>
-    val introPageUrl = routes.DocumentationController.mtdIntroductionPage().url
-    Future.successful(Ok(mtdIntroduction(pageAttributes("The Making Tax Digital Programme", introPageUrl, navLinks))))
+  def mtdIntroductionPage() = headerNavigation { implicit request =>
+    navLinks =>
+      val introPageUrl = routes.DocumentationController.mtdIntroductionPage().url
+      Future.successful(Ok(mtdIntroduction(pageAttributes("The Making Tax Digital Programme", introPageUrl, navLinks))))
   }
 
-  def referenceGuidePage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(reference(pageAttributes("Reference guide", routes.DocumentationController.referenceGuidePage().url, navLinks))))
+  def referenceGuidePage() = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(Ok(reference(pageAttributes("Reference guide", routes.DocumentationController.referenceGuidePage().url, navLinks))))
   }
 
-  def nameGuidelinesPage() = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("Application naming guidelines", routes.DocumentationController.nameGuidelinesPage().url),
-      usingTheHubCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(namingGuidelines(pageAttributes(
-      "Application naming guidelines",
-      routes.DocumentationController.nameGuidelinesPage().url,
-      navLinks,
-      Some(breadcrumbs)))))
+  def nameGuidelinesPage() = headerNavigation { implicit request =>
+    navLinks =>
+      val breadcrumbs = Breadcrumbs(
+        Crumb("Application naming guidelines", routes.DocumentationController.nameGuidelinesPage().url),
+        usingTheHubCrumb,
+        homeCrumb
+      )
+      Future.successful(Ok(namingGuidelines(pageAttributes(
+        "Application naming guidelines",
+        routes.DocumentationController.nameGuidelinesPage().url,
+        navLinks,
+        Some(breadcrumbs)))))
   }
 
-  def fraudPreventionPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(fraudPrevention(pageAttributes("Fraud prevention", routes.DocumentationController.fraudPreventionPage().url, navLinks))))
+  def fraudPreventionPage() = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(Ok(fraudPrevention(pageAttributes("Fraud prevention", routes.DocumentationController.fraudPreventionPage().url, navLinks))))
   }
 
-  def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]) = headerNavigation { implicit request => navLinks =>
-    def pageAttributes(title: String = "API Documentation") = apidocumentation.models.PageAttributes(title,
-      breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),
-      headerLinks = navLinks,
-      sidebarLinks = navigationService.sidebarNavigation())
+  def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]) = headerNavigation { implicit request =>
+    navLinks =>
+      def pageAttributes(title: String = "API Documentation") = apidocumentation.models.PageAttributes(title,
+        breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb),
+        headerLinks = navLinks,
+        sidebarLinks = navigationService.sidebarNavigation())
 
-    val params = for (a <- service; b <- version) yield (a, b)
+      val params = for (a <- service; b <- version) yield (a, b)
 
-    params match {
-      case Some((service, version)) => {
-        val url = routes.DocumentationController.renderApiDocumentation(service, version, None).url
-        Future.successful(Redirect(url))
-      }
-      case None =>
-        (for {
-          email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
-          apis <- documentationService.fetchAPIs(email)
-        } yield {
-          if (appConfig.groupedDocumentationEnabled) {
-            val apisByCategory = APIDefinition.groupedByCategory(apis)
+      params match {
+        case Some((service, version)) => {
+          val url = routes.DocumentationController.renderApiDocumentation(service, version, None).url
+          Future.successful(Redirect(url))
+        }
+        case None =>
+          (for {
+            email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
+            apis <- documentationService.fetchAPIs(email)
+          } yield {
+
+            val apisByCategory = DocumentationType.groupedByCategory(apis, XmlAPIDefinition.xmlApiDefinitions, ServiceGuide.serviceGuides)
 
             filter match {
               case Some(f) => Ok(apisFiltered(pageAttributes("Filtered API Documentation"), apisByCategory, APICategory.fromFilter(f)))
               case _ => Ok(apiIndex(pageAttributes(), apisByCategory))
             }
-          } else {
-            Ok(apiListIndex(pageAttributes(), apis.filter(isExampleApiDefinition), apis.filterNot(isExampleApiDefinition).filterNot(isTestSupportApi), apis.filter(isTestSupportApi)))
+
+          }) recover {
+            case e: Throwable =>
+              Logger.error("Could not load API Documentation service", e)
+              InternalServerError(ApplicationGlobal.internalServerErrorTemplate)
           }
-        }) recover {
-          case e: Throwable =>
-            Logger.error("Could not load API Documentation service", e)
-            InternalServerError(ApplicationGlobal.internalServerErrorTemplate)
-        }
-    }
+      }
   }
 
   private def makeBreadcrumbName(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion) = {
@@ -222,8 +237,10 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   }
 
   def redirectToApiDocumentation(service: String, version: Option[String], cacheBuster: Option[Boolean]): Action[AnyContent] = version match {
-    case Some(version) => Action.async { Future.successful(Redirect(routes.DocumentationController.renderApiDocumentation(service, version, cacheBuster))) }
-    case _ => redirectToCurrentApiDocumentation (service, cacheBuster)
+    case Some(version) => Action.async {
+      Future.successful(Redirect(routes.DocumentationController.renderApiDocumentation(service, version, cacheBuster)))
+    }
+    case _ => redirectToCurrentApiDocumentation(service, cacheBuster)
   }
 
   private def redirectToCurrentApiDocumentation(service: String, cacheBuster: Option[Boolean]) = Action.async { implicit request =>
@@ -243,29 +260,30 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   }
 
   def renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean]): Action[AnyContent] =
-    headerNavigation { implicit request =>navLinks =>
-    (for {
-      email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
-      api <- documentationService.fetchExtendedApiDefinition(service, email)
-      cacheBust = bustCache(appConfig.isStubMode, cacheBuster)
-      apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, email)
-    } yield apiDocumentation) recover {
-      case e: NotFoundException =>
-        Logger.info(s"Upstream request not found: ${e.getMessage}")
-        NotFound(ApplicationGlobal.notFoundTemplate)
-      case e: RamlNotFoundException =>
-        Logger.info(s"RAML document not found: ${e.getMessage}")
-        NotFound(ApplicationGlobal.notFoundTemplate)
-      case e: Throwable =>
-        Logger.error("Could not load API Documentation service", e)
-        InternalServerError(ApplicationGlobal.internalServerErrorTemplate)
+    headerNavigation { implicit request =>
+      navLinks =>
+        (for {
+          email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
+          api <- documentationService.fetchExtendedApiDefinition(service, email)
+          cacheBust = bustCache(appConfig.isStubMode, cacheBuster)
+          apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, email)
+        } yield apiDocumentation) recover {
+          case e: NotFoundException =>
+            Logger.info(s"Upstream request not found: ${e.getMessage}")
+            NotFound(ApplicationGlobal.notFoundTemplate)
+          case e: RamlNotFoundException =>
+            Logger.info(s"RAML document not found: ${e.getMessage}")
+            NotFound(ApplicationGlobal.notFoundTemplate)
+          case e: Throwable =>
+            Logger.error("Could not load API Documentation service", e)
+            InternalServerError(ApplicationGlobal.internalServerErrorTemplate)
+        }
     }
-  }
 
   def bustCache(stubMode: Boolean, cacheBuster: Option[Boolean]) = stubMode || cacheBuster.getOrElse(false)
 
   private def doRenderApiDocumentation(service: String, version: String, cacheBuster: Boolean, apiOption: Option[ExtendedAPIDefinition],
-                               navLinks: Seq[NavLink], email: Option[String])(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] = {
+                                       navLinks: Seq[NavLink], email: Option[String])(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] = {
     def makePageAttributes(apiDefinition: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, sidebarLinks: Seq[SidebarLink]): PageAttributes = {
       val breadcrumbs = Breadcrumbs(
         Crumb(
@@ -290,7 +308,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       Logger.info(s"redirectToLogin - access_uri ${routes.DocumentationController.renderApiDocumentation(service, version, None).url}")
       Future.successful(Redirect("/developer/login").withSession(
         "access_uri" -> routes.DocumentationController.renderApiDocumentation(service, version, None).url,
-        "ts"-> DateTime.now(DateTimeZone.UTC).getMillis.toString)
+        "ts" -> DateTime.now(DateTimeZone.UTC).getMillis.toString)
       )
     }
 
@@ -317,33 +335,34 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     }
   }
 
-  def previewApiDocumentation(url: Option[String]) = headerNavigation { implicit request => navLinks =>
-    if (appConfig.ramlPreviewEnabled) {
-      val pageAttributes = apidocumentation.models.PageAttributes(title = "API Documentation Preview",
-        breadcrumbs = Breadcrumbs(
-          Crumb("Preview RAML", routes.DocumentationController.previewApiDocumentation(None).url),
-          apiDocCrumb,
-          homeCrumb),
-        headerLinks = navLinks,
-        sidebarLinks = navigationService.sidebarNavigation())
+  def previewApiDocumentation(url: Option[String]) = headerNavigation { implicit request =>
+    navLinks =>
+      if (appConfig.ramlPreviewEnabled) {
+        val pageAttributes = apidocumentation.models.PageAttributes(title = "API Documentation Preview",
+          breadcrumbs = Breadcrumbs(
+            Crumb("Preview RAML", routes.DocumentationController.previewApiDocumentation(None).url),
+            apiDocCrumb,
+            homeCrumb),
+          headerLinks = navLinks,
+          sidebarLinks = navigationService.sidebarNavigation())
 
-      val page = (result: Try[Option[RamlAndSchemas]]) => previewDocumentation(pageAttributes, url, result)
+        val page = (result: Try[Option[RamlAndSchemas]]) => previewDocumentation(pageAttributes, url, result)
 
-      url match {
-        case Some("") => Future.successful(InternalServerError(page(Failure(RamlParseException("No URL supplied")))))
-        case None => Future.successful(Ok(page(Success(None))))
-        case _ =>
-          documentationService.fetchRAML(url.get, true).map { ramlAndSchemas =>
-            Ok(page(Success(Some(ramlAndSchemas))))
-          } recover {
-            case e: Throwable =>
-              Logger.error("Could not load API Documentation service", e)
-              InternalServerError(page(Failure(e)))
-          }
+        url match {
+          case Some("") => Future.successful(InternalServerError(page(Failure(RamlParseException("No URL supplied")))))
+          case None => Future.successful(Ok(page(Success(None))))
+          case _ =>
+            documentationService.fetchRAML(url.get, true).map { ramlAndSchemas =>
+              Ok(page(Success(Some(ramlAndSchemas))))
+            } recover {
+              case e: Throwable =>
+                Logger.error("Could not load API Documentation service", e)
+                InternalServerError(page(Failure(e)))
+            }
+        }
+      } else {
+        Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
       }
-    } else {
-      Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
-    }
   }
 
   def fetchTestEndpointJson(service: String, version: String) = Action.async { implicit request =>
@@ -363,9 +382,9 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     }
   }
 
-  def renderXmlApiDocumentation(name: String): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    if (appConfig.groupedDocumentationEnabled) {
-      def makePageAttributes(apiDefinition: APIDefinition): PageAttributes = {
+  def renderXmlApiDocumentation(name: String): Action[AnyContent] = headerNavigation { implicit request =>
+    navLinks =>
+      def makePageAttributes(apiDefinition: DocumentationType): PageAttributes = {
         val breadcrumbs = Breadcrumbs(
           Crumb(
             apiDefinition.name,
@@ -376,13 +395,10 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         apidocumentation.models.PageAttributes(apiDefinition.name, breadcrumbs, navLinks, navigationService.sidebarNavigation())
       }
 
-      APIDefinition.xmlApiDefinitions.find(_.name == name) match {
+      XmlAPIDefinition.xmlApiDefinitions.find(_.name == name) match {
         case Some(xmlApiDefinition) => Future.successful(Ok(xmlDocumentation(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
         case _ => Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
       }
-    } else {
-      Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
-    }
   }
 
   private def headerNavigation(f: Request[AnyContent] => Seq[NavLink] => Future[Result]): Action[AnyContent] = {

@@ -21,7 +21,7 @@
 @import include._
 
 @(pageAttributes: PageAttributes,
-        apisByCategory: Map[APICategory, Seq[APIDefinition]])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+        documentsByCategory: Map[APICategory, Seq[DocumentationType]])(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @apiMain(pageAttributes) {
 
@@ -29,6 +29,6 @@
 
     <p>View documentation for our RESTful APIs here on the Developer Hub. We also provide links to XML APIs which are documented elsewhere.</p>
 
-    @apiFilter(apisByCategory)
-    @apiGroups(apisByCategory)
+    @documentFilter(documentsByCategory)
+    @documentGroups(documentsByCategory)
 }

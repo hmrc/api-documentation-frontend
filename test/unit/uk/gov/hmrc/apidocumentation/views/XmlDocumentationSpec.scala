@@ -56,7 +56,7 @@ class XmlDocumentationSpec extends UnitSpec with MockitoSugar with OneAppPerSuit
     When(pageAttributes.breadcrumbs).thenReturn(Breadcrumbs())
     When(pageAttributes.contentHeader).thenReturn(None)
 
-    val apiDefinition = APIDefinition(name, name, description, context, Some(false), Some(false), Seq(APIVersion("1.0", Some(APIAccess(APIAccessType.PUBLIC)), APIStatus.STABLE, Seq.empty)), isXmlApi = Some(true))
+    val apiDefinition = XmlAPIDefinition(name, context, description)
     val page = Page(views.html.xmlDocumentation(pageAttributes, apiDefinition)(request, appConfig, messages))
   }
 

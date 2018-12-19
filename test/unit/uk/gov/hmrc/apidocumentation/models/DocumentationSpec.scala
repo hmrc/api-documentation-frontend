@@ -226,7 +226,7 @@ class DocumentationSpec extends UnitSpec {
         CUSTOMS -> Seq(api1),
         PAYE -> Seq(api2))
 
-      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq.empty)
+      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty)
 
       result shouldBe expected
     }
@@ -242,7 +242,7 @@ class DocumentationSpec extends UnitSpec {
         PAYE -> Seq(api2),
         VAT -> Seq(api1, api2))
 
-      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq.empty, categoryMap)
+      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -253,7 +253,7 @@ class DocumentationSpec extends UnitSpec {
       val categoryMap = Map("name3" -> Seq(CUSTOMS))
       val expected = Map(OTHER -> Seq(api1, api2))
 
-      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq.empty, categoryMap)
+      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -270,7 +270,7 @@ class DocumentationSpec extends UnitSpec {
         PAYE -> Seq(api2),
         VAT -> Seq(api1, api2))
 
-      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq.empty, categoryMap)
+      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -278,8 +278,8 @@ class DocumentationSpec extends UnitSpec {
     "include XML API definitions" in {
       val api1 = anApiDefinition("name1")
       val api2 = anApiDefinition("name2")
-      val xmlApi1 = anApiDefinition("xmlName1", isXmlApi = Some(true))
-      val xmlApi2 = anApiDefinition("xmlName2", isXmlApi = Some(true))
+      val xmlApi1 = anXmlApiDefinition("xmlName1")
+      val xmlApi2 = anXmlApiDefinition("xmlName2")
       val categoryMap = Map(
         "name1" -> Seq(CUSTOMS, VAT),
         "name2" -> Seq(PAYE, VAT),
@@ -291,7 +291,7 @@ class DocumentationSpec extends UnitSpec {
         PAYE -> Seq(api2, xmlApi1),
         VAT -> Seq(api1, api2, xmlApi2))
 
-      val result = APIDefinition.groupedByCategory(Seq(api1, api2), Seq(xmlApi1, xmlApi2), categoryMap)
+      val result = DocumentationType.groupedByCategory(Seq(api1, api2), Seq(xmlApi1, xmlApi2), Seq.empty, categoryMap)
 
       result shouldBe expected
     }
@@ -304,35 +304,55 @@ class DocumentationSpec extends UnitSpec {
         "testSupportApi" -> Seq(CUSTOMS))
       val expected = Map(CUSTOMS -> Seq(restApi, testSupportApi))
 
-      val result = APIDefinition.groupedByCategory(Seq(restApi, testSupportApi), Seq.empty, categoryMap)
+      val result = DocumentationType.groupedByCategory(Seq(restApi, testSupportApi), Seq.empty, Seq.empty, categoryMap)
 
       result shouldBe expected
     }
 
     "include XML and Test Support APIS" in {
-      val xmlApi = anApiDefinition("xmlApi", isXmlApi = Some(true))
+      val xmlApi = anXmlApiDefinition("xmlApi")
       val testSupportApi = anApiDefinition("testSupportApi", isTestSupport = Some(true))
       val categoryMap = Map(
         "xmlApi" -> Seq(CUSTOMS),
         "testSupportApi" -> Seq(CUSTOMS))
       val expected = Map(CUSTOMS -> Seq(testSupportApi, xmlApi))
 
-      val result = APIDefinition.groupedByCategory(Seq(testSupportApi), Seq(xmlApi), categoryMap)
+      val result = DocumentationType.groupedByCategory(Seq(testSupportApi), Seq(xmlApi), Seq.empty, categoryMap)
+
+      result shouldBe expected
+    }
+
+    "include APIs and Service guides" in {
+      val api = anApiDefinition("myApi")
+      val serviceGuide = aServiceGuide("myServiceGuide")
+      val categoryMap = Map(
+        "myApi" -> Seq(CUSTOMS),
+        "myServiceGuide" -> Seq(CUSTOMS))
+      val expected = Map(CUSTOMS -> Seq(api, serviceGuide))
+
+      val result = DocumentationType.groupedByCategory(Seq(api), Seq.empty, Seq(serviceGuide), categoryMap)
 
       result shouldBe expected
     }
 
     "filter out categories without REST or XML APIs" in {
       val testSupportApi = anApiDefinition("testSupportApi", isTestSupport = Some(true))
+      val serviceGuide = aServiceGuide("serviceGuide")
       val categoryMap = Map("name1" -> Seq(CUSTOMS, VAT))
 
-      val result = APIDefinition.groupedByCategory(Seq(testSupportApi), Seq.empty, categoryMap)
+      val result = DocumentationType.groupedByCategory(Seq(testSupportApi), Seq.empty, Seq(serviceGuide), categoryMap)
 
       result shouldBe Map.empty
     }
 
-    def anApiDefinition(name: String, categories: Option[Seq[APICategory]] = None, isTestSupport: Option[Boolean] = None, isXmlApi: Option[Boolean] = None) =
-      APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), categories, isXmlApi)
+    def anApiDefinition(name: String, categories: Option[Seq[APICategory]] = None, isTestSupport: Option[Boolean] = None) =
+      APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), categories)
+
+    def anXmlApiDefinition(name: String, categories: Option[Seq[APICategory]] = None) =
+      XmlAPIDefinition(name, "description", "context", categories)
+
+    def aServiceGuide(name: String, categories: Option[Seq[APICategory]] = None) =
+      ServiceGuide(name, "context", categories)
   }
 
   "decoratedUriPattern" should {

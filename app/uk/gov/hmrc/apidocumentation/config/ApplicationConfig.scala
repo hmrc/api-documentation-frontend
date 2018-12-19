@@ -52,7 +52,6 @@ class ApplicationConfig @Inject()(config: Configuration) extends ServicesConfig 
   lazy val title = "HMRC Developer Hub"
   lazy val isStubMode = env == "Stub"
   lazy val xmlApiBaseUrl = config.getString(s"$env.xml-api.base-url").getOrElse("https://www.gov.uk")
-  lazy val groupedDocumentationEnabled = config.getBoolean(s"$env.features.groupedDocumentation").getOrElse(false)
 
   private def buildRamlLoaderRewrites(config: Configuration): Map[String, String] = {
     Map(config.getString(s"$env.ramlLoaderUrlRewrite.from").getOrElse("") ->

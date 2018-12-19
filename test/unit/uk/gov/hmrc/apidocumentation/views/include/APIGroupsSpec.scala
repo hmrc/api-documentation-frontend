@@ -19,7 +19,7 @@ package unit.uk.gov.hmrc.apidocumentation.views.include
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat.Appendable
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, APIVersion}
+import uk.gov.hmrc.apidocumentation.models.{APICategory => _, _}
 import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.APIStatus._
 import uk.gov.hmrc.apidocumentation.views
@@ -35,25 +35,31 @@ class APIGroupsSpec extends UnitSpec {
     lazy val serviceTags = dom.getElementsByClass("service-tag")
   }
 
-  private def anApiDefinition(name: String, isTestSupport: Option[Boolean] = None, isXmlApi: Option[Boolean] = None) =
-    APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), None, isXmlApi)
+  private def anApiDefinition(name: String, isTestSupport: Option[Boolean] = None) =
+    APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), None)
+
+  def anXmlApiDefinition(name: String) =
+    XmlAPIDefinition(name, "description", "context")
+
+  def aServiceGuide(name: String) =
+    ServiceGuide(name, "context")
 
   trait Setup {
     val customsApis = Seq(
       anApiDefinition("customsTestSupport1", isTestSupport = Some(true)),
-      anApiDefinition("customsXmlApi2", isXmlApi = Some(true)),
+      anXmlApiDefinition("customsXmlApi2"),
       anApiDefinition("customsRestApi2"),
       anApiDefinition("customsRestApi1"),
-      anApiDefinition("customsXmlApi1", isXmlApi = Some(true)),
+      anXmlApiDefinition("customsXmlApi1"),
       anApiDefinition("customsTestSupport2", isTestSupport = Some(true)))
     val vatApis = Seq(
       anApiDefinition("vatTestSupport1", isTestSupport = Some(true)),
-      anApiDefinition("vatXmlApi1", isXmlApi = Some(true)),
+      anXmlApiDefinition("vatXmlApi1"),
       anApiDefinition("vatRestApi2"),
       anApiDefinition("vatRestApi1"),
       anApiDefinition("vatTestSupport2", isTestSupport = Some(true)))
 
-    val apisByCategory: Map[APICategory, Seq[APIDefinition]] = Map(CUSTOMS -> customsApis, VAT -> vatApis)
+    val apisByCategory: Map[APICategory, Seq[DocumentationType]] = Map(CUSTOMS -> customsApis, VAT -> vatApis)
     val page = Page(views.html.include.apiGroups(apisByCategory))
   }
 
@@ -65,7 +71,7 @@ class APIGroupsSpec extends UnitSpec {
     }
 
     "sort the definitions by their label" in new Setup {
-      val classList = page.serviceTags.eachAttr("class").asScala.map(_.stripPrefix("service-tag service-tag--")).toSeq
+      val classList = page.serviceTags.eachAttr("class").asScala.map(_.stripPrefix("service-tag service-tag--"))
       classList shouldBe Seq("rest", "rest", "test", "test", "xml", "xml", "rest", "rest", "test", "test", "xml")
     }
   }

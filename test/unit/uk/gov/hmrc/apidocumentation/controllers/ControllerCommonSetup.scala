@@ -52,6 +52,12 @@ class ControllerCommonSetup extends UnitSpec with ScalaFutures with MockitoSugar
       Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)))))
   }
 
+  def anXmlApiDefinition(name: String) =
+    XmlAPIDefinition(name, "description", "context")
+
+  def aServiceGuide(name: String) =
+    ServiceGuide(name, "context")
+
   def extendedApiDefinition(serviceName: String, version: String): ExtendedAPIDefinition = {
     extendedApiDefinition(serviceName, version, APIAccessType.PUBLIC, loggedIn = false, authorised = true)
   }
