@@ -22,7 +22,7 @@ import play.api.mvc.{EssentialFilter, Request}
 import play.api.{Application, Configuration, Play}
 import play.twirl.api.Html
 import uk.gov.hmrc.ramltools.loaders.{UrlRewriter, UrlRewritingRamlLoader}
-import uk.gov.hmrc.apidocumentation.{LoginFilter, SessionRedirectFilter, views}
+import uk.gov.hmrc.apidocumentation.{SessionRedirectFilter, views}
 import uk.gov.hmrc.crypto.ApplicationCrypto
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
