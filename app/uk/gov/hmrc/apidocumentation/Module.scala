@@ -32,6 +32,8 @@ package uk.gov.hmrc.apidocumentation
  * limitations under the License.
  */
 
+import javax.inject.Inject
+
 import com.google.inject.{AbstractModule, Provides}
 import play.api.mvc.EssentialFilter
 import uk.gov.hmrc.apidocumentation.config._
@@ -56,6 +58,4 @@ class Module extends AbstractModule {
     bind(classOf[AuditConnector]).toInstance(ApiDocumentationFrontendAuditConnector)
   }
 
-  @Provides()
-  def provideFilters(): Seq[EssentialFilter] = Seq.empty
 }

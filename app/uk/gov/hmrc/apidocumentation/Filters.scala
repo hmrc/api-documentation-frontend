@@ -34,10 +34,29 @@ package uk.gov.hmrc.apidocumentation
 
 import javax.inject.{Inject, Singleton}
 
+import akka.stream.Materializer
 import play.api.http.HttpFilters
-import play.api.mvc.EssentialFilter
+import play.api.mvc._
+import uk.gov.hmrc.apidocumentation.controllers.DocumentationController
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class Filters @Inject()(override val filters: Seq[EssentialFilter]) extends HttpFilters {
 
+}
+
+@Singleton
+class SessionRedirectFilter @Inject()(implicit override val mat: Materializer,
+                            exec: ExecutionContext) extends Filter {
+
+  override def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
+    nextFilter(requestHeader).map { result =>
+      if (requestHeader.tags("ROUTE_CONTROLLER") == classOf[DocumentationController].getCanonicalName) {
+        result.withSession(requestHeader.session + ("access_uri" -> requestHeader.uri))
+      } else {
+        result
+      }
+    }
+  }
 }

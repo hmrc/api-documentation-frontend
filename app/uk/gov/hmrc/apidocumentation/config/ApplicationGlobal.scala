@@ -18,11 +18,11 @@ package uk.gov.hmrc.apidocumentation.config
 
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
-import play.api.mvc.Request
+import play.api.mvc.{EssentialFilter, Request}
 import play.api.{Application, Configuration, Play}
 import play.twirl.api.Html
 import uk.gov.hmrc.ramltools.loaders.{UrlRewriter, UrlRewritingRamlLoader}
-import uk.gov.hmrc.apidocumentation.views
+import uk.gov.hmrc.apidocumentation.{SessionRedirectFilter, views}
 import uk.gov.hmrc.crypto.ApplicationCrypto
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
@@ -46,6 +46,8 @@ object ApplicationGlobal extends DefaultFrontendGlobal with RunMode {
     super.onStart(app)
     ApplicationCrypto.verifyConfiguration()
   }
+
+  override def frontendFilters: Seq[EssentialFilter] = defaultFrontendFilters :+ Play.current.injector.instanceOf[SessionRedirectFilter]
 }
 
 object ControllerConfiguration extends ControllerConfig {
