@@ -57,7 +57,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
   }
 
   private def renderAllDocumentation(page: Page) = {
-    page.docHeadings shouldBe Set("Overview", "Versioning", "Errors", "Resources")
+    page.docHeadings shouldBe Set("Overview", "Versioning", "Errors", "Endpoints")
   }
 
   val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]

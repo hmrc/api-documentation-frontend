@@ -82,8 +82,8 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
         href = "#read-more")
     } else {
       SidebarLink(
-        label = "Resources",
-        href = "#resources",
+        label = "Endpoints",
+        href = "#endpoints",
         subLinks = traverse(raml.resources.asScala),
         showSubLinks = true)
     }

@@ -43,15 +43,15 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
         Table(
           "Section",
           "Errors",
-          "Resources"
+          "Endpoints"
         )
       executeScript("window.scrollTo(0, document.body.scrollHeight)")
       forAll(topLinkClickedFromSection) {
         case "Errors" =>
           HelloWorldPage.selectErrorsBackToTop()
           assert(executeScript("return window.pageYOffset;").toString.equalsIgnoreCase("0"))
-        case "Resources" =>
-          HelloWorldPage.selectResourcesBackToTop()
+        case "Endpoints" =>
+          HelloWorldPage.selectEndpointsBackToTop()
           assert(executeScript("return window.pageYOffset;").toString.equalsIgnoreCase("0"))
       }
     }

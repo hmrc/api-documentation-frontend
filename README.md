@@ -40,7 +40,7 @@ Frontend for API documentation - part of the Developer Hub
 
 ## Running locally with dependencies
 
-To run locally use `./run_local_with_dependencies.sh` as well as starting any apis you want to see the documentation for in Dev mode. 
+To run locally use `./run_local_with_dependencies.sh` as well as starting any apis you want to see the documentation for with service manager. 
 
 Note: API definitions (`mongo -d api-definition -c api`) will need their `serviceBaseUrl` pointing to `http://localhost:<port>`:
 To update:
