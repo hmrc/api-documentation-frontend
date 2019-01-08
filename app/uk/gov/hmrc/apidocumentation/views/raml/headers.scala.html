@@ -18,9 +18,8 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import org.raml.v2.api.model.v10.datamodel.TypeDeclaration
 
-@(headers: Seq[TypeDeclaration], version: String, caption: String, required: String, meth: Method)
+@(headers: Seq[TypeDeclaration], version: String, caption: String, required: String, authorisation: (String, Option[String]))
 
-@if(headers.nonEmpty) {
     <section id="request-headers" class="section">
         <h4 class="heading-small">@caption</h4>
         <table class="table--align-top">
@@ -56,16 +55,16 @@
                 </tr>
                 }
                 @{
-                Authorisation(meth) match {
+                authorisation match {
                 case ("user", Some(scope)) => {
-                <tr class="table__row--responsive">
+                <tr class="table__row--responsive authorization-request-header">
                     <td data-heading="Name" class="table__detail--responsive">
                         <div class="table__cell-contents--responsive">
                             <div class="parameter-name">Authorization</div>
                             <div class="parameter-required">required</div>
                         </div>
                     </td>
-                    <td> An
+                    <td class="auth-table-description"> An
                         <a href="/api-documentation/docs/authorisation/user-restricted-endpoints">OAuth 2.0 Bearer Token</a>
                         with the <code class="code--slim">{scope}</code> scope.
                         <br/>
@@ -75,14 +74,14 @@
                 </tr>
                 }
                 case ("application", _) => {
-                <tr>
+                <tr class="table__row--responsive authorization-request-header">
                     <td data-heading="Name" class="table__detail--responsive">
                         <div class="table__cell-contents--responsive">
                             <div class="parameter-name">Authorization</div>
                             <div class="parameter-required">required</div>
                         </div>
                     </td>
-                    <td>
+                    <td class="auth-table-description">
                         A bearer token which is either your application's <code class="code--slim"><a href="/api-documentation/docs/authorisation/application-restricted-endpoints">server_token</a></code> or an
                         <a href="/api-documentation/docs/authorisation/user-restricted-endpoints">OAuth 2.0 Bearer Token</a>.
                         <br/>
@@ -99,4 +98,3 @@
         </table>
         <p>See also <a href="/api-documentation/docs/fraud-prevention">fraud prevention</a> for other request headers which will become mandatory.</p>
     </section>
-}
