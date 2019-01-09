@@ -100,8 +100,8 @@ class NavigationServiceSpec extends UnitSpec with WithFakeApplication with Mocki
       apiSidebarNavLinks.size shouldBe 2
       apiSidebarNavLinks.head.href shouldBe "#overview"
       apiSidebarNavLinks.head.label shouldBe "Overview"
-      apiSidebarNavLinks.last.href shouldBe "#resources"
-      apiSidebarNavLinks.last.label shouldBe "Resources"
+      apiSidebarNavLinks.last.href shouldBe "#endpoints"
+      apiSidebarNavLinks.last.label shouldBe "Endpoints"
     }
 
     "render overview documentation and 'read more' links when the api is not visible" in new Setup {

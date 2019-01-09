@@ -93,8 +93,8 @@
         @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.flatMap(_.visibility)))) { case (isPreview, visibility) =>
             @if(isPreview || visibility == DocsVisibility.VISIBLE) {
                 <div class="section">
-                    <h2 id="resources" class="heading-large">
-                        Resources
+                    <h2 id="endpoints" class="heading-large">
+                        Endpoints
                     </h2>
 
                     @for(resourceGroup <- GroupedResources(raml.resources)) {

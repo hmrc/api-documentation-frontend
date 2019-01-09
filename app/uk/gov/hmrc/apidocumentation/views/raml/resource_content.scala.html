@@ -21,7 +21,36 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services.RAML
 
-@(res: Resource, meth: Method, raml: RAML, schemas: Map[String, JsonSchema], contentID: String)
+@(res: Resource, meth: Method, raml: RAML, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
+
+<section id="authorisation_@contentID" class="section">
+    <h4 class="heading-small">Authorisation</h4>
+    @{
+    val userRestrictedUrl = routes.DocumentationController.authorisationPage().url + "#user-restricted"
+    val appRestrictedUrl = routes.DocumentationController.authorisationPage().url + "#application-restricted"
+    authorisation match {
+    case ("user", Some(scope)) => {
+    <p class="endpoint-description">
+        This endpoint is
+        <a href = "/api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted</a>
+        - it requires an <code class="code--slim">Authorization</code> header containing an OAuth 2.0 Bearer Token with the <code class="code--slim">{scope}</code> scope.
+    </p>
+    }
+    case ("application", _) => {
+    <p class="endpoint-description">
+        This endpoint is
+        <a href = "/api-documentation/docs/authorisation/application-restricted-endpoints">application-restricted</a>
+        - it requires an <code class="code--slim">Authorization</code> header containing a <code class="code--slim">server_token</code> or an OAuth 2.0 Bearer Token.
+    </p>
+    }
+    case _ => {
+    <p class="endpoint-description">This endpoint is
+        <a href = "/api-documentation/docs/authorisation/open-access-endpoints">open access</a>
+        - no <code class="code--slim">Authorization</code> header is required.</p>
+    }
+    }
+    }
+</section>
 
 @defining(UriParams(res, raml)) { params =>
     @if(params.nonEmpty) {
@@ -67,38 +96,9 @@
     }
 }
 
-@if(meth.headers.nonEmpty) {
-    @headers(meth.headers.toSeq, raml.version.value, "Request headers", "required")
+@if(meth.headers.nonEmpty || authorisation._1 != "none") {
+    @headers(meth.headers.toSeq, raml.version.value, "Request headers", "required", authorisation)
 }
-
-<section id="authorisation_@contentID" class="section">
-    <h4 class="heading-small">Authorisation</h4>
-    @{
-    val userRestrictedUrl = routes.DocumentationController.authorisationPage().url + "#user-restricted"
-    val appRestrictedUrl = routes.DocumentationController.authorisationPage().url + "#application-restricted"
-    Authorisation(meth) match {
-        case ("user", Some(scope)) => {
-            <p>
-                This resource is
-                <a href = "/api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted</a>
-                - it requires an Authorization header containing an OAuth 2.0 Bearer Token with the <code class="code--slim">{scope}</code> scope.
-            </p>
-        }
-        case ("application", _) => {
-            <p>
-                This resource is
-                <a href = "/api-documentation/docs/authorisation/application-restricted-endpoints">application-restricted</a>
-                - it requires an Authorization header containing a <code class="code--slim">server_token</code> or an OAuth 2.0 Bearer Token.
-            </p>
-        }
-        case _ => {
-    <p>This resource is
-        <a href = "/api-documentation/docs/authorisation/open-access-endpoints">open access</a>
-        - no Authorization header is required.</p>
-        }
-      }
-    }
-</section>
 
 @for(body <- meth.body) {
     <section id="sample-request_@contentID" class="section">
@@ -117,7 +117,7 @@
 @for(resp <- Responses.success(meth)) {
     <section id="sample-response_@contentID" class="section">
         @if(resp.headers().nonEmpty) {
-            @headers(resp.headers.toSeq, raml.version.value, "Response headers", "")
+            @headers(resp.headers.toSeq, raml.version.value, "Response headers", "", ("none", None))
         }
 
         <h4 class="heading-small">Response</h4>
@@ -172,7 +172,7 @@
                 }
                 </tbody>
             </table>
-            <p>For error scenarios that are common across all APIs, see our <a href = "/api-documentation/docs/reference-guide#errors">reference guide</a>.</p>
+            <p>For error scenarios that are common across all APIs, and for error formats, see our <a href = "/api-documentation/docs/reference-guide#errors">reference guide</a>.</p>
         </section>
     }
 }
