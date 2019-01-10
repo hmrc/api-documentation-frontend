@@ -132,7 +132,8 @@ case class ExtendedAPIDefinition(serviceName: String,
                                  versions: Seq[ExtendedAPIVersion]) {
 
   def userAccessibleApiDefinition = {
-    def isAccessible(availability: Option[APIAvailability]) = availability.fold(false)(_.authorised)
+    def isAccessible(availability: Option[APIAvailability]) =
+      availability.fold(false)(avail => avail.authorised || avail.access.isTrial.contains(true))
 
     copy(versions = versions.filter(v => isAccessible(v.productionAvailability) || isAccessible(v.sandboxAvailability)))
   }
