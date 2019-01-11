@@ -307,6 +307,26 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
       }
 
+      "redirect to the documentation page for api in private trial for user without authorisation" in new Setup {
+        theUserIsLoggedIn()
+        val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
+          APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
+        theDocumentationServiceWillReturnAnApiDefinition(Some(privateTrialAPIDefinition))
+        val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
+        status(result) shouldBe 303
+        result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+      }
+
+      "redirect to the documentation page for api in private trial for user with authorisation" in new Setup {
+        theUserIsLoggedIn()
+        val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
+          APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
+        theDocumentationServiceWillReturnAnApiDefinition(Some(privateTrialAPIDefinition))
+        val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
+        status(result) shouldBe 303
+        result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+      }
+
       "redirect to the documentation page for the latest accessible version" in new Setup {
         theUserIsLoggedIn()
 
