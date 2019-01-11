@@ -221,8 +221,12 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     s"${api.name}$suffix v${selectedVersion.version} (${selectedVersion.displayedStatus})"
   }
 
-  def redirectToCurrentApiDocumentation(service: String, cacheBuster: Option[Boolean]): Action[AnyContent] =
-    Action.async { implicit request =>
+  def redirectToApiDocumentation(service: String, version: Option[String], cacheBuster: Option[Boolean]): Action[AnyContent] = version match {
+    case Some(version) => Action.async { Future.successful(Redirect(routes.DocumentationController.renderApiDocumentation(service, version, cacheBuster))) }
+    case _ => redirectToCurrentApiDocumentation (service, cacheBuster)
+  }
+
+  private def redirectToCurrentApiDocumentation(service: String, cacheBuster: Option[Boolean]) = Action.async { implicit request =>
     (for {
       email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
       extendedDefn <- documentationService.fetchExtendedApiDefinition(service, email)
