@@ -61,5 +61,15 @@ class FiltersSpec extends UnitSpec with MockitoSugar with WithFakeApplication {
 
       verify(mockResult, never).withSession(any[Session])
     }
+
+    "not add the current uri to the session when the request is not tagged with the ROUTE_CONTROLLER" in new Setup {
+      val controller = "controllers.AssetsController"
+      val path = "/path/to/save"
+      implicit val requestHeader = FakeRequest("OPTIONS", path)
+
+      val result = await(filter.apply(nextFilter)(requestHeader))
+
+      verify(mockResult, never).withSession(any[Session])
+    }
   }
 }

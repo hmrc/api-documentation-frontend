@@ -36,7 +36,7 @@ class SessionRedirectFilter @Inject()(implicit override val mat: Materializer,
 
   override def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     nextFilter(requestHeader).map { result =>
-      if (requestHeader.tags("ROUTE_CONTROLLER") == classOf[DocumentationController].getCanonicalName) {
+      if (requestHeader.tags.getOrElse("ROUTE_CONTROLLER", "") == classOf[DocumentationController].getCanonicalName) {
         result.withSession(requestHeader.session + ("access_uri" -> requestHeader.uri))
       } else {
         result
