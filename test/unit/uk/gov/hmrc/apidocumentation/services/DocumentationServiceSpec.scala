@@ -20,7 +20,6 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
-import play.api.Application
 import play.api.cache.CacheApi
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.connectors.APIDocumentationConnector
@@ -46,10 +45,9 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
   val api: APIDefinition = apiDefinition("gregorian-calendar")
 
   trait Setup {
-    private val cacheApiCache = Application.instanceCache[CacheApi]
     implicit val hc = HeaderCarrier()
     val apiDocumentationConnector = mock[APIDocumentationConnector]
-    val cache = cacheApiCache(fakeApplication)
+    val cache = fakeApplication.injector.instanceOf[CacheApi]
     val ramlLoader = mock[RamlLoader]
     val schemaLoader = mock[SchemaService]
     val underTest = new DocumentationService(apiDocumentationConnector, cache, ramlLoader, schemaLoader)

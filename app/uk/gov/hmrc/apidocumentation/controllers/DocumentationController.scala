@@ -24,14 +24,15 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation
-import uk.gov.hmrc.apidocumentation.config.{ApplicationConfig, ApplicationGlobal}
+import uk.gov.hmrc.apidocumentation.ErrorHandler
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,8 +40,9 @@ import scala.util.{Failure, Success, Try}
 
 class DocumentationController @Inject()(documentationService: DocumentationService, navigationService: NavigationService,
                                         partialsService: PartialsService,
-                                        loggedInUserProvider: LoggedInUserProvider, val messagesApi: MessagesApi,
-                                        implicit val appConfig: ApplicationConfig)
+                                        loggedInUserProvider: LoggedInUserProvider,
+                                        errorHandler: ErrorHandler,
+                                        val messagesApi: MessagesApi)(implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
     extends FrontendController with I18nSupport {
 
   private lazy val cacheControlHeaders = "cache-control" -> s"public, max-age=${documentationService.defaultExpiration.toSeconds}"
@@ -211,7 +213,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         }) recover {
           case e: Throwable =>
             Logger.error("Could not load API Documentation service", e)
-            InternalServerError(ApplicationGlobal.internalServerErrorTemplate)
+            InternalServerError(errorHandler.internalServerErrorTemplate)
         }
     }
   }
@@ -231,14 +233,14 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
       extendedDefn <- documentationService.fetchExtendedApiDefinition(service, email)
     } yield {
-      extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(NotFound(ApplicationGlobal.notFoundTemplate)) { version =>
+      extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(NotFound(errorHandler.notFoundTemplate)) { version =>
         Redirect(routes.DocumentationController.renderApiDocumentation(service, version.version, cacheBuster))
       }
     }) recover {
-      case e: NotFoundException => NotFound(ApplicationGlobal.notFoundTemplate)
+      case e: NotFoundException => NotFound(errorHandler.notFoundTemplate)
       case e: Throwable =>
         Logger.error("Could not load API Documentation service", e)
-        InternalServerError(ApplicationGlobal.internalServerErrorTemplate)
+        InternalServerError(errorHandler.internalServerErrorTemplate)
     }
   }
 
@@ -252,13 +254,13 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     } yield apiDocumentation) recover {
       case e: NotFoundException =>
         Logger.info(s"Upstream request not found: ${e.getMessage}")
-        NotFound(ApplicationGlobal.notFoundTemplate)
+        NotFound(errorHandler.notFoundTemplate)
       case e: RamlNotFoundException =>
         Logger.info(s"RAML document not found: ${e.getMessage}")
-        NotFound(ApplicationGlobal.notFoundTemplate)
+        NotFound(errorHandler.notFoundTemplate)
       case e: Throwable =>
         Logger.error("Could not load API Documentation service", e)
-        InternalServerError(ApplicationGlobal.internalServerErrorTemplate)
+        InternalServerError(errorHandler.internalServerErrorTemplate)
     }
   }
 
@@ -284,7 +286,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         visibility <- apiVersion.visibility
       } yield (api, apiVersion, visibility)
 
-    def renderNotFoundPage = Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+    def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
 
     def redirectToLoginPage = {
       Logger.info(s"redirectToLogin - access_uri ${routes.DocumentationController.renderApiDocumentation(service, version, None).url}")
@@ -342,7 +344,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
           }
       }
     } else {
-      Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+      Future.successful(NotFound(errorHandler.notFoundTemplate))
     }
   }
 
@@ -378,10 +380,10 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
       APIDefinition.xmlApiDefinitions.find(_.name == name) match {
         case Some(xmlApiDefinition) => Future.successful(Ok(xmlDocumentation(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
-        case _ => Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+        case _ => Future.successful(NotFound(errorHandler.notFoundTemplate))
       }
     } else {
-      Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+      Future.successful(NotFound(errorHandler.notFoundTemplate))
     }
   }
 
@@ -404,7 +406,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     apidocumentation.models.PageAttributes(title, breadcrumbs, headerNavLinks, navigationService.sidebarNavigation())
   }
 
-  private def extractEmail(fut: Future[Option[Developer]])(implicit ec: ExecutionContext): Future[Option[String]] = {
+  private def extractEmail(fut: Future[Option[Developer]]): Future[Option[String]] = {
     fut.map(opt => opt.map(dev => dev.email))
   }
 

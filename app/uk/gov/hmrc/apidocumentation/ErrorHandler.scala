@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import com.google.inject.AbstractModule
-import uk.gov.hmrc.apidocumentation.raml.{DocumentationRamlLoader, DocumentationUrlRewriter}
-import uk.gov.hmrc.ramltools.loaders.{RamlLoader, UrlRewriter}
-import uk.gov.hmrc.play.http.metrics.{Metrics, PlayMetrics}
+import javax.inject.{Inject, Singleton}
 
-class Module extends AbstractModule {
+import play.api.Configuration
+import play.api.i18n.MessagesApi
+import play.api.mvc.Request
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 
-  override def configure() = {
-    bind(classOf[Metrics]).toInstance(PlayMetrics)
-    bind(classOf[RamlLoader]).to(classOf[DocumentationRamlLoader])
-    bind(classOf[UrlRewriter]).to(classOf[DocumentationUrlRewriter])
-  }
+@Singleton
+class ErrorHandler @Inject()(val messagesApi: MessagesApi, val configuration: Configuration)(implicit val appConfig: ApplicationConfig) extends FrontendErrorHandler {
 
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]) =
+    views.html.errorTemplate(pageTitle, heading, message)
 }

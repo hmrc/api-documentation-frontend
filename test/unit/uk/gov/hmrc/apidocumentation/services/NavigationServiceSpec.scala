@@ -21,7 +21,7 @@ import org.mockito.Mockito._
 import org.raml.v2.api.model.v10.api.DocumentationItem
 import org.raml.v2.api.model.v10.system.types.AnnotableStringType
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.models._

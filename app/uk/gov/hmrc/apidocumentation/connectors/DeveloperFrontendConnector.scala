@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
-import uk.gov.hmrc.apidocumentation.config.WSHttp
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics.{API, Metrics}
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.connectionExceptionsAsHtmlPartialFailure
@@ -30,10 +30,11 @@ import uk.gov.hmrc.play.partials.HtmlPartial.connectionExceptionsAsHtmlPartialFa
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeveloperFrontendConnector @Inject()(http: WSHttp, metrics: Metrics) extends ServicesConfig {
+@Singleton
+class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig,  metrics: Metrics) {
 
   val api = API("third-party-developer-frontend")
-  val serviceBaseUrl = baseUrl("developer-frontend")
+  lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = metrics.record(api) {
     http.GET[Seq[NavLink]](s"$serviceBaseUrl/developer/user-navlinks")

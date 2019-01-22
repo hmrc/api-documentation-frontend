@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation
+package uk.gov.hmrc.apidocumentation.raml
 
-import com.google.inject.AbstractModule
-import uk.gov.hmrc.apidocumentation.raml.{DocumentationRamlLoader, DocumentationUrlRewriter}
-import uk.gov.hmrc.ramltools.loaders.{RamlLoader, UrlRewriter}
-import uk.gov.hmrc.play.http.metrics.{Metrics, PlayMetrics}
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.ramltools.loaders.UrlRewriter
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
-class Module extends AbstractModule {
-
-  override def configure() = {
-    bind(classOf[Metrics]).toInstance(PlayMetrics)
-    bind(classOf[RamlLoader]).to(classOf[DocumentationRamlLoader])
-    bind(classOf[UrlRewriter]).to(classOf[DocumentationUrlRewriter])
-  }
-
+@Singleton
+class DocumentationUrlRewriter @Inject()(appConfig: ApplicationConfig) extends UrlRewriter {
+  lazy val rewrites = appConfig.ramlLoaderRewrites
 }

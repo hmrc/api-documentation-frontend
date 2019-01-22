@@ -18,12 +18,10 @@ package acceptance.uk.gov.hmrc.apidocumentation
 
 import java.net.URL
 
-import cucumber.api.scala.{EN, ScalaDsl}
 import org.openqa.selenium._
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxProfile}
 import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
-import org.scalatest.Matchers
 
 import scala.util.{Properties, Try}
 

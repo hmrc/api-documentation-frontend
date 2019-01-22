@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import play.api.mvc.Action
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 

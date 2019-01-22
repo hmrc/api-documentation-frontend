@@ -16,21 +16,30 @@
 
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
-import java.net.URLEncoder
-
-import com.github.tomakehurst.wiremock.client.WireMock._
-import uk.gov.hmrc.apidocumentation.config.{ApiDocumentationFrontendAuditConnector, WSHttp}
+import org.mockito.Mockito.when
+import org.mockito.Matchers.{any, eq => meq}
+import play.api.libs.json.Json
+import play.api.http.Status._
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.APIDocumentationConnector
-import uk.gov.hmrc.apidocumentation.models.{APIAccessType, VersionVisibility}
+import uk.gov.hmrc.apidocumentation.models.{APIAccessType, APIDefinition, ExtendedAPIDefinition, VersionVisibility}
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics.{API, NoopMetrics}
 
+import scala.concurrent.Future
+
 class APIDocumentationConnectorSpec extends ConnectorSpec {
-  val apiDocumentationUrl = s"http://$wiremockHost:$wiremockPort"
+  val apiDocumentationUrl = "https://api-documentation.example.com"
 
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val connector = new APIDocumentationConnector(WSHttp(ApiDocumentationFrontendAuditConnector), NoopMetrics)
+    val mockHttpClient = mock[HttpClient]
+    val mockAppConfig = mock[ApplicationConfig]
+    val connector = new APIDocumentationConnector(mockHttpClient, mockAppConfig, NoopMetrics)
+
+    when(mockAppConfig.apiDocumentationUrl).thenReturn(apiDocumentationUrl)
   }
 
   "api" should {
@@ -43,8 +52,9 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
 
     "return a fetched API Definition" in new Setup {
       val serviceName = "calendar"
-      stubFor(get(urlEqualTo(s"/apis/$serviceName/definition"))
-        .willReturn(aResponse().withStatus(200).withBody(extendedApiDefinitionJson("Calendar"))))
+      when(mockHttpClient.GET[ExtendedAPIDefinition](meq(s"$apiDocumentationUrl/apis/$serviceName/definition"))(any(), any(), any()))
+        .thenReturn(Future.successful(extendedApiDefinition("Calendar")))
+
       val result = await(connector.fetchExtendedDefinitionByServiceName(serviceName))
       result.name shouldBe "Calendar"
       result.versions should have size 2
@@ -53,8 +63,9 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
 
     "return a fetched API Definition with access levels" in new Setup {
       val serviceName = "calendar"
-      stubFor(get(urlEqualTo(s"/apis/$serviceName/definition"))
-        .willReturn(aResponse().withStatus(200).withBody(extendedApiDefinitionJson("Hello with access levels"))))
+      when(mockHttpClient.GET[ExtendedAPIDefinition](meq(s"$apiDocumentationUrl/apis/$serviceName/definition"))(any(), any(), any()))
+        .thenReturn(Future.successful(extendedApiDefinition("Hello with access levels")))
+
       val result = await(connector.fetchExtendedDefinitionByServiceName(serviceName))
       result.name shouldBe "Hello with access levels"
       result.versions.size shouldBe 2
@@ -67,8 +78,9 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
 
     "throw an http-verbs Upstream5xxResponse exception if the API Definition service responds with an error" in new Setup {
       val serviceName = "calendar"
-      stubFor(get(urlEqualTo(s"/apis/$serviceName/definition"))
-        .willReturn(aResponse().withStatus(500)))
+      when(mockHttpClient.GET[ExtendedAPIDefinition](meq(s"$apiDocumentationUrl/apis/$serviceName/definition"))(any(), any(), any()))
+        .thenReturn(Future.failed(new Upstream5xxResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)))
+
       intercept[Upstream5xxResponse](await(connector.fetchExtendedDefinitionByServiceName(serviceName)))
     }
   }
@@ -76,12 +88,13 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
   "fetchExtendedDefinitionByServiceName with logged in email" should {
 
     val loggedInUserEmail = "test@example.com"
-    val encodedLoggedInUserMail = URLEncoder.encode(loggedInUserEmail, "UTF-8")
+    val params = Seq("email" -> loggedInUserEmail)
 
     "return a fetched API Definition" in new Setup {
       val serviceName = "calendar"
-      stubFor(get(urlEqualTo(s"/apis/$serviceName/definition?email=$encodedLoggedInUserMail"))
-        .willReturn(aResponse().withStatus(200).withBody(extendedApiDefinitionJson("Calendar"))))
+      when(mockHttpClient.GET[ExtendedAPIDefinition](meq(s"$apiDocumentationUrl/apis/$serviceName/definition"), meq(params))(any(), any(), any()))
+        .thenReturn(Future.successful(extendedApiDefinition("Calendar")))
+
       val result = await(connector.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, loggedInUserEmail))
       result.name shouldBe "Calendar"
       result.versions should have size 2
@@ -90,8 +103,9 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
 
     "throw an http-verbs Upstream5xxResponse exception if the API Definition service responds with an error" in new Setup {
       val serviceName = "calendar"
-      stubFor(get(urlEqualTo(s"/apis/$serviceName/definition?email=$encodedLoggedInUserMail"))
-        .willReturn(aResponse().withStatus(500)))
+      when(mockHttpClient.GET[ExtendedAPIDefinition](meq(s"$apiDocumentationUrl/apis/$serviceName/definition"), meq(params))(any(), any(), any()))
+      .thenReturn(Future.failed(new Upstream5xxResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)))
+
       intercept[Upstream5xxResponse](await(connector.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, loggedInUserEmail)))
     }
   }
@@ -99,8 +113,9 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
   "fetchAll" should {
 
     "return all API Definitions sorted by name" in new Setup {
-      stubFor(get(urlEqualTo("/apis/definition"))
-        .willReturn(aResponse().withStatus(200).withBody(apiDefinitionsJson("Hello", "Calendar"))))
+      when(mockHttpClient.GET[Seq[APIDefinition]](meq(s"$apiDocumentationUrl/apis/definition"))(any(), any(), any()))
+        .thenReturn(Future.successful(apiDefinitions("Hello", "Calendar")))
+
       val result = await(connector.fetchAll())
       result.size shouldBe 2
       result(0).name shouldBe "Calendar"
@@ -108,7 +123,9 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
     }
 
     "throw an http-verbs Upstream5xxResponse exception if the API Definition service responds with an error" in new Setup {
-      stubFor(get(urlEqualTo("/apis/definition")).willReturn(aResponse().withStatus(500)))
+      when(mockHttpClient.GET[Seq[APIDefinition]](meq(s"$apiDocumentationUrl/apis/definition"))(any(), any(), any()))
+        .thenReturn(Future.failed(new Upstream5xxResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)))
+
       intercept[Upstream5xxResponse](await(connector.fetchAll()))
     }
   }
@@ -116,11 +133,12 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
   "fetchByEmail" should {
 
     val loggedInUserEmail = "email@example.com"
-    val encodedLoggedInUserEmail = URLEncoder.encode(loggedInUserEmail, "UTF-8")
+    val params = Seq("email" -> loggedInUserEmail)
 
     "return all API Definitions sorted by name for an email address" in new Setup {
-      stubFor(get(urlEqualTo(s"/apis/definition?email=$encodedLoggedInUserEmail"))
-        .willReturn(aResponse().withStatus(200).withBody(apiDefinitionsJson("Hello", "Calendar"))))
+      when(mockHttpClient.GET[Seq[APIDefinition]](meq(s"$apiDocumentationUrl/apis/definition"), meq(params))(any(), any(), any()))
+        .thenReturn(Future.successful(apiDefinitions("Hello", "Calendar")))
+
       val result = await(connector.fetchByEmail(loggedInUserEmail))
       result.size shouldBe 2
       result(0).name shouldBe "Calendar"
@@ -129,9 +147,10 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
 
     "return all API Definitions sorted by name for a strange email address" in new Setup {
       val loggedInUserStrangeEmail = "email+strange@example.com"
-      val encodedLoggedInUserStrangeEmail = URLEncoder.encode(loggedInUserStrangeEmail, "UTF-8")
-      stubFor(get(urlEqualTo(s"/apis/definition?email=$encodedLoggedInUserStrangeEmail"))
-        .willReturn(aResponse().withStatus(200).withBody(apiDefinitionsJson("Hello", "Calendar"))))
+      val strangeParams = Seq("email" -> loggedInUserStrangeEmail)
+      when(mockHttpClient.GET[Seq[APIDefinition]](meq(s"$apiDocumentationUrl/apis/definition"), meq(strangeParams))(any(), any(), any()))
+        .thenReturn(Future.successful(apiDefinitions("Hello", "Calendar")))
+
       val result = await(connector.fetchByEmail(loggedInUserStrangeEmail))
       result.size shouldBe 2
       result(0).name shouldBe "Calendar"
@@ -139,18 +158,17 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
     }
 
     "throw an http-verbs Upstream5xxResponse exception if the API Definition service responds with an error" in new Setup {
-      stubFor(get(urlEqualTo(s"/apis/definition?email=$encodedLoggedInUserEmail"))
-        .willReturn(aResponse().withStatus(500)))
+      when(mockHttpClient.GET[Seq[APIDefinition]](meq(s"$apiDocumentationUrl/apis/definition"), meq(params))(any(), any(), any()))
+        .thenReturn(Future.failed(new Upstream5xxResponse("Internal server error", 500, 500)))
+
       intercept[Upstream5xxResponse](await(connector.fetchByEmail(loggedInUserEmail)))
     }
   }
 
-  private def apiDefinitionsJson(names: String*) = {
-    names.map(apiDefinitionJson).mkString("[", ",", "]")
-  }
+  private def apiDefinitions(names: String*) = names.map(apiDefinition)
   
-  private def extendedApiDefinitionJson(name: String) = {
-    s"""{
+  private def extendedApiDefinition(name: String) = {
+    Json.parse(s"""{
        |  "name" : "$name",
        |  "description" : "Test API",
        |  "context" : "test",
@@ -204,11 +222,11 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
        |    }
        |  ]
        |}
-     """.stripMargin
+     """.stripMargin).as[ExtendedAPIDefinition]
   }
 
-  private def apiDefinitionJson(name: String) = {
-    s"""{
+  private def apiDefinition(name: String) = {
+    Json.parse(s"""{
         |  "name" : "$name",
         |  "description" : "Test API",
         |  "context" : "test",
@@ -243,6 +261,6 @@ class APIDocumentationConnectorSpec extends ConnectorSpec {
         |      ]
         |    }
         |  ]
-        |}""".stripMargin.replaceAll("\n", " ")
+        |}""".stripMargin.replaceAll("\n", " ")).as[APIDefinition]
   }
 }
