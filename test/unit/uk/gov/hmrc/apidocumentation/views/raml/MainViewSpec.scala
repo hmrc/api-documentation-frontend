@@ -18,7 +18,6 @@ package unit.uk.gov.hmrc.apidocumentation.views.raml
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
-import org.jsoup.select.Elements
 import org.mockito.Mockito.{when => When}
 import org.scalatest.mockito.MockitoSugar
 import play.twirl.api.HtmlFormat.Appendable

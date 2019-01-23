@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.config
+package uk.gov.hmrc.apidocumentation.raml
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.ramltools.loaders.{UrlRewriter, UrlRewritingRamlLoader}
 
-import uk.gov.hmrc.http.HttpGet
-import uk.gov.hmrc.http.hooks.HttpHooks
-import uk.gov.hmrc.play.audit.http.HttpAuditing
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.config.AppName
-import uk.gov.hmrc.play.http.ws._
-
-case class WSHttp @Inject()(auditConnector: AuditConnector) extends WSGet with HttpGet with AppName with HttpHooks with HttpAuditing {
-  override val hooks = Seq(AuditingHook)
-}
+@Singleton
+class DocumentationRamlLoader @Inject()(urlRewriter: UrlRewriter) extends UrlRewritingRamlLoader(urlRewriter)

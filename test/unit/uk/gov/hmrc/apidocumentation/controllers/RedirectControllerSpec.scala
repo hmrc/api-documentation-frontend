@@ -25,7 +25,7 @@ import scala.concurrent.Future
 
 class RedirectControllerSpec extends UnitSpec with WithFakeApplication {
 
-  class Setup() {
+  trait Setup {
     val underTest = new RedirectController()
     implicit val request = FakeRequest()
 

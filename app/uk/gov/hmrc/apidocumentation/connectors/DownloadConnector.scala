@@ -16,24 +16,23 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import play.api.http.HttpEntity
 import play.api.http.Status._
 import play.api.libs.ws._
 import play.api.mvc.Results._
 import play.api.mvc._
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.http.{InternalServerException, NotFoundException}
-import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.metrics.Metrics
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+@Singleton
+class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig) {
 
-class DownloadConnector @Inject()(ws: WSClient, metrics: Metrics) extends ServicesConfig {
-
-  val serviceBaseUrl = baseUrl("api-documentation")
+  lazy val serviceBaseUrl = appConfig.apiDocumentationUrl
 
   private def buildRequest(resourceUrl: String): WSRequest = ws.url(resourceUrl)
 
