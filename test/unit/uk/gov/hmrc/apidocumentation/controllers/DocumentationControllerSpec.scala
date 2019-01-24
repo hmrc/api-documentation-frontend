@@ -539,6 +539,16 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       verifyErrorPageRendered(result, expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Sorry, we’re experiencing technical difficulties")
     }
+
+    "tell clients not to cache the page" in new Setup {
+      theUserIsLoggedIn()
+      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+      theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
+
+      val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+      result.header.headers.get("Cache-Control") shouldBe Some("no-cache,no-store,max-age=0")
+    }
   }
 
   "preview docs" should {
