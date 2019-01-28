@@ -115,12 +115,12 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def authorisationOpenAccessEndpointsPage() = headerNavigation { implicit request => navLinks =>
     val breadcrumbs = Breadcrumbs(
-      Crumb("Open Access Endpoints", routes.DocumentationController.authorisationOpenAccessEndpointsPage().url),
+      Crumb("Open access endpoints", routes.DocumentationController.authorisationOpenAccessEndpointsPage().url),
       authCrumb,
       homeCrumb
     )
     Future.successful(Ok(authorisationOpenAccessEndpoints(pageAttributes(
-      "Authorisation Introduction",
+      "Open access endpoints",
       routes.DocumentationController.authorisationOpenAccessEndpointsPage().url,
       navLinks,
       Some(breadcrumbs)))))
@@ -128,12 +128,12 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def authorisationAppRestrictedEndpointsPage() = headerNavigation { implicit request => navLinks =>
     val breadcrumbs = Breadcrumbs(
-      Crumb("Application Restricted Endpoints", routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url),
+      Crumb("Application-restricted endpoints", routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url),
       authCrumb,
       homeCrumb
     )
     Future.successful(Ok(authorisationAppRestrictedEndpoints(pageAttributes(
-      "Application Restricted Endpoints",
+      "Application-restricted endpoints",
       routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url,
       navLinks,
       Some(breadcrumbs)))))
@@ -141,12 +141,12 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def authorisationUserRestrictedEndpointsPage() = headerNavigation { implicit request => navLinks =>
     val breadcrumbs = Breadcrumbs(
-      Crumb("User Restricted Endpoints", routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url),
+      Crumb("User-restricted endpoints", routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url),
       authCrumb,
       homeCrumb
     )
     Future.successful(Ok(authorisationUserRestrictedEndpoints(pageAttributes(
-      "User Restricted Endpoints",
+      "User-restricted endpoints",
       routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url,
       navLinks,
       Some(breadcrumbs)))))
@@ -158,9 +158,27 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def mtdIntroductionPage() = headerNavigation { implicit request => navLinks =>
     val introPageUrl = routes.DocumentationController.mtdIntroductionPage().url
-    Future.successful(Ok(mtdIntroduction(pageAttributes("The Making Tax Digital Programme", introPageUrl, navLinks))))
+    Future.successful(Ok(mtdIntroduction(pageAttributes("Making Tax Digital guides", introPageUrl, navLinks))))
   }
 
+//  def mtdIncomeTaxServiceGuidePage() = headerNavigation { implicit request => navLinks =>
+//    val mtdIncomeTaxServiceGuidePageUrl = routes.DocumentationController.mtdIncomeTaxServiceGuidePage().url
+//    Future.successful(Ok(mtdIncomeTaxServiceGuide(pageAttributes("Income Tax (MTD) End-to-End Service Guide", mtdIncomeTaxServiceGuidePageUrl, navLinks))))
+//  }
+
+  def mtdIncomeTaxServiceGuidePage() = headerNavigation { implicit request => navLinks =>
+    val breadcrumbs = Breadcrumbs(
+      Crumb("Income Tax (MTD) End-to-End Service Guide", routes.DocumentationController.mtdIncomeTaxServiceGuidePage().url),
+      apiDocCrumb,
+      homeCrumb
+    )
+    Future.successful(Ok(mtdIncomeTaxServiceGuide(pageAttributes(
+      "Income Tax (MTD) End-to-End Service Guide",
+      routes.DocumentationController.mtdIncomeTaxServiceGuidePage().url,
+      navLinks,
+      Some(breadcrumbs)))))
+  }
+  
   def referenceGuidePage() = headerNavigation { implicit request => navLinks =>
     Future.successful(Ok(reference(pageAttributes("Reference guide", routes.DocumentationController.referenceGuidePage().url, navLinks))))
   }

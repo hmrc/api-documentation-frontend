@@ -27,6 +27,7 @@ GET         /docs/api/preview                                       @uk.gov.hmrc
 GET         /docs/api/testdata/:service/:version                    @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.fetchTestEndpointJson(service: String, version: String)
 GET         /docs/api/xml/:name                                     @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.renderXmlApiDocumentation(name: String)
 GET         /docs/api/:service/:version/:endpoint                   @uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToApiDocumentationPage(service: String, version: String, endpoint: String)
+GET         /docs/api/mtd-income-tax-service-guide                  @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIncomeTaxServiceGuidePage()
 
 GET         /docs/help/cookies                                      @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.cookiesPage()
 GET         /docs/help/privacy                                      @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.privacyPage()
