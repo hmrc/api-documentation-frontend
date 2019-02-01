@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services.RAML
 
-@(pageAttributes: PageAttributes, api: APIDefinition)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@(pageAttributes: PageAttributes, api: XmlApiDocumentation)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @apiMain(pageAttributes) {
 <h1 class="heading-xlarge">@api.name XML API</h1>

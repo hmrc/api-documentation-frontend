@@ -17,27 +17,21 @@
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.models.APICategory._
+@import uk.gov.hmrc.apidocumentation.models.Documentation
 
-@(apisByCategory: Map[APICategory, Seq[APIDefinition]])
-
-@documentationUrl(api: APIDefinition) = @{
-  if (api.isXmlApi.contains(true))
-    controllers.routes.DocumentationController.renderXmlApiDocumentation(api.name)
-  else
-    controllers.routes.DocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None)
-}
+@(documentsByCategory: Map[APICategory, Seq[Documentation]])
 
 <table class="api-list">
-    @for((category, apis) <- apisByCategory) {
+    @for((category, documents) <- documentsByCategory) {
         <tbody>
-            @for((api, index) <- apis.sortBy(_.label).zipWithIndex) {
+            @for((document, index) <- documents.sortBy(_.label).zipWithIndex) {
                 <tr>
                     @if(index == 0) { <td class="api-group">@category.displayName</td> } else { <td></td> }
                     <td>
-                        <a class="accordion__button link--no-underline" href="@documentationUrl(api)">@api.name</a>
+                        <a class="accordion__button link--no-underline" href="@document.documentationUrl">@document.name</a>
                     </td>
                     <td>
-                        <strong class="service-tag service-tag--@api.label.modifier">@api.label.displayName</strong>
+                        <strong class="service-tag service-tag--@document.label.modifier">@document.label.displayName</strong>
                     </td>
                 </tr>
             }

@@ -72,5 +72,7 @@
   "Real Time Information online": ["PAYE"],
   "Self Assessment Online": ["SELF_ASSESSMENT"],
   "Stamp Taxes Online": ["STAMP_DUTY"],
-  "VAT and EC Sales List Online": ["CUSTOMS", "VAT"]
+  "VAT and EC Sales List Online": ["CUSTOMS", "VAT"],
+
+  "VAT End-to-End Service Guide": ["VAT_MTD"]
 }

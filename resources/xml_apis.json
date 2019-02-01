@@ -1,128 +1,92 @@
 [
   {
-    "serviceName": "Agent Authorisation Online",
     "name": "Agent Authorisation Online",
     "context": "/government/collections/agent-authorisation-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Agent Authorisation Online service. This API is not part of the Making Tax Digital initiative.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the Agent Authorisation Online service. This API is not part of the Making Tax Digital initiative."
   },
   {
-    "serviceName": "Alcohol and Tobacco Warehouse Declaration Online",
     "name": "Alcohol and Tobacco Warehouse Declaration Online",
     "context": "/government/collections/alcohol-and-tobacco-warehouse-declaration-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Alcohol and Tobacco Warehousing Declaration Online service.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the Alcohol and Tobacco Warehousing Declaration Online service."
   },
   {
-    "serviceName": "Automatic Exchange of Information",
     "name": "Automatic Exchange of Information",
     "context": "/government/publications/foreign-account-tax-compliance-act-schema-and-supporting-documents",
-    "description": "Find the schema and supporting documents for software developers who use Automatic Exchange of Information (AEOI).",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Find the schema and supporting documents for software developers who use Automatic Exchange of Information (AEOI)."
   },
   {
-    "serviceName": "Charities Online",
     "name": "Charities Online",
     "context": "/government/collections/charities-online-support-for-software-developers",
-    "description": "Charities repayment claims technical specifications for software developers working with the Charities Online service.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Charities repayment claims technical specifications for software developers working with the Charities Online service."
   },
   {
-    "serviceName": "Construction Industry Scheme Online",
     "name": "Construction Industry Scheme Online",
     "context": "/government/collections/construction-industry-scheme-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Construction Industry Scheme Online service.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the Construction Industry Scheme Online service."
   },
   {
-    "serviceName": "Corporation Tax Online",
     "name": "Corporation Tax Online",
     "context": "/government/collections/corporation-tax-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Corporation Tax online service. This API is not part of the Making Tax Digital initiative.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the Corporation Tax online service. This API is not part of the Making Tax Digital initiative."
   },
   {
-    "serviceName": "Employment intermediaries",
     "name": "Employment intermediaries",
     "context": "/government/publications/employment-intermediaries-support-for-software-developers",
-    "description": "Employment intermediaries, data requirements for software developers.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Employment intermediaries, data requirements for software developers."
   },
   {
-    "serviceName": "Excise Movement Control System",
     "name": "Excise Movement Control System",
     "context": "/government/collections/excise-movement-control-system-fs31-support-for-software-developers",
-    "description": "Technical specifications for the Excise Movement Control System (EMCS).",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for the Excise Movement Control System (EMCS)."
   },
   {
-    "serviceName": "Exchange rates from HMRC",
     "name": "Exchange rates from HMRC",
     "context": "/government/collections/exchange-rates-for-customs-and-vat",
-    "description": "Check the foreign exchange monthly rates, yearly averages, spot rates and weekly amendments to rates (from HMRC in CSV and XML format).",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Check the foreign exchange monthly rates, yearly averages, spot rates and weekly amendments to rates (from HMRC in CSV and XML format)."
   },
   {
-    "serviceName": "Import Control System",
     "name": "Import Control System",
     "context": "/government/collections/import-control-system-support-for-software-developers",
-    "description": "Technical specifications for Import Control System software developers.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for Import Control System software developers."
   },
   {
-    "serviceName": "National Export System",
     "name": "National Export System",
     "context": "/government/collections/national-export-system-xml-channel-support-for-software-developers",
-    "description": "Technical specifications for National Export System (NES) XML channel software developers.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for National Export System (NES) XML channel software developers."
   },
   {
-    "serviceName": "New Computerised Transit System",
     "name": "New Computerised Transit System",
     "context": "/government/collections/new-computerised-transit-system-support-for-software-developers",
-    "description": "Technical specifications for New Computerised Transit System (NCTS) software developers.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for New Computerised Transit System (NCTS) software developers."
   },
   {
-    "serviceName": "PAYE Online",
     "name": "PAYE Online",
     "context": "/government/collections/paye-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the PAYE online service.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the PAYE online service."
   },
   {
-    "serviceName": "Pension Schemes Online",
     "name": "Pension Schemes Online",
     "context": "/government/collections/pension-schemes-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Pension Schemes Online service.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the Pension Schemes Online service."
   },
   {
-    "serviceName": "Real Time Information online",
     "name": "Real Time Information online",
     "context": "/government/collections/real-time-information-online-internet-submissions-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Real Time Information online service.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the Real Time Information online service."
   },
   {
-    "serviceName": "Self Assessment Online",
     "name": "Self Assessment Online",
     "context": "/government/collections/self-assessment-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Self Assessment Online service. This API is not part of the Making Tax Digital initiative.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the Self Assessment Online service. This API is not part of the Making Tax Digital initiative."
   },
   {
-    "serviceName": "Stamp Taxes Online",
     "name": "Stamp Taxes Online",
     "context": "/government/collections/stamp-taxes-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Stamp Taxes Online service.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the Stamp Taxes Online service."
   },
   {
-    "serviceName": "VAT and EC Sales List Online",
     "name": "VAT and EC Sales List Online",
     "context": "/government/collections/vat-and-ec-sales-list-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the VAT and EC Sales List Online service. This API is not part of the Making Tax Digital initiative.",
-    "versions": [{ "version": "1.0", "status": "STABLE", "endpoints": [] }]
+    "description": "Technical specifications for software developers working with the VAT and EC Sales List Online service. This API is not part of the Making Tax Digital initiative."
   }
 ]
