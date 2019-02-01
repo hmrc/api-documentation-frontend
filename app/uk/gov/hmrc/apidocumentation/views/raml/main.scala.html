@@ -1,5 +1,5 @@
 @*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,8 +93,8 @@
         @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.flatMap(_.visibility)))) { case (isPreview, visibility) =>
             @if(isPreview || visibility == DocsVisibility.VISIBLE) {
                 <div class="section">
-                    <h2 id="resources" class="heading-large">
-                        Resources
+                    <h2 id="endpoints" class="heading-large">
+                        Endpoints
                     </h2>
 
                     @for(resourceGroup <- GroupedResources(raml.resources)) {

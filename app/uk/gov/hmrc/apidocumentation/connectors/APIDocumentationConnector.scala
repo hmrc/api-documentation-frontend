@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,23 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
-import uk.gov.hmrc.apidocumentation.config.WSHttp
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics.{API, Metrics}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class APIDocumentationConnector @Inject()(http: WSHttp, metrics: Metrics) extends ServicesConfig {
+@Singleton
+class APIDocumentationConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, metrics: Metrics) {
 
   val api = API("api-documentation")
-  val serviceBaseUrl = baseUrl("api-documentation")
+  lazy val serviceBaseUrl = appConfig.apiDocumentationUrl
 
   def fetchExtendedDefinitionByServiceName(serviceName: String)(implicit hc: HeaderCarrier): Future[ExtendedAPIDefinition] = metrics.record(api) {
     http.GET[ExtendedAPIDefinition](s"$serviceBaseUrl/apis/$serviceName/definition")

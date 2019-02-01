@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,15 @@
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
 import mockws.MockWS
+import org.mockito.Mockito.when
 import play.api.http.Status._
 import play.api.mvc.{Action, Results}
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException, NotFoundException}
-import uk.gov.hmrc.play.http.metrics.NoopMetrics
-
 
 class DownloadConnectorSpec extends ConnectorSpec {
-  val apiDocumentationUrl = s"http://$wiremockHost:$wiremockPort"
+  val apiDocumentationUrl = "https://api-documentation.example.com"
 
   val serviceName = "hello-world"
   val version = "1.0"
@@ -43,7 +43,10 @@ class DownloadConnectorSpec extends ConnectorSpec {
 
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val connector = new DownloadConnector(mockWS, NoopMetrics)
+    val mockAppConfig = mock[ApplicationConfig]
+    val connector = new DownloadConnector(mockWS, mockAppConfig)
+
+    when(mockAppConfig.apiDocumentationUrl).thenReturn(apiDocumentationUrl)
   }
 
   "downloadResource" should {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,8 @@
 
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
-import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.mockito.MockitoSugar
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-trait ConnectorSpec extends UnitSpec with ScalaFutures with BeforeAndAfterAll with GuiceOneAppPerSuite {
-  val wiremockHost = "localhost"
-  val wiremockPort = sys.env.getOrElse("WIREMOCK", "11111").toInt
-  val wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(wiremockPort))
-
-  override def beforeAll() {
-    wireMockServer.start()
-    WireMock.configureFor(wiremockHost, wiremockPort)
-  }
-
-  override def afterAll() {
-    wireMockServer.stop()
-  }
-}
+trait ConnectorSpec extends UnitSpec with ScalaFutures with MockitoSugar with WithFakeApplication

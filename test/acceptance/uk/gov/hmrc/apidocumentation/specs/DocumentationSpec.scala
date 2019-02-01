@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package acceptance.uk.gov.hmrc.apidocumentation.specs
 import acceptance.uk.gov.hmrc.apidocumentation.pages._
 import acceptance.uk.gov.hmrc.apidocumentation.BaseSpec
 import acceptance.uk.gov.hmrc.apidocumentation.pages.APIDocumentationPage
-import org.scalatest.Tag
 import org.scalatest.prop.TableDrivenPropertyChecks
 import utils.uk.gov.hmrc.apidocumentation.mocks.TableDrivenPropertyMocks
 

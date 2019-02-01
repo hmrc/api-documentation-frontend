@@ -1,5 +1,5 @@
 @*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,11 +45,11 @@
 
     <p>These endpoints require specific authorisation from the end user. They generally give access to sensitive personal data.</p>
 
-    <p>We use the open standard <a href="https://oauth.net/2/" target="_blank">OAuth 2.0 (opens in a new tab)</a>. This lets the end user grant authority to your application to interact with HMRC on their behalf, without sharing their access credentials.</p>
+    <p>We use the open standard <a href="https://oauth.net/2/" target="_blank" rel="noopener noreferrer">OAuth 2.0 (opens in a new tab)</a>. This lets the end user grant authority to your application to interact with HMRC on their behalf, without sharing their access credentials.</p>
 
     <p>The end user authenticates directly with us using their Government Gateway account, and grants authority for specific <a href="@controllers.routes.DocumentationController.referenceGuidePage()#scopes">scopes</a>.</p>
 
-    <p>We then issue an OAuth 2.0 <a href="https://tools.ietf.org/html/rfc6749#section-1.4" target="_blank">access token (opens in a new tab)</a> that’s specific to the end user. Your application passes the access token in subsequent API requests to user-restricted endpoints.</p>
+    <p>We then issue an OAuth 2.0 <a href="https://tools.ietf.org/html/rfc6749#section-1.4" target="_blank" rel="noopener noreferrer">access token (opens in a new tab)</a> that’s specific to the end user. Your application passes the access token in subsequent API requests to user-restricted endpoints.</p>
 
     <p>There are separate Government Gateway accounts for individuals, agents and organisations. For individuals and organisations, the access token only gives access to the end user’s own data. For agents the access token gives access to their clients’ data.</p>
 
@@ -153,7 +153,7 @@ GET  @{applicationConfig.sandboxApiBaseUrl}/oauth/authorize?response_type=code
                 </tr>
                 <tr>
                     <td><code class="code--slim">state</code> (optional)</td>
-                    <td>An opaque value used to maintain state between the request and callback and to prevent tampering as described in the <a href="https://tools.ietf.org/html/rfc6749#section-10.12" target="_blank">OAuth 2.0 specification (opens in a new tab)</a>. This is passed back to your application via the <code class="code--slim">redirect_uri</code>.</td>
+                    <td>An opaque value used to maintain state between the request and callback and to prevent tampering as described in the <a href="https://tools.ietf.org/html/rfc6749#section-10.12" target="_blank" rel="noopener noreferrer">OAuth 2.0 specification (opens in a new tab)</a>. This is passed back to your application via the <code class="code--slim">redirect_uri</code>.</td>
                 </tr>
                 <tr>
                     <td><code class="code--slim">redirect_uri</code></td>

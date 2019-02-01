@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   def errorsBackToTop = find(cssSelector("div.bold-small > a")).get
 
-  def resourcesBackToTop = find(cssSelector("#section > div.bold-small > a")).get
+  def endpointsBackToTop = find(cssSelector("#section > div.bold-small > a")).get
 
   def applicationName = className("header__menu__proposition-name").element.text
 
@@ -40,8 +40,8 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     click on errorsBackToTop
   }
 
-  def selectResourcesBackToTop() {
-    click on resourcesBackToTop
+  def selectEndpointsBackToTop() {
+    click on endpointsBackToTop
   }
 
   def assertEndpointsDetails() {
@@ -99,7 +99,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
         "Overview",
         "Versioning",
         "Errors",
-        "Resources"
+        "Endpoints"
       )
 
     forAll(menuLink) { (menuLink: String) =>
@@ -124,7 +124,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
         ("Overview", "1"),
         ("Versioning", "2"),
         ("Errors", "3"),
-        ("Resources", "4")
+        ("Endpoints", "4")
       )
     forAll(navigationItems) { (navigationLink: String, number: String) =>
       val expectedCSSSelector = cssSelector("nav.side-nav > ul > li:nth-of-type(" + number + ") > a").element
@@ -139,7 +139,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
         "Overview",
         "Versioning",
         "Errors",
-        "Resources")
+        "Endpoints")
     forAll(navigationItems) { (navigationLink: String) =>
       val links = find(linkText(navigationLink)).get
       click on links
@@ -157,8 +157,8 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
   def checkBackToTopLinkAfterErrorsSection(): Unit = {
     assert(errorsBackToTop.isDisplayed)
     errorsBackToTop.text shouldBe "Back to top"
-    assert(resourcesBackToTop.isDisplayed)
-    resourcesBackToTop.text shouldBe "Back to top"
+    assert(endpointsBackToTop.isDisplayed)
+    endpointsBackToTop.text shouldBe "Back to top"
   }
 }
 
@@ -207,7 +207,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
 
   def checkAPIVersionInRequestHeader(): Unit = {
     click on linkText("post")
-    cssSelector("#request-headers>table>tbody>tr>td:nth-child(2)>div").element.text shouldBe "application/vnd.hmrc.1.1+json"
+    cssSelector("code[data-header-example]").element.text should include("application/vnd.hmrc.1.1+json")
 
   }
 

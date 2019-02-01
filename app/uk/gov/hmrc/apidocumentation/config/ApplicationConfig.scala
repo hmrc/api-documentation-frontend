@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,48 +18,52 @@ package uk.gov.hmrc.apidocumentation.config
 
 import javax.inject.Inject
 
-import play.api.Configuration
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.ServicesConfig
 
-class ApplicationConfig @Inject()(config: Configuration) extends ServicesConfig {
+class ApplicationConfig @Inject()(override val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
+  override protected def mode = environment.mode
 
-  private def loadConfig(key: String) = config.getString(key).getOrElse(throw new Exception(s"Missing key: $key"))
+  private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing key: $key"))
 
   val contactFormServiceIdentifier = "API"
-  val contactPath = config.getString(s"$env.contactPath").getOrElse("")
+  val contactPath = runModeConfiguration.getString(s"$env.contactPath").getOrElse("")
 
-  lazy val hotjarId = config.getInt(s"$env.hotjar.id")
-  lazy val hotjarEnabled = config.getBoolean(s"$env.features.hotjar")
-  lazy val analyticsToken = config.getString(s"$env.google-analytics.token")
-  lazy val analyticsHost = config.getString(s"$env.google-analytics.host").getOrElse("auto")
+  lazy val hotjarId = runModeConfiguration.getInt(s"$env.hotjar.id")
+  lazy val hotjarEnabled = runModeConfiguration.getBoolean(s"$env.features.hotjar")
+  lazy val analyticsToken = runModeConfiguration.getString(s"$env.google-analytics.token")
+  lazy val analyticsHost = runModeConfiguration.getString(s"$env.google-analytics.host").getOrElse("auto")
   lazy val betaFeedbackUrl = "/contact/beta-feedback"
   lazy val betaFeedbackUnauthenticatedUrl: String = "/contact/beta-feedback-unauthenticated"
-  lazy val developerFrontendUrl = config.getString(s"$env.developer-frontend-url").getOrElse("")
+  lazy val developerFrontendUrl = runModeConfiguration.getString(s"$env.developer-frontend-url").getOrElse("")
   lazy val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  lazy val apiDocumentationUrl = baseUrl("api-documentation")
+  lazy val developerFrontendBaseUrl = baseUrl("developer-frontend")
   lazy val thirdPartyDeveloperUrl = baseUrl("third-party-developer")
-  lazy val securedCookie = config.getBoolean(s"$env.cookie.secure").getOrElse(true)
-  lazy val ramlPreviewEnabled = config.getBoolean(s"$env.features.ramlPreview").getOrElse(false)
-  lazy val ramlLoaderRewrites = buildRamlLoaderRewrites(config)
-  lazy val showProductionAvailability = config.getBoolean(s"$env.features.showProductionAvailability").getOrElse(false)
-  lazy val showSandboxAvailability = config.getBoolean(s"$env.features.showSandboxAvailability").getOrElse(false)
-  lazy val productionApiHost = config.getString("platform.production.api.host")
-  lazy val productionWwwHost = config.getString("platform.production.www.host")
+  lazy val securedCookie = runModeConfiguration.getBoolean(s"$env.cookie.secure").getOrElse(true)
+  lazy val ramlPreviewEnabled = runModeConfiguration.getBoolean(s"$env.features.ramlPreview").getOrElse(false)
+  lazy val ramlLoaderRewrites = buildRamlLoaderRewrites
+  lazy val showProductionAvailability = runModeConfiguration.getBoolean(s"$env.features.showProductionAvailability").getOrElse(false)
+  lazy val showSandboxAvailability = runModeConfiguration.getBoolean(s"$env.features.showSandboxAvailability").getOrElse(false)
+  lazy val productionApiHost = runModeConfiguration.getString("platform.production.api.host")
+  lazy val productionWwwHost = runModeConfiguration.getString("platform.production.www.host")
   lazy val productionApiBaseUrl = apiBaseUrl("platform.production.api")
-  lazy val sandboxApiHost = config.getString("platform.sandbox.api.host")
-  lazy val sandboxWwwHost = config.getString("platform.sandbox.www.host")
+  lazy val sandboxApiHost = runModeConfiguration.getString("platform.sandbox.api.host")
+  lazy val sandboxWwwHost = runModeConfiguration.getString("platform.sandbox.www.host")
   lazy val sandboxApiBaseUrl = apiBaseUrl("platform.sandbox.api")
   lazy val title = "HMRC Developer Hub"
   lazy val isStubMode = env == "Stub"
-  lazy val xmlApiBaseUrl = config.getString(s"$env.xml-api.base-url").getOrElse("https://www.gov.uk")
+  lazy val xmlApiBaseUrl = runModeConfiguration.getString(s"$env.xml-api.base-url").getOrElse("https://www.gov.uk")
 
-  private def buildRamlLoaderRewrites(config: Configuration): Map[String, String] = {
-    Map(config.getString(s"$env.ramlLoaderUrlRewrite.from").getOrElse("") ->
-      config.getString(s"$env.ramlLoaderUrlRewrite.to").getOrElse(""))
+
+  private def buildRamlLoaderRewrites: Map[String, String] = {
+    Map(runModeConfiguration.getString(s"$env.ramlLoaderUrlRewrite.from").getOrElse("") ->
+      runModeConfiguration.getString(s"$env.ramlLoaderUrlRewrite.to").getOrElse(""))
   }
 
   private def apiBaseUrl(key: String) = {
-    (config.getString(s"$key.protocol"), config.getString(s"$key.host")) match {
+    (runModeConfiguration.getString(s"$key.protocol"), runModeConfiguration.getString(s"$key.host")) match {
       case (Some(protocol), Some(host)) => s"$protocol://$host"
       case (None, Some(host)) => s"https://$host"
       case _ => ""

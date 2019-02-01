@@ -1,5 +1,5 @@
 @*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@
   )(mainContent: Html = HtmlFormat.empty)(implicit applicationConfig: ApplicationConfig, messages: Messages)
 
 @headScripts = {
+    @googleTagManager()
     @hotjar(applicationConfig.hotjarId, applicationConfig.hotjarEnabled)
 }
 
@@ -83,10 +84,10 @@
 
 @footerLinks = {
     <ul class="platform-help-links">
-        <li><a href='/api-documentation/docs/help/cookies' target="_blank" data-sso="false" data-journey-click="footer:Click:Cookies">@Messages("footer.links.cookies.text")</a></li>
-        <li><a href='/api-documentation/docs/help/privacy' target="_blank" data-sso="false" data-journey-click="footer:Click:Privacy policy">@Messages("footer.links.privacy_policy.text")</a></li>
-        <li><a href='/api-documentation/docs/help/terms-and-conditions' target="_blank" data-sso="false" data-journey-click="footer:Click:Terms and conditions">@Messages("footer.links.terms_and_conditions.text")</a></li>
-        <li><a href='@Messages("footer.links.help_page.url")' target="_blank" data-sso="false" data-journey-click="footer:Click:Help">@Messages("footer.links.help_page.text")</a></li>
+        <li><a href='/api-documentation/docs/help/cookies' target="_blank" rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:Cookies">@Messages("footer.links.cookies.text")</a></li>
+        <li><a href='/api-documentation/docs/help/privacy' target="_blank" rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:Privacy policy">@Messages("footer.links.privacy_policy.text")</a></li>
+        <li><a href='/api-documentation/docs/help/terms-and-conditions' target="_blank" rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:Terms and conditions">@Messages("footer.links.terms_and_conditions.text")</a></li>
+        <li><a href='@Messages("footer.links.help_page.url")' target="_blank" rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:Help">@Messages("footer.links.help_page.text")</a></li>
     </ul>
 }
 
@@ -142,6 +143,8 @@
 }
 
 @bodyContent = {
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     @if(fullWidthBanner.isDefined) {
         <div class="centered-content">

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,20 @@ import javax.inject.Inject
 
 import play.api.Logger
 import play.api.mvc._
-import uk.gov.hmrc.apidocumentation.config.ApplicationGlobal
+import uk.gov.hmrc.apidocumentation.ErrorHandler
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, ExtendedAPIDefinition, VersionVisibility}
 import uk.gov.hmrc.apidocumentation.services.{DocumentationService, DownloadService}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DownloadController @Inject()(documentationService: DocumentationService, downloadService: DownloadService,
-                                   loggedInUserProvider: LoggedInUserProvider) extends FrontendController {
+class DownloadController @Inject()(documentationService: DocumentationService,
+                                   downloadService: DownloadService,
+                                   loggedInUserProvider: LoggedInUserProvider,
+                                   errorHandler: ErrorHandler)(implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
+    extends FrontendController {
 
   def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
 
@@ -43,10 +47,10 @@ class DownloadController @Inject()(documentationService: DocumentationService, d
     }) recover {
       case e: NotFoundException =>
         Logger.info(s"Resource not found: ${e.getMessage}")
-        NotFound(ApplicationGlobal.notFoundTemplate)
+        NotFound(errorHandler.notFoundTemplate)
       case e: Throwable =>
         Logger.error("Could not load resource", e)
-        InternalServerError(ApplicationGlobal.internalServerErrorTemplate)
+        InternalServerError(errorHandler.internalServerErrorTemplate)
     }
   }
 
@@ -60,7 +64,7 @@ class DownloadController @Inject()(documentationService: DocumentationService, d
       } yield (api, apiVersion, visibility)
 
     def renderNotFoundPage =
-      Future.successful(NotFound(ApplicationGlobal.notFoundTemplate))
+      Future.successful(NotFound(errorHandler.notFoundTemplate))
 
     def redirectToLoginPage(service: String) =
       Future.successful(Redirect("/developer/login").withSession(
@@ -83,7 +87,7 @@ class DownloadController @Inject()(documentationService: DocumentationService, d
     resourceName
   }
 
-  private def extractEmail(fut: Future[Option[Developer]])(implicit ec: ExecutionContext): Future[Option[String]] = {
+  private def extractEmail(fut: Future[Option[Developer]]): Future[Option[String]] = {
     fut.map(opt => opt.map(dev => dev.email))
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.views.helpers
 
-
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.apidocumentation.models._
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
+import io.netty.handler.codec.http.HttpResponseStatus
 import org.raml.v2.api.model.v10.bodies.Response
 import org.raml.v2.api.model.v10.common.Annotable
 import org.raml.v2.api.model.v10.datamodel._
@@ -29,6 +26,8 @@ import play.api.libs.json.Json
 import play.libs.XML
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation.models.DocsVisibility.DocsVisibility
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.models._
 
 import scala.collection.JavaConversions._
 import scala.language.reflectiveCalls
@@ -330,7 +329,7 @@ object HttpStatus {
 
   def apply(statusCode: Int): String = {
     val responseStatus = HttpResponseStatus.valueOf(statusCode)
-    s"$statusCode (${responseStatus.getReasonPhrase})"
+    s"$statusCode (${responseStatus.reasonPhrase})"
   }
 }
 

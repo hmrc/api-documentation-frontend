@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,13 @@ package unit.uk.gov.hmrc.apidocumentation.controllers
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status._
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation
+import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers
@@ -36,17 +37,19 @@ import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.failed
 import scala.concurrent.duration._
 
 class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with WithFakeApplication {
 
-  class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup {
+  class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup{
+    implicit val appConfig = mock[ApplicationConfig]
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
     val navigationService = mock[NavigationService]
     val partialsService = new PartialsService(developerFrontendConnector)
-    val appConfig = mock[ApplicationConfig]
+    val errorHandler = fakeApplication.injector.instanceOf[ErrorHandler]
     val messagesApi = fakeApplication.injector.instanceOf[MessagesApi]
     val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
@@ -67,8 +70,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     when(appConfig.hotjarEnabled) thenReturn None
     when(appConfig.hotjarId) thenReturn None
 
-    val underTest = new DocumentationController(documentationService, navigationService, partialsService,
-      loggedInUserProvider, messagesApi, appConfig)
+    val underTest = new DocumentationController(documentationService, navigationService, partialsService, loggedInUserProvider, errorHandler, messagesApi)
 
     def verifyPageRendered(actualPageFuture: Future[Result], expectedTitle: String, breadcrumbs: List[Crumb] = List(homeBreadcrumb), sideNavLinkRendered: Boolean = true, subNavRendered: Boolean = false, bodyContains: Seq[String] = Seq.empty) {
       val actualPage = await(actualPageFuture)
@@ -160,7 +162,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       val actualPageFuture = underTest.cookiesPage()(request)
       val actualPage = await(actualPageFuture)
-      status(actualPage) shouldBe 200
+      status(actualPage) shouldBe OK
       bodyOf(actualPage) should include("Cookies")
       bodyOf(actualPage) should include(pageTitle("Cookies"))
     }
@@ -213,14 +215,14 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
   "apiIndexPage" must {
 
     "render the API List" in new Setup {
-      theUserIsLoggedIn()
+        theUserIsLoggedIn()
 
-      when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
-        .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+        when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
+          .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
 
-      val result = underTest.apiIndexPage(None, None, None)(request)
+        val result = underTest.apiIndexPage(None, None, None)(request)
+        verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
 
-      verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
     }
 
     "render the filtered API list" in new Setup {
@@ -242,7 +244,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       val result = underTest.apiIndexPage(None, None, None)(request)
 
-      verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "Sorry, we’re experiencing technical difficulties")
+      verifyErrorPageRendered(result, expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Sorry, we’re experiencing technical difficulties")
+
     }
 
   }
@@ -255,7 +258,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         theUserIsLoggedIn()
         theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
         val result = await(underTest.redirectToApiDocumentation(serviceName, Some(version), Option(true))(request))
-        status(result) shouldBe 303
+        status(result) shouldBe SEE_OTHER
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}?cacheBuster=true")
       }
     }
@@ -267,7 +270,27 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         theUserIsLoggedIn()
         theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
         val result = await(underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request))
-        status(result) shouldBe 303
+        status(result) shouldBe SEE_OTHER
+        result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+      }
+
+      "redirect to the documentation page for api in private trial for user without authorisation" in new Setup {
+        theUserIsLoggedIn()
+        val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
+          APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
+        theDocumentationServiceWillReturnAnApiDefinition(Some(privateTrialAPIDefinition))
+        val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
+        status(result) shouldBe SEE_OTHER
+        result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+      }
+
+      "redirect to the documentation page for api in private trial for user with authorisation" in new Setup {
+        theUserIsLoggedIn()
+        val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
+          APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
+        theDocumentationServiceWillReturnAnApiDefinition(Some(privateTrialAPIDefinition))
+        val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
+        status(result) shouldBe SEE_OTHER
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
       }
 
@@ -286,7 +309,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
         theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
         val result = await(underTest.redirectToApiDocumentation("hello-world", version, Option(true))(request))
-        status(result) shouldBe 303
+        status(result) shouldBe SEE_OTHER
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
       }
 
@@ -479,7 +502,17 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
-      verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "Sorry, we’re experiencing technical difficulties")
+      verifyErrorPageRendered(result, expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Sorry, we’re experiencing technical difficulties")
+    }
+
+    "tell clients not to cache the page" in new Setup {
+      theUserIsLoggedIn()
+      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+      theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
+
+      val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+      result.header.headers.get("Cache-Control") shouldBe Some("no-cache,no-store,max-age=0")
     }
   }
 
@@ -497,14 +530,14 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "render 500 page when no URL supplied" in new Setup(ramlPreviewEnabled = true) {
       val result = underTest.previewApiDocumentation(Some(""))(request)
-      verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "No URL supplied")
+      verifyErrorPageRendered(result, expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "No URL supplied")
     }
 
     "render 500 page when service throws exception" in new Setup(ramlPreviewEnabled = true) {
       val url = "http://host:port/some.path.to.a.raml.document"
       when(documentationService.fetchRAML(any(), any())).thenReturn(failed(RamlParseException("Expected unit test failure")))
       val result = underTest.previewApiDocumentation(Some(url))(request)
-      verifyErrorPageRendered(result, expectedStatus = 500, expectedError = "Expected unit test failure")
+      verifyErrorPageRendered(result, expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Expected unit test failure")
     }
 
   }
@@ -534,7 +567,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       when(documentationService.buildTestEndpoints(any(), any())(any())).thenReturn(endpoints)
       val result = underTest.fetchTestEndpointJson("employers-paye", "1.0")(request)
       val actualPage = await(result)
-      actualPage.header.status shouldBe 200
+      actualPage.header.status shouldBe OK
       bodyOf(actualPage) should include regex s"aaa.*ddd.*www.*zzz"
     }
   }
@@ -558,5 +591,6 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       status(result) shouldBe NOT_FOUND
     }
+
   }
 }

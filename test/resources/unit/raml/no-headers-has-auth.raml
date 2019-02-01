@@ -1,0 +1,37 @@
+#%RAML 1.0
+---
+title: Hello World
+version: 1.0
+
+protocols: [ HTTPS ]
+baseUri: https://helloworld.service.hmrc.gov.uk/
+
+documentation:
+ - title: Overview
+   content: An overview
+
+mediaType: application/hal+json
+
+uses:
+  sec: ../../../../public/common/modules/securitySchemes.raml
+  headers: ../../../../public/common/modules/headers.raml
+  annotations: ../../../../public/common/modules/annotations.raml
+
+/hello:
+  /user:
+    get:
+      displayName: Say hello user
+      description: |
+        A simple example for integrating with a user-restricted service, using a OAuth 2.0 `access_token`.
+
+        Any authorised request to this endpoint initiates a 'Hello User' response.
+      (annotations.scope): "hello"
+      securedBy: [ sec.oauth_2_0: { scopes: [ "hello" ] } ]
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Hello User"
+                }

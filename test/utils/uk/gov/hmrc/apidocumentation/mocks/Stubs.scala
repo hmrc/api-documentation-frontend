@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 
 package utils.uk.gov.hmrc.apidocumentation.mocks
 
+import com.github.tomakehurst.wiremock.client.WireMock._
 import java.io.File
 import java.net.URLDecoder
-
-import com.github.tomakehurst.wiremock.client.WireMock._
-import play.api.Logger
 import play.api.http.ContentTypes
 import play.utils.UriEncoding
 
@@ -102,7 +100,7 @@ trait ApiDefinition {
 
       val listOfFiles: Seq[File] = smt match {
         case Success(s) =>
-          val dir = new File(URLDecoder.decode(s))
+          val dir = new File(URLDecoder.decode(s, "UTF-8"))
 
           if (dir.exists()) {
              dir.listFiles

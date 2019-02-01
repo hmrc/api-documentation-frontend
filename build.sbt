@@ -4,7 +4,6 @@ import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.uglify.Import.{uglifyCompressOptions, _}
 import com.typesafe.sbt.web.Import._
 import net.ground5hark.sbt.concat.Import._
-import play.routes.compiler.InjectedRoutesGenerator
 import play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
@@ -51,7 +50,6 @@ lazy val microservice = (project in file("."))
     fork in Test := false,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    routesGenerator := InjectedRoutesGenerator,
     majorVersion := 0
   )
   .settings(playPublishingSettings: _*)
@@ -115,10 +113,12 @@ lazy val appDependencies: Seq[ModuleID] = allDeps
 lazy val compile = Seq(
   ws,
   cache,
-  "uk.gov.hmrc" %% "frontend-bootstrap" % "10.6.0",
+  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.6.0",
   "uk.gov.hmrc" %% "url-builder" % "2.0.0",
   "uk.gov.hmrc" %% "http-metrics" % "1.2.0",
   "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
+  "uk.gov.hmrc" %% "govuk-template" % "5.27.0-play-25",
+  "uk.gov.hmrc" %% "play-ui" % "7.29.0-play-25",
   "org.raml" % "raml-parser-2" % "1.0.13",
   "uk.gov.hmrc" %% "play-partials" % "6.3.0",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
@@ -129,7 +129,7 @@ lazy val compile = Seq(
 lazy val test = Seq(
   "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
   "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it",
-  "uk.gov.hmrc" %% "hmrctest" % "3.3.0" % "test,it",
+  "uk.gov.hmrc" %% "hmrctest" % "3.4.0-play-25" % "test,it",
   "junit" % "junit" % "4.12" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
   "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
@@ -154,6 +154,6 @@ def endToEndFilter(name: String): Boolean = name startsWith "endtoend"
 def unitFilter(name: String): Boolean = name startsWith "unit"
 
 // Coverage configuration
-coverageMinimum := 83
+coverageMinimum := 85
 coverageFailOnMinimum := true
 coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;config.*"

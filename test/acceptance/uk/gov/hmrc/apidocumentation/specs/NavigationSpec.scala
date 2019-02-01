@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package acceptance.uk.gov.hmrc.apidocumentation.specs
 
 import acceptance.uk.gov.hmrc.apidocumentation.BaseSpec
 import acceptance.uk.gov.hmrc.apidocumentation.pages._
-import org.scalatest.Tag
 import org.scalatest.prop.TableDrivenPropertyChecks
 import utils.uk.gov.hmrc.apidocumentation.mocks.TableDrivenPropertyMocks
 
@@ -43,15 +42,15 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
         Table(
           "Section",
           "Errors",
-          "Resources"
+          "Endpoints"
         )
       executeScript("window.scrollTo(0, document.body.scrollHeight)")
       forAll(topLinkClickedFromSection) {
         case "Errors" =>
           HelloWorldPage.selectErrorsBackToTop()
           assert(executeScript("return window.pageYOffset;").toString.equalsIgnoreCase("0"))
-        case "Resources" =>
-          HelloWorldPage.selectResourcesBackToTop()
+        case "Endpoints" =>
+          HelloWorldPage.selectEndpointsBackToTop()
           assert(executeScript("return window.pageYOffset;").toString.equalsIgnoreCase("0"))
       }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.mockito.Mockito._
 import org.raml.v2.api.model.v10.api.DocumentationItem
 import org.raml.v2.api.model.v10.system.types.AnnotableStringType
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.models._
@@ -100,8 +100,8 @@ class NavigationServiceSpec extends UnitSpec with WithFakeApplication with Mocki
       apiSidebarNavLinks.size shouldBe 2
       apiSidebarNavLinks.head.href shouldBe "#overview"
       apiSidebarNavLinks.head.label shouldBe "Overview"
-      apiSidebarNavLinks.last.href shouldBe "#resources"
-      apiSidebarNavLinks.last.label shouldBe "Resources"
+      apiSidebarNavLinks.last.href shouldBe "#endpoints"
+      apiSidebarNavLinks.last.label shouldBe "Endpoints"
     }
 
     "render overview documentation and 'read more' links when the api is not visible" in new Setup {
