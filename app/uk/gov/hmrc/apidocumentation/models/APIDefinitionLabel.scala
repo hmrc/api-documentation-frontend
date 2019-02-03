@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.models
 
 object APIDefinitionLabel extends Enumeration {
-  type APIDefinitionLabel = Value
+  type DocumentationLabel = Value
 
   protected case class Val(displayName: String, modifier: String) extends super.Val
   implicit def valueToAPIDefinitionLabelVal(x: Value): Val = x.asInstanceOf[Val]

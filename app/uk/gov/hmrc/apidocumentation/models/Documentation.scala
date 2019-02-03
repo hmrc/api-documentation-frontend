@@ -17,15 +17,81 @@
 package uk.gov.hmrc.apidocumentation.models
 
 import play.api.libs.json._
-import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
-import uk.gov.hmrc.apidocumentation.models.HttpMethod.HttpMethod
+import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
+import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.HttpMethod.HttpMethod
 
 import scala.collection.immutable.ListMap
 import scala.io.Source
 import scala.util.Try
+
+trait Documentation {
+
+  val name: String
+  val context: String
+  val categories: Option[Seq[APICategory]]
+  val label: DocumentationLabel
+
+  def documentationUrl: String
+
+  def mappedCategories(catMap: Map[String, Seq[APICategory]] = categoryMap): Seq[APICategory] = categories match {
+    case Some(head :: tail) => head +: tail
+    case _ => catMap.getOrElse(name, Seq(OTHER))
+  }
+
+  lazy val isRestOrXmlApi = label == REST_API || label == XML_API
+
+}
+
+object Documentation {
+
+  def groupedByCategory(apiDefinitions: Seq[APIDefinition],
+                        xmlDefinitions: Seq[XmlApiDocumentation],
+                        serviceGuides: Seq[ServiceGuide],
+                        catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[Documentation]] = {
+    val categorised: Map[APICategory, Seq[Documentation]] =
+      (apiDefinitions ++ xmlDefinitions ++ serviceGuides).foldLeft(Map(): Map[APICategory, Seq[Documentation]]) {
+        (groupings, apiDefinition) =>
+          groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
+      }.filter(_._2.exists(_.isRestOrXmlApi))
+
+    ListMap(categorised.toSeq.sortBy(_._1): _*)
+  }
+}
+
+case class XmlApiDocumentation(name: String, context: String, description: String, categories: Option[Seq[APICategory]] = None)
+  extends Documentation {
+
+  val label: DocumentationLabel = XML_API
+
+  def documentationUrl: String = routes.DocumentationController.renderXmlApiDocumentation(name).url
+}
+
+object XmlApiDocumentation {
+  implicit val format = Json.format[XmlApiDocumentation]
+
+  def xmlApiDefinitions: Seq[XmlApiDocumentation] =
+    Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[XmlApiDocumentation]]
+}
+
+case class ServiceGuide(name: String, context: String, categories: Option[Seq[APICategory]] = None)
+  extends Documentation {
+
+  val label: DocumentationLabel = SERVICE_GUIDE
+
+  def documentationUrl: String = context
+}
+
+object ServiceGuide {
+  implicit val format = Json.format[ServiceGuide]
+
+  def serviceGuides: Seq[ServiceGuide] =
+    Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/service_guides.json")).mkString).as[Seq[ServiceGuide]]
+}
+
 
 object APIAccessType extends Enumeration {
   type APIAccessType = Value
@@ -42,10 +108,9 @@ case class APIDefinition(
                           requiresTrust: Option[Boolean],
                           isTestSupport: Option[Boolean],
                           versions: Seq[APIVersion],
-                          categories: Option[Seq[APICategory]] = None,
-                          isXmlApi: Option[Boolean] = None) {
+                          categories: Option[Seq[APICategory]] = None) extends Documentation {
 
-  require(versions.nonEmpty, s"API versions must not be empty! serviceName=${serviceName}")
+  require(versions.nonEmpty, s"API versions must not be empty! serviceName=$serviceName")
 
   lazy val retiredVersions = versions.filter(_.status == APIStatus.RETIRED)
   lazy val sortedVersions = versions.sortWith(APIDefinition.versionSorter)
@@ -54,16 +119,9 @@ case class APIDefinition(
   lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
   lazy val defaultVersion = statusSortedActiveVersions.headOption
   lazy val hasActiveVersions = statusSortedActiveVersions.nonEmpty
-  lazy val isRestOrXmlApi = Seq(REST_API, XML_API).contains(label)
-  lazy val label: APIDefinitionLabel =
-    if (isTestSupport.contains(true)) TEST_SUPPORT_API
-    else if (isXmlApi.contains(true)) XML_API
-    else REST_API
+  val label: DocumentationLabel = if(isTestSupport.contains(true)) TEST_SUPPORT_API else REST_API
 
-  def mappedCategories(catMap: Map[String, Seq[APICategory]] = categoryMap): Seq[APICategory] = categories match {
-    case Some(head :: tail) => head +: tail
-    case _ => catMap.get(name).getOrElse(Seq(OTHER))
-  }
+  def documentationUrl: String = routes.DocumentationController.renderApiDocumentation(serviceName, defaultVersion.get.version, None).url
 }
 
 object APIDefinition {
@@ -85,18 +143,9 @@ object APIDefinition {
     }
   }
 
-  def groupedByCategory(apiDefinitions: Seq[APIDefinition], xmlDefinitions: Seq[APIDefinition] = xmlApiDefinitions, catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[APIDefinition]] = {
-    val categorised: Map[APICategory, Seq[APIDefinition]] = (apiDefinitions ++ xmlDefinitions).foldLeft(Map(): Map[APICategory, Seq[APIDefinition]]) {
-      (groupings, apiDefinition) => groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
-    }.filter(_._2.exists(_.isRestOrXmlApi))
-
-    ListMap(categorised.toSeq.sortBy(_._1): _*)
-  }
-
   private val nonNumericOrPeriodRegex = "[^\\d^.]*"
   private val fallback = Array(1, 0, 0)
 
-  def xmlApiDefinitions = Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[APIDefinition]].map(_.copy(isXmlApi = Some(true)))
 }
 
 case class APIVersion(

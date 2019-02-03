@@ -55,7 +55,7 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   lazy val title = "HMRC Developer Hub"
   lazy val isStubMode = env == "Stub"
   lazy val xmlApiBaseUrl = runModeConfiguration.getString(s"$env.xml-api.base-url").getOrElse("https://www.gov.uk")
-  lazy val groupedDocumentationEnabled = runModeConfiguration.getBoolean(s"$env.features.groupedDocumentation").getOrElse(false)
+
 
   private def buildRamlLoaderRewrites: Map[String, String] = {
     Map(runModeConfiguration.getString(s"$env.ramlLoaderUrlRewrite.from").getOrElse("") ->

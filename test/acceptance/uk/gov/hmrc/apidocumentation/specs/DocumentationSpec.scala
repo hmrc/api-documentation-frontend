@@ -120,7 +120,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       ApiDocumentationTestServicePage.checkVersionSortOrder()
     }
 
-    scenario("Optional header displays as 'required' in API docs") {
+    scenario("Optional header displays as 'optional' in API docs") {
       Given apiServicesIsDeployed()
       Given apiDocumentationTestServiceVersionsIsDeployed()
 
