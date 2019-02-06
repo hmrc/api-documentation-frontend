@@ -205,6 +205,14 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       verifyPageRendered(underTest.fraudPreventionPage()(request), pageTitle("Fraud prevention"))
     }
 
+    "display the Making Tax Digital guides page" in new Setup {
+      verifyPageRendered(underTest.mtdIntroductionPage()(request), pageTitle("Making Tax Digital guides"))
+    }
+
+    "display the Income Tax (MTD) End-to-End Service Guide page" in new Setup {
+      verifyPageRendered(underTest.mtdIncomeTaxServiceGuidePage()(request), pageTitle("Income Tax (MTD) End-to-End Service Guide"))
+    }
+
     "redirect to the test users test data and stateful behaviour page" in new Setup {
       val result = await(underTest.testingStatefulBehaviourPage()(request))
       status(result) shouldBe MOVED_PERMANENTLY

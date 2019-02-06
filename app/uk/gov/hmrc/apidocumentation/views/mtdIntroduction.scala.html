@@ -17,18 +17,24 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
 @import include._
+@import uk.gov.hmrc.apidocumentation.controllers
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @apiMain(pageAttributes) {
     <h1 class="heading-xlarge">Making Tax Digital guides</h1>
 
+    <p>These guides have now moved to our <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
 
-    <p>The following Making Tax Digital (MTD) guides are available to help software developers and designers understand how software needs to interact with HMRC systems and what it needs to do:</p>
-    <ul class="list list-bullet">
-        <li><a href='@routes.Assets.versioned("content/documentation/MTD-VAT End-to-End (E2E) Customer Journeys.pdf")' target="_blank" rel="noopener noreferrer">MTD VAT End to End Customer Journeys (opens in a new tab)</a></li>
-        <li><a href='@routes.Assets.versioned("content/documentation/MTD-Income Tax End-to-End (E2E) Customer Journeys.pdf")' target="_blank" rel="noopener noreferrer">MTD Income Tax End to End Customer Journeys (opens in a new tab)</a></li>
-    </ul>
-    <p>Product owners and business analysts can also use these guides to further their understanding of MTD.</p>
+    <h2 class="heading-large">
+      VAT (MTD) End-to-End Service Guide
+    </h2>
+    <p>You can now find this guide and related VAT (MTD) documentation here:</p>
+    <p><a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, Some("vat")).url">VAT (MTD) API documentation</a></p>
+    <h2 class="heading-large">
+      Income Tax (MTD) End-to-End-Service Guide
+    </h2>
+    <p>You can now find this guide and related Income Tax (MTD) documentation here:</p>
+    <p><a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, Some("income-tax")).url">Income Tax (MTD) API documentation</a></p>
 
 }

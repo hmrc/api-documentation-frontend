@@ -74,5 +74,6 @@
   "Stamp Taxes Online": ["STAMP_DUTY"],
   "VAT and EC Sales List Online": ["CUSTOMS", "VAT"],
 
-  "VAT End-to-End Service Guide": ["VAT_MTD"]
+  "VAT (MTD) end-to-end service guide": ["VAT_MTD"],
+  "Income Tax (MTD) end-to-end service guide": ["INCOME_TAX_MTD"]
 }

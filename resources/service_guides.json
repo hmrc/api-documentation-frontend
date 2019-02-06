@@ -1,6 +1,10 @@
 [
   {
-    "name": "VAT End-to-End Service Guide",
+    "name": "VAT (MTD) end-to-end service guide",
     "context": "/guides/vat-mtd-end-to-end-service-guide"
+  },
+  {
+    "name": "Income Tax (MTD) end-to-end service guide",
+    "context": "/api-documentation/docs/api/mtd-income-tax-service-guide"
   }
 ]
