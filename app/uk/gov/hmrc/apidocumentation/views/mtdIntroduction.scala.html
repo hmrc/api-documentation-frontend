@@ -17,23 +17,24 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
 @import include._
+@import uk.gov.hmrc.apidocumentation.controllers
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
 @apiMain(pageAttributes) {
     <h1 class="heading-xlarge">Making Tax Digital guides</h1>
 
-    <p>These guides have now moved to our <a href="/api-documentation/docs/api">API documentation</a>.</p>
+    <p>These guides have now moved to our <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
 
     <h2 class="heading-large">
       VAT (MTD) End-to-End Service Guide
     </h2>
     <p>You can now find this guide and related VAT (MTD) documentation here:</p>
-    <p><a href="/api-documentation/docs/api?filter=vat">VAT (MTD) API documentation</a></p>
+    <p><a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, Some("vat")).url">VAT (MTD) API documentation</a></p>
     <h2 class="heading-large">
       Income Tax (MTD) End-to-End-Service Guide
     </h2>
     <p>You can now find this guide and related Income Tax (MTD) documentation here:</p>
-    <p><a href="/api-documentation/docs/api?filter=income-tax">Income Tax (MTD) API documentation</a></p>
+    <p><a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, Some("income-tax")).url">Income Tax (MTD) API documentation</a></p>
 
 }

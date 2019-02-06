@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
 @import include._
+@import uk.gov.hmrc.apidocumentation.controllers
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
@@ -43,8 +44,8 @@
 
     <h2 class="heading-large">Related service documentation</h2>
     <ul class="list list-bullet">
-      <li><a href="/api-documentation/docs/api/service/self-assessment-api">Self Assessment (MTD) API</a></li>
-      <li><a href="/api-documentation/docs/api/service/api-platform-test-user">Create Test User API</a></li>
+      <li><a href="@controllers.routes.DocumentationController.redirectToApiDocumentation("self-assessment-api", None, None)">Self Assessment (MTD) API</a></li>
+      <li><a href="@controllers.routes.DocumentationController.redirectToApiDocumentation("api-platform-test-user", None, None)">Create Test User API</a></li>
     </ul>
 
 }
