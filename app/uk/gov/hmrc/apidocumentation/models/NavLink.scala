@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-case class NavLink(label: String, href: String, truncate: Boolean = false)
+case class NavLink(label: String, href: String, truncate: Boolean = false, openInNewWindow: Boolean = false)
 
 case class SidebarLink(label: String, href: String, subLinks: Seq[SidebarLink] = Seq.empty, showSubLinks: Boolean = false)
 
@@ -26,6 +26,7 @@ case object StaticNavLinks {
     Seq(
       NavLink("Documentation", "/api-documentation/docs/using-the-hub"),
       NavLink("Applications", "/developer/applications"),
-      NavLink("Support", "/developer/support"))
+      NavLink("Support", "/developer/support"),
+      NavLink("Service availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true))
   }
 }
