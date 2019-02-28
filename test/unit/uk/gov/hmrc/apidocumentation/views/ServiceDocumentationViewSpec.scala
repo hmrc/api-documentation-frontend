@@ -43,8 +43,6 @@ class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with OneAp
   }
 
   val mockAppConfig = mock[ApplicationConfig]
-  when(mockAppConfig.hotjarEnabled).thenReturn(None)
-  when(mockAppConfig.hotjarId).thenReturn(None)
 
   val pageAttributes: PageAttributes = mock[PageAttributes]
   when(pageAttributes.headerLinks).thenReturn(Seq())

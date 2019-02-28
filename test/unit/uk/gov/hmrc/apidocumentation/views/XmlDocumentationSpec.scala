@@ -49,8 +49,6 @@ class XmlDocumentationSpec extends UnitSpec with MockitoSugar with OneAppPerSuit
     val request = mock[Request[Any]]
 
     When(appConfig.xmlApiBaseUrl).thenReturn(baseUrl)
-    When(appConfig.hotjarEnabled).thenReturn(None)
-    When(appConfig.hotjarId).thenReturn(None)
     When(pageAttributes.headerLinks).thenReturn(Seq())
     When(pageAttributes.sidebarLinks).thenReturn(Seq())
     When(pageAttributes.breadcrumbs).thenReturn(Breadcrumbs())

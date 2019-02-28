@@ -67,8 +67,6 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
     when(appConfig.title).thenReturn("HMRC Developer Hub")
     when(documentationService.defaultExpiration).thenReturn(1.hour)
-    when(appConfig.hotjarEnabled) thenReturn None
-    when(appConfig.hotjarId) thenReturn None
 
     val underTest = new DocumentationController(documentationService, navigationService, partialsService, loggedInUserProvider, errorHandler, messagesApi)
 

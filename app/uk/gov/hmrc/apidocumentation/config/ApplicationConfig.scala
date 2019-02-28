@@ -29,8 +29,6 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   val contactFormServiceIdentifier = "API"
   val contactPath = runModeConfiguration.getString(s"$env.contactPath").getOrElse("")
 
-  lazy val hotjarId = runModeConfiguration.getInt(s"$env.hotjar.id")
-  lazy val hotjarEnabled = runModeConfiguration.getBoolean(s"$env.features.hotjar")
   lazy val analyticsToken = runModeConfiguration.getString(s"$env.google-analytics.token")
   lazy val analyticsHost = runModeConfiguration.getString(s"$env.google-analytics.host").getOrElse("auto")
   lazy val betaFeedbackUrl = "/contact/beta-feedback"

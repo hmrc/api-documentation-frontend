@@ -70,24 +70,6 @@ help.cookies.how_used.intro_message.table.seen_message.name=seen_cookie_message
 help.cookies.how_used.intro_message.table.seen_message.purpose=Saves a message to let us know you''ve seen our cookie message
 help.cookies.how_used.intro_message.table.seen_message.expires=1 month
 
-help.cookies.hotjar=Understand end user behaviour (Hotjar)
-help.cookies.hotjar.info=Hotjar is an analytics and feedback tool that we use to understand how you use the documentation on this website. We do this to make site improvements and make sure it’s meeting your needs
-help.cookies.hotjar.heading=Hotjar uses the following cookies:
-help.cookies.hotjar.table.header.purpose=Purpose
-help.cookies.hotjar.table.1.name=hjClosedSurveyInvites
-help.cookies.hotjar.table.1.purpose=Set once you interact with a Survey invitation modal popup. It ensures that the same invitation does not re-appear once shown.
-help.cookies.hotjar.table.expires=365 Days
-help.cookies.hotjar.table.2.name=_hjDonePolls
-help.cookies.hotjar.table.2.purpose=Set once you complete a poll using the Feedback Poll widget. It ensures that the same poll does not re-appear once filled in.
-help.cookies.hotjar.table.3.name=_hjMinimizedPolls
-help.cookies.hotjar.table.3.purpose=Set once you minimise a Feedback Poll widget. It ensures that the widget stays minimised while you navigate through the site.
-help.cookies.hotjar.table.4.name=_hjDoneTestersWidgets
-help.cookies.hotjar.table.4.purpose=Set once you minimise a Recruit User Testers widget. It ensures that the same form does not re-appear once filled in.
-help.cookies.hotjar.table.5.name=_hjMinimizedTestersWidgets
-help.cookies.hotjar.table.5.purpose=Set once you minimise a Recruit User Testers widget. It ensures that the widget stays minimised while you navigate through the site.
-help.cookies.hotjar.table.6.name=_hjIncludedInSample
-help.cookies.hotjar.table.6.purpose=Set to let Hotjar know whether you are included in the sample which is used to generate funnels.
-
 help.cookies.optimizely=Comparing different versions of webpages (Optimizely)
 help.cookies.optimizely.info=Sometimes we use Optimizely software to test different versions of webpages to see which performs better. We do this to make site improvements and make sure it’s meeting your needs.
 help.cookies.optimizely.table.header.purpose=Purpose
@@ -99,7 +81,6 @@ help.cookies.optimizely.table.2.purpose=This helps us identify how you use GOV.U
 help.cookies.optimizely.table.2.expires=5 seconds
 
 help.cookies.sm=Our satisfaction survey (SurveyMonkey)
-help.cookies.sm.heading=Hotjar uses the following cookies:
 help.cookies.sm.table.header.purpose=Purpose
 help.cookies.sm.table.1.name=mbox
 help.cookies.sm.table.1.purpose=This is used to keep your progress through the survey
