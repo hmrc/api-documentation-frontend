@@ -36,8 +36,6 @@ class MainTemplateSpec extends UnitSpec with WithFakeApplication with MockitoSug
 
   "htmlView" must {
     "render with no indexing meta tags" in new TestCase {
-      given(mockApplicationConfig.hotjarEnabled) willReturn Some(false)
-      given(mockApplicationConfig.hotjarId) willReturn None
       val renderedHtml = views.html.index.render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
       renderedHtml.body shouldNot include("<meta name=\"robots\" content=\"noindex\">")
       renderedHtml.body shouldNot include("<meta name=\"googlebot\" content=\"noindex\">")
