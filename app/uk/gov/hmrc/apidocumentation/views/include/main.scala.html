@@ -38,7 +38,7 @@
   )(mainContent: Html = HtmlFormat.empty)(implicit applicationConfig: ApplicationConfig, messages: Messages)
 
 @headScripts = {
-    @googleTagManager()
+    <script src='@routes.Assets.versioned("javascripts/googleTagManager.js")'></script>
 }
 
 @head = {
