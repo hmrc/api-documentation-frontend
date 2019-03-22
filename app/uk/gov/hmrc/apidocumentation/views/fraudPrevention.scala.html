@@ -26,7 +26,7 @@
   <div class="fraud-prevention">
     <h1 class="heading-xlarge">Fraud prevention</h1>
 
-    <p>Version 2.2 issued 12 February 2019</p>
+    <p>Version 2.3 issued 22 March 2019</p>
 
     <p>
         Transaction Monitoring (TxM) is a key security approach adopted in the UK and globally.
@@ -38,15 +38,22 @@
       Without the protection offered by TxM, personal data could be compromised, leading to fraud against taxpayers or the UK Exchequer.
     </p>
     <p>You must help us protect our users’ confidential data by sending us particular types of user audit data which we will record.</p>
+    <p>From 1 April 2019, regulation 2(2) of the <a href="http://www.legislation.gov.uk/uksi/2019/360/made">Delivery of Tax Information through Software (Ancillary Metadata) Regulations 2019 (S.I. 360/2019)</a> requires this by law.</p>
     <p>Our APIs provide HTTP headers that you can use to pass this audit data to us.</p>
     <p>These headers can influence the processing of the API call, or support our prosecutions for tax or duty fraud.</p>
 
     <h2 class="heading-large">Mandatory information</h2>
     <p>Supplying header information for all our APIs will become mandatory - so we recommend designing it into your applications now.</p>
     <p>To find out if header information is mandatory for an API that you use, read its <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
+    <p>We have published our <a href='@routes.Assets.versioned("content/documentation/TxM DPIA v3 1 Public.pdf")'>TxM Data Protection Impact Assessment</a> (DPIA) in line with best practice guidance from the Information Commissioner’s Office. This is to:</p>
+    <ul class="list list-bullet">
+      <li>provide transparency for our end users and software developers who work with us</li>
+      <li>tell the public why we are processing particular personal data</li>
+      <li>help software developers amend their privacy notices in relation to our APIs</li>
+    </ul>
 
     <h2 class="heading-large">Header contents</h2>
-    <p>Header contents must use the character set US-ASCII, with other characters percent encoded as in <a href="https://www.ietf.org/rfc/rfc3986.txt" target="_blank" rel="noopener noreferrer">RFC3986 (opens in a new tab)</a>.
+    <p>Header contents must use the character set US-ASCII, with other characters percent encoded as in <a href="https://tools.ietf.org/html/rfc3986#section-2.1" target="_blank" rel="noopener noreferrer">RFC3986 (opens in a new tab)</a>.
       Other restrictions on header values are shown under the individual header definitions.</p>
     <p>The application connection method determines which headers we require:</p>
 
@@ -100,13 +107,13 @@
     <p>Whenever a header contains a key-value data structure, it must be in the form:</p>
     <p class="code--slim">&lt;key-1&gt;=&lt;value-1&gt;&&lt;key-2&gt;=&lt;value-2&gt;&…</p>
     <p>Whenever a key is applicable but has no applicable value, the key-value pair can be omitted, or the key can be included with an empty value.
-    <p>Keys and values must be <a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank" rel="noopener noreferrer">percent encoded (opens in a new tab)</a>.</p>
+    <p>Keys and values must be <a href="https://tools.ietf.org/html/rfc3986#section-2.1" target="_blank" rel="noopener noreferrer">percent encoded (opens in a new tab)</a>.</p>
     <p>The key-value pairs can be given in any order.</p>
 
     <h3 class="heading-medium">List encoding</h3>
     <p>Whenever a header contains a list, it must be of the form:</p>
     <p class="code--slim">&lt;value-1&gt;,&lt;value-2&gt;,…</p>
-    <p>Values must be <a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank" rel="noopener noreferrer">percent encoded (opens in a new tab)</a>.
+    <p>Values must be <a href="https://tools.ietf.org/html/rfc3986#section-2.1" target="_blank" rel="noopener noreferrer">percent encoded (opens in a new tab)</a>.
     <p>Values must not be empty.</p>
 
     <h2 class="heading-large">Header definitions</h2>
