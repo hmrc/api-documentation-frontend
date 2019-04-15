@@ -22,7 +22,10 @@ import org.raml.v2.api.model.v10.methods.Method
 
 import scala.collection.JavaConversions._
 
-case class EnumValue(name: String, description: Option[String] = None)
+case class EnumValue(
+                      name: String,
+                      description: Option[String] = None
+                    )
 
 case class RequestResponseField(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: String,
                                 description: String, pattern: String, depth: Int, enumValues: Seq[EnumValue])
@@ -56,11 +59,7 @@ trait RequestResponseFields {
                             isArray: Boolean = false,
                             isPatternproperty: Boolean = false): Seq[RequestResponseField] = {
 
-    def extractEnumValues(schema: JsonSchema): Seq[EnumValue] = {
-      schema.enum.map(EnumValue(_)) ++ schema.oneOf.map(enumValue =>
-        EnumValue(enumValue.enum.headOption.getOrElse(""), enumValue.description)
-      )
-    }
+    def extractEnumValues(schema: JsonSchema): Seq[EnumValue] = schema.enum.map( e => EnumValue(e.value))
 
     val currentField = fieldName match {
       case Some(name) if schema.`type` != "array" => {
