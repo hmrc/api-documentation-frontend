@@ -46,6 +46,39 @@ case class JsonSchema(description: Option[String] = None,
 
 object JsonSchema {
 
+  case object JsonSchemaWithReference {
+
+    def unapply(arg: JsonSchema): Boolean = arg match {
+      case JsonSchema(description, _, _, _, _, properties, patternProperties, items, _, definitions, ref, _, oneOf, _) =>
+
+        val hasReference: PartialFunction[JsonSchema, Boolean] = {
+          case JsonSchemaWithReference() => true
+          case _ => false
+        }
+
+        val doesPatternPropertiesHaveReference = patternProperties.exists(v => hasReference(v._2))
+
+        val doesDefinitionsHaveReference = definitions.exists(v => hasReference(v._2))
+
+        val doesPropertiesHaveReference = properties.exists(v => hasReference(v._2))
+
+        val doesItemsHaveReference = items.exists(hasReference)
+
+        val doesOneofHaveReference = oneOf.exists(hasReference)
+
+        val reference = ref.isDefined
+
+
+        doesPropertiesHaveReference ||
+          doesPatternPropertiesHaveReference ||
+          doesItemsHaveReference ||
+          reference ||
+          doesOneofHaveReference ||
+          doesDefinitionsHaveReference
+    }
+
+  }
+
   implicit def listMapReads[V](implicit formatV: Reads[V]): Reads[ListMap[String, V]] = new Reads[ListMap[String, V]] {
     def reads(json: JsValue) = json match {
       case JsObject(m) =>
