@@ -40,7 +40,7 @@ case class JsonSchema(description: Option[String] = None,
                       required: Seq[String] = Nil,
                       definitions: ListMap[String, JsonSchema] = ListMap(), // See above regarding use of ListMap
                       ref: Option[String] = None,
-                      enum: Seq[String] = Nil,
+                      enum: Seq[EnumerationValue] = Nil,
                       oneOf: Seq[JsonSchema] = Nil,
                       pattern: Option[String] = None)
 
@@ -77,7 +77,7 @@ object JsonSchema {
       ( __ \ "required" ).readNullable[Seq[String]].map(_.toSeq.flatten) and
       ( __ \ "definitions" ).lazyReadNullable[ListMap[String,JsonSchema]](listMapReads[JsonSchema]).map(_.getOrElse(ListMap())) and
       ( __ \ "$ref" ).readNullable[String] and
-      ( __ \ "enum" ).readNullable[Seq[String]].map(_.toSeq.flatten) and
+      ( __ \ "enum" ).readNullable[Seq[EnumerationValue]].map(_.toSeq.flatten) and
       ( __ \ "oneOf" ).lazyReadNullable[Seq[JsonSchema]](Reads.seq[JsonSchema]).map(_.toSeq.flatten) and
       ( __ \ "pattern" ).readNullable[String]
     )(JsonSchema.apply _)
