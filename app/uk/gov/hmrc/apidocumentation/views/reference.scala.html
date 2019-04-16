@@ -221,7 +221,7 @@
                     <td><code class="code--slim">INVALID_CREDENTIALS</code></td>
                 </tr>
                 <tr>
-                    <td>Supplied OAuth token not authorised to access data for given tax identifier(s)</td>
+                    <td>Other issue with authentication of the supplied OAuth token</td>
                     <td><code class="code--slim">UNAUTHORIZED</code></td>
                 </tr>
                 <tr>
@@ -252,6 +252,10 @@
                 <tr>
                     <td>The scope of the OAuth token is not sufficient to access the API</td>
                     <td><code class="code--slim">INVALID_SCOPE</code></td>
+                </tr>
+                <tr>
+                    <td>Supplied OAuth token not authorised to access data for given tax identifier(s)</td>
+                    <td><code class="code--slim">FORBIDDEN</code></td>
                 </tr>
                 </tbody>
             </table>
