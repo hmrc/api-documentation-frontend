@@ -18,7 +18,7 @@ package unit.uk.gov.hmrc.apidocumentation.models
 
 import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.Json
-import uk.gov.hmrc.apidocumentation.models.{EnumerationValue, JsonSchema}
+import uk.gov.hmrc.apidocumentation.models.JsonSchema
 
 import scala.collection.immutable.ListMap
 
@@ -258,10 +258,8 @@ class JsonSchemaSpec extends WordSpec with Matchers {
           |}
         """.stripMargin)
 
-      actual shouldBe JsonSchema(
-        description = Some("Transaction type"),
-        `type` = Some("string"),
-        enum = Seq(EnumerationValue("CREDIT"), EnumerationValue("DEBIT")))
+      actual shouldBe JsonSchema(description = Some("Transaction type"), `type` = Some("string"),
+        enum = Seq("CREDIT", "DEBIT"))
     }
 
     "support oneOf for specifying enums with descriptions" in {
@@ -279,8 +277,8 @@ class JsonSchemaSpec extends WordSpec with Matchers {
 
       actual shouldBe JsonSchema(description = Some("Transaction type"),
         oneOf = Seq(
-          JsonSchema(enum = Seq(EnumerationValue("CREDIT")), description = Some("A credit")),
-          JsonSchema(enum = Seq(EnumerationValue("DEBIT")), description = Some("A debit"))
+          JsonSchema(enum = Seq("CREDIT"), description = Some("A credit")),
+          JsonSchema(enum = Seq("DEBIT"), description = Some("A debit"))
         )
       )
     }
