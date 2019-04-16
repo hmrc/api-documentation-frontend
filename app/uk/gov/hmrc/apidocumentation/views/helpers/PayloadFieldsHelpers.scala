@@ -22,7 +22,10 @@ import org.raml.v2.api.model.v10.methods.Method
 
 import scala.collection.JavaConversions._
 
-case class EnumValue(name: String, description: Option[String] = None)
+case class EnumValue(
+                      name: String,
+                      description: Option[String] = None
+                    )
 
 case class RequestResponseField(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: String,
                                 description: String, pattern: String, depth: Int, enumValues: Seq[EnumValue])
