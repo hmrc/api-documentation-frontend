@@ -47,7 +47,7 @@ object APICategory extends Enumeration {
   val STAMP_DUTY = Val("Stamp Duty", "stamp-duty")
   val TRUSTS = Val("Trusts", "trusts")
   val VAT_MTD = Val("VAT (Making Tax Digital)", "vat")
-  val VAT = Val("VAT (XML)", "vat")
+  val VAT = Val("VAT", "vat")
 
   val OTHER = Val("Other", "other")
 
