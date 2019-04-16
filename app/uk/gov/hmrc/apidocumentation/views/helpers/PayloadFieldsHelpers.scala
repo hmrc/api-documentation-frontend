@@ -31,8 +31,8 @@ trait RequestResponseFields {
 
   def extractFields(requestResponseBodies: Seq[TypeDeclaration], schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
     val fields = for {
-      body    <- requestResponseBodies
-      schema  <- schema(body, schemas)
+      body <- requestResponseBodies
+      schema <- schema(body, schemas)
     } yield {
       extractFields(schema)
     }
@@ -57,14 +57,9 @@ trait RequestResponseFields {
                             isPatternproperty: Boolean = false): Seq[RequestResponseField] = {
 
     def extractEnumValues(schema: JsonSchema): Seq[EnumValue] = {
-
-      val enum = schema.enum.map( e => EnumValue(e.value))
-
-      val oneOf = schema.oneOf.map { e =>
-        EnumValue(e.enum.headOption.fold("")(_.value), e.description)
-      }
-
-      enum ++ oneOf
+      schema.enum.map(EnumValue(_)) ++ schema.oneOf.map(enumValue =>
+        EnumValue(enumValue.enum.headOption.getOrElse(""), enumValue.description)
+      )
     }
 
     val currentField = fieldName match {
