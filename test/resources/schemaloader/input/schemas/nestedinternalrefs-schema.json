@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Business name",
+      "type": "string"
+    },
+    "description": {
+      "$ref": "#/definitions/description"
+    },
+    "doublenesteddescription": {
+      "$ref": "#/definitions/evenmorenesteddescription"
+    }
+  },
+  "definitions": {
+    "description": {
+      "$ref": "#/definitions/nesteddescription"
+    },
+    "nesteddescription": {
+      "description": "Description of the activities of the business",
+      "type": "string"
+    },
+    "evenmorenesteddescription": {
+      "$ref": "#/definitions/description"
+    }
+  }
+}

@@ -21,6 +21,7 @@ import java.net.URI
 import org.raml.v2.api.model.v10.methods.Method
 import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
+import uk.gov.hmrc.apidocumentation.models.JsonSchema.JsonSchemaWithReference
 import uk.gov.hmrc.ramltools.Implicits._
 
 import scala.collection.JavaConversions._
@@ -31,9 +32,9 @@ class SchemaService {
 
   def loadSchemas(basePath: String, raml: RAML): Map[String, JsonSchema] = {
     val schemas = for {
-      resource <- raml.flattenedResources
-      method <- resource.methods
-      schema <- payloadSchemas(method)
+      resource  <- raml.flattenedResources
+      method    <- resource.methods
+      schema    <- payloadSchemas(method)
     } yield {
       schema -> parseSchema(schema, basePath)
     }
@@ -67,12 +68,49 @@ class SchemaService {
 
   private def parseSchema(schema: String, basePath: String): JsonSchema = {
     val jsonSchema = Json.parse(schema).as[JsonSchema]
-    if (schema.contains("$ref")) resolveRefs(jsonSchema, basePath, jsonSchema) else jsonSchema
+   jsonSchema match {
+      case JsonSchemaWithReference() => resolveRefs(jsonSchema, basePath, jsonSchema)
+      case s                         => s
+    }
   }
 
   private def resolveRefs(schema: JsonSchema, basePath: String, enclosingSchema: JsonSchema): JsonSchema = {
-    def splitJsonPointer(jsonPointer: String): Seq[String] = {
-      jsonPointer.dropWhile(_ == '/').split("/")
+    val name = schema.oneOf
+
+    def resolve(schema: JsonSchema, basePath: String, enclosingSchema: JsonSchema)(ref: String) = {
+      val (referredSchemaPath, jsonPointerPathParts) = getPath(ref)
+
+      val referredSchema = referredSchemaPath match {
+        case "" => enclosingSchema
+        case _  => fetchSchema(basePath, referredSchemaPath)
+      }
+
+      val referredSubSchema = findSubschema(jsonPointerPathParts, referredSchema)
+      schema.description.fold(referredSubSchema)(description => referredSubSchema.copy(description = Some(description)))
+    }
+
+    def findSubschema(pathParts: Seq[String], schema: JsonSchema): JsonSchema = {
+      pathParts match {
+        case "definitions" +: pathPart +: Nil => {
+          val resolved = schema.definitions(pathPart)
+          resolved match {
+            case JsonSchemaWithReference()  =>
+              resolveRefs(resolved, basePath, enclosingSchema)
+            case _       =>
+              resolved
+          }
+        }
+        case "definitions" +: pathPart +: remainingPathParts => {
+          findSubschema(remainingPathParts, schema.definitions(pathPart))
+        }
+        case pathPart +: Nil => {
+          schema.properties(pathPart)
+        }
+        case pathPart +: remainingPath => {
+          findSubschema(remainingPath, schema.properties(pathPart))
+        }
+        case _ => schema
+      }
     }
 
     def resolveRefsInSubschemas(subschemas: ListMap[String, JsonSchema], basePath: String, enclosingSchema: JsonSchema): ListMap[String, JsonSchema] = {
@@ -81,52 +119,43 @@ class SchemaService {
       }
     }
 
+    def resolveRefsInOneOfs(oneOfs: Seq[JsonSchema], basePath: String, enclosingSchema: JsonSchema): Seq[JsonSchema] = {
+      oneOfs.map(resolveRefs(_, basePath, enclosingSchema))
+    }
+
     schema.ref match {
-      case Some(ref) => {
-        val (referredSchemaPath, jsonPointerPathParts) = ref.split('#') match {
-          case Array(referredSchemaPath, jsonPointer) => {
-            (referredSchemaPath, splitJsonPointer(jsonPointer))
-          }
-          case Array(referredSchemaPath) => {
-            (referredSchemaPath, Nil)
-          }
-        }
-
-        val referredSchema = referredSchemaPath match {
-          case "" => enclosingSchema
-          case _ => fetchSchema(basePath, referredSchemaPath)
-        }
-
-        val referredSubSchema = findSubschema(jsonPointerPathParts, referredSchema)
-        schema.description.fold(referredSubSchema)(description => referredSubSchema.copy(description = Some(description)))
-      }
+      case Some(ref) =>
+        val x = resolve(schema, basePath, enclosingSchema)(ref)
+        x
       case _ => {
         val properties = resolveRefsInSubschemas(schema.properties, basePath, enclosingSchema)
         val patternProperties = resolveRefsInSubschemas(schema.patternProperties, basePath, enclosingSchema)
         val definitions = resolveRefsInSubschemas(schema.definitions, basePath, enclosingSchema)
         val items = schema.items.map(resolveRefs(_, basePath, enclosingSchema))
+        val oneOfs = resolveRefsInOneOfs(schema.oneOf, basePath, enclosingSchema)
 
-        schema.copy(properties = properties, patternProperties = patternProperties,
-          items = items, definitions = definitions, ref = None)
+        schema.copy(
+          properties = properties,
+          patternProperties = patternProperties,
+          items = items,
+          definitions = definitions,
+          oneOf = oneOfs,
+          ref = None)
       }
     }
   }
 
-  private def findSubschema(pathParts: Seq[String], schema: JsonSchema): JsonSchema = {
-    pathParts match {
-      case "definitions" +: pathPart +: Nil => {
-        schema.definitions(pathPart)
+  def getPath(ref: String): (String, Seq[String]) = {
+    def splitJsonPointer(jsonPointer: String): Seq[String] = {
+      jsonPointer.dropWhile(_ == '/').split("/")
+    }
+
+    ref.split('#') match {
+      case Array(referredSchemaPath, jsonPointer) =>
+        (referredSchemaPath, splitJsonPointer(jsonPointer))
+      case Array(referredSchemaPath) => {
+        (referredSchemaPath, Nil)
       }
-      case "definitions" +: pathPart +: remainingPathParts => {
-        findSubschema(remainingPathParts, schema.definitions(pathPart))
-      }
-      case pathPart +: Nil => {
-        schema.properties(pathPart)
-      }
-      case pathPart +: remainingPath => {
-        findSubschema(remainingPath, schema.properties(pathPart))
-      }
-      case _ => schema
     }
   }
 }
