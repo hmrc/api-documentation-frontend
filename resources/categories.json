@@ -75,5 +75,6 @@
   "VAT and EC Sales List Online": ["CUSTOMS", "VAT"],
 
   "VAT (MTD) end-to-end service guide": ["VAT_MTD"],
-  "Income Tax (MTD) end-to-end service guide": ["INCOME_TAX_MTD"]
+  "Income Tax (MTD) end-to-end service guide": ["INCOME_TAX_MTD"],
+  "Self Assessment end-to-end service guide": ["SELF_ASSESSMENT"]
 }
