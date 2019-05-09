@@ -6,5 +6,9 @@
   {
     "name": "Income Tax (MTD) end-to-end service guide",
     "context": "/api-documentation/docs/api/mtd-income-tax-service-guide"
+  },
+  {
+    "name": "Self Assessment end-to-end service guide",
+    "context": "/guides/self-assessment-end-to-end-service-guide"
   }
 ]
