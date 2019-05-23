@@ -297,3 +297,15 @@ pre, code {
   font-weight: 400;
   margin: 0;
 }
+
+.section--branded {
+  a {
+    &:visited {
+      color: #005ea5;
+    }
+
+    &:hover {
+      color: #2b8cc4;
+    }
+  }
+}
