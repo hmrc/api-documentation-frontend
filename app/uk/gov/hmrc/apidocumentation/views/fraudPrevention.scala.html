@@ -286,6 +286,30 @@
     </div>
 
     <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-MAC-Addresses</h3>
+      <p>
+        The list of MAC addresses available on the originating device.
+        If you cannot retrieve them due to operating system restrictions, then submit the header with an empty value or omit it entirely.
+      </p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-MAC-Addresses: ea%3A43%3A1a%3A5d%3A21%3A45,10%3A12%3Acc%3Afa%3Aaa%3A32</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
       <h3 class="code--slim code--slim-large bold">Gov-Client-Screens</h3>
       <p>Information related to the originating device’s screens. The fields include:</p>
       <p><span class="code--slim">width</span> is the reported width of the screen, in pixels</p>
@@ -509,30 +533,6 @@
       </ul>
       <h4 class="heading-small">For example:</h4>
       <pre class="code--block">Gov-Vendor-Public-IP: 203.0.113.6</pre>
-      <hr class="hr--code">
-    </div>
-
-    <div class="header-definition">
-      <h3 class="code--slim code--slim-large bold">Gov-Client-MAC-Addresses</h3>
-      <p>
-        The list of MAC addresses available on the originating device.
-        If you cannot retrieve them due to operating system restrictions, then submit the header with an empty value or omit it entirely.
-      </p>
-
-      <h4 class="heading-small">Required for connection methods:</h4>
-      <ul>
-        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
-        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
-        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
-        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
-        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
-        <li class="code--slim">OTHER_DIRECT</li><br>
-        <li class="code--slim">OTHER_VIA_SERVER</li><br>
-      </ul>
-
-      <h4 class="heading-small">For example:</h4>
-      <pre class="code--block">Gov-Client-MAC-Addresses: ea%3A43%3A1a%3A5d%3A21%3A45,10%3A12%3Acc%3Afa%3Aaa%3A32</pre>
-      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
       <hr class="hr--code">
     </div>
 
