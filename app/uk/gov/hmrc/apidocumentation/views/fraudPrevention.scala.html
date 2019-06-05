@@ -26,7 +26,7 @@
   <div class="fraud-prevention">
     <h1 class="heading-xlarge">Fraud prevention</h1>
 
-    <p>Version 2.4 issued 16 April 2019</p>
+    <p>Version 2.5 issued 5 June 2019</p>
 
     <p>
         Transaction Monitoring (TxM) is a key security approach adopted in the UK and globally.
@@ -167,6 +167,9 @@
       <h3 class="code--slim code--slim-large bold">Gov-Client-Public-Port</h3>
       <p>The public TCP port that the originating device uses when initiating the request.</p>
 
+      <h4 class="heading-small">Tip</h4>
+      <p>This must not be a server port, such as 443 for an https connection.</p>
+
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
         <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
@@ -215,6 +218,7 @@
           Additional fields should contain the user’s identifiers with the vendor services involved in the request.
       </p>
       <p>If a user identifier cannot be accessed due to operating system permissions or security controls, then it can be left blank or omitted.</p>
+      <p>Each key and value must be percent encoded, separators (equal signs, ampersands) must not.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -230,9 +234,9 @@
 
       <h4 class="heading-small">For example:</h4>
       <p>In <span class="code--slim">DESKTOP_APP_VIA_SERVER</span> connection method, when there is a single vendor service involved in handling the request:</p>
-      <pre class="code--block">Gov-Client-User-IDs: os=alice_desktop&amp;my-vendor-online-account=alice_online_account_user_id_with_vendor</pre>
+      <pre class="code--block">Gov-Client-User-IDs: os=domain%5Calice&amp;my-vendor-online-account=alice_online_account_user_id_with_vendor</pre>
       <p>For example, in <span class="code--slim">DESKTOP_APP_VIA_SERVER</span> connection method, when the request passes through two vendor services:</p>
-      <pre class="code--block">Gov-Client-User-IDs: os=alice_desktop&amp;my-vendor=alice_online_account_user_id_with_vendor&amp;my-secondary-vendor=alice_online_account_user_id_with_secondary_vendor</pre>
+      <pre class="code--block">Gov-Client-User-IDs: os=domain%5Calice&amp;my-vendor=alice_online_account_user_id_with_vendor&amp;my-secondary-vendor=alice_online_account_user_id_with_secondary_vendor</pre>
       <p>For example, in <span class="code--slim">DESKTOP_APP_DIRECT</span>, where there are no vendor accounts involved, or <span class="code--slim">BATCH_PROCESS_DIRECT</span> where there are no user devices involved and the originating device is the batch server:</p>
       <pre class="code--block">Gov-Client-User-IDs: os=user123</pre>
       <hr class="hr--code">
@@ -268,6 +272,8 @@
         If local device IP addresses cannot be discovered – for example, through a web browser due to permissions or lack of WebRTC – then submit the header with an empty value or omit it entirely.
       </p>
 
+      <p>Each value in the list must be percent encoded, commas used as separators must not.</p>
+
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
         <li class="code--slim">MOBILE_APP_DIRECT</li><br>
@@ -281,7 +287,33 @@
       </ul>
 
       <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Local-IPs: fc00%3A%3A,10.1.2.3</pre>
       <pre class="code--block">Gov-Client-Local-IPs: 10.1.2.3,10.3.4.2</pre>
+      <hr class="hr--code">
+    </div>
+
+    <div class="header-definition">
+      <h3 class="code--slim code--slim-large bold">Gov-Client-MAC-Addresses</h3>
+      <p>
+        The list of MAC addresses available on the originating device.
+        If you cannot retrieve them due to operating system restrictions, then submit the header with an empty value or omit it entirely.
+      </p>
+      <p>Each value in the list must be percent encoded, commas used as separators must not.</p>
+
+      <h4 class="heading-small">Required for connection methods:</h4>
+      <ul>
+        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
+        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
+        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
+        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
+        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
+        <li class="code--slim">OTHER_DIRECT</li><br>
+        <li class="code--slim">OTHER_VIA_SERVER</li><br>
+      </ul>
+
+      <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-MAC-Addresses: ea%3A43%3A1a%3A5d%3A21%3A45,10%3A12%3Acc%3Afa%3Aaa%3A32</pre>
+      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
       <hr class="hr--code">
     </div>
 
@@ -337,8 +369,10 @@
       <p class="code--slim">OS Family/OS Version+ (Device Manufacturer/Device Model+)</p>
       <p>
         If you cannot detect the exact version due to operating system constraints, but can detect several options, list all options.
+      </p>
+      <p>
         Each value (OS Family, OS Version, Device Manufacturer and Device Model) must be percent encoded but not the separators themselves.
-        The separators are / ( ).
+        The separators are forward slashes, spaces, opening round bracket, closing round bracket.
       </p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
@@ -353,7 +387,9 @@
       </ul>
 
       <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-User-Agent: Windows/Server%202012 (Dell%20Inc./OptiPlex%20980)</pre>
       <pre class="code--block">Gov-Client-User-Agent: Windows/XP Windows/NT (Dell/XPS15 Dell/XPS13)</pre>
+
       <p>If you cannot discover any information due to operating system constraints, leave the appropriate field blank as shown in the following examples:</p>
       <pre class="code--block">Gov-Client-User-Agent: Windows/ (Dell/XPS15)</pre>
       <pre class="code--block">Gov-Client-User-Agent: / (Dell/XPS15)</pre>
@@ -370,6 +406,8 @@
         A list of browser plugins on the originating device.
         If none can be discovered, due to browser restrictions or the lack of installed plugins, submit the header with an empty value or omit it entirely.
       </p>
+      <p>Each value in the list must be percent encoded, commas used as separators must not.</p>
+
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
         <li class="code--slim">WEB_APP_VIA_SERVER</li><br>
@@ -428,6 +466,7 @@
         For example, a salted-and-hashed phone number used for SMS or an identifier linked to a TOTP secret – but not the secret itself.
         The intention is to recognise the same factor being used across API calls.</p>
       <p>If only a single factor (for example, username and password) is being used, submit the header with an empty value or omit it entirely.</p>
+      <p>Each key and value must be percent encoded, separators (equal signs, ampersands, commas) must not.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -450,6 +489,8 @@
       <h3 class="code--slim code--slim-large bold">Gov-Vendor-Version</h3>
       <p>A key-value data structure of software versions involved in handling a request:</p>
       <p class="code--slim">&lt;software-name&gt;=&lt;version-number&gt;&&lt;software-name-2&gt;=&lt;version-number-2&gt;& …</p>
+      <p>Each key and value must be percent encoded, separators (equal signs, ampersands) must not.</p>
+
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
         <li class="code--slim">MOBILE_APP_DIRECT</li><br>
@@ -464,7 +505,7 @@
 
       <h4 class="heading-small">For example:</h4>
       <p>For <span class="code--slim">DESKTOP_APP_DIRECT</span> the header may be:
-        <pre class="code--block">Gov-Vendor-Version: my-desktop-software=1.2.3.build4286</pre>
+        <pre class="code--block">Gov-Vendor-Version: My%20Desktop%20Software=1.2.3.build4286</pre>
       <p>For <span class="code--slim">MOBILE_APP_VIA_SERVER</span>, the header may be:
         <pre class="code--block">Gov-Vendor-Version: my-frontend-app=2.2.2&amp;my-serverside-code=v3.8</pre>
         <hr class="hr--code">
@@ -475,6 +516,8 @@
       <p>A key-value data structure of hashed license keys relating to the vendor software initiating the API request on the originating device.</p>
       <p class="code--slim">&lt;software-name&gt;=&lt;hashed-license-value&gt;&&lt;software-name-2&gt;=&lt;hashed-license-value-2&gt;& …</p>
       <p>If there are no such licenses on the originating device, then submit the header with an empty value or omit it entirely.</p>
+      <p>Each key and value must be percent encoded, separators (equal signs, ampersands) must not.</p>
+
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
         <li class="code--slim">MOBILE_APP_DIRECT</li><br>
@@ -488,7 +531,7 @@
       </ul>
 
       <h4 class="heading-small">For example:</h4>
-      <pre class="code--block">Gov-Vendor-License-IDs: my-licensed-software=8D7963490527D33716835EE7C195516D5E562E03B224E9B359836466EE40CDE1</pre>
+      <pre class="code--block">Gov-Vendor-License-IDs: my%20licensed%20software=8D7963490527D33716835EE7C195516D5E562E03B224E9B359836466EE40CDE1</pre>
       <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
       <hr class="hr--code">
     </div>
@@ -513,35 +556,13 @@
     </div>
 
     <div class="header-definition">
-      <h3 class="code--slim code--slim-large bold">Gov-Client-MAC-Addresses</h3>
-      <p>
-        The list of MAC addresses available on the originating device.
-        If you cannot retrieve them due to operating system restrictions, then submit the header with an empty value or omit it entirely.
-      </p>
-
-      <h4 class="heading-small">Required for connection methods:</h4>
-      <ul>
-        <li class="code--slim">MOBILE_APP_DIRECT</li><br>
-        <li class="code--slim">DESKTOP_APP_DIRECT</li><br>
-        <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
-        <li class="code--slim">DESKTOP_APP_VIA_SERVER</li><br>
-        <li class="code--slim">BATCH_PROCESS_DIRECT</li><br>
-        <li class="code--slim">OTHER_DIRECT</li><br>
-        <li class="code--slim">OTHER_VIA_SERVER</li><br>
-      </ul>
-
-      <h4 class="heading-small">For example:</h4>
-      <pre class="code--block">Gov-Client-MAC-Addresses: ea%3A43%3A1a%3A5d%3A21%3A45,10%3A12%3Acc%3Afa%3Aaa%3A32</pre>
-      <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
-      <hr class="hr--code">
-    </div>
-
-    <div class="header-definition">
       <h3 class="code--slim code--slim-large bold">Gov-Vendor-Forwarded</h3>
       <p>A list that details hops over the internet between services that terminate TLS.</p>
       <p>For each hop over the internet, a key-value data structure with a <i>by</i> and <i>for</i> field must be appended to the list.</p>
       <p>The <i>by</i> field must be the server’s public IP address where it received the request.</p>
       <p>The <i>for</i> field must be the requestor’s public IP address from which the vendor received the request.</p>
+      <p>Each key and value must be percent encoded, separators (equal signs, ampersands, commas) must not.</p>
+
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
         <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
@@ -551,14 +572,14 @@
       </ul>
       <h4 class="heading-small">For example, if:</h4>
       <ol class="list list-number">
-        <li>a request is first received by a web application firewall (WAF) service on <span class="code--slim">33.252.57.234</span>.
+        <li>a request is first received by a web application firewall (WAF) service on <span class="code--slim">2001:0db8:85a3:0000:0000:8a2e:0370:7334</span>.
           The WAF sees the request coming from <span class="code--slim">57.4.28.41</span>.
           Subsequently, the WAF passes the request on to the vendor servers via HTTPS over the internet.
         <li>the request is received by the server of vendor A on <span class="code--slim">188.87.76.95</span>, from the WAF-owned IP address <span class="code--slim">209.210.136.84</span>
         <li>The services of vendor A issue a HTTP request as a result of the previous step to the services of vendor B on <span class="code--slim">176.30.57.118</span>, from vendor A owned IP <span class="code--slim">150.94.192.63</span>
       </ol>
       <p>then you should generate the following header:</p>
-      <pre class="code--block">Gov-Vendor-Forwarded: by=33.252.57.234&amp;for=57.4.28.41,by=188.87.76.95&amp;for=209.210.136.84,by=176.30.57.118&amp;for=150.94.192.63</pre>
+      <pre class="code--block">Gov-Vendor-Forwarded: by=2001%3A0db8%3A85a3%3A0000%3A0000%3A8a2e%3A0370%3A7334&amp;for=57.4.28.41,by=188.87.76.95&amp;for=209.210.136.84,by=176.30.57.118&amp;for=150.94.192.63</pre>
       <hr class="hr--code">
     </div>
 
