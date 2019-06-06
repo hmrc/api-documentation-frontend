@@ -218,7 +218,7 @@
           Additional fields should contain the user’s identifiers with the vendor services involved in the request.
       </p>
       <p>If a user identifier cannot be accessed due to operating system permissions or security controls, then it can be left blank or omitted.</p>
-      <p>Each key and value must be percent encoded, separators (equal signs, ampersands) must not.</p>
+      <p>Each key and value must be percent encoded but not the separators (equal signs, ampersands) themselves.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -272,7 +272,7 @@
         If local device IP addresses cannot be discovered – for example, through a web browser due to permissions or lack of WebRTC – then submit the header with an empty value or omit it entirely.
       </p>
 
-      <p>Each value in the list must be percent encoded, commas used as separators must not.</p>
+      <p>Each value in the list must be percent encoded, but commas used as separators must not be percent encoded.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -298,7 +298,7 @@
         The list of MAC addresses available on the originating device.
         If you cannot retrieve them due to operating system restrictions, then submit the header with an empty value or omit it entirely.
       </p>
-      <p>Each value in the list must be percent encoded, commas used as separators must not.</p>
+      <p>Each value in the list must be percent encoded, but commas used as separators must not be percent encoded.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -406,7 +406,7 @@
         A list of browser plugins on the originating device.
         If none can be discovered, due to browser restrictions or the lack of installed plugins, submit the header with an empty value or omit it entirely.
       </p>
-      <p>Each value in the list must be percent encoded, commas used as separators must not.</p>
+      <p>Each value in the list must be percent encoded, but commas used as separators must not be percent encoded.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -466,7 +466,7 @@
         For example, a salted-and-hashed phone number used for SMS or an identifier linked to a TOTP secret – but not the secret itself.
         The intention is to recognise the same factor being used across API calls.</p>
       <p>If only a single factor (for example, username and password) is being used, submit the header with an empty value or omit it entirely.</p>
-      <p>Each key and value must be percent encoded, separators (equal signs, ampersands, commas) must not.</p>
+      <p>Each key and value must be percent encoded but not the separators (equal signs, ampersands, commas) themselves.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -489,7 +489,7 @@
       <h3 class="code--slim code--slim-large bold">Gov-Vendor-Version</h3>
       <p>A key-value data structure of software versions involved in handling a request:</p>
       <p class="code--slim">&lt;software-name&gt;=&lt;version-number&gt;&&lt;software-name-2&gt;=&lt;version-number-2&gt;& …</p>
-      <p>Each key and value must be percent encoded, separators (equal signs, ampersands) must not.</p>
+      <p>Each key and value must be percent encoded but not the separators (equal signs, ampersands) themselves.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -516,7 +516,7 @@
       <p>A key-value data structure of hashed license keys relating to the vendor software initiating the API request on the originating device.</p>
       <p class="code--slim">&lt;software-name&gt;=&lt;hashed-license-value&gt;&&lt;software-name-2&gt;=&lt;hashed-license-value-2&gt;& …</p>
       <p>If there are no such licenses on the originating device, then submit the header with an empty value or omit it entirely.</p>
-      <p>Each key and value must be percent encoded, separators (equal signs, ampersands) must not.</p>
+      <p>Each key and value must be percent encoded but not the separators (equal signs, ampersands) themselves.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -561,7 +561,7 @@
       <p>For each hop over the internet, a key-value data structure with a <i>by</i> and <i>for</i> field must be appended to the list.</p>
       <p>The <i>by</i> field must be the server’s public IP address where it received the request.</p>
       <p>The <i>for</i> field must be the requestor’s public IP address from which the vendor received the request.</p>
-      <p>Each key and value must be percent encoded, separators (equal signs, ampersands, commas) must not.</p>
+      <p>Each key and value must be percent encoded but not the separators (equal signs, ampersands, commas) themselves.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
