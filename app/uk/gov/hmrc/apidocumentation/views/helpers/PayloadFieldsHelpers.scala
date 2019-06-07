@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.apidocumentation.views.helpers
 
-import uk.gov.hmrc.apidocumentation.models.{EnumerationValue, JsonSchema}
+import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration
 import org.raml.v2.api.model.v10.methods.Method
-import uk.gov.hmrc.apidocumentation.models
 
 import scala.collection.JavaConversions._
 
@@ -28,30 +27,20 @@ case class EnumValue(
                       description: Option[String] = None
                     )
 
-case class RequestResponseField(
-                                 name: String,
-                                 title: Option[String],
-                                 `type`: String,
-                                 typeId: String,
-                                 isArray: Boolean,
-                                 required: Boolean,
-                                 example: String,
-                                 description: String,
-                                 pattern: String,
-                                 depth: Int,
-                                 enumValues: Seq[EnumValue],
-                                 oneOf: Map[String, Seq[RequestResponseField]]
-                               )
+case class RequestResponseField(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: String,
+                                description: String, pattern: String, depth: Int, enumValues: Seq[EnumValue])
 
 trait RequestResponseFields {
 
   def extractFields(requestResponseBodies: Seq[TypeDeclaration], schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
     val fields = for {
       body    <- requestResponseBodies
-      schema  <- schema(body, schemas).toSeq
-      result  <- extractFields(schema)
-    } yield result
-    fields
+      schema  <- schema(body, schemas)
+    } yield {
+      extractFields(schema)
+    }
+
+    fields.flatten
   }
 
   private def schema(body: TypeDeclaration, schemas: Map[String, JsonSchema]): Option[JsonSchema] = {
@@ -62,7 +51,6 @@ trait RequestResponseFields {
   }
 
   private def extractFields(schema: JsonSchema,
-                            title: Option[String] = None,
                             fieldName: Option[String] = None,
                             description: Option[String] = None,
                             required: Boolean = false,
@@ -71,44 +59,31 @@ trait RequestResponseFields {
                             isArray: Boolean = false,
                             isPatternproperty: Boolean = false): Seq[RequestResponseField] = {
 
-    def extractOneOfValues(schema: JsonSchema): Map[String, Seq[RequestResponseField]] = {
-      val x: Seq[RequestResponseField] = for {
-        oneOf <- schema.oneOf ++ schema.items.map(_.oneOf).getOrElse(Nil)
-        (fieldName, definition) <- oneOf.properties
-        x <- extractFields(definition, oneOf.title, Some(fieldName), definition.description, schema.required.contains(fieldName), depth + 1).toList
-      } yield x
-
-      x.groupBy(_.title.getOrElse(""))
-    }
-
     def extractEnumValues(schema: JsonSchema): Seq[EnumValue] = {
+
       val enum = schema.enum.map( e => EnumValue(e.value))
 
-      val oneOf: Seq[EnumValue] = schema.oneOf.flatMap { e =>
-        e.enum.headOption.map(v => EnumValue(v.value, e.description)).toSeq
+      val oneOf = schema.oneOf.map { e =>
+        EnumValue(e.enum.headOption.fold("")(_.value), e.description)
       }
 
       enum ++ oneOf
     }
 
     val currentField = fieldName match {
-      case Some(name) if schema.`type` != "array" =>
+      case Some(name) if schema.`type` != "array" => {
         val fieldOrTitle = if (isPatternproperty) schema.title.getOrElse(name) else name
-        Some(RequestResponseField(
-          name = fieldOrTitle,
-          title = title,
-          `type` = schema.`type`.getOrElse(""),
-          typeId = schema.id.getOrElse(""),
-          isArray = isArray,
-          required = required,
-          example = schema.example.getOrElse(""),
-          description = schema.description.orElse(description).getOrElse(""),
-          pattern = schema.pattern.getOrElse(""),
-          depth = depth,
-          enumValues = extractEnumValues(schema),
-          oneOf = extractOneOfValues(schema)
-        ))
-
+        Some(RequestResponseField(fieldOrTitle,
+          schema.`type`.getOrElse(""),
+          schema.id.getOrElse(""),
+          isArray,
+          required,
+          schema.example.getOrElse(""),
+          schema.description.orElse(description).getOrElse(""),
+          schema.pattern.getOrElse(""),
+          depth,
+          extractEnumValues(schema)))
+      }
       case _ => None
     }
 
@@ -116,25 +91,26 @@ trait RequestResponseFields {
       case Some("object") => {
         val propertyFields = for {
           (fieldName, definition) <- schema.properties
-          field <- extractFields(definition, title, Some(fieldName), None, schema.required.contains(fieldName), depth+1)
+          field <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth+1)
         } yield {
           field
         }
 
         val patternFields = for {
           (fieldName, definition) <- schema.patternProperties
-          field <- extractFields(definition, title, Some(fieldName), None, schema.required.contains(fieldName), depth+1,
+          field <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth+1,
             isPatternproperty=true)
         } yield {
           field
         }
-
         currentField.fold(acc)(acc :+ _) ++ propertyFields ++ patternFields
       }
       case Some("array") => {
-        extractFields(schema.items.get, title, fieldName, schema.description, required, depth, acc, true)
+        extractFields(schema.items.get, fieldName, schema.description, required, depth, acc, true)
       }
-      case _ => currentField.fold(acc)(acc :+ _)
+      case _ => {
+        currentField.fold(acc)(acc :+ _)
+      }
     }
   }
 }
