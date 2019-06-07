@@ -18,21 +18,16 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.services._
 
-@(fields: Seq[RequestResponseField], caption: String, fieldOptionalityKnown: Boolean)
+@(key: String, depth: Int, fieldOptionalityKnown: Boolean, optId: Option[String])
 
-@if(fields.nonEmpty) {
-    <table class="table--align-top">
-        <caption class="table__caption--low-vis">
-            <div class="visually-hidden">@caption</div>
-        </caption>
-        <thead>
-            <tr class="table__row--desktop-heading">
-                <th class="table__col--1-2">Name</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-       @FieldHelpers.build(fields.toList, fieldOptionalityKnown)
-        </tbody>
-    </table>
-}
+<tr class="table__row--responsive @if(depth == 0) {table__row--parent} @if(depth > 0) {table__row--nested-@{depth + 1}} @optId.getOrElse("")" >
+    <td class="table__detail--responsive table__col--1-2">
+        <a id="@{key.toLowerCase.replaceAll(" ", "-")}" class="accordion__button no--underline toggle" href="javascript:void(0);">
+        <i class="arrow arrow--right" data-accordion-arrow></i>
+        <span class="font-xsmall underline">@Val(key)</span>
+        </a>
+    </td>
+    <td>
+
+    </td>
+</tr>
