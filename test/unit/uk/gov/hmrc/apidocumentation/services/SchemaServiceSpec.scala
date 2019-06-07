@@ -71,17 +71,6 @@ class SchemaServiceSpec extends WordSpec with Matchers {
       actual shouldBe Map(expectedPlainText -> expectedSchema)
     }
 
-    "load a schema that has nested internal refs with oneOfs" in {
-      val raml = loadRaml("test/resources/schemaloader/input/oneofsnestedinternalrefs.raml")
-      val expectedPlainText = loadPlainText("test/resources/schemaloader/input/schemas/oneofsnestedinternalrefs-schema.json")
-      val expectedSchema = loadSchema("test/resources/schemaloader/expected/expected-oneofsnestedinternalrefs-schema.json")
-
-      val actual = loader.loadSchemas("test/resources/schemaloader/input/schemas", raml)
-
-      actual should have size 1
-      actual shouldBe Map(expectedPlainText -> expectedSchema)
-    }
-
     "load a schema that has external refs" in {
       val raml = loadRaml("test/resources/schemaloader/input/externalrefs.raml")
       val expectedPlainText = loadPlainText("test/resources/schemaloader/input/schemas/externalrefs-schema.json")

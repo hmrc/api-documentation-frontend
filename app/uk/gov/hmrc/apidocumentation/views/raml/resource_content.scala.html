@@ -112,7 +112,6 @@
         }
     </section>
 }
-
 @fields(RequestFields(meth, schemas), "Request table", !Annotation.exists(raml, "(fieldOptionalityUnknown)"))
 
 @for(resp <- Responses.success(meth)) {
@@ -134,7 +133,6 @@
         }
     </section>
 }
-
 @fields(ResponseFields(meth, schemas), "Response table", !Annotation.exists(raml, "(fieldOptionalityUnknown)"))
 
 @defining(ErrorScenarios(meth)) { errorScenarios =>
