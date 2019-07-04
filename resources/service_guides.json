@@ -10,5 +10,9 @@
   {
     "name": "Self Assessment end-to-end service guide",
     "context": "/guides/self-assessment-end-to-end-service-guide"
+  },	
+  {	
+    "name": "Customs Declarations end-to-end service guide",	
+    "context": "/guides/customs-declarations-end-to-end-service-guide"	
   }
 ]
