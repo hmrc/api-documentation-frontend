@@ -26,7 +26,9 @@
   <div class="fraud-prevention">
     <h1 class="heading-xlarge">Fraud prevention</h1>
 
-    <p>Version 2.5 issued 5 June 2019</p>
+    <p>Version 2.6 issued 5 July 2019</p>
+    <p>Minor versions are backwards compatible - each minor version adds more examples and advice.</p>
+    <hr class="hr--code">
 
     <p>
         Transaction Monitoring (TxM) is a key security approach adopted in the UK and globally.
@@ -147,6 +149,9 @@
       <h3 class="code--slim code--slim-large bold">Gov-Client-Public-IP</h3>
       <p>The public IP address (IPv4 or IPv6) from which the originating device makes the request.</p>
 
+      <h4 class="heading-small">Tip:</h4>
+      <p>When the connection between client and server is over a private network, you will not be able to collect a public ip address, so submit this header with an empty value or omit it entirely.</p>
+
       <h4 class="heading-small">Required for connection methods:</h4>
 
       <ul>
@@ -167,8 +172,11 @@
       <h3 class="code--slim code--slim-large bold">Gov-Client-Public-Port</h3>
       <p>The public TCP port that the originating device uses when initiating the request.</p>
 
-      <h4 class="heading-small">Tip:</h4>
-      <p>This must not be a server port, such as 443 for an https connection.</p>
+      <h4 class="heading-small">Tips:</h4>
+      <ul class="list list-bullet">
+        <li>This must not be a server port, such as 443 for an https connection.</li>
+        <li>When the connection between client and server is over a private network, you will not be able to collect a public port, so submit this header with an empty value or omit it entirely.</li>
+      </ul>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
@@ -259,6 +267,7 @@
       </ul>
 
       <h4 class="heading-small">For example:</h4>
+      <pre class="code--block">Gov-Client-Timezone: UTC+00:00</pre>
       <pre class="code--block">Gov-Client-Timezone: UTC+01:00</pre>
       <pre class="code--block">Gov-Client-Timezone: UTC-01:15</pre>
       <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
@@ -543,6 +552,9 @@
         This might be an IP address of a Web Application Firewall, a DDoS Protection Service, or a load balancer that the vendor's DNS record resolves to.
       </p>
 
+      <h4 class="heading-small">Tip:</h4>
+      <p>When the connection between client and server is over a private network, you will not be able to collect a public ip address, so submit this header with an empty value or omit it entirely.</p>
+
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
         <li class="code--slim">MOBILE_APP_VIA_SERVER</li><br>
@@ -562,6 +574,9 @@
       <p>The <i>by</i> field must be the server’s public IP address where it received the request.</p>
       <p>The <i>for</i> field must be the requestor’s public IP address from which the vendor received the request.</p>
       <p>Each key and value must be percent encoded but not the separators (equal signs, ampersands, commas) themselves.</p>
+
+      <h4 class="heading-small">Tip:</h4>
+      <p>Do not include hops within a private network.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
