@@ -168,7 +168,9 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
 
   override def isCurrentPage: Boolean = find(className("page-header")).fold(false)(_.text == "Developer Forum API")
 
-  def LocationFieldOptional = find(cssSelector("div.parameter-optional")).get
+  private def locationFieldOptionalCss = "div.parameter-optional"
+
+  def locationFieldOptional = find(cssSelector(locationFieldOptionalCss)).get
 
 
   def checkVersionSortOrder(): Unit = {
@@ -202,7 +204,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
   }
 
   def checkLocationFieldIsOptional(): Unit = {
-    LocationFieldOptional.text shouldBe "optional"
+    waitForElement(By.cssSelector(locationFieldOptionalCss)).getText shouldBe "optional"
   }
 
   def checkAPIVersionInRequestHeader(): Unit = {
@@ -220,5 +222,11 @@ object CommonPage extends WebPage with TableDrivenPropertyChecks {
     val versionDropDown = new Select(waitForElement(By.id("version")))
     versionDropDown.selectByVisibleText(expectedVersion)
     versionDropDown.getFirstSelectedOption.submit()
+    println
+    println("##############################")
+    println("In CommonPage.selectVersion()")
+    println("##############################")
+    println
+    waitForPageToReload(versionDropDown.getFirstSelectedOption)
   }
 }

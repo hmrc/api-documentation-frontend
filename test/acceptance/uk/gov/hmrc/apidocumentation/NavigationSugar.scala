@@ -24,7 +24,7 @@ import org.scalatest.selenium.WebBrowser.{go => goo}
 import org.scalatest.{Assertions, Matchers}
 
 
-trait NavigationSugar extends WebBrowser with Eventually with Assertions with Matchers with IntegrationPatience {
+trait NavigationSugar extends WebBrowser with Eventually with Assertions with Matchers with IntegrationPatience with Wait {
 
   def goOn(page: WebPage)(implicit webDriver: WebDriver) {
     go(page)
@@ -73,6 +73,6 @@ trait NavigationSugar extends WebBrowser with Eventually with Assertions with Ma
   }
 
   def clickOnLink(expectedLink:String)(implicit webDriver: WebDriver): Unit = {
-    click on linkText(expectedLink)
+    click on waitForElement(By.linkText(expectedLink))
   }
 }

@@ -24,7 +24,7 @@ import org.scalatest.Matchers
 import org.scalatest.concurrent.Eventually
 import org.scalatest.selenium.{Page, WebBrowser}
 
-trait WebPage extends Page with WebBrowser with Matchers with Eventually {
+trait WebPage extends Page with WebBrowser with Matchers with Eventually with Wait {
 
   implicit val webDriver: WebDriver = Env.driver
 
@@ -48,11 +48,5 @@ trait WebPage extends Page with WebBrowser with Matchers with Eventually {
     withClue(s"Currently in page: $currentUrl " + find(tagName("h1")).map(_.text).fold(" - ")(h1 => s", with title '$h1' - ")) {
       assert(page.isCurrentPage, s"Page was not loaded: ${page.url}")
     }
-  }
-
-  def waitForElement(by: By, timeout: Int  = 5): WebElement = {
-    val wait = new FluentWait[WebDriver](Env.driver).withTimeout(timeout, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS)
-      .ignoring(classOf[NoSuchElementException],classOf[StaleElementReferenceException])
-    wait.until(ExpectedConditions.visibilityOfElementLocated(by))
   }
 }
