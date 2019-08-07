@@ -71,8 +71,4 @@ trait NavigationSugar extends WebBrowser with Eventually with Assertions with Ma
   def checkPageTitle(expectedPageTitle : String)(implicit webDriver: WebDriver): Unit = {
     webDriver.getTitle shouldBe expectedPageTitle
   }
-
-  def clickOnLink(expectedLink:String)(implicit webDriver: WebDriver): Unit = {
-    click on waitForElement(By.linkText(expectedLink))
-  }
 }

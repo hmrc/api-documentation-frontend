@@ -18,45 +18,36 @@ package acceptance.uk.gov.hmrc.apidocumentation
 
 import java.util.concurrent.TimeUnit
 
-import org.openqa.selenium.{By, NoSuchElementException, StaleElementReferenceException, WebDriver, WebElement}
 import org.openqa.selenium.support.ui.{ExpectedConditions, FluentWait}
-import org.scalatest.concurrent.{Eventually, PatienceConfiguration}
+import org.openqa.selenium._
+import org.scalatest.concurrent.Eventually
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
+
 import scala.concurrent.duration._
 
 trait Wait extends Eventually {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 2 seconds)
   val timeout = Timeout(patienceConfig.timeout)
-
+  val fluentWaitPollingMilliseconds = 500
 
   def waitForElement(by: By, timeout: Int = 5): WebElement = {
     val wait = new FluentWait[WebDriver](Env.driver)
       .withTimeout(timeout, TimeUnit.SECONDS)
-      .pollingEvery(500, TimeUnit.MILLISECONDS)
+      .pollingEvery(fluentWaitPollingMilliseconds, TimeUnit.MILLISECONDS)
       .ignoring(classOf[NoSuchElementException], classOf[StaleElementReferenceException])
     wait.until(ExpectedConditions.visibilityOfElementLocated(by))
   }
 
   def waitForPageToReload(oldPageElement: WebElement): Unit = {
-    println
-    println("######################################")
-    println("In Wait.waitForPageReload() outside eventually")
-    println("######################################")
-    println
-    eventually(timeout,
-      () => try {
-        println
-        println("######################################")
-        println("In Wait.waitForPageReload() try block")
-        println("######################################")
-        println
+    eventually(timeout) {
+      try {
         oldPageElement.getText
-        waitForPageToReload(oldPageElement)
+        throw new RuntimeException("Old element still present")
       }
       catch {
         case _: StaleElementReferenceException => Unit
       }
-    )
+    }
   }
 }

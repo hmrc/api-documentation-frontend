@@ -119,61 +119,61 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       ApiDocumentationTestServicePage.checkVersionSortOrder()
     }
 
-//    scenario("Optional header displays as 'optional' in API docs") {
-//      Given apiServicesIsDeployed()
-//      Given apiDocumentationTestServiceVersionsIsDeployed()
-//
-//      Given("I have navigated to the API documentation page")
-//      goOn(APIDocumentationPage)
-//      on(APIDocumentationPage)
-//
-//      When("I select to view the API  Documentation Test documentation")
-//      APIDocumentationPage.selectAPIDocumentationTestService()
-//
-//      And("I select version 'v1.5 (Beta)")
-//      CommonPage.selectVersion("v1.5 (Beta)")
-//
-//      And("I click on the 'Create user' link")
-//      clickOnLink("Create user")
-//
-//      Then("location field is optional")
-//      ApiDocumentationTestServicePage.checkLocationFieldIsOptional()
-//    }
-//
-//    scenario("Ensure user can access the Hello World API Summary Details page and view all endpoints for a Beta version") {
-//      Given("I have navigated to the API documentation page")
-//      Given apiServicesIsDeployed()
-//      goOn(APIDocumentationPage)
-//      on(APIDocumentationPage)
-//
-//      When("I select to view the Hello World documentation")
-//      helloWorldVersionsIsDeployed()
-//      APIDocumentationPage.selectHelloWorld()
-//      on(HelloWorldPage)
-//
-//      And("I select version 'v1.2 (Beta)")
-//      CommonPage.selectVersion("v1.2 (Beta)")
-//
-//      Then("I can see the details of the following end points when a HTTP verb button is clicked on")
-//      HelloWorldPage.assertEndpointsDetails()
-//    }
-//
-//    scenario("Update API Version in the request header") {
-//      Given apiServicesIsDeployed()
-//      Given apiDocumentationTestServiceVersionsIsDeployed()
-//
-//      Given("I have navigated to the API documentation page")
-//      goOn(APIDocumentationPage)
-//      on(APIDocumentationPage)
-//
-//      When("I select to view the API  Documentation Test documentation")
-//      APIDocumentationPage.selectAPIDocumentationTestService()
-//
-//      And("I select version 'v1.1 (Stable)")
-//      CommonPage.selectVersion("v1.1 (Stable)")
-//
-//      Then("API version in the request header matches the API version selected")
-//      ApiDocumentationTestServicePage.checkAPIVersionInRequestHeader()
-//    }
+    scenario("Optional header displays as 'optional' in API docs") {
+      Given apiServicesIsDeployed()
+      Given apiDocumentationTestServiceVersionsIsDeployed()
+
+      Given("I have navigated to the API documentation page")
+      goOn(APIDocumentationPage)
+      on(APIDocumentationPage)
+
+      When("I select to view the API  Documentation Test documentation")
+      APIDocumentationPage.selectAPIDocumentationTestService()
+
+      And("I select version 'v1.5 (Beta)")
+      CommonPage.selectVersion("v1.5 (Beta)")
+
+      And("I click on the 'Create user' link")
+      APIDocumentationPage.clickOnLink("Create user")
+
+      Then("location field is optional")
+      ApiDocumentationTestServicePage.checkLocationFieldIsOptional()
+    }
+
+    scenario("Ensure user can access the Hello World API Summary Details page and view all endpoints for a Beta version") {
+      Given("I have navigated to the API documentation page")
+      Given apiServicesIsDeployed()
+      goOn(APIDocumentationPage)
+      on(APIDocumentationPage)
+
+      When("I select to view the Hello World documentation")
+      helloWorldVersionsIsDeployed()
+      APIDocumentationPage.selectHelloWorld()
+      on(HelloWorldPage)
+
+      And("I select version 'v1.2 (Beta)")
+      CommonPage.selectVersion("v1.2 (Beta)")
+
+      Then("I can see the details of the following end points when a HTTP verb button is clicked on")
+      HelloWorldPage.assertEndpointsDetails()
+    }
+
+    scenario("Update API Version in the request header") {
+      Given apiServicesIsDeployed()
+      Given apiDocumentationTestServiceVersionsIsDeployed()
+
+      Given("I have navigated to the API documentation page")
+      goOn(APIDocumentationPage)
+      on(APIDocumentationPage)
+
+      When("I select to view the API  Documentation Test documentation")
+      APIDocumentationPage.selectAPIDocumentationTestService()
+
+      And("I select version 'v1.1 (Stable)")
+      CommonPage.selectVersion("v1.1 (Stable)")
+
+      Then("API version in the request header matches the API version selected")
+      ApiDocumentationTestServicePage.checkAPIVersionInRequestHeader()
+    }
   }
 }

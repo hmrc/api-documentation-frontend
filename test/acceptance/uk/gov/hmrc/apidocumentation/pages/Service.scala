@@ -208,8 +208,8 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
   }
 
   def checkAPIVersionInRequestHeader(): Unit = {
-    click on linkText("post")
-    cssSelector("code[data-header-example]").element.text should include("application/vnd.hmrc.1.1+json")
+    clickOnLink("post")
+    waitForElement(By.cssSelector("code[data-header-example]")).getText should include("application/vnd.hmrc.1.1+json")
 
   }
 
@@ -221,12 +221,8 @@ object CommonPage extends WebPage with TableDrivenPropertyChecks {
   def selectVersion(expectedVersion: String): Unit = {
     val versionDropDown = new Select(waitForElement(By.id("version")))
     versionDropDown.selectByVisibleText(expectedVersion)
-    versionDropDown.getFirstSelectedOption.submit()
-    println
-    println("##############################")
-    println("In CommonPage.selectVersion()")
-    println("##############################")
-    println
-    waitForPageToReload(versionDropDown.getFirstSelectedOption)
+    val firstSelectedOption = versionDropDown.getFirstSelectedOption
+    firstSelectedOption.submit()
+    waitForPageToReload(firstSelectedOption)
   }
 }

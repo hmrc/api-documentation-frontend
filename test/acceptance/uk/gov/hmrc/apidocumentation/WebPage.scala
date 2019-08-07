@@ -49,4 +49,8 @@ trait WebPage extends Page with WebBrowser with Matchers with Eventually with Wa
       assert(page.isCurrentPage, s"Page was not loaded: ${page.url}")
     }
   }
+
+  def clickOnLink(expectedLink:String)(implicit webDriver: WebDriver): Unit = {
+    click on waitForElement(By.linkText(expectedLink))
+  }
 }
