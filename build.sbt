@@ -154,6 +154,6 @@ def endToEndFilter(name: String): Boolean = name startsWith "endtoend"
 def unitFilter(name: String): Boolean = name startsWith "unit"
 
 // Coverage configuration
-coverageMinimum := 85
+coverageMinimum := 82
 coverageFailOnMinimum := true
 coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;config.*"
