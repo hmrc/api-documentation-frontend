@@ -17,6 +17,7 @@
   "Individual Employment": ["SELF_ASSESSMENT"],
   "Individual Income": ["SELF_ASSESSMENT"],
   "Individual Losses (MTD)": ["INCOME_TAX_MTD"],
+  "Individual Calculations (MTD)": ["INCOME_TAX_MTD"],
   "Individual PAYE": ["PAYE", "SELF_ASSESSMENT"],
   "Individual Tax": ["SELF_ASSESSMENT"],
   "Individuals": ["PRIVATE_GOVERNMENT"],
