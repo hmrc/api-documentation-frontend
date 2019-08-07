@@ -24,7 +24,7 @@ import org.scalatest.Matchers
 import org.scalatest.concurrent.Eventually
 import org.scalatest.selenium.{Page, WebBrowser}
 
-trait WebPage extends Page with WebBrowser with Matchers with Eventually {
+trait WebPage extends Page with WebBrowser with Matchers with Eventually with Wait {
 
   implicit val webDriver: WebDriver = Env.driver
 
@@ -50,9 +50,7 @@ trait WebPage extends Page with WebBrowser with Matchers with Eventually {
     }
   }
 
-  def waitForElement(by: By, timeout: Int  = 5): WebElement = {
-    val wait = new FluentWait[WebDriver](Env.driver).withTimeout(timeout, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS)
-      .ignoring(classOf[NoSuchElementException],classOf[StaleElementReferenceException])
-    wait.until(ExpectedConditions.visibilityOfElementLocated(by))
+  def clickOnLink(expectedLink:String)(implicit webDriver: WebDriver): Unit = {
+    click on waitForElement(By.linkText(expectedLink))
   }
 }
