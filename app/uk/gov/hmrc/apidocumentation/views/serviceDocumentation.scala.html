@@ -43,8 +43,13 @@
 @apiMain(pageAttributes, topContent) {
     @if(currentVersion.status == APIStatus.ALPHA) {
     <div class="section">
-        <div class="panel panel-border-wide" role="alert">
-            <p>This version is in alpha - expect extensive breaking changes.</p>
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Alert</span>
+            </i>
+                <strong class ="bold-small">
+                    <p>This version is in alpha - You will not be able to subscribe to this API</p>
+                </strong>
         </div>
     </div>
     }
