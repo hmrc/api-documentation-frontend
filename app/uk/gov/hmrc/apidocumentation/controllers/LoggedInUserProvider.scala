@@ -17,11 +17,10 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.Inject
-
 import jp.t2v.lab.play2.auth.{AsyncIdContainer, CookieTokenAccessor, TransparentIdContainer}
 import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.Developer
+import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
 import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -35,10 +34,22 @@ class LoggedInUserProvider @Inject()(config: ApplicationConfig, sessionService: 
 
   lazy val idContainer = AsyncIdContainer(new TransparentIdContainer[String])
 
-  def resolveUser(id: String)(implicit ctx: ExecutionContext, hc: HeaderCarrier): Future[Option[Developer]] =
-    sessionService.fetch(id).map(_.map(_.developer))
+  // TODO - Revert this? & remove println statements
+  def resolveUser(id: String)(implicit ctx: ExecutionContext, hc: HeaderCarrier): Future[Option[Developer]] = {
+    sessionService
+      .fetch(id)
+      .map((maybeSession: Option[Session]) => {
+        println("maybeSession: " + maybeSession)
+        maybeSession
+          .map((session: Session) => {
+            println("session: " + maybeSession)
+            session.developer
+          })
+      })
+  }
 
   def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier): Future[Option[Developer]] = {
+
     (for {
       token <- tokenAccessor.extract(request)
     } yield for {
