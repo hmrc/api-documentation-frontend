@@ -20,7 +20,7 @@ import org.mockito.Matchers.{any, eq => meq}
 import org.mockito.Mockito.when
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
-import uk.gov.hmrc.apidocumentation.models.{Developer, Session, SessionInvalid}
+import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, SessionInvalid}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics.{API, NoopMetrics}
@@ -48,7 +48,7 @@ class UserSessionConnectorSpec extends ConnectorSpec {
 
   "fetchSession" should {
     "return the session when found" in new Setup {
-      val session = Session(sessionId, Developer("developer@example.com", "Firstname", "Lastname"))
+      val session = Session(sessionId, LoggedInState.LOGGED_IN, Developer("developer@example.com", "Firstname", "Lastname"))
 
       when(mockHttpClient.GET[Session](meq(s"$thirdPartyDeveloperUrl/session/$sessionId"))(any(), any(), any()))
         .thenReturn(Future.successful(session))

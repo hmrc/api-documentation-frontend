@@ -26,8 +26,8 @@ import scala.concurrent.Future
 
 class SessionService @Inject()(connector: UserSessionConnector) {
 
-  // TODO : Test this filtering of part logged in sessions.
   def fetch(sessionId: String)(implicit hc: HeaderCarrier): Future[Option[Session]] = {
+
     def convertSession(session: Session): Option[Session] = {
       session.loggedInState match {
         case LoggedInState.LOGGED_IN => Some(session)
@@ -39,7 +39,7 @@ class SessionService @Inject()(connector: UserSessionConnector) {
       .fetchSession(sessionId)
       .map(convertSession)
       .recover {
-        case _: SessionInvalid => None
+       case _: SessionInvalid => None
       }
   }
 }
