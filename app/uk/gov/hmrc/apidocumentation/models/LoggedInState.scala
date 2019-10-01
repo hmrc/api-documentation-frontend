@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import uk.gov.hmrc.apidocumentation.models.LoggedInState.LoggedInState
-
-case class Session(sessionId: String,loggedInState: LoggedInState, developer: Developer)
+object LoggedInState extends Enumeration {
+  type LoggedInState = Value
+  val LOGGED_IN, PART_LOGGED_IN_ENABLING_MFA = Value
+}

@@ -23,6 +23,8 @@ package object JsonFormatters {
   implicit val formatAPICategory = EnumJson.enumFormat(APICategory)
   implicit val formatAPIStatus = EnumJson.enumFormat(APIStatus)
   implicit val formatAPIAccessType = EnumJson.enumFormat(APIAccessType)
+  implicit val formatLoggedInState = EnumJson.enumFormat(LoggedInState)
+
   implicit val formatAPIAccess = Json.format[APIAccess]
   implicit val formatVersionVisibility = Json.format[VersionVisibility]
   implicit val formatParameter = Json.format[Parameter]

@@ -17,11 +17,10 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.Inject
-
-import jp.t2v.lab.play2.auth.{AsyncIdContainer, CookieTokenAccessor, TransparentIdContainer}
+import jp.t2v.lab.play2.auth.{AsyncIdContainer, AuthenticityToken, CookieTokenAccessor, TransparentIdContainer}
 import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.Developer
+import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
 import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -29,7 +28,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class LoggedInUserProvider @Inject()(config: ApplicationConfig, sessionService: SessionService) {
+class LoggedInUserProvider @Inject()(config: ApplicationConfig,
+                                     sessionService: SessionService
+                                    ) {
 
   lazy val tokenAccessor = new CookieTokenAccessor(cookieSecureOption = config.securedCookie)
 
@@ -39,15 +40,18 @@ class LoggedInUserProvider @Inject()(config: ApplicationConfig, sessionService: 
     sessionService.fetch(id).map(_.map(_.developer))
 
   def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier): Future[Option[Developer]] = {
-    (for {
-      token <- tokenAccessor.extract(request)
-    } yield for {
-      Some(userId) <- idContainer.get(token)
-      Some(user) <- resolveUser(userId)
-    } yield {
-      Option(user)
-    }) getOrElse {
-      Future.successful(Option.empty)
+
+    val oToken = tokenAccessor.extract(request)
+
+    oToken match {
+      case None => Future.successful(None)
+      case Some(token) =>
+        val foUserId = idContainer.get(token)
+
+        foUserId.flatMap({
+            case None => Future.successful(None)
+            case Some(userId) => resolveUser(userId)
+        })
     }
   }
 }
