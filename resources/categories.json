@@ -56,6 +56,7 @@
   "Individual PAYE Test Support": ["PAYE", "SELF_ASSESSMENT"],
   "Marriage Allowance Test Support": ["MARRIAGE_ALLOWANCE","PAYE", "SELF_ASSESSMENT"],
   "National Insurance Test Support": ["NATIONAL_INSURANCE","SELF_ASSESSMENT"],
+  "Test Fraud Prevention Headers": ["VAT_MTD"],
 
   "Agent Authorisation Online": ["AGENTS"],
   "Alcohol and Tobacco Warehouse Declaration Online": ["CUSTOMS"],
