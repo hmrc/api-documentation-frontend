@@ -22,14 +22,14 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import play.api.cache.CacheApi
 import uk.gov.hmrc.apidocumentation
-import uk.gov.hmrc.apidocumentation.connectors.APIDocumentationConnector
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.APIStatus._
 import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint, _}
-import uk.gov.hmrc.apidocumentation.services.{DocumentationService, RAML, SchemaService}
+import uk.gov.hmrc.apidocumentation.services.{DocumentationService, ProxyAwareApiDefinitionService, RAML, SchemaService}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import uk.gov.hmrc.ramltools.domain.{RamlParseException}
-import uk.gov.hmrc.ramltools.loaders.{RamlLoader}
+import uk.gov.hmrc.ramltools.domain.RamlParseException
+import uk.gov.hmrc.ramltools.loaders.RamlLoader
 import unit.uk.gov.hmrc.apidocumentation.utils.FileRamlLoader
 
 import scala.concurrent.Future
@@ -46,17 +46,20 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
 
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val apiDocumentationConnector = mock[APIDocumentationConnector]
+    val proxyAwareApiDefinitionService = mock[ProxyAwareApiDefinitionService]
     val cache = fakeApplication.injector.instanceOf[CacheApi]
     val ramlLoader = mock[RamlLoader]
     val schemaLoader = mock[SchemaService]
-    val underTest = new DocumentationService(apiDocumentationConnector, cache, ramlLoader, schemaLoader)
+    val appConfig = mock[ApplicationConfig]
+    when(appConfig.localApiDocumentationUrl).thenReturn(serviceUrl)
+
+    val underTest = new DocumentationService(proxyAwareApiDefinitionService, appConfig, cache, ramlLoader, schemaLoader)
   }
 
   "fetchAPIs with user session handling" should {
     "fetch all APIs if there is no user logged in" in new Setup {
       val apis = Seq(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
-      when(apiDocumentationConnector.fetchAll()).thenReturn(Future.successful(apis))
+      when(proxyAwareApiDefinitionService.fetchAll).thenReturn(Future.successful(apis))
       val result = await(underTest.fetchAPIs(None))
       result.size shouldBe 2
       result(0).name shouldBe "gregorian-calendar"
@@ -66,7 +69,7 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
     "fetch APIs for user email if a user is logged in" in new Setup {
       val loggedInUserEmail = "3rdparty@example.com"
       val apis = Seq(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
-      when(apiDocumentationConnector.fetchByEmail(loggedInUserEmail)).thenReturn(Future.successful(apis))
+      when(proxyAwareApiDefinitionService.fetchByEmail(loggedInUserEmail)).thenReturn(Future.successful(apis))
       val result = await(underTest.fetchAPIs(Some(loggedInUserEmail)))
       result.size shouldBe 2
       result(0).name shouldBe "gregorian-calendar"
@@ -78,7 +81,7 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
 
     "fetch a single API if there is no user logged in" in new Setup {
       val api = extendedApiDefinition("buddist-calendar")
-      when(apiDocumentationConnector.fetchExtendedDefinitionByServiceName("buddist-calendar")).thenReturn(Future.successful(api))
+      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceName("buddist-calendar")).thenReturn(Future.successful(Some(api)))
       val result = await(underTest.fetchExtendedApiDefinition("buddist-calendar", None))
       result shouldBe defined
       result.get.name shouldBe "buddist-calendar"
@@ -87,7 +90,7 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
     "fetch a single API for user email if a user is logged in" in new Setup {
       val loggedInUserEmail = "3rdparty@example.com"
       val api = extendedApiDefinition("buddist-calendar")
-      when(apiDocumentationConnector.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail)).thenReturn(Future.successful(api))
+      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail)).thenReturn(Future.successful(Some(api)))
       val result = await(underTest.fetchExtendedApiDefinition("buddist-calendar", Some(loggedInUserEmail)))
       result shouldBe defined
       result.get.name shouldBe "buddist-calendar"
@@ -96,7 +99,7 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
     "reject for an unsubscribed API for user email if a user is logged in" in new Setup {
       val loggedInUserEmail = "3rdparty@example.com"
       val api = apiDefinition("buddist-calendar")
-      when(apiDocumentationConnector.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail)).thenReturn(Future.failed(new NotFoundException("Expected unit test exception")))
+      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail)).thenReturn(Future.failed(new NotFoundException("Expected unit test exception")))
       intercept[NotFoundException] {
         await(underTest.fetchExtendedApiDefinition("buddist-calendar", Some(loggedInUserEmail)))
       }
@@ -135,7 +138,6 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
 
     "fail when raml loader fails" in new Setup {
       val url = s"$serviceUrl/apis/$serviceName/1.0/documentation/application.raml"
-      when(apiDocumentationConnector.serviceBaseUrl).thenReturn(serviceUrl)
       when(ramlLoader.load(url)).thenReturn(Failure(RamlParseException("Expected test failure")))
       intercept[RamlParseException] {
         await(underTest.fetchRAML(serviceName, "1.0", true))
@@ -144,7 +146,6 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
 
     "clear the cache key when the load fails" in new Setup {
       val url = s"$serviceUrl/apis/$serviceName/1.0/documentation/application.raml"
-      when(apiDocumentationConnector.serviceBaseUrl).thenReturn(serviceUrl)
       cache.set(url, mock[RAML])
       when(ramlLoader.load(url)).thenReturn(Failure(RamlParseException("Expected test failure")))
       intercept[RamlParseException] {
@@ -157,8 +158,6 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
       val url = s"$serviceUrl/apis/$serviceName/1.1/documentation/application.raml"
       val schemaBase = s"$serviceUrl/apis/$serviceName/1.1/documentation/schemas"
 
-      when(apiDocumentationConnector.serviceBaseUrl).thenReturn(serviceUrl)
-
       val expectedRaml = mock[RAML]
       when(ramlLoader.load(url)).thenReturn(Success(expectedRaml))
       val expectedSchemas = mock[Map[String,JsonSchema]]
@@ -170,8 +169,6 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
     "clear the cached RAML when cachebuster is set" in new Setup {
       val url = s"$serviceUrl/apis/$serviceName/1.1/documentation/application.raml"
       val schemaBase = s"$serviceUrl/apis/$serviceName/1.1/documentation/schemas"
-
-      when(apiDocumentationConnector.serviceBaseUrl).thenReturn(serviceUrl)
 
       val expectedRaml1 = mock[RAML]
       when(ramlLoader.load(url)).thenReturn(Success(expectedRaml1))

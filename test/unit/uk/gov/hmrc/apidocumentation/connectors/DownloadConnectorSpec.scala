@@ -46,7 +46,7 @@ class DownloadConnectorSpec extends ConnectorSpec {
     val mockAppConfig = mock[ApplicationConfig]
     val connector = new DownloadConnector(mockWS, mockAppConfig)
 
-    when(mockAppConfig.apiDocumentationUrl).thenReturn(apiDocumentationUrl)
+    when(mockAppConfig.localApiDocumentationUrl).thenReturn(apiDocumentationUrl)
   }
 
   "downloadResource" should {

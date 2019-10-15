@@ -32,7 +32,7 @@ import scala.concurrent.Future
 @Singleton
 class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig) {
 
-  lazy val serviceBaseUrl = appConfig.apiDocumentationUrl
+  lazy val serviceBaseUrl = appConfig.localApiDocumentationUrl
 
   private def buildRequest(resourceUrl: String): WSRequest = ws.url(resourceUrl)
 

@@ -109,7 +109,7 @@ object JsonSchema {
       ( __ \ "items" ).lazyReadNullable[JsonSchema](JsonSchema.reads) and
       ( __ \ "required" ).readNullable[Seq[String]].map(_.toSeq.flatten) and
       ( __ \ "definitions" ).lazyReadNullable[ListMap[String,JsonSchema]](listMapReads[JsonSchema]).map(_.getOrElse(ListMap())) and
-      ( __ \ "$ref" ).readNullable[String] and
+      ( __ \ """$ref""" ).readNullable[String] and
       ( __ \ "enum" ).readNullable[Seq[EnumerationValue]].map(_.toSeq.flatten) and
       ( __ \ "oneOf" ).lazyReadNullable[Seq[JsonSchema]](Reads.seq[JsonSchema]).map(_.toSeq.flatten) and
       ( __ \ "pattern" ).readNullable[String]

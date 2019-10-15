@@ -43,6 +43,7 @@ package object JsonFormatters {
   implicit val formatErrorResponse = Json.format[ErrorResponse]
 }
 
+
 package object EnumJson {
 
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] = new Reads[E#Value] {

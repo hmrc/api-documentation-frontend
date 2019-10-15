@@ -17,10 +17,9 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.Inject
-
 import org.raml.v2.api.model.v10.resources.Resource
 import play.api.cache._
-import uk.gov.hmrc.apidocumentation.connectors.APIDocumentationConnector
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint, _}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
@@ -31,26 +30,34 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
 
-class DocumentationService @Inject()(apiDefinitionConnector: APIDocumentationConnector,
-                                     cache: CacheApi, ramlLoader: RamlLoader, schemaService: SchemaService) {
+class DocumentationService @Inject()(apiDefinitionService: ProxyAwareApiDefinitionService,
+                                     appConfig: ApplicationConfig,
+                                     cache: CacheApi,
+                                     ramlLoader: RamlLoader,
+                                     schemaService: SchemaService) {
 
   val defaultExpiration = 1.hour
 
+  private lazy val serviceBaseUrl = appConfig.localApiDocumentationUrl
+
   def fetchAPIs(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
     val apiDefinitions = email match {
-      case Some(e) => apiDefinitionConnector.fetchByEmail(e)
-      case None => apiDefinitionConnector.fetchAll()
+      case Some(e) => apiDefinitionService.fetchByEmail(e)
+      case None => apiDefinitionService.fetchAll
     }
     apiDefinitions map filterDefinitions
   }
 
   def fetchExtendedApiDefinition(serviceName: String, email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
     val apiDefinition = email match {
-      case Some(e) => apiDefinitionConnector.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, e)
-      case None => apiDefinitionConnector.fetchExtendedDefinitionByServiceName(serviceName)
+      case Some(e) => apiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, e)
+      case None => apiDefinitionService.fetchExtendedDefinitionByServiceName(serviceName)
     }
-
-    apiDefinition.map(api => if(api.requiresTrust) None else Some(api))
+    apiDefinition.map {
+      maybeApi => maybeApi.flatMap {
+        api => if (api.requiresTrust) None else Some(api)
+      }
+    }
   }
 
   def filterDefinitions(apis: Seq[APIDefinition]): Seq[APIDefinition] = {
@@ -65,7 +72,7 @@ class DocumentationService @Inject()(apiDefinitionConnector: APIDocumentationCon
   }
 
   def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[RamlAndSchemas] = {
-      val url = s"${apiDefinitionConnector.serviceBaseUrl}/apis/$serviceName/$version/documentation/application.raml"
+      val url = s"$serviceBaseUrl/apis/$serviceName/$version/documentation/application.raml"
       fetchRAML(url, cacheBuster)
   }
 

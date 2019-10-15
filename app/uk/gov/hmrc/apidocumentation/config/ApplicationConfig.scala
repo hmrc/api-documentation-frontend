@@ -36,7 +36,11 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   lazy val developerFrontendUrl = runModeConfiguration.getString(s"$env.developer-frontend-url").getOrElse("")
   lazy val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  lazy val apiDocumentationUrl = baseUrl("api-documentation")
+  lazy val localApiDocumentationUrl = baseUrl("local-api-documentation")
+  lazy val remoteApiDocumentationUrl = baseUrl("remote-api-documentation")
+  lazy val localApiDefinitionUrl = baseUrl("local-api-definition")
+  lazy val remoteApiDefinitionUrl = baseUrl("remote-api-definition")
+  lazy val apiPlatformBearerToken = runModeConfiguration.getString(s"$env.api-platform.bearer-token")
   lazy val developerFrontendBaseUrl = baseUrl("developer-frontend")
   lazy val thirdPartyDeveloperUrl = baseUrl("third-party-developer")
   lazy val securedCookie = runModeConfiguration.getBoolean(s"$env.cookie.secure").getOrElse(true)

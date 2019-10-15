@@ -112,6 +112,10 @@ case class APIDefinition(
 
   require(versions.nonEmpty, s"API versions must not be empty! serviceName=$serviceName")
 
+  def isIn(definitions: Seq[APIDefinition]): Boolean = {
+    definitions.find(_.name == name).isDefined
+  }
+
   lazy val retiredVersions = versions.filter(_.status == APIStatus.RETIRED)
   lazy val sortedVersions = versions.sortWith(APIDefinition.versionSorter)
   lazy val sortedActiveVersions = sortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
@@ -161,13 +165,7 @@ case class APIVersion(
       case APIAccessType.PRIVATE => "Private "
       case _ => ""
     }
-    status match {
-      case APIStatus.ALPHA => s"${accessIndicator}Alpha"
-      case APIStatus.BETA | APIStatus.PROTOTYPED => s"${accessIndicator}Beta"
-      case APIStatus.STABLE | APIStatus.PUBLISHED => s"${accessIndicator}Stable"
-      case APIStatus.DEPRECATED => s"${accessIndicator}Deprecated"
-      case APIStatus.RETIRED => s"${accessIndicator}Retired"
-    }
+    s"${accessIndicator}${APIStatus.description(status)}"
   }
 }
 
@@ -255,13 +253,7 @@ case class ExtendedAPIVersion(version: String,
       case Some(VersionVisibility(APIAccessType.PRIVATE, _, _, _)) => "Private "
       case _ => ""
     }
-    status match {
-      case APIStatus.ALPHA => s"${accessIndicator}Alpha"
-      case APIStatus.BETA | APIStatus.PROTOTYPED => s"${accessIndicator}Beta"
-      case APIStatus.STABLE | APIStatus.PUBLISHED => s"${accessIndicator}Stable"
-      case APIStatus.DEPRECATED => s"${accessIndicator}Deprecated"
-      case APIStatus.RETIRED => s"${accessIndicator}Retired"
-    }
+    s"${accessIndicator}${APIStatus.description(status)}"
   }
 }
 
@@ -315,6 +307,17 @@ object APIStatus extends Enumeration {
       case RETIRED => 1
     }
   }
+
+  def description(apiStatus: APIStatus) = {
+    apiStatus match {
+      case APIStatus.ALPHA => "Alpha"
+      case APIStatus.BETA | APIStatus.PROTOTYPED => "Beta"
+      case APIStatus.STABLE | APIStatus.PUBLISHED => "Stable"
+      case APIStatus.DEPRECATED => "Deprecated"
+      case APIStatus.RETIRED => "Retired"
+    }
+  }
+
 }
 
 case class ServiceDetails(serviceName: String, serviceUrl: String)
