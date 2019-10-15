@@ -38,11 +38,14 @@ import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-class DocumentationController @Inject()(documentationService: DocumentationService, navigationService: NavigationService,
+// TODO introduce ApiDefnService
+class DocumentationController @Inject()(documentationService: DocumentationService,
+                                        navigationService: NavigationService,
                                         partialsService: PartialsService,
                                         loggedInUserProvider: LoggedInUserProvider,
                                         errorHandler: ErrorHandler,
-                                        val messagesApi: MessagesApi)(implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
+                                        val messagesApi: MessagesApi)
+                                       (implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
   extends FrontendController with I18nSupport {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"

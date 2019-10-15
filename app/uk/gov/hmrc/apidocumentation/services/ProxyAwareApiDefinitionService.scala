@@ -35,6 +35,7 @@ class ProxyAwareApiDefinitionService @Inject()(localConnector: LocalApiDefinitio
     } yield (remoteDefinitions ++ localDefinitions.filterNot(_.isIn(remoteDefinitions))).sortBy(_.name)
   }
 
+  // TODO Flatten two methods into one
   def fetchAll()(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
     val localFuture = localConnector.fetchAll()
     val remoteFuture = remoteConnector.fetchAll()
@@ -71,13 +72,17 @@ class ProxyAwareApiDefinitionService @Inject()(localConnector: LocalApiDefinitio
 
   private def combine(maybeLocalDefinition: Option[ExtendedAPIDefinition], maybeRemoteDefinition: Option[ExtendedAPIDefinition]) = {
     def findProductionDefinition(maybeLocalDefinition: Option[ExtendedAPIDefinition], maybeRemoteDefinition: Option[ExtendedAPIDefinition]) = {
-      if (maybeLocalDefinition.exists(_.versions.exists(_.productionAvailability.isDefined))) maybeLocalDefinition
-      else maybeRemoteDefinition
+      if (maybeLocalDefinition.exists(_.versions.exists(_.productionAvailability.isDefined)))
+        maybeLocalDefinition
+      else
+        maybeRemoteDefinition
     }
 
     def findSandboxDefinition(maybeLocalDefinition: Option[ExtendedAPIDefinition], maybeRemoteDefinition: Option[ExtendedAPIDefinition]) = {
-      if (maybeLocalDefinition.exists(_.versions.exists(_.sandboxAvailability.isDefined))) maybeLocalDefinition
-      else maybeRemoteDefinition
+      if (maybeLocalDefinition.exists(_.versions.exists(_.sandboxAvailability.isDefined)))
+        maybeLocalDefinition
+      else
+        maybeRemoteDefinition
     }
 
     def combineVersion(maybeProductionVersion: Option[ExtendedAPIVersion], maybeSandboxVersion: Option[ExtendedAPIVersion]) = {

@@ -90,7 +90,8 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
     "fetch a single API for user email if a user is logged in" in new Setup {
       val loggedInUserEmail = "3rdparty@example.com"
       val api = extendedApiDefinition("buddist-calendar")
-      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail)).thenReturn(Future.successful(Some(api)))
+      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail))
+        .thenReturn(Future.successful(Some(api)))
       val result = await(underTest.fetchExtendedApiDefinition("buddist-calendar", Some(loggedInUserEmail)))
       result shouldBe defined
       result.get.name shouldBe "buddist-calendar"
@@ -99,7 +100,8 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
     "reject for an unsubscribed API for user email if a user is logged in" in new Setup {
       val loggedInUserEmail = "3rdparty@example.com"
       val api = apiDefinition("buddist-calendar")
-      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail)).thenReturn(Future.failed(new NotFoundException("Expected unit test exception")))
+      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail))
+        .thenReturn(Future.failed(new NotFoundException("Expected unit test exception")))
       intercept[NotFoundException] {
         await(underTest.fetchExtendedApiDefinition("buddist-calendar", Some(loggedInUserEmail)))
       }
@@ -120,8 +122,8 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
 
     "return versions in expected order" in new Setup {
       val apis = Seq(apiDefinition("api-1", Seq(
-        apiVersion("2.0", STABLE),
         apiVersion("3.0", BETA),
+        apiVersion("2.0", STABLE),
         apiVersion("1.0", DEPRECATED),
         apiVersion("2.5", BETA))))
 

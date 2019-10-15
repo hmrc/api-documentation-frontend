@@ -112,6 +112,7 @@ case class APIDefinition(
 
   require(versions.nonEmpty, s"API versions must not be empty! serviceName=$serviceName")
 
+  // TODO - should this be context based on non-unique names
   def isIn(definitions: Seq[APIDefinition]): Boolean = {
     definitions.find(_.name == name).isDefined
   }

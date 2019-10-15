@@ -37,7 +37,6 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   lazy val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   lazy val localApiDocumentationUrl = baseUrl("local-api-documentation")
-  lazy val remoteApiDocumentationUrl = baseUrl("remote-api-documentation")
   lazy val localApiDefinitionUrl = baseUrl("local-api-definition")
   lazy val remoteApiDefinitionUrl = baseUrl("remote-api-definition")
   lazy val apiPlatformBearerToken = runModeConfiguration.getString(s"$env.api-platform.bearer-token")

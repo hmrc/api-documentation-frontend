@@ -45,6 +45,7 @@ class DocumentationService @Inject()(apiDefinitionService: ProxyAwareApiDefiniti
       case Some(e) => apiDefinitionService.fetchByEmail(e)
       case None => apiDefinitionService.fetchAll
     }
+    // TODO - push to PAADS
     apiDefinitions map filterDefinitions
   }
 
@@ -53,6 +54,7 @@ class DocumentationService @Inject()(apiDefinitionService: ProxyAwareApiDefiniti
       case Some(e) => apiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, e)
       case None => apiDefinitionService.fetchExtendedDefinitionByServiceName(serviceName)
     }
+    // TODO - push to PAADS
     apiDefinition.map {
       maybeApi => maybeApi.flatMap {
         api => if (api.requiresTrust) None else Some(api)
@@ -60,10 +62,12 @@ class DocumentationService @Inject()(apiDefinitionService: ProxyAwareApiDefiniti
     }
   }
 
+  // TODO - push to PAADS
   def filterDefinitions(apis: Seq[APIDefinition]): Seq[APIDefinition] = {
     apis.filter(api => !apiRequiresTrust(api) && api.hasActiveVersions)
   }
 
+  // TODO - push to PAADS
   private def apiRequiresTrust(api: APIDefinition): Boolean = {
     api.requiresTrust match {
       case Some(true) => true

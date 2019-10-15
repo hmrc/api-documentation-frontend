@@ -32,10 +32,11 @@ trait RawApiDefinitionConnector {
   def fetchApiDefinition(serviceName: String, email: Option[String] = None)
                         (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
 
-  private val ignoreRemote = Seq("ignoreRemote" -> "true")
+  type Params = Seq[(String,String)]
+  val noParams: Params = Seq.empty
 
-  def queryParams(oemail: Option[String]): Seq[(String, String)] =
-    oemail.fold(ignoreRemote)(email => Seq("email" -> email) ++ ignoreRemote)
+  def queryParams(oemail: Option[String]): Params =
+    oemail.fold(noParams)(email => Seq("email" -> email))
 }
 
 @Singleton
@@ -74,7 +75,8 @@ class RemoteRawApiDefinitionConnector @Inject()(
   def fetchApiDefinitions(email: Option[String] = None)
                          (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
 
-    ws.buildRequest(s"$serviceBaseUrl/apis/definition")
+    ws
+      .buildRequest(s"$serviceBaseUrl/apis/definition")
       .withQueryString(queryParams(email): _*)
       .get()
       .map(_.json.as[Seq[APIDefinition]])

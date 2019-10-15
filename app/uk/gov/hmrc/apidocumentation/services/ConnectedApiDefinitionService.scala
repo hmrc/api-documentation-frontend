@@ -28,6 +28,7 @@ import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 
+// TODO  - flatten to two methods
 trait BaseApiDefinitionService {
   def fetchExtendedDefinitionByServiceName(serviceName: String)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
 
@@ -39,6 +40,7 @@ trait BaseApiDefinitionService {
   def fetchByEmail(email: String)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 }
 
+// TODO  - flatten to two methods
 trait ConnectedApiDefinitionService extends BaseApiDefinitionService {
   def raw: RawApiDefinitionConnector
   def metrics: Metrics

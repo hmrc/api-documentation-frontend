@@ -49,12 +49,11 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
 
     type Params = Seq[(String,String)]
 
-
     def params(email: String) = {
-      Seq("email" -> email, "ignoreRemote" -> "true")
+      Seq("email" -> email)
     }
     def params() = {
-      Seq("ignoreRemote" -> "true")
+      Seq.empty
     }
 
     def onGetDefn(serviceName: String, email: String)(response: Future[ExtendedAPIDefinition]): Unit = {
