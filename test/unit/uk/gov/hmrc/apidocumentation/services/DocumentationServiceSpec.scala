@@ -46,94 +46,13 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
 
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val proxyAwareApiDefinitionService = mock[ProxyAwareApiDefinitionService]
     val cache = fakeApplication.injector.instanceOf[CacheApi]
     val ramlLoader = mock[RamlLoader]
     val schemaLoader = mock[SchemaService]
     val appConfig = mock[ApplicationConfig]
     when(appConfig.localApiDocumentationUrl).thenReturn(serviceUrl)
 
-    val underTest = new DocumentationService(proxyAwareApiDefinitionService, appConfig, cache, ramlLoader, schemaLoader)
-  }
-
-  "fetchAPIs with user session handling" should {
-    "fetch all APIs if there is no user logged in" in new Setup {
-      val apis = Seq(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
-      when(proxyAwareApiDefinitionService.fetchAll).thenReturn(Future.successful(apis))
-      val result = await(underTest.fetchAPIs(None))
-      result.size shouldBe 2
-      result(0).name shouldBe "gregorian-calendar"
-      result(1).name shouldBe "roman-calendar"
-    }
-
-    "fetch APIs for user email if a user is logged in" in new Setup {
-      val loggedInUserEmail = "3rdparty@example.com"
-      val apis = Seq(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
-      when(proxyAwareApiDefinitionService.fetchByEmail(loggedInUserEmail)).thenReturn(Future.successful(apis))
-      val result = await(underTest.fetchAPIs(Some(loggedInUserEmail)))
-      result.size shouldBe 2
-      result(0).name shouldBe "gregorian-calendar"
-      result(1).name shouldBe "roman-calendar"
-    }
-  }
-
-  "fetchAPI with user session handling" should {
-
-    "fetch a single API if there is no user logged in" in new Setup {
-      val api = extendedApiDefinition("buddist-calendar")
-      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceName("buddist-calendar")).thenReturn(Future.successful(Some(api)))
-      val result = await(underTest.fetchExtendedApiDefinition("buddist-calendar", None))
-      result shouldBe defined
-      result.get.name shouldBe "buddist-calendar"
-    }
-
-    "fetch a single API for user email if a user is logged in" in new Setup {
-      val loggedInUserEmail = "3rdparty@example.com"
-      val api = extendedApiDefinition("buddist-calendar")
-      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail))
-        .thenReturn(Future.successful(Some(api)))
-      val result = await(underTest.fetchExtendedApiDefinition("buddist-calendar", Some(loggedInUserEmail)))
-      result shouldBe defined
-      result.get.name shouldBe "buddist-calendar"
-    }
-
-    "reject for an unsubscribed API for user email if a user is logged in" in new Setup {
-      val loggedInUserEmail = "3rdparty@example.com"
-      val api = apiDefinition("buddist-calendar")
-      when(proxyAwareApiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail("buddist-calendar", loggedInUserEmail))
-        .thenReturn(Future.failed(new NotFoundException("Expected unit test exception")))
-      intercept[NotFoundException] {
-        await(underTest.fetchExtendedApiDefinition("buddist-calendar", Some(loggedInUserEmail)))
-      }
-    }
-  }
-
-  "filterDefinitions" should {
-
-    "return all API Definitions" in new Setup {
-      val apis = Seq(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
-      underTest.filterDefinitions(apis) shouldBe apis
-    }
-
-    "filter APIs which requires trust" in new Setup {
-      val apis = Seq(apiDefinition("gregorian-calendar").copy(requiresTrust = Some(false)), apiDefinition("roman-calendar").copy(requiresTrust = Some(true)))
-      underTest.filterDefinitions(apis) shouldBe Seq(apiDefinition("gregorian-calendar").copy(requiresTrust = Some(false)))
-    }
-
-    "return versions in expected order" in new Setup {
-      val apis = Seq(apiDefinition("api-1", Seq(
-        apiVersion("3.0", BETA),
-        apiVersion("2.0", STABLE),
-        apiVersion("1.0", DEPRECATED),
-        apiVersion("2.5", BETA))))
-
-      underTest.filterDefinitions(apis).flatMap(_.statusSortedActiveVersions) shouldBe Seq(
-        apiVersion("2.0", STABLE),
-        apiVersion("3.0", BETA),
-        apiVersion("2.5", BETA),
-        apiVersion("1.0", DEPRECATED)
-      )
-    }
+    val underTest = new DocumentationService(appConfig, cache, ramlLoader, schemaLoader)
   }
 
   "fetchRAML" should {

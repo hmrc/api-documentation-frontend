@@ -101,7 +101,7 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
       val serviceName = "calendar"
       onGetDefn(serviceName)(Future.successful(extendedApiDefinition("Calendar")))
 
-      val oresult = await(connector.fetchExtendedDefinitionByServiceName(serviceName))
+      val oresult = await(connector.fetchExtendedDefinition(serviceName))
       oresult should be('defined)
       oresult.map(result => {
         result.name shouldBe "Calendar"
@@ -114,7 +114,7 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
       val serviceName = "calendar"
       onGetDefn(serviceName)(Future.successful(extendedApiDefinition("Hello with access levels")))
 
-      val oresult = await(connector.fetchExtendedDefinitionByServiceName(serviceName))
+      val oresult = await(connector.fetchExtendedDefinition(serviceName))
       oresult should be('defined)
       oresult.map(result => {
         result.name shouldBe "Hello with access levels"
@@ -130,7 +130,7 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
 
       onGetDefn(serviceName)(Future.failed(new Upstream5xxResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)))
 
-      intercept[Upstream5xxResponse](await(connector.fetchExtendedDefinitionByServiceName(serviceName)))
+      intercept[Upstream5xxResponse](await(connector.fetchExtendedDefinition(serviceName)))
     }
   }
 
@@ -142,7 +142,7 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
       val serviceName = "calendar"
       onGetDefn(serviceName,loggedInUserEmail)(Future.successful(extendedApiDefinition("Calendar")))
 
-      val oresult = await(connector.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, loggedInUserEmail))
+      val oresult = await(connector.fetchExtendedDefinition(serviceName, Some(loggedInUserEmail)))
       oresult should be('defined)
       oresult.map(result => {
         result.name shouldBe "Calendar"
@@ -156,7 +156,7 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
 
       onGetDefn(serviceName, loggedInUserEmail)(Future.failed(new Upstream5xxResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)))
 
-      intercept[Upstream5xxResponse](await(connector.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, loggedInUserEmail)))
+      intercept[Upstream5xxResponse](await(connector.fetchExtendedDefinition(serviceName, Some(loggedInUserEmail))))
     }
   }
 
@@ -165,7 +165,7 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
     "return all API Definitions sorted by name" in new Setup {
       onGetDefns(Future.successful(apiDefinitions("Hello", "Calendar")))
 
-      val result = await(connector.fetchAll())
+      val result = await(connector.fetchAllDefinitions())
       result.size shouldBe 2
       result.map(_.name) should contain("Calendar")
       result.map(_.name) should contain("Hello")
@@ -174,7 +174,7 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
     "throw an http-verbs Upstream5xxResponse exception if the API Definition service responds with an error" in new Setup {
       onGetDefns(Future.failed(new Upstream5xxResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)))
 
-      intercept[Upstream5xxResponse](await(connector.fetchAll()))
+      intercept[Upstream5xxResponse](await(connector.fetchAllDefinitions()))
     }
   }
 
@@ -185,7 +185,7 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
     "return all API Definitions sorted by name for an email address" in new Setup {
       onGetDefns(Future.successful(apiDefinitions("Hello", "Calendar")))
 
-      val result = await(connector.fetchByEmail(loggedInUserEmail))
+      val result = await(connector.fetchAllDefinitions(Some(loggedInUserEmail)))
       result.size shouldBe 2
       result.map(_.name) should contain("Calendar")
       result.map(_.name) should contain("Hello")
@@ -194,7 +194,7 @@ class ConnectedApiDefinitionServiceSpec extends ConnectorSpec with  OptionValues
     "throw an http-verbs Upstream5xxResponse exception if the API Definition service responds with an error" in new Setup {
       onGetDefns(Future.failed(new Upstream5xxResponse("Internal server error", 500, 500)))
 
-      intercept[Upstream5xxResponse](await(connector.fetchByEmail(loggedInUserEmail)))
+      intercept[Upstream5xxResponse](await(connector.fetchAllDefinitions(Some(loggedInUserEmail))))
     }
   }
 

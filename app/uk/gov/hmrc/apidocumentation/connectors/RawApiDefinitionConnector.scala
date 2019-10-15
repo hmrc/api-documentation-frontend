@@ -26,11 +26,9 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.{ExecutionContext, Future}
 
 trait RawApiDefinitionConnector {
-  def fetchApiDefinitions(email: Option[String] = None)
-                         (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
+  def fetchApiDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 
-  def fetchApiDefinition(serviceName: String, email: Option[String] = None)
-                        (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
+  def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
 
   type Params = Seq[(String,String)]
   val noParams: Params = Seq.empty

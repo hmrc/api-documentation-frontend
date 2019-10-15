@@ -17,19 +17,19 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.Inject
-
 import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, ExtendedAPIDefinition, VersionVisibility}
-import uk.gov.hmrc.apidocumentation.services.{DocumentationService, DownloadService}
+import uk.gov.hmrc.apidocumentation.services.{BaseApiDefinitionService, DocumentationService, DownloadService, ProxyAwareApiDefinitionService}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DownloadController @Inject()(documentationService: DocumentationService,
+                                   apiDefinitionService: ProxyAwareApiDefinitionService,
                                    downloadService: DownloadService,
                                    loggedInUserProvider: LoggedInUserProvider,
                                    errorHandler: ErrorHandler)(implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
@@ -39,7 +39,7 @@ class DownloadController @Inject()(documentationService: DocumentationService,
 
     (for {
       email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
-      api <- documentationService.fetchExtendedApiDefinition(service, email)
+      api <- apiDefinitionService.fetchExtendedDefinition(service, email)
       validResource = validateResource(resource)
       result <- fetchResourceForApi(api, version, validResource)
     } yield {

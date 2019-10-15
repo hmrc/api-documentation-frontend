@@ -28,19 +28,13 @@ import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 
-// TODO  - flatten to two methods
 trait BaseApiDefinitionService {
-  def fetchExtendedDefinitionByServiceName(serviceName: String)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
+  def fetchExtendedDefinition(serviceName: String, email: Option[String])
+                            (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
 
-  def fetchExtendedDefinitionByServiceNameAndEmail(serviceName: String, email: String)
-                                                  (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
-
-  def fetchAll()(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
-
-  def fetchByEmail(email: String)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
+  def fetchAllDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 }
 
-// TODO  - flatten to two methods
 trait ConnectedApiDefinitionService extends BaseApiDefinitionService {
   def raw: RawApiDefinitionConnector
   def metrics: Metrics
@@ -48,38 +42,20 @@ trait ConnectedApiDefinitionService extends BaseApiDefinitionService {
   def api: API
   def enabled: Boolean
 
-  def fetchExtendedDefinitionByServiceName(serviceName: String)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
+  def fetchExtendedDefinition(serviceName: String, email: Option[String] = None)
+                            (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
     if (enabled) {
       metrics.record(api) {
-        raw.fetchApiDefinition(serviceName, None)
+        raw.fetchApiDefinition(serviceName, email)
       }
     } else {
       successful(None)
     }
 
-  def fetchExtendedDefinitionByServiceNameAndEmail(serviceName: String, email: String)
-                                                  (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
+  def fetchAllDefinitions(email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
     if (enabled) {
       metrics.record(api) {
-        raw.fetchApiDefinition(serviceName, Some(email))
-      }
-    } else {
-      successful(None)
-    }
-
-  def fetchAll()(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
-    if (enabled) {
-      metrics.record(api) {
-        raw.fetchApiDefinitions(None)
-      }
-    } else {
-      successful(Seq.empty)
-    }
-
-  def fetchByEmail(email: String)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
-    if (enabled) {
-      metrics.record(api) {
-        raw.fetchApiDefinitions(Some(email))
+        raw.fetchApiDefinitions(email)
       }
     } else {
       successful(Seq.empty)

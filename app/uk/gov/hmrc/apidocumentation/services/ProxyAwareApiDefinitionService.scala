@@ -28,6 +28,14 @@ class ProxyAwareApiDefinitionService @Inject()(localConnector: LocalApiDefinitio
                                               )(implicit val ec: ExecutionContext)
                                               extends BaseApiDefinitionService {
 
+  def fetchAllDefinitions(thirdPartyDeveloperEmail: Option[String])
+                         (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
+
+    val localFuture = localConnector.fetchAllDefinitions(thirdPartyDeveloperEmail)
+    val remoteFuture = remoteConnector.fetchAllDefinitions(thirdPartyDeveloperEmail)
+    mergeSeqsOfDefinitions(remoteFuture,localFuture) map filterDefinitions
+  }
+
   private def mergeSeqsOfDefinitions(remoteFuture: Future[Seq[APIDefinition]], localFuture: Future[Seq[APIDefinition]]) = {
     for {
       remoteDefinitions <- remoteFuture
@@ -35,54 +43,44 @@ class ProxyAwareApiDefinitionService @Inject()(localConnector: LocalApiDefinitio
     } yield (remoteDefinitions ++ localDefinitions.filterNot(_.isIn(remoteDefinitions))).sortBy(_.name)
   }
 
-  // TODO Flatten two methods into one
-  def fetchAll()(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-    val localFuture = localConnector.fetchAll()
-    val remoteFuture = remoteConnector.fetchAll()
-    mergeSeqsOfDefinitions(remoteFuture,localFuture)
+  def filterDefinitions(apis: Seq[APIDefinition]): Seq[APIDefinition] = {
+    def apiRequiresTrust(api: APIDefinition): Boolean = {
+      api.requiresTrust match {
+        case Some(true) => true
+        case _ => false
+      }
+    }
+
+    apis.filter(api => !apiRequiresTrust(api) && api.hasActiveVersions)
   }
 
-  def fetchByEmail(thirdPartyDeveloperEmail: String)
-                         (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-    val localFuture = localConnector.fetchByEmail(thirdPartyDeveloperEmail)
-    val remoteFuture = remoteConnector.fetchByEmail(thirdPartyDeveloperEmail)
-    mergeSeqsOfDefinitions(remoteFuture,localFuture)
-  }
-
-  def fetchExtendedDefinitionByServiceNameAndEmail(serviceName: String, thirdPartyDeveloperEmail: String)
+  def fetchExtendedDefinition(serviceName: String, thirdPartyDeveloperEmail: Option[String])
                         (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    val localFuture = localConnector.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, thirdPartyDeveloperEmail)
-    val remoteFuture = remoteConnector.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, thirdPartyDeveloperEmail)
+    val localFuture = localConnector.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
+    val remoteFuture = remoteConnector.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
+
     for {
       maybeLocalDefinition <- localFuture
       maybeRemoteDefinition <- remoteFuture
-    } yield combine(maybeLocalDefinition, maybeRemoteDefinition)
+      combined = combine(maybeLocalDefinition, maybeRemoteDefinition)
+    } yield combined.filterNot(_.requiresTrust)
   }
-
-  def fetchExtendedDefinitionByServiceName(serviceName: String)
-                        (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    val localFuture = localConnector.fetchExtendedDefinitionByServiceName(serviceName)
-    val remoteFuture = remoteConnector.fetchExtendedDefinitionByServiceName(serviceName)
-    for {
-      maybeLocalDefinition <- localFuture
-      maybeRemoteDefinition <- remoteFuture
-    } yield combine(maybeLocalDefinition, maybeRemoteDefinition)
-  }
-
 
   private def combine(maybeLocalDefinition: Option[ExtendedAPIDefinition], maybeRemoteDefinition: Option[ExtendedAPIDefinition]) = {
     def findProductionDefinition(maybeLocalDefinition: Option[ExtendedAPIDefinition], maybeRemoteDefinition: Option[ExtendedAPIDefinition]) = {
-      if (maybeLocalDefinition.exists(_.versions.exists(_.productionAvailability.isDefined)))
+      if (maybeLocalDefinition.exists(_.versions.exists(_.productionAvailability.isDefined))) {
         maybeLocalDefinition
-      else
+      } else {
         maybeRemoteDefinition
+      }
     }
 
     def findSandboxDefinition(maybeLocalDefinition: Option[ExtendedAPIDefinition], maybeRemoteDefinition: Option[ExtendedAPIDefinition]) = {
-      if (maybeLocalDefinition.exists(_.versions.exists(_.sandboxAvailability.isDefined)))
+      if (maybeLocalDefinition.exists(_.versions.exists(_.sandboxAvailability.isDefined))) {
         maybeLocalDefinition
-      else
+      } else {
         maybeRemoteDefinition
+      }
     }
 
     def combineVersion(maybeProductionVersion: Option[ExtendedAPIVersion], maybeSandboxVersion: Option[ExtendedAPIVersion]) = {

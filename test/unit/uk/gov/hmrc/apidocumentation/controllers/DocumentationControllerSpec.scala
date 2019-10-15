@@ -68,7 +68,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     when(appConfig.title).thenReturn("HMRC Developer Hub")
     when(documentationService.defaultExpiration).thenReturn(1.hour)
 
-    val underTest = new DocumentationController(documentationService, navigationService, partialsService, loggedInUserProvider, errorHandler, messagesApi)
+    val underTest = new DocumentationController(documentationService, apiDefinitionService, navigationService, partialsService, loggedInUserProvider, errorHandler, messagesApi)
 
     def verifyPageRendered(actualPageFuture: Future[Result], expectedTitle: String, breadcrumbs: List[Crumb] = List(homeBreadcrumb), sideNavLinkRendered: Boolean = true, subNavRendered: Boolean = false, bodyContains: Seq[String] = Seq.empty) {
       val actualPage = await(actualPageFuture)
@@ -196,7 +196,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     "display the naming guidelines page" in new Setup {
-      verifyPageRendered(underTest.nameGuidelinesPage()(request), pageTitle("Application naming guidelines"), breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb))
+      verifyPageRendered(underTest.nameGuidelinesPage()(request), pageTitle("Application naming guidelines")
+        , breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb))
     }
 
     "display the fraud prevention page" in new Setup {
@@ -222,9 +223,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "render the API List" in new Setup {
         theUserIsLoggedIn()
-
-        when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
-          .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+        theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
 
         val result = underTest.apiIndexPage(None, None, None)(request)
         verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
@@ -233,9 +232,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "render the filtered API list" in new Setup {
       theUserIsLoggedIn()
-
-      when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
-        .thenReturn(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+      theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
 
       val result = underTest.apiIndexPage(None, None, Some("vat"))(request)
 
@@ -244,9 +241,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the error page when the documentationService throws an exception" in new Setup {
       theUserIsLoggedIn()
-
-      when(documentationService.fetchAPIs(any())(any[HeaderCarrier]))
-        .thenReturn(failed(new Exception("Expected unit test failure")))
+      theDefinitionServiceWillFail(new Exception("Expected unit test failure"))
 
       val result = underTest.apiIndexPage(None, None, None)(request)
 
@@ -262,7 +257,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       "redirect to the documentation page for the specified version" in new Setup {
         theUserIsLoggedIn()
-        theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+        theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
         val result = await(underTest.redirectToApiDocumentation(serviceName, Some(version), Option(true))(request))
         status(result) shouldBe SEE_OTHER
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}?cacheBuster=true")
@@ -274,7 +269,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       "redirect to the documentation page" in new Setup {
         theUserIsLoggedIn()
-        theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+        theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
         val result = await(underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request))
         status(result) shouldBe SEE_OTHER
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
@@ -284,7 +279,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         theUserIsLoggedIn()
         val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
           APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
-        theDocumentationServiceWillReturnAnApiDefinition(Some(privateTrialAPIDefinition))
+        theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
         val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
         status(result) shouldBe SEE_OTHER
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
@@ -294,7 +289,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         theUserIsLoggedIn()
         val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
           APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
-        theDocumentationServiceWillReturnAnApiDefinition(Some(privateTrialAPIDefinition))
+        theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
         val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
         status(result) shouldBe SEE_OTHER
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
@@ -313,7 +308,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
               None)
           ))
 
-        theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
+        theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
         val result = await(underTest.redirectToApiDocumentation("hello-world", version, Option(true))(request))
         status(result) shouldBe SEE_OTHER
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
@@ -321,8 +316,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       "display the not found page when invalid service specified" in new Setup {
         theUserIsLoggedIn()
-        when(documentationService.fetchExtendedApiDefinition(any(), any())(any[HeaderCarrier]))
-          .thenReturn(Future.failed(new NotFoundException("Expected unit test failure")))
+        theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
+
         val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
         verifyNotFoundPageRendered(result)
       }
@@ -333,7 +328,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the documentation page" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -343,8 +338,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the not found page when invalid service specified" in new Setup {
       theUserIsLoggedIn()
-      when(documentationService.fetchExtendedApiDefinition(any(), any())(any[HeaderCarrier]))
-        .thenReturn(Future.failed(new NotFoundException("Expected unit test failure")))
+      theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
@@ -353,7 +347,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the not found page when RAML file not found" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
       theDocumentationServiceWillFailWhenFetchingRaml(RamlNotFoundException("not found"))
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -363,8 +357,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the retired version page when the API version is marked as retired" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinitionWithRetiredVersion(serviceName, "1.0", "1.1")))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinitionWithRetiredVersion(serviceName, "1.0", "1.1"))
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
@@ -374,8 +368,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the documentation when the API version is not marked as retired" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinitionWithRetiredVersion(serviceName, "1.0", "1.1")))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinitionWithRetiredVersion(serviceName, "1.0", "1.1"))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.1", Option(true))(request)
@@ -385,8 +379,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the not found page when invalid version specified" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinitionWithRetiredVersion(serviceName, "1.0", "1.1")))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinitionWithRetiredVersion(serviceName, "1.0", "1.1"))
 
       val result = underTest.renderApiDocumentation(serviceName, "2.0", Option(true))(request)
 
@@ -395,7 +389,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the not found page when no API definition is returned" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(None)
+      theDefinitionServiceWillReturnNoApiDefinition()
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
@@ -404,8 +398,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the documentation when the API is private but the logged in user has access to it" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true)))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -418,7 +412,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true)
 
-      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
+      theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -431,7 +425,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false, isTrial = Some(true))
 
-      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
+      theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -444,7 +438,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
 
-      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
+      theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -457,7 +451,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
 
-      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
+      theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
 
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
@@ -471,7 +465,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
       val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false)
 
-      theDocumentationServiceWillReturnAnApiDefinition(Some(apiDefinition))
+      theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -481,8 +475,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the not found page when the API is private and the logged in user does not have access to it" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false)))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -492,8 +486,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "redirect to the login page when the API is private and the user is not logged in" in new Setup {
       theUserIsNotLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false)))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -503,7 +497,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "display the error page when any other exception occurs" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
       theDocumentationServiceWillFailWhenFetchingRaml(new Exception("expected unit test failure"))
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -513,7 +507,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "tell clients not to cache the page" in new Setup {
       theUserIsLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, "1.0")))
+      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
 
       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)

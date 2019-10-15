@@ -40,6 +40,7 @@ import scala.util.{Failure, Success, Try}
 
 // TODO introduce ApiDefnService
 class DocumentationController @Inject()(documentationService: DocumentationService,
+                                        apiDefinitionService: ProxyAwareApiDefinitionService,
                                         navigationService: NavigationService,
                                         partialsService: PartialsService,
                                         loggedInUserProvider: LoggedInUserProvider,
@@ -230,7 +231,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         case None =>
           (for {
             email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
-            apis <- documentationService.fetchAPIs(email)
+            apis <- apiDefinitionService.fetchAllDefinitions(email)
           } yield {
             val apisByCategory = Documentation.groupedByCategory(apis, XmlApiDocumentation.xmlApiDefinitions, ServiceGuide.serviceGuides)
 
@@ -262,7 +263,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   private def redirectToCurrentApiDocumentation(service: String, cacheBuster: Option[Boolean]) = Action.async { implicit request =>
     (for {
       email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
-      extendedDefn <- documentationService.fetchExtendedApiDefinition(service, email)
+      extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, email)
     } yield {
       extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(NotFound(errorHandler.notFoundTemplate)) { version =>
         Redirect(routes.DocumentationController.renderApiDocumentation(service, version.version, cacheBuster))
@@ -280,7 +281,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       navLinks =>
         (for {
           email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
-          api <- documentationService.fetchExtendedApiDefinition(service, email)
+          api <- apiDefinitionService.fetchExtendedDefinition(service, email)
           cacheBust = bustCache(appConfig.isStubMode, cacheBuster)
           apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, email)
         } yield apiDocumentation) recover {

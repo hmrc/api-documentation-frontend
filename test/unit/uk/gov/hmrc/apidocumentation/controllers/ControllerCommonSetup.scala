@@ -26,7 +26,7 @@ import play.api.mvc._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.controllers.LoggedInUserProvider
 import uk.gov.hmrc.apidocumentation.models.Developer
-import uk.gov.hmrc.apidocumentation.services.DocumentationService
+import uk.gov.hmrc.apidocumentation.services.{BaseApiDefinitionService, DocumentationService, ProxyAwareApiDefinitionService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -46,6 +46,7 @@ class ControllerCommonSetup extends UnitSpec with ScalaFutures with MockitoSugar
 
   val documentationService = mock[DocumentationService]
   val loggedInUserProvider = mock[LoggedInUserProvider]
+  val apiDefinitionService = mock[ProxyAwareApiDefinitionService]
 
   def anApiDefinition(serviceName: String, version: String): APIDefinition = {
     APIDefinition(serviceName, "Hello World", "Say Hello World", "hello", None, None, Seq(APIVersion(version, None, APIStatus.STABLE,
@@ -107,9 +108,26 @@ class ControllerCommonSetup extends UnitSpec with ScalaFutures with MockitoSugar
     when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(None))
   }
 
-  def theDocumentationServiceWillReturnAnApiDefinition(apiDefinition: Option[ExtendedAPIDefinition]) = {
-    when(documentationService.fetchExtendedApiDefinition(any(), any())(any[HeaderCarrier])).thenReturn(apiDefinition)
+  def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(Some(apiDefinition)))
   }
+
+  def theDefinitionServiceWillReturnNoApiDefinition() = {
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(None))
+  }
+
+  def  theDefinitionServiceWillFail(exception: Throwable) = {
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.failed(exception))
+
+    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
+      .thenReturn(Future.failed(exception))
+  }
+
+  def theDefinitionServiceWillReturnApiDefinitions(apis: Seq[APIDefinition]) = {
+    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
+      .thenReturn(Future.successful(apis))
+  }
+
 
   def verifyRedirectToLoginPage(actualPageFuture: Future[Result], service: String, version: String) {
     val actualPage = await(actualPageFuture)

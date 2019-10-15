@@ -30,8 +30,7 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
 
-class DocumentationService @Inject()(apiDefinitionService: ProxyAwareApiDefinitionService,
-                                     appConfig: ApplicationConfig,
+class DocumentationService @Inject()(appConfig: ApplicationConfig,
                                      cache: CacheApi,
                                      ramlLoader: RamlLoader,
                                      schemaService: SchemaService) {
@@ -39,41 +38,6 @@ class DocumentationService @Inject()(apiDefinitionService: ProxyAwareApiDefiniti
   val defaultExpiration = 1.hour
 
   private lazy val serviceBaseUrl = appConfig.localApiDocumentationUrl
-
-  def fetchAPIs(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-    val apiDefinitions = email match {
-      case Some(e) => apiDefinitionService.fetchByEmail(e)
-      case None => apiDefinitionService.fetchAll
-    }
-    // TODO - push to PAADS
-    apiDefinitions map filterDefinitions
-  }
-
-  def fetchExtendedApiDefinition(serviceName: String, email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    val apiDefinition = email match {
-      case Some(e) => apiDefinitionService.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, e)
-      case None => apiDefinitionService.fetchExtendedDefinitionByServiceName(serviceName)
-    }
-    // TODO - push to PAADS
-    apiDefinition.map {
-      maybeApi => maybeApi.flatMap {
-        api => if (api.requiresTrust) None else Some(api)
-      }
-    }
-  }
-
-  // TODO - push to PAADS
-  def filterDefinitions(apis: Seq[APIDefinition]): Seq[APIDefinition] = {
-    apis.filter(api => !apiRequiresTrust(api) && api.hasActiveVersions)
-  }
-
-  // TODO - push to PAADS
-  private def apiRequiresTrust(api: APIDefinition): Boolean = {
-    api.requiresTrust match {
-      case Some(true) => true
-      case _ => false
-    }
-  }
 
   def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[RamlAndSchemas] = {
       val url = s"$serviceBaseUrl/apis/$serviceName/$version/documentation/application.raml"
