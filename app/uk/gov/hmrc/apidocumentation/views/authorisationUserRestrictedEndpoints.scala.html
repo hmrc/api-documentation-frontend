@@ -102,7 +102,7 @@
             <h5 id="auth-endpoint-syntax" class="heading-small faded-text">Syntax</h5>
 
             <pre class="code--block">
-GET  @{applicationConfig.sandboxApiBaseUrl}/oauth/authorize?response_type=code
+GET  @{applicationConfig.sandboxWwwHost}/oauth/authorize?response_type=code
 &amp;client_id=[YOUR-CLIENT-ID]
 &amp;scope=[REQUESTED-SCOPE]
 &amp;state=[STATE]
@@ -111,7 +111,7 @@ GET  @{applicationConfig.sandboxApiBaseUrl}/oauth/authorize?response_type=code
             <h5 id="auth-endpoint-example" class="heading-small faded-text">Example</h5>
 
             <pre class="code--block">
-GET  @{applicationConfig.sandboxApiBaseUrl}/oauth/authorize?response_type=code
+GET  @{applicationConfig.sandboxWwwHost}/oauth/authorize?response_type=code
 &amp;client_id=Hf8sfkiUkYp9I3_R10qSnZ2ZUvoa
 &amp;scope=scope_1+scope_2+scope_3
 &amp;state=30de877c-ee2f-15db-8314-0800200c9a66
