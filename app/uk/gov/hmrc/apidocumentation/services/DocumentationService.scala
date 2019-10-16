@@ -30,17 +30,28 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
 
+object DocumentationService {
+  def ramlUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
+    s"$serviceBaseUrl/apis/$serviceName/$version/documentation/application.raml"
+
+  def schemasUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
+    s"$serviceBaseUrl/apis/$serviceName/$version/documentation/schemas"
+
+}
+
 class DocumentationService @Inject()(appConfig: ApplicationConfig,
                                      cache: CacheApi,
                                      ramlLoader: RamlLoader,
                                      schemaService: SchemaService) {
+
+  import DocumentationService.ramlUrl
 
   val defaultExpiration = 1.hour
 
   private lazy val serviceBaseUrl = appConfig.localApiDocumentationUrl
 
   def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[RamlAndSchemas] = {
-      val url = s"$serviceBaseUrl/apis/$serviceName/$version/documentation/application.raml"
+      val url = ramlUrl(serviceBaseUrl,serviceName,version)
       fetchRAML(url, cacheBuster)
   }
 

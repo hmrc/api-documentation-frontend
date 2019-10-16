@@ -18,7 +18,7 @@ package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.{LocalRawApiDefinitionConnector, RawApiDefinitionConnector, RemoteRawApiDefinitionConnector}
+import uk.gov.hmrc.apidocumentation.connectors.{LocalApiDefinitionConnector, ApiDefinitionConnector, RemoteApiDefinitionConnector}
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.{API, Metrics}
@@ -35,8 +35,8 @@ trait BaseApiDefinitionService {
   def fetchAllDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 }
 
-trait ConnectedApiDefinitionService extends BaseApiDefinitionService {
-  def raw: RawApiDefinitionConnector
+trait ApiDefinitionService extends BaseApiDefinitionService {
+  def raw: ApiDefinitionConnector
   def metrics: Metrics
 
   def api: API
@@ -55,7 +55,7 @@ trait ConnectedApiDefinitionService extends BaseApiDefinitionService {
   def fetchAllDefinitions(email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
     if (enabled) {
       metrics.record(api) {
-        raw.fetchApiDefinitions(email)
+        raw.fetchAllApiDefinitions(email)
       }
     } else {
       successful(Seq.empty)
@@ -64,9 +64,9 @@ trait ConnectedApiDefinitionService extends BaseApiDefinitionService {
 
 @Singleton
 class LocalApiDefinitionService @Inject()(
-      val raw: LocalRawApiDefinitionConnector,
-      val metrics: Metrics
-   ) extends ConnectedApiDefinitionService {
+                                           val raw: LocalApiDefinitionConnector,
+                                           val metrics: Metrics
+   ) extends ApiDefinitionService {
 
   val api: API = API("local-api-definition")
 
@@ -75,10 +75,10 @@ class LocalApiDefinitionService @Inject()(
 
 @Singleton
 class RemoteApiDefinitionService @Inject()(
-     val raw: RemoteRawApiDefinitionConnector,
-     val appConfig: ApplicationConfig,
-     val metrics: Metrics
-   ) extends ConnectedApiDefinitionService {
+                                            val raw: RemoteApiDefinitionConnector,
+                                            val appConfig: ApplicationConfig,
+                                            val metrics: Metrics
+   ) extends ApiDefinitionService {
 
   val api: API = API("remote-api-definition")
 

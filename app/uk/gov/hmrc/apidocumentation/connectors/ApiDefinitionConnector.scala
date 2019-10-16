@@ -25,56 +25,69 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait RawApiDefinitionConnector {
-  def fetchApiDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
+trait ApiDefinitionConnector {
+  def fetchAllApiDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 
   def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
 
-  type Params = Seq[(String,String)]
+}
+
+object ApiDefinitionConnector {
+  type Params = Seq[(String, String)]
+
   val noParams: Params = Seq.empty
 
   def queryParams(oemail: Option[String]): Params =
     oemail.fold(noParams)(email => Seq("email" -> email))
+
+  def definitionsUrl(serviceBaseUrl: String) = s"$serviceBaseUrl/apis/definition"
+
+  def definitionUrl(serviceBaseUrl: String, serviceName: String) = s"$serviceBaseUrl/apis/$serviceName/definition"
+
 }
 
 @Singleton
-class LocalRawApiDefinitionConnector @Inject()(
+class LocalApiDefinitionConnector @Inject()(
       val http: HttpClient,
       val appConfig: ApplicationConfig
     )
-    (implicit val ec: ExecutionContext) extends RawApiDefinitionConnector {
+   (implicit val ec: ExecutionContext) extends ApiDefinitionConnector {
+
+  import ApiDefinitionConnector._
 
   private lazy val serviceBaseUrl = appConfig.localApiDefinitionUrl
 
-  def fetchApiDefinitions(email: Option[String] = None)
-                         (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
+  def fetchAllApiDefinitions(email: Option[String] = None)
+                            (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
 
-    http.GET[Seq[APIDefinition]](s"$serviceBaseUrl/apis/definition", queryParams(email))
+    http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(email))
       .map(_.sortBy(_.name))
   }
 
   def fetchApiDefinition(serviceName: String, email: Option[String] = None)
                         (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
 
-    http.GET[ExtendedAPIDefinition](s"$serviceBaseUrl/apis/$serviceName/definition", queryParams(email))
-      .map(Some(_))
+    http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl,serviceName), queryParams(email)).map(Some(_))
   }
 }
 
 @Singleton
-class RemoteRawApiDefinitionConnector @Inject()(
-     ws: ProxiedApiPlatformWsClient,
-     appConfig: ApplicationConfig
-   )
-   (implicit val ec: ExecutionContext) extends RawApiDefinitionConnector {
+class RemoteApiDefinitionConnector @Inject()(
+      ws: ProxiedApiPlatformWsClient,
+      appConfig: ApplicationConfig
+    )
+    (implicit val ec: ExecutionContext)
+    extends ApiDefinitionConnector {
+
+  import ApiDefinitionConnector._
 
   private lazy val serviceBaseUrl = appConfig.remoteApiDefinitionUrl
 
-  def fetchApiDefinitions(email: Option[String] = None)
-                         (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
+  def fetchAllApiDefinitions(email: Option[String] = None)
+                            (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
 
     ws
-      .buildRequest(s"$serviceBaseUrl/apis/definition")
+      .buildRequest(definitionsUrl(serviceBaseUrl))
       .withQueryString(queryParams(email): _*)
       .get()
       .map(_.json.as[Seq[APIDefinition]])
@@ -88,7 +101,7 @@ class RemoteRawApiDefinitionConnector @Inject()(
   def fetchApiDefinition(serviceName: String, email: Option[String] = None)
                         (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
 
-    ws.buildRequest(s"$serviceBaseUrl/apis/$serviceName/definition")
+    ws.buildRequest(definitionUrl(serviceBaseUrl, serviceName))
       .withQueryString(queryParams(email): _*)
       .get()
       .map(_.json.as[ExtendedAPIDefinition])

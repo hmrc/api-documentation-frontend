@@ -62,7 +62,7 @@ class DocumentationServiceSpec extends UnitSpec
   "fetchRAML" should {
 
     "fail when raml loader fails" in new Setup {
-      val url = s"$serviceUrl/apis/$serviceName/1.0/documentation/application.raml"
+      val url = DocumentationService.ramlUrl(serviceUrl,serviceName,"1.0")
       when(ramlLoader.load(url)).thenReturn(Failure(RamlParseException("Expected test failure")))
       intercept[RamlParseException] {
         await(underTest.fetchRAML(serviceName, "1.0", true))
@@ -70,7 +70,7 @@ class DocumentationServiceSpec extends UnitSpec
     }
 
     "clear the cache key when the load fails" in new Setup {
-      val url = s"$serviceUrl/apis/$serviceName/1.0/documentation/application.raml"
+      val url = DocumentationService.ramlUrl(serviceUrl,serviceName,"1.0")
       cache.set(url, mock[RAML])
       when(ramlLoader.load(url)).thenReturn(Failure(RamlParseException("Expected test failure")))
       intercept[RamlParseException] {
@@ -80,8 +80,8 @@ class DocumentationServiceSpec extends UnitSpec
     }
 
     "return a RAML API object when the load is successful" in new Setup {
-      val url = s"$serviceUrl/apis/$serviceName/1.1/documentation/application.raml"
-      val schemaBase = s"$serviceUrl/apis/$serviceName/1.1/documentation/schemas"
+      val url = DocumentationService.ramlUrl(serviceUrl,serviceName,"1.1")
+      val schemaBase = DocumentationService.schemasUrl(serviceUrl,serviceName,"1.1")
 
       val expectedRaml = mock[RAML]
       when(ramlLoader.load(url)).thenReturn(Success(expectedRaml))
@@ -92,8 +92,8 @@ class DocumentationServiceSpec extends UnitSpec
     }
 
     "clear the cached RAML when cachebuster is set" in new Setup {
-      val url = s"$serviceUrl/apis/$serviceName/1.1/documentation/application.raml"
-      val schemaBase = s"$serviceUrl/apis/$serviceName/1.1/documentation/schemas"
+      val url = DocumentationService.ramlUrl(serviceUrl,serviceName,"1.1")
+      val schemaBase = DocumentationService.schemasUrl(serviceUrl,serviceName,"1.1")
 
       val expectedRaml1 = mock[RAML]
       when(ramlLoader.load(url)).thenReturn(Success(expectedRaml1))
