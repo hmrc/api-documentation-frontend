@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,10 +40,9 @@ object ApiDefinitionConnector {
   def queryParams(oemail: Option[String]): Params =
     oemail.fold(noParams)(email => Seq("email" -> email))
 
-  def definitionsUrl(serviceBaseUrl: String) = s"$serviceBaseUrl/apis/definition"
+  def definitionsUrl(serviceBaseUrl: String) = s"$serviceBaseUrl/api-definition"
 
-  def definitionUrl(serviceBaseUrl: String, serviceName: String) = s"$serviceBaseUrl/apis/$serviceName/definition"
-
+  def definitionUrl(serviceBaseUrl: String, serviceName: String) = s"$serviceBaseUrl/api-definition/$serviceName/extended"
 }
 
 @Singleton
@@ -67,7 +66,11 @@ class LocalApiDefinitionConnector @Inject()(
   def fetchApiDefinition(serviceName: String, email: Option[String] = None)
                         (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
 
-    http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl,serviceName), queryParams(email)).map(Some(_))
+    http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl,serviceName), queryParams(email))
+      .map(Some(_))
+      .recover {
+        case _: NotFoundException => None
+      }
   }
 }
 
