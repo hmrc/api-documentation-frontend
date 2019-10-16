@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.services.proxyaware
+package unit.uk.gov.hmrc.apidocumentation.services
 
-import org.mockito.Matchers.{any, anyString, eq => eqTo}
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
@@ -26,10 +26,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, BaseApiDefinitionServiceMockingHelper}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ProxyAwareAPIDefinitionServiceSpec
+class ProxyAwareApiDefinitionServiceSpec
   extends UnitSpec
     with ScalaFutures
     with MockitoSugar

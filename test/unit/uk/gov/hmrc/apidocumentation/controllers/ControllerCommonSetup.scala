@@ -143,6 +143,6 @@ class ControllerCommonSetup
     status(actualPage) shouldBe 303
 
     actualPage.header.headers.get("Location") shouldBe Some("/developer/login")
-    actualPage.session.get("access_uri") shouldBe Some(s"/api-documentation/docs/api/service/${service}/${version}")
+    actualPage.session.get("access_uri") shouldBe Some(s"/api-documentation/docs/api/service/$service/$version")
   }
 }

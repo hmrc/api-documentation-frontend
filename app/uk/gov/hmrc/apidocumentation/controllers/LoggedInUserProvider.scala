@@ -17,10 +17,10 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.Inject
-import jp.t2v.lab.play2.auth.{AsyncIdContainer, AuthenticityToken, CookieTokenAccessor, TransparentIdContainer}
+import jp.t2v.lab.play2.auth.{AsyncIdContainer, CookieTokenAccessor, TransparentIdContainer}
 import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
+import uk.gov.hmrc.apidocumentation.models.Developer
 import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 

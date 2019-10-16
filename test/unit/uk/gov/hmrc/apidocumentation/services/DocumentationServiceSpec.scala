@@ -23,10 +23,9 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.cache.CacheApi
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.APIStatus._
 import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint, _}
-import uk.gov.hmrc.apidocumentation.services.{DocumentationService, ProxyAwareApiDefinitionService, RAML, SchemaService}
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.apidocumentation.services.{DocumentationService, RAML, SchemaService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.ramltools.domain.RamlParseException
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
@@ -65,7 +64,7 @@ class DocumentationServiceSpec extends UnitSpec
       val url = DocumentationService.ramlUrl(serviceUrl,serviceName,"1.0")
       when(ramlLoader.load(url)).thenReturn(Failure(RamlParseException("Expected test failure")))
       intercept[RamlParseException] {
-        await(underTest.fetchRAML(serviceName, "1.0", true))
+        await(underTest.fetchRAML(serviceName, "1.0", cacheBuster = true))
       }
     }
 
@@ -74,7 +73,7 @@ class DocumentationServiceSpec extends UnitSpec
       cache.set(url, mock[RAML])
       when(ramlLoader.load(url)).thenReturn(Failure(RamlParseException("Expected test failure")))
       intercept[RamlParseException] {
-        await(underTest.fetchRAML(serviceName, "1.0", false))
+        await(underTest.fetchRAML(serviceName, "1.0", cacheBuster = false))
       }
       cache.get(url) shouldBe None
     }
@@ -88,7 +87,7 @@ class DocumentationServiceSpec extends UnitSpec
       val expectedSchemas = mock[Map[String,JsonSchema]]
       when(schemaLoader.loadSchemas(schemaBase, expectedRaml)).thenReturn(expectedSchemas)
 
-      await(underTest.fetchRAML(serviceName, "1.1", true)) shouldBe apidocumentation.models.RamlAndSchemas(expectedRaml, expectedSchemas)
+      await(underTest.fetchRAML(serviceName, "1.1", cacheBuster = true)) shouldBe apidocumentation.models.RamlAndSchemas(expectedRaml, expectedSchemas)
     }
 
     "clear the cached RAML when cachebuster is set" in new Setup {
@@ -99,19 +98,19 @@ class DocumentationServiceSpec extends UnitSpec
       when(ramlLoader.load(url)).thenReturn(Success(expectedRaml1))
       val expectedSchemas1 = mock[Map[String,JsonSchema]]
       when(schemaLoader.loadSchemas(schemaBase, expectedRaml1)).thenReturn(expectedSchemas1)
-      await(underTest.fetchRAML(serviceName, "1.1", true)) shouldBe apidocumentation.models.RamlAndSchemas(expectedRaml1, expectedSchemas1)
+      await(underTest.fetchRAML(serviceName, "1.1", cacheBuster = true)) shouldBe apidocumentation.models.RamlAndSchemas(expectedRaml1, expectedSchemas1)
 
       val expectedRaml2 = mock[RAML]
       when(ramlLoader.load(url)).thenReturn(Success(expectedRaml2))
       val expectedSchemas2 = mock[Map[String,JsonSchema]]
       when(schemaLoader.loadSchemas(schemaBase, expectedRaml2)).thenReturn(expectedSchemas2)
-      await(underTest.fetchRAML(serviceName, "1.1", false)) shouldBe apidocumentation.models.RamlAndSchemas(expectedRaml1, expectedSchemas1)
+      await(underTest.fetchRAML(serviceName, "1.1", cacheBuster = false)) shouldBe apidocumentation.models.RamlAndSchemas(expectedRaml1, expectedSchemas1)
 
       val expectedRaml3 = mock[RAML]
       when(ramlLoader.load(url)).thenReturn(Success(expectedRaml3))
       val expectedSchemas3 = mock[Map[String,JsonSchema]]
       when(schemaLoader.loadSchemas(schemaBase, expectedRaml3)).thenReturn(expectedSchemas3)
-      await(underTest.fetchRAML(serviceName, "1.1", true)) shouldBe RamlAndSchemas(expectedRaml3, expectedSchemas3)
+      await(underTest.fetchRAML(serviceName, "1.1", cacheBuster = true)) shouldBe RamlAndSchemas(expectedRaml3, expectedSchemas3)
     }
   }
 

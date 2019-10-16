@@ -20,7 +20,7 @@ import javax.inject.Inject
 import org.raml.v2.api.model.v10.resources.Resource
 import play.api.cache._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint, _}
+import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
@@ -69,15 +69,14 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
       }
     } flatMap {
       case Success(api) => Future.successful(api)
-      case Failure(e) => {
+      case Failure(e) =>
         cache.remove(url)
         Future.failed(e)
-      }
     }
   }
 
-  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier) = {
-    fetchRAML(service, version, true).map { ramlAndSchemas =>
+  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier): Future[Seq[TestEndpoint]] = {
+    fetchRAML(service, version, cacheBuster = true).map { ramlAndSchemas =>
       buildResources(ramlAndSchemas.raml.resources.toSeq)
     }
   }
@@ -86,12 +85,12 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
     resources.flatMap { res =>
       val nested = buildResources(res.resources())
       res.methods.headOption match {
-        case Some(_) => {
+        case Some(_) =>
           val methods = res.methods.map(_.method.toUpperCase).sorted
           val endpoint = TestEndpoint(s"{service-url}${res.resourcePath}", methods:_*)
 
           endpoint +: nested
-        }
+
         case _ => nested
       }
     }

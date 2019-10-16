@@ -20,7 +20,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.{LocalApiDefinitionConnector, RemoteApiDefinitionConnector}
-import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.{LocalApiDefinitionService, RemoteApiDefinitionService}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.NoopMetrics
