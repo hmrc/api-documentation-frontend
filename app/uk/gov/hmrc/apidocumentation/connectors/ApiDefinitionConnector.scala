@@ -16,10 +16,14 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
+import akka.actor.ActorSystem
+import akka.pattern.FutureTimeoutSupport
+import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.utils.{FutureTimeoutSupportImpl, Retries}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -54,7 +58,7 @@ class LocalApiDefinitionConnector @Inject()(
 
   import ApiDefinitionConnector._
 
-  private lazy val serviceBaseUrl = appConfig.localApiDefinitionUrl
+  private lazy val serviceBaseUrl = appConfig.apiDefinitionProductionBaseUrl
 
   def fetchAllApiDefinitions(email: Option[String] = None)
                             (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
@@ -76,41 +80,51 @@ class LocalApiDefinitionConnector @Inject()(
 
 @Singleton
 class RemoteApiDefinitionConnector @Inject()(
-      ws: ProxiedApiPlatformWsClient,
-      appConfig: ApplicationConfig
+    val appConfig: ApplicationConfig,
+    val httpClient: HttpClient,
+    val proxiedHttpClient: ProxiedHttpClient,
+    val actorSystem: ActorSystem,
+    val futureTimeout: FutureTimeoutSupport
     )
     (implicit val ec: ExecutionContext)
-    extends ApiDefinitionConnector {
+    extends ApiDefinitionConnector with Retries {
 
   import ApiDefinitionConnector._
 
-  private lazy val serviceBaseUrl = appConfig.remoteApiDefinitionUrl
+  private lazy val useProxy = appConfig.apiDefinitionSandboxUseProxy
+  private lazy val serviceBaseUrl = appConfig.apiDefinitionSandboxBaseUrl
+  private lazy val bearerToken = appConfig.apiDefinitionSandboxBearerToken
+  private lazy val apiKey = appConfig.apiDefinitionSandboxApiKey
+
+  def http: HttpClient = if (useProxy) proxiedHttpClient.withHeaders(bearerToken, apiKey) else httpClient
 
   def fetchAllApiDefinitions(email: Option[String] = None)
                             (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
 
-    ws
-      .buildRequest(definitionsUrl(serviceBaseUrl))
-      .withQueryString(queryParams(email): _*)
-      .get()
-      .map(_.json.as[Seq[APIDefinition]])
+    retry {
+      http.GET[Seq[APIDefinition]](
+        ApiDefinitionConnector.definitionsUrl(serviceBaseUrl),
+        queryParams(email)
+      )
       .map(_.sortBy(_.name))
       .recover {
         case _ => Seq()
       }
-
+    }
   }
 
   def fetchApiDefinition(serviceName: String, email: Option[String] = None)
                         (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
 
-    ws.buildRequest(definitionUrl(serviceBaseUrl, serviceName))
-      .withQueryString(queryParams(email): _*)
-      .get()
-      .map(_.json.as[ExtendedAPIDefinition])
+    retry {
+      http.GET[ExtendedAPIDefinition](
+        ApiDefinitionConnector.definitionUrl(serviceBaseUrl, serviceName),
+        queryParams(email)
+      )
       .map(Some(_))
       .recover {
         case _ => None
       }
+    }
   }
 }

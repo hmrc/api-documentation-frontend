@@ -93,7 +93,6 @@ object ServiceGuide {
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/service_guides.json")).mkString).as[Seq[ServiceGuide]]
 }
 
-
 object APIAccessType extends Enumeration {
   type APIAccessType = Value
   val PRIVATE, PUBLIC = Value
