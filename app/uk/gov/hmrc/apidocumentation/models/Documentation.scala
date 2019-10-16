@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
+import play.api.Configuration
 import play.api.libs.json._
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.APICategory._
@@ -98,7 +99,18 @@ object APIAccessType extends Enumeration {
   val PRIVATE, PUBLIC = Value
 }
 
-case class APIAccess(`type`: APIAccessType.Value, isTrial: Option[Boolean] = None)
+case class APIAccess(`type`: APIAccessType.Value, whitelistedApplicationIds: Option[Seq[String]], isTrial: Option[Boolean] = None)
+
+object APIAccess {
+  def apply(accessType: APIAccessType.Value): APIAccess = {
+    APIAccess(accessType, Some(Seq.empty), Some(false))
+  }
+
+  def build(config: Option[Configuration]): APIAccess = APIAccess(
+    `type` = APIAccessType.PRIVATE,
+    whitelistedApplicationIds = config.flatMap(_.getStringSeq("whitelistedApplicationIds")).orElse(Some(Seq.empty)),
+    isTrial = None)
+}
 
 case class APIDefinition(
                           serviceName: String,

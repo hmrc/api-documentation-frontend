@@ -16,20 +16,23 @@
 
 package unit.uk.gov.hmrc.apidocumentation.services
 
-import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.APIStatus._
-import uk.gov.hmrc.apidocumentation.services.{BaseApiDefinitionService, LocalApiDefinitionService, ProxyAwareApiDefinitionService, RemoteApiDefinitionService}
+import uk.gov.hmrc.apidocumentation.services.{LocalApiDefinitionService, ProxyAwareApiDefinitionService, RemoteApiDefinitionService}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, BaseApiDefinitionServiceMockingHelper}
 
-import scala.concurrent.Future
-
-class ApiDefinitionServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
+class ApiDefinitionServiceSpec extends UnitSpec
+  with WithFakeApplication
+  with MockitoSugar
+  with ScalaFutures
+  with BaseApiDefinitionServiceMockingHelper
+  with ApiDefinitionTestDataHelper {
 
   val html = "<b>Today is 01 January 2001</b>"
   val serviceName = "calendar"
@@ -44,54 +47,13 @@ class ApiDefinitionServiceSpec extends UnitSpec with WithFakeApplication with Mo
 
     val local = mock[LocalApiDefinitionService]
     val remote = mock[RemoteApiDefinitionService]
+
     import scala.concurrent.ExecutionContext.Implicits.global
+
     val loggedInUserEmail = "3rdparty@example.com"
 
     val underTest = new ProxyAwareApiDefinitionService(local, remote)
 
-    def whenFetchAllDefinitions(base: BaseApiDefinitionService)
-                               (apis: APIDefinition*)
-                               (implicit hc: HeaderCarrier) = {
-      when(base.fetchAllDefinitions(any[None.type]())(any[HeaderCarrier]))
-        .thenReturn(Future.successful(apis.toSeq))
-    }
-    def whenFetchAllDefinitionsWithEmail(base: BaseApiDefinitionService)
-                                        (email: String)
-                                        (apis: APIDefinition*)
-                                        (implicit hc: HeaderCarrier) = {
-      when(base.fetchAllDefinitions(any[Some[String]]())(any[HeaderCarrier]))
-        .thenReturn(Future.successful(apis.toSeq))
-    }
-    def whenFetchExtendedDefinition(base: BaseApiDefinitionService)
-                                   (serviceName: String)
-                                   (api: ExtendedAPIDefinition)
-                                   (implicit hc: HeaderCarrier) = {
-      when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(api)))
-    }
-    def whenFetchExtendedDefinitionWithEmail(base: BaseApiDefinitionService)
-                                            (serviceName: String, email: String)
-                                            (api: ExtendedAPIDefinition)
-                                            (implicit hc: HeaderCarrier) = {
-      when(base.fetchExtendedDefinition(eqTo(serviceName), any[Some[String]]())(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Some(api)))
-    }
-
-    def whenApiDefinitionFails(base: BaseApiDefinitionService = local)
-                              (exception: Throwable)
-                              (implicit hc: HeaderCarrier) = {
-      when(base.fetchExtendedDefinition(any[String],any[None.type]())(any[HeaderCarrier]))
-        .thenReturn(Future.failed(exception))
-      when(base.fetchAllDefinitions(any())(any[HeaderCarrier]))
-        .thenReturn(Future.failed(exception))
-    }
-
-    def whenNoApiDefinitions(base: BaseApiDefinitionService) = {
-      when(base.fetchExtendedDefinition(any[String],any())(any[HeaderCarrier]))
-        .thenReturn(Future.successful(None))
-      when(base.fetchAllDefinitions(any())(any[HeaderCarrier]))
-        .thenReturn(Future.successful(Seq.empty))
-    }
   }
 
   "fetchAPIs with user session handling" should {
@@ -102,8 +64,7 @@ class ApiDefinitionServiceSpec extends UnitSpec with WithFakeApplication with Mo
       val result = await(underTest.fetchAllDefinitions(None))
 
       result.size shouldBe 2
-      result(0).name shouldBe "gregorian-calendar"
-      result(1).name shouldBe "roman-calendar"
+      result.map(_.name) shouldBe Seq("gregorian-calendar", "roman-calendar")
     }
 
     "fetch APIs for user email if a user is logged in" in new Setup {
@@ -113,8 +74,7 @@ class ApiDefinitionServiceSpec extends UnitSpec with WithFakeApplication with Mo
       val result = await(underTest.fetchAllDefinitions(Some(loggedInUserEmail)))
 
       result.size shouldBe 2
-      result(0).name shouldBe "gregorian-calendar"
-      result(1).name shouldBe "roman-calendar"
+      result.map(_.name) shouldBe Seq("gregorian-calendar", "roman-calendar")
     }
   }
 
@@ -131,7 +91,7 @@ class ApiDefinitionServiceSpec extends UnitSpec with WithFakeApplication with Mo
     }
 
     "fetch a single API for user email if a user is logged in" in new Setup {
-      whenFetchExtendedDefinitionWithEmail(local)("buddist-calendar",loggedInUserEmail)(extendedApiDefinition("buddist-calendar"))
+      whenFetchExtendedDefinitionWithEmail(local)("buddist-calendar", loggedInUserEmail)(extendedApiDefinition("buddist-calendar"))
       whenNoApiDefinitions(remote)
 
       val result = await(underTest.fetchExtendedDefinition("buddist-calendar", Some(loggedInUserEmail)))
@@ -178,23 +138,8 @@ class ApiDefinitionServiceSpec extends UnitSpec with WithFakeApplication with Mo
       )
     }
   }
-
-  private def apiDefinition(name: String, versions: Seq[APIVersion] = Seq(apiVersion("1.0", STABLE))) = {
-    APIDefinition(name, name, name, name, None, None, versions)
-  }
-
-  private def extendedApiDefinition(name: String) = {
-    ExtendedAPIDefinition(name, "http://service", name, name, name, requiresTrust = false, isTestSupport = false,
-      Seq(
-        ExtendedAPIVersion("1.0", APIStatus.STABLE, Seq(Endpoint("Today's Date", "/today", HttpMethod.GET, None),
-          Endpoint("Yesterday's Date", "/yesterday", HttpMethod.GET, None)),
-          Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)), None)
-      ))
-  }
-
-  private def apiVersion(version: String, status: APIStatus = STABLE, access: Option[APIAccess] = None): APIVersion = {
-    APIVersion(version, access, status, Seq(
-      Endpoint("Today's Date", "/today", HttpMethod.GET, None),
-      Endpoint("Yesterday's Date", "/yesterday", HttpMethod.GET, None)))
-  }
 }
+
+
+
+

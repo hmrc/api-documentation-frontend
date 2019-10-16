@@ -23,16 +23,16 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ProxyAwareApiDefinitionService @Inject()(localConnector: LocalApiDefinitionService,
-                                               remoteConnector: RemoteApiDefinitionService
+class ProxyAwareApiDefinitionService @Inject()(localSvc: LocalApiDefinitionService,
+                                               remoteSvc: RemoteApiDefinitionService
                                               )(implicit val ec: ExecutionContext)
                                               extends BaseApiDefinitionService {
 
   def fetchAllDefinitions(thirdPartyDeveloperEmail: Option[String])
                          (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
 
-    val localFuture = localConnector.fetchAllDefinitions(thirdPartyDeveloperEmail)
-    val remoteFuture = remoteConnector.fetchAllDefinitions(thirdPartyDeveloperEmail)
+    val localFuture = localSvc.fetchAllDefinitions(thirdPartyDeveloperEmail)
+    val remoteFuture = remoteSvc.fetchAllDefinitions(thirdPartyDeveloperEmail)
     mergeSeqsOfDefinitions(remoteFuture,localFuture) map filterDefinitions
   }
 
@@ -56,8 +56,8 @@ class ProxyAwareApiDefinitionService @Inject()(localConnector: LocalApiDefinitio
 
   def fetchExtendedDefinition(serviceName: String, thirdPartyDeveloperEmail: Option[String])
                         (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    val localFuture = localConnector.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
-    val remoteFuture = remoteConnector.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
+    val localFuture = localSvc.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
+    val remoteFuture = remoteSvc.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
 
     for {
       maybeLocalDefinition <- localFuture

@@ -23,10 +23,11 @@ import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.play.test.UnitSpec
+import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 import scala.collection.JavaConversions._
 
-class ServicesSpec extends UnitSpec with MockitoSugar {
+class ServicesSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestDataHelper {
   trait Setup {
     val raml = mock[RAML]
     val (overview, versioning, errors) = (mock[DocumentationItem], mock[DocumentationItem], mock[DocumentationItem])
@@ -44,7 +45,7 @@ class ServicesSpec extends UnitSpec with MockitoSugar {
 
   "documentationForVersion" should {
     "return all documentation when the version is visible" in new Setup {
-      val availability: Option[APIAvailability] = Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC, isTrial = Some(false)), loggedIn = false, authorised = false))
+      val availability = someApiAvailability()
       val visibleVersion = Some(ExtendedAPIVersion("1.0", APIStatus.STABLE, endpoints = Seq.empty, productionAvailability = availability, sandboxAvailability = availability))
       val result = raml.documentationForVersion(visibleVersion)
 
@@ -52,15 +53,18 @@ class ServicesSpec extends UnitSpec with MockitoSugar {
     }
 
     "return only the overview documentation when the version is in private trial" in new Setup {
-      val availability: Option[APIAvailability] = Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE, isTrial = Some(true)), loggedIn = false, authorised = false))
-      val overviewOnlyVersion = Some(ExtendedAPIVersion("1.0", APIStatus.STABLE, endpoints = Seq.empty, productionAvailability = availability, sandboxAvailability = availability))
+      val availability = someApiAvailability().asPrivate.asTrial.notAuthorised
+      val overviewOnlyVersion =
+        Some(
+          ExtendedAPIVersion("1.0", APIStatus.STABLE, endpoints = Seq.empty, productionAvailability = availability, sandboxAvailability = availability)
+        )
       val result = raml.documentationForVersion(overviewOnlyVersion)
 
       result shouldBe List(overview)
     }
 
     "return no documentation when the version is not visible" in new Setup {
-      val availability: Option[APIAvailability] = Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE, isTrial = Some(false)), loggedIn = false, authorised = false))
+      val availability = someApiAvailability().asPrivate.notTrial.notAuthorised
       val notVisibleVersion = Some(ExtendedAPIVersion("1.0", APIStatus.STABLE, endpoints = Seq.empty, productionAvailability = availability, sandboxAvailability = availability))
       val result = raml.documentationForVersion(notVisibleVersion)
 

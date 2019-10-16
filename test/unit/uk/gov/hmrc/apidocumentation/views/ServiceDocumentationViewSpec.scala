@@ -26,20 +26,16 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.play.test.UnitSpec
 import play.twirl.api.HtmlFormat.Appendable
 import play.api.mvc.Request
-import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
 import uk.gov.hmrc.apidocumentation.services.RAML
 import org.mockito.Mockito.when
 import org.scalatestplus.play.OneAppPerSuite
+import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
-class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
+class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with OneAppPerSuite with ApiDefinitionTestDataHelper {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val versionsDropdown = dom.getElementById("version")
     lazy val selectedVersion = versionsDropdown.getElementsByAttribute("selected")
-  }
-
-  def availability(accessType: APIAccessType = APIAccessType.PUBLIC, isTrial: Option[Boolean] = None) = {
-    Some(APIAvailability(endpointsEnabled = false, APIAccess(accessType, isTrial), loggedIn = false, authorised = false))
   }
 
   val mockAppConfig = mock[ApplicationConfig]
@@ -57,9 +53,9 @@ class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with OneAp
   val request = mock[Request[Any]]
 
   trait Setup {
-    val publicAvailability = availability(APIAccessType.PUBLIC)
-    val privateAvailability = availability(APIAccessType.PRIVATE)
-    val privateTrialAvailability = availability(APIAccessType.PRIVATE, Some(true))
+    val publicAvailability = someApiAvailability().asPublic
+    val privateAvailability = someApiAvailability().asPrivate
+    val privateTrialAvailability = someApiAvailability().asPrivate.asTrial
 
     val publicVersion: ExtendedAPIVersion = ExtendedAPIVersion("1.0", APIStatus.STABLE, Seq(), publicAvailability, publicAvailability)
     val privateVersion: ExtendedAPIVersion = ExtendedAPIVersion("2.0", APIStatus.BETA, Seq(), privateAvailability, privateAvailability)

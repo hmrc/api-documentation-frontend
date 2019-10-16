@@ -68,9 +68,25 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     when(appConfig.title).thenReturn("HMRC Developer Hub")
     when(documentationService.defaultExpiration).thenReturn(1.hour)
 
-    val underTest = new DocumentationController(documentationService, apiDefinitionService, navigationService, partialsService, loggedInUserProvider, errorHandler, messagesApi)
+    val underTest =
+      new DocumentationController(
+        documentationService,
+        apiDefinitionService,
+        navigationService,
+        partialsService,
+        loggedInUserProvider,
+        errorHandler,
+        messagesApi
+      )
 
-    def verifyPageRendered(actualPageFuture: Future[Result], expectedTitle: String, breadcrumbs: List[Crumb] = List(homeBreadcrumb), sideNavLinkRendered: Boolean = true, subNavRendered: Boolean = false, bodyContains: Seq[String] = Seq.empty) {
+    def verifyPageRendered(
+                            actualPageFuture: Future[Result],
+                            expectedTitle: String,
+                            breadcrumbs: List[Crumb] = List(homeBreadcrumb),
+                            sideNavLinkRendered: Boolean = true,
+                            subNavRendered: Boolean = false,
+                            bodyContains: Seq[String] = Seq.empty
+                          ) {
       val actualPage = await(actualPageFuture)
       status(actualPage) shouldBe 200
       titleOf(actualPage) shouldBe expectedTitle
@@ -90,7 +106,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     def verifyNotFoundPageRendered(actualPageFuture: Future[Result]) {
       val actualPage = await(actualPageFuture)
-      status(actualPage) shouldBe 404
+      status(actualPage) shouldBe NOT_FOUND
     }
 
     private def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
@@ -102,12 +118,12 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     def verifyLinkToStableDocumentationRendered(actualPage: Result, service: String, version: String) = {
-      bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/${service}/${version}">""")
+      bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
     }
 
     def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
       verifyPageRendered(actualPage, pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))
-      verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v${version} (${apiStatus})")
+      verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
     }
 
     def titleOf(result: Result) = {
@@ -246,9 +262,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       val result = underTest.apiIndexPage(None, None, None)(request)
 
       verifyErrorPageRendered(result, expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Sorry, we’re experiencing technical difficulties")
-
     }
-
   }
 
   "redirectToApiDocumentation" must {
@@ -280,6 +294,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
           APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
         theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
+
         val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
         status(result) shouldBe SEE_OTHER
         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
@@ -298,15 +313,25 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       "redirect to the documentation page for the latest accessible version" in new Setup {
         theUserIsLoggedIn()
 
-        val apiDefinition = ExtendedAPIDefinition(serviceName, "http://service", "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
-          Seq(
-            ExtendedAPIVersion("1.0", APIStatus.BETA, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-              Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
-              None),
-            ExtendedAPIVersion("1.1", APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-              Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
-              None)
-          ))
+        val apiDefinition =
+          ExtendedAPIDefinition(
+            serviceName,
+            "http://service",
+            "Hello World",
+            "Say Hello World",
+            "hello",
+            requiresTrust = false,
+            isTestSupport = false,
+            Seq(
+              ExtendedAPIVersion(
+                "1.0", APIStatus.BETA, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
+                Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
+                None),
+              ExtendedAPIVersion(
+                "1.1", APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
+                Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
+                None)
+            ))
 
         theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
         val result = await(underTest.redirectToApiDocumentation("hello-world", version, Option(true))(request))
@@ -544,15 +569,15 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
   "bustCache" should {
     "override value of the query parameter if in stub mode" in new Setup {
-      underTest.bustCache(false, Some(true)) shouldBe true
-      underTest.bustCache(false, Some(false)) shouldBe false
-      underTest.bustCache(true, Some(true)) shouldBe true
-      underTest.bustCache(true, Some(false)) shouldBe true
+      underTest.bustCache(stubMode = false, Some(true)) shouldBe true
+      underTest.bustCache(stubMode = false, Some(false)) shouldBe false
+      underTest.bustCache(stubMode = true, Some(true)) shouldBe true
+      underTest.bustCache(stubMode = true, Some(false)) shouldBe true
     }
 
     "return true if no query parameter was provided and the app is running in Stub mode" in new Setup {
-      underTest.bustCache(false, None) shouldBe false
-      underTest.bustCache(true, None) shouldBe true
+      underTest.bustCache(stubMode = false, None) shouldBe false
+      underTest.bustCache(stubMode = true, None) shouldBe true
     }
   }
 

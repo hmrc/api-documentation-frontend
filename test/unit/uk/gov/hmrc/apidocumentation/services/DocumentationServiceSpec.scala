@@ -30,12 +30,16 @@ import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.ramltools.domain.RamlParseException
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
-import unit.uk.gov.hmrc.apidocumentation.utils.FileRamlLoader
+import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, FileRamlLoader}
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
+class DocumentationServiceSpec extends UnitSpec
+  with WithFakeApplication
+  with MockitoSugar
+  with ScalaFutures
+  with ApiDefinitionTestDataHelper {
 
   val contentType = "application/xml"
   val rawXml = "<date>2001-01-01</date>"
@@ -139,24 +143,5 @@ class DocumentationServiceSpec extends UnitSpec with WithFakeApplication with Mo
         TestEndpoint("{service-url}/hello/there/{empref}/year/{taxYear}", "PUT"))
       await(underTest.buildTestEndpoints("multiple-endpoints", "1.0")) shouldBe expected
     }
-  }
-
-  private def apiDefinition(name: String, versions: Seq[APIVersion] = Seq(apiVersion("1.0", STABLE))) = {
-    APIDefinition(name, name, name, name, None, None, versions)
-  }
-
-  private def extendedApiDefinition(name: String) = {
-    ExtendedAPIDefinition(name, "http://service", name, name, name, requiresTrust = false, isTestSupport = false,
-      Seq(
-        ExtendedAPIVersion("1.0", APIStatus.STABLE, Seq(Endpoint("Today's Date", "/today", HttpMethod.GET, None),
-          Endpoint("Yesterday's Date", "/yesterday", HttpMethod.GET, None)),
-          Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)), None)
-      ))
-  }
-
-  def apiVersion(version: String, status: APIStatus = STABLE, access: Option[APIAccess] = None): APIVersion = {
-    APIVersion(version, access, status, Seq(
-      Endpoint("Today's Date", "/today", HttpMethod.GET, None),
-      Endpoint("Yesterday's Date", "/yesterday", HttpMethod.GET, None)))
   }
 }

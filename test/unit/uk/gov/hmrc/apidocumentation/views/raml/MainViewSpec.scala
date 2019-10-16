@@ -26,11 +26,11 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.RAML
 import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.play.test.UnitSpec
-import unit.uk.gov.hmrc.apidocumentation.utils.FileRamlLoader
+import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, FileRamlLoader}
 
 import scala.collection.JavaConversions._
 
-class MainViewSpec extends UnitSpec with MockitoSugar {
+class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestDataHelper {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val sandboxAvailability: String = environmentAvailability("sandbox")
@@ -97,7 +97,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     "api version is private, in trial and the user is logged in as a member of a whitelisted application" should {
 
       val isWhitelisted = true
-      val apiAccess = APIAccess(APIAccessType.PRIVATE, isTrial = Some(true))
+      val apiAccess = APIAccess(APIAccessType.PRIVATE).asTrial
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
       val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
@@ -118,10 +118,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     }
 
     "api version is private, in trial and the user is logged in but not a member of a whitelisted application" should {
+      val availability = someApiAvailability()
+        .asPrivate
+        .asTrial
+        .asLoggedIn
+        .notAuthorised
 
-      val isWhitelisted = false
-      val apiAccess = APIAccess(APIAccessType.PRIVATE, isTrial = Some(true))
-      val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
       val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
@@ -144,10 +146,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     }
 
     "api version is private, in trial and the user is not logged in" should {
+      val availability = someApiAvailability()
+        .asPrivate
+        .asTrial
+        .notLoggedIn
+        .notAuthorised
 
-      val isWhitelisted = false
-      val apiAccess = APIAccess(APIAccessType.PRIVATE, isTrial = Some(true))
-      val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
       val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = false, mockAppConfig))
@@ -169,10 +173,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     }
 
     "api version is private, not in trial and the user is a member of a whitelisted application" should {
+      val availability = someApiAvailability()
+        .asPrivate
+        .notTrial
+        .asLoggedIn
+        .asAuthorised
 
-      val isWhitelisted = true
-      val apiAccess = APIAccess(APIAccessType.PRIVATE, isTrial = Some(false))
-      val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
       val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
@@ -193,10 +199,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     }
 
     "api version is private, not in trial and the user is not a member of a whitelisted application" should {
+      val availability = someApiAvailability()
+        .asPrivate
+        .notTrial
+        .asLoggedIn
+        .notAuthorised
 
-      val isWhitelisted = false
-      val apiAccess = APIAccess(APIAccessType.PRIVATE, isTrial = Some(false))
-      val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
       val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
@@ -217,10 +225,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     }
 
     "api version is public, in trial and the user is a member of a whitelisted application" should {
+      val availability = someApiAvailability()
+        .asPublic
+        .asTrial
+        .asLoggedIn
+        .asAuthorised
 
-      val isWhitelisted = true
-      val apiAccess = APIAccess(APIAccessType.PUBLIC, isTrial = Some(true))
-      val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
       val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
@@ -241,10 +251,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     }
 
     "api version is public, in trial and the user is not a member of a whitelisted application" should {
+      val availability = someApiAvailability()
+        .asPublic
+        .asTrial
+        .asLoggedIn // TODO - really ???
+        .asAuthorised
 
-      val isWhitelisted = true
-      val apiAccess = APIAccess(APIAccessType.PUBLIC, isTrial = Some(true))
-      val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
       val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true,  mockAppConfig))
@@ -265,10 +277,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     }
 
     "api version is public, not in trial and the user is a member of a whitelisted application" should {
+      val availability = someApiAvailability()
+        .asPublic
+        .notTrial
+        .asLoggedIn
+        .asAuthorised
 
-      val isWhitelisted = true
-      val apiAccess = APIAccess(APIAccessType.PUBLIC, isTrial = Some(false))
-      val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
       val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
@@ -289,10 +303,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     }
 
     "api version is public, not in trial and the user is not a member of a whitelisted application" should {
+      val availability = someApiAvailability()
+        .asPublic
+        .notTrial
+        .asLoggedIn
+        .notAuthorised
 
-      val isWhitelisted = false
-      val apiAccess = APIAccess(APIAccessType.PUBLIC, isTrial = Some(false))
-      val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
       val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
@@ -321,10 +337,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar {
     }
 
     "rendering resource content" should {
+      val availability = someApiAvailability()
+        .asPrivate
+        .asTrial
+        .asLoggedIn
+        .asAuthorised
 
-      val isWhitelisted = true
-      val apiAccess = APIAccess(APIAccessType.PRIVATE, isTrial = Some(true))
-      val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val endpoints = Seq(Endpoint("endpoint1", "uriPattern1", HttpMethod.GET))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, endpoints, availability, availability)
 
