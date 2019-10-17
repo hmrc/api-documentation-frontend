@@ -18,12 +18,11 @@ package uk.gov.hmrc.apidocumentation.connectors
 
 import akka.actor.ActorSystem
 import akka.pattern.FutureTimeoutSupport
-import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.apidocumentation.utils.{FutureTimeoutSupportImpl, Retries}
+import uk.gov.hmrc.apidocumentation.utils.Retries
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 

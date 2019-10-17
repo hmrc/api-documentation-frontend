@@ -66,7 +66,7 @@ trait ApiDefinitionService extends BaseApiDefinitionService {
 class LocalApiDefinitionService @Inject()(
                                            val raw: LocalApiDefinitionConnector,
                                            val metrics: Metrics
-   ) extends ApiDefinitionService {
+) extends ApiDefinitionService {
 
   val api: API = API("local-api-definition")
 

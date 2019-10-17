@@ -16,14 +16,12 @@
 
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
-import akka.actor.ActorSystem
 import org.mockito.Mockito
 import org.mockito.Mockito.when
 import org.scalatest.OptionValues
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, LocalApiDefinitionConnector}
-import uk.gov.hmrc.apidocumentation.utils.FutureTimeoutSupportImpl
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionHttpMockingHelper
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
