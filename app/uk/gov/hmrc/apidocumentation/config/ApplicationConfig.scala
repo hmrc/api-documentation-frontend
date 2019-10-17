@@ -22,6 +22,7 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 class ApplicationConfig @Inject()(override val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
+
   override protected def mode = environment.mode
 
   private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing key: $key"))
@@ -31,8 +32,8 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
 
   lazy val analyticsToken = runModeConfiguration.getString(s"$env.google-analytics.token")
   lazy val analyticsHost = runModeConfiguration.getString(s"$env.google-analytics.host").getOrElse("auto")
-  lazy val betaFeedbackUrl = "/contact/beta-feedback"
-  lazy val betaFeedbackUnauthenticatedUrl: String = "/contact/beta-feedback-unauthenticated"
+//  lazy val betaFeedbackUrl = "/contact/beta-feedback"
+//  lazy val betaFeedbackUnauthenticatedUrl: String = "/contact/beta-feedback-unauthenticated"
   lazy val developerFrontendUrl = runModeConfiguration.getString(s"$env.developer-frontend-url").getOrElse("")
   lazy val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
@@ -63,20 +64,17 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   lazy val apiDefinitionSandboxApiKey = apiKey("api-definition-sandbox")
 
   lazy val apiDefinitionProductionBaseUrl = serviceUrl("api-definition")("api-definition-production")
-  lazy val apiDefinitionProductionUseProxy = false
-  lazy val apiDefinitionProductionBearerToken = bearerToken("api-definition-production")
-  lazy val apiDefinitionProductionApiKey = ""
 
-  private def serviceUrl(key: String)(serviceName: String): String = {
+  def serviceUrl(key: String)(serviceName: String): String = {
     if (useProxy(serviceName)) s"${baseUrl(serviceName)}/${getConfString(s"$serviceName.context", key)}"
     else baseUrl(serviceName)
   }
 
-  private def useProxy(serviceName: String) = getConfBool(s"$serviceName.use-proxy", false)
+  def useProxy(serviceName: String) = getConfBool(s"$serviceName.use-proxy", false)
 
-  private def bearerToken(serviceName: String) = getConfString(s"$serviceName.bearer-token", "")
+  def bearerToken(serviceName: String) = getConfString(s"$serviceName.bearer-token", "")
 
-  private def apiKey(serviceName: String) = getConfString(s"$serviceName.api-key", "")
+  def apiKey(serviceName: String) = getConfString(s"$serviceName.api-key", "")
 
   private def buildRamlLoaderRewrites: Map[String, String] = {
     Map(runModeConfiguration.getString(s"$env.ramlLoaderUrlRewrite.from").getOrElse("") ->
