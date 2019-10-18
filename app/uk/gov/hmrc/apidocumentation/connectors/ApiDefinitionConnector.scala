@@ -20,19 +20,39 @@ import akka.actor.ActorSystem
 import akka.pattern.FutureTimeoutSupport
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector.{definitionUrl, definitionsUrl, queryParams}
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.utils.Retries
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait ApiDefinitionConnector {
-  def fetchAllApiDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
+  def http: HttpClient
+  def serviceBaseUrl: String
+  implicit val ec: ExecutionContext
 
-  def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
+  def fetchAllApiDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
+    val r= http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(email))
+      r.map(e => e.sortBy(
+        _.name
+      ))
+      .recover {
+        case _ : NotFoundException => Seq()
+        case e : Upstream5xxResponse => throw e
+      }
+  }
 
+  def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
+    http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl,serviceName), queryParams(email))
+      .map(Some(_))
+      .recover {
+        case _ : NotFoundException => None
+        case e : Upstream5xxResponse => throw e
+      }
+  }
 }
 
 object ApiDefinitionConnector {
@@ -55,26 +75,7 @@ class LocalApiDefinitionConnector @Inject()(
     )
    (implicit val ec: ExecutionContext) extends ApiDefinitionConnector {
 
-  import ApiDefinitionConnector._
-
-  private lazy val serviceBaseUrl = appConfig.apiDefinitionProductionBaseUrl
-
-  def fetchAllApiDefinitions(email: Option[String] = None)
-                            (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-
-    http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(email))
-      .map(_.sortBy(_.name))
-  }
-
-  def fetchApiDefinition(serviceName: String, email: Option[String] = None)
-                        (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-
-    http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl,serviceName), queryParams(email))
-      .map(Some(_))
-      .recover {
-        case _: NotFoundException => None
-      }
-  }
+  val serviceBaseUrl = appConfig.apiDefinitionProductionBaseUrl
 }
 
 @Singleton
@@ -88,42 +89,28 @@ class RemoteApiDefinitionConnector @Inject()(
     (implicit val ec: ExecutionContext)
     extends ApiDefinitionConnector with Retries {
 
-  import ApiDefinitionConnector._
+  val serviceBaseUrl = appConfig.apiDefinitionSandboxBaseUrl
 
-  private lazy val useProxy = appConfig.apiDefinitionSandboxUseProxy
-  private lazy val serviceBaseUrl = appConfig.apiDefinitionSandboxBaseUrl
-  private lazy val bearerToken = appConfig.apiDefinitionSandboxBearerToken
-  private lazy val apiKey = appConfig.apiDefinitionSandboxApiKey
+  val useProxy = appConfig.apiDefinitionSandboxUseProxy
+  val bearerToken = appConfig.apiDefinitionSandboxBearerToken
+  val apiKey = appConfig.apiDefinitionSandboxApiKey
 
-  def http: HttpClient = if (useProxy) proxiedHttpClient.withHeaders(bearerToken, apiKey) else httpClient
+  override def http: HttpClient = if (useProxy)
+    proxiedHttpClient.withHeaders(bearerToken, apiKey)
+  else
+    httpClient
 
-  def fetchAllApiDefinitions(email: Option[String] = None)
+  override def fetchAllApiDefinitions(email: Option[String] = None)
                             (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-
     retry {
-      http.GET[Seq[APIDefinition]](
-        ApiDefinitionConnector.definitionsUrl(serviceBaseUrl),
-        queryParams(email)
-      )
-      .map(_.sortBy(_.name))
-      .recover {
-        case _ => Seq()
-      }
+      super.fetchAllApiDefinitions(email)
     }
   }
 
-  def fetchApiDefinition(serviceName: String, email: Option[String] = None)
-                        (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-
+  override def fetchApiDefinition(serviceName: String, email: Option[String] = None)
+                                 (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
     retry {
-      http.GET[ExtendedAPIDefinition](
-        ApiDefinitionConnector.definitionUrl(serviceBaseUrl, serviceName),
-        queryParams(email)
-      )
-      .map(Some(_))
-      .recover {
-        case _ => None
-      }
+      super.fetchApiDefinition(serviceName, email)
     }
   }
 }

@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor.ActorSystem
 import akka.pattern.FutureTimeoutSupport
-import com.google.inject.Singleton
 import javax.inject.Inject
 import play.api.Logger
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig

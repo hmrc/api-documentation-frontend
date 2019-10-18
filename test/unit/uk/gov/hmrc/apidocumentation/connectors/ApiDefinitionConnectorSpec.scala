@@ -16,17 +16,25 @@
 
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
+import java.util.UUID
+
+import akka.actor.ActorSystem
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito
-import org.mockito.Mockito.when
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
+import play.api.Environment
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, LocalApiDefinitionConnector}
+import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, LocalApiDefinitionConnector, ProxiedHttpClient, RemoteApiDefinitionConnector}
+import uk.gov.hmrc.apidocumentation.models.APIDefinition
+import uk.gov.hmrc.apidocumentation.utils.FutureTimeoutSupportImpl
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionHttpMockingHelper
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
+import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, NotFoundException, Upstream5xxResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class ApiDefinitionConnectorSpec
   extends ConnectorSpec
@@ -34,6 +42,10 @@ class ApiDefinitionConnectorSpec
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val UpstreamException = Upstream5xxResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)
+
+  val bearer = "TestBearerToken"
+  val apiKeyTest = UUID.randomUUID().toString
+
 
   trait LocalSetup extends ApiDefinitionHttpMockingHelper {
     val mockConfig = mock[ApplicationConfig]
@@ -123,6 +135,69 @@ class ApiDefinitionConnectorSpec
 
         intercept[UpstreamException.type] {
           await(underTest.fetchAllApiDefinitions(None))
+        }
+      }
+    }
+  }
+
+
+  class RemoteSetup(proxyEnabled: Boolean = false) {
+    private val environmentName = "ENVIRONMENT"
+    private val futureTimeoutSupport = new FutureTimeoutSupportImpl
+    private val actorSystemTest = ActorSystem("test-actor-system")
+
+    implicit val hc = HeaderCarrier()
+    val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]
+    when(mockAppConfig.apiDefinitionSandboxBaseUrl).thenReturn("mockUrl")
+    when(mockAppConfig.apiDefinitionSandboxUseProxy).thenReturn(proxyEnabled)
+    when(mockAppConfig.apiDefinitionSandboxBearerToken).thenReturn(bearer)
+    when(mockAppConfig.apiDefinitionSandboxApiKey).thenReturn(apiKeyTest)
+    when(mockAppConfig.retryCount).thenReturn(1)
+
+    val mockEnvironment = mock[Environment]
+    when(mockEnvironment.toString).thenReturn(environmentName)
+
+    val mockProxiedHttpClient = mock[ProxiedHttpClient]
+    when(mockProxiedHttpClient.withHeaders(any(), any())).thenReturn(mockProxiedHttpClient)
+
+    val mockHttpClient = mock[HttpClient]
+
+    val connector = new RemoteApiDefinitionConnector(
+      mockAppConfig,
+      mockHttpClient,
+      mockProxiedHttpClient,
+      actorSystemTest,
+      futureTimeoutSupport
+    )
+  }
+
+  "remote connector" should {
+    "when retry logic is enabled should retry on failure" in new RemoteSetup(true) {
+
+      val response = Seq(apiDefinition("dummyAPI"))
+
+      when(mockProxiedHttpClient.GET[Seq[APIDefinition]](any[String](), any())( any(), any(), any())).thenReturn(
+        Future.failed(new BadRequestException("")),
+        Future.successful(response),
+        Future.successful(response),
+        Future.successful(response)
+      )
+      await(connector.fetchAllApiDefinitions()) shouldBe response
+    }
+
+
+    "http" when {
+      "configured not to use the proxy" should {
+        "use the HttpClient" in new RemoteSetup(proxyEnabled = false) {
+          connector.http shouldBe mockHttpClient
+        }
+      }
+
+      "configured to use the proxy" should {
+        "use the ProxiedHttpClient with the correct authorisation" in new RemoteSetup(proxyEnabled = true) {
+          connector.http shouldBe mockProxiedHttpClient
+
+          verify(mockProxiedHttpClient).withHeaders(bearer, apiKeyTest)
         }
       }
     }

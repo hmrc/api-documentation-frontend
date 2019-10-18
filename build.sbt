@@ -110,6 +110,7 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
 lazy val appName = "api-documentation-frontend"
 lazy val appDependencies: Seq[ModuleID] = allDeps
 
+
 lazy val compile = Seq(
   ws,
   cache,
@@ -154,6 +155,6 @@ def endToEndFilter(name: String): Boolean = name startsWith "endtoend"
 def unitFilter(name: String): Boolean = name startsWith "unit"
 
 // Coverage configuration
-coverageMinimum := 85
+coverageMinimum := 75
 coverageFailOnMinimum := true
 coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;config.*"
