@@ -18,7 +18,7 @@ package uk.gov.hmrc.apidocumentation.models
 
 import play.api.libs.json._
 
-object JsonFormatters {
+package object JsonFormatters {
   implicit val formatHttpMethod = EnumJson.enumFormat(HttpMethod)
   implicit val formatAPICategory = EnumJson.enumFormat(APICategory)
   implicit val formatAPIStatus = EnumJson.enumFormat(APIStatus)
@@ -44,7 +44,7 @@ object JsonFormatters {
 }
 
 
-object EnumJson {
+package object EnumJson {
 
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] = new Reads[E#Value] {
     def reads(json: JsValue): JsResult[E#Value] = json match {

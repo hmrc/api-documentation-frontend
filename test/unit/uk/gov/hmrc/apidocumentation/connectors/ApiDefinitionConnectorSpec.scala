@@ -49,7 +49,7 @@ class ApiDefinitionConnectorSpec
 
   trait LocalSetup extends ApiDefinitionHttpMockingHelper {
     val mockConfig = mock[ApplicationConfig]
-    val mockHttpClient = mock[HttpClient](Mockito.withSettings().verboseLogging())
+    val mockHttpClient = mock[HttpClient]
 
     val apiDefinitionUrl = "/mockUrl"
     when(mockConfig.apiDefinitionProductionBaseUrl).thenReturn(apiDefinitionUrl)
