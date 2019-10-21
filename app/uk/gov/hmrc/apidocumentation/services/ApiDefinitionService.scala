@@ -17,8 +17,9 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
+import play.api.Logger
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.{LocalApiDefinitionConnector, ApiDefinitionConnector, RemoteApiDefinitionConnector}
+import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, LocalApiDefinitionConnector, RemoteApiDefinitionConnector}
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.{API, Metrics}
@@ -83,4 +84,9 @@ class RemoteApiDefinitionService @Inject()(
   val api: API = API("remote-api-definition")
 
   val enabled: Boolean = appConfig.getConfBool("remote-api-definition.enabled", false)
+
+  Logger.info(s"Remote Api Definition Service is ${if(enabled) "enabled" else "disabled"}")
+
+  Logger.info(s"Remote Api Definition Service use-proxy = ${appConfig.apiDefinitionSandboxUseProxy}")
+  Logger.info(s"Remote Api Definition Service bseUrl = ${appConfig.apiDefinitionSandboxBaseUrl}")
 }
