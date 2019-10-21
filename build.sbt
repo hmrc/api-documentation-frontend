@@ -110,6 +110,7 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
 lazy val appName = "api-documentation-frontend"
 lazy val appDependencies: Seq[ModuleID] = allDeps
 
+
 lazy val compile = Seq(
   ws,
   cache,

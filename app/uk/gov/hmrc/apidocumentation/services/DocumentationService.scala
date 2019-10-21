@@ -17,11 +17,10 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.Inject
-
 import org.raml.v2.api.model.v10.resources.Resource
 import play.api.cache._
-import uk.gov.hmrc.apidocumentation.connectors.APIDocumentationConnector
-import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint, _}
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
@@ -31,41 +30,28 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
 
-class DocumentationService @Inject()(apiDefinitionConnector: APIDocumentationConnector,
-                                     cache: CacheApi, ramlLoader: RamlLoader, schemaService: SchemaService) {
+object DocumentationService {
+  def ramlUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
+    s"$serviceBaseUrl/apis/$serviceName/$version/documentation/application.raml"
+
+  def schemasUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
+    s"$serviceBaseUrl/apis/$serviceName/$version/documentation/schemas"
+
+}
+
+class DocumentationService @Inject()(appConfig: ApplicationConfig,
+                                     cache: CacheApi,
+                                     ramlLoader: RamlLoader,
+                                     schemaService: SchemaService) {
+
+  import DocumentationService.ramlUrl
 
   val defaultExpiration = 1.hour
 
-  def fetchAPIs(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-    val apiDefinitions = email match {
-      case Some(e) => apiDefinitionConnector.fetchByEmail(e)
-      case None => apiDefinitionConnector.fetchAll()
-    }
-    apiDefinitions map filterDefinitions
-  }
-
-  def fetchExtendedApiDefinition(serviceName: String, email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    val apiDefinition = email match {
-      case Some(e) => apiDefinitionConnector.fetchExtendedDefinitionByServiceNameAndEmail(serviceName, e)
-      case None => apiDefinitionConnector.fetchExtendedDefinitionByServiceName(serviceName)
-    }
-
-    apiDefinition.map(api => if(api.requiresTrust) None else Some(api))
-  }
-
-  def filterDefinitions(apis: Seq[APIDefinition]): Seq[APIDefinition] = {
-    apis.filter(api => !apiRequiresTrust(api) && api.hasActiveVersions)
-  }
-
-  private def apiRequiresTrust(api: APIDefinition): Boolean = {
-    api.requiresTrust match {
-      case Some(true) => true
-      case _ => false
-    }
-  }
+  private lazy val serviceBaseUrl = appConfig.localApiDocumentationUrl
 
   def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[RamlAndSchemas] = {
-      val url = s"${apiDefinitionConnector.serviceBaseUrl}/apis/$serviceName/$version/documentation/application.raml"
+      val url = ramlUrl(serviceBaseUrl,serviceName,version)
       fetchRAML(url, cacheBuster)
   }
 
@@ -83,15 +69,14 @@ class DocumentationService @Inject()(apiDefinitionConnector: APIDocumentationCon
       }
     } flatMap {
       case Success(api) => Future.successful(api)
-      case Failure(e) => {
+      case Failure(e) =>
         cache.remove(url)
         Future.failed(e)
-      }
     }
   }
 
-  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier) = {
-    fetchRAML(service, version, true).map { ramlAndSchemas =>
+  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier): Future[Seq[TestEndpoint]] = {
+    fetchRAML(service, version, cacheBuster = true).map { ramlAndSchemas =>
       buildResources(ramlAndSchemas.raml.resources.toSeq)
     }
   }
@@ -100,12 +85,12 @@ class DocumentationService @Inject()(apiDefinitionConnector: APIDocumentationCon
     resources.flatMap { res =>
       val nested = buildResources(res.resources())
       res.methods.headOption match {
-        case Some(_) => {
+        case Some(_) =>
           val methods = res.methods.map(_.method.toUpperCase).sorted
           val endpoint = TestEndpoint(s"{service-url}${res.resourcePath}", methods:_*)
 
           endpoint +: nested
-        }
+
         case _ => nested
       }
     }

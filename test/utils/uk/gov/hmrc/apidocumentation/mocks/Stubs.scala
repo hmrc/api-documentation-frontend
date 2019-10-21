@@ -34,7 +34,7 @@ trait ApiDefinition {
     val allDefinitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/all.json")).mkString
 
     stubFor(
-      get(urlMatching("/apis/definition"))
+      get(urlMatching("/api-definition"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
@@ -45,7 +45,7 @@ trait ApiDefinition {
   def fetchDefinition(serviceName: String) {
     val definitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/$serviceName.json")).mkString
     stubFor(
-      get(urlMatching(s"/apis/$serviceName/definition"))
+      get(urlMatching(s"/api-definition/$serviceName/extended"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
@@ -165,7 +165,7 @@ trait DeveloperFrontend {
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody("""[{"label": "John Doe", "href": "/developer/profile", "truncate" : false}, {"label":"Sign out", "href":"/developer/logout", "truncate" : false}]"""))
+            .withBody("""[{"label": "John Doe", "href": "/developer/profile", "truncate" : false, "openInNewWindow": false}, {"label":"Sign out", "href":"/developer/logout", "truncate" : false, "openInNewWindow": false}]"""))
     )
   }
 
@@ -175,7 +175,7 @@ trait DeveloperFrontend {
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody("""[{"label": "Sign in", "href": "/developer/login", "truncate" : false}, {"label":"Register", "href":"/developer/registration", "truncate" : false}]"""))
+            .withBody("""[{"label": "Sign in", "href": "/developer/login", "truncate" : false, "openInNewWindow": false}, {"label":"Register", "href":"/developer/registration", "truncate" : false, "openInNewWindow": false}]"""))
     )
   }
 }

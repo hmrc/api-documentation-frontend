@@ -43,7 +43,7 @@ class DownloadControllerSpec extends UnitSpec with MockitoSugar with WithFakeApp
     val version = "2.0"
     val resourceName = "some/resource"
 
-    val underTest = new DownloadController(documentationService, downloadService, loggedInUserProvider, errorHandler)
+    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadService, loggedInUserProvider, errorHandler)
 
     def theDownloadServiceWillReturnTheResult(result: Results.Status) = {
       when(downloadService.fetchResource(any(), any(), any())(any())).thenReturn(Future.successful(result))
@@ -56,34 +56,33 @@ class DownloadControllerSpec extends UnitSpec with MockitoSugar with WithFakeApp
 
 
     "download the resource when found" in new Setup {
-      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, version)))
+      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, version))
       theDownloadServiceWillReturnTheResult(Results.Ok)
 
       await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe OK
     }
 
     "return 404 code when the resource not found" in new Setup {
-      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, version)))
+      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, version))
       theDownloadServiceWillReturnTheResult(Results.NotFound)
 
       await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe NOT_FOUND
     }
 
     "error when the resource name contains '..'" in new Setup {
-      theDocumentationServiceWillReturnAnApiDefinition(Some(extendedApiDefinition(serviceName, version)))
+      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, version))
 
       await(underTest.downloadResource(serviceName, version, "../secret")(request)).header.status shouldBe INTERNAL_SERVER_ERROR
     }
 
     "redirect to the login page when the API is private and the user is not logged in" in new Setup {
       theUserIsNotLoggedIn()
-      theDocumentationServiceWillReturnAnApiDefinition(
-        Some(extendedApiDefinition(serviceName, version, APIAccessType.PRIVATE, false, false)))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinition(serviceName, version, APIAccessType.PRIVATE, false, false))
 
       val result = underTest.downloadResource(serviceName, version, resourceName)(request)
 
       verifyRedirectToLoginPage(result, serviceName, version)
     }
-
   }
 }

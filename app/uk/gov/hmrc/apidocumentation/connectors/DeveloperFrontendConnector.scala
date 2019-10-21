@@ -34,7 +34,7 @@ import scala.concurrent.Future
 class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig,  metrics: Metrics) {
 
   val api = API("third-party-developer-frontend")
-  lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
+  private lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = metrics.record(api) {
     http.GET[Seq[NavLink]](s"$serviceBaseUrl/developer/user-navlinks")

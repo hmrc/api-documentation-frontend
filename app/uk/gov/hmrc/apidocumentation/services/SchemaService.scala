@@ -51,7 +51,7 @@ class SchemaService {
     val schemaLocation = if (URI.create(schemaPath).isAbsolute) {
       schemaPath
     } else {
-      URI.create(s"${basePath}/${schemaPath}").normalize.toString
+      URI.create(s"$basePath/$schemaPath").normalize.toString
     }
 
     val newBasePath = schemaLocation.substring(0, schemaLocation.lastIndexOf('/'))
@@ -89,6 +89,7 @@ class SchemaService {
       schema.description.fold(referredSubSchema)(description => referredSubSchema.copy(description = Some(description)))
     }
 
+    @scala.annotation.tailrec
     def findSubschema(pathParts: Seq[String], schema: JsonSchema): JsonSchema = {
       pathParts match {
         case "definitions" +: pathPart +: Nil => {
@@ -100,15 +101,15 @@ class SchemaService {
               resolved
           }
         }
-        case "definitions" +: pathPart +: remainingPathParts => {
+        case "definitions" +: pathPart +: remainingPathParts =>
           findSubschema(remainingPathParts, schema.definitions(pathPart))
-        }
-        case pathPart +: Nil => {
+
+        case pathPart +: Nil =>
           schema.properties(pathPart)
-        }
-        case pathPart +: remainingPath => {
+
+        case pathPart +: remainingPath =>
           findSubschema(remainingPath, schema.properties(pathPart))
-        }
+
         case _ => schema
       }
     }
@@ -127,7 +128,7 @@ class SchemaService {
       case Some(ref) =>
         val x = resolve(schema, basePath, enclosingSchema)(ref)
         x
-      case _ => {
+      case _ =>
         val properties = resolveRefsInSubschemas(schema.properties, basePath, enclosingSchema)
         val patternProperties = resolveRefsInSubschemas(schema.patternProperties, basePath, enclosingSchema)
         val definitions = resolveRefsInSubschemas(schema.definitions, basePath, enclosingSchema)
@@ -141,7 +142,6 @@ class SchemaService {
           definitions = definitions,
           oneOf = oneOfs,
           ref = None)
-      }
     }
   }
 
@@ -153,9 +153,8 @@ class SchemaService {
     ref.split('#') match {
       case Array(referredSchemaPath, jsonPointer) =>
         (referredSchemaPath, splitJsonPointer(jsonPointer))
-      case Array(referredSchemaPath) => {
+      case Array(referredSchemaPath) =>
         (referredSchemaPath, Nil)
-      }
     }
   }
 }

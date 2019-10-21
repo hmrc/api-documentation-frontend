@@ -22,6 +22,7 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 class ApplicationConfig @Inject()(override val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
+
   override protected def mode = environment.mode
 
   private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing key: $key"))
@@ -31,12 +32,12 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
 
   lazy val analyticsToken = runModeConfiguration.getString(s"$env.google-analytics.token")
   lazy val analyticsHost = runModeConfiguration.getString(s"$env.google-analytics.host").getOrElse("auto")
-  lazy val betaFeedbackUrl = "/contact/beta-feedback"
-  lazy val betaFeedbackUnauthenticatedUrl: String = "/contact/beta-feedback-unauthenticated"
+//  lazy val betaFeedbackUrl = "/contact/beta-feedback"
+//  lazy val betaFeedbackUnauthenticatedUrl: String = "/contact/beta-feedback-unauthenticated"
   lazy val developerFrontendUrl = runModeConfiguration.getString(s"$env.developer-frontend-url").getOrElse("")
   lazy val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  lazy val apiDocumentationUrl = baseUrl("api-documentation")
+  lazy val localApiDocumentationUrl = baseUrl("local-api-documentation")
   lazy val developerFrontendBaseUrl = baseUrl("developer-frontend")
   lazy val thirdPartyDeveloperUrl = baseUrl("third-party-developer")
   lazy val securedCookie = runModeConfiguration.getBoolean(s"$env.cookie.secure").getOrElse(true)
@@ -54,6 +55,26 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   lazy val isStubMode = env == "Stub"
   lazy val xmlApiBaseUrl = runModeConfiguration.getString(s"$env.xml-api.base-url").getOrElse("https://www.gov.uk")
 
+  lazy val retryCount = runModeConfiguration.getInt("retryCount").getOrElse(0)
+  lazy val retryDelayMilliseconds = runModeConfiguration.getInt("retryDelayMilliseconds").getOrElse(500)
+
+  lazy val apiDefinitionSandboxBaseUrl = serviceUrl("api-definition")("api-definition-sandbox")
+  lazy val apiDefinitionSandboxUseProxy = useProxy("api-definition-sandbox")
+  lazy val apiDefinitionSandboxBearerToken = bearerToken("api-definition-sandbox")
+  lazy val apiDefinitionSandboxApiKey = apiKey("api-definition-sandbox")
+
+  lazy val apiDefinitionProductionBaseUrl = serviceUrl("api-definition")("api-definition-production")
+
+  def serviceUrl(key: String)(serviceName: String): String = {
+    if (useProxy(serviceName)) s"${baseUrl(serviceName)}/${getConfString(s"$serviceName.context", key)}"
+    else baseUrl(serviceName)
+  }
+
+  def useProxy(serviceName: String) = getConfBool(s"$serviceName.use-proxy", false)
+
+  def bearerToken(serviceName: String) = getConfString(s"$serviceName.bearer-token", "")
+
+  def apiKey(serviceName: String) = getConfString(s"$serviceName.api-key", "")
 
   private def buildRamlLoaderRewrites: Map[String, String] = {
     Map(runModeConfiguration.getString(s"$env.ramlLoaderUrlRewrite.from").getOrElse("") ->
