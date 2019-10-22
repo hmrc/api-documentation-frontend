@@ -61,8 +61,8 @@ class ProxyAwareApiDefinitionService @Inject()(principal: PrincipalApiDefinition
 
     for {
       maybePrincipalDefinition <- principalFuture
-      maybeRemoteSubordinate <- subordinateFuture
-      combined = combine(maybePrincipalDefinition, maybeRemoteSubordinate)
+      maybeSubordinateDefinition <- subordinateFuture
+      combined = combine(maybePrincipalDefinition, maybeSubordinateDefinition)
     } yield combined.filterNot(_.requiresTrust)
   }
 
@@ -91,10 +91,10 @@ class ProxyAwareApiDefinitionService @Inject()(principal: PrincipalApiDefinition
       }
     }
 
-    def combineVersions(productionVersions: Seq[ExtendedAPIVersion], sandboxVersions: Seq[ExtendedAPIVersion]): Seq[ExtendedAPIVersion] = {
-      val allVersions = (productionVersions.map(_.version) ++ sandboxVersions.map(_.version)).distinct.sorted
+    def combineVersions(principalVersions: Seq[ExtendedAPIVersion], subordinateVersions: Seq[ExtendedAPIVersion]): Seq[ExtendedAPIVersion] = {
+      val allVersions = (principalVersions.map(_.version) ++ subordinateVersions.map(_.version)).distinct.sorted
       allVersions.flatMap { version =>
-        combineVersion(productionVersions.find(_.version == version), sandboxVersions.find(_.version == version))
+        combineVersion(principalVersions.find(_.version == version), subordinateVersions.find(_.version == version))
       }
     }
 
