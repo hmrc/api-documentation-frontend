@@ -23,24 +23,24 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ProxyAwareApiDefinitionService @Inject()(localSvc: LocalApiDefinitionService,
-                                               remoteSvc: RemoteApiDefinitionService
+class ProxyAwareApiDefinitionService @Inject()(principal: PrincipalApiDefinitionService,
+                                               subordinate: SubordinateApiDefinitionService
                                               )(implicit val ec: ExecutionContext)
                                               extends BaseApiDefinitionService {
 
   def fetchAllDefinitions(thirdPartyDeveloperEmail: Option[String])
                          (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
 
-    val localFuture = localSvc.fetchAllDefinitions(thirdPartyDeveloperEmail)
-    val remoteFuture = remoteSvc.fetchAllDefinitions(thirdPartyDeveloperEmail)
-    mergeSeqsOfDefinitions(remoteFuture,localFuture) map filterDefinitions
+    val principalFuture = principal.fetchAllDefinitions(thirdPartyDeveloperEmail)
+    val subordinateFuture = subordinate.fetchAllDefinitions(thirdPartyDeveloperEmail)
+    mergeSeqsOfDefinitions(subordinateFuture,principalFuture) map filterDefinitions
   }
 
-  private def mergeSeqsOfDefinitions(remoteFuture: Future[Seq[APIDefinition]], localFuture: Future[Seq[APIDefinition]]) = {
+  private def mergeSeqsOfDefinitions(subordinateFuture: Future[Seq[APIDefinition]], principalFuture: Future[Seq[APIDefinition]]) = {
     for {
-      remoteDefinitions <- remoteFuture
-      localDefinitions <- localFuture
-    } yield (remoteDefinitions ++ localDefinitions.filterNot(_.isIn(remoteDefinitions))).sortBy(_.name)
+      subordinateDefinitions <- subordinateFuture
+      principalDefinitions <- principalFuture
+    } yield (subordinateDefinitions ++ principalDefinitions.filterNot(_.isIn(subordinateDefinitions))).sortBy(_.name)
   }
 
   def filterDefinitions(apis: Seq[APIDefinition]): Seq[APIDefinition] = {
@@ -56,36 +56,36 @@ class ProxyAwareApiDefinitionService @Inject()(localSvc: LocalApiDefinitionServi
 
   def fetchExtendedDefinition(serviceName: String, thirdPartyDeveloperEmail: Option[String])
                         (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    val localFuture = localSvc.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
-    val remoteFuture = remoteSvc.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
+    val principalFuture = principal.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
+    val subordinateFuture = subordinate.fetchExtendedDefinition(serviceName, thirdPartyDeveloperEmail)
 
     for {
-      maybeLocalDefinition <- localFuture
-      maybeRemoteDefinition <- remoteFuture
-      combined = combine(maybeLocalDefinition, maybeRemoteDefinition)
+      maybePrincipalDefinition <- principalFuture
+      maybeRemoteSubordinate <- subordinateFuture
+      combined = combine(maybePrincipalDefinition, maybeRemoteSubordinate)
     } yield combined.filterNot(_.requiresTrust)
   }
 
-  private def combine(maybeLocalDefinition: Option[ExtendedAPIDefinition], maybeRemoteDefinition: Option[ExtendedAPIDefinition]) = {
-    def findProductionDefinition(maybeLocalDefinition: Option[ExtendedAPIDefinition], maybeRemoteDefinition: Option[ExtendedAPIDefinition]) = {
-      if (maybeLocalDefinition.exists(_.versions.exists(_.productionAvailability.isDefined))) {
-        maybeLocalDefinition
+  private def combine(maybePrincipalDefinition: Option[ExtendedAPIDefinition], maybeSubordinateDefinition: Option[ExtendedAPIDefinition]) = {
+    def findProductionDefinition(maybePrincipalDefinition: Option[ExtendedAPIDefinition], maybeSubordinateDefinition: Option[ExtendedAPIDefinition]) = {
+      if (maybePrincipalDefinition.exists(_.versions.exists(_.productionAvailability.isDefined))) {
+        maybePrincipalDefinition
       } else {
-        maybeRemoteDefinition
+        maybeSubordinateDefinition
       }
     }
 
-    def findSandboxDefinition(maybeLocalDefinition: Option[ExtendedAPIDefinition], maybeRemoteDefinition: Option[ExtendedAPIDefinition]) = {
-      if (maybeLocalDefinition.exists(_.versions.exists(_.sandboxAvailability.isDefined))) {
-        maybeLocalDefinition
+    def findSandboxDefinition(maybePrincipalDefinition: Option[ExtendedAPIDefinition], maybeSubordinateDefinition: Option[ExtendedAPIDefinition]) = {
+      if (maybePrincipalDefinition.exists(_.versions.exists(_.sandboxAvailability.isDefined))) {
+        maybePrincipalDefinition
       } else {
-        maybeRemoteDefinition
+        maybeSubordinateDefinition
       }
     }
 
-    def combineVersion(maybeProductionVersion: Option[ExtendedAPIVersion], maybeSandboxVersion: Option[ExtendedAPIVersion]) = {
-      maybeProductionVersion.fold(maybeSandboxVersion) { productionVersion =>
-        maybeSandboxVersion.fold(maybeProductionVersion) { sandboxVersion =>
+    def combineVersion(maybePrincipalVersion: Option[ExtendedAPIVersion], maybeSubordinateVersion: Option[ExtendedAPIVersion]) = {
+      maybePrincipalVersion.fold(maybeSubordinateVersion) { productionVersion =>
+        maybeSubordinateVersion.fold(maybePrincipalVersion) { sandboxVersion =>
           Some(sandboxVersion.copy(productionAvailability = productionVersion.productionAvailability))
         }
       }
@@ -98,8 +98,8 @@ class ProxyAwareApiDefinitionService @Inject()(localSvc: LocalApiDefinitionServi
       }
     }
 
-    val maybeProductionDefinition = findProductionDefinition(maybeLocalDefinition, maybeRemoteDefinition)
-    val maybeSandboxDefinition = findSandboxDefinition(maybeLocalDefinition, maybeRemoteDefinition)
+    val maybeProductionDefinition = findProductionDefinition(maybePrincipalDefinition, maybeSubordinateDefinition)
+    val maybeSandboxDefinition = findSandboxDefinition(maybePrincipalDefinition, maybeSubordinateDefinition)
 
     maybeProductionDefinition.fold(maybeSandboxDefinition) { productionDefinition =>
       maybeSandboxDefinition.fold(maybeProductionDefinition) { sandboxDefinition =>

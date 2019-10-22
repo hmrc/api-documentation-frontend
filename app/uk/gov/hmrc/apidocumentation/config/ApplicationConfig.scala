@@ -37,7 +37,7 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   lazy val developerFrontendUrl = runModeConfiguration.getString(s"$env.developer-frontend-url").getOrElse("")
   lazy val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  lazy val localApiDocumentationUrl = baseUrl("local-api-documentation")
+  lazy val apiDocumentationUrl = baseUrl("api-documentation")
   lazy val developerFrontendBaseUrl = baseUrl("developer-frontend")
   lazy val thirdPartyDeveloperUrl = baseUrl("third-party-developer")
   lazy val securedCookie = runModeConfiguration.getBoolean(s"$env.cookie.secure").getOrElse(true)
@@ -58,12 +58,13 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   lazy val retryCount = runModeConfiguration.getInt("retryCount").getOrElse(0)
   lazy val retryDelayMilliseconds = runModeConfiguration.getInt("retryDelayMilliseconds").getOrElse(500)
 
-  lazy val apiDefinitionSandboxBaseUrl = serviceUrl("api-definition")("api-definition-sandbox")
-  lazy val apiDefinitionSandboxUseProxy = useProxy("api-definition-sandbox")
-  lazy val apiDefinitionSandboxBearerToken = bearerToken("api-definition-sandbox")
-  lazy val apiDefinitionSandboxApiKey = apiKey("api-definition-sandbox")
+  private val subordinateServiceName = "api-definition-subordinate"
+  lazy val apiDefinitionSubordinateBaseUrl = serviceUrl("api-definition")(subordinateServiceName)
+  lazy val apiDefinitionSubordinateUseProxy = useProxy(subordinateServiceName)
+  lazy val apiDefinitionSubordinateBearerToken = bearerToken(subordinateServiceName)
+  lazy val apiDefinitionSubordinateApiKey = apiKey(subordinateServiceName)
 
-  lazy val apiDefinitionProductionBaseUrl = serviceUrl("api-definition")("api-definition-production")
+  lazy val apiDefinitionPrincipalBaseUrl = serviceUrl("api-definition")("api-definition-principal")
 
   def serviceUrl(key: String)(serviceName: String): String = {
     if (useProxy(serviceName)) s"${baseUrl(serviceName)}/${getConfString(s"$serviceName.context", key)}"

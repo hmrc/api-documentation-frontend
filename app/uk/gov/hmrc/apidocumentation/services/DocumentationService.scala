@@ -48,7 +48,7 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
 
   val defaultExpiration = 1.hour
 
-  private lazy val serviceBaseUrl = appConfig.localApiDocumentationUrl
+  private lazy val serviceBaseUrl = appConfig.apiDocumentationUrl
 
   def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[RamlAndSchemas] = {
       val url = ramlUrl(serviceBaseUrl,serviceName,version)

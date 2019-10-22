@@ -80,31 +80,31 @@ object ApiDefinitionConnector {
 }
 
 @Singleton
-class LocalApiDefinitionConnector @Inject()(
+class PrincipalApiDefinitionConnector @Inject()(
       val http: HttpClient,
       val appConfig: ApplicationConfig
     )
-   (implicit val ec: ExecutionContext) extends ApiDefinitionConnector {
+                                               (implicit val ec: ExecutionContext) extends ApiDefinitionConnector {
 
-  val serviceBaseUrl = appConfig.apiDefinitionProductionBaseUrl
+  val serviceBaseUrl = appConfig.apiDefinitionPrincipalBaseUrl
 }
 
 @Singleton
-class RemoteApiDefinitionConnector @Inject()(
+class SubordinateApiDefinitionConnector @Inject()(
     val appConfig: ApplicationConfig,
     val httpClient: HttpClient,
     val proxiedHttpClient: ProxiedHttpClient,
     val actorSystem: ActorSystem,
     val futureTimeout: FutureTimeoutSupport
     )
-    (implicit val ec: ExecutionContext)
+                                                 (implicit val ec: ExecutionContext)
     extends ApiDefinitionConnector with Retries {
 
-  val serviceBaseUrl = appConfig.apiDefinitionSandboxBaseUrl
+  val serviceBaseUrl = appConfig.apiDefinitionSubordinateBaseUrl
 
-  val useProxy = appConfig.apiDefinitionSandboxUseProxy
-  val bearerToken = appConfig.apiDefinitionSandboxBearerToken
-  val apiKey = appConfig.apiDefinitionSandboxApiKey
+  val useProxy = appConfig.apiDefinitionSubordinateUseProxy
+  val bearerToken = appConfig.apiDefinitionSubordinateBearerToken
+  val apiKey = appConfig.apiDefinitionSubordinateApiKey
 
   override def http: HttpClient = if (useProxy)
     proxiedHttpClient.withHeaders(bearerToken, apiKey)
