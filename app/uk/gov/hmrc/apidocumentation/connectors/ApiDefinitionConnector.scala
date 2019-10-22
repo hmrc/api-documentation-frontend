@@ -36,7 +36,7 @@ trait ApiDefinitionConnector {
   implicit val ec: ExecutionContext
 
   def fetchAllApiDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-    Logger.info("fetchAllApiDefinitions")
+    Logger.info(s"${this.getClass.getSimpleName} - fetchAllApiDefinitions")
     val r= http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(email))
 
     r.map(defns => defns.foreach(defn => Logger.info(s"Found ${defn.name}")))
@@ -52,7 +52,7 @@ trait ApiDefinitionConnector {
   }
 
   def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    Logger.info("fetchApiDefinition")
+    Logger.info(s"${this.getClass.getSimpleName} - fetchApiDefinition")
     val r = http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl,serviceName), queryParams(email))
 
     r.map(defn => Logger.info(s"Found ${defn.name}"))
@@ -113,7 +113,6 @@ class RemoteApiDefinitionConnector @Inject()(
 
   override def fetchAllApiDefinitions(email: Option[String] = None)
                             (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-    Logger.info("fetchAllApiDefinitions")
     retry {
       super.fetchAllApiDefinitions(email)
     }
@@ -121,7 +120,6 @@ class RemoteApiDefinitionConnector @Inject()(
 
   override def fetchApiDefinition(serviceName: String, email: Option[String] = None)
                                  (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    Logger.info("fetchApiDefinition")
     retry {
       super.fetchApiDefinition(serviceName, email)
     }

@@ -69,7 +69,7 @@ class LocalApiDefinitionService @Inject()(
                                            val metrics: Metrics
 ) extends ApiDefinitionService {
 
-  val api: API = API("local-api-definition")
+  val api: API = API("api-definition-principal")
 
   val enabled: Boolean = true
 }
@@ -81,9 +81,9 @@ class RemoteApiDefinitionService @Inject()(
                                             val metrics: Metrics
    ) extends ApiDefinitionService {
 
-  val api: API = API("remote-api-definition")
+  val api: API = API("api-definition-subordinate")
 
-  val enabled: Boolean = appConfig.getConfBool("remote-api-definition.enabled", false)
+  val enabled: Boolean = appConfig.showSandboxAvailability
 
   Logger.info(s"Remote Api Definition Service is ${if(enabled) "enabled" else "disabled"}")
 
