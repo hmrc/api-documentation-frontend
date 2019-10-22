@@ -19,7 +19,7 @@ package uk.gov.hmrc.apidocumentation.services
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, LocalApiDefinitionConnector, RemoteApiDefinitionConnector}
+import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, PrincipalApiDefinitionConnector, SubordinateApiDefinitionConnector}
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.{API, Metrics}
@@ -64,9 +64,9 @@ trait ApiDefinitionService extends BaseApiDefinitionService {
 }
 
 @Singleton
-class LocalApiDefinitionService @Inject()(
-                                           val raw: LocalApiDefinitionConnector,
-                                           val metrics: Metrics
+class PrincipalApiDefinitionService @Inject()(
+                                               val raw: PrincipalApiDefinitionConnector,
+                                               val metrics: Metrics
 ) extends ApiDefinitionService {
 
   val api: API = API("api-definition-principal")
@@ -75,18 +75,18 @@ class LocalApiDefinitionService @Inject()(
 }
 
 @Singleton
-class RemoteApiDefinitionService @Inject()(
-                                            val raw: RemoteApiDefinitionConnector,
-                                            val appConfig: ApplicationConfig,
-                                            val metrics: Metrics
+class SubordinateApiDefinitionService @Inject()(
+                                                 val raw: SubordinateApiDefinitionConnector,
+                                                 val appConfig: ApplicationConfig,
+                                                 val metrics: Metrics
    ) extends ApiDefinitionService {
 
   val api: API = API("api-definition-subordinate")
 
   val enabled: Boolean = appConfig.showSandboxAvailability
 
-  Logger.info(s"Remote Api Definition Service is ${if(enabled) "enabled" else "disabled"}")
+  Logger.info(s"Subordinate Api Definition Service is ${if(enabled) "enabled" else "disabled"}")
 
-  Logger.info(s"Remote Api Definition Service use-proxy = ${appConfig.apiDefinitionSandboxUseProxy}")
-  Logger.info(s"Remote Api Definition Service bseUrl = ${appConfig.apiDefinitionSandboxBaseUrl}")
+  Logger.info(s"Subordinate Api Definition Service use-proxy = ${appConfig.apiDefinitionSubordinateUseProxy}")
+  Logger.info(s"Subordinate Api Definition Service bseUrl = ${appConfig.apiDefinitionSubordinateBaseUrl}")
 }

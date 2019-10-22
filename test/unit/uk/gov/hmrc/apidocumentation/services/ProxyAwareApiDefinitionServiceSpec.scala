@@ -21,7 +21,7 @@ import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.services.{LocalApiDefinitionService, ProxyAwareApiDefinitionService, RemoteApiDefinitionService}
+import uk.gov.hmrc.apidocumentation.services.{PrincipalApiDefinitionService, ProxyAwareApiDefinitionService, SubordinateApiDefinitionService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, BaseApiDefinitionServiceMockingHelper}
@@ -44,8 +44,8 @@ class ProxyAwareApiDefinitionServiceSpec
     val remoteDef = localDef1.copy(versions = Seq(APIVersion("2.0", None, APIStatus.BETA, Seq.empty)))
     val APIDefinitions = Seq(localDef1, localDef2)
 
-    val local = mock[LocalApiDefinitionService]
-    val remote = mock[RemoteApiDefinitionService]
+    val local = mock[PrincipalApiDefinitionService]
+    val remote = mock[SubordinateApiDefinitionService]
 
     val productionV1Availability = apiAvailability().asPrivate
     val sandboxV1Availability = apiAvailability().asPublic

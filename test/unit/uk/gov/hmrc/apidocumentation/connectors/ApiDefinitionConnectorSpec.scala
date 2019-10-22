@@ -26,7 +26,7 @@ import org.scalatest.OptionValues
 import play.api.Environment
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, LocalApiDefinitionConnector, ProxiedHttpClient, RemoteApiDefinitionConnector}
+import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, PrincipalApiDefinitionConnector, ProxiedHttpClient, SubordinateApiDefinitionConnector}
 import uk.gov.hmrc.apidocumentation.models.APIDefinition
 import uk.gov.hmrc.apidocumentation.utils.FutureTimeoutSupportImpl
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -46,13 +46,12 @@ class ApiDefinitionConnectorSpec
   val bearer = "TestBearerToken"
   val apiKeyTest = UUID.randomUUID().toString
 
-
   trait LocalSetup extends ApiDefinitionHttpMockingHelper {
     val mockConfig = mock[ApplicationConfig]
     val mockHttpClient = mock[HttpClient]
 
     val apiDefinitionUrl = "/mockUrl"
-    when(mockConfig.apiDefinitionProductionBaseUrl).thenReturn(apiDefinitionUrl)
+    when(mockConfig.apiDefinitionPrincipalBaseUrl).thenReturn(apiDefinitionUrl)
 
     val serviceName = "someService"
     val userEmail = "3rdparty@example.com"
@@ -60,7 +59,7 @@ class ApiDefinitionConnectorSpec
     val apiName1 = "Calendar"
     val apiName2 = "HelloWorld"
 
-    val underTest = new LocalApiDefinitionConnector(mockHttpClient, mockConfig)
+    val underTest = new PrincipalApiDefinitionConnector(mockHttpClient, mockConfig)
 
   }
 
@@ -148,10 +147,10 @@ class ApiDefinitionConnectorSpec
 
     implicit val hc = HeaderCarrier()
     val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]
-    when(mockAppConfig.apiDefinitionSandboxBaseUrl).thenReturn("mockUrl")
-    when(mockAppConfig.apiDefinitionSandboxUseProxy).thenReturn(proxyEnabled)
-    when(mockAppConfig.apiDefinitionSandboxBearerToken).thenReturn(bearer)
-    when(mockAppConfig.apiDefinitionSandboxApiKey).thenReturn(apiKeyTest)
+    when(mockAppConfig.apiDefinitionSubordinateBaseUrl).thenReturn("mockUrl")
+    when(mockAppConfig.apiDefinitionSubordinateUseProxy).thenReturn(proxyEnabled)
+    when(mockAppConfig.apiDefinitionSubordinateBearerToken).thenReturn(bearer)
+    when(mockAppConfig.apiDefinitionSubordinateApiKey).thenReturn(apiKeyTest)
     when(mockAppConfig.retryCount).thenReturn(1)
 
     val mockEnvironment = mock[Environment]
@@ -162,7 +161,7 @@ class ApiDefinitionConnectorSpec
 
     val mockHttpClient = mock[HttpClient]
 
-    val connector = new RemoteApiDefinitionConnector(
+    val connector = new SubordinateApiDefinitionConnector(
       mockAppConfig,
       mockHttpClient,
       mockProxiedHttpClient,

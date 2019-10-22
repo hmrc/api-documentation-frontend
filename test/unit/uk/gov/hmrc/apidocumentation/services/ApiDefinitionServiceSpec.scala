@@ -19,8 +19,8 @@ package unit.uk.gov.hmrc.apidocumentation.services
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.{LocalApiDefinitionConnector, RemoteApiDefinitionConnector}
-import uk.gov.hmrc.apidocumentation.services.{LocalApiDefinitionService, RemoteApiDefinitionService}
+import uk.gov.hmrc.apidocumentation.connectors.{PrincipalApiDefinitionConnector, SubordinateApiDefinitionConnector}
+import uk.gov.hmrc.apidocumentation.services.{PrincipalApiDefinitionService, SubordinateApiDefinitionService}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.NoopMetrics
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -36,9 +36,9 @@ class ApiDefinitionServiceSpec extends UnitSpec
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val loggedInUserEmail = "3rdparty@example.com"
 
-    val connector = mock[LocalApiDefinitionConnector]
+    val connector = mock[PrincipalApiDefinitionConnector]
 
-    val underTest = new LocalApiDefinitionService(connector, NoopMetrics)
+    val underTest = new PrincipalApiDefinitionService(connector, NoopMetrics)
 
   }
 
@@ -48,9 +48,9 @@ class ApiDefinitionServiceSpec extends UnitSpec
 
     val appConfig = mock[ApplicationConfig]
 
-    val connector = mock[RemoteApiDefinitionConnector]
+    val connector = mock[SubordinateApiDefinitionConnector]
 
-    val underTest = new RemoteApiDefinitionService(connector, appConfig, NoopMetrics)
+    val underTest = new SubordinateApiDefinitionService(connector, appConfig, NoopMetrics)
 
   }
 
