@@ -19,6 +19,7 @@ package uk.gov.hmrc.apidocumentation.connectors
 import akka.actor.ActorSystem
 import akka.pattern.FutureTimeoutSupport
 import javax.inject.{Inject, Singleton}
+import play.api.Logger
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector.{definitionUrl, definitionsUrl, queryParams}
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
@@ -35,22 +36,32 @@ trait ApiDefinitionConnector {
   implicit val ec: ExecutionContext
 
   def fetchAllApiDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
+    Logger.info("fetchAllApiDefinitions")
     val r= http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(email))
-      r.map(e => e.sortBy(
-        _.name
-      ))
-      .recover {
-        case _ : NotFoundException => Seq()
-        case e : Upstream5xxResponse => throw e
-      }
+
+    r.map(defns => defns.foreach(defn => Logger.info(s"Found ${defn.name}")))
+
+    r.map(e => e.sortBy(
+      _.name
+    ))
+    .recover {
+      case _ : NotFoundException => { Logger.info("Not found"); Seq.empty}
+      case e : Upstream5xxResponse => { Logger.error(s"Failed ${e}"); throw e}
+      case e => { Logger.error(s"Failed ${e}"); throw e}
+    }
   }
 
   def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl,serviceName), queryParams(email))
-      .map(Some(_))
+    Logger.info("fetchApiDefinition")
+    val r = http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl,serviceName), queryParams(email))
+
+    r.map(defn => Logger.info(s"Found ${defn.name}"))
+
+    r.map(Some(_))
       .recover {
-        case _ : NotFoundException => None
-        case e : Upstream5xxResponse => throw e
+        case _ : NotFoundException => { Logger.info("Not found"); None}
+        case e : Upstream5xxResponse => { Logger.error(s"Failed ${e}"); throw e}
+        case e => { Logger.error(s"Failed ${e}"); throw e}
       }
   }
 }
@@ -102,6 +113,7 @@ class RemoteApiDefinitionConnector @Inject()(
 
   override def fetchAllApiDefinitions(email: Option[String] = None)
                             (implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
+    Logger.info("fetchAllApiDefinitions")
     retry {
       super.fetchAllApiDefinitions(email)
     }
@@ -109,6 +121,7 @@ class RemoteApiDefinitionConnector @Inject()(
 
   override def fetchApiDefinition(serviceName: String, email: Option[String] = None)
                                  (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
+    Logger.info("fetchApiDefinition")
     retry {
       super.fetchApiDefinition(serviceName, email)
     }
