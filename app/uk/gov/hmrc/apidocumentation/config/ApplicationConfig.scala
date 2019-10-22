@@ -47,10 +47,11 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   lazy val showSandboxAvailability = runModeConfiguration.getBoolean(s"$env.features.showSandboxAvailability").getOrElse(false)
   lazy val productionApiHost = runModeConfiguration.getString("platform.production.api.host")
   lazy val productionWwwHost = runModeConfiguration.getString("platform.production.www.host")
-  lazy val productionApiBaseUrl = apiBaseUrl("platform.production.api")
+  lazy val productionApiBaseUrl = platformBaseUrl("platform.production.api")
   lazy val sandboxApiHost = runModeConfiguration.getString("platform.sandbox.api.host")
   lazy val sandboxWwwHost = runModeConfiguration.getString("platform.sandbox.www.host")
-  lazy val sandboxApiBaseUrl = apiBaseUrl("platform.sandbox.api")
+  lazy val sandboxApiBaseUrl = platformBaseUrl("platform.sandbox.api")
+  lazy val sandboxWwwBaseUrl = platformBaseUrl("platform.sandbox.www")
   lazy val title = "HMRC Developer Hub"
   lazy val isStubMode = env == "Stub"
   lazy val xmlApiBaseUrl = runModeConfiguration.getString(s"$env.xml-api.base-url").getOrElse("https://www.gov.uk")
@@ -82,7 +83,7 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
       runModeConfiguration.getString(s"$env.ramlLoaderUrlRewrite.to").getOrElse(""))
   }
 
-  private def apiBaseUrl(key: String) = {
+  private def platformBaseUrl(key: String) = {
     (runModeConfiguration.getString(s"$key.protocol"), runModeConfiguration.getString(s"$key.host")) match {
       case (Some(protocol), Some(host)) => s"$protocol://$host"
       case (None, Some(host)) => s"https://$host"
