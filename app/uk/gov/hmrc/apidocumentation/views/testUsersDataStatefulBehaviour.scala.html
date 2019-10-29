@@ -31,7 +31,6 @@
         <ul class="list">
             <li><a href="@controllers.routes.DocumentationController.testingPage()">Getting started</a></li>
             <li>Test users, test data and stateful behaviour</li>
-            <li><a href="@controllers.routes.DocumentationController.testingDataClearDownPage()">Data clear down</a></li>
         </ul>
     </nav>
     <hr aria-hidden="true">
@@ -81,7 +80,6 @@
     </p>
 
     @pagination(
-        previous = Some(Pagination("Getting started", controllers.routes.DocumentationController.testingPage().url)),
-        next = Some(Pagination("Data cleardown", controllers.routes.DocumentationController.testingDataClearDownPage().url)))
+        previous = Some(Pagination("Getting started", controllers.routes.DocumentationController.testingPage().url)))
 
 }
