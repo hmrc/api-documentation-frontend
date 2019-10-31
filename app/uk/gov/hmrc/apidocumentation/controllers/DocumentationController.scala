@@ -87,11 +87,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       Future.successful(Ok(testUsersDataStatefulBehaviour(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
   }
 
-  def testingDataClearDownPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      Future.successful(Ok(testingDataClearDown(pageAttributes("Data Clear Down", routes.DocumentationController.testingDataClearDownPage().url, navLinks))))
-  }
-
   def tutorialsPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       Future.successful(Ok(tutorials(pageAttributes("Tutorials", routes.DocumentationController.tutorialsPage().url, navLinks))))
