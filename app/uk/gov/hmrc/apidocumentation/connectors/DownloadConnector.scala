@@ -52,11 +52,12 @@ class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig) {
               case Some(Seq(length)) =>
                 Ok.sendEntity(HttpEntity.Streamed(body, Some(length.toLong), Some(contentType)))
               case _ =>
-                Ok.chunked(body).as(contentType)
+                Ok.sendEntity(HttpEntity.Streamed(body, None, Some(contentType)))
+//                Ok.chunked(body).as(contentType)
             }
           }
           case NOT_FOUND => throw new NotFoundException(s"$resource not found for $serviceName $version")
-          case _ => throw new InternalServerException(s"Error downloading $resource for $serviceName $version")
+          case status => throw new InternalServerException(s"Error (status $status) downloading $resource for $serviceName $version")
         }
     }
   }
