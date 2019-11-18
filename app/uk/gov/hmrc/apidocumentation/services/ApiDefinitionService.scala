@@ -17,17 +17,13 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, PrincipalApiDefinitionConnector, SubordinateApiDefinitionConnector}
+import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.{API, Metrics}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.Future.successful
-
 
 trait BaseApiDefinitionService {
   def fetchExtendedDefinition(serviceName: String, email: Option[String])
@@ -36,57 +32,21 @@ trait BaseApiDefinitionService {
   def fetchAllDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 }
 
-trait ApiDefinitionService extends BaseApiDefinitionService {
-  def raw: ApiDefinitionConnector
-  def metrics: Metrics
-
-  def api: API
-  def enabled: Boolean
+@Singleton
+class ApiDefinitionService @Inject()(
+                                      val raw: ApiDefinitionConnector,
+                                      val metrics: Metrics
+                                             ) extends BaseApiDefinitionService {
+  val api: API = API("api-definition")
 
   def fetchExtendedDefinition(serviceName: String, email: Option[String] = None)
                             (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
-    if (enabled) {
-      metrics.record(api) {
-        raw.fetchApiDefinition(serviceName, email)
-      }
-    } else {
-      successful(None)
+    metrics.record(api) {
+      raw.fetchApiDefinition(serviceName, email)
     }
 
   def fetchAllDefinitions(email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
-    if (enabled) {
-      metrics.record(api) {
-        raw.fetchAllApiDefinitions(email)
-      }
-    } else {
-      successful(Seq.empty)
+    metrics.record(api) {
+      raw.fetchAllApiDefinitions(email)
     }
-}
-
-@Singleton
-class PrincipalApiDefinitionService @Inject()(
-                                               val raw: PrincipalApiDefinitionConnector,
-                                               val metrics: Metrics
-) extends ApiDefinitionService {
-
-  val api: API = API("api-definition-principal")
-
-  val enabled: Boolean = true
-}
-
-@Singleton
-class SubordinateApiDefinitionService @Inject()(
-                                                 val raw: SubordinateApiDefinitionConnector,
-                                                 val appConfig: ApplicationConfig,
-                                                 val metrics: Metrics
-   ) extends ApiDefinitionService {
-
-  val api: API = API("api-definition-subordinate")
-
-  val enabled: Boolean = appConfig.showSandboxAvailability
-
-  Logger.info(s"Subordinate Api Definition Service is ${if(enabled) "enabled" else "disabled"}")
-
-  Logger.info(s"Subordinate Api Definition Service use-proxy = ${appConfig.apiDefinitionSubordinateUseProxy}")
-  Logger.info(s"Subordinate Api Definition Service bseUrl = ${appConfig.apiDefinitionSubordinateBaseUrl}")
 }

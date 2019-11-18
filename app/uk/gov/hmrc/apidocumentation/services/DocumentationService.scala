@@ -32,10 +32,10 @@ import scala.util.{Failure, Success, Try}
 
 object DocumentationService {
   def ramlUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
-    s"$serviceBaseUrl/apis/$serviceName/$version/documentation/application.raml"
+    s"$serviceBaseUrl/api-definition/$serviceName/$version/documentation/application.raml"
 
   def schemasUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
-    s"$serviceBaseUrl/apis/$serviceName/$version/documentation/schemas"
+    s"$serviceBaseUrl/api-definition/$serviceName/$version/documentation/schemas"
 
 }
 
@@ -48,7 +48,7 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
 
   val defaultExpiration = 1.hour
 
-  private lazy val serviceBaseUrl = appConfig.apiDocumentationUrl
+  private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 
   def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[RamlAndSchemas] = {
       val url = ramlUrl(serviceBaseUrl,serviceName,version)

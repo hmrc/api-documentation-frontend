@@ -39,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 class DocumentationController @Inject()(documentationService: DocumentationService,
-                                        apiDefinitionService: ProxyAwareApiDefinitionService,
+                                        apiDefinitionService: ApiDefinitionService,
                                         navigationService: NavigationService,
                                         partialsService: PartialsService,
                                         loggedInUserProvider: LoggedInUserProvider,

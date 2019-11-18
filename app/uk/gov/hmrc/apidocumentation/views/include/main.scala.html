@@ -16,12 +16,11 @@
 
 @import uk.gov.hmrc.apidocumentation.views.html.include
 @import layouts.{govuk_template => hmrcGovUkTemplate}
-@import uk.gov.hmrc.apidocumentation.views.html.partials
-@import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
-@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
-
+@import uk.gov.hmrc.apidocumentation.views.html.{include, partials}
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers, layouts => uiLayouts}
+@import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
 @(title: Option[String] = None,
     navTitle: Option[String] = None,
     navTitleLink: Option[play.api.mvc.Call] = None,

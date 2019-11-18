@@ -16,8 +16,6 @@
 
 package unit.uk.gov.hmrc.apidocumentation.controllers
 
-import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
-import uk.gov.hmrc.apidocumentation.models._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
@@ -25,8 +23,9 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.controllers.LoggedInUserProvider
-import uk.gov.hmrc.apidocumentation.models.Developer
-import uk.gov.hmrc.apidocumentation.services.{BaseApiDefinitionService, DocumentationService, ProxyAwareApiDefinitionService}
+import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
+import uk.gov.hmrc.apidocumentation.models.{Developer, _}
+import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
@@ -35,9 +34,9 @@ import scala.concurrent.Future
 
 class ControllerCommonSetup
   extends UnitSpec
-  with ScalaFutures
-  with MockitoSugar
-  with ApiDefinitionTestDataHelper {
+    with ScalaFutures
+    with MockitoSugar
+    with ApiDefinitionTestDataHelper {
 
   implicit val request = FakeRequest()
   implicit val hc = HeaderCarrier()
@@ -51,7 +50,7 @@ class ControllerCommonSetup
 
   val documentationService = mock[DocumentationService]
   val loggedInUserProvider = mock[LoggedInUserProvider]
-  val apiDefinitionService = mock[ProxyAwareApiDefinitionService]
+  val apiDefinitionService = mock[ApiDefinitionService]
 
   def anApiDefinition(serviceName: String, version: String): APIDefinition = {
     APIDefinition(serviceName, "Hello World", "Say Hello World", "hello", None, None,
@@ -125,7 +124,7 @@ class ControllerCommonSetup
     when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(None))
   }
 
-  def  theDefinitionServiceWillFail(exception: Throwable) = {
+  def theDefinitionServiceWillFail(exception: Throwable) = {
     when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.failed(exception))
 
     when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))

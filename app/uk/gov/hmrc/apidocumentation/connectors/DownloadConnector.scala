@@ -17,7 +17,6 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.http.HttpEntity
 import play.api.http.Status._
 import play.api.libs.ws._
@@ -32,12 +31,12 @@ import scala.concurrent.Future
 @Singleton
 class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig) {
 
-  private lazy val serviceBaseUrl = appConfig.apiDocumentationUrl
+  private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 
   private def buildRequest(resourceUrl: String): WSRequest = ws.url(resourceUrl)
 
   private def makeRequest(serviceName: String, version: String, resource: String): Future[StreamedResponse] = {
-    buildRequest(s"$serviceBaseUrl/apis/$serviceName/$version/documentation/$resource").withMethod("GET").stream()
+    buildRequest(s"$serviceBaseUrl/api-definition/$serviceName/$version/documentation/$resource").withMethod("GET").stream()
   }
 
   def fetch(serviceName: String, version: String, resource: String): Future[Result] = {

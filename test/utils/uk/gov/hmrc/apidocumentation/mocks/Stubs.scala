@@ -56,7 +56,7 @@ trait ApiDefinition {
   def fetchDefinitionExtended(serviceName: String) {
     val definitionJson = Source.fromURL(getClass.getResource(s"/acceptance/$serviceName/definition.json")).mkString
     stubFor(
-      get(urlMatching(s"/apis/$serviceName/definition/extended"))
+      get(urlMatching(s"/api-definition/$serviceName/definition/extended"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
@@ -69,7 +69,7 @@ trait ApiDefinition {
     def fetchFile(filename: String, contentType: String) = {
       val url = getClass.getResource(s"/services/$serviceName/conf/$version/$filename")
       val file = Source.fromURL(url).mkString
-      stubFor(get(urlMatching(s"/apis/$serviceName/$version/documentation/$filename"))
+      stubFor(get(urlMatching(s"/api-definition/$serviceName/$version/documentation/$filename"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", contentType)
@@ -87,7 +87,7 @@ trait ApiDefinition {
 
     def fetchFile(filename: String, contentType: String) = {
       val file = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$filename")).mkString
-      stubFor(get(urlMatching(s"/apis/$serviceName/$version/documentation/$filename"))
+      stubFor(get(urlMatching(s"/api-definition/$serviceName/$version/documentation/$filename"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", contentType)
@@ -116,7 +116,7 @@ trait ApiDefinition {
       listOfFiles.foreach {
         r =>
           val file: String = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$path/${r.getName}")).mkString
-          stubFor(get(urlMatching(s"/apis/$serviceName/$version/documentation/$path/${r.getName}"))
+          stubFor(get(urlMatching(s"/api-definition/$serviceName/$version/documentation/$path/${r.getName}"))
             .willReturn(aResponse()
               .withStatus(200)
               .withHeader("Content-Type", ContentTypes.JSON)
@@ -133,7 +133,7 @@ trait ApiDefinition {
 
   def failToFetch(serviceName: String) {
     stubFor(
-      get(urlMatching(s"/apis/$serviceName/definition"))
+      get(urlMatching(s"/api-definition/$serviceName/definition"))
         .willReturn(aResponse()
           .withStatus(404))
     )
@@ -148,7 +148,7 @@ trait ApiMicroservice {
     ).mkString
 
     stubFor(
-      get(urlPathEqualTo(s"/apis/$serviceName/$version/documentation/${UriEncoding.encodePathSegment(endpointName, "UTF-8")}"))
+      get(urlPathEqualTo(s"/api-definition/$serviceName/$version/documentation/${UriEncoding.encodePathSegment(endpointName, "UTF-8")}"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/xml")
