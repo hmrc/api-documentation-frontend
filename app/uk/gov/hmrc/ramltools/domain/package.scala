@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation
+package uk.gov.hmrc.ramltools
 
-import com.google.inject.AbstractModule
-import uk.gov.hmrc.apidocumentation.raml.{DocumentationRamlLoader, DocumentationUrlRewriter}
-import uk.gov.hmrc.play.http.metrics.{Metrics, PlayMetrics}
-import uk.gov.hmrc.ramltools.domain.loaders.{RamlLoader, UrlRewriter}
+import play.api.libs.json._
 
-class Module extends AbstractModule {
-
-  override def configure() = {
-    bind(classOf[Metrics]).toInstance(PlayMetrics)
-    bind(classOf[RamlLoader]).to(classOf[DocumentationRamlLoader])
-    bind(classOf[UrlRewriter]).to(classOf[DocumentationUrlRewriter])
-  }
-
+package object domain {
+  implicit val queryParamFormat = Json.format[QueryParam]
+  implicit val endpointFormat = Json.format[Endpoint]
 }

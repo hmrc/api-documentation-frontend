@@ -14,19 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation
+package uk.gov.hmrc.ramltools.domain
 
-import com.google.inject.AbstractModule
-import uk.gov.hmrc.apidocumentation.raml.{DocumentationRamlLoader, DocumentationUrlRewriter}
-import uk.gov.hmrc.play.http.metrics.{Metrics, PlayMetrics}
-import uk.gov.hmrc.ramltools.domain.loaders.{RamlLoader, UrlRewriter}
-
-class Module extends AbstractModule {
-
-  override def configure() = {
-    bind(classOf[Metrics]).toInstance(PlayMetrics)
-    bind(classOf[RamlLoader]).to(classOf[DocumentationRamlLoader])
-    bind(classOf[UrlRewriter]).to(classOf[DocumentationUrlRewriter])
-  }
-
-}
+case class RamlParseException(msg: String) extends RuntimeException(msg)
+case class RamlNotFoundException(msg: String) extends RuntimeException(msg)
+case class RamlUnsupportedVersionException(msg: String) extends RuntimeException(msg)

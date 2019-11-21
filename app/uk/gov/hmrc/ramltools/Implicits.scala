@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation
+package uk.gov.hmrc.ramltools
 
-import com.google.inject.AbstractModule
-import uk.gov.hmrc.apidocumentation.raml.{DocumentationRamlLoader, DocumentationUrlRewriter}
-import uk.gov.hmrc.play.http.metrics.{Metrics, PlayMetrics}
-import uk.gov.hmrc.ramltools.domain.loaders.{RamlLoader, UrlRewriter}
+import org.raml.v2.api.model.v10.api.Api
+import org.raml.v2.api.model.v10.resources.Resource
+import scala.collection.JavaConversions._
 
-class Module extends AbstractModule {
+object Implicits {
 
-  override def configure() = {
-    bind(classOf[Metrics]).toInstance(PlayMetrics)
-    bind(classOf[RamlLoader]).to(classOf[DocumentationRamlLoader])
-    bind(classOf[UrlRewriter]).to(classOf[DocumentationUrlRewriter])
+  implicit class RichRAML(val x: Api) {
+
+    def flattenedResources(): List[Resource] = {
+      flatten(x.resources().toList)
+    }
+
+    private def flatten(resources: List[Resource], acc: List[Resource]=Nil): List[Resource] = resources match {
+      case head :: tail => flatten(head.resources.toList ++ tail, acc :+ head)
+      case _ => acc
+    }
+
   }
 
 }

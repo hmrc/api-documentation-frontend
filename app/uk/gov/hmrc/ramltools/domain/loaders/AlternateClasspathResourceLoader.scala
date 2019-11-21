@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation
+package uk.gov.hmrc.ramltools.domain.loaders
 
-import com.google.inject.AbstractModule
-import uk.gov.hmrc.apidocumentation.raml.{DocumentationRamlLoader, DocumentationUrlRewriter}
-import uk.gov.hmrc.play.http.metrics.{Metrics, PlayMetrics}
-import uk.gov.hmrc.ramltools.domain.loaders.{RamlLoader, UrlRewriter}
+import java.io.{File, InputStream}
 
-class Module extends AbstractModule {
+import org.raml.v2.api.loader.ClassPathResourceLoader
 
-  override def configure() = {
-    bind(classOf[Metrics]).toInstance(PlayMetrics)
-    bind(classOf[RamlLoader]).to(classOf[DocumentationRamlLoader])
-    bind(classOf[UrlRewriter]).to(classOf[DocumentationUrlRewriter])
+class AlternateClasspathResourceLoader(prefix: String = "") extends ClassPathResourceLoader {
+  override def fetchResource(resourceName: String): InputStream = {
+    val path: String = new File(prefix, resourceName).getPath.substring(1)
+    super.fetchResource(path)
   }
-
 }
