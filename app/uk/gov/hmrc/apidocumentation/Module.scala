@@ -18,8 +18,8 @@ package uk.gov.hmrc.apidocumentation
 
 import com.google.inject.AbstractModule
 import uk.gov.hmrc.apidocumentation.raml.{DocumentationRamlLoader, DocumentationUrlRewriter}
+import uk.gov.hmrc.ramltools.loaders.{RamlLoader, UrlRewriter}
 import uk.gov.hmrc.play.http.metrics.{Metrics, PlayMetrics}
-import uk.gov.hmrc.ramltools.domain.loaders.{RamlLoader, UrlRewriter}
 
 class Module extends AbstractModule {
 

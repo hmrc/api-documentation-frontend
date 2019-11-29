@@ -22,7 +22,7 @@ import play.api.cache._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.ramltools.domain.loaders.RamlLoader
+import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
 import scala.collection.JavaConversions._
 import scala.concurrent.ExecutionContext.Implicits.global

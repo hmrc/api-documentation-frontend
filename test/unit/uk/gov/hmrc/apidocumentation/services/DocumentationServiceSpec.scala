@@ -28,7 +28,7 @@ import uk.gov.hmrc.apidocumentation.services.{DocumentationService, RAML, Schema
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.ramltools.domain.RamlParseException
-import uk.gov.hmrc.ramltools.domain.loaders.RamlLoader
+import uk.gov.hmrc.ramltools.loaders.RamlLoader
 import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, FileRamlLoader}
 
 import scala.concurrent.Future
