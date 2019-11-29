@@ -157,4 +157,4 @@ def unitFilter(name: String): Boolean = name startsWith "unit"
 // Coverage configuration
 coverageMinimum := 80
 coverageFailOnMinimum := true
-coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;config.*"
+coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;uk.gov.hmrc.apidocumentation.config.*;testOnlyDoNotUseInAppConf.*;app.*;config.*"

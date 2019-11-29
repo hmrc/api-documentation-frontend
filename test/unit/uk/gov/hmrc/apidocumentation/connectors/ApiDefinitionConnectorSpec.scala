@@ -18,23 +18,16 @@ package unit.uk.gov.hmrc.apidocumentation.connectors
 
 import java.util.UUID
 
-import akka.actor.ActorSystem
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito
 import org.mockito.Mockito._
 import org.scalatest.OptionValues
-import play.api.Environment
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, PrincipalApiDefinitionConnector, ProxiedHttpClient, SubordinateApiDefinitionConnector}
-import uk.gov.hmrc.apidocumentation.models.APIDefinition
-import uk.gov.hmrc.apidocumentation.utils.FutureTimeoutSupportImpl
+import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionHttpMockingHelper
-import uk.gov.hmrc.http.{BadRequestException, HeaderCarrier, NotFoundException, Upstream5xxResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class ApiDefinitionConnectorSpec
   extends ConnectorSpec
@@ -51,7 +44,7 @@ class ApiDefinitionConnectorSpec
     val mockHttpClient = mock[HttpClient]
 
     val apiDefinitionUrl = "/mockUrl"
-    when(mockConfig.apiDefinitionPrincipalBaseUrl).thenReturn(apiDefinitionUrl)
+    when(mockConfig.apiDefinitionBaseUrl).thenReturn(apiDefinitionUrl)
 
     val serviceName = "someService"
     val userEmail = "3rdparty@example.com"
@@ -59,7 +52,7 @@ class ApiDefinitionConnectorSpec
     val apiName1 = "Calendar"
     val apiName2 = "HelloWorld"
 
-    val underTest = new PrincipalApiDefinitionConnector(mockHttpClient, mockConfig)
+    val underTest = new ApiDefinitionConnector(mockHttpClient, mockConfig)
 
   }
 
@@ -73,7 +66,7 @@ class ApiDefinitionConnectorSpec
     }
   }
 
-  "local api definition connector" should {
+  "api definition connector" should {
 
     "when requesting an extended api definition" should {
 
@@ -134,69 +127,6 @@ class ApiDefinitionConnectorSpec
 
         intercept[UpstreamException.type] {
           await(underTest.fetchAllApiDefinitions(None))
-        }
-      }
-    }
-  }
-
-
-  class RemoteSetup(proxyEnabled: Boolean = false) {
-    private val environmentName = "ENVIRONMENT"
-    private val futureTimeoutSupport = new FutureTimeoutSupportImpl
-    private val actorSystemTest = ActorSystem("test-actor-system")
-
-    implicit val hc = HeaderCarrier()
-    val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]
-    when(mockAppConfig.apiDefinitionSubordinateBaseUrl).thenReturn("mockUrl")
-    when(mockAppConfig.apiDefinitionSubordinateUseProxy).thenReturn(proxyEnabled)
-    when(mockAppConfig.apiDefinitionSubordinateBearerToken).thenReturn(bearer)
-    when(mockAppConfig.apiDefinitionSubordinateApiKey).thenReturn(apiKeyTest)
-    when(mockAppConfig.retryCount).thenReturn(1)
-
-    val mockEnvironment = mock[Environment]
-    when(mockEnvironment.toString).thenReturn(environmentName)
-
-    val mockProxiedHttpClient = mock[ProxiedHttpClient]
-    when(mockProxiedHttpClient.withHeaders(any(), any())).thenReturn(mockProxiedHttpClient)
-
-    val mockHttpClient = mock[HttpClient]
-
-    val connector = new SubordinateApiDefinitionConnector(
-      mockAppConfig,
-      mockHttpClient,
-      mockProxiedHttpClient,
-      actorSystemTest,
-      futureTimeoutSupport
-    )
-  }
-
-  "remote connector" should {
-    "when retry logic is enabled should retry on failure" in new RemoteSetup(true) {
-
-      val response = Seq(apiDefinition("dummyAPI"))
-
-      when(mockProxiedHttpClient.GET[Seq[APIDefinition]](any[String](), any())( any(), any(), any())).thenReturn(
-        Future.failed(new BadRequestException("")),
-        Future.successful(response),
-        Future.successful(response),
-        Future.successful(response)
-      )
-      await(connector.fetchAllApiDefinitions()) shouldBe response
-    }
-
-
-    "http" when {
-      "configured not to use the proxy" should {
-        "use the HttpClient" in new RemoteSetup(proxyEnabled = false) {
-          connector.http shouldBe mockHttpClient
-        }
-      }
-
-      "configured to use the proxy" should {
-        "use the ProxiedHttpClient with the correct authorisation" in new RemoteSetup(proxyEnabled = true) {
-          connector.http shouldBe mockProxiedHttpClient
-
-          verify(mockProxiedHttpClient).withHeaders(bearer, apiKeyTest)
         }
       }
     }

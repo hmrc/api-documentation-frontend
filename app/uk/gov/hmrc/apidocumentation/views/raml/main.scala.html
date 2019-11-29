@@ -22,6 +22,7 @@
 @import uk.gov.hmrc.apidocumentation.services._
 @import scala.collection.JavaConversions._
 
+@import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig)
 
 @renderGetApiVersionForm = {

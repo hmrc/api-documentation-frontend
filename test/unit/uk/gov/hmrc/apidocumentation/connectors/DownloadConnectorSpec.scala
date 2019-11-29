@@ -29,10 +29,10 @@ class DownloadConnectorSpec extends ConnectorSpec {
 
   val serviceName = "hello-world"
   val version = "1.0"
-  val resourceFoundUrl = s"$apiDocumentationUrl/apis/$serviceName/$version/documentation/some/resource"
-  val resourceNotFoundUrl = s"$apiDocumentationUrl/apis/$serviceName/$version/documentation/some/resourceNotThere"
-  val serviceUnavailableUrl = s"$apiDocumentationUrl/apis/$serviceName/$version/documentation/some/resourceInvalid"
-  val timeoutUrl = s"$apiDocumentationUrl/apis/$serviceName/$version/documentation/some/timeout"
+  val resourceFoundUrl = s"$apiDocumentationUrl/api-definition/$serviceName/$version/documentation/some/resource"
+  val resourceNotFoundUrl = s"$apiDocumentationUrl/api-definition/$serviceName/$version/documentation/some/resourceNotThere"
+  val serviceUnavailableUrl = s"$apiDocumentationUrl/api-definition/$serviceName/$version/documentation/some/resourceInvalid"
+  val timeoutUrl = s"$apiDocumentationUrl/api-definition/$serviceName/$version/documentation/some/timeout"
 
   val mockWS = MockWS {
     case ("GET", `resourceFoundUrl`) => Action(Results.Ok("hello world"))
@@ -46,7 +46,7 @@ class DownloadConnectorSpec extends ConnectorSpec {
     val mockAppConfig = mock[ApplicationConfig]
     val connector = new DownloadConnector(mockWS, mockAppConfig)
 
-    when(mockAppConfig.apiDocumentationUrl).thenReturn(apiDocumentationUrl)
+    when(mockAppConfig.apiDefinitionBaseUrl).thenReturn(apiDocumentationUrl)
   }
 
   "downloadResource" should {
