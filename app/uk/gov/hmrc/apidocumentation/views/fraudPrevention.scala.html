@@ -26,7 +26,7 @@
   <div class="fraud-prevention">
     <h1 class="heading-xlarge">Fraud prevention</h1>
 
-    <p class="bold">Version 2.7 issued 8 October 2019</p>
+    <p class="bold">Version 2.7 issued 11 December 2019</p>
     <p>Minor versions are backwards compatible - each minor version adds more examples and advice.</p>
     <hr class="hr--code">
 
@@ -140,6 +140,9 @@
     <p class="code--slim">&lt;value-1&gt;,&lt;value-2&gt;,…</p>
     <p>Values must be <a href="https://tools.ietf.org/html/rfc3986#section-2.1" target="_blank" rel="noopener noreferrer">percent encoded (opens in a new tab)</a>.
     <p>Values must not be empty.</p>
+
+    <h2 class="heading-large">Header testing</h2>
+    <p>Use our <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, Some("txm-fph-validator-api")).url" target="_blank">Test Fraud Prevention Headers API (opens in a new tab)</a> to check that the headers submitted by your application are formatted correctly. It can be used during the initial development phase and as part of your regular quality assurance checks.</p>
 
     <h2 class="heading-large">Header definitions</h2>
     <hr>
