@@ -24,7 +24,7 @@ def findOutOfDateDependencies(dependencies):
             dependency['latestVersion']['patch'])
         currentVersion = (dependency['currentVersion']['major'],
             dependency['currentVersion']['minor'],
-            dependency['currentVersion']['patch'
+            dependency['currentVersion']['patch'])
 
         if latestVersion > currentVersion:
             outOfDateDependencies.append(dependency)
