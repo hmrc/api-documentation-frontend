@@ -102,20 +102,22 @@
             <h5 id="auth-endpoint-syntax" class="heading-small faded-text">Syntax</h5>
 
             <pre class="code--block">
-curl -X GET  @{applicationConfig.sandboxWwwBaseUrl}/oauth/authorize?response_type=code
-&amp;client_id=[YOUR-CLIENT-ID]
-&amp;scope=[REQUESTED-SCOPE]
-&amp;state=[STATE]
-&amp;redirect_uri=[YOUR-REDIRECT-URI]</pre>
+dcurl -X GET "@{applicationConfig.sandboxWwwBaseUrl}/oauth/authorize?\
+response_type=code\
+&amp;client_id=[YOUR-CLIENT-ID]\
+&amp;scope=[REQUESTED-SCOPE]\
+&amp;state=[STATE]\
+&amp;redirect_uri=[YOUR-REDIRECT-URI]"</pre>
                     
             <h5 id="auth-endpoint-example" class="heading-small faded-text">Example</h5>
 
             <pre class="code--block">
-curl -X GET  @{applicationConfig.sandboxWwwBaseUrl}/oauth/authorize?response_type=code
-&amp;client_id=Hf8sfkiUkYp9I3_R10qSnZ2ZUvoa
-&amp;scope=scope_1+scope_2+scope_3
-&amp;state=30de877c-ee2f-15db-8314-0800200c9a66
-&amp;redirect_uri=https://www.example.com/auth-redirect</pre>
+curl -X GET "@{applicationConfig.sandboxWwwBaseUrl}/oauth/authorize?\
+response_type=code\
+&amp;client_id=Hf8sfkiUkYp9I3_R10qSnZ2ZUvoa\
+&amp;scope=scope_1+scope_2+scope_3\
+&amp;state=30de877c-ee2f-15db-8314-0800200c9a66\
+&amp;redirect_uri=https://www.example.com/auth-redirect"</pre>
 
             <br>
 
@@ -298,15 +300,18 @@ curl -X GET  @{applicationConfig.sandboxWwwBaseUrl}/oauth/authorize?response_typ
             <p>Here’s an example of a redirect we issue after a successful authorisation:</p>
 
             <pre class="code--block">
-curl -X GET https://www.example.com?code=TBC&amp;state=123e4567-e89b-12d3-a456-426655440000</pre>
+curl -X GET \
+"https://www.example.com?code=TBC&amp;\
+state=123e4567-e89b-12d3-a456-426655440000"</pre>
 
             <p>Here’s an example of a redirect we issue after an unsuccessful authorisation:</p>
 
             <pre class="code--block">
-curl -X GET https://www.example.com?error=access_denied
-&amp;error_description=user+denied+the+authorization
-&amp;error_code=USER_DENIED_AUTHORIZATION
-&amp;state=123e4567-e89b-12d3-a456-426655440000</pre>
+curl -X GET "https://www.example.com?\
+error=access_denied\
+&amp;error_description=user+denied+the+authorization\
+&amp;error_code=USER_DENIED_AUTHORIZATION\
+&amp;state=123e4567-e89b-12d3-a456-426655440000"</pre>
 
         </section>
 
@@ -328,7 +333,11 @@ curl -X GET https://www.example.com?error=access_denied
 
             <pre class="code--block">
 curl -X POST --data \
-'client_secret=[YOUR-CLIENT-SECRET]&amp;client_id=[YOUR-CLIENT-ID]&amp;grant_type=authorization_code&amp;redirect_uri=[YOUR-REDIRECT-URI]&amp;code=[AUTHORIZATION-CODE]' \
+"client_secret=[YOUR-CLIENT-SECRET]\
+&amp;client_id=[YOUR-CLIENT-ID]\
+&amp;grant_type=authorization_code\
+&amp;redirect_uri=[YOUR-REDIRECT-URI]\
+&amp;code=[AUTHORIZATION-CODE]" \
 @{applicationConfig.sandboxApiBaseUrl}/oauth/token
 </pre>
 
@@ -486,8 +495,8 @@ curl -X POST --data \
 
             <pre class="code--block">
 curl -X GET @{applicationConfig.sandboxApiBaseUrl}/oauth/token \
--H ‘Accept: application/vnd.hmrc.1.0+json’ \
--H ‘Authorization: Bearer [ACCESS-TOKEN]’</pre>
+-H "Accept: application/vnd.hmrc.1.0+json" \
+-H "Authorization: Bearer [ACCESS-TOKEN]"</pre>
 
         </section>
 
@@ -509,7 +518,10 @@ curl -X GET @{applicationConfig.sandboxApiBaseUrl}/oauth/token \
 
             <pre class="code--block">
 curl -X POST --data \
-'client_secret=[YOUR-CLIENT-SECRET]&amp;client_id=[YOUR-CLIENT-ID]&amp;grant_type=refresh_token&amp;refresh_token=[REFRESH-TOKEN]' \
+"client_secret=[YOUR-CLIENT-SECRET]\
+&amp;client_id=[YOUR-CLIENT-ID]\
+&amp;grant_type=refresh_token\
+&amp;refresh_token=[REFRESH-TOKEN]" \
 @{applicationConfig.sandboxApiBaseUrl}/oauth/token
 </pre>
 
