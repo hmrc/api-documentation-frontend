@@ -102,7 +102,7 @@
             <h5 id="auth-endpoint-syntax" class="heading-small faded-text">Syntax</h5>
 
             <pre class="code--block">
-dcurl -X GET "@{applicationConfig.sandboxWwwBaseUrl}/oauth/authorize?\
+curl -X GET "@{applicationConfig.sandboxWwwBaseUrl}/oauth/authorize?\
 response_type=code\
 &amp;client_id=[YOUR-CLIENT-ID]\
 &amp;scope=[REQUESTED-SCOPE]\
