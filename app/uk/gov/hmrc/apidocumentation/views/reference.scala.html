@@ -451,9 +451,13 @@
         <h2 class="heading-large">Rate limiting</h2>
 
         <p>We limit the number of requests each application can make. This protects our service against excessive use and Denial-of-Service attacks, and also encourages you to use our APIs efficiently.</p>
-        <p>We set limits based on anticipated loads and peaks. Our standard limit is 150 requests per minute per application.</p>
-        <p>Our rate limit works on an approximate rolling minute basis - we count the number of requests made in the last 60 seconds, not the last discrete minute.</p>
-        <p>If you reach this limit you’ll get a response with an HTTP status of <code class="code--slim">429</code> (Too Many Requests).</p>
+        <p>We set limits based on anticipated loads and peaks. Our standard limit is 3 requests per second per application.</p>
+        <p>If you reach this limit you’ll get a response with an HTTP status of <code class="code--slim">429</code>
+            (Too Many Requests). If a 429 response is received we recommend that your code should stop making additional
+            API requests for a short period of time before retrying.
+        </p>
+        <p>Our rate limits are designed to encourage real-time interactions.  As such we advise software developers to
+            avoid batching requests if they wish to avoid being rate limited.</p>
         <p>If you continually hit this rate limit, <a href="/developer/support">contact us</a> to discuss your application design and whether it’s appropriate to raise your rate limit. </p>
 
     </section>
