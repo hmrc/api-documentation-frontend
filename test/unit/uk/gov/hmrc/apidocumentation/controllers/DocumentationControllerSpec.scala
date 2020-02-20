@@ -193,6 +193,10 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       verifyPageRendered(underTest.authorisationPage()(request), pageTitle("Authorisation"))
     }
 
+    "display the authorisation credentials page" in new Setup {
+      verifyPageRendered(underTest.authorisationCredentialsPage()(request), pageTitle("Credentials"))
+    }
+
     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
       when(developerFrontendConnector.fetchTermsOfUsePartial()(any()))
         .thenReturn(Future.successful(HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))))

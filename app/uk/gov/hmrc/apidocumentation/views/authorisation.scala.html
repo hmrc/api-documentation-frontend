@@ -30,6 +30,7 @@
             <h2 id="onThisPage" class="visually-hidden">On this page</h2>
             <ul class="list">
                 <li>Introduction</li>
+                <li><a href="@controllers.routes.DocumentationController.authorisationCredentialsPage().url">Credentials</a></li>
                 <li><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
                 <li><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
                 <li><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
@@ -90,6 +91,6 @@
 
 
 
-        @pagination(next = Some(Pagination("Open access endpoints", controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url)))
+        @pagination(next = Some(Pagination("Credentials", controllers.routes.DocumentationController.authorisationCredentialsPage().url)))
 
     }
