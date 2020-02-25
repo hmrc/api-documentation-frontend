@@ -225,7 +225,9 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     "display the Income Tax (MTD) End-to-End Service Guide page" in new Setup {
-      verifyPageRendered(underTest.mtdIncomeTaxServiceGuidePage()(request), pageTitle("Income Tax (MTD) End-to-End Service Guide"))
+      val result = await(underTest.mtdIncomeTaxServiceGuidePage()(request))
+      status(result) shouldBe MOVED_PERMANENTLY
+      result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
     }
 
     "redirect to the test users test data and stateful behaviour page" in new Setup {

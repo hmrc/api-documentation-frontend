@@ -173,16 +173,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def mtdIncomeTaxServiceGuidePage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      val breadcrumbs = Breadcrumbs(
-        Crumb("Income Tax (MTD) End-to-End Service Guide", routes.DocumentationController.mtdIncomeTaxServiceGuidePage().url),
-        apiDocCrumb,
-        homeCrumb
-      )
-      Future.successful(Ok(mtdIncomeTaxServiceGuide(pageAttributes(
-        "Income Tax (MTD) End-to-End Service Guide",
-        routes.DocumentationController.mtdIncomeTaxServiceGuidePage().url,
-        navLinks,
-        Some(breadcrumbs)))))
+      Future.successful(MovedPermanently("/guides/income-tax-mtd-end-to-end-service-guide/"))
   }
   
   def referenceGuidePage(): Action[AnyContent] = headerNavigation { implicit request =>
