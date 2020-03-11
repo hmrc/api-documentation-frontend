@@ -38,14 +38,14 @@
                 <li>
                     <a href="#open-endpoint">Accessing an open endpoint</a>
                 </li>
-                <li>
-                    <a href="#app-restricted">Accessing an application-restricted endpoint</a>
-                </li>
             </ul>
         </div>
 
         <div class="column-one-half">
             <ul class="list">
+                <li>
+                    <a href="#app-restricted">Accessing an application-restricted endpoint</a>
+                </li>
                 <li>
                     <a href="#user-restricted">Accessing a user-restricted endpoint</a>
                 </li>
@@ -81,7 +81,8 @@
 
     <table>
         <caption class="visually-hidden">Endpoints exposed by Hello World API</caption>
-        <thead><tr>
+        <thead>
+        <tr>
             <th>Method</th>
             <th>Path</th>
             <th>Authorisation</th>
@@ -89,24 +90,24 @@
         </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><code class="code--slim">GET</code></td>
-                <td><code class="code--slim">/hello/world</code></td>
-                <td>None</td>
-                <td><code class="code--slim">Hello World!</code></td>
-            </tr>
-            <tr>
-                <td><code class="code--slim">GET</code></td>
-                <td><code class="code--slim">/hello/application</code></td>
-                <td>Application (<code class="code--slim">server_token</code>)</td>
-                <td><code class="code--slim">Hello Application!</code></td>
-            </tr>
-            <tr>
-                <td><code class="code--slim">GET</code></td>
-                <td><code class="code--slim">/hello/user</code></td>
-                <td>User (OAuth 2.0 <code class="code--slim">access_token</code>)</td>
-                <td><code class="code--slim">Hello User!</code></td>
-            </tr>
+        <tr>
+            <td><code class="code--slim">GET</code></td>
+            <td><code class="code--slim">/hello/world</code></td>
+            <td>None</td>
+            <td><code class="code--slim">Hello World!</code></td>
+        </tr>
+        <tr>
+            <td><code class="code--slim">GET</code></td>
+            <td><code class="code--slim">/hello/application</code></td>
+            <td>Application (OAuth 2.0 <code class="code--slim">access_token</code>)</td>
+            <td><code class="code--slim">Hello Application!</code></td>
+        </tr>
+        <tr>
+            <td><code class="code--slim">GET</code></td>
+            <td><code class="code--slim">/hello/user</code></td>
+            <td>User (OAuth 2.0 <code class="code--slim">access_token</code>)</td>
+            <td><code class="code--slim">Hello User!</code></td>
+        </tr>
         </tbody>
     </table>
 
@@ -119,20 +120,21 @@
 
     <p>In this example, you'll access the Hello World API ‘Hello World’ endpoint.</p>
 
-    <p>This endpoint is unrestricted so you can access it without a <code class="code--slim">server_token</code>
-        or an <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth 2.0</a> <code class="code--slim">access_token</code>.
-        It'll still work if you provide either of those tokens as an <code class="code--slim">Authorization</code>
-        header.</p>
+    <p>
+        This endpoint is unrestricted so you can access it without an
+        <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth2.0</a>
+        <code class="code--slim">access_token</code>.
+    </p>
 
     <section>
 
-        <h3 class="heading-medium">Issue a GET request to <br>@{applicationConfig.sandboxApiBaseUrl}/hello/world</h3>
+        <h3 class="heading-medium">Issue a GET request</h3>
+        <p>Issue a GET request to <span class="bold">@{applicationConfig.sandboxApiBaseUrl}/hello/world</span></p>
 
         <pre class="code--block">
 // construct the GET request for our Hello World endpoint
 HttpClient client = HttpClientBuilder.create().build();
-HttpGet request = new HttpGet(
-  "@{applicationConfig.sandboxApiBaseUrl}/hello/world");
+HttpGet request = new HttpGet("@{applicationConfig.sandboxApiBaseUrl}/hello/world");
 request.addHeader("Accept", "application/vnd.hmrc.1.0+json");
 
 // execute the request
@@ -150,29 +152,65 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
     <h2 class="heading-large" id="application-restricted-endpoint">Accessing an application-restricted endpoint</h2>
 
-    <p>The Hello World API ‘Hello Application’ endpoint is application-restricted. You'll need a <code class="code--slim">server_token</code>.</p>
+    <p>In this example, you will request an OAuth 2.0 <code class="code--slim">access_token</code> and
+        then use it to access the Hello World API ‘Hello Application’ endpoint.
+    </p>
 
-    <p>To get your <code class="code--slim">server_token</code> <a href="https://developer.service.hmrc.gov.uk/developer/registration">register with HMRC as a developer</a> and create an application.</p>
+    <p>
+        <a href="https://developer.service.hmrc.gov.uk/developer/registration">Register with the Developer Hub</a>
+        and create a sandbox application. You will need your application's <code class="code--slim">client_id</code>
+        and <code class="code--slim">client_secret</code>.
+    </p>
 
-    <p>You'll get different tokens for accessing production and test environments.</p>
+    <div class="panel panel-border-wide">
+        <p>You will need to test your application in the sandbox environment before you request production credentials.
+        </p>
+    </div>
 
-    <p>Remember not to share your <code class="code--slim">server_token</code> or <code class="code--slim">client_secret</code>.</p>
+    <p>
+        See the <a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage()">
+        authorisation</a> section for information about requesting an OAuth 2.0 <code class="code--slim">access_token</code>.
+    </p>
 
     <section>
+        <h3 class="heading-medium">1. Request an OAuth 2.0 access token with the required scope</h3>
+        <pre class="code--block">// extract the authorization code from the request querystring
+OAuthAuthzResponse response =
+OAuthAuthzResponse.oauthCodeAuthzResponse(httpServletRequest);
+String authorizationCode = response.getCode();
 
-        <h3 class="heading-medium">Issue a GET request to<br>@{applicationConfig.sandboxApiBaseUrl}/hello/application, passing your server token as an <code class="code--slim">Authorization</code>
-            header with the type <code class="code--slim">Bearer</code></h3>
+// create OAuth 2.0 Client using Apache HTTP Client
+OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 
-        <pre class="code--block">
-// replace with your application's server_token
-String serverToken = "YOUR-SERVER-TOKEN";
+// construct OAuth 2.0 Token request for the authorization code
+OAuthClientRequest request = OAuthClientRequest
+  .tokenLocation("https://test-api.service.hmrc.gov.uk/oauth/token")
+  .setGrantType(GrantType.CLIENT_CREDENTIALS)
+  .setClientId(clientId)
+  .setClientSecret(clientSecret)
+  .buildBodyMessage();
 
-// construct the GET request for our Hello Application endpoint
+// request the token via the OAuth 2.0 client
+OAuthJSONAccessTokenResponse response = oAuthClient.accessToken(request);
+
+// extract the data from the response
+String accessToken = response.getAccessToken();
+String grantedScope = response.getScope();
+Long expiresIn = response.getExpiresIn();</pre>
+    </section>
+    <section>
+        <h3 class="heading-medium">2. Issue a GET request</h3>
+        <p>
+            Issue a GET request to <span class="bold">https://test-api.service.hmrc.gov.uk/hello/application</span>,
+            passing your newly issued <code class="code--slim">access_token</code> as an
+            <code class="code--slim">Authorization</code> header with the type <code class="code--slim">Bearer</code>
+        </h3>
+
+        <pre class="code--block">// construct the GET request for our Hello User endpoint
 HttpClient client = HttpClientBuilder.create().build();
-HttpGet request = new HttpGet(
-"@{applicationConfig.sandboxApiBaseUrl}/hello/application");
+HttpGet request = new HttpGet("https://test-api.service.hmrc.gov.uk/hello/application");
 request.addHeader("Accept", "application/vnd.hmrc.1.0+json");
-request.addHeader("Authorization", "Bearer "+serverToken);
+request.addHeader("Authorization", "Bearer "+accessToken);
 
 // execute the request
 HttpResponse response = client.execute(request);
@@ -181,6 +219,7 @@ HttpResponse response = client.execute(request);
 int statusCode = response.getStatusLine().getStatusCode();
 String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
+        <p>This should give you a "Hello Application" response.</p>
     </section>
 
 </section>
@@ -189,14 +228,18 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
     <h2 class="heading-large" id="user-restricted-endpoint">Accessing a user-restricted endpoint</h2>
 
-    <p>In this example, you’ll request an <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth 2.0</a> <code class="code--slim">access_token</code>.
-        You’ll then use it to access the Hello World API ‘Hello User’ endpoint.</p>
+    <p>In this example, you will request an OAuth 2.0<code class="code--slim">access_token</code>
+        and then use it to access the Hello World API ‘Hello User’ endpoint.</p>
 
-    <p>You must <a href="https://developer.service.hmrc.gov.uk/developer/registration">register with HMRC as a developer</a>
-        and create an application. You’ll need your application's production or testing <code class="code--slim">client_id</code>
+    <p>You must <a href="https://developer.service.hmrc.gov.uk/developer/registration">register with HMRC as a
+        developer</a>
+        and create an application. You will need your application's production or testing <code class="code--slim">client_id</code>
         and <code class="code--slim">client_secret</code>.</p>
 
-    <p>For more information about requesting, refreshing or revoking an OAuth 2.0 <code class="code--slim">access_token</code>, see the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">authorisation</a> section.</p>
+    <p>For more information about requesting, refreshing or revoking an OAuth 2.0 <code
+            class="code--slim">access_token</code>, see the <a
+            href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">authorisation</a>
+        section.</p>
 
     <section>
 
@@ -221,11 +264,15 @@ OAuthClientRequest request = OAuthClientRequest
 // redirect to the given location
 httpServletResponse.sendRedirect(request.getLocationUri());</pre>
 
-        <p>The user will be redirected to the HMRC login screen. When they've submitted their credentials, they'll be asked to authorise your application to access the requested scope.</p>
+        <p>The user will be redirected to the HMRC login screen. When they've submitted their credentials, they'll be
+            asked to authorise your application to access the requested scope.</p>
 
-        <p>Once the user has granted the requested authority, we'll redirect back to your application via the redirect URI. We'll provide it with an authorisation code as a querystring parameter.</p>
+        <p>Once the user has granted the requested authority, we will redirect back to your application via the redirect
+            URI. We'll provide it with an authorisation code as a querystring parameter.</p>
 
-        <p>This authorisation code can then be exchanged for an <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth 2.0</a> <code class="code--slim">access_token</code>
+        <p>This authorisation code can then be exchanged for an <a
+                href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth
+            2.0</a> <code class="code--slim">access_token</code>
             and a <code class="code--slim">refresh_token</code>.</p>
 
     </section>
@@ -266,15 +313,16 @@ Long expiresIn = response.getExpiresIn();</pre>
 
     <section>
 
-        <h3 class="heading-medium">3. Issue a GET request to<br>@{applicationConfig.sandboxApiBaseUrl}/hello/user, passing your newly issued <code class="code--slim">access_token</code>
+        <h3 class="heading-medium">3. Issue a GET request</h3>
+        <p>Issue a GET request to <span class="bold">@{applicationConfig.sandboxApiBaseUrl}/hello/user</span>,
+            passing your newly issued <code class="code--slim">access_token</code>
             as an <code class="code--slim">Authorization</code>
             header with the type <code class="code--slim">Bearer</code></h3>
 
         <pre class="code--block">
 // construct the GET request for our Hello User endpoint
 HttpClient client = HttpClientBuilder.create().build();
-HttpGet request = new HttpGet(
-  "@{applicationConfig.sandboxApiBaseUrl}/hello/user");
+HttpGet request = new HttpGet("@{applicationConfig.sandboxApiBaseUrl}/hello/user");
 request.addHeader("Accept", "application/vnd.hmrc.1.0+json");
 request.addHeader("Authorization", "Bearer "+accessToken);
 
@@ -285,9 +333,12 @@ HttpResponse response = client.execute(request);
 int statusCode = response.getStatusLine().getStatusCode();
 String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
-        <p>This should give you a "Hello User!" response. This may vary depending on whether you used your testing or production <code class="code--slim">client_id</code>
+        <p>This should give you a "Hello User!" response. This may vary depending on whether you used your testing or
+            production <code class="code--slim">client_id</code>
             and <code class="code--slim">client_secret</code>
-            when you started <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth 2.0</a> flow.</p>
+            when you started <a
+                    href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth
+                2.0</a> flow.</p>
 
     </section>
 
@@ -329,6 +380,7 @@ Long expiresIn = response.getExpiresIn();</pre>
 
 <br/>
 
-<p>You should now be ready to start integrating with <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">our APIs</a>.</p>
+<p>You should now be ready to start integrating with <a
+        href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">our APIs</a>.</p>
 
 }
