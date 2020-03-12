@@ -65,24 +65,34 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td scope="row">Open access</td>
+                        <td scope="row"><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access</a></td>
                         <td>No token</td>
                     </tr>
                     <tr>
-                        <td scope="row">Application-restricted</td>
-                        <td><code class="code--slim">server_token</code></td>
+                        <td scope="row"><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted</a></td>
+                        <td>
+                            OAuth 2.0 <code class="code--slim">access_token</code><br>
+                            Generated using <a href="https://oauth.net/2/grant-types/client-credentials/">OAuth 2.0 Client Credentials Grant</a>
+                            <br>
+                            <br>
+                            Using <code class="code--slim">server_token</code> is now deprecated.
+                        </td>
                     </tr>
                     <tr>
-                        <td scope="row">User-restricted</td>
-                        <td>OAuth 2.0 <code class="code--slim">access_token</code></td>
+                        <td scope="row"><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted</a></td>
+                        <td>
+                            OAuth 2.0 <code class="code--slim">access_token</code><br>
+                            Generated using <a href="https://oauth.net/2/grant-types/authorization-code/">OAuth 2.0 Authorization Code Grant</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
             <br>
             <div class="panel panel-border-wide">
-                <p>HMRC APIs are only accessible over Transport Layer Security (TLS, that is https://). We require that new applications support TLS 1.2 or higher to avoid known weaknesses in previous versions. You should upgrade your existing applications by 1 October 2019 when we will remove support for previous versions.
-
-</p>
+                <p>
+                    HMRC APIs are only accessible over Transport Layer Security (TLS). For example, URLs that begin
+                    with https://. Applications must support TLS 1.2 or higher to avoid known weaknesses in previous versions.
+                </p>
             </div>
 
 
