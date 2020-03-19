@@ -118,6 +118,20 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         Some(breadcrumbs)))))
   }
 
+  def authorisationCredentialsPage(): Action[AnyContent] = headerNavigation { implicit request =>
+    navLinks =>
+      val breadcrumbs = Breadcrumbs(
+        Crumb("Credentials", routes.DocumentationController.authorisationCredentialsPage().url),
+        authCrumb,
+        homeCrumb
+      )
+      Future.successful(Ok(credentials(pageAttributes(
+        "Credentials",
+        routes.DocumentationController.authorisationCredentialsPage().url,
+        navLinks,
+        Some(breadcrumbs)))))
+  }
+
   def authorisationOpenAccessEndpointsPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       val breadcrumbs = Breadcrumbs(

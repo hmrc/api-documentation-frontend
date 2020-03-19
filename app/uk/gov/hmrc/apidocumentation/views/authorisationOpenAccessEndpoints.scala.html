@@ -30,6 +30,7 @@
         <h2 id="onThisPage" class="visually-hidden">On this page</h2>
         <ul class="list">
             <li><a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a></li>
+            <li><a href="@controllers.routes.DocumentationController.authorisationCredentialsPage().url">Credentials</a></li>
             <li>Open access endpoints</li>
             <li><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
             <li><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
@@ -58,7 +59,7 @@ curl -H 'Accept: application/vnd.hmrc.1.0+json' \
     </section>
 
     @pagination(
-        previous = Some(Pagination("Introduction", controllers.routes.DocumentationController.authorisationPage().url)),
+        previous = Some(Pagination("Credentials", controllers.routes.DocumentationController.authorisationCredentialsPage().url)),
         next = Some(Pagination("Application-restricted endpoints", controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url)))
 
 }

@@ -13,6 +13,7 @@ GET         /docs/using-the-hub/name-guidelines                     @uk.gov.hmrc
 GET         /docs/reference-guide                                   @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.referenceGuidePage()
 GET         /docs/mtd                                               @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIntroductionPage()
 GET         /docs/fraud-prevention                                  @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.fraudPreventionPage()
+GET         /docs/authorisation/credentials                         @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationCredentialsPage()
 GET         /docs/authorisation/open-access-endpoints               @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationOpenAccessEndpointsPage()
 GET         /docs/authorisation/application-restricted-endpoints    @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationAppRestrictedEndpointsPage()
 GET         /docs/authorisation/user-restricted-endpoints           @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationUserRestrictedEndpointsPage()
