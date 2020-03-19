@@ -26,7 +26,7 @@
   <div class="fraud-prevention">
     <h1 class="heading-xlarge">Fraud prevention</h1>
 
-    <p class="bold">Version 2.8 issued 12 December 2019</p>
+    <p class="bold">Version 2.9 issued 5 March 2020</p>
     <p>Minor versions are backwards compatible - each minor version adds more examples and advice.</p>
     <hr class="hr--code">
 
@@ -504,7 +504,7 @@
       </ul>
 
       <h4 class="heading-small">For example:</h4>
-      <pre class="code--block">Gov-Client-Multi-Factor: type=AUTH_CODE&amp;timestamp=2017-04-21T13%3A23%3A42Z&amp;unique-reference=c672b8d1ef56ed28,type=TOTP&amp;timestamp=2017-05-19T13%3A10%3A00Z&amp;unique-reference=ac73430ffdfd9</pre>
+      <pre class="code--block">Gov-Client-Multi-Factor: type=AUTH_CODE&amp;timestamp=2017-04-21T13%3A23Z&amp;unique-reference=c672b8d1ef56ed28,type=TOTP&amp;timestamp=2017-05-19T13%3A10Z&amp;unique-reference=ac73430ffdfd9</pre>
       <div class="back_to_top bold-small"><a href="#">Back to top</a></div>
       <hr class="hr--code">
     </div>
@@ -541,6 +541,9 @@
       <p class="code--slim">&lt;software-name&gt;=&lt;hashed-license-value&gt;&&lt;software-name-2&gt;=&lt;hashed-license-value-2&gt;& …</p>
       <p>If there are no such licenses on the originating device, then submit the header with an empty value or omit it entirely.</p>
       <p>Each key and value must be percent encoded but not the separators (equal signs, ampersands) themselves.</p>
+
+      <h4 class="heading-small">Tip:</h4>
+      <p>In order to obtain consistency amongst the values provided, please maintain the use of the same hashing function.</p>
 
       <h4 class="heading-small">Required for connection methods:</h4>
       <ul>
