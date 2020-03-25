@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.Logger
@@ -38,15 +38,16 @@ import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
+@Singleton
 class DocumentationController @Inject()(documentationService: DocumentationService,
                                         apiDefinitionService: ApiDefinitionService,
                                         navigationService: NavigationService,
                                         partialsService: PartialsService,
                                         loggedInUserProvider: LoggedInUserProvider,
                                         errorHandler: ErrorHandler,
-                                        val messagesApi: MessagesApi)
+                                        mcc: MessagesControllerComponents)
                                        (implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
-  extends FrontendController with I18nSupport {
+  extends FrontendController(mcc) with I18nSupport {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
   private val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)

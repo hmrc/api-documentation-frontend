@@ -1,4 +1,3 @@
-import _root_.play.core.PlayVersion
 import _root_.play.sbt.PlayImport._
 import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.uglify.Import.{uglifyCompressOptions, _}
@@ -114,14 +113,14 @@ lazy val appDependencies: Seq[ModuleID] = allDeps
 lazy val compile = Seq(
   ws,
   cache,
-  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.13.0",
-  "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-25",
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.5.0",
+  "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-26",
   "uk.gov.hmrc" %% "http-metrics" % "1.5.0",
   "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
-  "uk.gov.hmrc" %% "govuk-template" % "5.37.0-play-25",
-  "uk.gov.hmrc" %% "play-ui" % "7.40.0-play-25",
+  "uk.gov.hmrc" %% "govuk-template" % "5.37.0-play-26",
+  "uk.gov.hmrc" %% "play-ui" % "7.40.0-play-26",
   "org.raml" % "raml-parser-2" % "1.0.13",
-  "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-25",
+  "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-26",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
   "jp.t2v" %% "play2-auth" % "0.14.2",
   "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1"
@@ -130,10 +129,9 @@ lazy val compile = Seq(
 lazy val test = Seq(
   "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
   "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it",
-  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-25" % "test,it",
+  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % "test,it",
   "junit" % "junit" % "4.12" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
-  "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
   "org.scalatest" %% "scalatest" % "2.2.6" % "test,it",
   "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % "test,it",
   "org.mockito" % "mockito-all" % "1.10.19" % "test,it",
