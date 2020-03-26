@@ -20,29 +20,28 @@ import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.http.HeaderNames.ACCEPT
-import play.api.libs.ws
 import play.api.libs.ws.{WSClient, WSProxyServer, WSRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.audit.http.HttpAuditing
+import uk.gov.hmrc.play.bootstrap.config.RunMode
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.config.RunMode
 import uk.gov.hmrc.play.http.ws.{WSProxy, WSProxyConfiguration}
 
 @Singleton
 class ProxiedHttpClient @Inject()(config: Configuration,
                                   httpAuditing: HttpAuditing,
                                   wsClient: WSClient,
-                                  environment: play.api.Environment,
-                                  actorSystem: ActorSystem)
+                                  actorSystem: ActorSystem,
+                                  runMode: RunMode)
   extends DefaultHttpClient(config, httpAuditing, wsClient, actorSystem) with WSProxy {
 
   val authorization: Option[Authorization] = None
   val apiKeyHeader: Option[(String, String)] = None
-  private val env = RunMode(environment.mode, config).env
+  private val env = runMode.env
 
   def withHeaders(bearerToken: String, apiKey: String = ""): ProxiedHttpClient = {
-    new ProxiedHttpClient(config, httpAuditing, wsClient, environment, actorSystem) {
+    new ProxiedHttpClient(config, httpAuditing, wsClient, actorSystem, runMode) {
       override val authorization = Some(Authorization(s"Bearer $bearerToken"))
       override val apiKeyHeader: Option[(String, String)] = if ("" == apiKey) None else Some("x-api-key" -> apiKey)
     }
