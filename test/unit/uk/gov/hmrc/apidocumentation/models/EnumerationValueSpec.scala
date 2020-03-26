@@ -53,13 +53,13 @@ class EnumerationValueSpec extends WordSpec with Matchers {
 
     "objects" should {
       "fail due to complexity of showing an object in html form (one Of should be used)" in new Setup {
-        read(JsObject(Map("value" -> JsString("x")))) shouldBe JsError(ValidationError(List("Unsupported enum format (Json object): use NUMBER, BOOLEAN OR STRING")))
+        read(JsObject(Map("value" -> JsString("x")))) shouldBe JsError(JsonValidationError(List("Unsupported enum format (Json object): use NUMBER, BOOLEAN OR STRING")))
       }
     }
 
     "arrays" should {
       "fail due to complexity of showing an array in html form" in new Setup {
-        read(JsArray(Seq(Json.obj("value" -> "x")))) shouldBe JsError(ValidationError(List("Unsupported enum format (Json array): use NUMBER, BOOLEAN OR STRING")))
+        read(JsArray(Seq(Json.obj("value" -> "x")))) shouldBe JsError(JsonValidationError(List("Unsupported enum format (Json array): use NUMBER, BOOLEAN OR STRING")))
       }
     }
   }

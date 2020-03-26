@@ -21,7 +21,6 @@ import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status._
-import play.api.i18n.MessagesApi
 import play.api.mvc._
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation
@@ -50,7 +49,6 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     val navigationService = mock[NavigationService]
     val partialsService = new PartialsService(developerFrontendConnector)
     val errorHandler = fakeApplication.injector.instanceOf[ErrorHandler]
-    val messagesApi = fakeApplication.injector.instanceOf[MessagesApi]
     val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
     implicit lazy val materializer = fakeApplication.materializer
@@ -76,7 +74,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         partialsService,
         loggedInUserProvider,
         errorHandler,
-        messagesApi
+        messagesControllerComponents
       )
 
     def verifyPageRendered(

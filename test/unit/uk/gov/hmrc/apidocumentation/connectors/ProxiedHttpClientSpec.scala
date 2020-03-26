@@ -28,7 +28,7 @@ import play.api.{Configuration, Environment, Mode}
 import uk.gov.hmrc.apidocumentation.connectors.ProxiedHttpClient
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.test.UnitSpec
 
 class ProxiedHttpClientSpec extends UnitSpec with ScalaFutures with MockitoSugar {
@@ -41,7 +41,7 @@ class ProxiedHttpClientSpec extends UnitSpec with ScalaFutures with MockitoSugar
     val bearerToken: String = UUID.randomUUID().toString
     val url = "http://example.com"
     val mockConfig: Configuration = mock[Configuration]
-    val mockAuditConnector: AuditConnector = mock[AuditConnector]
+    val mockHttpAuditing: HttpAuditing = mock[HttpAuditing]
     val mockWsClient: WSClient = mock[WSClient]
     val mockEnvironment: Environment = mock[Environment]
     when(mockEnvironment.mode).thenReturn(Mode.Test)
@@ -50,7 +50,7 @@ class ProxiedHttpClientSpec extends UnitSpec with ScalaFutures with MockitoSugar
     when(mockConfig.getBoolean("Test.proxy.proxyRequiredForThisEnvironment")).thenReturn(Some(true))
     when(mockWsClient.url(url)).thenReturn(mock[WSRequest])
 
-    val underTest = new ProxiedHttpClient(mockConfig, mockAuditConnector, mockWsClient, mockEnvironment, actorSystem)
+    val underTest = new ProxiedHttpClient(mockConfig, mockHttpAuditing, mockWsClient, mockEnvironment, actorSystem)
   }
 
   "withHeaders" should {
