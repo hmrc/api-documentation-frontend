@@ -82,7 +82,8 @@ object JsonSchema {
   implicit def listMapReads[V](implicit formatV: Reads[V]): Reads[ListMap[String, V]] = new Reads[ListMap[String, V]] {
     def reads(json: JsValue) = json match {
       case JsObject(m) =>
-        type Errors = Seq[(JsPath, Seq[ValidationError])]
+        type Errors = Seq[(JsPath, Seq[JsonValidationError])]
+
         def locate(e: Errors, key: String) = e.map { case (path, validationError) => (JsPath \ key) ++ path -> validationError }
 
         m.foldLeft(Right(ListMap.empty): Either[Errors, ListMap[String, V]]) {
@@ -94,7 +95,7 @@ object JsonSchema {
           }
         }.fold(JsError.apply, res => JsSuccess(res))
 
-      case _ => JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.jsobject"))))
+      case _ => JsError(Seq(JsPath() -> Seq(JsonValidationError("error.expected.jsobject"))))
     }
   }
 
