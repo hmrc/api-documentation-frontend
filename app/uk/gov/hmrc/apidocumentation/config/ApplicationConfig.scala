@@ -68,7 +68,7 @@ class ApplicationConfigImpl @Inject()(environment: Environment, config: Services
   private def loadConfig(key: String) = config.getString(key)
 
   val contactFormServiceIdentifier = "API"
-  val contactPath = config.getString("contactPath")
+  val contactPath = config.getConfString("contactPath", "")
 
   val analyticsToken = config.getConfString("google-analytics.token", "") match {
     case s if !s.isEmpty => Some(s)
@@ -76,7 +76,7 @@ class ApplicationConfigImpl @Inject()(environment: Environment, config: Services
   }
   val analyticsHost = config.getConfString("google-analytics.host", "auto")
 
-  val developerFrontendUrl = config.getString("developer-frontend-url")
+  val developerFrontendUrl = config.getConfString("developer-frontend-url", "")
 
   val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"

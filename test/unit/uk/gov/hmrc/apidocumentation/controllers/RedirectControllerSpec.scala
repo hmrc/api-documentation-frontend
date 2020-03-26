@@ -26,7 +26,9 @@ import scala.concurrent.Future
 class RedirectControllerSpec extends UnitSpec with WithFakeApplication {
 
   class Setup extends ControllerCommonSetup {
-    val underTest = new RedirectController(messagesControllerComponents)
+    val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+
+    val underTest = new RedirectController(mcc)
 
     def verifyPageRedirected(actualPageFuture: Future[Result], expectedUrl: String) {
       val actualPage = await(actualPageFuture)

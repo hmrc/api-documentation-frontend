@@ -38,12 +38,14 @@ class DownloadControllerSpec extends UnitSpec with MockitoSugar with WithFakeApp
 
     implicit val appConfig = mock[ApplicationConfig]
     val downloadService = mock[DownloadService]
+
     val errorHandler = fakeApplication.injector.instanceOf[ErrorHandler]
+    val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
     val version = "2.0"
     val resourceName = "some/resource"
 
-    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadService, loggedInUserProvider, errorHandler, messagesControllerComponents)
+    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadService, loggedInUserProvider, errorHandler, mcc)
 
     def theDownloadServiceWillReturnTheResult(result: Results.Status) = {
       when(downloadService.fetchResource(any(), any(), any())(any())).thenReturn(Future.successful(result))

@@ -43,12 +43,13 @@ import scala.concurrent.duration._
 
 class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with WithFakeApplication {
 
-  class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup{
+  class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup {
     implicit val appConfig = mock[ApplicationConfig]
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
     val navigationService = mock[NavigationService]
     val partialsService = new PartialsService(developerFrontendConnector)
     val errorHandler = fakeApplication.injector.instanceOf[ErrorHandler]
+    val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
     val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
     implicit lazy val materializer = fakeApplication.materializer
@@ -74,17 +75,15 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         partialsService,
         loggedInUserProvider,
         errorHandler,
-        messagesControllerComponents
+        mcc
       )
 
-    def verifyPageRendered(
-                            actualPageFuture: Future[Result],
-                            expectedTitle: String,
-                            breadcrumbs: List[Crumb] = List(homeBreadcrumb),
-                            sideNavLinkRendered: Boolean = true,
-                            subNavRendered: Boolean = false,
-                            bodyContains: Seq[String] = Seq.empty
-                          ) {
+    def verifyPageRendered(actualPageFuture: Future[Result],
+                           expectedTitle: String,
+                           breadcrumbs: List[Crumb] = List(homeBreadcrumb),
+                           sideNavLinkRendered: Boolean = true,
+                           subNavRendered: Boolean = false,
+                           bodyContains: Seq[String] = Seq.empty) {
       val actualPage = await(actualPageFuture)
       status(actualPage) shouldBe 200
       titleOf(actualPage) shouldBe expectedTitle
@@ -165,13 +164,10 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
   "DocumentationController" should {
 
     "display the index page" in new Setup {
-
       verifyPageRendered(underTest.indexPage()(request), "HMRC Developer Hub - GOV.UK", breadcrumbs = List.empty, sideNavLinkRendered = false)
-
     }
 
     "display the cookies page" in new Setup {
-
       val actualPageFuture = underTest.cookiesPage()(request)
       val actualPage = await(actualPageFuture)
       status(actualPage) shouldBe OK
@@ -236,11 +232,11 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
   "apiIndexPage" must {
 
     "render the API List" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+      theUserIsLoggedIn()
+      theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
 
-        val result = underTest.apiIndexPage(None, None, None)(request)
-        verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
+      val result = underTest.apiIndexPage(None, None, None)(request)
+      verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
 
     }
 

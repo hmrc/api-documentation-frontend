@@ -51,7 +51,6 @@ class ControllerCommonSetup
   val documentationService = mock[DocumentationService]
   val loggedInUserProvider = mock[LoggedInUserProvider]
   val apiDefinitionService = mock[ApiDefinitionService]
-  val messagesControllerComponents = mock[MessagesControllerComponents]
 
   def anApiDefinition(serviceName: String, version: String): APIDefinition = {
     APIDefinition(serviceName, "Hello World", "Say Hello World", "hello", None, None,
