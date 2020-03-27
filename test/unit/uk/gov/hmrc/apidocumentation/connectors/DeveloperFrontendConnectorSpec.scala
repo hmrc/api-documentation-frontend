@@ -16,8 +16,8 @@
 
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
-import org.mockito.Mockito.when
 import org.mockito.Matchers.{any, eq => meq}
+import org.mockito.Mockito.when
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector

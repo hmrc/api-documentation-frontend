@@ -14,13 +14,23 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
 lazy val appName = "api-documentation-frontend"
-lazy val appDependencies: Seq[ModuleID] = allDeps
+
+lazy val bookstrapPlayVersion = "1.5.0"
+lazy val govUktemplateVersion = "5.52.0-play-26"
+
+lazy val hmrcTestVersion = "3.9.0-play-26"
+lazy val pegdownVersion = "1.6.0"
+lazy val scalaTestVersion = "3.0.8"
+lazy val scalaTestPlusVersion = "3.1.3"
+lazy val jsoupVersion = "1.11.3"
+
+lazy val scope: String = "test, it"
 
 lazy val compile = Seq(
   ws,
   cache,
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.5.0",
-  "uk.gov.hmrc" %% "govuk-template" % "5.52.0-play-26",
+  "uk.gov.hmrc" %% "bootstrap-play-26" % bookstrapPlayVersion,
+  "uk.gov.hmrc" %% "govuk-template" % govUktemplateVersion,
   "uk.gov.hmrc" %% "play-ui" % "8.8.0-play-26",
   "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-26",
 
@@ -35,22 +45,24 @@ lazy val compile = Seq(
 )
 
 lazy val test = Seq(
-  "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
-  "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it",
-  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % "test,it",
-  "junit" % "junit" % "4.12" % "test,it",
-  "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
-  "org.scalatest" %% "scalatest" % "2.2.6" % "test,it",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % "test,it",
-  "org.mockito" % "mockito-all" % "1.10.19" % "test,it",
-  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "test,it",
-  "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
-  "com.github.tomakehurst" % "wiremock" % "1.58" % "test,it",
-  "org.jsoup" % "jsoup" % "1.11.3" % "test,it",
-  "jp.t2v" %% "play2-auth-test" % "0.14.2" % "test,it"
+  "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
+  "org.pegdown" % "pegdown" % pegdownVersion % scope,
+  "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
+  "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
+  "org.jsoup" % "jsoup" % jsoupVersion % scope,
+  "info.cukes" %% "cucumber-scala" % "1.2.5" % scope,
+  "info.cukes" % "cucumber-junit" % "1.2.5" % scope,
+  "org.mockito" % "mockito-all" % "1.10.19" % scope,
+  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % scope,
+  "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % scope,
+  "com.github.tomakehurst" % "wiremock" % "1.58" % scope,
+  "jp.t2v" %% "play2-auth-test" % "0.14.2" % scope
 ).map(_.exclude("xalan", "xalan")
   .exclude("org.apache.httpcomponents", "httpcore")
 )
+
+lazy val allDeps = compile ++ test
+lazy val appDependencies: Seq[ModuleID] = allDeps
 
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
@@ -143,8 +155,6 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
   publishArtifact in(Compile, packageSrc) := false
 ) ++
   publishAllArtefacts
-
-lazy val allDeps = compile ++ test
 
 def acceptanceTestFilter(name: String): Boolean = name startsWith "acceptance"
 

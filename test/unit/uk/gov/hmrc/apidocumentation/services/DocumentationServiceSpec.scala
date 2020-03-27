@@ -19,7 +19,7 @@ package unit.uk.gov.hmrc.apidocumentation.services
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.cache.CacheApi
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig

@@ -29,6 +29,7 @@ import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.{views, ErrorHandler}
 import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.include.{apiMain, main}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
@@ -43,7 +44,9 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
                                         partialsService: PartialsService,
                                         loggedInUserProvider: LoggedInUserProvider,
                                         errorHandler: ErrorHandler,
-                                        mcc: MessagesControllerComponents)
+                                        mcc: MessagesControllerComponents,
+                                        apiMain: apiMain,
+                                        main: main)
                                        (implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport {
 
@@ -54,26 +57,26 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   private val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
   private val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
 
-  def cookiesPage(): Action[AnyContent] = {
-    Action.async { implicit request => Future.successful(Ok(views.html.cookies())) }
+  def cookiesPage(): Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(new cookies(main)()))
   }
 
   def privacyPage(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.html.privacy()))
+    Future.successful(Ok(new privacy(main)()))
   }
 
   def termsPage(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.html.termsAndConditions()))
+    Future.successful(Ok(new termsAndConditions(main)()))
   }
 
   def indexPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      Future.successful(Ok(index("Home", navLinks)))
+      Future.successful(Ok(new index(main)("Home", navLinks)))
   }
 
   def testingPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      Future.successful(Ok(testing(pageAttributes("Testing in the sandbox", routes.DocumentationController.testingPage().url, navLinks))))
+      Future.successful(Ok(new testing(apiMain)(pageAttributes("Testing in the sandbox", routes.DocumentationController.testingPage().url, navLinks))))
   }
 
   def testingStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { implicit request =>
@@ -83,24 +86,24 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   def testUsersDataStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       val testUsersDataStatefulBehaviourUrl = routes.DocumentationController.testUsersDataStatefulBehaviourPage().url
-      Future.successful(Ok(testUsersDataStatefulBehaviour(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
+      Future.successful(Ok(new testUsersDataStatefulBehaviour(apiMain)(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
   }
 
   def tutorialsPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      Future.successful(Ok(tutorials(pageAttributes("Tutorials", routes.DocumentationController.tutorialsPage().url, navLinks))))
+      Future.successful(Ok(new tutorials(apiMain)(pageAttributes("Tutorials", routes.DocumentationController.tutorialsPage().url, navLinks))))
   }
 
   def termsOfUsePage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       partialsService.termsOfUsePartial() map { termsOfUsePartial =>
-        Ok(termsOfUse(pageAttributes("Terms Of Use", routes.DocumentationController.termsOfUsePage().url, navLinks), termsOfUsePartial))
+        Ok(new termsOfUse(apiMain)(pageAttributes("Terms Of Use", routes.DocumentationController.termsOfUsePage().url, navLinks), termsOfUsePartial))
       }
   }
 
   def authorisationPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      Future.successful(Ok(authorisation(pageAttributes("Authorisation", routes.DocumentationController.authorisationPage().url, navLinks))))
+      Future.successful(Ok(new authorisation(apiMain)(pageAttributes("Authorisation", routes.DocumentationController.authorisationPage().url, navLinks))))
   }
 
   def authorisation2SVPage(): Action[AnyContent] = headerNavigation { implicit request =>
@@ -110,7 +113,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         authCrumb,
         homeCrumb
       )
-      Future.successful(Ok(authorisation2SV(pageAttributes(
+      Future.successful(Ok(new authorisation2SV(apiMain)(pageAttributes(
         "2-step verification",
         routes.DocumentationController.authorisation2SVPage().url,
         navLinks,
@@ -124,7 +127,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         authCrumb,
         homeCrumb
       )
-      Future.successful(Ok(credentials(pageAttributes(
+      Future.successful(Ok(new credentials(apiMain)(pageAttributes(
         "Credentials",
         routes.DocumentationController.authorisationCredentialsPage().url,
         navLinks,
@@ -138,7 +141,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         authCrumb,
         homeCrumb
       )
-      Future.successful(Ok(authorisationOpenAccessEndpoints(pageAttributes(
+      Future.successful(Ok(new authorisationOpenAccessEndpoints(apiMain)(pageAttributes(
         "Open access endpoints",
         routes.DocumentationController.authorisationOpenAccessEndpointsPage().url,
         navLinks,
@@ -152,7 +155,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         authCrumb,
         homeCrumb
       )
-      Future.successful(Ok(authorisationAppRestrictedEndpoints(pageAttributes(
+      Future.successful(Ok(new authorisationAppRestrictedEndpoints(apiMain)(pageAttributes(
         "Application-restricted endpoints",
         routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url,
         navLinks,
@@ -166,7 +169,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         authCrumb,
         homeCrumb
       )
-      Future.successful(Ok(authorisationUserRestrictedEndpoints(pageAttributes(
+      Future.successful(Ok(new authorisationUserRestrictedEndpoints(apiMain)(pageAttributes(
         "User-restricted endpoints",
         routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url,
         navLinks,
@@ -175,13 +178,13 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def usingTheHubPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      Future.successful(Ok(usingTheHub(pageAttributes(s"Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url, navLinks))))
+      Future.successful(Ok(new usingTheHub(apiMain)(pageAttributes(s"Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url, navLinks))))
   }
 
   def mtdIntroductionPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       val introPageUrl = routes.DocumentationController.mtdIntroductionPage().url
-      Future.successful(Ok(mtdIntroduction(pageAttributes("Making Tax Digital guides", introPageUrl, navLinks))))
+      Future.successful(Ok(new mtdIntroduction(apiMain)(pageAttributes("Making Tax Digital guides", introPageUrl, navLinks))))
   }
 
   def mtdIncomeTaxServiceGuidePage(): Action[AnyContent] = headerNavigation { implicit request =>
@@ -191,7 +194,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   
   def referenceGuidePage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      Future.successful(Ok(reference(pageAttributes("Reference guide", routes.DocumentationController.referenceGuidePage().url, navLinks))))
+      Future.successful(Ok(new reference(apiMain)(pageAttributes("Reference guide", routes.DocumentationController.referenceGuidePage().url, navLinks))))
   }
 
   def nameGuidelinesPage(): Action[AnyContent] = headerNavigation { implicit request =>
@@ -201,7 +204,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         usingTheHubCrumb,
         homeCrumb
       )
-      Future.successful(Ok(namingGuidelines(pageAttributes(
+      Future.successful(Ok(new namingGuidelines(apiMain)(pageAttributes(
         "Application naming guidelines",
         routes.DocumentationController.nameGuidelinesPage().url,
         navLinks,
@@ -210,7 +213,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def fraudPreventionPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      Future.successful(Ok(fraudPrevention(pageAttributes("Fraud prevention", routes.DocumentationController.fraudPreventionPage().url, navLinks))))
+      Future.successful(Ok(new fraudPrevention(apiMain)(pageAttributes("Fraud prevention", routes.DocumentationController.fraudPreventionPage().url, navLinks))))
   }
 
   def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]): Action[AnyContent] = headerNavigation { implicit request =>
@@ -234,8 +237,8 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
             val apisByCategory = Documentation.groupedByCategory(apis, XmlApiDocumentation.xmlApiDefinitions, ServiceGuide.serviceGuides)
 
             filter match {
-              case Some(f) => Ok(apisFiltered(pageAttributes("Filtered API Documentation"), apisByCategory, APICategory.fromFilter(f)))
-              case _ => Ok(apiIndex(pageAttributes(), apisByCategory))
+              case Some(f) => Ok(new apisFiltered(apiMain)(pageAttributes("Filtered API Documentation"), apisByCategory, APICategory.fromFilter(f)))
+              case _ => Ok(new apiIndex(apiMain)(pageAttributes(), apisByCategory))
             }
 
           }) recover {
@@ -330,14 +333,14 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     def renderRetiredVersionJumpPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion) = {
       val apiDefinition = api.userAccessibleApiDefinition
 
-      Future.successful(Ok(retiredVersionJump(
+      Future.successful(Ok(new retiredVersionJump(apiMain)(
         makePageAttributes(apiDefinition, selectedVersion, navigationService.sidebarNavigation()), apiDefinition)))
     }
 
     def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false) =
       documentationService.fetchRAML(service, version, cacheBuster).map { ramlAndSchemas =>
         val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation(service, selectedVersion, ramlAndSchemas.raml))
-        Ok(serviceDocumentation(attrs, api, selectedVersion, ramlAndSchemas, email.isDefined)).withHeaders(cacheControlHeaders)
+        Ok(new serviceDocumentation(apiMain)(attrs, api, selectedVersion, ramlAndSchemas, email.isDefined)).withHeaders(cacheControlHeaders)
       }
 
     findVersion(apiOption) match {
@@ -361,7 +364,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
           headerLinks = navLinks,
           sidebarLinks = navigationService.sidebarNavigation())
 
-        val page = (result: Try[Option[RamlAndSchemas]]) => previewDocumentation(pageAttributes, url, result)
+        val page = (result: Try[Option[RamlAndSchemas]]) => new previewDocumentation(apiMain)(pageAttributes, url, result)
 
         url match {
           case Some("") => Future.successful(InternalServerError(page(Failure(RamlParseException("No URL supplied")))))
@@ -411,7 +414,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       }
 
       XmlApiDocumentation.xmlApiDefinitions.find(_.name == name) match {
-        case Some(xmlApiDefinition) => Future.successful(Ok(xmlDocumentation(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
+        case Some(xmlApiDefinition) => Future.successful(Ok(new xmlDocumentation(apiMain)(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
         case _ => Future.successful(NotFound(errorHandler.notFoundTemplate))
       }
   }

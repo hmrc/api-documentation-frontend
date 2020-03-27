@@ -16,22 +16,24 @@
 
 package unit.uk.gov.hmrc.apidocumentation.views
 
+import javax.inject.Inject
 import org.jsoup.Jsoup
-import uk.gov.hmrc.apidocumentation.views
 import org.jsoup.nodes.Document
-import org.scalatest.mockito.MockitoSugar
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.Messages
+import play.api.mvc.Request
+import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.play.test.UnitSpec
-import play.twirl.api.HtmlFormat.Appendable
-import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.services.RAML
-import org.mockito.Mockito.when
-import org.scalatestplus.play.OneAppPerSuite
+import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
+import uk.gov.hmrc.apidocumentation.views.html.serviceDocumentation
+import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
-class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with OneAppPerSuite with ApiDefinitionTestDataHelper {
+class ServiceDocumentationViewSpec @Inject()(apiMain: apiMain) extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite with ApiDefinitionTestDataHelper {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val versionsDropdown = dom.getElementById("version")
@@ -64,7 +66,7 @@ class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with OneAp
     val api: ExtendedAPIDefinition = ExtendedAPIDefinition("test", "", "Test Service", "", "a context", requiresTrust = true, isTestSupport = true, versions)
     val currentVersion = versions.head
 
-    val page = Page(views.html.serviceDocumentation(pageAttributes, api, currentVersion, ramlAndSchemas, loggedIn = true)(request, mockAppConfig, messages))
+    val page = Page(new serviceDocumentation(apiMain)(pageAttributes, api, currentVersion, ramlAndSchemas, loggedIn = true)(request, mockAppConfig, messages))
   }
 
   "service documentation view" when {

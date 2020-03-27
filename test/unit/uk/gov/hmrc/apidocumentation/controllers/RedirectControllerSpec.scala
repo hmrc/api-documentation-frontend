@@ -17,7 +17,6 @@
 package unit.uk.gov.hmrc.apidocumentation.controllers
 
 import play.api.mvc._
-import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.controllers.RedirectController
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 

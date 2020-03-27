@@ -17,7 +17,6 @@
 package unit.uk.gov.hmrc.apidocumentation.models
 
 import org.scalatest.{Matchers, WordSpec}
-import play.api.data.validation.ValidationError
 import play.api.libs.json._
 import uk.gov.hmrc.apidocumentation.models.EnumerationValue
 

@@ -18,7 +18,6 @@ package uk.gov.hmrc.apidocumentation.config
 
 import com.google.inject.ImplementedBy
 import javax.inject.Inject
-import play.api.Environment
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 @ImplementedBy(classOf[ApplicationConfigImpl])
@@ -61,7 +60,7 @@ trait ApplicationConfig {
   val apiDefinitionBaseUrl: String
 }
 
-class ApplicationConfigImpl @Inject()(environment: Environment, config: ServicesConfig, runMode: RunMode) extends ApplicationConfig {
+class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) extends ApplicationConfig {
 
   val contactFormServiceIdentifier = "API"
   val contactPath = config.getConfString("contactPath", "")

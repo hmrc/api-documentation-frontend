@@ -17,90 +17,92 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import include._
-@import partials.pagination
+@import uk.gov.hmrc.apidocumentation.views.html.partials.pagination
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain)
 
 @(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
-    @apiMain(pageAttributes) {
+@apiMain(pageAttributes) {
 
-        <h1 class="heading-xlarge">Authorisation</h1>
+    <h1 class="heading-xlarge">Authorisation</h1>
 
-        <nav role="navigation" aria-labelledby="onThisPage">
-            <h2 id="onThisPage" class="visually-hidden">On this page</h2>
-            <ul class="list">
-                <li>Introduction</li>
-                <li><a href="@controllers.routes.DocumentationController.authorisationCredentialsPage().url">Credentials</a></li>
-                <li><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
-                <li><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
-                <li><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
-                <li><a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a></li>
-            </ul>
-        </nav>
+    <nav role="navigation" aria-labelledby="onThisPage">
+        <h2 id="onThisPage" class="visually-hidden">On this page</h2>
+        <ul class="list">
+            <li>Introduction</li>
+            <li><a href="@controllers.routes.DocumentationController.authorisationCredentialsPage().url">Credentials</a></li>
+            <li><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
+            <li><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
+            <li><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
+            <li><a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a></li>
+        </ul>
+    </nav>
 
-        <hr aria-hidden="true">
+    <hr aria-hidden="true">
 
-        <section id="introduction">
+    <section id="introduction">
 
-            <h2 class="heading-large">Introduction</h2>
+        <h2 class="heading-large">Introduction</h2>
 
-            <p>Our APIs have 3 types of endpoint. Each endpoint has its own:</p>
+        <p>Our APIs have 3 types of endpoint. Each endpoint has its own:</p>
 
-            <ul class="list list-bullet">
-                <li>access level</li>
-                <li>authorisation token</li>
-                <li>authorisation procedure</li>
-            </ul>
+        <ul class="list list-bullet">
+            <li>access level</li>
+            <li>authorisation token</li>
+            <li>authorisation procedure</li>
+        </ul>
 
-            <br>
+        <br>
 
-            <p>These are dependent on the data that's served.</p>
+        <p>These are dependent on the data that's served.</p>
 
-            <table>
-                <caption class="visually-hidden">Endpoint types and their required tokens</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Endpoint access level</th>
-                        <th scope="col">Required authorisation token</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td scope="row"><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access</a></td>
-                        <td>No token</td>
-                    </tr>
-                    <tr>
-                        <td scope="row"><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted</a></td>
-                        <td>
-                            OAuth 2.0 <code class="code--slim">access_token</code><br>
-                            Generated using <a href="https://oauth.net/2/grant-types/client-credentials/">OAuth 2.0 Client Credentials Grant</a>
-                            <br>
-                            <br>
-                            Using <code class="code--slim">server_token</code> is now deprecated.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row"><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted</a></td>
-                        <td>
-                            OAuth 2.0 <code class="code--slim">access_token</code><br>
-                            Generated using <a href="https://oauth.net/2/grant-types/authorization-code/">OAuth 2.0 Authorization Code Grant</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <br>
-            <div class="panel panel-border-wide">
-                <p>
-                    HMRC APIs are only accessible over Transport Layer Security (TLS). For example, URLs that begin
-                    with https://. Applications must support TLS 1.2 or higher to avoid known weaknesses in previous versions.
-                </p>
-            </div>
-
-
-                    </section>
+        <table>
+            <caption class="visually-hidden">Endpoint types and their required tokens</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Endpoint access level</th>
+                    <th scope="col">Required authorisation token</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row"><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access</a></td>
+                    <td>No token</td>
+                </tr>
+                <tr>
+                    <td scope="row"><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted</a></td>
+                    <td>
+                        OAuth 2.0 <code class="code--slim">access_token</code><br>
+                        Generated using <a href="https://oauth.net/2/grant-types/client-credentials/">OAuth 2.0 Client Credentials Grant</a>
+                        <br>
+                        <br>
+                        Using <code class="code--slim">server_token</code> is now deprecated.
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="row"><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted</a></td>
+                    <td>
+                        OAuth 2.0 <code class="code--slim">access_token</code><br>
+                        Generated using <a href="https://oauth.net/2/grant-types/authorization-code/">OAuth 2.0 Authorization Code Grant</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <div class="panel panel-border-wide">
+            <p>
+                HMRC APIs are only accessible over Transport Layer Security (TLS). For example, URLs that begin
+                with https://. Applications must support TLS 1.2 or higher to avoid known weaknesses in previous versions.
+            </p>
+        </div>
 
 
+                </section>
 
-        @pagination(next = Some(Pagination("Credentials", controllers.routes.DocumentationController.authorisationCredentialsPage().url)))
 
-    }
+
+    @pagination(next = Some(Pagination("Credentials", controllers.routes.DocumentationController.authorisationCredentialsPage().url)))
+
+}

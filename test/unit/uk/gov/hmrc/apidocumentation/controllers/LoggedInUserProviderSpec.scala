@@ -20,7 +20,7 @@ import jp.t2v.lab.play2.auth.{AsyncIdContainer, CookieTokenAccessor}
 import org.mockito.Matchers.{any, eq => meq}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.RequestHeader
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig

@@ -16,12 +16,10 @@
 
 @import play.api.mvc.Request
 @import uk.gov.hmrc.apidocumentation.config._
-@import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import include.apiMain
-@import raml.main
-@import uk.gov.hmrc.apidocumentation.views.helpers._
-@import uk.gov.hmrc.apidocumentation.services.RAML
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain)
 
 @(pageAttributes: PageAttributes, api: XmlApiDocumentation)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 

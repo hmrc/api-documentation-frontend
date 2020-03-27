@@ -17,11 +17,11 @@
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
+import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 trait ConnectorSpec extends UnitSpec with ScalaFutures with MockitoSugar with WithFakeApplication {
 

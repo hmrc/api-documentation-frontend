@@ -24,7 +24,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-
 trait ApiDefinitionConnectorMockingHelper {
   def whenFetchAllDefinitions[T <: ApiDefinitionConnector](base: T)
                              (apis: APIDefinition*)

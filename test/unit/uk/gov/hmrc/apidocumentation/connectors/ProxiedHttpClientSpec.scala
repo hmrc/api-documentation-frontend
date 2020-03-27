@@ -23,8 +23,8 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
+import play.api.{ConfigLoader, Configuration, Mode}
 import play.api.libs.ws.{WSClient, WSRequest}
-import play.api.{ConfigLoader, Configuration, Environment, Mode}
 import uk.gov.hmrc.apidocumentation.connectors.ProxiedHttpClient
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization

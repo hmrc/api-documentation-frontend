@@ -19,7 +19,9 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.models.APICategory._
 
-@import include._
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain)
 
 @(pageAttributes: PageAttributes, documentsByCategory: Map[APICategory, Seq[Documentation]], filter: Option[APICategory]
     )(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)

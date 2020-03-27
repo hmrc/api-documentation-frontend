@@ -19,18 +19,18 @@ package unit.uk.gov.hmrc.apidocumentation.controllers
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status._
 import play.api.mvc._
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation
-import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
-import uk.gov.hmrc.apidocumentation.controllers
+import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
 import uk.gov.hmrc.apidocumentation.controllers.DocumentationController
 import uk.gov.hmrc.apidocumentation.models.{Crumb, RamlAndSchemas, TestEndpoint, _}
 import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService, RAML}
+import uk.gov.hmrc.apidocumentation.views.html.include.{apiMain, main}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -50,6 +50,8 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     val partialsService = new PartialsService(developerFrontendConnector)
     val errorHandler = fakeApplication.injector.instanceOf[ErrorHandler]
     val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+    val apiMain = fakeApplication.injector.instanceOf[apiMain]
+    val main = fakeApplication.injector.instanceOf[main]
     val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
     implicit lazy val materializer = fakeApplication.materializer
@@ -75,7 +77,9 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         partialsService,
         loggedInUserProvider,
         errorHandler,
-        mcc
+        mcc,
+        apiMain,
+        main
       )
 
     def verifyPageRendered(actualPageFuture: Future[Result],

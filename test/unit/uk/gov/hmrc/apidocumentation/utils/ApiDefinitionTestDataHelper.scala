@@ -16,8 +16,8 @@
 
 package unit.uk.gov.hmrc.apidocumentation.utils
 
-import uk.gov.hmrc.apidocumentation.models.APIStatus.{APIStatus, STABLE}
 import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.APIStatus.{APIStatus, STABLE}
 
 trait ApiDefinitionTestDataHelper {
   def apiDefinition(name: String, versions: Seq[APIVersion] = Seq(apiVersion("1.0", STABLE))) = {

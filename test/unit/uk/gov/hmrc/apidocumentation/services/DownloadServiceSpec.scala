@@ -18,7 +18,7 @@ package unit.uk.gov.hmrc.apidocumentation.services
 
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Results
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.apidocumentation.services.DownloadService

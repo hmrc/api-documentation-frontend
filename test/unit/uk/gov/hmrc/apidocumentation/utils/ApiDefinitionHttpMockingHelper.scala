@@ -16,11 +16,11 @@
 
 package unit.uk.gov.hmrc.apidocumentation.utils
 
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.when
 import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import org.mockito.Matchers.{any, eq => eqTo}
 
 import scala.concurrent.Future
 
