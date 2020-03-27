@@ -296,7 +296,7 @@
                 </tr></thead>
                 <tbody>
                 <tr>
-                    <td>Request method is not GET, PUT, POST, DELETE or OPTIONS</td>
+                    <td>Request method is not GET, PUT, POST, PATCH, DELETE or OPTIONS</td>
                     <td><code class="code--slim">METHOD_NOT_ALLOWED</code></td>
                 </tr>
                 </tbody>
@@ -435,7 +435,7 @@
             If your software is installed on end user devices, they might also need to configure their own network.</p>
         <p>We have fixed domain names, but cannot provide static IP addresses, so you need to configure your network
             access in your proxy, not your firewall.</p>
-        <p>Configure your proxy to allow full access to the following domains, including HTTP GET, POST, PUT and DELETE.</p>
+        <p>Configure your proxy to allow full access to the following domains, including HTTP GET, POST, PUT, PATCH and DELETE.</p>
         <p>For testing in sandbox:</p>
         <pre class="code--block">
 @applicationConfig.sandboxApiHost
