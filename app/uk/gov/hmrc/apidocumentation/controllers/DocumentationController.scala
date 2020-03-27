@@ -117,6 +117,20 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         Some(breadcrumbs)))))
   }
 
+  def authorisationCredentialsPage(): Action[AnyContent] = headerNavigation { implicit request =>
+    navLinks =>
+      val breadcrumbs = Breadcrumbs(
+        Crumb("Credentials", routes.DocumentationController.authorisationCredentialsPage().url),
+        authCrumb,
+        homeCrumb
+      )
+      Future.successful(Ok(credentials(pageAttributes(
+        "Credentials",
+        routes.DocumentationController.authorisationCredentialsPage().url,
+        navLinks,
+        Some(breadcrumbs)))))
+  }
+
   def authorisationOpenAccessEndpointsPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       val breadcrumbs = Breadcrumbs(
@@ -172,16 +186,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
 
   def mtdIncomeTaxServiceGuidePage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
-      val breadcrumbs = Breadcrumbs(
-        Crumb("Income Tax (MTD) End-to-End Service Guide", routes.DocumentationController.mtdIncomeTaxServiceGuidePage().url),
-        apiDocCrumb,
-        homeCrumb
-      )
-      Future.successful(Ok(mtdIncomeTaxServiceGuide(pageAttributes(
-        "Income Tax (MTD) End-to-End Service Guide",
-        routes.DocumentationController.mtdIncomeTaxServiceGuidePage().url,
-        navLinks,
-        Some(breadcrumbs)))))
+      Future.successful(MovedPermanently("/guides/income-tax-mtd-end-to-end-service-guide/"))
   }
   
   def referenceGuidePage(): Action[AnyContent] = headerNavigation { implicit request =>

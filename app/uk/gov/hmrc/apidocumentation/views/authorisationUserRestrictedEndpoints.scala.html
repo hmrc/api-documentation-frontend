@@ -30,6 +30,7 @@
         <h2 id="onThisPage" class="visually-hidden">On this page</h2>
         <ul class="list">
             <li><a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a></li>
+            <li><a href="@controllers.routes.DocumentationController.authorisationCredentialsPage().url">Credentials</a></li>
             <li><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
             <li><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
             <li>User-restricted endpoints</li>
@@ -686,29 +687,6 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
         <p>The authorisation code is rendered in the title of a HTML page. The user sees a message asking them to close the browser window.</p>
 
         <p>Use this if your application can detect that the page has loaded and parse the DOM to retrieve the code from the title, but can't close the window.</p>
-
-    </section>
-    <section>
-
-        <h3 class="heading-medium">Managing your client secret</h3>
-
-        <div class="notice">
-            <i class="icon icon-important">
-                <span class="visually-hidden">Warning</span>
-            </i>
-            <strong class="bold-small">
-                Your <code class="code--slim">client_secret</code> is embedded in the source code of your application,
-                and may be discoverable.
-            </strong>
-        </div>
-
-        <p>
-            You should consider a rotation strategy for your <code class="code--slim">client_secret</code>, to ensure
-            that secrets are periodically rolled over to a new value.
-        </p>
-        <p>
-            We support multiple <code class="code--slim">client_secret</code> values for a single application.
-        </p>
 
     </section>
 

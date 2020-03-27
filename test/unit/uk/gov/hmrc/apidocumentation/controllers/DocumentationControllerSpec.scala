@@ -187,6 +187,10 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
       verifyPageRendered(underTest.authorisationPage()(request), pageTitle("Authorisation"))
     }
 
+    "display the authorisation credentials page" in new Setup {
+      verifyPageRendered(underTest.authorisationCredentialsPage()(request), pageTitle("Credentials"))
+    }
+
     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
       when(developerFrontendConnector.fetchTermsOfUsePartial()(any()))
         .thenReturn(Future.successful(HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))))
@@ -219,7 +223,9 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     "display the Income Tax (MTD) End-to-End Service Guide page" in new Setup {
-      verifyPageRendered(underTest.mtdIncomeTaxServiceGuidePage()(request), pageTitle("Income Tax (MTD) End-to-End Service Guide"))
+      val result = await(underTest.mtdIncomeTaxServiceGuidePage()(request))
+      status(result) shouldBe MOVED_PERMANENTLY
+      result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
     }
 
     "redirect to the test users test data and stateful behaviour page" in new Setup {
