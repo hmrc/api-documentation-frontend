@@ -47,8 +47,7 @@ lazy val test = Seq(
   "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
   "com.github.tomakehurst" % "wiremock" % "1.58" % "test,it",
   "org.jsoup" % "jsoup" % "1.11.3" % "test,it",
-  "jp.t2v" %% "play2-auth-test" % "0.14.2" % "test,it",
-  "de.leanovate.play-mockws" %% "play-mockws" % "2.5.1" % "test"
+  "jp.t2v" %% "play2-auth-test" % "0.14.2" % "test,it"
 ).map(_.exclude("xalan", "xalan")
   .exclude("org.apache.httpcomponents", "httpcore")
 )
