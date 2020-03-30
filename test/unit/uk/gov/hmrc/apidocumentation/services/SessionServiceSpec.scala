@@ -26,8 +26,8 @@ import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
 
@@ -45,7 +45,7 @@ class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoS
     "Return session if the session is logged in" in new Setup {
       val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
 
-      when(userSessionConnectorMock.fetchSession(any[String])(any[HeaderCarrier]))
+      when(userSessionConnectorMock.fetchSession(any[String])(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Future.successful(session))
 
       val result = await(underTest.fetch("sessionId"))
@@ -56,7 +56,7 @@ class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoS
     "Return None when the session is part logged in" in new Setup {
       val session = Session("sessionId", LoggedInState.PART_LOGGED_IN_ENABLING_MFA, developer)
 
-      when(userSessionConnectorMock.fetchSession(any[String])(any[HeaderCarrier]))
+      when(userSessionConnectorMock.fetchSession(any[String])(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Future.successful(session))
 
       val result = await(underTest.fetch("sessionId"))
