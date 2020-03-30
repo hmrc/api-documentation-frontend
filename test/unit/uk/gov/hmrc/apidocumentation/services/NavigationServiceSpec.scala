@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.collection.JavaConversions._
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class NavigationServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
@@ -58,12 +58,12 @@ class NavigationServiceSpec extends UnitSpec with WithFakeApplication with Mocki
   "headerNavigation" should {
     "fetch and return header navigation links" in new Setup {
       when(config.developerFrontendUrl).thenReturn("http://localhost:9865")
-      when(connector.fetchNavLinks()(any())).thenReturn(Future.successful(Seq(
+      when(connector.fetchNavLinks()(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(Seq(
         NavLink("Register", "/developer/registration"),
         NavLink("Sign in", "/developer/login"))))
 
       val headerNavLinks = await(underTest.headerNavigation())
-      verify(connector, times(1)).fetchNavLinks()(any())
+      verify(connector, times(1)).fetchNavLinks()(any[HeaderCarrier], any[ExecutionContext])
       headerNavLinks.size shouldBe 2
       headerNavLinks.head.href shouldBe "http://localhost:9865/developer/registration"
       headerNavLinks.head.label shouldBe "Register"
@@ -72,9 +72,9 @@ class NavigationServiceSpec extends UnitSpec with WithFakeApplication with Mocki
     }
 
     "return empty header navigation links" in new Setup {
-      when(connector.fetchNavLinks()(any())).thenReturn(Future.successful(Seq.empty[NavLink]))
+      when(connector.fetchNavLinks()(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(Seq.empty[NavLink]))
       val headerNavLinks = await(underTest.headerNavigation())
-      verify(connector, times(1)).fetchNavLinks()(any())
+      verify(connector, times(1)).fetchNavLinks()(any[HeaderCarrier], any[ExecutionContext])
       headerNavLinks.size shouldBe 0
     }
   }

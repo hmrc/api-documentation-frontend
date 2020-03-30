@@ -24,9 +24,9 @@ import play.api.http.Status._
 import play.api.mvc._
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation
+import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
-import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
 import uk.gov.hmrc.apidocumentation.controllers.DocumentationController
 import uk.gov.hmrc.apidocumentation.models.{Crumb, RamlAndSchemas, TestEndpoint, _}
 import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService, RAML}
@@ -36,8 +36,8 @@ import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
 import scala.concurrent.duration._
 
@@ -196,7 +196,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
-      when(developerFrontendConnector.fetchTermsOfUsePartial()(any()))
+      when(developerFrontendConnector.fetchTermsOfUsePartial()(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Future.successful(HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))))
 
       verifyPageRendered(underTest.termsOfUsePage()(request), pageTitle("Terms Of Use"),

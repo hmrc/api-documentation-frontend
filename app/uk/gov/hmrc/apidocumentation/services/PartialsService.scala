@@ -17,16 +17,15 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.Inject
-
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.HtmlPartial
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class PartialsService @Inject()(connector: DeveloperFrontendConnector) {
 
-  def termsOfUsePartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = {
+  def termsOfUsePartial()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HtmlPartial] = {
     connector.fetchTermsOfUsePartial
   }
 }
