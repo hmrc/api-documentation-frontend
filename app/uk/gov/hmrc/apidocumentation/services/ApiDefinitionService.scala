@@ -24,7 +24,6 @@ import uk.gov.hmrc.play.http.metrics.{API, Metrics}
 
 import scala.concurrent.ExecutionContext
 
-//import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 trait BaseApiDefinitionService {

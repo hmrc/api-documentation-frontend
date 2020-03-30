@@ -25,7 +25,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
 import scala.collection.JavaConversions._
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
@@ -50,12 +49,12 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
 
   private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 
-  def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[RamlAndSchemas] = {
+  def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[RamlAndSchemas] = {
       val url = ramlUrl(serviceBaseUrl,serviceName,version)
       fetchRAML(url, cacheBuster)
   }
 
-  def fetchRAML(url: String, cacheBuster: Boolean): Future[RamlAndSchemas] = {
+  def fetchRAML(url: String, cacheBuster: Boolean)(implicit ec: ExecutionContext): Future[RamlAndSchemas] = {
     if (cacheBuster) cache.remove(url)
 
     Future {
@@ -75,7 +74,7 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
     }
   }
 
-  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier): Future[Seq[TestEndpoint]] = {
+  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TestEndpoint]] = {
     fetchRAML(service, version, cacheBuster = true).map { ramlAndSchemas =>
       buildResources(ramlAndSchemas.raml.resources.toSeq)
     }

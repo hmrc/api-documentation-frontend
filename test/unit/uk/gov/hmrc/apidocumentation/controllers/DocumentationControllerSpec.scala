@@ -37,7 +37,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.failed
 import scala.concurrent.duration._
 
@@ -151,11 +151,11 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
-      when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(ramlAndSchemas)
+      when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier], any[ExecutionContext])).thenReturn(ramlAndSchemas)
     }
 
     def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
-      when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(failed(exception))
+      when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier], any[ExecutionContext])).thenReturn(failed(exception))
     }
 
     def pageTitle(pagePurpose: String) = {
@@ -593,7 +593,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         TestEndpoint("{service-url}/employers-paye/zzz"),
         TestEndpoint("{service-url}/employers-paye/ddd")
       )
-      when(documentationService.buildTestEndpoints(any(), any())(any())).thenReturn(endpoints)
+      when(documentationService.buildTestEndpoints(any(), any())(any[HeaderCarrier], any[ExecutionContext])).thenReturn(endpoints)
       val result = underTest.fetchTestEndpointJson("employers-paye", "1.0")(request)
       val actualPage = await(result)
       actualPage.header.status shouldBe OK
