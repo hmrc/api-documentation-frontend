@@ -31,7 +31,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class LoggedInUserProviderTest(config: ApplicationConfig,
                                sessionService: SessionService,
@@ -95,7 +95,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
       when(mockAsyncIdContainer.get(tokenId))
         .thenReturn(Future.successful(Some(userId)))
 
-      when(mockSessionService.fetch( meq(userId))(any[HeaderCarrier]))
+      when(mockSessionService.fetch( meq(userId))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(None)
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
@@ -112,7 +112,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
       when(mockAsyncIdContainer.get(tokenId))
         .thenReturn(Future.successful(Some(userId)))
 
-      when(mockSessionService.fetch( meq(userId))(any[HeaderCarrier]))
+      when(mockSessionService.fetch( meq(userId))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Some(session))
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
