@@ -42,7 +42,7 @@ lazy val test = Seq(
   "org.jsoup" % "jsoup" % "1.11.3" % scope,
   "info.cukes" %% "cucumber-scala" % "1.2.5" % scope,
   "info.cukes" % "cucumber-junit" % "1.2.5" % scope,
-  "org.mockito" % "mockito-all" % "1.10.19" % scope,
+  "org.mockito" % "mockito-core" % "1.10.19" % scope,
   "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % scope,
   "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % scope,
   "com.github.tomakehurst" % "wiremock" % "1.58" % scope,
