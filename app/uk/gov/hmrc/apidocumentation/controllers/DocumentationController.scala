@@ -419,11 +419,11 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       }
   }
 
-  private def headerNavigation(f: Request[AnyContent] => Seq[NavLink] => Future[Result]): Action[AnyContent] = {
+  private def headerNavigation(f: Request[AnyContent] => Seq[NavLink] => Future[Result])(implicit ec: ExecutionContext): Action[AnyContent] = {
     Action.async { implicit request =>
       // We use a non-standard cookie which doesn't get propagated in the header carrier
       val newHc = request.headers.get(COOKIE).fold(hc) { cookie => hc.withExtraHeaders(COOKIE -> cookie) }
-      navigationService.headerNavigation()(newHc) flatMap { navLinks =>
+      navigationService.headerNavigation()(newHc, ec) flatMap { navLinks =>
         f(request)(navLinks)
       } recoverWith {
         case ex =>

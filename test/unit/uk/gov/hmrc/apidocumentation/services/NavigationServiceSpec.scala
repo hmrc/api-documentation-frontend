@@ -31,6 +31,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.collection.JavaConversions._
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class NavigationServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
 

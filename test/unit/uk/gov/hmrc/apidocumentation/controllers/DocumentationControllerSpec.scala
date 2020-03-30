@@ -62,9 +62,9 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None, None).url)
     val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
 
-    when(navigationService.headerNavigation()(any())).thenReturn(Future.successful(Seq(navLink)))
+    when(navigationService.headerNavigation()(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(Seq(navLink)))
     when(navigationService.sidebarNavigation()).thenReturn(Future.successful(Seq(sidebarLink)))
-    when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
+    when(navigationService.apiSidebarNavigation(any(), any(), any())(any[ExecutionContext])).thenReturn(Seq(sidebarLink))
     when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
     when(appConfig.title).thenReturn("HMRC Developer Hub")
     when(documentationService.defaultExpiration).thenReturn(1.hour)
@@ -564,7 +564,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "render 500 page when service throws exception" in new Setup(ramlPreviewEnabled = true) {
       val url = "http://host:port/some.path.to.a.raml.document"
-      when(documentationService.fetchRAML(any(), any())).thenReturn(failed(RamlParseException("Expected unit test failure")))
+      when(documentationService.fetchRAML(any(), any())(any[ExecutionContext])).thenReturn(failed(RamlParseException("Expected unit test failure")))
       val result = underTest.previewApiDocumentation(Some(url))(request)
       verifyErrorPageRendered(result, expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Expected unit test failure")
     }
