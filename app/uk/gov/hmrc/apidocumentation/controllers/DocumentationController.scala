@@ -27,7 +27,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.services._
-import uk.gov.hmrc.apidocumentation.{views, ErrorHandler}
+import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.views.html.include.{apiMain, main}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}

@@ -38,7 +38,7 @@ class LoggedInUserProvider @Inject()(config: ApplicationConfig,
   def resolveUser(id: String)(implicit ctx: ExecutionContext, hc: HeaderCarrier): Future[Option[Developer]] =
     sessionService.fetch(id).map(_.map(_.developer))
 
-  def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier): Future[Option[Developer]] = 
+  def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier): Future[Option[Developer]] =
     tokenAccessor.extract(request) match {
       case None => Future.successful(None)
       case Some(token) =>

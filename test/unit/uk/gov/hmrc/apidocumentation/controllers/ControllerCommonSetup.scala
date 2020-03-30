@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerCommonSetup
   extends UnitSpec
@@ -117,22 +117,22 @@ class ControllerCommonSetup
   }
 
   def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(Some(apiDefinition)))
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(Some(apiDefinition)))
   }
 
   def theDefinitionServiceWillReturnNoApiDefinition() = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(None))
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(None))
   }
 
   def theDefinitionServiceWillFail(exception: Throwable) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.failed(exception))
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.failed(exception))
 
-    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
+    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.failed(exception))
   }
 
   def theDefinitionServiceWillReturnApiDefinitions(apis: Seq[APIDefinition]) = {
-    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
+    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.successful(apis))
   }
 
