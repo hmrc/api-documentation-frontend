@@ -37,44 +37,44 @@ class LoggedInUserProviderTest(config: ApplicationConfig,
                                sessionService: SessionService,
                                asyncIdContainer: AsyncIdContainer[String],
                                cookieTokenAccessor: CookieTokenAccessor)
-  extends LoggedInUserProvider(config,
-    sessionService) {
+  extends LoggedInUserProvider(config, sessionService) {
   override lazy val idContainer: AsyncIdContainer[String] = asyncIdContainer
   override lazy val tokenAccessor: CookieTokenAccessor = cookieTokenAccessor
 }
 
 class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSugar {
 
-  "Fetching logged in user" should {
+  trait Setup {
+    implicit val hc = HeaderCarrier()
+    implicit val fakeRequest = FakeRequest()
 
     val mockApplicationConfig = mock[ApplicationConfig]
     val mockSessionService = mock[SessionService]
     val mockAsyncIdContainer = mock[AsyncIdContainer[String]]
     val mockCookieTokenAccessor = mock[CookieTokenAccessor]
 
-    val fakeRequest = FakeRequest()
-
-    implicit val hc = HeaderCarrier()
-
     val developer = Developer("email","John", "Smith")
     val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
 
     val tokenId = "tokenId"
     val userId = "userId"
+  }
 
-    "Be None when no cookie token from cookieTokeExtractor" in {
+  "Fetching logged in user" should {
+
+    "Be None when no cookie token from cookieTokeExtractor" in new Setup {
 
       when(mockCookieTokenAccessor.extract(any[RequestHeader]))
         .thenReturn(None)
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser()(fakeRequest,any[HeaderCarrier]))
+      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe None
     }
 
-    "Be None when no userId from idContainer" in {
+    "Be None when no userId from idContainer" in new Setup {
       when(mockCookieTokenAccessor.extract(any[RequestHeader]))
         .thenReturn(Some(tokenId))
 
@@ -83,12 +83,12 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser()(fakeRequest,any[HeaderCarrier]))
+      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe None
     }
 
-    "Be None when no session from sessionService" in {
+    "Be None when no session from sessionService" in new Setup {
       when(mockCookieTokenAccessor.extract(any[RequestHeader]))
         .thenReturn(Some(tokenId))
 
@@ -100,12 +100,12 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser()(fakeRequest,any[HeaderCarrier]))
+      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe None
     }
 
-    "Be a Developer when a valid cookie and session" in {
+    "Be a Developer when a valid cookie and session" in new Setup {
       when(mockCookieTokenAccessor.extract(any[RequestHeader]))
         .thenReturn(Some(tokenId))
 
@@ -117,7 +117,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser()(fakeRequest,any[HeaderCarrier]))
+      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe Some(developer)
     }

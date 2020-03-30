@@ -24,7 +24,6 @@ import uk.gov.hmrc.apidocumentation.models.Developer
 import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 
@@ -38,7 +37,7 @@ class LoggedInUserProvider @Inject()(config: ApplicationConfig,
   def resolveUser(id: String)(implicit ctx: ExecutionContext, hc: HeaderCarrier): Future[Option[Developer]] =
     sessionService.fetch(id).map(_.map(_.developer))
 
-  def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier): Future[Option[Developer]] =
+  def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Developer]] =
     tokenAccessor.extract(request) match {
       case None => Future.successful(None)
       case Some(token) =>

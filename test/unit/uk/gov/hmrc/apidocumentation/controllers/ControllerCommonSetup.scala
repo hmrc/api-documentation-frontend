@@ -109,11 +109,11 @@ class ControllerCommonSetup
 
 
   def theUserIsLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(userLoggedIn))
+    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]], any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(userLoggedIn))
   }
 
   def theUserIsNotLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(None))
+    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]], any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(None))
   }
 
   def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
