@@ -26,6 +26,8 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException, NotFoundException}
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class DownloadConnectorSpec extends ConnectorSpec {
   val apiDocumentationUrl = "https://api-documentation.example.com"
 
