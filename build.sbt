@@ -38,7 +38,6 @@ lazy val compile = Seq(
 lazy val test = Seq(
   "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % scope,
   "org.pegdown" % "pegdown" % "1.6.0" % scope,
-  "org.scalatest" %% "scalatest" % "3.0.8" % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % scope,
   "org.jsoup" % "jsoup" % "1.11.3" % scope,
   "info.cukes" %% "cucumber-scala" % "1.2.5" % scope,
