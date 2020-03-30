@@ -16,7 +16,7 @@
 
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
-import org.mockito.Matchers.{any, eq => meq}
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.when
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -52,7 +52,7 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
     "return fetched nav links and pass headers by" in new Setup {
       implicit val hc = HeaderCarrier(extraHeaders = Seq("possibleAuthHeader" -> "possibleAuthHeaderVal"))
 
-      when(mockHttpClient.GET[Seq[NavLink]](meq(s"$developerFrontendUrl/developer/user-navlinks"))(any(), any(), any()))
+      when(mockHttpClient.GET[Seq[NavLink]](eqTo(s"$developerFrontendUrl/developer/user-navlinks"))(any(), any(), any()))
         .thenReturn(Future.successful(Seq(NavLink("Some random link", "/developer/345435345342523534253245"))))
 
       val result = await(connector.fetchNavLinks())
@@ -65,7 +65,7 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
       implicit val hc = HeaderCarrier()
       val response = HtmlPartial.Success(None, Html("<p>some terms of use</p>"))
 
-      when(mockHttpClient.GET[HtmlPartial](meq(s"$developerFrontendUrl/developer/partials/terms-of-use"))(any(), any(), any()))
+      when(mockHttpClient.GET[HtmlPartial](eqTo(s"$developerFrontendUrl/developer/partials/terms-of-use"))(any(), any(), any()))
         .thenReturn(Future.successful(response))
 
       val result = await(connector.fetchTermsOfUsePartial())

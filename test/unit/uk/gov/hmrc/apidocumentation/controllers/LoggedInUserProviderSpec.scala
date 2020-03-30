@@ -17,7 +17,7 @@
 package unit.uk.gov.hmrc.apidocumentation.controllers
 
 import jp.t2v.lab.play2.auth.{AsyncIdContainer, CookieTokenAccessor}
-import org.mockito.Matchers.{any, eq => meq}
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
@@ -95,7 +95,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
       when(mockAsyncIdContainer.get(tokenId))
         .thenReturn(Future.successful(Some(userId)))
 
-      when(mockSessionService.fetch( meq(userId))(any[HeaderCarrier], any[ExecutionContext]))
+      when(mockSessionService.fetch( eqTo(userId))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(None)
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
@@ -112,7 +112,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
       when(mockAsyncIdContainer.get(tokenId))
         .thenReturn(Future.successful(Some(userId)))
 
-      when(mockSessionService.fetch( meq(userId))(any[HeaderCarrier], any[ExecutionContext]))
+      when(mockSessionService.fetch( eqTo(userId))(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Some(session))
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
