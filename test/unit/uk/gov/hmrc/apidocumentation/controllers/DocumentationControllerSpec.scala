@@ -20,8 +20,11 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.http.Status._
 import play.api.mvc._
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
@@ -33,7 +36,7 @@ import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService
 import uk.gov.hmrc.apidocumentation.views.html.include.{apiMain, main}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.partials.HtmlPartial
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,7 +44,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
 import scala.concurrent.duration._
 
-class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with WithFakeApplication {
+class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with GuiceOneAppPerTest {
+
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(("metrics.jvm", false))
+      .build()
 
   class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup {
     implicit val appConfig = mock[ApplicationConfig]

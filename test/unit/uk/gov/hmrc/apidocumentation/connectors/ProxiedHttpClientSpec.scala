@@ -22,7 +22,7 @@ import akka.actor.ActorSystem
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.{ConfigLoader, Configuration, Mode}
 import play.api.libs.ws.{WSClient, WSRequest}
 import uk.gov.hmrc.apidocumentation.connectors.ProxiedHttpClient

@@ -26,6 +26,7 @@ import uk.gov.hmrc.play.bootstrap.filters.FrontendFilters
 
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class Filters @Inject()(defaultFilters: FrontendFilters, sessionRedirectFilter: SessionRedirectFilter)
     extends DefaultHttpFilters(defaultFilters.filters :+ sessionRedirectFilter: _*)
 

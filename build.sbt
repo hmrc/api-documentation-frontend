@@ -32,7 +32,7 @@ lazy val compile = Seq(
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
   "jp.t2v" %% "play2-auth" % "0.14.2",
   "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1",
-  "com.typesafe.play" %% "play-json" % "2.6.0"
+  "com.typesafe.play" %% "play-json" % "2.6.14"
 )
 
 lazy val test = Seq(
