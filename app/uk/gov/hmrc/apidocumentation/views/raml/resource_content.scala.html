@@ -33,20 +33,20 @@
     <p class="endpoint-description">
         This endpoint is
         <a href = "/api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted</a>
-        - it requires an <code class="code--slim">Authorization</code> header containing an OAuth 2.0 Bearer Token with the <code class="code--slim">{scope}</code> scope.
+        and requires an <code class="code--slim">Authorization</code> header containing an OAuth 2.0 Bearer Token with the <code class="code--slim">{scope}</code> scope.
     </p>
     }
     case ("application", _) => {
     <p class="endpoint-description">
         This endpoint is
         <a href = "/api-documentation/docs/authorisation/application-restricted-endpoints">application-restricted</a>
-        - it requires an <code class="code--slim">Authorization</code> header containing a <code class="code--slim">server_token</code> or an OAuth 2.0 Bearer Token.
+        and requires an <code class="code--slim">Authorization</code> header containing an OAuth 2.0 Bearer Token.
     </p>
     }
     case _ => {
     <p class="endpoint-description">This endpoint is
         <a href = "/api-documentation/docs/authorisation/open-access-endpoints">open access</a>
-        - no <code class="code--slim">Authorization</code> header is required.</p>
+        and requires no <code class="code--slim">Authorization</code> header.</p>
     }
     }
     }
