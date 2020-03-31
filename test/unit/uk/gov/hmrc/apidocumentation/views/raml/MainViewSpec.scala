@@ -19,7 +19,7 @@ package unit.uk.gov.hmrc.apidocumentation.views.raml
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import org.mockito.Mockito.{when => When}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._

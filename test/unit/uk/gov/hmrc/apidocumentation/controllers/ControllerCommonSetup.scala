@@ -19,18 +19,18 @@ package unit.uk.gov.hmrc.apidocumentation.controllers
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.controllers.LoggedInUserProvider
-import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
 import uk.gov.hmrc.apidocumentation.models.{Developer, _}
+import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerCommonSetup
   extends UnitSpec
@@ -109,30 +109,30 @@ class ControllerCommonSetup
 
 
   def theUserIsLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(userLoggedIn))
+    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]], any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(userLoggedIn))
   }
 
   def theUserIsNotLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(None))
+    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]], any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(None))
   }
 
   def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(Some(apiDefinition)))
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(Some(apiDefinition)))
   }
 
   def theDefinitionServiceWillReturnNoApiDefinition() = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(None))
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.successful(None))
   }
 
   def theDefinitionServiceWillFail(exception: Throwable) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.failed(exception))
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier], any[ExecutionContext])).thenReturn(Future.failed(exception))
 
-    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
+    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.failed(exception))
   }
 
   def theDefinitionServiceWillReturnApiDefinitions(apis: Seq[APIDefinition]) = {
-    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
+    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.successful(apis))
   }
 

@@ -16,60 +16,94 @@
 
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
-import mockws.MockWS
 import org.mockito.Mockito.when
 import play.api.http.Status._
-import play.api.mvc.{Action, Results}
+import play.api.mvc.Results
+import play.api.routing.sird._
+import play.api.test.WsTestClient
+import play.core.server.Server
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException, NotFoundException}
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class DownloadConnectorSpec extends ConnectorSpec {
   val apiDocumentationUrl = "https://api-documentation.example.com"
 
   val serviceName = "hello-world"
   val version = "1.0"
-  val resourceFoundUrl = s"$apiDocumentationUrl/api-definition/$serviceName/$version/documentation/some/resource"
-  val resourceNotFoundUrl = s"$apiDocumentationUrl/api-definition/$serviceName/$version/documentation/some/resourceNotThere"
-  val serviceUnavailableUrl = s"$apiDocumentationUrl/api-definition/$serviceName/$version/documentation/some/resourceInvalid"
-  val timeoutUrl = s"$apiDocumentationUrl/api-definition/$serviceName/$version/documentation/some/timeout"
-
-  val mockWS = MockWS {
-    case ("GET", `resourceFoundUrl`) => Action(Results.Ok("hello world"))
-    case ("GET", `resourceNotFoundUrl`) => Action(Results.NotFound)
-    case ("GET", `serviceUnavailableUrl`) => Action(Results.ServiceUnavailable)
-    case ("GET", `timeoutUrl`) => Action(Results.RequestTimeout)
-  }
 
   trait Setup {
     implicit val hc = HeaderCarrier()
     val mockAppConfig = mock[ApplicationConfig]
-    val connector = new DownloadConnector(mockWS, mockAppConfig)
-
-    when(mockAppConfig.apiDefinitionBaseUrl).thenReturn(apiDocumentationUrl)
+    when(mockAppConfig.apiDefinitionBaseUrl).thenReturn("")
   }
 
   "downloadResource" should {
     "return resource when found" in new Setup {
-
-      val result = await(connector.fetch(serviceName, version, "some/resource"))
-      result.header.status shouldBe OK
+      Server.withRouterFromComponents() { components =>
+        import Results._
+        import components.{defaultActionBuilder => Action}
+        {
+          case GET(p"/api-definition/hello-world/1.0/documentation/some/resource") => Action {
+            Ok("hello world")
+          }
+        }
+      } { implicit port =>
+        WsTestClient.withClient { client =>
+          val connector = new DownloadConnector(client, mockAppConfig)
+          val result = await(connector.fetch(serviceName, version, "some/resource"))
+          result.header.status shouldBe OK
+        }
+      }
     }
 
     "throw NotFoundException when not found" in new Setup {
-      intercept[NotFoundException] {
-        await(connector.fetch(serviceName, version, "some/resourceNotThere"))
+      Server.withRouterFromComponents() { components =>
+        import Results._
+        import components.{defaultActionBuilder => Action}
+        {
+          case GET(p"/api-definition/hello-world/1.0/documentation/some/resourceNotThere") => Action {
+            NotFound
+          }
+        }
+      } { implicit port =>
+        WsTestClient.withClient { client =>
+          val connector = new DownloadConnector(client, mockAppConfig)
+
+          intercept[NotFoundException] {
+            await(connector.fetch(serviceName, version, "some/resourceNotThere"))
+          }
+        }
       }
     }
 
     "throw InternalServerException for any other response" in new Setup {
-      intercept[InternalServerException] {
-        await(connector.fetch(serviceName, version, "some/resourceInvalid"))
-      }
-      intercept[InternalServerException] {
-        await(connector.fetch(serviceName, version, "some/timeout"))
+      Server.withRouterFromComponents() { components =>
+        import Results._
+        import components.{defaultActionBuilder => Action}
+        {
+          case GET(p"/api-definition/hello-world/1.0/documentation/some/resourceInvalid") => Action {
+            ServiceUnavailable
+          }
+          case GET(p"/api-definition/hello-world/1.0/documentation/some/timeout") => Action {
+            RequestTimeout
+          }
+        }
+      } { implicit port =>
+        WsTestClient.withClient { client =>
+          val connector = new DownloadConnector(client, mockAppConfig)
+
+          intercept[InternalServerException] {
+            await(connector.fetch(serviceName, version, "some/resourceInvalid"))
+          }
+
+          intercept[InternalServerException] {
+            await(connector.fetch(serviceName, version, "some/timeout"))
+          }
+        }
       }
     }
   }
-
 }

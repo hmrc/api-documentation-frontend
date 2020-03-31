@@ -16,57 +16,56 @@
 
 package unit.uk.gov.hmrc.apidocumentation.utils
 
-import org.mockito.Mockito.when
 import org.mockito.Matchers.{any, eq => eqTo}
-import scala.concurrent.Future
-
+import org.mockito.Mockito.when
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.services.BaseApiDefinitionService
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.{ExecutionContext, Future}
 
 trait BaseApiDefinitionServiceMockingHelper {
   def whenFetchAllDefinitions[T <: BaseApiDefinitionService](base: T)
                              (apis: APIDefinition*)
                              (implicit hc: HeaderCarrier) = {
-    when(base.fetchAllDefinitions(any[None.type]())(any[HeaderCarrier]))
+    when(base.fetchAllDefinitions(any[None.type]())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.successful(apis.toSeq))
   }
   def whenFetchAllDefinitionsWithEmail[T <: BaseApiDefinitionService](base: T)
                                       (email: String)
                                       (apis: APIDefinition*)
                                       (implicit hc: HeaderCarrier) = {
-    when(base.fetchAllDefinitions(any[Some[String]]())(any[HeaderCarrier]))
+    when(base.fetchAllDefinitions(any[Some[String]]())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.successful(apis.toSeq))
   }
   def whenFetchExtendedDefinition[T <: BaseApiDefinitionService](base: T)
                                  (serviceName: String)
                                  (api: ExtendedAPIDefinition)
                                  (implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(any[HeaderCarrier]))
+    when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.successful(Some(api)))
   }
   def whenFetchExtendedDefinitionWithEmail[T <: BaseApiDefinitionService](base: T)
                                           (serviceName: String, email: String)
                                           (api: ExtendedAPIDefinition)
                                           (implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(eqTo(serviceName), any[Some[String]]())(any[HeaderCarrier]))
+    when(base.fetchExtendedDefinition(eqTo(serviceName), any[Some[String]]())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.successful(Some(api)))
   }
 
   def whenApiDefinitionFails[T <: BaseApiDefinitionService](base: T)
                             (exception: Throwable)
                             (implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(any[String],any[None.type]())(any[HeaderCarrier]))
+    when(base.fetchExtendedDefinition(any[String],any[None.type]())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.failed(exception))
-    when(base.fetchAllDefinitions(any())(any[HeaderCarrier]))
+    when(base.fetchAllDefinitions(any())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.failed(exception))
   }
 
   def whenNoApiDefinitions[T <: BaseApiDefinitionService](base: T) = {
-    when(base.fetchExtendedDefinition(any[String],any())(any[HeaderCarrier]))
+    when(base.fetchExtendedDefinition(any[String],any())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.successful(None))
-    when(base.fetchAllDefinitions(any())(any[HeaderCarrier]))
+    when(base.fetchAllDefinitions(any())(any[HeaderCarrier], any[ExecutionContext]))
       .thenReturn(Future.successful(Seq.empty))
   }
 }

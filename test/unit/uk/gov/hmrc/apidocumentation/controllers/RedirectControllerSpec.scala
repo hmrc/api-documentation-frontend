@@ -16,18 +16,26 @@
 
 package unit.uk.gov.hmrc.apidocumentation.controllers
 
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.mvc._
-import play.api.test.FakeRequest
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.apidocumentation.controllers.RedirectController
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
-class RedirectControllerSpec extends UnitSpec with WithFakeApplication {
+class RedirectControllerSpec extends UnitSpec with GuiceOneAppPerTest {
 
-  trait Setup {
-    val underTest = new RedirectController()
-    implicit val request = FakeRequest()
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(("metrics.jvm", false))
+      .build()
+
+  class Setup extends ControllerCommonSetup {
+    val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+
+    val underTest = new RedirectController(mcc)
 
     def verifyPageRedirected(actualPageFuture: Future[Result], expectedUrl: String) {
       val actualPage = await(actualPageFuture)

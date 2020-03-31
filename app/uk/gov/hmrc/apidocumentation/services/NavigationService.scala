@@ -17,7 +17,6 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.Inject
-
 import org.raml.v2.api.model.v10.resources.Resource
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
@@ -27,8 +26,7 @@ import uk.gov.hmrc.apidocumentation.views.helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.collection.JavaConverters._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConfig: ApplicationConfig) {
 
@@ -59,7 +57,7 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
   def sidebarNavigation() = sidebarNavigationLinks
 
 
-  private def traverse(resources: Seq[Resource], accum: Seq[SidebarLink] = Seq.empty): Seq[SidebarLink] = {
+  private def traverse(resources: Seq[Resource], accum: Seq[SidebarLink] = Seq.empty)(implicit ec: ExecutionContext): Seq[SidebarLink] = {
     if (resources.isEmpty)
       accum
     else {
@@ -71,7 +69,7 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
     }
   }
 
-  def apiSidebarNavigation(service: String, version: ExtendedAPIVersion, raml: RAML): Seq[SidebarLink] = {
+  def apiSidebarNavigation(service: String, version: ExtendedAPIVersion, raml: RAML)(implicit ec: ExecutionContext): Seq[SidebarLink] = {
     val sections = raml.documentationForVersion(Option(version)).map { doc =>
       SidebarLink(label = doc.title.value, href = s"#${Slugify(doc.title.value)}")
     }
@@ -99,7 +97,7 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
     }
   }
 
-  def headerNavigation()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] =
+  def headerNavigation()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[NavLink]] =
     connector.fetchNavLinks() map (navLinks => addUrlPrefix(appConfig.developerFrontendUrl, navLinks))
 
   private def addUrlPrefix(urlPrefix: String, links: Seq[NavLink]) =

@@ -16,9 +16,9 @@
 
 package unit.uk.gov.hmrc.apidocumentation.views.helpers
 
-import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.Json
+import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import uk.gov.hmrc.apidocumentation.views.helpers.{EnumValue, RequestFields, RequestResponseField, ResponseFields}
 import unit.uk.gov.hmrc.apidocumentation.utils.StringRamlLoader
 

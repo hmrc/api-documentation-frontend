@@ -16,45 +16,51 @@
 
 package unit.uk.gov.hmrc.apidocumentation.services
 
-import org.mockito.Matchers.{any, eq => meq}
+import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
 import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
 
-class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
+class SessionServiceSpec extends UnitSpec with GuiceOneAppPerTest with MockitoSugar with ScalaFutures {
 
-  private val userSessionConnectorMock = mock[UserSessionConnector]
+  trait Setup {
+    implicit val hc = HeaderCarrier()
 
-  def sessionService = new SessionService(userSessionConnectorMock)
+    val userSessionConnectorMock = mock[UserSessionConnector]
+
+    val underTest = new SessionService(userSessionConnectorMock)
+  }
 
   "The SessionService" should {
     val developer = Developer("email","John", "Smith")
 
-    "Return session if the session is logged in" in {
+    "Return session if the session is logged in" in new Setup {
       val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
 
-      when(userSessionConnectorMock.fetchSession(any())(any[HeaderCarrier]))
+      when(userSessionConnectorMock.fetchSession(any[String])(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Future.successful(session))
 
-      val result = await(sessionService.fetch(meq("sessionId"))(any[HeaderCarrier]))
+      val result = await(underTest.fetch("sessionId"))
 
       result shouldBe Some(session)
     }
 
-    "Return None when the session is part logged in" in {
+    "Return None when the session is part logged in" in new Setup {
       val session = Session("sessionId", LoggedInState.PART_LOGGED_IN_ENABLING_MFA, developer)
 
-      when(userSessionConnectorMock.fetchSession(any())(any[HeaderCarrier]))
+      when(userSessionConnectorMock.fetchSession(any[String])(any[HeaderCarrier], any[ExecutionContext]))
         .thenReturn(Future.successful(session))
 
-      val result = await(sessionService.fetch(meq("sessionId"))(any[HeaderCarrier]))
+      val result = await(underTest.fetch("sessionId"))
 
       result shouldBe None
     }

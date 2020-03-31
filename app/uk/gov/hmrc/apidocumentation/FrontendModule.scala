@@ -21,12 +21,10 @@ import uk.gov.hmrc.apidocumentation.raml.{DocumentationRamlLoader, Documentation
 import uk.gov.hmrc.ramltools.loaders.{RamlLoader, UrlRewriter}
 import uk.gov.hmrc.play.http.metrics.{Metrics, PlayMetrics}
 
-class Module extends AbstractModule {
-
+class FrontendModule extends AbstractModule {
   override def configure() = {
     bind(classOf[Metrics]).toInstance(PlayMetrics)
     bind(classOf[RamlLoader]).to(classOf[DocumentationRamlLoader])
     bind(classOf[UrlRewriter]).to(classOf[DocumentationUrlRewriter])
   }
-
 }

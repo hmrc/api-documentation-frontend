@@ -17,16 +17,19 @@
 package unit.uk.gov.hmrc.apidocumentation.services
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.NoopMetrics
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionConnectorMockingHelper, ApiDefinitionTestDataHelper}
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class ApiDefinitionServiceSpec extends UnitSpec
-  with WithFakeApplication
+  with GuiceOneAppPerTest
   with MockitoSugar
   with ScalaFutures
   with ApiDefinitionTestDataHelper {

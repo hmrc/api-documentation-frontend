@@ -22,30 +22,30 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.{API, Metrics}
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
+
 import scala.concurrent.Future
 
 trait BaseApiDefinitionService {
   def fetchExtendedDefinition(serviceName: String, email: Option[String])
-                            (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
+                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[ExtendedAPIDefinition]]
 
-  def fetchAllDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
+  def fetchAllDefinitions(email: Option[String])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[APIDefinition]]
 }
 
 @Singleton
-class ApiDefinitionService @Inject()(
-                                      val raw: ApiDefinitionConnector,
-                                      val metrics: Metrics
-                                             ) extends BaseApiDefinitionService {
+class ApiDefinitionService @Inject()(val raw: ApiDefinitionConnector,
+                                     val metrics: Metrics
+                                    ) extends BaseApiDefinitionService {
   val api: API = API("api-definition")
 
   def fetchExtendedDefinition(serviceName: String, email: Option[String] = None)
-                            (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
+                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[ExtendedAPIDefinition]] =
     metrics.record(api) {
       raw.fetchApiDefinition(serviceName, email)
     }
 
-  def fetchAllDefinitions(email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
+  def fetchAllDefinitions(email: Option[String] = None)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[APIDefinition]] =
     metrics.record(api) {
       raw.fetchAllApiDefinitions(email)
     }

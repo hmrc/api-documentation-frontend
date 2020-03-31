@@ -18,7 +18,9 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import include.apiMain
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain)
 
 @(pageAttributes: PageAttributes, api: ExtendedAPIDefinition)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 
