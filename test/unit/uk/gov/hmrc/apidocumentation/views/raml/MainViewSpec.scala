@@ -364,7 +364,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
         page.authorisationDescription should include("application-restricted")
         page.requestHeaders should include("Authorization")
         page.authorisationTableDescription should
-          include("A bearer token which is either your application's server_token or an OAuth 2.0 Bearer Token. ")
+          include("An OAuth 2.0 Bearer Token. For example: Bearer 59fc92c1cdf0b8ef1f138a702effdbd2")
       }
 
       "render table with authorization header if authorization is the only header" in {
