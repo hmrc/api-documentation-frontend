@@ -105,7 +105,6 @@ class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) 
   val isStubMode = runMode.env == "Stub"
   val xmlApiBaseUrl = config.getConfString("xml-api.base-url", "https://www.gov.uk")
 
-
   private def buildRamlLoaderRewrites: Map[String, String] = {
     Map(config.getConfString("ramlLoaderUrlRewrite.from", "") ->
       config.getConfString("ramlLoaderUrlRewrite.to", ""))
