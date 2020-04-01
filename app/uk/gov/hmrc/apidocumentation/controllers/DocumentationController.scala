@@ -197,6 +197,11 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       Future.successful(Ok(new reference(apiMain)(pageAttributes("Reference guide", routes.DocumentationController.referenceGuidePage().url, navLinks))))
   }
 
+  def developmentPracticesPage(): Action[AnyContent] = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(Ok(new developmentPractices(apiMain)(pageAttributes("Development practices", routes.DocumentationController.developmentPracticesPage().url, navLinks))))
+  }
+
   def nameGuidelinesPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       val breadcrumbs = Breadcrumbs(
