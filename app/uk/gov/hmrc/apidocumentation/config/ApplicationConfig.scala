@@ -78,6 +78,8 @@ class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) 
 
   val developerFrontendBaseUrl = config.baseUrl("developer-frontend")
   val thirdPartyDeveloperUrl = config.baseUrl("third-party-developer")
+  lazy val apiDefinitionBaseUrl = config.baseUrl("api-definition")
+
   val securedCookie = config.getConfBool("cookie.secure", true)
   val ramlPreviewEnabled = config.getConfBool("features.ramlPreview", false)
   val ramlLoaderRewrites = buildRamlLoaderRewrites
@@ -96,7 +98,6 @@ class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) 
   val isStubMode = runMode.env == "Stub"
   val xmlApiBaseUrl = config.getConfString("xml-api.base-url", "https://www.gov.uk")
 
-  val apiDefinitionBaseUrl = config.baseUrl("api-definition")
 
   private def buildRamlLoaderRewrites: Map[String, String] = {
     Map(config.getConfString("ramlLoaderUrlRewrite.from", "") ->
