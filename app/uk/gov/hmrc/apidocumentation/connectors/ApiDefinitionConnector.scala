@@ -34,7 +34,7 @@ class ApiDefinitionConnector @Inject()(
                                       )
                                       (implicit val ec: ExecutionContext) {
 
-  val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
+  private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 
   def fetchAllApiDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
     Logger.info(s"${this.getClass.getSimpleName} - fetchAllApiDefinitions")

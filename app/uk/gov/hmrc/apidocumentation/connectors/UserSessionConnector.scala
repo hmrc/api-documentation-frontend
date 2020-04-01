@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class UserSessionConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, metrics: Metrics) {
 
   val api = API("third-party-developer")
-  lazy val serviceBaseUrl: String = appConfig.thirdPartyDeveloperUrl
+  private lazy val serviceBaseUrl: String = appConfig.thirdPartyDeveloperUrl
 
   def fetchSession(sessionId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Session] = metrics.record(api) {
     http.GET[Session](s"$serviceBaseUrl/session/$sessionId") recover {
