@@ -20,6 +20,7 @@ lazy val scope: String = "test, it"
 lazy val compile = Seq(
   ws,
   cache,
+  guice,
   "uk.gov.hmrc" %% "bootstrap-play-26" % "1.5.0",
   "uk.gov.hmrc" %% "govuk-template" % "5.52.0-play-26",
   "uk.gov.hmrc" %% "play-ui" % "8.8.0-play-26",
@@ -130,7 +131,7 @@ lazy val microservice = (project in file("."))
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
 
-  .settings(scalaVersion := "2.11.11")
+  .settings(scalaVersion := "2.11.12")
 lazy val allPhases = "tt->test;test->test;test->compile;compile->compile"
 lazy val allItPhases = "tit->it;it->it;it->compile;compile->compile"
 lazy val AcceptanceTest = config("acceptance") extend Test
