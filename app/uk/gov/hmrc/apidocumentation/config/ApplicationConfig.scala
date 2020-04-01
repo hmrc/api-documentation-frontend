@@ -22,42 +22,41 @@ import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 @ImplementedBy(classOf[ApplicationConfigImpl])
 trait ApplicationConfig {
-  val contactFormServiceIdentifier: String
-  val contactPath: String
+  def contactFormServiceIdentifier: String
+  def contactPath: String
 
-  val analyticsToken: Option[String]
-  val analyticsHost: String
+  def analyticsToken: Option[String]
+  def analyticsHost: String
 
-  val developerFrontendUrl: String
+  def developerFrontendUrl: String
 
-  val reportAProblemPartialUrl: String
-  val reportAProblemNonJSUrl: String
+  def reportAProblemPartialUrl: String
+  def reportAProblemNonJSUrl: String
 
-  val developerFrontendBaseUrl: String
-  val thirdPartyDeveloperUrl: String
+  def developerFrontendBaseUrl: String
+  def thirdPartyDeveloperUrl: String
+  def apiDefinitionBaseUrl: String
 
-  val securedCookie: Boolean
-  val ramlPreviewEnabled: Boolean
+  def securedCookie: Boolean
+  def ramlPreviewEnabled: Boolean
 
-  val ramlLoaderRewrites: Map[String, String]
+  def ramlLoaderRewrites: Map[String, String]
 
-  val showProductionAvailability: Boolean
-  val showSandboxAvailability: Boolean
-  
-  val productionApiHost: String
-  val productionWwwHost: String
-  val productionApiBaseUrl: String
+  def showProductionAvailability: Boolean
+  def showSandboxAvailability: Boolean
 
-  val sandboxApiHost: String
-  val sandboxWwwHost: String
-  val sandboxApiBaseUrl: String
-  val sandboxWwwBaseUrl: String
+  def productionApiHost: String
+  def productionWwwHost: String
+  def productionApiBaseUrl: String
 
-  val title: String
-  val isStubMode: Boolean
-  val xmlApiBaseUrl: String
+  def sandboxApiHost: String
+  def sandboxWwwHost: String
+  def sandboxApiBaseUrl: String
+  def sandboxWwwBaseUrl: String
 
-  val apiDefinitionBaseUrl: String
+  def title: String
+  def isStubMode: Boolean
+  def xmlApiBaseUrl: String
 }
 
 class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) extends ApplicationConfig {
@@ -78,6 +77,16 @@ class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) 
 
   val developerFrontendBaseUrl = config.baseUrl("developer-frontend")
   val thirdPartyDeveloperUrl = config.baseUrl("third-party-developer")
+
+  /**
+   * This value needs to be lazy because it doesn't actually exist in all environments that we deploy to.
+   * Specifically, it doesn't exist in Development which really shouldn't need this app deployed but does due
+   * to api-publisher needing it.
+   *
+   * DO NOT REMOVE
+   */
+  lazy val apiDefinitionBaseUrl = config.baseUrl("api-definition")
+
   val securedCookie = config.getConfBool("cookie.secure", true)
   val ramlPreviewEnabled = config.getConfBool("features.ramlPreview", false)
   val ramlLoaderRewrites = buildRamlLoaderRewrites
@@ -96,7 +105,6 @@ class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) 
   val isStubMode = runMode.env == "Stub"
   val xmlApiBaseUrl = config.getConfString("xml-api.base-url", "https://www.gov.uk")
 
-  val apiDefinitionBaseUrl = config.baseUrl("api-definition")
 
   private def buildRamlLoaderRewrites: Map[String, String] = {
     Map(config.getConfString("ramlLoaderUrlRewrite.from", "") ->
