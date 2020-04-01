@@ -83,6 +83,8 @@ class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) 
    * This value needs to be lazy because it doesn't actually exist in all environments that we deploy to.
    * Specifically, it doesn't exist in Development which really shouldn't need this app deployed but does due
    * to api-publisher needing it.
+   *
+   * DO NOT REMOVE
    */
   lazy val apiDefinitionBaseUrl = config.baseUrl("api-definition")
 
