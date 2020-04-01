@@ -78,6 +78,16 @@ class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) 
 
   val developerFrontendBaseUrl = config.baseUrl("developer-frontend")
   val thirdPartyDeveloperUrl = config.baseUrl("third-party-developer")
+
+  /**
+   * This value needs to be lazy because it doesn't actually exist in all environments that we deploy to.
+   * Specifically, it doesn't exist in Development which really shouldn't need this app deployed but does due
+   * to api-publisher needing it.
+   *
+   * DO NOT REMOVE
+   */
+  lazy val apiDefinitionBaseUrl = config.baseUrl("api-definition")
+
   val securedCookie = config.getConfBool("cookie.secure", true)
   val ramlPreviewEnabled = config.getConfBool("features.ramlPreview", false)
   val ramlLoaderRewrites = buildRamlLoaderRewrites
@@ -96,7 +106,6 @@ class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) 
   val isStubMode = runMode.env == "Stub"
   val xmlApiBaseUrl = config.getConfString("xml-api.base-url", "https://www.gov.uk")
 
-  val apiDefinitionBaseUrl = config.baseUrl("api-definition")
 
   private def buildRamlLoaderRewrites: Map[String, String] = {
     Map(config.getConfString("ramlLoaderUrlRewrite.from", "") ->
