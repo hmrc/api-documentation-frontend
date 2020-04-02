@@ -16,7 +16,7 @@
 
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
-import org.mockito.Matchers.{any, eq => eqTo}
+import org.mockito.Matchers.{any, eq => meq}
 import org.mockito.Mockito.when
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
@@ -25,7 +25,6 @@ import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics.{API, NoopMetrics}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class UserSessionConnectorSpec extends ConnectorSpec {
@@ -51,7 +50,7 @@ class UserSessionConnectorSpec extends ConnectorSpec {
     "return the session when found" in new Setup {
       val session = Session(sessionId, LoggedInState.LOGGED_IN, Developer("developer@example.com", "Firstname", "Lastname"))
 
-      when(mockHttpClient.GET[Session](eqTo(s"$thirdPartyDeveloperUrl/session/$sessionId"))(any(), any(), any()))
+      when(mockHttpClient.GET[Session](meq(s"$thirdPartyDeveloperUrl/session/$sessionId"))(any(), any(), any()))
         .thenReturn(Future.successful(session))
 
       val result = await(connector.fetchSession(sessionId))
@@ -60,7 +59,7 @@ class UserSessionConnectorSpec extends ConnectorSpec {
     }
 
     "throw SessionInvalid when not found" in new Setup {
-      when(mockHttpClient.GET[Session](eqTo(s"$thirdPartyDeveloperUrl/session/$sessionId"))(any(), any(), any()))
+      when(mockHttpClient.GET[Session](meq(s"$thirdPartyDeveloperUrl/session/$sessionId"))(any(), any(), any()))
         .thenReturn(Future.failed(new NotFoundException("Not found")))
 
       intercept[SessionInvalid] {

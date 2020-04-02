@@ -16,17 +16,17 @@
 
 package unit.uk.gov.hmrc.apidocumentation.views.include
 
-import javax.inject.Inject
-import org.scalatestplus.mockito.MockitoSugar
+import junit.framework.TestCase
+import org.mockito.BDDMockito.given
+import org.scalatest.mockito.MockitoSugar
 import play.api.i18n.Messages
 import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.NavLink
-import uk.gov.hmrc.apidocumentation.views.html.include.main
-import uk.gov.hmrc.apidocumentation.views.html.index
+import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class MainTemplateSpec @Inject()(main: main) extends UnitSpec with WithFakeApplication with MockitoSugar {
+class MainTemplateSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
 
   val pageTitle = "pageTitle"
   val navLinks = Seq[NavLink]()
@@ -34,9 +34,9 @@ class MainTemplateSpec @Inject()(main: main) extends UnitSpec with WithFakeAppli
   val mockApplicationConfig = mock[ApplicationConfig]
   val mockMessages = mock[Messages]
 
-  "htmlView" should {
-    "render with no indexing meta tags" in {
-      val renderedHtml = new index(main).render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
+  "htmlView" must {
+    "render with no indexing meta tags" in new TestCase {
+      val renderedHtml = views.html.index.render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
       renderedHtml.body shouldNot include("<meta name=\"robots\" content=\"noindex\">")
       renderedHtml.body shouldNot include("<meta name=\"googlebot\" content=\"noindex\">")
     }

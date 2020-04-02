@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.views.helpers
 
-import akka.http.scaladsl.model.StatusCode
+import io.netty.handler.codec.http.HttpResponseStatus
 import org.raml.v2.api.model.v10.bodies.Response
 import org.raml.v2.api.model.v10.common.Annotable
 import org.raml.v2.api.model.v10.datamodel._
@@ -324,11 +324,12 @@ object BodyExamples {
 }
 
 object HttpStatus {
+
   def apply(statusCode: String): String = apply(statusCode.toInt)
 
   def apply(statusCode: Int): String = {
-    val responseStatus = StatusCode.int2StatusCode(statusCode)
-    s"$statusCode (${responseStatus.reason})"
+    val responseStatus = HttpResponseStatus.valueOf(statusCode)
+    s"$statusCode (${responseStatus.reasonPhrase})"
   }
 }
 

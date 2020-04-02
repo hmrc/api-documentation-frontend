@@ -16,22 +16,20 @@
 
 package unit.uk.gov.hmrc.apidocumentation.views
 
-import javax.inject.Inject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Mockito.{when => When}
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneServerPerSuite
-import play.api.i18n.Messages
+import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.play.OneAppPerSuite
 import play.api.mvc.Request
+import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
-import uk.gov.hmrc.apidocumentation.views.html.xmlDocumentation
+import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.play.test.UnitSpec
 
-class XmlDocumentationSpec @Inject()(apiMain: apiMain) extends UnitSpec with MockitoSugar with GuiceOneServerPerSuite {
+class XmlDocumentationSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val heading = dom.getElementsByTag("h1").first
@@ -57,7 +55,7 @@ class XmlDocumentationSpec @Inject()(apiMain: apiMain) extends UnitSpec with Moc
     When(pageAttributes.contentHeader).thenReturn(None)
 
     val apiDefinition = XmlApiDocumentation(name, context, description)
-    val page = Page(new xmlDocumentation(apiMain)(pageAttributes, apiDefinition)(request, appConfig, messages))
+    val page = Page(views.html.xmlDocumentation(pageAttributes, apiDefinition)(request, appConfig, messages))
   }
 
   "XmlDocumentation view" should {

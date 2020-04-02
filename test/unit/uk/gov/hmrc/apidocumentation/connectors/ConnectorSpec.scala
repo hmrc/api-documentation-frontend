@@ -17,14 +17,13 @@
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
-import play.api.libs.json.Json
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.play.test.UnitSpec
 
-trait ConnectorSpec extends UnitSpec with ScalaFutures with MockitoSugar with GuiceOneAppPerTest {
+trait ConnectorSpec extends UnitSpec with ScalaFutures with MockitoSugar with WithFakeApplication {
 
   def extendedApiDefinition(name: String) = {
     Json.parse(s"""{

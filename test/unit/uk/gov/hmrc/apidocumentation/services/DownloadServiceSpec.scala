@@ -18,18 +18,16 @@ package unit.uk.gov.hmrc.apidocumentation.services
 
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Results
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.apidocumentation.services.DownloadService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DownloadServiceSpec extends UnitSpec with GuiceOneAppPerTest with MockitoSugar with ScalaFutures {
+class DownloadServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
 
   val serviceName = "calendar"
   val resource = "some/resource"

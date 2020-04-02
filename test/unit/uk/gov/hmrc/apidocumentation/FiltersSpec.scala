@@ -18,9 +18,9 @@ package unit.uk.gov.hmrc.apidocumentation
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
-import org.mockito.Matchers.{any, eq => eqTo}
+import org.mockito.Matchers.{any, eq => meq}
 import org.mockito.Mockito.{never, verify, when}
-import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.{RequestHeader, Result, Session}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.SessionRedirectFilter
@@ -54,7 +54,7 @@ class FiltersSpec extends UnitSpec with MockitoSugar with WithFakeApplication {
 
       val result = await(filter.apply(nextFilter)(requestHeader))
 
-      verify(mockResult).withSession(eqTo(Session(defaultSession.toMap + ("access_uri" -> path))))
+      verify(mockResult).withSession(meq(Session(defaultSession.toMap + ("access_uri" -> path))))
     }
 
     "remove the current uri in the session when the path is for the index page" in new Setup {
@@ -67,7 +67,7 @@ class FiltersSpec extends UnitSpec with MockitoSugar with WithFakeApplication {
 
       val result = await(filter.apply(nextFilter)(requestHeader))
 
-      verify(mockResult).withSession(eqTo(Session(defaultSession.toMap)))
+      verify(mockResult).withSession(meq(Session(defaultSession.toMap)))
     }
 
     "not add the current uri to the session when the path is not for a documentation page" in new Setup {

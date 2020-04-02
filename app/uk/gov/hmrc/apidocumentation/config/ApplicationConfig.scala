@@ -16,96 +16,58 @@
 
 package uk.gov.hmrc.apidocumentation.config
 
-import com.google.inject.ImplementedBy
 import javax.inject.Inject
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
+import play.api.{Configuration, Environment}
+import uk.gov.hmrc.play.config.ServicesConfig
 
-@ImplementedBy(classOf[ApplicationConfigImpl])
-trait ApplicationConfig {
-  def contactFormServiceIdentifier: String
-  def contactPath: String
+class ApplicationConfig @Inject()(override val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
 
-  def analyticsToken: Option[String]
-  def analyticsHost: String
+  override protected def mode = environment.mode
 
-  def developerFrontendUrl: String
-
-  def reportAProblemPartialUrl: String
-  def reportAProblemNonJSUrl: String
-
-  def developerFrontendBaseUrl: String
-  def thirdPartyDeveloperUrl: String
-  def apiDefinitionBaseUrl: String
-
-  def securedCookie: Boolean
-  def ramlPreviewEnabled: Boolean
-
-  def ramlLoaderRewrites: Map[String, String]
-
-  def showProductionAvailability: Boolean
-  def showSandboxAvailability: Boolean
-
-  def productionApiHost: String
-  def productionWwwHost: String
-  def productionApiBaseUrl: String
-
-  def sandboxApiHost: String
-  def sandboxWwwHost: String
-  def sandboxApiBaseUrl: String
-  def sandboxWwwBaseUrl: String
-
-  def title: String
-  def isStubMode: Boolean
-  def xmlApiBaseUrl: String
-}
-
-class ApplicationConfigImpl @Inject()(config: ServicesConfig, runMode: RunMode) extends ApplicationConfig {
+  private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing key: $key"))
 
   val contactFormServiceIdentifier = "API"
-  val contactPath = config.getConfString("contactPath", "")
+  val contactPath = runModeConfiguration.getString(s"$env.contactPath").getOrElse("")
 
-  val analyticsToken = config.getConfString("google-analytics.token", "") match {
-    case s if !s.isEmpty => Some(s)
-    case _ => None
-  }
-  val analyticsHost = config.getConfString("google-analytics.host", "auto")
+  lazy val analyticsToken = runModeConfiguration.getString(s"$env.google-analytics.token")
+  lazy val analyticsHost = runModeConfiguration.getString(s"$env.google-analytics.host").getOrElse("auto")
 
-  val developerFrontendUrl = config.getConfString("developer-frontend-url", "")
+  lazy val developerFrontendUrl = runModeConfiguration.getString(s"$env.developer-frontend-url").getOrElse("")
 
-  val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
-  val developerFrontendBaseUrl = config.baseUrl("developer-frontend")
-  val thirdPartyDeveloperUrl = config.baseUrl("third-party-developer")
-  val securedCookie = config.getConfBool("cookie.secure", true)
-  val ramlPreviewEnabled = config.getConfBool("features.ramlPreview", false)
-  val ramlLoaderRewrites = buildRamlLoaderRewrites
-  val showProductionAvailability = config.getConfBool("features.showProductionAvailability", false)
-  val showSandboxAvailability = config.getConfBool("features.showSandboxAvailability", false)
-  val productionApiHost = config.getString("platform.production.api.host")
-  val productionWwwHost = config.getString("platform.production.www.host")
-  val productionApiBaseUrl = platformBaseUrl("platform.production.api")
+  lazy val developerFrontendBaseUrl = baseUrl("developer-frontend")
+  lazy val thirdPartyDeveloperUrl = baseUrl("third-party-developer")
+  lazy val securedCookie = runModeConfiguration.getBoolean(s"$env.cookie.secure").getOrElse(true)
+  lazy val ramlPreviewEnabled = runModeConfiguration.getBoolean(s"$env.features.ramlPreview").getOrElse(false)
+  lazy val ramlLoaderRewrites = buildRamlLoaderRewrites
+  lazy val showProductionAvailability = runModeConfiguration.getBoolean(s"$env.features.showProductionAvailability").getOrElse(false)
+  lazy val showSandboxAvailability = runModeConfiguration.getBoolean(s"$env.features.showSandboxAvailability").getOrElse(false)
+  lazy val productionApiHost = runModeConfiguration.getString("platform.production.api.host")
+  lazy val productionWwwHost = runModeConfiguration.getString("platform.production.www.host")
+  lazy val productionApiBaseUrl = platformBaseUrl("platform.production.api")
 
-  val sandboxApiHost = config.getString("platform.sandbox.api.host")
-  val sandboxWwwHost = config.getString("platform.sandbox.www.host")
-  val sandboxApiBaseUrl = platformBaseUrl("platform.sandbox.api")
-  val sandboxWwwBaseUrl = platformBaseUrl("platform.sandbox.www")
+  lazy val sandboxApiHost = runModeConfiguration.getString("platform.sandbox.api.host")
+  lazy val sandboxWwwHost = runModeConfiguration.getString("platform.sandbox.www.host")
+  lazy val sandboxApiBaseUrl = platformBaseUrl("platform.sandbox.api")
+  lazy val sandboxWwwBaseUrl = platformBaseUrl("platform.sandbox.www")
 
-  val title = "HMRC Developer Hub"
-  val isStubMode = runMode.env == "Stub"
-  val xmlApiBaseUrl = config.getConfString("xml-api.base-url", "https://www.gov.uk")
+  lazy val title = "HMRC Developer Hub"
+  lazy val isStubMode = env == "Stub"
+  lazy val xmlApiBaseUrl = runModeConfiguration.getString(s"$env.xml-api.base-url").getOrElse("https://www.gov.uk")
 
-  val apiDefinitionBaseUrl = config.baseUrl("api-definition")
+  lazy val apiDefinitionBaseUrl = baseUrl("api-definition")
 
   private def buildRamlLoaderRewrites: Map[String, String] = {
-    Map(config.getConfString("ramlLoaderUrlRewrite.from", "") ->
-      config.getConfString("ramlLoaderUrlRewrite.to", ""))
+    Map(runModeConfiguration.getString(s"$env.ramlLoaderUrlRewrite.from").getOrElse("") ->
+      runModeConfiguration.getString(s"$env.ramlLoaderUrlRewrite.to").getOrElse(""))
   }
 
   private def platformBaseUrl(key: String) = {
-    (config.getConfString(s"$key.protocol", ""), config.getConfString(s"$key.host", "")) match {
-      case (p, h) if !p.isEmpty && !h.isEmpty => s"$p://$h"
-      case (p, h) if p.isEmpty => s"https://$h"
+    (runModeConfiguration.getString(s"$key.protocol"), runModeConfiguration.getString(s"$key.host")) match {
+      case (Some(protocol), Some(host)) => s"$protocol://$host"
+      case (None, Some(host)) => s"https://$host"
       case _ => ""
     }
   }

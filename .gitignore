@@ -24,7 +24,6 @@ precompiled
 /.project
 project/project
 project/target
-project/metals.sbt
 /RUNNING_PID
 server.pid
 /.settings
