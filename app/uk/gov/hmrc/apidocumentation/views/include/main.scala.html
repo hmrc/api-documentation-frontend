@@ -14,24 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.layouts._
-@import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
-@import views.html.layouts.GovUkTemplate
 @import uk.gov.hmrc.apidocumentation.views.html.include
+@import layouts.{govuk_template => hmrcGovUkTemplate}
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-@import uk.gov.hmrc.apidocumentation.views.html.partials
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.views.html.{include, partials}
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers, layouts => uiLayouts}
 @import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
-
-@import play.twirl.api.HtmlFormat
-
-@this(layoutsHead: Head,
-        layoutsFooter: Footer,
-        layoutsServiceInfo: ServiceInfo,
-        layoutsMainContentHeader: MainContentHeader,
-        helpersReportAProblemLink: ReportAProblemLink,
-        govUkTemplate: GovUkTemplate
-)
-
 @(title: Option[String] = None,
     navTitle: Option[String] = None,
     navTitleLink: Option[play.api.mvc.Call] = None,
@@ -55,7 +44,7 @@
 @if(metaTitle.isDefined) {
     @metaTitle.get
 }
-@layoutsHead(
+@uiLayouts.head(
     linkElem = None,
     headScripts = Some(headScripts))
 
@@ -81,7 +70,7 @@
 }
 
 @bodyEnd = {
-@layoutsFooter(
+@uiLayouts.footer(
     analyticsToken = applicationConfig.analyticsToken,
     analyticsHost = applicationConfig.analyticsHost,
     ssoUrl = None,
@@ -108,7 +97,7 @@
 
 @serviceInfo = {
     @if(fullWidthBanner.isEmpty) {
-        @layoutsServiceInfo(
+        @uiLayouts.serviceInfo(
             betaBanner = banner,
             includeGridWrapper = false,
             includeHMRCBranding = false,
@@ -119,11 +108,11 @@
 
 @mainContentHeader = {
     @if(contentHeader.isDefined) {
-        @layoutsMainContentHeader(contentHeader = contentHeader.getOrElse(HtmlFormat.empty))
+        @uiLayouts.main_content_header(contentHeader = contentHeader.getOrElse(HtmlFormat.empty))
     }
 }
 
-@getHelpForm = @{helpersReportAProblemLink(applicationConfig.reportAProblemPartialUrl, applicationConfig.reportAProblemNonJSUrl)}
+@getHelpForm = @{uiHelpers.reportAProblemLink(applicationConfig.reportAProblemPartialUrl, applicationConfig.reportAProblemNonJSUrl)}
 
 @contentWithLeftNav = {
     <div class="column-one-quarter">
@@ -175,7 +164,7 @@
     </main>
 }
 
-@govUkTemplate(
+@hmrcGovUkTemplate(
     title = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     bodyClasses = None)(head = head,
     bodyEnd = bodyEnd,

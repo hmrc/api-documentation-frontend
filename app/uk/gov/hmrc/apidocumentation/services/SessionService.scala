@@ -21,11 +21,12 @@ import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
 import uk.gov.hmrc.apidocumentation.models.{LoggedInState, Session, SessionInvalid}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class SessionService @Inject()(connector: UserSessionConnector) {
 
-  def fetch(sessionId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Session]] = {
+  def fetch(sessionId: String)(implicit hc: HeaderCarrier): Future[Option[Session]] = {
 
     def convertSession(session: Session): Option[Session] = {
       session.loggedInState match {

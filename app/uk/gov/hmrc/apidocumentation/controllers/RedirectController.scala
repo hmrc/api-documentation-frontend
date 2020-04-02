@@ -16,15 +16,12 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import javax.inject.{Inject, Singleton}
-
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
-@Singleton
-class RedirectController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc) {
+class RedirectController extends FrontendController {
   def redirectToDocumentationIndexPage(): Action[AnyContent] = {
     val redirectTo = routes.DocumentationController.apiIndexPage(None, None, None).url
     Action.async { implicit request => Future.successful(MovedPermanently(redirectTo)) }

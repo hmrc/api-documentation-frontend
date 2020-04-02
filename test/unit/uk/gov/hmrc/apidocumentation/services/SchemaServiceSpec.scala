@@ -16,10 +16,11 @@
 
 package unit.uk.gov.hmrc.apidocumentation.services
 
+import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.Json
-import uk.gov.hmrc.apidocumentation.models.JsonSchema
-import uk.gov.hmrc.apidocumentation.services.{RAML, SchemaService}
+import uk.gov.hmrc.apidocumentation.services.RAML
+import uk.gov.hmrc.apidocumentation.services.SchemaService
 import unit.uk.gov.hmrc.apidocumentation.utils.FileRamlLoader
 
 import scala.io.Source

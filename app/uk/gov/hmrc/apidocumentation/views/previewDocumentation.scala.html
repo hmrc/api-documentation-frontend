@@ -19,11 +19,9 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers.routes
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.views.html.raml._
-
-@import uk.gov.hmrc.apidocumentation.views.html.include._
-
-@this(apiMain: apiMain)
+@import include.apiMain
+@import raml.main
+@import uk.gov.hmrc.apidocumentation.services.RAML
 
 @(pageAttributes: PageAttributes, url: Option[String], result: Try[Option[RamlAndSchemas]])(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
 

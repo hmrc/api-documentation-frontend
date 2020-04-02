@@ -16,11 +16,11 @@
 
 package unit.uk.gov.hmrc.apidocumentation.models
 
+import uk.gov.hmrc.apidocumentation.models.APIStatus._
+import uk.gov.hmrc.apidocumentation.models.APICategory._
+import uk.gov.hmrc.apidocumentation.models._
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.models.APICategory._
-import uk.gov.hmrc.apidocumentation.models.APIStatus._
 import uk.gov.hmrc.play.test.UnitSpec
 
 class DocumentationSpec extends UnitSpec {

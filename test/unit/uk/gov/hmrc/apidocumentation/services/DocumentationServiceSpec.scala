@@ -19,27 +19,23 @@ package unit.uk.gov.hmrc.apidocumentation.services
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import org.scalatest.mockito.MockitoSugar
 import play.api.cache.CacheApi
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint, _}
 import uk.gov.hmrc.apidocumentation.services.{DocumentationService, RAML, SchemaService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.ramltools.domain.RamlParseException
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
 import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, FileRamlLoader}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 class DocumentationServiceSpec extends UnitSpec
-  with GuiceOneAppPerTest
+  with WithFakeApplication
   with MockitoSugar
   with ScalaFutures
   with ApiDefinitionTestDataHelper {
@@ -50,11 +46,6 @@ class DocumentationServiceSpec extends UnitSpec
   val serviceName = "calendar"
   val serviceUrl = "http://localhost:1234"
   val api: APIDefinition = apiDefinition("gregorian-calendar")
-
-  override def fakeApplication(): Application =
-    GuiceApplicationBuilder()
-      .configure(("metrics.jvm", false))
-      .build()
 
   trait Setup {
     implicit val hc = HeaderCarrier()

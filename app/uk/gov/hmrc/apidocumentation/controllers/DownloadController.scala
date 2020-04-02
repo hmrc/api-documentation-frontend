@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
@@ -28,15 +28,12 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
 class DownloadController @Inject()(documentationService: DocumentationService,
                                    apiDefinitionService: ApiDefinitionService,
                                    downloadService: DownloadService,
                                    loggedInUserProvider: LoggedInUserProvider,
-                                   errorHandler: ErrorHandler,
-                                   mcc: MessagesControllerComponents)
-                                   (implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
-  extends FrontendController(mcc) {
+                                   errorHandler: ErrorHandler)(implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
+  extends FrontendController {
 
   def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
 
