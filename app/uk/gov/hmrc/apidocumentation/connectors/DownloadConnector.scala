@@ -26,13 +26,15 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.http.{InternalServerException, NotFoundException}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
+
 
 @Singleton
 class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig) {
 
   private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 
-  private def buildRequest(resourceUrl: String): WSRequest = ws.url(resourceUrl)
+  private def buildRequest(resourceUrl: String): WSRequest = ws.url(resourceUrl).withRequestTimeout(10.seconds)
 
   private def makeRequest(serviceName: String, version: String, resource: String): Future[WSResponse] = {
     buildRequest(s"$serviceBaseUrl/api-definition/$serviceName/$version/documentation/$resource").withMethod("GET").stream()
