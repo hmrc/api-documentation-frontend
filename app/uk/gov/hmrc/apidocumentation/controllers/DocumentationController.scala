@@ -17,7 +17,6 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.Inject
-
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -193,6 +192,11 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   def referenceGuidePage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       Future.successful(Ok(reference(pageAttributes("Reference guide", routes.DocumentationController.referenceGuidePage().url, navLinks))))
+  }
+
+  def developmentPracticesPage(): Action[AnyContent] = headerNavigation { implicit request =>
+    navLinks =>
+      Future.successful(Ok(developmentPractices(pageAttributes("Development practices", routes.DocumentationController.developmentPracticesPage().url, navLinks))))
   }
 
   def nameGuidelinesPage(): Action[AnyContent] = headerNavigation { implicit request =>
