@@ -26,6 +26,7 @@ import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {

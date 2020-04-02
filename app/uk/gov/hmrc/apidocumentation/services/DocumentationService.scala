@@ -25,10 +25,11 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
 import scala.collection.JavaConversions._
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ExecutionContext, Future}
+
 
 object DocumentationService {
   def ramlUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
@@ -42,7 +43,8 @@ object DocumentationService {
 class DocumentationService @Inject()(appConfig: ApplicationConfig,
                                      cache: CacheApi,
                                      ramlLoader: RamlLoader,
-                                     schemaService: SchemaService) {
+                                     schemaService: SchemaService)
+                                     (implicit ec: ExecutionContext) {
 
   import DocumentationService.ramlUrl
 

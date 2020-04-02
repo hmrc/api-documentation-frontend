@@ -29,10 +29,9 @@ import uk.gov.hmrc.apidocumentation.models.APIAccessType
 import uk.gov.hmrc.apidocumentation.services.DownloadService
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class DownloadControllerSpec extends UnitSpec with MockitoSugar with WithFakeApplication {
+class DownloadControllerSpec(implicit ec: ExecutionContext) extends UnitSpec with MockitoSugar with WithFakeApplication {
 
   class Setup extends ControllerCommonSetup {
 

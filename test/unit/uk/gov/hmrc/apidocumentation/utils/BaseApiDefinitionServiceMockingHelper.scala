@@ -23,9 +23,10 @@ import scala.concurrent.Future
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.services.BaseApiDefinitionService
 import uk.gov.hmrc.http.HeaderCarrier
-
+import scala.concurrent.ExecutionContext
 
 trait BaseApiDefinitionServiceMockingHelper {
+
   def whenFetchAllDefinitions[T <: BaseApiDefinitionService](base: T)
                              (apis: APIDefinition*)
                              (implicit hc: HeaderCarrier) = {

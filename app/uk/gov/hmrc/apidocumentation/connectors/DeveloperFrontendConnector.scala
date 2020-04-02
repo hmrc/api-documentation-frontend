@@ -27,11 +27,10 @@ import uk.gov.hmrc.play.http.metrics.{API, Metrics}
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.connectionExceptionsAsHtmlPartialFailure
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig,  metrics: Metrics) {
+class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig,  metrics: Metrics)(implicit ec: ExecutionContext) {
 
   val api = API("third-party-developer-frontend")
   private lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl

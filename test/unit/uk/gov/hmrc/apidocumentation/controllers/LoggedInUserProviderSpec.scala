@@ -30,13 +30,14 @@ import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class LoggedInUserProviderTest(config: ApplicationConfig,
                                sessionService: SessionService,
                                asyncIdContainer: AsyncIdContainer[String],
                                cookieTokenAccessor: CookieTokenAccessor)
+                               (implicit ec: ExecutionContext)
   extends LoggedInUserProvider(config,
     sessionService) {
   override lazy val idContainer: AsyncIdContainer[String] = asyncIdContainer
@@ -52,8 +53,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
     val mockAsyncIdContainer = mock[AsyncIdContainer[String]]
     val mockCookieTokenAccessor = mock[CookieTokenAccessor]
 
-    val fakeRequest = FakeRequest()
-
+    implicit val fakeRequest = FakeRequest()
     implicit val hc = HeaderCarrier()
 
     val developer = Developer("email","John", "Smith")
@@ -69,7 +69,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser()(fakeRequest,any[HeaderCarrier]))
+      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe None
     }
@@ -83,7 +83,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser()(fakeRequest,any[HeaderCarrier]))
+      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe None
     }
@@ -100,7 +100,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser()(fakeRequest,any[HeaderCarrier]))
+      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe None
     }
@@ -117,7 +117,7 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
 
       val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser()(fakeRequest,any[HeaderCarrier]))
+      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe Some(developer)
     }

@@ -91,7 +91,7 @@ lazy val microservice = (project in file("."))
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
 
-  .settings(scalaVersion := "2.11.11")
+  .settings(scalaVersion := "2.11.12")
 lazy val allPhases = "tt->test;test->test;test->compile;compile->compile"
 lazy val allItPhases = "tit->it;it->it;it->compile;compile->compile"
 lazy val AcceptanceTest = config("acceptance") extend Test

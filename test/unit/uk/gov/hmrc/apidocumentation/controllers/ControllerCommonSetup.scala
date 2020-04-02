@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerCommonSetup
   extends UnitSpec

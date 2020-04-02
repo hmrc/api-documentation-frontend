@@ -26,6 +26,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics.{API, NoopMetrics}
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class UserSessionConnectorSpec extends ConnectorSpec {
   val thirdPartyDeveloperUrl = "https://third-party-developer.example.com"

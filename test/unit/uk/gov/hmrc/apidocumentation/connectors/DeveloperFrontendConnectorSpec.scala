@@ -28,6 +28,7 @@ import uk.gov.hmrc.play.http.metrics.{API, NoopMetrics}
 import uk.gov.hmrc.play.partials.HtmlPartial
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   val developerFrontendUrl = "http://developer-frontend.example.com"

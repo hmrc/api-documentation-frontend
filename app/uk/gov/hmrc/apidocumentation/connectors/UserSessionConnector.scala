@@ -25,11 +25,10 @@ import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics.{API, Metrics}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UserSessionConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, metrics: Metrics) {
+class UserSessionConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, metrics: Metrics)(implicit ec: ExecutionContext) {
 
   val api = API("third-party-developer")
   private lazy val serviceBaseUrl: String = appConfig.thirdPartyDeveloperUrl

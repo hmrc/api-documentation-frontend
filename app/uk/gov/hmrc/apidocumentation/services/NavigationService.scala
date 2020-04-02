@@ -27,10 +27,9 @@ import uk.gov.hmrc.apidocumentation.views.helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.collection.JavaConverters._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConfig: ApplicationConfig) {
+class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
 
   val gettingStartedUrl = routes.DocumentationController.usingTheHubPage().url
   val apiDocumentationUrl = routes.DocumentationController.apiIndexPage(None, None, None).url
