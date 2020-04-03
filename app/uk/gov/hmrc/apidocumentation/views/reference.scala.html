@@ -43,7 +43,6 @@
             <div class="column-one-half">
                 <ul class="list">
                     <li><a href="#http-redirection">HTTP redirection</a></li>
-                    <li><a href="#network-access">Network access</a></li>
                     <li><a href="#rate-limiting">Rate limiting</a></li>
                     <li><a href="#redirect-uris">Redirect URIs</a></li>
                     <li><a href="#scopes">Scopes</a></li>
@@ -204,9 +203,7 @@
 &lt;/error&gt;
 </pre>
 
-        <p>If the response body of an error is not in the above format or the OAuth 2.0 error format, the error has probably not come from us. One possible cause is a <a href="#network-access">network access issue</a>.</p>
-        <p>Some API errors are common across all APIs; others are API-specific.</p>
-        <p>The following tables list the common API errors. You can find API-specific errors in the <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
+        <p>These error responses are common across all APIs:</p>
 
         </section>
         <section id="401">
@@ -426,24 +423,6 @@
         <h2 class="heading-large">HTTP redirection</h2>
         <p>Our API Platform uses HTTP redirection if endpoints move permanently or temporarily.<p>
         <p>Redirection responses have a <strong class="bold-small">Location</strong> header with the endpoint's new URI.</p>
-    </section>
-
-    <section id="network-access">
-        <h2 class="heading-large">Network access</h2>
-        <p>You might need to configure your network so your software can access our API Platform and the authorisation journey for
-            <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.
-            If your software is installed on end user devices, they might also need to configure their own network.</p>
-        <p>We have fixed domain names, but cannot provide static IP addresses, so you need to configure your network
-            access in your proxy, not your firewall.</p>
-        <p>Configure your proxy to allow full access to the following domains, including HTTP GET, POST, PUT, PATCH and DELETE.</p>
-        <p>For testing in sandbox:</p>
-        <pre class="code--block">
-@applicationConfig.sandboxApiHost
-@applicationConfig.sandboxWwwHost</pre>
-        <p>For production use:</p>
-        <pre class="code--block">
-@applicationConfig.productionApiHost
-@applicationConfig.productionWwwHost</pre>
     </section>
 
     <section id="rate-limiting">
