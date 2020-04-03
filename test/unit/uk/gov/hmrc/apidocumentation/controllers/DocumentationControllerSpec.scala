@@ -37,12 +37,11 @@ import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.failed
 import scala.concurrent.duration._
 
-class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with WithFakeApplication {
+class DocumentationControllerSpec(implicit ec: ExecutionContext) extends UnitSpec with MockitoSugar with ScalaFutures with WithFakeApplication {
 
   class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup{
     implicit val appConfig = mock[ApplicationConfig]
@@ -595,7 +594,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         TestEndpoint("{service-url}/employers-paye/zzz"),
         TestEndpoint("{service-url}/employers-paye/ddd")
       )
-      when(documentationService.buildTestEndpoints(any(), any())(any())).thenReturn(endpoints)
+      when(documentationService.buildTestEndpoints(any[String], any[String])(any[HeaderCarrier])).thenReturn(endpoints)
       val result = underTest.fetchTestEndpointJson("employers-paye", "1.0")(request)
       val actualPage = await(result)
       actualPage.header.status shouldBe OK

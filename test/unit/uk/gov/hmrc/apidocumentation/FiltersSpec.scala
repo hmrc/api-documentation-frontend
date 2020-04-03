@@ -26,10 +26,9 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.SessionRedirectFilter
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class FiltersSpec extends UnitSpec with MockitoSugar with WithFakeApplication {
+class FiltersSpec(implicit ec: ExecutionContext) extends UnitSpec with MockitoSugar with WithFakeApplication {
   trait Setup {
     implicit val sys = ActorSystem("FiltersSpec")
     implicit val mat: Materializer = ActorMaterializer()

@@ -25,6 +25,8 @@ import uk.gov.hmrc.play.http.metrics.NoopMetrics
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionConnectorMockingHelper, ApiDefinitionTestDataHelper}
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class ApiDefinitionServiceSpec extends UnitSpec
   with WithFakeApplication
   with MockitoSugar

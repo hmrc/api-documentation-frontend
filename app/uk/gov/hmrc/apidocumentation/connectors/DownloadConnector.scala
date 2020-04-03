@@ -25,11 +25,11 @@ import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.http.{InternalServerException, NotFoundException}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig) {
+class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
 
   private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 

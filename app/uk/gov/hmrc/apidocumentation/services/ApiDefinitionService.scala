@@ -22,7 +22,8 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.{API, Metrics}
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
+
 import scala.concurrent.Future
 
 trait BaseApiDefinitionService {
@@ -33,10 +34,9 @@ trait BaseApiDefinitionService {
 }
 
 @Singleton
-class ApiDefinitionService @Inject()(
-                                      val raw: ApiDefinitionConnector,
-                                      val metrics: Metrics
-                                             ) extends BaseApiDefinitionService {
+class ApiDefinitionService @Inject()(val raw: ApiDefinitionConnector,
+                                      val metrics: Metrics)
+                                      (implicit ec: ExecutionContext) extends BaseApiDefinitionService {
   val api: API = API("api-definition")
 
   def fetchExtendedDefinition(serviceName: String, email: Option[String] = None)
