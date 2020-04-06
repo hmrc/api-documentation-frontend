@@ -38,10 +38,11 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
 import scala.concurrent.duration._
 
-class DocumentationControllerSpec(implicit ec: ExecutionContext) extends UnitSpec with MockitoSugar with ScalaFutures with WithFakeApplication {
+class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with WithFakeApplication {
 
   class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup{
     implicit val appConfig = mock[ApplicationConfig]
