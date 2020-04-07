@@ -46,6 +46,7 @@
                     <li><a href="#rate-limiting">Rate limiting</a></li>
                     <li><a href="#redirect-uris">Redirect URIs</a></li>
                     <li><a href="#scopes">Scopes</a></li>
+                    <li><a href="#tls-standards">TLS standards</a></li>
                     <li><a href="#versioning">Versioning</a></li>
                 </ul>
             </div>
@@ -411,12 +412,12 @@
 
     <section id="fraud-prevention">
         <h2 class="heading-large">Fraud prevention</h2>
-        <p>
-            You must help us protect our users' confidential data by sending us particular types of user audit data which we will
-            record. Important information on how to do this is now on a new
-            <a href="@controllers.routes.DocumentationController.fraudPreventionPage().url">fraud prevention</a> page.
-        </p>
-        <p>This will become mandatory - so we recommend designing it into your applications now.</p>
+        <p>You must help us protect our users’ confidential data by sending us particular types of user audit data which we will record.
+            Check <a href="@controllers.routes.DocumentationController.fraudPreventionPage().url">what you need to send</a>.</p>
+
+        <p>It is mandatory to provide header data for the <a href="/api-documentation/docs/api/service/vat-api/1.0">VAT (MTD) API</a>.</p>
+
+        <p>Soon, you'll need to send user audit data in fraud prevention headers for all of our APIs. We recommend designing this into your applications now.</p>
     </section>
 
     <section id="http-redirection">
@@ -535,6 +536,16 @@
         <p>The scope for each user-restricted endpoint is defined in the <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
 
         <p>For details about OAuth 2.0 and scopes, see <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>.</p>
+
+    </section>
+
+    <section id ="tls-standards">
+
+        <h2 class="heading-large">TLS standards</h2>
+
+        <p>HMRC APIs are only accessible over Transport Layer Security (TLS). For example, URLs that begin with https://.</p>
+
+        <p class="panel panel-border-wide">Applications must support TLS 1.2 or higher to avoid known weaknesses in previous versions.</p>
 
     </section>
 
