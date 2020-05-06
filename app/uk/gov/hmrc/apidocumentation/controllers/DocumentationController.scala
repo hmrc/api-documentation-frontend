@@ -213,10 +213,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
         Some(breadcrumbs)))))
   }
 
-  def usingPrivilegedApplicationCredentialsPage(): Action[AnyContent] = {
-    Action.async { implicit request => Future.successful(Ok(views.html.usingPrivilegedApplicationCredentials())) }
-  }
-
   def fraudPreventionPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       Future.successful(Ok(fraudPrevention(pageAttributes("Fraud prevention", routes.DocumentationController.fraudPreventionPage().url, navLinks))))
