@@ -19,7 +19,6 @@ GET         /docs/authorisation/open-access-endpoints               @uk.gov.hmrc
 GET         /docs/authorisation/application-restricted-endpoints    @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationAppRestrictedEndpointsPage()
 GET         /docs/authorisation/user-restricted-endpoints           @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationUserRestrictedEndpointsPage()
 GET         /docs/authorisation/two-step-verification               @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisation2SVPage()
-GET         /docs/using-privileged-application-credentials          @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.usingPrivilegedApplicationCredentialsPage()
 
 GET         /docs/apiIndex                                          @uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToDocumentationIndexPage()
 GET         /docs/api                                               @uk.gov.hmrc.apidocumentation.controllers.DocumentationController.apiIndexPage(service: Option[String], version: Option[String], filter: Option[String])
