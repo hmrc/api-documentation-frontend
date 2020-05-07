@@ -123,7 +123,6 @@ lazy val compile = Seq(
   "org.raml" % "raml-parser-2" % "1.0.13",
   "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-25",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
-  "jp.t2v" %% "play2-auth" % "0.14.2",
   "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1"
 )
 
@@ -141,7 +140,6 @@ lazy val test = Seq(
   "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
   "com.github.tomakehurst" % "wiremock" % "1.58" % "test,it",
   "org.jsoup" % "jsoup" % "1.11.3" % "test,it",
-  "jp.t2v" %% "play2-auth-test" % "0.14.2" % "test,it",
   "de.leanovate.play-mockws" %% "play-mockws" % "2.5.1" % "test"
 ).map(_.exclude("xalan", "xalan")
   .exclude("org.apache.httpcomponents", "httpcore")
