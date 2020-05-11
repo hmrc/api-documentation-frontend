@@ -18,7 +18,7 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import java.security.MessageDigest
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import play.api.libs.crypto.CookieSigner
 import play.api.mvc.{Request, RequestHeader}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -32,6 +32,7 @@ import scala.util.Try
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 import play.api.mvc.ControllerComponents
 
+@Singleton
 class LoggedInUserProvider @Inject()(config: ApplicationConfig,
                                      sessionService: SessionService,
                                      val cookieSigner : CookieSigner,

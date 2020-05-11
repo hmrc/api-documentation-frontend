@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 @import uk.gov.hmrc.apidocumentation.views.html.partials
+@import play.twirl.api.HtmlFormat
 
 @(pageAttributes: PageAttributes, additionalTopContent: Html = HtmlFormat.empty)(mainContent: Html)(implicit request: Request[_], applicationConfig: ApplicationConfig, messages: Messages)
 
