@@ -28,19 +28,20 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class LoggedInUserProvider @Inject()(config: ApplicationConfig,
                                      sessionService: SessionService,
                                      val cookieSigner : CookieSigner)
                                      (implicit ec: ExecutionContext) extends CookieEncoding with HeaderCarrierConversion {
 
+  import LoggedInUserProvider._
+
   def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier): Future[Option[Developer]] = {
     // TODO: Tidy this up
     loadSession
       .map(_.map(_.developer))
   }
-
-    private val cookieName = "PLAY2AUTH_SESS_ID"
 
     private def loadSession[A](implicit ec: ExecutionContext, request: Request[A]): Future[Option[Session]] = {
       (for {
@@ -56,6 +57,10 @@ class LoggedInUserProvider @Inject()(config: ApplicationConfig,
   }
 }
 
+object LoggedInUserProvider {
+  val cookieName = "PLAY2AUTH_SESS_ID"
+}
+
 trait CookieEncoding {
 
   val cookieSigner : CookieSigner
@@ -65,15 +70,17 @@ trait CookieEncoding {
   }
 
   def decodeCookie(token : String) : Option[String] = {
-    val (hmac, value) = token.splitAt(40)
+    Try({
+      val (hmac, value) = token.splitAt(40)
 
-    val signedValue = cookieSigner.sign(value)
+      val signedValue = cookieSigner.sign(value)
 
-    if (MessageDigest.isEqual(signedValue.getBytes, hmac.getBytes)) {
-      Some(value)
-    } else {
-      None
-    }
+      if (MessageDigest.isEqual(signedValue.getBytes, hmac.getBytes)) {
+        Some(value)
+      } else {
+        None
+      }
+    }).toOption.flatten
   }
 }
 
