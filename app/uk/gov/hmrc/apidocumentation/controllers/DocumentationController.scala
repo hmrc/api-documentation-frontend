@@ -188,7 +188,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
     navLinks =>
       Future.successful(MovedPermanently("/guides/income-tax-mtd-end-to-end-service-guide/"))
   }
-  
+
   def referenceGuidePage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       Future.successful(Ok(reference(pageAttributes("Reference guide", routes.DocumentationController.referenceGuidePage().url, navLinks))))

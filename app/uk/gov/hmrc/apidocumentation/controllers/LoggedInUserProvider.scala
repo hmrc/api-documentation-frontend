@@ -29,11 +29,17 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import play.api.mvc.ControllerComponents
 
 class LoggedInUserProvider @Inject()(config: ApplicationConfig,
                                      sessionService: SessionService,
-                                     val cookieSigner : CookieSigner)
-                                     (implicit ec: ExecutionContext) extends CookieEncoding with HeaderCarrierConversion {
+                                     val cookieSigner : CookieSigner,
+                                     cc: ControllerComponents)
+                                    (implicit ec: ExecutionContext)
+                                    extends BackendController(cc)
+                                    with CookieEncoding
+                                    with HeaderCarrierConversion {
 
   import LoggedInUserProvider._
 
@@ -83,9 +89,7 @@ trait CookieEncoding {
   }
 }
 
-trait HeaderCarrierConversion
-  extends uk.gov.hmrc.play.bootstrap.controller.BaseController
-    with uk.gov.hmrc.play.bootstrap.controller.Utf8MimeTypes {
+trait HeaderCarrierConversion extends uk.gov.hmrc.play.bootstrap.controller.BackendBaseController {
 
   override implicit def hc(implicit rh: RequestHeader): HeaderCarrier =
     HeaderCarrierConverter.fromHeadersAndSessionAndRequest(rh.headers, Some(rh.session), Some(rh))
