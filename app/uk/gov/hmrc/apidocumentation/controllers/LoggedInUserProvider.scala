@@ -38,7 +38,6 @@ class LoggedInUserProvider @Inject()(config: ApplicationConfig,
   import LoggedInUserProvider._
 
   def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier): Future[Option[Developer]] = {
-    // TODO: Tidy this up
     loadSession
       .map(_.map(_.developer))
   }
