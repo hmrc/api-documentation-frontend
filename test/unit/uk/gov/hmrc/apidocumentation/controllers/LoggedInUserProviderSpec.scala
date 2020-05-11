@@ -16,8 +16,7 @@
 
 package unit.uk.gov.hmrc.apidocumentation.controllers
 
-import jp.t2v.lab.play2.auth.{AsyncIdContainer, CookieTokenAccessor}
-import org.mockito.Matchers.{any, eq => meq}
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
@@ -32,90 +31,83 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
-
-class LoggedInUserProviderTest(config: ApplicationConfig,
-                               sessionService: SessionService,
-                               asyncIdContainer: AsyncIdContainer[String],
-                               cookieTokenAccessor: CookieTokenAccessor)
-                               (implicit ec: ExecutionContext)
-  extends LoggedInUserProvider(config,
-    sessionService) {
-  override lazy val idContainer: AsyncIdContainer[String] = asyncIdContainer
-  override lazy val tokenAccessor: CookieTokenAccessor = cookieTokenAccessor
-}
+import play.api.libs.crypto.CookieSigner
+import uk.gov.hmrc.apidocumentation.views.html.cookies
 
 class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSugar {
+
+  import LoggedInUserProvider.cookieName
 
   "Fetching logged in user" should {
 
     val mockApplicationConfig = mock[ApplicationConfig]
     val mockSessionService = mock[SessionService]
-    val mockAsyncIdContainer = mock[AsyncIdContainer[String]]
-    val mockCookieTokenAccessor = mock[CookieTokenAccessor]
+    val mockCookieSigner = mock[CookieSigner]
 
-    implicit val fakeRequest = FakeRequest()
     implicit val hc = HeaderCarrier()
 
     val developer = Developer("email","John", "Smith")
     val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
 
+    val cookie = play.api.mvc.Cookie(cookieName, "bobbins")
+    val fakeRequestWithoutCookie = FakeRequest()
+    val fakeRequestWithCookie = FakeRequest().withCookies(cookie)
+
     val tokenId = "tokenId"
     val userId = "userId"
 
-    "Be None when no cookie token from cookieTokeExtractor" in {
-
-      when(mockCookieTokenAccessor.extract(any[RequestHeader]))
-        .thenReturn(None)
-
-      val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
+    "Be None when no cookie" in {
+      implicit val request = fakeRequestWithoutCookie
+      val loggedInUserProvider = new LoggedInUserProvider(mockApplicationConfig, mockSessionService, mockCookieSigner)
 
       val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe None
     }
 
-    "Be None when no userId from idContainer" in {
-      when(mockCookieTokenAccessor.extract(any[RequestHeader]))
-        .thenReturn(Some(tokenId))
+    "Be None when cookie is present but there is no valid signed cookie token" in {
+      implicit val request = fakeRequestWithoutCookie
 
-      when(mockAsyncIdContainer.get(tokenId))
+      val loggedInUserProvider = new LoggedInUserProvider(mockApplicationConfig, mockSessionService, mockCookieSigner)
+
+      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
+
+      result shouldBe None
+    }
+
+   "Be None when no session from sessionService" in {
+      implicit val request = fakeRequestWithCookie
+
+      val fakeId = "123"
+      val decodeSessionResult = Some(fakeId)
+
+      when(mockSessionService.fetch(eqTo(fakeId))(any[HeaderCarrier]))
         .thenReturn(Future.successful(None))
 
-      val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
+      val loggedInUserProvider =
+        new LoggedInUserProvider(mockApplicationConfig, mockSessionService, mockCookieSigner) {
+          override def decodeCookie(token: String) : Option[String] = decodeSessionResult
+        }
 
       val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 
       result shouldBe None
     }
 
-    "Be None when no session from sessionService" in {
-      when(mockCookieTokenAccessor.extract(any[RequestHeader]))
-        .thenReturn(Some(tokenId))
-
-      when(mockAsyncIdContainer.get(tokenId))
-        .thenReturn(Future.successful(Some(userId)))
-
-      when(mockSessionService.fetch( meq(userId))(any[HeaderCarrier]))
-        .thenReturn(None)
-
-      val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
-
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
-
-      result shouldBe None
-    }
 
     "Be a Developer when a valid cookie and session" in {
-      when(mockCookieTokenAccessor.extract(any[RequestHeader]))
-        .thenReturn(Some(tokenId))
+      implicit val request = fakeRequestWithCookie
 
-      when(mockAsyncIdContainer.get(tokenId))
-        .thenReturn(Future.successful(Some(userId)))
+      val fakeId = "123"
+      val decodeSessionResult = Some(fakeId)
 
-      when(mockSessionService.fetch( meq(userId))(any[HeaderCarrier]))
-        .thenReturn(Some(session))
+      when(mockSessionService.fetch(eqTo(fakeId))(any[HeaderCarrier]))
+        .thenReturn(Future.successful(Some(session)))
 
-      val loggedInUserProvider = new LoggedInUserProviderTest(mockApplicationConfig, mockSessionService, mockAsyncIdContainer, mockCookieTokenAccessor)
+      val loggedInUserProvider =
+        new LoggedInUserProvider(mockApplicationConfig, mockSessionService, mockCookieSigner) {
+          override def decodeCookie(token: String) : Option[String] = decodeSessionResult
+        }
 
       val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
 

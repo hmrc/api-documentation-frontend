@@ -16,40 +16,77 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import java.security.MessageDigest
+
 import javax.inject.Inject
-import jp.t2v.lab.play2.auth.{AsyncIdContainer, CookieTokenAccessor, TransparentIdContainer}
-import play.api.mvc.Request
+import play.api.libs.crypto.CookieSigner
+import play.api.mvc.{Request, RequestHeader}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.Developer
+import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
 import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class LoggedInUserProvider @Inject()(config: ApplicationConfig,
-                                     sessionService: SessionService)
-                                     (implicit ec: ExecutionContext) {
+                                     sessionService: SessionService,
+                                     val cookieSigner : CookieSigner)
+                                     (implicit ec: ExecutionContext) extends CookieEncoding with HeaderCarrierConversion {
 
-  lazy val tokenAccessor = new CookieTokenAccessor(cookieSecureOption = config.securedCookie)
-
-  lazy val idContainer = AsyncIdContainer(new TransparentIdContainer[String])
-
-  def resolveUser(id: String)(implicit hc: HeaderCarrier): Future[Option[Developer]] =
-    sessionService.fetch(id).map(_.map(_.developer))
+  import LoggedInUserProvider._
 
   def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier): Future[Option[Developer]] = {
-
-    val oToken = tokenAccessor.extract(request)
-
-    oToken match {
-      case None => Future.successful(None)
-      case Some(token) =>
-        val foUserId = idContainer.get(token)
-
-        foUserId.flatMap({
-            case None => Future.successful(None)
-            case Some(userId) => resolveUser(userId)
-        })
-    }
+    loadSession
+      .map(_.map(_.developer))
   }
+
+    private def loadSession[A](implicit ec: ExecutionContext, request: Request[A]): Future[Option[Session]] = {
+      (for {
+        cookie <- request.cookies.get(cookieName)
+        sessionId <- decodeCookie(cookie.value)
+      } yield fetchDeveloperSession(sessionId))
+        .getOrElse(Future.successful(None))
+    }
+
+  private def fetchDeveloperSession[A](sessionId: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Session]] = {
+    sessionService
+      .fetch(sessionId)
+  }
+}
+
+object LoggedInUserProvider {
+  val cookieName = "PLAY2AUTH_SESS_ID"
+}
+
+trait CookieEncoding {
+
+  val cookieSigner : CookieSigner
+
+  def encodeCookie(token : String) : String = {
+    cookieSigner.sign(token) + token
+  }
+
+  def decodeCookie(token : String) : Option[String] = {
+    Try({
+      val (hmac, value) = token.splitAt(40)
+
+      val signedValue = cookieSigner.sign(value)
+
+      if (MessageDigest.isEqual(signedValue.getBytes, hmac.getBytes)) {
+        Some(value)
+      } else {
+        None
+      }
+    }).toOption.flatten
+  }
+}
+
+trait HeaderCarrierConversion
+  extends uk.gov.hmrc.play.bootstrap.controller.BaseController
+    with uk.gov.hmrc.play.bootstrap.controller.Utf8MimeTypes {
+
+  override implicit def hc(implicit rh: RequestHeader): HeaderCarrier =
+    HeaderCarrierConverter.fromHeadersAndSessionAndRequest(rh.headers, Some(rh.session), Some(rh))
 }
