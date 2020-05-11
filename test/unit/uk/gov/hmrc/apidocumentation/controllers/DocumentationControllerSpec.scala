@@ -19,38 +19,46 @@ package unit.uk.gov.hmrc.apidocumentation.controllers
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.http.Status._
-import play.api.i18n.MessagesApi
 import play.api.mvc._
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation
-import uk.gov.hmrc.apidocumentation.ErrorHandler
+import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
-import uk.gov.hmrc.apidocumentation.controllers
 import uk.gov.hmrc.apidocumentation.controllers.DocumentationController
 import uk.gov.hmrc.apidocumentation.models.{Crumb, RamlAndSchemas, TestEndpoint, _}
 import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService, RAML}
+import uk.gov.hmrc.apidocumentation.views.html.include.{apiMain, main}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.partials.HtmlPartial
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
 import scala.concurrent.duration._
+import play.api.test.Helpers
 
-class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with WithFakeApplication {
+class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with GuiceOneAppPerTest {
 
-  class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup{
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(("metrics.jvm", false))
+      .build()
+
+  class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup {
     implicit val appConfig = mock[ApplicationConfig]
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
     val navigationService = mock[NavigationService]
     val partialsService = new PartialsService(developerFrontendConnector)
     val errorHandler = fakeApplication.injector.instanceOf[ErrorHandler]
-    val messagesApi = fakeApplication.injector.instanceOf[MessagesApi]
+    val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
     val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
     implicit lazy val materializer = fakeApplication.materializer
@@ -61,7 +69,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None, None).url)
     val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
 
-    when(navigationService.headerNavigation()(any())).thenReturn(Future.successful(Seq(navLink)))
+    when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(Future.successful(Seq(navLink)))
     when(navigationService.sidebarNavigation()).thenReturn(Future.successful(Seq(sidebarLink)))
     when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
     when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
@@ -76,17 +84,15 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         partialsService,
         loggedInUserProvider,
         errorHandler,
-        messagesApi
+        mcc
       )
 
-    def verifyPageRendered(
-                            actualPageFuture: Future[Result],
-                            expectedTitle: String,
-                            breadcrumbs: List[Crumb] = List(homeBreadcrumb),
-                            sideNavLinkRendered: Boolean = true,
-                            subNavRendered: Boolean = false,
-                            bodyContains: Seq[String] = Seq.empty
-                          ) {
+    def verifyPageRendered(actualPageFuture: Future[Result],
+                           expectedTitle: String,
+                           breadcrumbs: List[Crumb] = List(homeBreadcrumb),
+                           sideNavLinkRendered: Boolean = true,
+                           subNavRendered: Boolean = false,
+                           bodyContains: Seq[String] = Seq.empty) {
       val actualPage = await(actualPageFuture)
       status(actualPage) shouldBe 200
       titleOf(actualPage) shouldBe expectedTitle
@@ -167,13 +173,10 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
   "DocumentationController" should {
 
     "display the index page" in new Setup {
-
       verifyPageRendered(underTest.indexPage()(request), "HMRC Developer Hub - GOV.UK", breadcrumbs = List.empty, sideNavLinkRendered = false)
-
     }
 
     "display the cookies page" in new Setup {
-
       val actualPageFuture = underTest.cookiesPage()(request)
       val actualPage = await(actualPageFuture)
       status(actualPage) shouldBe OK
@@ -198,7 +201,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     }
 
     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
-      when(developerFrontendConnector.fetchTermsOfUsePartial()(any()))
+      when(developerFrontendConnector.fetchTermsOfUsePartial()(any[HeaderCarrier]))
         .thenReturn(Future.successful(HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))))
 
       verifyPageRendered(underTest.termsOfUsePage()(request), pageTitle("Terms Of Use"),
@@ -244,11 +247,11 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
   "apiIndexPage" must {
 
     "render the API List" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+      theUserIsLoggedIn()
+      theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
 
-        val result = underTest.apiIndexPage(None, None, None)(request)
-        verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
+      val result = underTest.apiIndexPage(None, None, None)(request)
+      verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
 
     }
 
@@ -595,7 +598,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
         TestEndpoint("{service-url}/employers-paye/zzz"),
         TestEndpoint("{service-url}/employers-paye/ddd")
       )
-      when(documentationService.buildTestEndpoints(any[String], any[String])(any[HeaderCarrier])).thenReturn(endpoints)
+      when(documentationService.buildTestEndpoints(any(), any())(any[HeaderCarrier])).thenReturn(endpoints)
       val result = underTest.fetchTestEndpointJson("employers-paye", "1.0")(request)
       val actualPage = await(result)
       actualPage.header.status shouldBe OK

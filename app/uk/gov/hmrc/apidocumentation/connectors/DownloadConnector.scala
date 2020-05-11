@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
 @Singleton
-class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig) {
+class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
 
   private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 
@@ -39,7 +39,7 @@ class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig) {
     buildRequest(s"$serviceBaseUrl/api-definition/$serviceName/$version/documentation/$resource").withMethod("GET").stream()
   }
 
-  def fetch(serviceName: String, version: String, resource: String)(implicit ec: ExecutionContext): Future[Result] = {
+  def fetch(serviceName: String, version: String, resource: String): Future[Result] = {
     makeRequest(serviceName, version, resource).map { response =>
       if(response.status == OK) {
         val contentType = response.headers.get("Content-Type").flatMap(_.headOption)

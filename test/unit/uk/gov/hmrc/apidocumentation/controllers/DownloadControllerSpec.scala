@@ -18,35 +18,45 @@ package unit.uk.gov.hmrc.apidocumentation.controllers
 
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.http.Status._
 import play.api.mvc._
-import play.twirl.api.Html
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.controllers.DownloadController
 import uk.gov.hmrc.apidocumentation.models.APIAccessType
 import uk.gov.hmrc.apidocumentation.services.DownloadService
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class DownloadControllerSpec extends UnitSpec with MockitoSugar with WithFakeApplication {
+class DownloadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerTest {
+
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(("metrics.jvm", false))
+      .build()
 
   class Setup extends ControllerCommonSetup {
 
-    implicit val appConfig = mock[ApplicationConfig]
+    val appConfig = mock[ApplicationConfig]
     val downloadService = mock[DownloadService]
+
     val errorHandler = fakeApplication.injector.instanceOf[ErrorHandler]
+    val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
     val version = "2.0"
     val resourceName = "some/resource"
 
-    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadService, loggedInUserProvider, errorHandler)
+    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadService, loggedInUserProvider, errorHandler, appConfig, mcc)
 
     def theDownloadServiceWillReturnTheResult(result: Results.Status) = {
-      when(downloadService.fetchResource(any(), any(), any())(any())).thenReturn(Future.successful(result))
+      when(downloadService.fetchResource(any[String], any[String], any[String])(any[HeaderCarrier])).thenReturn(Future.successful(result))
     }
 
     theUserIsNotLoggedIn()

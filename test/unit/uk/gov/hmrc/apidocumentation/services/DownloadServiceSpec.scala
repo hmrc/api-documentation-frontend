@@ -24,6 +24,7 @@ import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.apidocumentation.services.DownloadService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
