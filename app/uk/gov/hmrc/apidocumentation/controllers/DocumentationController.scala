@@ -37,7 +37,7 @@ import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-@Singleton
+
 class DocumentationController @Inject()(documentationService: DocumentationService,
                                         apiDefinitionService: ApiDefinitionService,
                                         navigationService: NavigationService,

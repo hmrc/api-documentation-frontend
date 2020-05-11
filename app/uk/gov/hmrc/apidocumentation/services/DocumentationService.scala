@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import org.raml.v2.api.model.v10.resources.Resource
 import play.api.cache._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -45,6 +45,8 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
                                      ramlLoader: RamlLoader,
                                      schemaService: SchemaService)
                                      (implicit ec: ExecutionContext) {
+ 
+  println("***** Hello from DocumentationService")
 
   import DocumentationService.ramlUrl
 
@@ -61,7 +63,7 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
     if (cacheBuster) cache.remove(url)
 
     Future {
-      blocking {
+      blocking {  // ramlLoader is blocking and synchronous
         cache.getOrElse[Try[RamlAndSchemas]](url, defaultExpiration) {
           ramlLoader.load(url).map(raml => {
             val schemaBasePath =  s"${url.take(url.lastIndexOf('/'))}/schemas"

@@ -1,4 +1,3 @@
-import _root_.play.core.PlayVersion
 import _root_.play.sbt.PlayImport._
 import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.uglify.Import.{uglifyCompressOptions, _}
@@ -13,6 +12,48 @@ import uk.gov.hmrc.{SbtAutoBuildPlugin, _}
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
+
+lazy val appName = "api-documentation-frontend"
+
+lazy val scope: String = "test, it"
+
+lazy val compile = Seq(
+  ws,
+  cache,
+  guice,
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.5.0",
+  "uk.gov.hmrc" %% "govuk-template" % "5.52.0-play-26",
+  "uk.gov.hmrc" %% "play-ui" % "8.8.0-play-26",
+  "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-26",
+
+  "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-26",
+  "uk.gov.hmrc" %% "http-metrics" % "1.5.0",
+  "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
+  "org.raml" % "raml-parser-2" % "1.0.13",
+  "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
+  "jp.t2v" %% "play2-auth" % "0.14.2",
+  "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1",
+  "com.typesafe.play" %% "play-json" % "2.6.14"
+)
+
+lazy val test = Seq(
+  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % scope,
+  "org.pegdown" % "pegdown" % "1.6.0" % scope,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % scope,
+  "org.jsoup" % "jsoup" % "1.11.3" % scope,
+  "info.cukes" %% "cucumber-scala" % "1.2.5" % scope,
+  "info.cukes" % "cucumber-junit" % "1.2.5" % scope,
+  "org.mockito" % "mockito-core" % "1.10.19" % scope,
+  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % scope,
+  "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % scope,
+  "com.github.tomakehurst" % "wiremock" % "1.58" % scope,
+  "jp.t2v" %% "play2-auth-test" % "0.14.2" % scope
+).map(_.exclude("xalan", "xalan")
+  .exclude("org.apache.httpcomponents", "httpcore")
+)
+
+lazy val allDeps = compile ++ test
+lazy val appDependencies: Seq[ModuleID] = allDeps
 
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
@@ -105,43 +146,6 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
   publishArtifact in(Compile, packageSrc) := false
 ) ++
   publishAllArtefacts
-
-lazy val appName = "api-documentation-frontend"
-lazy val appDependencies: Seq[ModuleID] = allDeps
-
-
-lazy val compile = Seq(
-  ws,
-  cache,
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.7.0",
-  "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-26",
-  "uk.gov.hmrc" %% "http-metrics" % "1.5.0",
-  "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
-  "uk.gov.hmrc" %% "govuk-template" % "5.54.0-play-26",
-  "uk.gov.hmrc" %% "play-ui" % "8.9.0-play-26",
-  "org.raml" % "raml-parser-2" % "1.0.13",
-  "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
-  "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
-  "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1"
-)
-
-lazy val test = Seq(
-  "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
-  "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it",
-  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % "test,it",
-  "junit" % "junit" % "4.12" % "test,it",
-  "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
-  "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % "test,it",
-  "org.mockito" % "mockito-core" % "1.10.19" % "test,it",
-  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "test,it",
-  "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
-  "com.github.tomakehurst" % "wiremock" % "1.58" % "test,it",
-  "org.jsoup" % "jsoup" % "1.11.3" % "test,it"
-).map(_.exclude("xalan", "xalan")
-  .exclude("org.apache.httpcomponents", "httpcore")
-)
-lazy val allDeps = compile ++ test
 
 def acceptanceTestFilter(name: String): Boolean = name startsWith "acceptance"
 

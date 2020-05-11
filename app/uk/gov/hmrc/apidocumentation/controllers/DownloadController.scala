@@ -28,7 +28,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
+
 class DownloadController @Inject()(documentationService: DocumentationService,
                                    apiDefinitionService: ApiDefinitionService,
                                    downloadService: DownloadService,
