@@ -20,7 +20,8 @@ import org.jsoup.Jsoup
 import uk.gov.hmrc.apidocumentation.views
 import org.jsoup.nodes.Document
 import org.scalatest.mockito.MockitoSugar
-import play.api.i18n.Messages
+import play.api.i18n.{Messages, DefaultMessagesApi, Lang}
+import java.util.Locale
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.play.test.UnitSpec
@@ -49,7 +50,7 @@ class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with Guice
   val ramlAndSchemas: RamlAndSchemas = mock[RamlAndSchemas]
   when(ramlAndSchemas.raml).thenReturn(mock[RAML])
 
-  val messages = mock[Messages]
+  val messages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
   val request = mock[Request[Any]]
 
   trait Setup {
