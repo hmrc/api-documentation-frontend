@@ -57,7 +57,7 @@ lazy val microservice = (project in file("."))
   )
   .settings(playPublishingSettings: _*)
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
-  
+
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
   .settings(testOptions in Test := Seq(Tests.Filter(unitFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT")))
 
@@ -106,6 +106,7 @@ lazy val compile = Seq(
   "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1"
 )
 
+
 lazy val testScopes = "test"
 
 lazy val test = Seq(
@@ -121,9 +122,8 @@ lazy val test = Seq(
   "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
   "com.github.tomakehurst" % "wiremock" % "1.58" % testScopes,
   "org.jsoup" % "jsoup" % "1.11.3" % testScopes
-).map(_.exclude("xalan", "xalan")
-  .exclude("org.apache.httpcomponents", "httpcore")
 )
+
 lazy val allDeps = compile ++ test
 
 def acceptanceTestFilter(name: String): Boolean = name startsWith "acceptance"
