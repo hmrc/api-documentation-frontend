@@ -17,7 +17,7 @@
 package unit.uk.gov.hmrc.apidocumentation.services
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}

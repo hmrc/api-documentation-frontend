@@ -20,7 +20,7 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import org.mockito.Matchers.{any, eq => meq}
 import org.mockito.Mockito.{never, verify, when}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{RequestHeader, Result, Session}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.SessionRedirectFilter

@@ -19,9 +19,9 @@ package unit.uk.gov.hmrc.apidocumentation.controllers
 import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
-import play.api.mvc.RequestHeader
-import play.api.test.FakeRequest
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.crypto.CookieSigner
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.controllers.LoggedInUserProvider
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
@@ -29,11 +29,8 @@ import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.libs.crypto.CookieSigner
-import uk.gov.hmrc.apidocumentation.views.html.cookies
-import play.api.test.Helpers
+import scala.concurrent.Future
 
 class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSugar {
 

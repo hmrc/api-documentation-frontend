@@ -16,20 +16,21 @@
 
 package unit.uk.gov.hmrc.apidocumentation.views
 
-import org.jsoup.Jsoup
-import uk.gov.hmrc.apidocumentation.views
-import org.jsoup.nodes.Document
-import org.scalatest.mockito.MockitoSugar
-import play.api.i18n.{Messages, DefaultMessagesApi, Lang}
 import java.util.Locale
+
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.i18n.{DefaultMessagesApi, Lang}
+import play.api.mvc.Request
+import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.play.test.UnitSpec
-import play.twirl.api.HtmlFormat.Appendable
-import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.services.RAML
-import org.mockito.Mockito.when
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import uk.gov.hmrc.apidocumentation.views
+import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite with ApiDefinitionTestDataHelper {

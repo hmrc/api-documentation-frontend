@@ -17,7 +17,7 @@
 package unit.uk.gov.hmrc.apidocumentation.connectors
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.play.test.{UnitSpec}
 import play.api.libs.json.Json

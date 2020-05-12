@@ -19,7 +19,7 @@ package unit.uk.gov.hmrc.apidocumentation.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Mockito.{when => When}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.Request
 import play.api.i18n.{Messages, DefaultMessagesApi, Lang}

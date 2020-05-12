@@ -16,18 +16,17 @@
 
 package unit.uk.gov.hmrc.apidocumentation.views.include
 
+import java.util.Locale
+
 import junit.framework.TestCase
-import org.mockito.BDDMockito.given
-import org.scalatest.mockito.MockitoSugar
-import play.api.i18n.{Messages, DefaultMessagesApi, Lang}
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.i18n.{DefaultMessagesApi, Lang}
 import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.NavLink
 import uk.gov.hmrc.apidocumentation.views
-import uk.gov.hmrc.play.test.{UnitSpec}
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-
-import java.util.Locale
+import uk.gov.hmrc.play.test.UnitSpec
 
 class MainTemplateSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
 
