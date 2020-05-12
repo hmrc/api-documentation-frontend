@@ -31,19 +31,19 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
-  val gettingStartedUrl = routes.DocumentationController.usingTheHubPage().url
-  val apiDocumentationUrl = routes.DocumentationController.apiIndexPage(None, None, None).url
-  val referenceGuideUrl = routes.DocumentationController.referenceGuidePage().url
-  val namingGuidelinesUrl = routes.DocumentationController.nameGuidelinesPage().url
-  val authorisationUri =routes.DocumentationController.authorisationPage().url
-  val tutorialsUri = routes.DocumentationController.tutorialsPage().url
-  val termsOfUseUri = routes.DocumentationController.termsOfUsePage().url
-  val testingUri = routes.DocumentationController.testingPage().url
-  val mtdIntroductionPageUrl = routes.DocumentationController.mtdIntroductionPage().url
-  val fraudPreventionPageUrl = routes.DocumentationController.fraudPreventionPage().url
-  val developmentPracticesUrl = routes.DocumentationController.developmentPracticesPage().url
+  lazy val gettingStartedUrl = routes.DocumentationController.usingTheHubPage().url
+  lazy val apiDocumentationUrl = routes.DocumentationController.apiIndexPage(None, None, None).url
+  lazy val referenceGuideUrl = routes.DocumentationController.referenceGuidePage().url
+  lazy val namingGuidelinesUrl = routes.DocumentationController.nameGuidelinesPage().url
+  lazy val authorisationUri =routes.DocumentationController.authorisationPage().url
+  lazy val tutorialsUri = routes.DocumentationController.tutorialsPage().url
+  lazy val termsOfUseUri = routes.DocumentationController.termsOfUsePage().url
+  lazy val testingUri = routes.DocumentationController.testingPage().url
+  lazy val mtdIntroductionPageUrl = routes.DocumentationController.mtdIntroductionPage().url
+  lazy val fraudPreventionPageUrl = routes.DocumentationController.fraudPreventionPage().url
+  lazy val developmentPracticesUrl = routes.DocumentationController.developmentPracticesPage().url
 
-  val sidebarNavigationLinks = Seq(
+  lazy val sidebarNavigationLinks = Seq(
     SidebarLink(label = "Using the Developer Hub", href = gettingStartedUrl,
       subLinks = Seq(SidebarLink(label = "Application naming guidelines", href = namingGuidelinesUrl))),
     SidebarLink(label = "Authorisation", href = authorisationUri),
