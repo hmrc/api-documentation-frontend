@@ -49,11 +49,11 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   extends FrontendController(mcc) with I18nSupport {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
-  private val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
-  private val apiDocCrumb = Crumb("API Documentation", routes.DocumentationController.apiIndexPage(None, None, None).url)
-  private val usingTheHubCrumb = Crumb("Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url)
-  private val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
-  private val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
+  private lazy val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
+  private lazy val apiDocCrumb = Crumb("API Documentation", routes.DocumentationController.apiIndexPage(None, None, None).url)
+  private lazy val usingTheHubCrumb = Crumb("Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url)
+  private lazy val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
+  private lazy val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
 
   def cookiesPage(): Action[AnyContent] = {
     Action.async { implicit request => Future.successful(Ok(views.html.cookies())) }
