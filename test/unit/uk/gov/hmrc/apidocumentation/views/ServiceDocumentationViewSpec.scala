@@ -28,10 +28,10 @@ import play.twirl.api.HtmlFormat.Appendable
 import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.services.RAML
 import org.mockito.Mockito.when
-import org.scalatestplus.play.OneAppPerSuite
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
-class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with OneAppPerSuite with ApiDefinitionTestDataHelper {
+class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite with ApiDefinitionTestDataHelper {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val versionsDropdown = dom.getElementById("version")

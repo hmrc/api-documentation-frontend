@@ -57,11 +57,11 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
     val navigationService = mock[NavigationService]
     val partialsService = new PartialsService(developerFrontendConnector)
-    val errorHandler = fakeApplication.injector.instanceOf[ErrorHandler]
-    val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+    val errorHandler = app.injector.instanceOf[ErrorHandler]
+    val mcc = app.injector.instanceOf[MessagesControllerComponents]
     val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
-    implicit lazy val materializer = fakeApplication.materializer
+    implicit lazy val materializer = app.materializer
 
     val navLink = NavLink("Header Link", "/api-documentation/headerlink")
     val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")

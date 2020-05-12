@@ -1,3 +1,4 @@
+import _root_.play.core.PlayVersion
 import _root_.play.sbt.PlayImport._
 import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.uglify.Import.{uglifyCompressOptions, _}
@@ -12,48 +13,6 @@ import uk.gov.hmrc.{SbtAutoBuildPlugin, _}
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
-
-lazy val appName = "api-documentation-frontend"
-
-lazy val scope: String = "test, it"
-
-lazy val compile = Seq(
-  ws,
-  cache,
-  guice,
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.5.0",
-  "uk.gov.hmrc" %% "govuk-template" % "5.52.0-play-26",
-  "uk.gov.hmrc" %% "play-ui" % "8.8.0-play-26",
-  "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-26",
-
-  "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-26",
-  "uk.gov.hmrc" %% "http-metrics" % "1.5.0",
-  "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
-  "org.raml" % "raml-parser-2" % "1.0.13",
-  "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
-  "jp.t2v" %% "play2-auth" % "0.14.2",
-  "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1",
-  "com.typesafe.play" %% "play-json" % "2.6.14"
-)
-
-lazy val test = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % scope,
-  "org.pegdown" % "pegdown" % "1.6.0" % scope,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % scope,
-  "org.jsoup" % "jsoup" % "1.11.3" % scope,
-  "info.cukes" %% "cucumber-scala" % "1.2.5" % scope,
-  "info.cukes" % "cucumber-junit" % "1.2.5" % scope,
-  "org.mockito" % "mockito-core" % "1.10.19" % scope,
-  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % scope,
-  "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % scope,
-  "com.github.tomakehurst" % "wiremock" % "1.58" % scope,
-  "jp.t2v" %% "play2-auth-test" % "0.14.2" % scope
-).map(_.exclude("xalan", "xalan")
-  .exclude("org.apache.httpcomponents", "httpcore")
-)
-
-lazy val allDeps = compile ++ test
-lazy val appDependencies: Seq[ModuleID] = allDeps
 
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
@@ -79,6 +38,10 @@ lazy val microservice = (project in file("."))
       uglify
     )
   )
+  .settings(
+    resolvers += Resolver.bintrayRepo("hmrc", "releases"),
+    resolvers += Resolver.jcenterRepo
+  )
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
   .settings(publishingSettings: _*)
@@ -94,32 +57,10 @@ lazy val microservice = (project in file("."))
   )
   .settings(playPublishingSettings: _*)
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
+  
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
   .settings(testOptions in Test := Seq(Tests.Filter(unitFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT")))
-  .configs(IntegrationTest)
-  .settings(inConfig(TemplateItTest)(Defaults.itSettings): _*)
-  .settings(
-    Keys.fork in IntegrationTest := false,
-    unmanagedSourceDirectories in IntegrationTest := Seq((baseDirectory in IntegrationTest).value / "it"),
-    unmanagedResourceDirectories in IntegrationTest := Seq((baseDirectory in IntegrationTest).value / "it/resources"),
-    addTestReportOption(IntegrationTest, "int-test-reports"),
-    testGrouping in IntegrationTest := (definedTests in IntegrationTest).value.map {
-      test => Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name))))
-    },
-    parallelExecution in IntegrationTest := false)
-  .settings(
-    resolvers += Resolver.bintrayRepo("hmrc", "releases"),
-    resolvers += Resolver.jcenterRepo)
-  .configs(EndToEndTest)
-  .settings(inConfig(EndToEndTest)(Defaults.testSettings): _*)
-  .settings(
-    testOptions in EndToEndTest := Seq(Tests.Filter(endToEndFilter)),
-    unmanagedSourceDirectories in EndToEndTest := Seq((baseDirectory in EndToEndTest).value / "test"),
-    unmanagedResourceDirectories in EndToEndTest := Seq((baseDirectory in EndToEndTest).value / "test"),
-    Keys.fork in EndToEndTest := false,
-    parallelExecution in EndToEndTest := false,
-    addTestReportOption(EndToEndTest, "e2e-test-reports")
-  )
+
   .configs(AcceptanceTest)
   .settings(inConfig(AcceptanceTest)(Defaults.testSettings): _*)
   .settings(
@@ -132,12 +73,11 @@ lazy val microservice = (project in file("."))
   )
 
   .settings(scalaVersion := "2.11.12")
+
 lazy val allPhases = "tt->test;test->test;test->compile;compile->compile"
-lazy val allItPhases = "tit->it;it->it;it->compile;compile->compile"
 lazy val AcceptanceTest = config("acceptance") extend Test
-lazy val EndToEndTest = config("endtoend") extend Test
 lazy val TemplateTest = config("tt") extend Test
-lazy val TemplateItTest = config("tit") extend IntegrationTest
+
 lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
 
   credentials += SbtCredentials,
@@ -147,9 +87,46 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
 ) ++
   publishAllArtefacts
 
-def acceptanceTestFilter(name: String): Boolean = name startsWith "acceptance"
+lazy val appName = "api-documentation-frontend"
+lazy val appDependencies: Seq[ModuleID] = allDeps
 
-def endToEndFilter(name: String): Boolean = name startsWith "endtoend"
+
+lazy val compile = Seq(
+  ws,
+  ehcache,
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.7.0",
+  "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-26",
+  "uk.gov.hmrc" %% "http-metrics" % "1.5.0",
+  "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
+  "uk.gov.hmrc" %% "govuk-template" % "5.54.0-play-26",
+  "uk.gov.hmrc" %% "play-ui" % "8.9.0-play-26",
+  "org.raml" % "raml-parser-2" % "1.0.13",
+  "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
+  "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
+  "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1"
+)
+
+lazy val testScopes = "test"
+
+lazy val test = Seq(
+  "info.cukes" %% "cucumber-scala" % "1.2.5" % testScopes,
+  "info.cukes" % "cucumber-junit" % "1.2.5" % testScopes,
+  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % testScopes,
+  "junit" % "junit" % "4.12" % testScopes,
+  "org.pegdown" % "pegdown" % "1.6.0" % testScopes,
+  "com.typesafe.play" %% "play-test" % PlayVersion.current % testScopes,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % testScopes,
+  "org.mockito" % "mockito-core" % "1.10.19" % testScopes,
+  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % testScopes,
+  "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
+  "com.github.tomakehurst" % "wiremock" % "1.58" % testScopes,
+  "org.jsoup" % "jsoup" % "1.11.3" % testScopes
+).map(_.exclude("xalan", "xalan")
+  .exclude("org.apache.httpcomponents", "httpcore")
+)
+lazy val allDeps = compile ++ test
+
+def acceptanceTestFilter(name: String): Boolean = name startsWith "acceptance"
 
 def unitFilter(name: String): Boolean = name startsWith "unit"
 

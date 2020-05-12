@@ -40,14 +40,12 @@ object DocumentationService {
 
 }
 
+@Singleton
 class DocumentationService @Inject()(appConfig: ApplicationConfig,
                                      cache: CacheApi,
                                      ramlLoader: RamlLoader,
                                      schemaService: SchemaService)
                                      (implicit ec: ExecutionContext) {
- 
-  println("***** Hello from DocumentationService")
-
   import DocumentationService.ramlUrl
 
   val defaultExpiration = 1.hour

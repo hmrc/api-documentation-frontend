@@ -33,7 +33,7 @@ class RedirectControllerSpec extends UnitSpec with GuiceOneAppPerTest {
       .build()
 
   class Setup extends ControllerCommonSetup {
-    val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+    val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
     val underTest = new RedirectController(mcc)
 

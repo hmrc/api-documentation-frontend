@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import org.raml.v2.api.model.v10.resources.Resource
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -29,8 +29,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
-
   val gettingStartedUrl = routes.DocumentationController.usingTheHubPage().url
   val apiDocumentationUrl = routes.DocumentationController.apiIndexPage(None, None, None).url
   val referenceGuideUrl = routes.DocumentationController.referenceGuidePage().url

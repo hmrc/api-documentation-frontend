@@ -24,9 +24,9 @@ import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.NavLink
 import uk.gov.hmrc.apidocumentation.views
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.play.test.{UnitSpec}
 
-class MainTemplateSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
+class MainTemplateSpec extends UnitSpec with MockitoSugar {
 
   val pageTitle = "pageTitle"
   val navLinks = Seq[NavLink]()

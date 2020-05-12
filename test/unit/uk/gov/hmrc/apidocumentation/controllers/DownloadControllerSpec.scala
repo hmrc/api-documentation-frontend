@@ -47,8 +47,8 @@ class DownloadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
     val appConfig = mock[ApplicationConfig]
     val downloadService = mock[DownloadService]
 
-    val errorHandler = fakeApplication.injector.instanceOf[ErrorHandler]
-    val mcc = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+    val errorHandler = app.injector.instanceOf[ErrorHandler]
+    val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
     val version = "2.0"
     val resourceName = "some/resource"

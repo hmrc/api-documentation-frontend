@@ -20,16 +20,17 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Mockito.{when => When}
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.OneAppPerSuite
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.Request
-import play.api.i18n.Messages
+import play.api.i18n.{Messages, DefaultMessagesApi, Lang}
+import java.util.Locale
 import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.play.test.UnitSpec
 
-class XmlDocumentationSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
+class XmlDocumentationSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val heading = dom.getElementsByTag("h1").first
@@ -44,7 +45,8 @@ class XmlDocumentationSpec extends UnitSpec with MockitoSugar with OneAppPerSuit
     val name = "Test Online Service"
 
     val appConfig = mock[ApplicationConfig]
-    val messages = mock[Messages]
+    val messages: Messages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
+
     val pageAttributes: PageAttributes = mock[PageAttributes]
     val request = mock[Request[Any]]
 
