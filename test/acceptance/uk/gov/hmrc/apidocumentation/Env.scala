@@ -24,6 +24,7 @@ import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxProfile}
 import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
 
 import scala.util.{Properties, Try}
+import org.openqa.selenium.firefox.FirefoxOptions
 
 trait Env {
 
@@ -59,9 +60,8 @@ trait Env {
   }
 
   def createFirefoxDriver(): WebDriver = {
-    val profile = new FirefoxProfile
-    profile.setAcceptUntrustedCertificates(true)
-    new FirefoxDriver(profile)
+    val fOpts = new FirefoxOptions().setAcceptInsecureCerts(true)
+    new FirefoxDriver(fOpts)
   }
 
   sys addShutdownHook {

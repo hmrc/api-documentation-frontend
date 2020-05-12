@@ -118,8 +118,9 @@ lazy val test = Seq(
   "com.typesafe.play" %% "play-test" % PlayVersion.current % testScopes,
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % testScopes,
   "org.mockito" % "mockito-core" % "1.10.19" % testScopes,
-  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % testScopes,
-  "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
+  "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % testScopes,
+  "org.seleniumhq.selenium" % "selenium-firefox-driver" % "3.141.59",
+  "org.seleniumhq.selenium" % "selenium-chrome-driver" % "3.141.59",
   "com.github.tomakehurst" % "wiremock" % "1.58" % testScopes,
   "org.jsoup" % "jsoup" % "1.11.3" % testScopes
 )
