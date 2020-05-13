@@ -94,6 +94,7 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
 lazy val appName = "api-documentation-frontend"
 lazy val appDependencies: Seq[ModuleID] = allDeps
 
+val jacksonVersion = "2.10.4"
 
 lazy val compile = Seq(
   ws,
@@ -107,7 +108,16 @@ lazy val compile = Seq(
   "org.raml" % "raml-parser-2" % "1.0.13",
   "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
-  "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1"
+  "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1",
+
+  /*
+    Jackson dependencies are transitive but the same versions are not pulled in for each one.
+    Therefore we explicitly pull them here at the same version to prevent problems running tests.
+   */
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.module" % "jackson-module-jsonSchema" % jacksonVersion
 )
 
 
