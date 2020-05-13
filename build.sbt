@@ -53,8 +53,6 @@ lazy val microservice = (project in file("."))
   .settings(
     targetJvm := "jvm-1.8",
     libraryDependencies ++= appDependencies,
-    parallelExecution in Test := false,
-    fork in Test := false,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     majorVersion := 0
@@ -64,7 +62,10 @@ lazy val microservice = (project in file("."))
 
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
   .settings(
-    Test / testOptions := Seq(Tests.Filter(unitFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT"))
+    Test / testOptions := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
+    Test / unmanagedSourceDirectories += baseDirectory.value / "test",
+    Test / fork := false,
+    Test / parallelExecution := false
   )
 
   .configs(AcceptanceTest)
@@ -73,7 +74,7 @@ lazy val microservice = (project in file("."))
     testOptions in AcceptanceTest := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "acceptance",
     AcceptanceTest / unmanagedResourceDirectories := Seq((baseDirectory in AcceptanceTest).value / "test", (baseDirectory in AcceptanceTest).value / "target/web/public/test"),
-    Keys.fork in AcceptanceTest := false,
+    AcceptanceTest / fork := false,
     AcceptanceTest / parallelExecution := false,
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
@@ -122,7 +123,6 @@ lazy val compile = Seq(
   "com.fasterxml.jackson.module" % "jackson-module-jsonSchema" % jacksonVersion
 )
 
-
 lazy val testScopes = "test"
 
 lazy val test = Seq(
@@ -142,9 +142,7 @@ lazy val test = Seq(
 
 lazy val allDeps = compile ++ test
 
-def unitFilter(name: String): Boolean = name startsWith "unit"
-
 // Coverage configuration
-coverageMinimum := 80
+coverageMinimum := 83
 coverageFailOnMinimum := true
 coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;uk.gov.hmrc.apidocumentation.config.*;testOnlyDoNotUseInAppConf.*;app.*;config.*"
