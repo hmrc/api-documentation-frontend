@@ -110,8 +110,8 @@ lazy val compile = Seq(
 lazy val testScopes = "test"
 
 lazy val test = Seq(
-  "info.cukes" %% "cucumber-scala" % "1.2.5" % testScopes,
-  "info.cukes" % "cucumber-junit" % "1.2.5" % testScopes,
+  "io.cucumber" %% "cucumber-scala" % "5.7.0" % testScopes,
+  "io.cucumber" % "cucumber-junit" % "5.7.0" % testScopes,
   "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % testScopes,
   "junit" % "junit" % "4.12" % testScopes,
   "org.pegdown" % "pegdown" % "1.6.0" % testScopes,
