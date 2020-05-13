@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package acceptance.uk.gov.hmrc.apidocumentation.pages
+package uk.gov.hmrc.apidocumentation.pages
 
-import acceptance.uk.gov.hmrc.apidocumentation.{Env, WebPage}
+import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 import org.openqa.selenium.By
 import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.Select

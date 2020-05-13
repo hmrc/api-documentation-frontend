@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package acceptance.uk.gov.hmrc.apidocumentation.specs
+package uk.gov.hmrc.apidocumentation.specs
 
-import acceptance.uk.gov.hmrc.apidocumentation.BaseSpec
-import acceptance.uk.gov.hmrc.apidocumentation.pages._
+import uk.gov.hmrc.apidocumentation.BaseSpec
+import uk.gov.hmrc.apidocumentation.pages._
 import org.scalatest.prop.TableDrivenPropertyChecks
-import utils.uk.gov.hmrc.apidocumentation.mocks.TableDrivenPropertyMocks
+import uk.gov.hmrc.apidocumentation.TableDrivenPropertyMocks
 
 class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPropertyChecks with TableDrivenPropertyMocks {
 

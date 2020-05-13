@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package acceptance.uk.gov.hmrc.apidocumentation.specs
+package uk.gov.hmrc.apidocumentation.specs
 
-import acceptance.uk.gov.hmrc.apidocumentation.BaseSpec
+import uk.gov.hmrc.apidocumentation.BaseSpec
 import org.scalatest._
-import utils.uk.gov.hmrc.apidocumentation.mocks.DescriptiveMocks
+import uk.gov.hmrc.apidocumentation.DescriptiveMocks
 
 trait ComponentTestsSpec extends GivenWhenThen { baseSpec: BaseSpec =>
 
@@ -40,5 +40,3 @@ trait ComponentTestsSpec extends GivenWhenThen { baseSpec: BaseSpec =>
     }
   }
 }
-
-

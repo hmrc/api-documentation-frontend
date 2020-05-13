@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.uk.gov.hmrc.apidocumentation.mocks
+package uk.gov.hmrc.apidocumentation
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import java.io.File

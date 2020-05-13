@@ -63,16 +63,18 @@ lazy val microservice = (project in file("."))
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
 
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
-  .settings(testOptions in Test := Seq(Tests.Filter(unitFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT")))
+  .settings(
+    Test / testOptions := Seq(Tests.Filter(unitFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT"))
+  )
 
   .configs(AcceptanceTest)
   .settings(inConfig(AcceptanceTest)(Defaults.testSettings): _*)
   .settings(
-    testOptions in AcceptanceTest := Seq(Tests.Filter(acceptanceTestFilter), Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
-    unmanagedSourceDirectories in AcceptanceTest := Seq((baseDirectory in AcceptanceTest).value / "test"),
-    unmanagedResourceDirectories in AcceptanceTest := Seq((baseDirectory in AcceptanceTest).value / "test", (baseDirectory in AcceptanceTest).value / "target/web/public/test"),
+    testOptions in AcceptanceTest := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
+    AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "acceptance",
+    AcceptanceTest / unmanagedResourceDirectories := Seq((baseDirectory in AcceptanceTest).value / "test", (baseDirectory in AcceptanceTest).value / "target/web/public/test"),
     Keys.fork in AcceptanceTest := false,
-    parallelExecution in AcceptanceTest := false,
+    AcceptanceTest / parallelExecution := false,
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
 
@@ -139,8 +141,6 @@ lazy val test = Seq(
 )
 
 lazy val allDeps = compile ++ test
-
-def acceptanceTestFilter(name: String): Boolean = name startsWith "acceptance"
 
 def unitFilter(name: String): Boolean = name startsWith "unit"
 

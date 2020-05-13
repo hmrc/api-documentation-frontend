@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package acceptance.uk.gov.hmrc.apidocumentation
+package uk.gov.hmrc.apidocumentation
 
 import org.openqa.selenium.support.ui.{ExpectedCondition, WebDriverWait}
 import org.openqa.selenium.{By, WebDriver, WebElement}

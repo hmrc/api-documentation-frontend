@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package acceptance.uk.gov.hmrc.apidocumentation.pages
+package uk.gov.hmrc.apidocumentation.pages
 
-import acceptance.uk.gov.hmrc.apidocumentation.{Env, WebPage}
+import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 
 object TutorialsPage extends WebPage {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package acceptance.uk.gov.hmrc.apidocumentation.matchers
+package uk.gov.hmrc.apidocumentation.matchers
 
 import org.scalatest.matchers.{MatchResult, Matcher}
 
