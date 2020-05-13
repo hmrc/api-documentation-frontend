@@ -131,14 +131,14 @@ class DocumentationServiceSpec extends UnitSpec
 
     "create a simple testers URL output file with just endpoint information" in new Setup {
       val service = "minimal"
-      val raml = new FileRamlLoader().load(s"test/resources/unit/raml/$service.raml")
+      val raml = new FileRamlLoader().load(s"test/resources/raml/$service.raml")
       when(ramlLoader.load(any[String])).thenReturn(Future.successful(raml))
       await(underTest.buildTestEndpoints("minimal", "1.0")) shouldBe Seq.empty
     }
 
     "create a simple testers URL output file with just endpoint information for a single endpoint" in new Setup {
       val service = "single-endpoint"
-      val raml = new FileRamlLoader().load(s"test/resources/unit/raml/$service.raml")
+      val raml = new FileRamlLoader().load(s"test/resources/raml/$service.raml")
       when(ramlLoader.load(any[String])).thenReturn(Future.successful(raml))
       val expected = Seq(TestEndpoint("{service-url}/hello/world", "GET"))
       await(underTest.buildTestEndpoints("single-endpoint", "1.0")) shouldBe expected
@@ -146,7 +146,7 @@ class DocumentationServiceSpec extends UnitSpec
 
     "create a complex testers URL output file with just endpoint information for a multiple endpoints" in new Setup {
       val service = "multiple-endpoints"
-      val raml = new FileRamlLoader().load(s"test/resources/unit/raml/$service.raml")
+      val raml = new FileRamlLoader().load(s"test/resources/raml/$service.raml")
       when(ramlLoader.load(any[String])).thenReturn(Future.successful(raml))
       val expected = Seq(
         TestEndpoint("{service-url}/hello/there", "GET", "OPTIONS", "PUT"),

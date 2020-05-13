@@ -13,9 +13,9 @@ documentation:
 mediaType: application/hal+json
 
 uses:
-  sec: ../../../../public/common/modules/securitySchemes.raml
-  headers: ../../../../public/common/modules/headers.raml
-  annotations: ../../../../public/common/modules/annotations.raml
+  sec: ../../../public/common/modules/securitySchemes.raml
+  headers: ../../../public/common/modules/headers.raml
+  annotations: ../../../public/common/modules/annotations.raml
 
 /hello:
   /user:
@@ -25,6 +25,7 @@ uses:
         A simple example for integrating with a user-restricted service, using a OAuth 2.0 `access_token`.
 
         Any authorised request to this endpoint initiates a 'Hello User' response.
+      is: [headers.acceptHeader]
       (annotations.scope): "hello"
       securedBy: [ sec.oauth_2_0: { scopes: [ "hello" ] } ]
       responses:

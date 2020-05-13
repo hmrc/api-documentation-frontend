@@ -69,12 +69,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
   }
 
   val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]
-  val multipleDocsRaml: RAML = new FileRamlLoader().load("test/resources/unit/raml/multiple-docs.raml").get
-  val openEndpointRaml: RAML = new FileRamlLoader().load("test/resources/unit/raml/open-endpoint.raml").get
-  val userRestrictedRaml: RAML = new FileRamlLoader().load("test/resources/unit/raml/user-restricted-endpoint.raml").get
-  val appRestrictedRaml: RAML = new FileRamlLoader().load("test/resources/unit/raml/app-restricted-endpoint.raml").get
-  val noHeadersNoAuthRaml: RAML = new FileRamlLoader().load("test/resources/unit/raml/no-headers-no-auth.raml").get
-  val noHeadersHasAuthRaml: RAML = new FileRamlLoader().load("test/resources/unit/raml/no-headers-has-auth.raml").get
+  val multipleDocsRaml: RAML = new FileRamlLoader().load("test/resources/raml/multiple-docs.raml").get
+  val openEndpointRaml: RAML = new FileRamlLoader().load("test/resources/raml/open-endpoint.raml").get
+  val userRestrictedRaml: RAML = new FileRamlLoader().load("test/resources/raml/user-restricted-endpoint.raml").get
+  val appRestrictedRaml: RAML = new FileRamlLoader().load("test/resources/raml/app-restricted-endpoint.raml").get
+  val noHeadersNoAuthRaml: RAML = new FileRamlLoader().load("test/resources/raml/no-headers-no-auth.raml").get
+  val noHeadersHasAuthRaml: RAML = new FileRamlLoader().load("test/resources/raml/no-headers-has-auth.raml").get
   val schemas: Map[String, JsonSchema] = Map()
 
   private def showEnvironmentAvailability(isAvailable: Boolean) = {

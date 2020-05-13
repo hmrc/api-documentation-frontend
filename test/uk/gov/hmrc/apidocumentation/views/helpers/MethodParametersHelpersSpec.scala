@@ -227,7 +227,7 @@ class MethodParametersHelpersSpec extends WordSpec with Matchers {
           |---
           |title: Trivial Doc
           |uses:
-          |  types: unit/raml/types.raml
+          |  types: raml/types.raml
           |/cust:
           |  /{taxYear}:
           |    uriParameters:
@@ -255,7 +255,7 @@ class MethodParametersHelpersSpec extends WordSpec with Matchers {
           |---
           |title: Trivial Doc
           |uses:
-          |  types: unit/raml/types.raml
+          |  types: raml/types.raml
           |/cust:
           |  /{taxYear}:
           |    uriParameters:

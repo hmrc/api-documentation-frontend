@@ -203,7 +203,7 @@ class HelpersSpec extends WordSpec with Matchers {
           |---
           |title: Trivial Doc
           |uses:
-          |  annotations: unit/raml/annotations.raml
+          |  annotations: raml/annotations.raml
           |
           |(annotations.thing): Hello
         """.stripMargin
