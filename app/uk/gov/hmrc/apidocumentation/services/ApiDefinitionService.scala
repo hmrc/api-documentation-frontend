@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.{API, Metrics}
+import uk.gov.hmrc.play.http.metrics._
 
 import scala.concurrent.ExecutionContext
 
@@ -35,18 +35,18 @@ trait BaseApiDefinitionService {
 
 @Singleton
 class ApiDefinitionService @Inject()(val raw: ApiDefinitionConnector,
-                                      val metrics: Metrics)
-                                      (implicit ec: ExecutionContext) extends BaseApiDefinitionService {
+                                      val apiMetrics: ApiMetrics)
+                                      (implicit ec: ExecutionContext) extends BaseApiDefinitionService with RecordMetrics {
   val api: API = API("api-definition")
 
   def fetchExtendedDefinition(serviceName: String, email: Option[String] = None)
                             (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
-    metrics.record(api) {
+    record {
       raw.fetchApiDefinition(serviceName, email)
     }
 
   def fetchAllDefinitions(email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
-    metrics.record(api) {
+    record {
       raw.fetchAllApiDefinitions(email)
     }
 }

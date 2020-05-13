@@ -23,7 +23,7 @@ import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, SessionInvalid}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.http.metrics.{API, NoopMetrics}
+import uk.gov.hmrc.play.http.metrics.{API, NoopApiMetrics}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -36,7 +36,7 @@ class UserSessionConnectorSpec extends ConnectorSpec {
     implicit val hc = HeaderCarrier()
     val mockHttpClient = mock[HttpClient]
     val mockAppConfig = mock[ApplicationConfig]
-    val connector = new UserSessionConnector(mockHttpClient, mockAppConfig, NoopMetrics)
+    val connector = new UserSessionConnector(mockHttpClient, mockAppConfig, new NoopApiMetrics)
 
     when(mockAppConfig.thirdPartyDeveloperUrl).thenReturn(thirdPartyDeveloperUrl)
   }

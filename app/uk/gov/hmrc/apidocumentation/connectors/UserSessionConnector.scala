@@ -23,17 +23,17 @@ import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models.{Session, SessionInvalid}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.http.metrics.{API, Metrics}
+import uk.gov.hmrc.play.http.metrics._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UserSessionConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, metrics: Metrics)(implicit ec: ExecutionContext) {
+class UserSessionConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
 
   val api = API("third-party-developer")
   private lazy val serviceBaseUrl: String = appConfig.thirdPartyDeveloperUrl
 
-  def fetchSession(sessionId: String)(implicit hc: HeaderCarrier): Future[Session] = metrics.record(api) {
+  def fetchSession(sessionId: String)(implicit hc: HeaderCarrier): Future[Session] = record {
     http.GET[Session](s"$serviceBaseUrl/session/$sessionId") recover {
       case e: NotFoundException => throw new SessionInvalid
     }

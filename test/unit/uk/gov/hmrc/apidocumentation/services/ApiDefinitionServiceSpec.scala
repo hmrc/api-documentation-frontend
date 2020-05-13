@@ -21,7 +21,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
-import uk.gov.hmrc.play.http.metrics.NoopMetrics
+import uk.gov.hmrc.play.http.metrics.NoopApiMetrics
 import uk.gov.hmrc.play.test.{UnitSpec}
 import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionConnectorMockingHelper, ApiDefinitionTestDataHelper}
 
@@ -38,7 +38,7 @@ class ApiDefinitionServiceSpec extends UnitSpec
 
     val connector = mock[ApiDefinitionConnector]
 
-    val underTest = new ApiDefinitionService(connector, NoopMetrics)
+    val underTest = new ApiDefinitionService(connector, new NoopApiMetrics)
 
   }
 

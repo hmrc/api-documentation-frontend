@@ -24,7 +24,7 @@ import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.http.metrics.{API, NoopMetrics}
+import uk.gov.hmrc.play.http.metrics.{API, NoopApiMetrics}
 import uk.gov.hmrc.play.partials.HtmlPartial
 
 import scala.concurrent.Future
@@ -36,7 +36,7 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   trait Setup {
     val mockHttpClient = mock[HttpClient]
     val mockAppConfig = mock[ApplicationConfig]
-    val connector = new DeveloperFrontendConnector(mockHttpClient, mockAppConfig, NoopMetrics)
+    val connector = new DeveloperFrontendConnector(mockHttpClient, mockAppConfig, new NoopApiMetrics)
 
     when(mockAppConfig.developerFrontendBaseUrl).thenReturn(developerFrontendUrl)
   }

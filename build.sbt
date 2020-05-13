@@ -17,7 +17,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = (project in file("."))
-  .enablePlugins(Seq(_root_.play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
+  .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
   .settings(
     name := appName
   )
@@ -39,8 +39,12 @@ lazy val microservice = (project in file("."))
     )
   )
   .settings(
-    resolvers += Resolver.bintrayRepo("hmrc", "releases"),
-    resolvers += Resolver.jcenterRepo
+    resolvers ++= Seq(
+      Resolver.bintrayRepo("hmrc", "releases"),
+      Resolver.jcenterRepo,
+      Resolver.sonatypeRepo("releases")
+    ),
+    resolvers += "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/"
   )
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
@@ -72,7 +76,7 @@ lazy val microservice = (project in file("."))
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
 
-  .settings(scalaVersion := "2.11.12")
+  .settings(scalaVersion := "2.12.11")
 
 lazy val allPhases = "tt->test;test->test;test->compile;compile->compile"
 lazy val AcceptanceTest = config("acceptance") extend Test
@@ -96,8 +100,8 @@ lazy val compile = Seq(
   ehcache,
   "uk.gov.hmrc" %% "bootstrap-play-26" % "1.7.0",
   "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-26",
-  "uk.gov.hmrc" %% "http-metrics" % "1.5.0",
-  "uk.gov.hmrc" %% "raml-tools" % "1.11.0",
+  "uk.gov.hmrc" %% "http-metrics" % "1.10.0",
+  "uk.gov.hmrc" %% "raml-tools" % "1.18.0",
   "uk.gov.hmrc" %% "govuk-template" % "5.54.0-play-26",
   "uk.gov.hmrc" %% "play-ui" % "8.9.0-play-26",
   "org.raml" % "raml-parser-2" % "1.0.13",
