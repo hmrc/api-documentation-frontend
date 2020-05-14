@@ -100,7 +100,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
       val apiAccess = APIAccess(APIAccessType.PRIVATE).asTrial
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+      val page = Page(views.html.raml.MainView.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
 
       "render availability 'Yes - private trial'" in {
         page.sandboxAvailability shouldBe "Yes - private trial"
