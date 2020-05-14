@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.views.helpers
+package uk.gov.hmrc.apidocumentation.views.helpers
 
 import org.raml.v2.api.model.v10.api.Api
 import org.raml.v2.api.model.v10.system.types.AnnotableSimpleType
 import org.scalatest.{Matchers, WordSpec}
-import uk.gov.hmrc.apidocumentation.views.helpers._
-import unit.uk.gov.hmrc.apidocumentation.utils.StringRamlLoader
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
+import unit.uk.gov.hmrc.apidocumentation.utils.StringRamlLoader
 
 case class Wrapper(data: String) {
   def value() = {
@@ -217,7 +216,7 @@ class HelpersSpec extends WordSpec with Matchers {
 
   "GroupResources helper" should {
 
-    def verifyGroup(group: ResourceGroup, name: Option[String] = None, description: Option[String] = None, resourcePaths: Seq[String] = Nil) = {
+    def verifyGroup(group: ResourceGroup, name: Option[String] = None, description: Option[String] = None, resourcePaths: Seq[String]) = {
       group.name shouldBe name
       group.description shouldBe description
       group.resources.map(_.resourcePath) shouldBe resourcePaths
@@ -236,7 +235,7 @@ class HelpersSpec extends WordSpec with Matchers {
 
       val resources = new StringRamlLoader().load(raml).get.resources()
 
-      val groupedResources = GroupedResources(resources)
+      val groupedResources = GroupedResources(resources.asScala)
 
       groupedResources.length shouldBe 1
 
@@ -266,7 +265,7 @@ class HelpersSpec extends WordSpec with Matchers {
 
       val resources = new StringRamlLoader().load(raml).get.resources()
 
-      val groupedResources = GroupedResources(resources)
+      val groupedResources = GroupedResources(resources.asScala)
 
       groupedResources.length shouldBe 1
 
@@ -302,7 +301,7 @@ class HelpersSpec extends WordSpec with Matchers {
 
       val resources = new StringRamlLoader().load(raml).get.resources()
 
-      val groupedResources = GroupedResources(resources)
+      val groupedResources = GroupedResources(resources.asScala)
 
       groupedResources.length shouldBe 3
 

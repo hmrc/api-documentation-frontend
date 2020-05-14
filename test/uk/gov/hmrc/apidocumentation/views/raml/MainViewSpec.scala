@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.views.raml
+package uk.gov.hmrc.apidocumentation.views.raml
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import org.mockito.Mockito.{when => When}
-import org.scalatestplus.mockito.MockitoSugar
 import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.RAML
-import uk.gov.hmrc.apidocumentation.views
-import uk.gov.hmrc.play.test.UnitSpec
-import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, FileRamlLoader}
-
+import uk.gov.hmrc.apidocumentation.views.CommonViewSpec
 import scala.collection.JavaConversions._
+import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import unit.uk.gov.hmrc.apidocumentation.utils.FileRamlLoader
+import uk.gov.hmrc.apidocumentation.views.html.raml.MainView
 
-class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestDataHelper {
+class MainViewSpec extends CommonViewSpec with ApiDefinitionTestDataHelper {
+
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val sandboxAvailability: String = environmentAvailability("sandbox")
@@ -100,7 +100,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
       val apiAccess = APIAccess(APIAccessType.PRIVATE).asTrial
       val availability = Some(APIAvailability(endpointsEnabled = true, apiAccess, loggedIn = true, authorised = isWhitelisted))
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
-      val page = Page(views.html.raml.MainView.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+      val page = Page(new MainView(mockAppConfig).render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true))
 
       "render availability 'Yes - private trial'" in {
         page.sandboxAvailability shouldBe "Yes - private trial"
@@ -126,7 +126,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
 
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+      val page = Page(new MainView(mockAppConfig)(multipleDocsRaml, schemas, Some(version), None, loggedIn = true))
 
       "render availability 'Yes - private trial'" in {
         page.sandboxAvailability shouldBe "Yes - private trial"
@@ -154,7 +154,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
 
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = false, mockAppConfig))
+      val page = Page(new MainView(mockAppConfig)(multipleDocsRaml, schemas, Some(version), None, loggedIn = false))
 
       "render availability 'Yes - private trial'" in {
         page.sandboxAvailability shouldBe "Yes - private trial"
@@ -181,7 +181,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
 
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+      val page = Page(new MainView(mockAppConfig)(multipleDocsRaml, schemas, Some(version), None, loggedIn = true))
 
       "render availability 'Yes - private trial" in {
         page.sandboxAvailability shouldBe "Yes"
@@ -207,7 +207,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
 
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+      val page = Page(new MainView(mockAppConfig)(multipleDocsRaml, schemas, Some(version), None, loggedIn = true))
 
       "render 'No'" in {
         page.sandboxAvailability shouldBe "No"
@@ -233,7 +233,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
 
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+      val page = Page(new MainView(mockAppConfig)(multipleDocsRaml, schemas, Some(version), None, loggedIn = true))
 
       "render availability 'Yes'" in {
         page.sandboxAvailability shouldBe "Yes"
@@ -259,7 +259,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
 
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true,  mockAppConfig))
+      val page = Page(new MainView(mockAppConfig)(multipleDocsRaml, schemas, Some(version), None, loggedIn = true))
 
       "render availability 'Yes'" in {
         page.sandboxAvailability shouldBe "Yes"
@@ -285,7 +285,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
 
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+      val page = Page(new MainView(mockAppConfig)(multipleDocsRaml, schemas, Some(version), None, loggedIn = true))
 
       "render availability 'Yes'" in {
         page.sandboxAvailability shouldBe "Yes"
@@ -311,7 +311,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
 
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)
 
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+      val page = Page(new MainView(mockAppConfig)(multipleDocsRaml, schemas, Some(version), None, loggedIn = true))
 
       "render availability: 'Yes'" in {
         page.sandboxAvailability shouldBe "Yes"
@@ -329,7 +329,7 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
     }
 
     "previewing RAML" should {
-      val page = Page(views.html.raml.main.render(multipleDocsRaml, schemas, None, None, loggedIn = true, mockAppConfig))
+      val page = Page(new MainView(mockAppConfig)(multipleDocsRaml, schemas, None, None, loggedIn = true))
 
       "render full documentation" in {
         renderAllDocumentation(page)
@@ -347,20 +347,20 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, endpoints, availability, availability)
 
        "render authorization header content for open endpoint" in {
-         val page = Page(views.html.raml.main.render(openEndpointRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+         val page = Page(new MainView(mockAppConfig)(openEndpointRaml, schemas, Some(version), None, loggedIn = true))
          page.authorisationDescription should include("open access")
          page.requestHeaders shouldNot include("Authorization")
        }
 
       "render authorization header content for user-restricted endpoint" in {
-        val page = Page(views.html.raml.main.render(userRestrictedRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+        val page = Page(new MainView(mockAppConfig)(userRestrictedRaml, schemas, Some(version), None, loggedIn = true))
         page.authorisationDescription should include("user-restricted")
         page.requestHeaders should include("Authorization")
         page.authorisationTableDescription should include("An OAuth 2.0 Bearer Token with the hello scope.")
       }
 
       "render authorization header content for application-restricted endpoint" in {
-        val page = Page(views.html.raml.main.render(appRestrictedRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+        val page = Page(new MainView(mockAppConfig)(appRestrictedRaml, schemas, Some(version), None, loggedIn = true))
         page.authorisationDescription should include("application-restricted")
         page.requestHeaders should include("Authorization")
         page.authorisationTableDescription should
@@ -368,12 +368,12 @@ class MainViewSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
       }
 
       "render table with authorization header if authorization is the only header" in {
-        val page = Page(views.html.raml.main.render(noHeadersHasAuthRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+        val page = Page(new MainView(mockAppConfig)(noHeadersHasAuthRaml, schemas, Some(version), None, loggedIn = true))
         page.requestHeaders should include("Authorization")
        }
 
       "do not render table if there are no headers" in {
-        val page = Page(views.html.raml.main.render(noHeadersNoAuthRaml, schemas, Some(version), None, loggedIn = true, mockAppConfig))
+        val page = Page(new MainView(mockAppConfig)(noHeadersNoAuthRaml, schemas, Some(version), None, loggedIn = true))
         page.requestHeadersTableExists shouldBe false
        }
 

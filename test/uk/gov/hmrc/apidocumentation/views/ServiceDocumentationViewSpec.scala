@@ -14,26 +14,21 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.views
-
-import java.util.Locale
+package uk.gov.hmrc.apidocumentation.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.{DefaultMessagesApi, Lang}
-import play.api.mvc.Request
 import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.RAML
 import uk.gov.hmrc.apidocumentation.views.html.ServiceDocumentationView
-import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
+import uk.gov.hmrc.apidocumentation.views.html.raml.MainView
 
-class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite with ApiDefinitionTestDataHelper {
+class ServiceDocumentationViewSpec extends CommonViewSpec with ApiDefinitionTestDataHelper {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val versionsDropdown = dom.getElementById("version")
@@ -51,9 +46,6 @@ class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with Guice
   val ramlAndSchemas: RamlAndSchemas = mock[RamlAndSchemas]
   when(ramlAndSchemas.raml).thenReturn(mock[RAML])
 
-  val messages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
-  val request = mock[Request[Any]]
-
   trait Setup {
     val publicAvailability = someApiAvailability().asPublic
     val privateAvailability = someApiAvailability().asPrivate
@@ -66,7 +58,12 @@ class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with Guice
     val api: ExtendedAPIDefinition = ExtendedAPIDefinition("test", "", "Test Service", "", "a context", requiresTrust = true, isTestSupport = true, versions)
     val currentVersion = versions.head
 
-    val page = Page(ServiceDocumentationView(pageAttributes, api, currentVersion, ramlAndSchemas, loggedIn = true)(request, mockAppConfig, messages))
+    val apiMain = app.injector.instanceOf[apiMain]
+    val ramlMainView = app.injector.instanceOf[MainView]
+
+    val serviceDocumentationView = new ServiceDocumentationView(apiMain, ramlMainView, mockAppConfig)(pageAttributes, api, currentVersion, ramlAndSchemas, loggedIn = true)
+
+    val page = Page(serviceDocumentationView)
   }
 
   "service documentation view" when {

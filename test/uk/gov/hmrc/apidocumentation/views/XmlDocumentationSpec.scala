@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.views
+package uk.gov.hmrc.apidocumentation.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Mockito.{when => When}
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.mvc.Request
 import play.api.i18n.{Messages, DefaultMessagesApi, Lang}
 import java.util.Locale
 import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.views
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.views.html.XmlDocumentationView
+import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
 
-class XmlDocumentationSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
+class XmlDocumentationSpec extends CommonViewSpec {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val heading = dom.getElementsByTag("h1").first
@@ -48,7 +45,6 @@ class XmlDocumentationSpec extends UnitSpec with MockitoSugar with GuiceOneAppPe
     val messages: Messages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
 
     val pageAttributes: PageAttributes = mock[PageAttributes]
-    val request = mock[Request[Any]]
 
     When(appConfig.xmlApiBaseUrl).thenReturn(baseUrl)
     When(pageAttributes.headerLinks).thenReturn(Seq())
@@ -56,8 +52,12 @@ class XmlDocumentationSpec extends UnitSpec with MockitoSugar with GuiceOneAppPe
     When(pageAttributes.breadcrumbs).thenReturn(Breadcrumbs())
     When(pageAttributes.contentHeader).thenReturn(None)
 
+    val apiMain = app.injector.instanceOf[apiMain]
+
     val apiDefinition = XmlApiDocumentation(name, context, description)
-    val page = Page(views.html.xmlDocumentation(pageAttributes, apiDefinition)(request, appConfig, messages))
+    val xmlDocView = new XmlDocumentationView(apiMain, appConfig)(pageAttributes, apiDefinition)
+
+    val page = Page(xmlDocView)
   }
 
   "XmlDocumentation view" should {

@@ -19,16 +19,15 @@ package unit.uk.gov.hmrc.apidocumentation.views.include
 import java.util.Locale
 
 import junit.framework.TestCase
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{DefaultMessagesApi, Lang}
 import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.NavLink
-import uk.gov.hmrc.apidocumentation.views
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.views.CommonViewSpec
+import uk.gov.hmrc.apidocumentation.views.html.IndexView
+import uk.gov.hmrc.apidocumentation.views.html.include.main
 
-class MainTemplateSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
+class IndexViewSpec extends CommonViewSpec {
 
   val pageTitle = "pageTitle"
   val navLinks = Seq[NavLink]()
@@ -36,9 +35,11 @@ class MainTemplateSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSui
   val mockApplicationConfig = mock[ApplicationConfig]
   val mockMessages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
 
+  val main = app.injector.instanceOf[main]
+
   "htmlView" must {
     "render with no indexing meta tags" in new TestCase {
-      val renderedHtml = views.html.index.render(pageTitle, navLinks, mockRequest, mockApplicationConfig, mockMessages)
+      val renderedHtml = new IndexView(main, mockApplicationConfig)(pageTitle, navLinks)
       renderedHtml.body shouldNot include("<meta name=\"robots\" content=\"noindex\">")
       renderedHtml.body shouldNot include("<meta name=\"googlebot\" content=\"noindex\">")
     }
