@@ -19,11 +19,13 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers.routes
 @import uk.gov.hmrc.apidocumentation.models._
-@import include.apiMain
-@import raml.main
+@import raml.MainView
 @import uk.gov.hmrc.apidocumentation.services.RAML
+@import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@(pageAttributes: PageAttributes, url: Option[String], result: Try[Option[RamlAndSchemas]])(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@this(apiMain: apiMain, ramlMainView: raml.MainView, applicationConfig: ApplicationConfig)
+
+@(pageAttributes: PageAttributes, url: Option[String], result: Try[Option[RamlAndSchemas]])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
 
@@ -54,7 +56,7 @@
     @if(result.isSuccess) {
         @for(ramlAndSchemas <- result.get) {
             <h2 class="divider--bottom">Generated Content</h2>
-            @main(ramlAndSchemas.raml, ramlAndSchemas.schemas, None, None)
+            @ramlMainView(ramlAndSchemas.raml, ramlAndSchemas.schemas, None, None)
         }
     }
 }

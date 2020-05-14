@@ -16,9 +16,11 @@
 
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
-@import include._
+@import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@(title: String, heading: String, message: String)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@this(main: main, applicationConfig: ApplicationConfig)
+
+@(title: String, heading: String, message: String)(implicit request: RequestHeader, messagesProvider: MessagesProvider)
 
 @main(navTitle = Some(applicationConfig.title),
     navTitleLink = Some(Call("GET", "/api-documentation")),

@@ -17,10 +17,13 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import include._
 @import partials.pagination
 
-@(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
+
+@(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
 

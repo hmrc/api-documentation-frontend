@@ -21,7 +21,9 @@
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import play.twirl.api.HtmlFormat
 
-@(pageAttributes: PageAttributes, additionalTopContent: Html = HtmlFormat.empty)(mainContent: Html)(implicit request: Request[_], applicationConfig: ApplicationConfig, messages: Messages)
+@this(main: main, applicationConfig: ApplicationConfig)
+
+@(pageAttributes: PageAttributes, additionalTopContent: Html = HtmlFormat.empty)(mainContent: Html)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 
 @userBanner = {

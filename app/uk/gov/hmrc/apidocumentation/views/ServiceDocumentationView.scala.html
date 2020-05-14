@@ -18,12 +18,14 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import include.apiMain
-@import raml.main
+@import raml.MainView
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services.RAML
+@import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ramlAndSchemas: RamlAndSchemas, loggedIn: Boolean = false)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@this(apiMain: apiMain, ramlMainView: raml.MainView, applicationConfig: ApplicationConfig)
+
+@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ramlAndSchemas: RamlAndSchemas, loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @topContent = {
     <div class="form-group">
@@ -83,5 +85,5 @@
         }
     }
 
-    @main(ramlAndSchemas.raml, ramlAndSchemas.schemas, Some(currentVersion), Some(api), loggedIn)
+    @ramlMainView(ramlAndSchemas.raml, ramlAndSchemas.schemas, Some(currentVersion), Some(api), loggedIn)
 }

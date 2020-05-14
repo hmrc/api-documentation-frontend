@@ -20,10 +20,13 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services._
-@import scala.collection.JavaConversions._
+@import scala.collection.JavaConverters._
 
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-@(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig)
+
+@this(applicationConfig: ApplicationConfig)
+
+@(raml: RAML, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)
 
 @renderGetApiVersionForm = {
     @for(api <- maybeApi) {
@@ -98,7 +101,7 @@
                         Endpoints
                     </h2>
 
-                    @for(resourceGroup <- GroupedResources(raml.resources)) {
+                    @for(resourceGroup <- GroupedResources(raml.resources.asScala)) {
                         @resource_group(resourceGroup, raml, schemas)
                     }
                 </div>

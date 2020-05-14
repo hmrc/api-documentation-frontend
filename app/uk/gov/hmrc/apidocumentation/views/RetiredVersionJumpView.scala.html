@@ -18,9 +18,12 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import include.apiMain
 
-@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition)(implicit request: Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
+
+@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
     <div class="browse-panes section">

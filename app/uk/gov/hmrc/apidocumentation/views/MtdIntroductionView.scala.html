@@ -16,10 +16,12 @@
 
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
-@import include._
 @import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@(pageAttributes: PageAttributes)(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
+
+@(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
     <h1 class="heading-xlarge">Making Tax Digital guides</h1>

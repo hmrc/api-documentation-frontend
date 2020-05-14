@@ -15,9 +15,11 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.config._
-@import include._
+@import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@()(implicit request: play.api.mvc.Request[Any], applicationConfig: ApplicationConfig, messages: Messages)
+@this(main: main, applicationConfig: ApplicationConfig)
+
+@()(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 
 @main(title = Some("Terms and conditions")) {
