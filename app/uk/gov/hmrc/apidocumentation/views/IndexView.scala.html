@@ -21,7 +21,7 @@
 
 @this(main: main, applicationConfig: ApplicationConfig)
 
-@(pageTitle: String, navLinks: Seq[NavLink])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider)
 
 @fullWidthBanner = {
 <header class="hero">

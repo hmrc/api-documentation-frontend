@@ -45,7 +45,7 @@
     breadcrumbs: Option[Breadcrumbs] = None,
     additionalTopContent: Option[Html] = None,
     fullWidthContent: Boolean = false
-  )(mainContent: Html = HtmlFormat.empty)(implicit messages: Messages)
+  )(mainContent: Html = HtmlFormat.empty)(implicit messagesProvider: MessagesProvider)
 
 @headScripts = {
     <script src='@routes.Assets.versioned("javascripts/googleTagManager.js")'></script>
@@ -121,7 +121,7 @@
     }
 }
 
-@getHelpForm = @{helpersReportAProblemLink(applicationConfig.reportAProblemPartialUrl, applicationConfig.reportAProblemNonJSUrl)}
+// @getHelpForm = @{helpersReportAProblemLink(applicationConfig.reportAProblemPartialUrl, applicationConfig.reportAProblemNonJSUrl)}
 
 @contentWithLeftNav = {
     <div class="column-one-quarter">

@@ -29,7 +29,7 @@ import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.RAML
-import uk.gov.hmrc.apidocumentation.views
+import uk.gov.hmrc.apidocumentation.views.html.ServiceDocumentationView
 import uk.gov.hmrc.play.test.UnitSpec
 import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
@@ -66,7 +66,7 @@ class ServiceDocumentationViewSpec extends UnitSpec with MockitoSugar with Guice
     val api: ExtendedAPIDefinition = ExtendedAPIDefinition("test", "", "Test Service", "", "a context", requiresTrust = true, isTestSupport = true, versions)
     val currentVersion = versions.head
 
-    val page = Page(views.html.serviceDocumentation(pageAttributes, api, currentVersion, ramlAndSchemas, loggedIn = true)(request, mockAppConfig, messages))
+    val page = Page(ServiceDocumentationView(pageAttributes, api, currentVersion, ramlAndSchemas, loggedIn = true)(request, mockAppConfig, messages))
   }
 
   "service documentation view" when {

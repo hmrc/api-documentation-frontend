@@ -14,13 +14,12 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.models.APICategory._
 
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
+@this(apiMain: apiMain)
 
 @(pageAttributes: PageAttributes, documentsByCategory: Map[APICategory, Seq[Documentation]])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 

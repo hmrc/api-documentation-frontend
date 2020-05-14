@@ -15,13 +15,12 @@
  *@
 
 @import play.api.mvc.Request
-@import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
+@this(apiMain: apiMain)
 
 @(pageAttributes: PageAttributes, api: ExtendedAPIDefinition)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
