@@ -26,8 +26,8 @@
 <section id="authorisation_@contentID" class="section">
     <h4 class="heading-small">Authorisation</h4>
     @{
-    val userRestrictedUrl = routes.DocumentationController.authorisationPage().url + "#user-restricted"
-    val appRestrictedUrl = routes.DocumentationController.authorisationPage().url + "#application-restricted"
+    // val userRestrictedUrl = routes.DocumentationController.authorisationPage().url + "#user-restricted"
+    // val appRestrictedUrl = routes.DocumentationController.authorisationPage().url + "#application-restricted"
     authorisation match {
     case ("user", Some(scope)) => {
     <p class="endpoint-description">

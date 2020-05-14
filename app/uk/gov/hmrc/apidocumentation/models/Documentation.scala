@@ -107,7 +107,7 @@ object APIAccess {
 
   def build(config: Option[Configuration]): APIAccess = APIAccess(
     `type` = APIAccessType.PRIVATE,
-    whitelistedApplicationIds = config.flatMap(_.getStringSeq("whitelistedApplicationIds")).orElse(Some(Seq.empty)),
+    whitelistedApplicationIds = config.flatMap(_.getOptional[Seq[String]]("whitelistedApplicationIds")).orElse(Some(Seq.empty)),
     isTrial = None)
 }
 
