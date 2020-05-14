@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.models
+package uk.gov.hmrc.apidocumentation.models
 
 import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json._
-import uk.gov.hmrc.apidocumentation.models.EnumerationValue
 
 class EnumerationValueSpec extends WordSpec with Matchers {
 

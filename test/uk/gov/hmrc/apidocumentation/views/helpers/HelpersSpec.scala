@@ -21,7 +21,7 @@ import org.raml.v2.api.model.v10.system.types.AnnotableSimpleType
 import org.scalatest.{Matchers, WordSpec}
 
 import scala.collection.JavaConverters._
-import unit.uk.gov.hmrc.apidocumentation.utils.StringRamlLoader
+import uk.gov.hmrc.apidocumentation.utils.StringRamlLoader
 
 case class Wrapper(data: String) {
   def value() = {

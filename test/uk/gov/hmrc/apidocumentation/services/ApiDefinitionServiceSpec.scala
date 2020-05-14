@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.services
+package uk.gov.hmrc.apidocumentation.services
 
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
-import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.NoopApiMetrics
 import uk.gov.hmrc.play.test.{UnitSpec}
-import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionConnectorMockingHelper, ApiDefinitionTestDataHelper}
+import uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionConnectorMockingHelper, ApiDefinitionTestDataHelper}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

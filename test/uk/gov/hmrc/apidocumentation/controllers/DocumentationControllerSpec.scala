@@ -14,177 +14,162 @@
  * limitations under the License.
  */
 
-// /*
-//  * Copyright 2020 HM Revenue & Customs
-//  *
-//  * Licensed under the Apache License, Version 2.0 (the "License");
-//  * you may not use this file except in compliance with the License.
-//  * You may obtain a copy of the License at
-//  *
-//  *     http://www.apache.org/licenses/LICENSE-2.0
-//  *
-//  * Unless required by applicable law or agreed to in writing, software
-//  * distributed under the License is distributed on an "AS IS" BASIS,
-//  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  * See the License for the specific language governing permissions and
-//  * limitations under the License.
-//  */
+ package uk.gov.hmrc.apidocumentation.controllers
 
-// package unit.uk.gov.hmrc.apidocumentation.controllers
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import play.api.http.Status._
+import play.api.mvc._
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.twirl.api.Html
+import uk.gov.hmrc.apidocumentation
+import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
+import uk.gov.hmrc.apidocumentation.controllers.DocumentationController
+import uk.gov.hmrc.apidocumentation.models.{Crumb, RamlAndSchemas, TestEndpoint, _}
+import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService, RAML}
+import uk.gov.hmrc.apidocumentation.views.html.include.{apiMain, main}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.play.partials.HtmlPartial
+import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
-// import org.mockito.Matchers._
-// import org.mockito.Mockito._
-// import org.scalatest.concurrent.ScalaFutures
-// import org.scalatestplus.mockito.MockitoSugar
-// import org.scalatestplus.play.guice.GuiceOneAppPerTest
-// import play.api.http.Status._
-// import play.api.mvc._
-// import play.api.Application
-// import play.api.inject.guice.GuiceApplicationBuilder
-// import play.twirl.api.Html
-// import uk.gov.hmrc.apidocumentation
-// import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
-// import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-// import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
-// import uk.gov.hmrc.apidocumentation.controllers.DocumentationController
-// import uk.gov.hmrc.apidocumentation.models.{Crumb, RamlAndSchemas, TestEndpoint, _}
-// import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService, RAML}
-// import uk.gov.hmrc.apidocumentation.views.html.include.{apiMain, main}
-// import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
-// import uk.gov.hmrc.play.partials.HtmlPartial
-// import uk.gov.hmrc.play.test.UnitSpec
-// import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
+import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future.failed
+import scala.concurrent.duration._
+import play.api.test.Helpers
 
-// import scala.concurrent.{ExecutionContext, Future}
-// import scala.concurrent.ExecutionContext.Implicits.global
-// import scala.concurrent.Future.failed
-// import scala.concurrent.duration._
-// import play.api.test.Helpers
+// TODO - Make this test work !!!
+class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with GuiceOneAppPerTest {
 
-// class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with GuiceOneAppPerTest {
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(("metrics.jvm", false))
+      .build()
 
-//   override def fakeApplication(): Application =
-//     GuiceApplicationBuilder()
-//       .configure(("metrics.jvm", false))
-//       .build()
+  class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup {
+    implicit val appConfig = mock[ApplicationConfig]
+    val developerFrontendConnector = mock[DeveloperFrontendConnector]
+    val navigationService = mock[NavigationService]
+    val partialsService = new PartialsService(developerFrontendConnector)
+    val errorHandler = app.injector.instanceOf[ErrorHandler]
+    val mcc = app.injector.instanceOf[MessagesControllerComponents]
+    val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
-//   class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup {
-//     implicit val appConfig = mock[ApplicationConfig]
-//     val developerFrontendConnector = mock[DeveloperFrontendConnector]
-//     val navigationService = mock[NavigationService]
-//     val partialsService = new PartialsService(developerFrontendConnector)
-//     val errorHandler = app.injector.instanceOf[ErrorHandler]
-//     val mcc = app.injector.instanceOf[MessagesControllerComponents]
-//     val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
+    implicit lazy val materializer = app.materializer
 
-//     implicit lazy val materializer = app.materializer
+    val navLink = NavLink("Header Link", "/api-documentation/headerlink")
+    val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
+    val homeBreadcrumb = Crumb("Home", controllers.routes.DocumentationController.indexPage().url)
+    val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None, None).url)
+    val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
 
-//     val navLink = NavLink("Header Link", "/api-documentation/headerlink")
-//     val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
-//     val homeBreadcrumb = Crumb("Home", controllers.routes.DocumentationController.indexPage().url)
-//     val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None, None).url)
-//     val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
+    when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(Future.successful(Seq(navLink)))
+    when(navigationService.sidebarNavigation()).thenReturn(Future.successful(Seq(sidebarLink)))
+    when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
+    when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
+    when(appConfig.title).thenReturn("HMRC Developer Hub")
+    when(documentationService.defaultExpiration).thenReturn(1.hour)
 
-//     when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(Future.successful(Seq(navLink)))
-//     when(navigationService.sidebarNavigation()).thenReturn(Future.successful(Seq(sidebarLink)))
-//     when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
-//     when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
-//     when(appConfig.title).thenReturn("HMRC Developer Hub")
-//     when(documentationService.defaultExpiration).thenReturn(1.hour)
+    // val underTest =
+    //   new DocumentationController(
+    //     documentationService,
+    //     apiDefinitionService,
+    //     navigationService,
+    //     partialsService,
+    //     loggedInUserProvider,
+    //     errorHandler,
+    //     mcc
+    //   )
 
-//     val underTest =
-//       new DocumentationController(
-//         documentationService,
-//         apiDefinitionService,
-//         navigationService,
-//         partialsService,
-//         loggedInUserProvider,
-//         errorHandler,
-//         mcc
-//       )
+    def verifyPageRendered(actualPageFuture: Future[Result],
+                           expectedTitle: String,
+                           breadcrumbs: List[Crumb] = List(homeBreadcrumb),
+                           sideNavLinkRendered: Boolean = true,
+                           subNavRendered: Boolean = false,
+                           bodyContains: Seq[String] = Seq.empty) {
+      val actualPage = await(actualPageFuture)
+      status(actualPage) shouldBe 200
+      titleOf(actualPage) shouldBe expectedTitle
 
-//     def verifyPageRendered(actualPageFuture: Future[Result],
-//                            expectedTitle: String,
-//                            breadcrumbs: List[Crumb] = List(homeBreadcrumb),
-//                            sideNavLinkRendered: Boolean = true,
-//                            subNavRendered: Boolean = false,
-//                            bodyContains: Seq[String] = Seq.empty) {
-//       val actualPage = await(actualPageFuture)
-//       status(actualPage) shouldBe 200
-//       titleOf(actualPage) shouldBe expectedTitle
+      userNavLinkIsRendered(actualPage, navLink) shouldBe true
+      sideNavLinkIsRendered(actualPage, sidebarLink) shouldBe sideNavLinkRendered
+      subNavIsRendered(actualPage) shouldBe subNavRendered
+      breadcrumbs.foreach(verifyBreadcrumbRendered(actualPage, _))
+      bodyContains.foreach { snippet => bodyOf(actualPage) should include(snippet) }
+    }
 
-//       userNavLinkIsRendered(actualPage, navLink) shouldBe true
-//       sideNavLinkIsRendered(actualPage, sidebarLink) shouldBe sideNavLinkRendered
-//       subNavIsRendered(actualPage) shouldBe subNavRendered
-//       breadcrumbs.foreach(verifyBreadcrumbRendered(actualPage, _))
-//       bodyContains.foreach { snippet => bodyOf(actualPage) should include(snippet) }
-//     }
+    def verifyErrorPageRendered(actualPageFuture: Future[Result], expectedStatus: Int, expectedError: String) {
+      val actualPage = await(actualPageFuture)
+      status(actualPage) shouldBe expectedStatus
+      bodyOf(actualPage) should include(expectedError)
+    }
 
-//     def verifyErrorPageRendered(actualPageFuture: Future[Result], expectedStatus: Int, expectedError: String) {
-//       val actualPage = await(actualPageFuture)
-//       status(actualPage) shouldBe expectedStatus
-//       bodyOf(actualPage) should include(expectedError)
-//     }
+    def verifyNotFoundPageRendered(actualPageFuture: Future[Result]) {
+      val actualPage = await(actualPageFuture)
+      status(actualPage) shouldBe NOT_FOUND
+    }
 
-//     def verifyNotFoundPageRendered(actualPageFuture: Future[Result]) {
-//       val actualPage = await(actualPageFuture)
-//       status(actualPage) shouldBe NOT_FOUND
-//     }
+    private def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
+      bodyOf(actualPage) should include(s"""<li><a href="${crumb.url}">${crumb.name}</a></li>""")
+    }
 
-//     private def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
-//       bodyOf(actualPage) should include(s"""<li><a href="${crumb.url}">${crumb.name}</a></li>""")
-//     }
+    def verifyBreadcrumbEndpointRendered(actualPage: Result, crumbText: String) = {
+      bodyOf(actualPage) should include(s"""<li>${crumbText}</li>""")
+    }
 
-//     def verifyBreadcrumbEndpointRendered(actualPage: Result, crumbText: String) = {
-//       bodyOf(actualPage) should include(s"""<li>${crumbText}</li>""")
-//     }
+    def verifyLinkToStableDocumentationRendered(actualPage: Result, service: String, version: String) = {
+      bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
+    }
 
-//     def verifyLinkToStableDocumentationRendered(actualPage: Result, service: String, version: String) = {
-//       bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
-//     }
+    def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
+      verifyPageRendered(actualPage, pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))
+      verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
+    }
 
-//     def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
-//       verifyPageRendered(actualPage, pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))
-//       verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
-//     }
+    def titleOf(result: Result) = {
+      val titleRegEx = """<title[^>]*>(.*)</title>""".r
+      val title = titleRegEx.findFirstMatchIn(bodyOf(result)).map(_.group(1))
+      title.isDefined shouldBe true
+      title.get
+    }
 
-//     def titleOf(result: Result) = {
-//       val titleRegEx = """<title[^>]*>(.*)</title>""".r
-//       val title = titleRegEx.findFirstMatchIn(bodyOf(result)).map(_.group(1))
-//       title.isDefined shouldBe true
-//       title.get
-//     }
+    def subNavIsRendered(result: Result) = {
+      bodyOf(result).contains("<ul class=\"side-nav side-nav--child\">")
+    }
 
-//     def subNavIsRendered(result: Result) = {
-//       bodyOf(result).contains("<ul class=\"side-nav side-nav--child\">")
-//     }
+    def sideNavLinkIsRendered(result: Result, sidebarLink: SidebarLink) = {
+      bodyOf(result).contains(s"""<a href="${sidebarLink.href}" class="side-nav__link">${sidebarLink.label}</a>""")
+    }
 
-//     def sideNavLinkIsRendered(result: Result, sidebarLink: SidebarLink) = {
-//       bodyOf(result).contains(s"""<a href="${sidebarLink.href}" class="side-nav__link">${sidebarLink.label}</a>""")
-//     }
+    def userNavLinkIsRendered(result: Result, navLink: NavLink) = {
+      bodyOf(result).contains(navLink.href) && bodyOf(result).contains(navLink.label)
+    }
 
-//     def userNavLinkIsRendered(result: Result, navLink: NavLink) = {
-//       bodyOf(result).contains(navLink.href) && bodyOf(result).contains(navLink.label)
-//     }
+    def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
+      bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
+    }
 
-//     def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
-//       bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
-//     }
+    // def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
+    //   when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(ramlAndSchemas)
+    // }
 
-//     def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
-//       when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(ramlAndSchemas)
-//     }
+    // def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
+    //   when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(failed(exception))
+    // }
 
-//     def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
-//       when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(failed(exception))
-//     }
-
-//     def pageTitle(pagePurpose: String) = {
-//       s"$pagePurpose - HMRC Developer Hub - GOV.UK"
-//     }
+    def pageTitle(pagePurpose: String) = {
+      s"$pagePurpose - HMRC Developer Hub - GOV.UK"
+    }
 
 
-//   }
+  }
 
 //   "DocumentationController" should {
 
@@ -643,4 +628,4 @@
 //     }
 
 //   }
-// }
+}

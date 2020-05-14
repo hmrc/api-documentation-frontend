@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.controllers
+package uk.gov.hmrc.apidocumentation.controllers
 
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -22,15 +22,14 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.FakeRequest
-import uk.gov.hmrc.apidocumentation.controllers.LoggedInUserProvider
 import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
 import uk.gov.hmrc.apidocumentation.models.{Developer, _}
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
-import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class ControllerCommonSetup
   extends UnitSpec

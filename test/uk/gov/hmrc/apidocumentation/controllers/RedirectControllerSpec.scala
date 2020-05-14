@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.controllers
+package uk.gov.hmrc.apidocumentation.controllers
 
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.mvc._
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.apidocumentation.controllers.RedirectController
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.models
+package uk.gov.hmrc.apidocumentation.models
 
 import uk.gov.hmrc.apidocumentation.models.APIStatus._
 import uk.gov.hmrc.apidocumentation.models.APICategory._

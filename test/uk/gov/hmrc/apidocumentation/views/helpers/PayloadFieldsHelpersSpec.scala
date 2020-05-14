@@ -19,7 +19,7 @@ package uk.gov.hmrc.apidocumentation.views.helpers
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.Json
-import unit.uk.gov.hmrc.apidocumentation.utils.StringRamlLoader
+import uk.gov.hmrc.apidocumentation.utils.StringRamlLoader
 
 class PayloadFieldsHelpersSpec extends WordSpec with Matchers {
 

@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.connectors
+package uk.gov.hmrc.apidocumentation.connectors
 
 import org.mockito.Matchers.{any, eq => meq}
 import org.mockito.Mockito.when
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, SessionInvalid}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient

@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.services
+package uk.gov.hmrc.apidocumentation.services
 
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.cache.SyncCacheApi
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint, _}
-import uk.gov.hmrc.apidocumentation.services.{DocumentationService, RAML, SchemaService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.ramltools.domain.RamlParseException
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
-import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, FileRamlLoader}
+import uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, FileRamlLoader}
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -37,10 +35,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.Application
-import play.api.inject.bind
 import play.api.cache.CacheApi
-import play.api.cache.ehcache.EhCacheModule
-import play.api.Mode
 
 class DocumentationServiceSpec extends UnitSpec
   with GuiceOneAppPerTest

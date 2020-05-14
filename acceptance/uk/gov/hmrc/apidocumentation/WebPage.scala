@@ -22,7 +22,7 @@ import org.openqa.selenium._
 import org.openqa.selenium.support.ui._
 import org.scalatest.Matchers
 import org.scalatest.concurrent.Eventually
-import org.scalatest.selenium.{Page, WebBrowser}
+import org.scalatestplus.selenium.{Page, WebBrowser}
 
 trait WebPage extends Page with WebBrowser with Matchers with Eventually with Wait {
 

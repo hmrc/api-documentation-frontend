@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.utils
+package uk.gov.hmrc.apidocumentation.utils
 
 import java.io.File
 

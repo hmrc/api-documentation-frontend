@@ -25,8 +25,8 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.RAML
 import uk.gov.hmrc.apidocumentation.views.CommonViewSpec
 import scala.collection.JavaConversions._
-import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
-import unit.uk.gov.hmrc.apidocumentation.utils.FileRamlLoader
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.apidocumentation.utils.FileRamlLoader
 import uk.gov.hmrc.apidocumentation.views.html.raml.MainView
 
 class MainViewSpec extends CommonViewSpec with ApiDefinitionTestDataHelper {

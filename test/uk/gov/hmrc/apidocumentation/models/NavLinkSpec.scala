@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.models
+package uk.gov.hmrc.apidocumentation.models
 
-import uk.gov.hmrc.apidocumentation.models.{NavLink, StaticNavLinks}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class NavLinkSpec extends UnitSpec {

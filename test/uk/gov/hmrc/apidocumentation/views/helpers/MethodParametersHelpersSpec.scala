@@ -18,7 +18,7 @@ package uk.gov.hmrc.apidocumentation.views.helpers
 
 import org.raml.v2.api.model.v10.api.Api
 import org.scalatest.{Matchers, WordSpec}
-import unit.uk.gov.hmrc.apidocumentation.utils.StringRamlLoader
+import uk.gov.hmrc.apidocumentation.utils.StringRamlLoader
 
 class MethodParametersHelpersSpec extends WordSpec with Matchers {
 

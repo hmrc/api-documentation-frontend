@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.services
+package uk.gov.hmrc.apidocumentation.services
 
 import org.mockito.Matchers.{any, eq => meq}
 import org.mockito.Mockito._
@@ -22,7 +22,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
-import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 

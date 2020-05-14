@@ -24,7 +24,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.RAML
 import uk.gov.hmrc.apidocumentation.views.html.ServiceDocumentationView
-import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
 import uk.gov.hmrc.apidocumentation.views.html.raml.MainView
 

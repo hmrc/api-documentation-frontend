@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.utils
+package uk.gov.hmrc.apidocumentation.utils
 
 import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.when

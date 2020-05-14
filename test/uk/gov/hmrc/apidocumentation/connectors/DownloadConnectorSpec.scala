@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.connectors
+package uk.gov.hmrc.apidocumentation.connectors
 
 import org.mockito.Mockito.when
 import play.api.http.Status._
@@ -23,7 +23,6 @@ import play.api.routing.sird._
 import play.api.test.WsTestClient
 import play.core.server.Server
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException, NotFoundException}
 
 import scala.concurrent.ExecutionContext.Implicits.global

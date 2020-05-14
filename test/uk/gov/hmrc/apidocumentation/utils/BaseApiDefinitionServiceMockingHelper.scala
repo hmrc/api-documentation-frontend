@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.utils
+package uk.gov.hmrc.apidocumentation.utils
 
 import org.mockito.Mockito.when
 import org.mockito.Matchers.{any, eq => eqTo}
@@ -23,7 +23,6 @@ import scala.concurrent.Future
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.services.BaseApiDefinitionService
 import uk.gov.hmrc.http.HeaderCarrier
-import scala.concurrent.ExecutionContext
 
 trait BaseApiDefinitionServiceMockingHelper {
 

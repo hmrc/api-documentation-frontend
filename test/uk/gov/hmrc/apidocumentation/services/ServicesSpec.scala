@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.services
+package uk.gov.hmrc.apidocumentation.services
 
 import org.mockito.Mockito._
 import org.raml.v2.api.model.v10.api.DocumentationItem
 import org.raml.v2.api.model.v10.system.types.AnnotableStringType
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.play.test.UnitSpec
-import unit.uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 import scala.collection.JavaConversions._
 

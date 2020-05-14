@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.controllers
+package uk.gov.hmrc.apidocumentation.controllers
 
 import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito._
@@ -23,7 +23,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.crypto.CookieSigner
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.controllers.LoggedInUserProvider
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
 import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -52,9 +51,6 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
     val cookie = play.api.mvc.Cookie(cookieName, "bobbins")
     val fakeRequestWithoutCookie = FakeRequest()
     val fakeRequestWithCookie = FakeRequest().withCookies(cookie)
-
-    val tokenId = "tokenId"
-    val userId = "userId"
 
     "Be None when no cookie" in {
       implicit val request = fakeRequestWithoutCookie

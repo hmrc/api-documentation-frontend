@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.connectors
+package uk.gov.hmrc.apidocumentation.connectors
 
 import java.util.UUID
 
@@ -25,7 +25,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.{ConfigLoader, Configuration, Mode}
 import play.api.libs.ws.{WSClient, WSRequest}
-import uk.gov.hmrc.apidocumentation.connectors.ProxiedHttpClient
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.audit.http.HttpAuditing
