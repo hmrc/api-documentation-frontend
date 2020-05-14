@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Json.fromJson
 import play.api.libs.json._

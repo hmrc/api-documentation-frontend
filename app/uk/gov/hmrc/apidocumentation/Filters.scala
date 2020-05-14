@@ -37,7 +37,7 @@ class SessionRedirectFilter @Inject()(implicit override val mat: Materializer,
     nextFilter(requestHeader).map { result =>
       val root = "/api-documentation"
       val routePattern = requestHeader.tags.getOrElse("ROUTE_PATTERN", root)
-      var controllerName = requestHeader.tags.getOrElse("ROUTE_CONTROLLER", "")
+      val controllerName = requestHeader.tags.getOrElse("ROUTE_CONTROLLER", "")
       val documentationControllerName = classOf[DocumentationController].getCanonicalName
 
       if (controllerName == documentationControllerName) {

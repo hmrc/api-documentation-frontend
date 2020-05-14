@@ -19,7 +19,7 @@ package uk.gov.hmrc.apidocumentation.controllers
 import javax.inject.{Inject, Singleton}
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation
@@ -37,7 +37,7 @@ import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-
+@Singleton
 class DocumentationController @Inject()(documentationService: DocumentationService,
                                         apiDefinitionService: ApiDefinitionService,
                                         navigationService: NavigationService,
@@ -52,7 +52,8 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   private lazy val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
   private lazy val apiDocCrumb = Crumb("API Documentation", routes.DocumentationController.apiIndexPage(None, None, None).url)
   private lazy val usingTheHubCrumb = Crumb("Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url)
-  private lazy val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
+  // TODO - remove after check
+  // private lazy val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
   private lazy val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
 
   def cookiesPage(): Action[AnyContent] = {
@@ -77,7 +78,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       Future.successful(Ok(testing(pageAttributes("Testing in the sandbox", routes.DocumentationController.testingPage().url, navLinks))))
   }
 
-  def testingStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { implicit request =>
+  def testingStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { _ =>
     _ => Future.successful(MovedPermanently(routes.DocumentationController.testUsersDataStatefulBehaviourPage().url))
   }
 
@@ -185,7 +186,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       Future.successful(Ok(mtdIntroduction(pageAttributes("Making Tax Digital guides", introPageUrl, navLinks))))
   }
 
-  def mtdIncomeTaxServiceGuidePage(): Action[AnyContent] = headerNavigation { implicit request =>
+  def mtdIncomeTaxServiceGuidePage(): Action[AnyContent] = headerNavigation { _ =>
     navLinks =>
       Future.successful(MovedPermanently("/guides/income-tax-mtd-end-to-end-service-guide/"))
   }
@@ -304,7 +305,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   def bustCache(stubMode: Boolean, cacheBuster: Option[Boolean]): Boolean = stubMode || cacheBuster.getOrElse(false)
 
   private def doRenderApiDocumentation(service: String, version: String, cacheBuster: Boolean, apiOption: Option[ExtendedAPIDefinition],
-                                       navLinks: Seq[NavLink], email: Option[String])(implicit hc: HeaderCarrier, request: Request[_]): Future[Result] = {
+                                       navLinks: Seq[NavLink], email: Option[String])(implicit request: Request[_]): Future[Result] = {
     def makePageAttributes(apiDefinition: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, sidebarLinks: Seq[SidebarLink]): PageAttributes = {
       val breadcrumbs = Breadcrumbs(
         Crumb(
@@ -386,7 +387,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       }
   }
 
-  def fetchTestEndpointJson(service: String, version: String): Action[AnyContent] = Action.async { implicit request =>
+  def fetchTestEndpointJson(service: String, version: String): Action[AnyContent] = Action.async { _ =>
     if (appConfig.ramlPreviewEnabled) {
       documentationService.buildTestEndpoints(service, version) map { endpoints =>
         Ok(Json.toJson(endpoints.sortWith((x, y) => x.url < y.url)))

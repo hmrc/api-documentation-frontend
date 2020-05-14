@@ -27,11 +27,11 @@ import play.api.mvc.MessagesControllerComponents
 class RedirectController @Inject()(cc: MessagesControllerComponents) extends FrontendController(cc) {
   def redirectToDocumentationIndexPage(): Action[AnyContent] = {
     val redirectTo = routes.DocumentationController.apiIndexPage(None, None, None).url
-    Action.async { implicit request => Future.successful(MovedPermanently(redirectTo)) }
+    Action.async { _ => Future.successful(MovedPermanently(redirectTo)) }
   }
 
   def redirectToApiDocumentationPage(service: String, version: String, endpoint: String): Action[AnyContent] = {
     val redirectTo = routes.DocumentationController.renderApiDocumentation(service, version, None).url
-    Action.async { implicit request => Future.successful(MovedPermanently(redirectTo)) }
+    Action.async { _ => Future.successful(MovedPermanently(redirectTo)) }
   }
 }

@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.config
 
 import com.google.inject.{Inject, Singleton, ImplementedBy}
-import play.api.{Configuration, ConfigLoader, Environment}
+import play.api.{Configuration, ConfigLoader}
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 @ImplementedBy(classOf[ApplicationConfigImpl])

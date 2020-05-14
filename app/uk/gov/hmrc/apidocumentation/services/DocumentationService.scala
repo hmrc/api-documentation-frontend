@@ -21,10 +21,9 @@ import org.raml.v2.api.model.v10.resources.Resource
 import play.api.cache._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
@@ -52,7 +51,7 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
 
   private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 
-  def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[RamlAndSchemas] = {
+  def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean): Future[RamlAndSchemas] = {
       val url = ramlUrl(serviceBaseUrl,serviceName,version)
       fetchRAML(url, cacheBuster)
   }
@@ -77,18 +76,18 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
     }
   }
 
-  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier): Future[Seq[TestEndpoint]] = {
+  def buildTestEndpoints(service: String, version: String): Future[Seq[TestEndpoint]] = {
     fetchRAML(service, version, cacheBuster = true).map { ramlAndSchemas =>
-      buildResources(ramlAndSchemas.raml.resources.toSeq)
+      buildResources(ramlAndSchemas.raml.resources.asScala.toSeq)
     }
   }
 
   private def buildResources(resources: Seq[Resource]): Seq[TestEndpoint] = {
     resources.flatMap { res =>
-      val nested = buildResources(res.resources())
-      res.methods.headOption match {
+      val nested = buildResources(res.resources().asScala)
+      res.methods.asScala.headOption match {
         case Some(_) =>
-          val methods = res.methods.map(_.method.toUpperCase).sorted
+          val methods = res.methods.asScala.map(_.method.toUpperCase).sorted
           val endpoint = TestEndpoint(s"{service-url}${res.resourcePath}", methods:_*)
 
           endpoint +: nested

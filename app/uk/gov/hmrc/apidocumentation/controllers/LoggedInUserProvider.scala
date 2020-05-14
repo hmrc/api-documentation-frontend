@@ -44,12 +44,12 @@ class LoggedInUserProvider @Inject()(config: ApplicationConfig,
 
   import LoggedInUserProvider._
 
-  def fetchLoggedInUser()(implicit request: Request[_], hc: HeaderCarrier): Future[Option[Developer]] = {
+  def fetchLoggedInUser()(implicit request: Request[_]): Future[Option[Developer]] = {
     loadSession
       .map(_.map(_.developer))
   }
 
-    private def loadSession[A](implicit ec: ExecutionContext, request: Request[A]): Future[Option[Session]] = {
+    private def loadSession[A](implicit request: Request[A]): Future[Option[Session]] = {
       (for {
         cookie <- request.cookies.get(cookieName)
         sessionId <- decodeCookie(cookie.value)
@@ -57,7 +57,7 @@ class LoggedInUserProvider @Inject()(config: ApplicationConfig,
         .getOrElse(Future.successful(None))
     }
 
-  private def fetchDeveloperSession[A](sessionId: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Session]] = {
+  private def fetchDeveloperSession[A](sessionId: String)(implicit hc: HeaderCarrier): Future[Option[Session]] = {
     sessionService
       .fetch(sessionId)
   }

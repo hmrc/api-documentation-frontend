@@ -22,7 +22,7 @@ import org.raml.v2.api.model.v10.resources.Resource
 import org.raml.v2.api.model.v10.system.types.MarkdownString
 import uk.gov.hmrc.apidocumentation.services._
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 case class MethodParameter(name: String, typeName: String, baseTypeName: String, required: Boolean, description: MarkdownString,
                            example: ExampleSpec, pattern: Option[String] = None, enumValues: Seq[String] = Seq.empty)
@@ -44,7 +44,7 @@ trait MethodParameters {
     def findType(param: TypeDeclaration) = {
       def findInTypes(types: Seq[TypeDeclaration]) = types.find(_.name == param.`type`)
 
-      findInTypes(raml.types).orElse(findInTypes(raml.uses.flatMap(_.types)))
+      findInTypes(raml.types.asScala).orElse(findInTypes(raml.uses.asScala.flatMap(_.types.asScala)))
     }
 
     parameters.map { p =>
@@ -52,7 +52,7 @@ trait MethodParameters {
       findType(p).fold(MethodParameter.fromTypeDeclaration(p)) {
         case t: StringTypeDeclaration => {
           MethodParameter.fromTypeDeclaration(p).copy(baseTypeName = t.`type`, pattern = Option(t.pattern),
-            enumValues = t.enumValues, example = Option(p.example).getOrElse(t.example))
+            enumValues = t.enumValues.asScala, example = Option(p.example).getOrElse(t.example))
         }
         case t => {
           MethodParameter.fromTypeDeclaration(p).copy(baseTypeName = t.`type`,
@@ -66,7 +66,7 @@ trait MethodParameters {
 object UriParams extends MethodParameters {
   def apply(resource: Resource, raml: RAML): Seq[MethodParameter] = {
     Option(resource).fold(Seq.empty[MethodParameter]) { res =>
-      apply(res.parentResource, raml) ++ resolveTypes(res.uriParameters, raml)
+      apply(res.parentResource, raml) ++ resolveTypes(res.uriParameters.asScala, raml)
     }
   }
 }
@@ -74,7 +74,7 @@ object UriParams extends MethodParameters {
 object QueryParams extends MethodParameters {
   def apply(method: Method, raml: RAML): Seq[MethodParameter] = {
     Option(method).fold(Seq.empty[MethodParameter]) { meth =>
-      resolveTypes(meth.queryParameters, raml)
+      resolveTypes(meth.queryParameters.asScala, raml)
     }
   }
 }

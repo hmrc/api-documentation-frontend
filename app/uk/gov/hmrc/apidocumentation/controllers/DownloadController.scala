@@ -23,12 +23,12 @@ import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, ExtendedAPIDefinition, VersionVisibility}
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService}
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
+@Singleton
 class DownloadController @Inject()(documentationService: DocumentationService,
                                    apiDefinitionService: ApiDefinitionService,
                                    downloadService: DownloadService,
@@ -59,7 +59,7 @@ class DownloadController @Inject()(documentationService: DocumentationService,
   }
 
   private def fetchResourceForApi(apiOption: Option[ExtendedAPIDefinition], version: String, validResource: String)
-                                 (implicit hc: HeaderCarrier, request: Request[_]): Future[Result] = {
+                                 (implicit request: Request[_]): Future[Result] = {
     def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
       for {
         api <- apiOption
