@@ -18,35 +18,24 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.http.Status._
 import play.api.mvc._
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.APIAccessType
 import uk.gov.hmrc.apidocumentation.services.DownloadService
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class DownloadControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerTest {
+class DownloadControllerSpec extends CommonControllerBaseSpec {
 
-  override def fakeApplication(): Application =
-    GuiceApplicationBuilder()
-      .configure(("metrics.jvm", false))
-      .build()
+  trait Setup {
 
-  class Setup extends ControllerCommonSetup {
-
-    val appConfig = mock[ApplicationConfig]
+    // val appConfig = mock[ApplicationConfig]
     val downloadService = mock[DownloadService]
 
     val errorHandler = app.injector.instanceOf[ErrorHandler]
-    val mcc = app.injector.instanceOf[MessagesControllerComponents]
+    // val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
     val version = "2.0"
     val resourceName = "some/resource"

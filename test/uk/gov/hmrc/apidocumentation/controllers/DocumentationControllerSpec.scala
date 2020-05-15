@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- package uk.gov.hmrc.apidocumentation.controllers
+package uk.gov.hmrc.apidocumentation.controllers
 
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -44,16 +44,17 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
 import scala.concurrent.duration._
 import play.api.test.Helpers
+import uk.gov.hmrc.apidocumentation.services.DocumentationService
 
 // TODO - Make this test work !!!
-class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with GuiceOneAppPerTest {
+class DocumentationControllerSpec extends CommonControllerBaseSpec {
 
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()
       .configure(("metrics.jvm", false))
       .build()
 
-  class Setup(ramlPreviewEnabled: Boolean = false) extends ControllerCommonSetup {
+  class Setup(ramlPreviewEnabled: Boolean = false) {
     implicit val appConfig = mock[ApplicationConfig]
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
     val navigationService = mock[NavigationService]
@@ -63,6 +64,7 @@ class DocumentationControllerSpec extends UnitSpec with MockitoSugar with ScalaF
     val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
     implicit lazy val materializer = app.materializer
+
 
     val navLink = NavLink("Header Link", "/api-documentation/headerlink")
     val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")

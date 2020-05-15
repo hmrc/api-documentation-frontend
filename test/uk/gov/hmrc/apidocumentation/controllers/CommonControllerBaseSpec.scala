@@ -24,47 +24,57 @@ import play.api.mvc._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
 import uk.gov.hmrc.apidocumentation.models.{Developer, _}
-import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 import scala.concurrent.Future
+import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.apidocumentation.services.DocumentationService
 
-class ControllerCommonSetup
+
+class CommonControllerBaseSpec
   extends UnitSpec
     with ScalaFutures
     with MockitoSugar
-    with ApiDefinitionTestDataHelper {
+    with ApiDefinitionTestDataHelper
+    with LoggedInUserProviderMock
+    with ApiDefinitionServiceMock 
+    with GuiceOneAppPerSuite
+    {
 
-  implicit val request = FakeRequest()
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(("metrics.jvm", false))
+      .build()
+
+  implicit lazy val request: Request[AnyContent] = FakeRequest()
+  implicit lazy val materializer = app.materializer
+  lazy val mcc = app.injector.instanceOf[MessagesControllerComponents]
+
+  // TODO - move to another layer
+  val documentationService = mock[DocumentationService]
+
+  implicit val appConfig = mock[ApplicationConfig]
+
   implicit val hc = HeaderCarrier()
-
-  val loggedInEmail = "mr.abcd@example.com"
-  val userLoggedIn = Some(Developer(loggedInEmail, "Anony", "Mouse"))
-  val noUserLoggedIn = None
 
   val serviceName = "hello-world"
   val endpointName = "Say Hello World!"
-
-  val documentationService = mock[DocumentationService]
-  val loggedInUserProvider = mock[LoggedInUserProvider]
-  val apiDefinitionService = mock[ApiDefinitionService]
 
   def anApiDefinition(serviceName: String, version: String): APIDefinition = {
     APIDefinition(serviceName, "Hello World", "Say Hello World", "hello", None, None,
       Seq(APIVersion(version, None, APIStatus.STABLE, Seq(endpoint()))))
   }
 
-  def anXmlApiDefinition(name: String) =
-    XmlApiDocumentation(name, "description", "context")
+  def anXmlApiDefinition(name: String) = XmlApiDocumentation(name, "description", "context")
 
-  def aServiceGuide(name: String) =
-    ServiceGuide(name, "context")
-
-  def extendedApiDefinition(serviceName: String, version: String): ExtendedAPIDefinition = {
+  def extendedApiDefinition(serviceName: String, version: String): ExtendedAPIDefinition =
     extendedApiDefinition(serviceName, version, APIAccessType.PUBLIC, loggedIn = false, authorised = true)
-  }
 
   def extendedApiDefinition(serviceName: String,
                             version: String,
@@ -106,14 +116,22 @@ class ControllerCommonSetup
       ))
   }
 
+  def aServiceGuide(name: String) = ServiceGuide(name, "context")
 
-  def theUserIsLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(Future.successful(userLoggedIn))
+  def verifyRedirectToLoginPage(actualPageFuture: Future[Result], service: String, version: String) {
+    val actualPage = await(actualPageFuture)
+    status(actualPage) shouldBe 303
+
+    actualPage.header.headers.get("Location") shouldBe Some("/developer/login")
+    actualPage.session.get("access_uri") shouldBe Some(s"/api-documentation/docs/api/service/$service/$version")
   }
 
-  def theUserIsNotLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(Future.successful(None))
-  }
+  def pageTitle(pagePurpose: String) = s"$pagePurpose - HMRC Developer Hub - GOV.UK"
+
+}
+
+trait ApiDefinitionServiceMock extends MockitoSugar {
+  val apiDefinitionService = mock[ApiDefinitionService]
 
   def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
     when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(Some(apiDefinition)))
@@ -134,13 +152,20 @@ class ControllerCommonSetup
     when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
       .thenReturn(Future.successful(apis))
   }
+}
 
+trait LoggedInUserProviderMock extends MockitoSugar {
+  val loggedInEmail = "mr.abcd@example.com"
+  val noUserLoggedIn = None
+  val userLoggedIn = Some(Developer(loggedInEmail, "Anony", "Mouse"))
 
-  def verifyRedirectToLoginPage(actualPageFuture: Future[Result], service: String, version: String) {
-    val actualPage = await(actualPageFuture)
-    status(actualPage) shouldBe 303
+  lazy val loggedInUserProvider: LoggedInUserProvider = mock[LoggedInUserProvider]
 
-    actualPage.header.headers.get("Location") shouldBe Some("/developer/login")
-    actualPage.session.get("access_uri") shouldBe Some(s"/api-documentation/docs/api/service/$service/$version")
+  def theUserIsLoggedIn() = {
+    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(Future.successful(userLoggedIn))
+  }
+
+  def theUserIsNotLoggedIn() = {
+    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(Future.successful(noUserLoggedIn))
   }
 }

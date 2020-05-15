@@ -82,10 +82,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   // private lazy val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
   private lazy val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
 
-  def cookiesPage(): Action[AnyContent] = Action { implicit request =>
-    Ok(cookiesView())
-  }
-
   def privacyPage(): Action[AnyContent] = Action { implicit request =>
     Ok(privacyView())
   }
