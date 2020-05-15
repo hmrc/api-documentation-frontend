@@ -17,24 +17,39 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import play.api.http.Status._
-import uk.gov.hmrc.apidocumentation.views.html.CookiesView
+import play.api.mvc.Result
+import scala.concurrent.Future
+import uk.gov.hmrc.apidocumentation.views.html.{CookiesView, PrivacyView, TermsAndConditionsView}
 
 class InformationPagesControllerSpec extends CommonControllerBaseSpec {
 
   trait Setup {
     val cookiesView = app.injector.instanceOf[CookiesView]
+    val privacyView = app.injector.instanceOf[PrivacyView]
+    val termsAndConditionsView = app.injector.instanceOf[TermsAndConditionsView]
 
-    val informationPages = new InformationPagesController(mcc,cookiesView)
+    val informationPages = new InformationPagesController(mcc, cookiesView, privacyView, termsAndConditionsView)
+  }
+
+  def isPresentAndCorrect(includesText: String, title: String)(fResult: Future[Result]): Unit = {
+    val result = await(fResult)
+    status(result) shouldBe OK
+    bodyOf(result) should include(includesText)
+    bodyOf(result) should include(pageTitle(title))
   }
 
   "InformationPagesController" should {
 
     "display the cookies page" in new Setup {
-      val actualPageFuture = informationPages.cookiesPage()(request)
-      val actualPage = await(actualPageFuture)
-      status(actualPage) shouldBe OK
-      bodyOf(actualPage) should include("Cookies")
-      bodyOf(actualPage) should include(pageTitle("Cookies"))
+      isPresentAndCorrect("Cookies","Cookies")(informationPages.cookiesPage()(request))
+    }
+
+    "display the privacy policy page" in new Setup {
+      isPresentAndCorrect("Privacy","Privacy policy")(informationPages.privacyPolicyPage()(request))
+    }
+
+    "display the terms and conditions page" in new Setup {
+      isPresentAndCorrect("Terms","Terms and conditions")(informationPages.termsAndConditionsPage()(request))
     }
   }
 }

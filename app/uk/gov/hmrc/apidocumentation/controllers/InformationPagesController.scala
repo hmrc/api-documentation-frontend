@@ -26,10 +26,21 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 @Singleton
 class InformationPagesController @Inject()(
                                             mcc: MessagesControllerComponents,
-                                            cookiesView: CookiesView
+                                            cookiesView: CookiesView,
+                                            privacyView:PrivacyView,
+                                            termsAndConditionsView: TermsAndConditionsView
                                           )
                                           extends FrontendController(mcc) {
   def cookiesPage(): Action[AnyContent] = Action { implicit request =>
     Ok(cookiesView())
   }
+
+  def privacyPolicyPage(): Action[AnyContent] = Action { implicit request =>
+    Ok(privacyView())
+  }
+
+  def termsAndConditionsPage(): Action[AnyContent] = Action { implicit request =>
+    Ok(termsAndConditionsView())
+  }
+
 }

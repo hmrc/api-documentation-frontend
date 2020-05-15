@@ -179,14 +179,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec {
 //       verifyPageRendered(underTest.indexPage()(request), "HMRC Developer Hub - GOV.UK", breadcrumbs = List.empty, sideNavLinkRendered = false)
 //     }
 
-//     "display the cookies page" in new Setup {
-//       val actualPageFuture = underTest.cookiesPage()(request)
-//       val actualPage = await(actualPageFuture)
-//       status(actualPage) shouldBe OK
-//       bodyOf(actualPage) should include("Cookies")
-//       bodyOf(actualPage) should include(pageTitle("Cookies"))
-//     }
-
 //     "display the testing page" in new Setup {
 //       verifyPageRendered(underTest.testingPage()(request), pageTitle("Testing in the sandbox"))
 //     }

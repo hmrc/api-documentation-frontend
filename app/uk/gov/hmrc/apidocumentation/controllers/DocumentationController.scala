@@ -44,11 +44,8 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
                                         loggedInUserProvider: LoggedInUserProvider,
                                         errorHandler: ErrorHandler,
                                         mcc: MessagesControllerComponents,
-                                        cookiesView: CookiesView,
-                                        privacyView: PrivacyView,
                                         indexView: IndexView,
                                         apiIndexView: ApiIndexView,
-                                        termsAndConditionsView: TermsAndConditionsView,
                                         testingView: TestingView,
                                         testUsersDataStatefulBehaviourView: TestUsersDataStatefulBehaviourView,
                                         retiredVersionJumpView: RetiredVersionJumpView,
@@ -81,14 +78,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   // TODO - remove after check
   // private lazy val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
   private lazy val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
-
-  def privacyPage(): Action[AnyContent] = Action { implicit request =>
-    Ok(privacyView())
-  }
-
-  def termsPage(): Action[AnyContent] = Action { implicit request =>
-    Ok(termsAndConditionsView())
-  }
 
   def indexPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>

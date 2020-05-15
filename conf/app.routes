@@ -31,8 +31,8 @@ GET         /docs/api/:service/:version/:endpoint                   uk.gov.hmrc.
 GET         /docs/api/mtd-income-tax-service-guide                  uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIncomeTaxServiceGuidePage()
 
 GET         /docs/help/cookies                                      uk.gov.hmrc.apidocumentation.controllers.InformationPagesController.cookiesPage()
-GET         /docs/help/privacy                                      uk.gov.hmrc.apidocumentation.controllers.DocumentationController.privacyPage()
-GET         /docs/help/terms-and-conditions                         uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsPage()
+GET         /docs/help/privacy                                      uk.gov.hmrc.apidocumentation.controllers.InformationPagesController.privacyPolicyPage()
+GET         /docs/help/terms-and-conditions                         uk.gov.hmrc.apidocumentation.controllers.InformationPagesController.termsAndConditionsPage()
 
 GET         /docs/api/download/:service/:version/*resource          uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: String, version: String, resource: String)
 
