@@ -38,7 +38,7 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
   lazy val authorisationUri =routes.DocumentationController.authorisationPage().url
   lazy val tutorialsUri = routes.DocumentationController.tutorialsPage().url
   lazy val termsOfUseUri = routes.DocumentationController.termsOfUsePage().url
-  lazy val testingUri = routes.DocumentationController.testingPage().url
+  lazy val testingUri = routes.TestingPagesController.testingPage().url
   lazy val mtdIntroductionPageUrl = routes.DocumentationController.mtdIntroductionPage().url
   lazy val fraudPreventionPageUrl = routes.DocumentationController.fraudPreventionPage().url
   lazy val developmentPracticesUrl = routes.DocumentationController.developmentPracticesPage().url

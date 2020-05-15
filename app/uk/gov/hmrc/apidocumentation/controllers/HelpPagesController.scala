@@ -17,9 +17,9 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import play.api.mvc._
+import play.api.mvc._
 import javax.inject.{Singleton, Inject}
 import uk.gov.hmrc.apidocumentation.views.html._
-import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 

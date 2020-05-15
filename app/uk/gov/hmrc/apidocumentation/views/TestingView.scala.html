@@ -33,7 +33,7 @@
         <h2 id="onThisPage" class="visually-hidden">On this page</h2>
         <ul class="list">
             <li>Getting started</li>
-            <li><a href="@controllers.routes.DocumentationController.testUsersDataStatefulBehaviourPage()">Test users, test data and stateful behaviour</a></li>
+            <li><a href="@controllers.routes.TestingPagesController.testUsersDataStatefulBehaviourPage()">Test users, test data and stateful behaviour</a></li>
         </ul>
     </nav>
     <hr aria-hidden="true">
@@ -53,7 +53,7 @@
     <h3 class="heading-medium">4. Configure your application for sandbox</h3>
     <p>Configure your application to make authorisation and API calls to sandbox endpoints using your sandbox credentials and the base URL <code class="code--slim">https://test-api.service.hmrc.gov.uk</code>.</p>
     <h3 class="heading-medium">5. Create test users and other test data</h3>
-    <p>To test <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, you need to create <a href="@controllers.routes.DocumentationController.testUsersDataStatefulBehaviourPage()">test users and potentially other test data</a>.</p>
+    <p>To test <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, you need to create <a href="@controllers.routes.TestingPagesController.testUsersDataStatefulBehaviourPage()">test users and potentially other test data</a>.</p>
     <h3 class="heading-medium">6. Test the authorisation process</h3>
     <p>If you’re testing <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, trigger the authorisation process from your application:</p>
     <ul class="list list-bullet">
@@ -66,6 +66,6 @@
     <p>Use your application to make calls to our sandbox APIs.</p>
     <p>Remember to test the error scenarios mentioned in the API documentation.</p>
 
-    @pagination(next = Some(Pagination("Test users, test data and stateful behaviour", controllers.routes.DocumentationController.testUsersDataStatefulBehaviourPage().url)))
+    @pagination(next = Some(Pagination("Test users, test data and stateful behaviour", controllers.routes.TestingPagesController.testUsersDataStatefulBehaviourPage().url)))
 
 }

@@ -39,15 +39,13 @@ import play.api.i18n.MessagesProvider
 @Singleton
 class DocumentationController @Inject()(documentationService: DocumentationService,
                                         apiDefinitionService: ApiDefinitionService,
-                                        navigationService: NavigationService,
+                                        val navigationService: NavigationService,
                                         partialsService: PartialsService,
                                         loggedInUserProvider: LoggedInUserProvider,
                                         errorHandler: ErrorHandler,
                                         mcc: MessagesControllerComponents,
                                         indexView: IndexView,
                                         apiIndexView: ApiIndexView,
-                                        testingView: TestingView,
-                                        testUsersDataStatefulBehaviourView: TestUsersDataStatefulBehaviourView,
                                         retiredVersionJumpView: RetiredVersionJumpView,
                                         tutorialsView: TutorialsView,
                                         authorisationView: AuthorisationView,
@@ -69,10 +67,9 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
                                         xmlDocumentationView: XmlDocumentationView
                                         )
                                        (implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
-  extends FrontendController(mcc) {
+  extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
-  private lazy val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
   private lazy val apiDocCrumb = Crumb("API Documentation", routes.DocumentationController.apiIndexPage(None, None, None).url)
   private lazy val usingTheHubCrumb = Crumb("Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url)
   // TODO - remove after check
@@ -82,21 +79,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   def indexPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       Future.successful(Ok(indexView("Home", navLinks)))
-  }
-
-  def testingPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      Future.successful(Ok(testingView(pageAttributes("Testing in the sandbox", routes.DocumentationController.testingPage().url, navLinks))))
-  }
-
-  def testingStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { _ =>
-    _ => Future.successful(MovedPermanently(routes.DocumentationController.testUsersDataStatefulBehaviourPage().url))
-  }
-
-  def testUsersDataStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      val testUsersDataStatefulBehaviourUrl = routes.DocumentationController.testUsersDataStatefulBehaviourPage().url
-      Future.successful(Ok(testUsersDataStatefulBehaviourView(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
   }
 
   def tutorialsPage(): Action[AnyContent] = headerNavigation { implicit request =>
@@ -434,7 +416,33 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       }
   }
 
-  private def headerNavigation(f: MessagesRequest[AnyContent] => Seq[NavLink] => Future[Result]): Action[AnyContent] = {
+
+  private def extractEmail(fut: Future[Option[Developer]]): Future[Option[String]] = {
+    fut.map(opt => opt.map(dev => dev.email))
+  }
+}
+
+trait HomeCrumb {
+  lazy val homeCrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
+}
+
+trait PageAttributesHelper {
+  self: FrontendController with HomeCrumb =>
+
+  def navigationService: NavigationService
+
+  def pageAttributes(title: String, url: String, headerNavLinks: Seq[NavLink], customBreadcrumbs: Option[Breadcrumbs] = None) = {
+    val breadcrumbs = customBreadcrumbs.getOrElse(Breadcrumbs(Crumb(title, url), homeCrumb))
+    apidocumentation.models.PageAttributes(title, breadcrumbs, headerNavLinks, navigationService.sidebarNavigation())
+  }
+}
+
+trait HeaderNavigation {
+  self: FrontendController =>
+
+  def navigationService: NavigationService
+
+  def headerNavigation(f: MessagesRequest[AnyContent] => Seq[NavLink] => Future[Result])(implicit ec: ExecutionContext): Action[AnyContent] = {
     Action.async { implicit request =>
       // We use a non-standard cookie which doesn't get propagated in the header carrier
       val newHc = request.headers.get(COOKIE).fold(hc) { cookie => hc.withExtraHeaders(COOKIE -> cookie) }
@@ -446,14 +454,5 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
           f(request)(Seq.empty)
       }
     }
-  }
-
-  private def pageAttributes(title: String, url: String, headerNavLinks: Seq[NavLink], customBreadcrumbs: Option[Breadcrumbs] = None) = {
-    val breadcrumbs = customBreadcrumbs.getOrElse(Breadcrumbs(Crumb(title, url), homeCrumb))
-    apidocumentation.models.PageAttributes(title, breadcrumbs, headerNavLinks, navigationService.sidebarNavigation())
-  }
-
-  private def extractEmail(fut: Future[Option[Developer]]): Future[Option[String]] = {
-    fut.map(opt => opt.map(dev => dev.email))
   }
 }

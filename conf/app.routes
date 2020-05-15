@@ -4,13 +4,14 @@ GET         /                                                       uk.gov.hmrc.
 GET         /docs/index                                             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
 GET         /docs/terms-of-use                                      uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUsePage()
 GET         /docs/tutorials                                         uk.gov.hmrc.apidocumentation.controllers.DocumentationController.tutorialsPage()
-GET         /docs/authorisation                                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationPage()
 GET         /docs/using-the-hub                                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.usingTheHubPage()
 GET         /docs/using-the-hub/name-guidelines                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.nameGuidelinesPage()
 GET         /docs/reference-guide                                   uk.gov.hmrc.apidocumentation.controllers.DocumentationController.referenceGuidePage()
 GET         /docs/mtd                                               uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIntroductionPage()
 GET         /docs/fraud-prevention                                  uk.gov.hmrc.apidocumentation.controllers.DocumentationController.fraudPreventionPage()
 GET         /docs/development-practices                             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.developmentPracticesPage()
+
+GET         /docs/authorisation                                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationPage()
 GET         /docs/authorisation/credentials                         uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationCredentialsPage()
 GET         /docs/authorisation/open-access-endpoints               uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationOpenAccessEndpointsPage()
 GET         /docs/authorisation/application-restricted-endpoints    uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationAppRestrictedEndpointsPage()
@@ -31,9 +32,9 @@ GET         /docs/help/cookies                                      uk.gov.hmrc.
 GET         /docs/help/privacy                                      uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.privacyPolicyPage()
 GET         /docs/help/terms-and-conditions                         uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.termsAndConditionsPage()
 
-GET         /docs/testing                                           uk.gov.hmrc.apidocumentation.controllers.DocumentationController.testingPage()
-GET         /docs/testing/stateful-behaviour                        uk.gov.hmrc.apidocumentation.controllers.DocumentationController.testingStatefulBehaviourPage()
-GET         /docs/testing/test-users-test-data-stateful-behaviour   uk.gov.hmrc.apidocumentation.controllers.DocumentationController.testUsersDataStatefulBehaviourPage()
+GET         /docs/testing                                           uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testingPage()
+GET         /docs/testing/stateful-behaviour                        uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testingStatefulBehaviourPage()
+GET         /docs/testing/test-users-test-data-stateful-behaviour   uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testUsersDataStatefulBehaviourPage()
 
 GET         /docs/api/download/:service/:version/*resource          uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: String, version: String, resource: String)
 
