@@ -31,12 +31,12 @@
     <nav role="navigation" aria-labelledby="onThisPage">
         <h2 id="onThisPage" class="visually-hidden">On this page</h2>
         <ul class="list">
-            <li><a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a></li>
-            <li><a href="@controllers.routes.DocumentationController.authorisationCredentialsPage().url">Credentials</a></li>
-            <li><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
-            <li><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationPage().url">Introduction</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationCredentialsPage().url">Credentials</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
             <li>User-restricted endpoints</li>
-            <li><a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-step verification</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisation2SVPage().url">2-step verification</a></li>
         </ul>
     </nav>
 
@@ -93,7 +93,7 @@
                 <li>Send your user to our <a href="#auth-endpoint-syntax">authorisation endpoint</a>.</li>
                 <li>We display a start page that explains the authorisation process.</li>
                 <li>We prompt the user to sign in using their Government Gateway account.</li>
-                <li>The user is taken through <a href="@controllers.routes.DocumentationController.authorisation2SVPage().url">2-Step Verification (2SV)</a>.</li>
+                <li>The user is taken through <a href="@controllers.routes.AuthorisationController.authorisation2SVPage().url">2-Step Verification (2SV)</a>.</li>
                 <li>The user may be asked to confirm their identity. This depends on the user type, the specific API scopes being requested and whether or not the user has previously confirmed their identity.</li>
                 <li>The user is asked to grant your application the authority to access certain <a href="https://developer.service.hmrc.gov.uk/api-documentation/docs/reference-guide#scopes">scopes</a>.</li>
             </ol>
@@ -695,7 +695,7 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 </section>
 
    @pagination(
-        previous = Some(Pagination("Application-restricted endpoints", controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url)),
-        next = Some(Pagination("2-step verification", controllers.routes.DocumentationController.authorisation2SVPage().url)))
+        previous = Some(Pagination("Application-restricted endpoints", controllers.routes.AuthorisationController.authorisationAppRestrictedEndpointsPage().url)),
+        next = Some(Pagination("2-step verification", controllers.routes.AuthorisationController.authorisation2SVPage().url)))
 
     }

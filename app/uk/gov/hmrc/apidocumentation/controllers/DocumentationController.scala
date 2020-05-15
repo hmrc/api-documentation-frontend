@@ -74,7 +74,6 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
   private lazy val usingTheHubCrumb = Crumb("Using the Developer Hub", routes.DocumentationController.usingTheHubPage().url)
   // TODO - remove after check
   // private lazy val mtdCrumb = Crumb("The Making Tax Digital Programme", routes.DocumentationController.mtdIntroductionPage().url)
-  private lazy val authCrumb = Crumb("Authorisation", routes.DocumentationController.authorisationPage().url)
 
   def indexPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
@@ -93,80 +92,7 @@ class DocumentationController @Inject()(documentationService: DocumentationServi
       }
   }
 
-  def authorisationPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      Future.successful(Ok(authorisationView(pageAttributes("Authorisation", routes.DocumentationController.authorisationPage().url, navLinks))))
-  }
 
-  def authorisation2SVPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      val breadcrumbs = Breadcrumbs(
-        Crumb("2-step verification", routes.DocumentationController.authorisation2SVPage().url),
-        authCrumb,
-        homeCrumb
-      )
-      Future.successful(Ok(authorisation2SVView(pageAttributes(
-        "2-step verification",
-        routes.DocumentationController.authorisation2SVPage().url,
-        navLinks,
-        Some(breadcrumbs)))))
-  }
-
-  def authorisationCredentialsPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      val breadcrumbs = Breadcrumbs(
-        Crumb("Credentials", routes.DocumentationController.authorisationCredentialsPage().url),
-        authCrumb,
-        homeCrumb
-      )
-      Future.successful(Ok(credentialsView(pageAttributes(
-        "Credentials",
-        routes.DocumentationController.authorisationCredentialsPage().url,
-        navLinks,
-        Some(breadcrumbs)))))
-  }
-
-  def authorisationOpenAccessEndpointsPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      val breadcrumbs = Breadcrumbs(
-        Crumb("Open access endpoints", routes.DocumentationController.authorisationOpenAccessEndpointsPage().url),
-        authCrumb,
-        homeCrumb
-      )
-      Future.successful(Ok(authorisationOpenAccessEndpointsView(pageAttributes(
-        "Open access endpoints",
-        routes.DocumentationController.authorisationOpenAccessEndpointsPage().url,
-        navLinks,
-        Some(breadcrumbs)))))
-  }
-
-  def authorisationAppRestrictedEndpointsPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      val breadcrumbs = Breadcrumbs(
-        Crumb("Application-restricted endpoints", routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url),
-        authCrumb,
-        homeCrumb
-      )
-      Future.successful(Ok(authorisationAppRestrictedEndpointsView(pageAttributes(
-        "Application-restricted endpoints",
-        routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url,
-        navLinks,
-        Some(breadcrumbs)))))
-  }
-
-  def authorisationUserRestrictedEndpointsPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      val breadcrumbs = Breadcrumbs(
-        Crumb("User-restricted endpoints", routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url),
-        authCrumb,
-        homeCrumb
-      )
-      Future.successful(Ok(authorisationUserRestrictedEndpointsView(pageAttributes(
-        "User-restricted endpoints",
-        routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url,
-        navLinks,
-        Some(breadcrumbs)))))
-  }
 
   def usingTheHubPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>

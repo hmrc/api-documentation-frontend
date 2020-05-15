@@ -75,7 +75,7 @@
     <section id="oauth-2.0-browser-support">
         <h2 class="heading-large">Browser support for OAuth 2.0</h2>
 
-        <p>The OAuth 2.0 <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
+        <p>The OAuth 2.0 <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
 
             journey is designed to work with most modern browsers as per the list specified on
             <a href="https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices#browsers-to-test-in">
@@ -150,7 +150,7 @@
         <h2 class="heading-large">Errors</h2>
 
         <section id="intro">
-            <p>Errors during the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation process</a> use the format specified in the OAuth 2.0 RFC.</p>
+            <p>Errors during the <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation process</a> use the format specified in the OAuth 2.0 RFC.</p>
             <p>Errors from APIs have a 4xx or 5xx HTTP status code and a consistently formed JSON or XML body, including:</p>
             <table>
                 <colgroup>
@@ -454,7 +454,7 @@
         <h2 class="heading-large">Redirect URIs</h2>
         <p>We use redirect URIs to send the user back to your application after successful (or unsuccessful) authorisation,
             prior to your application accessing
-            <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.</p>
+            <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.</p>
         <p>You must specify one or more redirect URIs when you create your application, and also specify one redirect
             URI when you send your user to our authorisation endpoint.</p>
         <p>To protect your application from phishing attacks,
@@ -515,15 +515,15 @@
             </tr>
             <tr>
                 <td><code class="code--slim">http://localhost:8080</code></td>
-                <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
+                <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
             </tr>
             <tr>
                 <td><code class="code--slim">urn:ietf:wg:oauth:2.0:oob</code></td>
-                <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
+                <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
             </tr>
             <tr>
                 <td><code class="code--slim">urn:ietf:wg:oauth:2.0:oob:auto</code></td>
-                <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
+                <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
             </tr>
             </tbody>
         </table>
@@ -533,7 +533,7 @@
 
         <h2 class="heading-large">Scopes</h2>
 
-        <p>When your application needs to access API endpoints on behalf of a user, the Developer Hub uses the <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
+        <p>When your application needs to access API endpoints on behalf of a user, the Developer Hub uses the <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
 
         <p>This authority is granted in terms of OAuth 2.0 'scopes'. Each 'scope' relates to one or more endpoints.</p>
 
@@ -543,7 +543,7 @@
 
         <p>The scope for each user-restricted endpoint is defined in the <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
 
-        <p>For details about OAuth 2.0 and scopes, see <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>.</p>
+        <p>For details about OAuth 2.0 and scopes, see <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>.</p>
 
     </section>
 

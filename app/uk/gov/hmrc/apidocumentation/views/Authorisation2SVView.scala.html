@@ -30,11 +30,11 @@
     <nav role="navigation" aria-labelledby="onThisPage">
         <h2 id="onThisPage" class="visually-hidden">On this page</h2>
         <ul class="list">
-            <li><a href="@controllers.routes.DocumentationController.authorisationPage().url">Introduction</a></li>
-            <li><a href="@controllers.routes.DocumentationController.authorisationCredentialsPage().url">Credentials</a></li>
-            <li><a href="@controllers.routes.DocumentationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
-            <li><a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
-            <li><a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationPage().url">Introduction</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationCredentialsPage().url">Credentials</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
             <li>2-step verification</li>
         </ul>
     </nav>
@@ -43,7 +43,7 @@
 
     <section id="two-step-verification">
             <h2 class="heading-large" id="2sv">2-step verification</h2>
-            <p>2-step verification (2SV) is an extra security step that takes place during the process for getting an <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url">OAuth 2.0 access token</a> for user-restricted endpoints.</p>
+            <p>2-step verification (2SV) is an extra security step that takes place during the process for getting an <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">OAuth 2.0 access token</a> for user-restricted endpoints.</p>
             <p>It occurs immediately after the user has signed in, and requires them to have their mobile or landline phone to hand.</p>
             <p>First time through, the user must register for 2SV. The options are:</p>
             <ul class="list list-bullet">
@@ -59,6 +59,6 @@
 
     </section>
 
-       @pagination(previous = Some(Pagination("User-restricted endpoints", controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url)))
+       @pagination(previous = Some(Pagination("User-restricted endpoints", controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url)))
 
 }

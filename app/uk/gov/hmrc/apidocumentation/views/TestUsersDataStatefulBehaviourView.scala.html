@@ -39,7 +39,7 @@
     <h2 class="heading-large">Test users, test data and stateful behaviour</h2>
 
     <h3 class="heading-medium">Test users</h3>
-    <p>To test <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>,
+    <p>To test <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>,
         you must create a test user. You can use:
     </p>
     <ul class="list list-bullet">
@@ -54,7 +54,7 @@
         individual). We generate the test user details automatically - you cannot choose them.
     </p>
     <p>Use the test user’s user ID and password to sign in during the
-        <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">authorisation process</a>.
+        <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">authorisation process</a>.
     </p>
     <p>Use the same test user’s tax identifiers when testing calls to our APIs. You should also test failure cases by
         using different tax identifiers.

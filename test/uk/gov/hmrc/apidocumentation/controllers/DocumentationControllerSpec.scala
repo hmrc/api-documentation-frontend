@@ -103,24 +103,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
       verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
     }
 
-    // def titleOf(result: Result) = {
-    //   val titleRegEx = """<title[^>]*>(.*)</title>""".r
-    //   val title = titleRegEx.findFirstMatchIn(bodyOf(result)).map(_.group(1))
-    //   title.isDefined shouldBe true
-    //   title.get
-    // }
-
-    // def subNavIsRendered(result: Result) = {
-    //   bodyOf(result).contains("<ul class=\"side-nav side-nav--child\">")
-    // }
-
-    // def sideNavLinkIsRendered(result: Result, sidebarLink: SidebarLink) = {
-    //   bodyOf(result).contains(s"""<a href="${sidebarLink.href}" class="side-nav__link">${sidebarLink.label}</a>""")
-    // }
-
-    // def userNavLinkIsRendered(result: Result, navLink: NavLink) = {
-    //   bodyOf(result).contains(navLink.href) && bodyOf(result).contains(navLink.label)
-    // }
 
     // def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
     //   bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
@@ -153,14 +135,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
 
 //     "display the tutorials page" in new Setup {
 //       verifyPageRendered(underTest.tutorialsPage()(request), pageTitle("Tutorials"))
-//     }
-
-//     "display the authorisation page" in new Setup {
-//       verifyPageRendered(underTest.authorisationPage()(request), pageTitle("Authorisation"))
-//     }
-
-//     "display the authorisation credentials page" in new Setup {
-//       verifyPageRendered(underTest.authorisationCredentialsPage()(request), pageTitle("Credentials"))
 //     }
 
 //     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {

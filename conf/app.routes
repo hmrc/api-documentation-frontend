@@ -11,12 +11,12 @@ GET         /docs/mtd                                               uk.gov.hmrc.
 GET         /docs/fraud-prevention                                  uk.gov.hmrc.apidocumentation.controllers.DocumentationController.fraudPreventionPage()
 GET         /docs/development-practices                             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.developmentPracticesPage()
 
-GET         /docs/authorisation                                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationPage()
-GET         /docs/authorisation/credentials                         uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationCredentialsPage()
-GET         /docs/authorisation/open-access-endpoints               uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationOpenAccessEndpointsPage()
-GET         /docs/authorisation/application-restricted-endpoints    uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationAppRestrictedEndpointsPage()
-GET         /docs/authorisation/user-restricted-endpoints           uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationUserRestrictedEndpointsPage()
-GET         /docs/authorisation/two-step-verification               uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisation2SVPage()
+GET         /docs/authorisation                                     uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationPage()
+GET         /docs/authorisation/credentials                         uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationCredentialsPage()
+GET         /docs/authorisation/open-access-endpoints               uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationOpenAccessEndpointsPage()
+GET         /docs/authorisation/application-restricted-endpoints    uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationAppRestrictedEndpointsPage()
+GET         /docs/authorisation/user-restricted-endpoints           uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationUserRestrictedEndpointsPage()
+GET         /docs/authorisation/two-step-verification               uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisation2SVPage()
 
 GET         /docs/apiIndex                                          uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToDocumentationIndexPage()
 GET         /docs/api                                               uk.gov.hmrc.apidocumentation.controllers.DocumentationController.apiIndexPage(service: Option[String], version: Option[String], filter: Option[String])

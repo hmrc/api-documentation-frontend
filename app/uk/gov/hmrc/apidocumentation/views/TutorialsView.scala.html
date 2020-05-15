@@ -67,7 +67,7 @@
         <li>the @Link.toExternalPage(url = "http://hc.apache.org/", value = Some("Apache HttpClient (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:Apache HttpClient"))).toHtml
             library for accessing HTTP resources</li>
         <li>the @Link.toExternalPage(url = "http://oltu.apache.org/", value = Some("Apache Oltu (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:Apache Oltu"))).toHtml
-            library for our <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> client
+            library for our <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> client
     </ul>
 
     <p>You can find more code samples in our public GitHub repositories. They're available in:</p>
@@ -124,7 +124,7 @@
 
     <p>
         This endpoint is unrestricted so you can access it without an
-        <a href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth2.0</a>
+        <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">OAuth2.0</a>
         <code class="code--slim">access_token</code>.
     </p>
 
@@ -170,7 +170,7 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
     </div>
 
     <p>
-        See the <a href="@controllers.routes.DocumentationController.authorisationAppRestrictedEndpointsPage()">
+        See the <a href="@controllers.routes.AuthorisationController.authorisationAppRestrictedEndpointsPage()">
         authorisation</a> section for information about requesting an OAuth 2.0 <code class="code--slim">access_token</code>.
     </p>
 
@@ -240,7 +240,7 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
 
     <p>For more information about requesting, refreshing or revoking an OAuth 2.0 <code
             class="code--slim">access_token</code>, see the <a
-            href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">authorisation</a>
+            href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">authorisation</a>
         section.</p>
 
     <section>
@@ -273,7 +273,7 @@ httpServletResponse.sendRedirect(request.getLocationUri());</pre>
             URI. We'll provide it with an authorisation code as a querystring parameter.</p>
 
         <p>This authorisation code can then be exchanged for an <a
-                href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth
+                href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">OAuth
             2.0</a> <code class="code--slim">access_token</code>
             and a <code class="code--slim">refresh_token</code>.</p>
 
@@ -339,7 +339,7 @@ String responseBody = EntityUtils.toString(response.getEntity());</pre>
             production <code class="code--slim">client_id</code>
             and <code class="code--slim">client_secret</code>
             when you started <a
-                    href="@controllers.routes.DocumentationController.authorisationUserRestrictedEndpointsPage()">OAuth
+                    href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">OAuth
                 2.0</a> flow.</p>
 
     </section>
