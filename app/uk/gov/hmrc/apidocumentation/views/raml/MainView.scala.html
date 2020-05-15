@@ -32,7 +32,7 @@
     @for(api <- maybeApi) {
        @for(version <- maybeVersion) {
        @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
-        <form id="version-select" method="get" action="@controllers.routes.DocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
+        <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
             <select class="form-control form-control-version"
                     id="version"
                     name="version"

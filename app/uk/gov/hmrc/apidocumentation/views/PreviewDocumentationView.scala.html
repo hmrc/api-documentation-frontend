@@ -38,7 +38,7 @@
     </div>
     }
 
-    <form action="@routes.DocumentationController.previewApiDocumentation(None).url" method="get">
+    <form action="@routes.ApiDocumentationController.previewApiDocumentation(None).url" method="get">
 
         <label class="form-label bold" for="url">
             URL
@@ -47,7 +47,7 @@
         </label>
 
         <input class="button" type="submit" value="Submit"/>
-	<a class="button" href="@routes.DocumentationController.previewApiDocumentation(None).url">Reset</a>
+	<a class="button" href="@routes.ApiDocumentationController.previewApiDocumentation(None).url">Reset</a>
     </form>
 
 

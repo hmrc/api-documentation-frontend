@@ -142,9 +142,9 @@ trait PageRenderVerification {
   self: CommonControllerBaseSpec =>
   import uk.gov.hmrc.apidocumentation.services.NavigationService
 
-  val homeBreadcrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
-  val navLink = NavLink("Header Link", "/api-documentation/headerlink")
-  val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
+  lazy val homeBreadcrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
+  lazy val navLink = NavLink("Header Link", "/api-documentation/headerlink")
+  lazy val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
 
   val navigationService = mock[NavigationService]
   when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(Future.successful(Seq(navLink)))
@@ -174,7 +174,6 @@ trait PageRenderVerification {
   def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
     bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
   }
-
 
   def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
     bodyOf(actualPage) should include(s"""<li><a href="${crumb.url}">${crumb.name}</a></li>""")

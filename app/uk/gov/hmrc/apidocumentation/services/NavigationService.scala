@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
   lazy val gettingStartedUrl = routes.DocumentationController.usingTheHubPage().url
-  lazy val apiDocumentationUrl = routes.DocumentationController.apiIndexPage(None, None, None).url
+  lazy val apiDocumentationUrl = routes.ApiDocumentationController.apiIndexPage(None, None, None).url
   lazy val referenceGuideUrl = routes.DocumentationController.referenceGuidePage().url
   lazy val namingGuidelinesUrl = routes.DocumentationController.nameGuidelinesPage().url
   lazy val authorisationUri =routes.AuthorisationController.authorisationPage().url
@@ -94,7 +94,7 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
 
   private def previewSublinks() = {
     if (appConfig.ramlPreviewEnabled) {
-      Seq(SidebarLink("Preview RAML", routes.DocumentationController.previewApiDocumentation(None).url))
+      Seq(SidebarLink("Preview RAML", routes.ApiDocumentationController.previewApiDocumentation(None).url))
     } else {
       Seq.empty
     }

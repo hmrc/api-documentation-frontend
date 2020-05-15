@@ -25,17 +25,17 @@
 @apiMain(pageAttributes) {
     <h1 class="heading-xlarge">Making Tax Digital guides</h1>
 
-    <p>These guides have now moved to our <a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
+    <p>These guides have now moved to our <a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
 
     <h2 class="heading-large">
       VAT (MTD) end-to-end service guide
     </h2>
     <p>You can now find this guide and related VAT (MTD) documentation here:</p>
-    <p><a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, Some("vat")).url">VAT (MTD) API documentation</a></p>
+    <p><a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("vat")).url">VAT (MTD) API documentation</a></p>
     <h2 class="heading-large">
       Income Tax (MTD) end-to-end service guide
     </h2>
     <p>You can now find this guide and related Income Tax (MTD) documentation here:</p>
-    <p><a href="@controllers.routes.DocumentationController.apiIndexPage(None, None, Some("income-tax")).url">Income Tax (MTD) API documentation</a></p>
+    <p><a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("income-tax")).url">Income Tax (MTD) API documentation</a></p>
 
 }

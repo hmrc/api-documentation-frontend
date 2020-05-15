@@ -16,42 +16,27 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import org.mockito.Matchers._
-import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
-import play.api.http.Status._
 import play.api.mvc._
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.twirl.api.Html
+import play.api.http.Status.NOT_FOUND
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
-import uk.gov.hmrc.apidocumentation.models.{Crumb, RamlAndSchemas, TestEndpoint, _}
-import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService, RAML}
-import uk.gov.hmrc.apidocumentation.views.html.include.{apiMain, main}
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
-import uk.gov.hmrc.play.partials.HtmlPartial
-import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
+import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.services.{PartialsService, RAML}
+import uk.gov.hmrc.apidocumentation.views.html._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future.failed
 import scala.concurrent.duration._
-import play.api.test.Helpers
-import uk.gov.hmrc.apidocumentation.services.DocumentationService
+import org.mockito.Mockito.when
+import org.mockito.Matchers.any
+import play.twirl.api.Html
 
 // TODO - Make this test work !!!
 class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
-
-  override def fakeApplication(): Application =
-    GuiceApplicationBuilder()
-      .configure(("metrics.jvm", false))
-      .build()
 
   class Setup(ramlPreviewEnabled: Boolean = false) {
     implicit val appConfig = mock[ApplicationConfig]
@@ -63,24 +48,39 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
 
     implicit lazy val materializer = app.materializer
 
+    private lazy val indexView = app.injector.instanceOf[IndexView]
+    private lazy val retiredVersionJumpView = app.injector.instanceOf[RetiredVersionJumpView]
+    private lazy val tutorialsView = app.injector.instanceOf[TutorialsView]
+    private lazy val credentialsView = app.injector.instanceOf[CredentialsView]
+    private lazy val developmentPracticesView = app.injector.instanceOf[DevelopmentPracticesView]
+    private lazy val fraudPreventionView = app.injector.instanceOf[FraudPreventionView]
+    private lazy val mtdIntroductionView = app.injector.instanceOf[MtdIntroductionView]
+    private lazy val namingGuidelinesView = app.injector.instanceOf[NamingGuidelinesView]
+    private lazy val referenceView = app.injector.instanceOf[ReferenceView]
+    private lazy val termsOfUseView = app.injector.instanceOf[TermsOfUseView]
+    private lazy val usingTheHubView = app.injector.instanceOf[UsingTheHubView]
 
-    val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None, None).url)
-    val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
+    lazy val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
+    lazy val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
 
     when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
     when(appConfig.title).thenReturn("HMRC Developer Hub")
     when(documentationService.defaultExpiration).thenReturn(1.hour)
 
-    // val underTest =
-    //   new DocumentationController(
-    //     documentationService,
-    //     apiDefinitionService,
-    //     navigationService,
-    //     partialsService,
-    //     loggedInUserProvider,
-    //     errorHandler,
-    //     mcc
-    //   )
+    val underTest: DocumentationController = new DocumentationController(navigationService,
+                                        partialsService,
+                                        mcc,
+                                        indexView,
+                                        retiredVersionJumpView,
+                                        tutorialsView,
+                                        credentialsView,
+                                        developmentPracticesView,
+                                        fraudPreventionView,
+                                        mtdIntroductionView,
+                                        namingGuidelinesView,
+                                        referenceView,
+                                        termsOfUseView,
+                                        usingTheHubView)
 
 
     def verifyErrorPageRendered(actualPageFuture: Future[Result], expectedStatus: Int, expectedError: String) {
@@ -123,46 +123,33 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
 
   }
 
-//   "DocumentationController" should {
+  "DocumentationController" should {
 
-//     "display the index page" in new Setup {
-//       verifyPageRendered(underTest.indexPage()(request), "HMRC Developer Hub - GOV.UK", breadcrumbs = List.empty, sideNavLinkRendered = false)
-//     }
+    "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
+      when(developerFrontendConnector.fetchTermsOfUsePartial()(any[HeaderCarrier]))
+        .thenReturn(Future.successful(HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))))
 
-//     "display the testing page" in new Setup {
-//       verifyPageRendered(underTest.testingPage()(request), pageTitle("Testing in the sandbox"))
-//     }
+      verifyPageRendered(pageTitle("Terms Of Use"),
+        bodyContains = Seq("blah blah blah"))(underTest.termsOfUsePage()(request))
+    }
 
-//     "display the tutorials page" in new Setup {
-//       verifyPageRendered(underTest.tutorialsPage()(request), pageTitle("Tutorials"))
-//     }
+    "display the reference guide page" in new Setup {
+      when(underTest.appConfig.productionApiBaseUrl).thenReturn("https://api.service.hmrc.gov.uk")
+      verifyPageRendered(pageTitle("Reference guide"),
+        bodyContains = Seq("The base URL for sandbox APIs is:", "https://api.service.hmrc.gov.uk"))(underTest.referenceGuidePage()(request))
+    }
 
-//     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
-//       when(developerFrontendConnector.fetchTermsOfUsePartial()(any[HeaderCarrier]))
-//         .thenReturn(Future.successful(HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))))
+    "display the using the hub page" in new Setup {
+      verifyPageRendered(pageTitle("Using the Developer Hub"))(underTest.usingTheHubPage()(request))
+    }
 
-//       verifyPageRendered(underTest.termsOfUsePage()(request), pageTitle("Terms Of Use"),
-//         bodyContains = Seq("blah blah blah"))
-//     }
+    "display the naming guidelines page" in new Setup {
+      verifyPageRendered(pageTitle("Application naming guidelines"), breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb))(underTest.nameGuidelinesPage()(request))
+    }
 
-//     "display the reference guide page" in new Setup {
-//       when(underTest.appConfig.productionApiBaseUrl).thenReturn("https://api.service.hmrc.gov.uk")
-//       verifyPageRendered(underTest.referenceGuidePage()(request), pageTitle("Reference guide"),
-//         bodyContains = Seq("The base URL for sandbox APIs is:", "https://api.service.hmrc.gov.uk"))
-//     }
-
-//     "display the using the hub page" in new Setup {
-//       verifyPageRendered(underTest.usingTheHubPage()(request), pageTitle("Using the Developer Hub"))
-//     }
-
-//     "display the naming guidelines page" in new Setup {
-//       verifyPageRendered(underTest.nameGuidelinesPage()(request), pageTitle("Application naming guidelines")
-//         , breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb))
-//     }
-
-//     "display the fraud prevention page" in new Setup {
-//       verifyPageRendered(underTest.fraudPreventionPage()(request), pageTitle("Fraud prevention"))
-//     }
+    "display the fraud prevention page" in new Setup {
+      verifyPageRendered(pageTitle("Fraud prevention"))(underTest.fraudPreventionPage()(request))
+    }
 
 //     "display the Making Tax Digital guides page" in new Setup {
 //       verifyPageRendered(underTest.mtdIntroductionPage()(request), pageTitle("Making Tax Digital guides"))
@@ -173,13 +160,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
 //       status(result) shouldBe MOVED_PERMANENTLY
 //       result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
 //     }
-
-//     "redirect to the test users test data and stateful behaviour page" in new Setup {
-//       val result = await(underTest.testingStatefulBehaviourPage()(request))
-//       status(result) shouldBe MOVED_PERMANENTLY
-//       result.header.headers.get("Location") shouldBe Some("/api-documentation/docs/testing/test-users-test-data-stateful-behaviour")
-//     }
-//   }
 
 //   "apiIndexPage" must {
 
@@ -563,5 +543,5 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
 //       status(result) shouldBe NOT_FOUND
 //     }
 
-//   }
+  }
 }

@@ -26,12 +26,12 @@ import play.api.mvc.MessagesControllerComponents
 @Singleton
 class RedirectController @Inject()(cc: MessagesControllerComponents) extends FrontendController(cc) {
   def redirectToDocumentationIndexPage(): Action[AnyContent] = {
-    val redirectTo = routes.DocumentationController.apiIndexPage(None, None, None).url
+    val redirectTo = routes.ApiDocumentationController.apiIndexPage(None, None, None).url
     Action.async { _ => Future.successful(MovedPermanently(redirectTo)) }
   }
 
   def redirectToApiDocumentationPage(service: String, version: String, endpoint: String): Action[AnyContent] = {
-    val redirectTo = routes.DocumentationController.renderApiDocumentation(service, version, None).url
+    val redirectTo = routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url
     Action.async { _ => Future.successful(MovedPermanently(redirectTo)) }
   }
 }
