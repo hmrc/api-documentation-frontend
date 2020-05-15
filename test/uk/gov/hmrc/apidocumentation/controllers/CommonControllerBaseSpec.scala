@@ -21,6 +21,7 @@ import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
+import play.api.http.Status._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
 import uk.gov.hmrc.apidocumentation.models.{Developer, _}
@@ -43,7 +44,7 @@ class CommonControllerBaseSpec
     with MockitoSugar
     with ApiDefinitionTestDataHelper
     with LoggedInUserProviderMock
-    with ApiDefinitionServiceMock 
+    with ApiDefinitionServiceMock
     with GuiceOneAppPerSuite
     {
 
@@ -128,6 +129,79 @@ class CommonControllerBaseSpec
 
   def pageTitle(pagePurpose: String) = s"$pagePurpose - HMRC Developer Hub - GOV.UK"
 
+  def isPresentAndCorrect(includesText: String, title: String)(fResult: Future[Result]): Unit = {
+    val result = await(fResult)
+    status(result) shouldBe OK
+    bodyOf(result) should include(includesText)
+    bodyOf(result) should include(pageTitle(title))
+  }
+}
+
+
+trait PageRenderVerification {
+  self: CommonControllerBaseSpec =>
+  import uk.gov.hmrc.apidocumentation.services.NavigationService
+
+  val homeBreadcrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
+  val navLink = NavLink("Header Link", "/api-documentation/headerlink")
+  val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
+
+  val navigationService = mock[NavigationService]
+  when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(Future.successful(Seq(navLink)))
+  when(navigationService.sidebarNavigation()).thenReturn(Future.successful(Seq(sidebarLink)))
+  when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
+
+
+  def titleOf(result: Result) = {
+    val titleRegEx = """<title[^>]*>(.*)</title>""".r
+    val title = titleRegEx.findFirstMatchIn(bodyOf(result)).map(_.group(1))
+    title.isDefined shouldBe true
+    title.get
+  }
+
+  def subNavIsRendered(result: Result) = {
+    bodyOf(result).contains("<ul class=\"side-nav side-nav--child\">")
+  }
+
+  def sideNavLinkIsRendered(result: Result, sidebarLink: SidebarLink) = {
+    bodyOf(result).contains(s"""<a href="${sidebarLink.href}" class="side-nav__link">${sidebarLink.label}</a>""")
+  }
+
+  def userNavLinkIsRendered(result: Result, navLink: NavLink) = {
+    bodyOf(result).contains(navLink.href) && bodyOf(result).contains(navLink.label)
+  }
+
+  def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
+    bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
+  }
+
+
+  def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
+    bodyOf(actualPage) should include(s"""<li><a href="${crumb.url}">${crumb.name}</a></li>""")
+  }
+
+  def verifyBreadcrumbEndpointRendered(actualPage: Result, crumbText: String) = {
+    bodyOf(actualPage) should include(s"""<li>${crumbText}</li>""")
+  }
+
+  def verifyPageRendered(expectedTitle: String,
+                          breadcrumbs: List[Crumb] = List(homeBreadcrumb),
+                          sideNavLinkRendered: Boolean = true,
+                          subNavRendered: Boolean = false,
+                          bodyContains: Seq[String] = Seq.empty
+                          )(
+                            actualPageFuture: Future[Result]
+                          ): Unit = {
+    val actualPage = await(actualPageFuture)
+    status(actualPage) shouldBe 200
+    titleOf(actualPage) shouldBe expectedTitle
+
+    userNavLinkIsRendered(actualPage, navLink) shouldBe true
+    sideNavLinkIsRendered(actualPage, sidebarLink) shouldBe sideNavLinkRendered
+    subNavIsRendered(actualPage) shouldBe subNavRendered
+    breadcrumbs.foreach(verifyBreadcrumbRendered(actualPage, _))
+    bodyContains.foreach { snippet => bodyOf(actualPage) should include(snippet) }
+  }
 }
 
 trait ApiDefinitionServiceMock extends MockitoSugar {

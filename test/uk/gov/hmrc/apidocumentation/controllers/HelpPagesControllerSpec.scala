@@ -31,13 +31,6 @@ class HelpPagesControllerSpec extends CommonControllerBaseSpec {
     val helpPages = new HelpPagesController(mcc, cookiesView, privacyView, termsAndConditionsView)
   }
 
-  def isPresentAndCorrect(includesText: String, title: String)(fResult: Future[Result]): Unit = {
-    val result = await(fResult)
-    status(result) shouldBe OK
-    bodyOf(result) should include(includesText)
-    bodyOf(result) should include(pageTitle(title))
-  }
-
   "helpPagesController" should {
 
     "display the cookies page" in new Setup {

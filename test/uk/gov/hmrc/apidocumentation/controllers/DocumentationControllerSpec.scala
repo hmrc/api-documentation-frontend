@@ -30,7 +30,6 @@ import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
-import uk.gov.hmrc.apidocumentation.controllers.DocumentationController
 import uk.gov.hmrc.apidocumentation.models.{Crumb, RamlAndSchemas, TestEndpoint, _}
 import uk.gov.hmrc.apidocumentation.services.{NavigationService, PartialsService, RAML}
 import uk.gov.hmrc.apidocumentation.views.html.include.{apiMain, main}
@@ -47,7 +46,7 @@ import play.api.test.Helpers
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
 
 // TODO - Make this test work !!!
-class DocumentationControllerSpec extends CommonControllerBaseSpec {
+class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()
@@ -57,7 +56,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec {
   class Setup(ramlPreviewEnabled: Boolean = false) {
     implicit val appConfig = mock[ApplicationConfig]
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
-    val navigationService = mock[NavigationService]
     val partialsService = new PartialsService(developerFrontendConnector)
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
@@ -66,15 +64,9 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec {
     implicit lazy val materializer = app.materializer
 
 
-    val navLink = NavLink("Header Link", "/api-documentation/headerlink")
-    val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
-    val homeBreadcrumb = Crumb("Home", controllers.routes.DocumentationController.indexPage().url)
     val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.DocumentationController.apiIndexPage(None, None, None).url)
     val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
 
-    when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(Future.successful(Seq(navLink)))
-    when(navigationService.sidebarNavigation()).thenReturn(Future.successful(Seq(sidebarLink)))
-    when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
     when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
     when(appConfig.title).thenReturn("HMRC Developer Hub")
     when(documentationService.defaultExpiration).thenReturn(1.hour)
@@ -90,22 +82,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec {
     //     mcc
     //   )
 
-    def verifyPageRendered(actualPageFuture: Future[Result],
-                           expectedTitle: String,
-                           breadcrumbs: List[Crumb] = List(homeBreadcrumb),
-                           sideNavLinkRendered: Boolean = true,
-                           subNavRendered: Boolean = false,
-                           bodyContains: Seq[String] = Seq.empty) {
-      val actualPage = await(actualPageFuture)
-      status(actualPage) shouldBe 200
-      titleOf(actualPage) shouldBe expectedTitle
-
-      userNavLinkIsRendered(actualPage, navLink) shouldBe true
-      sideNavLinkIsRendered(actualPage, sidebarLink) shouldBe sideNavLinkRendered
-      subNavIsRendered(actualPage) shouldBe subNavRendered
-      breadcrumbs.foreach(verifyBreadcrumbRendered(actualPage, _))
-      bodyContains.foreach { snippet => bodyOf(actualPage) should include(snippet) }
-    }
 
     def verifyErrorPageRendered(actualPageFuture: Future[Result], expectedStatus: Int, expectedError: String) {
       val actualPage = await(actualPageFuture)
@@ -118,45 +94,37 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec {
       status(actualPage) shouldBe NOT_FOUND
     }
 
-    private def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
-      bodyOf(actualPage) should include(s"""<li><a href="${crumb.url}">${crumb.name}</a></li>""")
-    }
-
-    def verifyBreadcrumbEndpointRendered(actualPage: Result, crumbText: String) = {
-      bodyOf(actualPage) should include(s"""<li>${crumbText}</li>""")
-    }
-
     def verifyLinkToStableDocumentationRendered(actualPage: Result, service: String, version: String) = {
       bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
     }
 
     def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
-      verifyPageRendered(actualPage, pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))
+      verifyPageRendered(pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))(actualPage)
       verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
     }
 
-    def titleOf(result: Result) = {
-      val titleRegEx = """<title[^>]*>(.*)</title>""".r
-      val title = titleRegEx.findFirstMatchIn(bodyOf(result)).map(_.group(1))
-      title.isDefined shouldBe true
-      title.get
-    }
+    // def titleOf(result: Result) = {
+    //   val titleRegEx = """<title[^>]*>(.*)</title>""".r
+    //   val title = titleRegEx.findFirstMatchIn(bodyOf(result)).map(_.group(1))
+    //   title.isDefined shouldBe true
+    //   title.get
+    // }
 
-    def subNavIsRendered(result: Result) = {
-      bodyOf(result).contains("<ul class=\"side-nav side-nav--child\">")
-    }
+    // def subNavIsRendered(result: Result) = {
+    //   bodyOf(result).contains("<ul class=\"side-nav side-nav--child\">")
+    // }
 
-    def sideNavLinkIsRendered(result: Result, sidebarLink: SidebarLink) = {
-      bodyOf(result).contains(s"""<a href="${sidebarLink.href}" class="side-nav__link">${sidebarLink.label}</a>""")
-    }
+    // def sideNavLinkIsRendered(result: Result, sidebarLink: SidebarLink) = {
+    //   bodyOf(result).contains(s"""<a href="${sidebarLink.href}" class="side-nav__link">${sidebarLink.label}</a>""")
+    // }
 
-    def userNavLinkIsRendered(result: Result, navLink: NavLink) = {
-      bodyOf(result).contains(navLink.href) && bodyOf(result).contains(navLink.label)
-    }
+    // def userNavLinkIsRendered(result: Result, navLink: NavLink) = {
+    //   bodyOf(result).contains(navLink.href) && bodyOf(result).contains(navLink.label)
+    // }
 
-    def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
-      bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
-    }
+    // def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
+    //   bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
+    // }
 
     // def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
     //   when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(ramlAndSchemas)
