@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 
 @Singleton
-class InformationPagesController @Inject()(
+class HelpPagesController @Inject()(
                                             mcc: MessagesControllerComponents,
                                             cookiesView: CookiesView,
                                             privacyView:PrivacyView,

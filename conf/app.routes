@@ -2,9 +2,6 @@
 
 GET         /                                                       uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
 GET         /docs/index                                             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
-GET         /docs/testing                                           uk.gov.hmrc.apidocumentation.controllers.DocumentationController.testingPage()
-GET         /docs/testing/stateful-behaviour                        uk.gov.hmrc.apidocumentation.controllers.DocumentationController.testingStatefulBehaviourPage()
-GET         /docs/testing/test-users-test-data-stateful-behaviour   uk.gov.hmrc.apidocumentation.controllers.DocumentationController.testUsersDataStatefulBehaviourPage()
 GET         /docs/terms-of-use                                      uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUsePage()
 GET         /docs/tutorials                                         uk.gov.hmrc.apidocumentation.controllers.DocumentationController.tutorialsPage()
 GET         /docs/authorisation                                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.authorisationPage()
@@ -30,9 +27,13 @@ GET         /docs/api/xml/:name                                     uk.gov.hmrc.
 GET         /docs/api/:service/:version/:endpoint                   uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToApiDocumentationPage(service: String, version: String, endpoint: String)
 GET         /docs/api/mtd-income-tax-service-guide                  uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIncomeTaxServiceGuidePage()
 
-GET         /docs/help/cookies                                      uk.gov.hmrc.apidocumentation.controllers.InformationPagesController.cookiesPage()
-GET         /docs/help/privacy                                      uk.gov.hmrc.apidocumentation.controllers.InformationPagesController.privacyPolicyPage()
-GET         /docs/help/terms-and-conditions                         uk.gov.hmrc.apidocumentation.controllers.InformationPagesController.termsAndConditionsPage()
+GET         /docs/help/cookies                                      uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.cookiesPage()
+GET         /docs/help/privacy                                      uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.privacyPolicyPage()
+GET         /docs/help/terms-and-conditions                         uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.termsAndConditionsPage()
+
+GET         /docs/testing                                           uk.gov.hmrc.apidocumentation.controllers.DocumentationController.testingPage()
+GET         /docs/testing/stateful-behaviour                        uk.gov.hmrc.apidocumentation.controllers.DocumentationController.testingStatefulBehaviourPage()
+GET         /docs/testing/test-users-test-data-stateful-behaviour   uk.gov.hmrc.apidocumentation.controllers.DocumentationController.testUsersDataStatefulBehaviourPage()
 
 GET         /docs/api/download/:service/:version/*resource          uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: String, version: String, resource: String)
 
