@@ -24,7 +24,7 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 class ServicesSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestDataHelper {
   trait Setup {

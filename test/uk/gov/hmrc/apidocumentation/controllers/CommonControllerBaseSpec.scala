@@ -138,6 +138,13 @@ class CommonControllerBaseSpec
   }
 }
 
+trait RamlPreviewBaseSpec {
+  self: CommonControllerBaseSpec =>
+  
+  trait RamlPreviewEnabled {
+    when(appConfig.ramlPreviewEnabled).thenReturn(true)
+  }
+}
 
 trait PageRenderVerification {
   self: CommonControllerBaseSpec =>
@@ -219,6 +226,10 @@ trait PageRenderVerification {
   def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
     verifyPageRendered(pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))(actualPage)
     verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
+  }
+
+  def verifyLinkToStableDocumentationRendered(actualPage: Result, service: String, version: String) = {
+    bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
   }
 }
 
