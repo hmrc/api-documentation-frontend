@@ -30,7 +30,6 @@ import uk.gov.hmrc.play.test.UnitSpec
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-// TODO: Rename to LoggedInUserServiceSpec (using IntelliJ)
 class LoggedInUserServiceSpec extends UnitSpec with ScalaFutures with MockitoSugar {
 
   import LoggedInUserService.cookieName
@@ -42,8 +41,6 @@ class LoggedInUserServiceSpec extends UnitSpec with ScalaFutures with MockitoSug
     val mockCookieSigner = mock[CookieSigner]
 
     val mcc = Helpers.stubControllerComponents()
-
-    implicit val hc = HeaderCarrier()
 
     val developer = Developer("email","John", "Smith")
     val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
