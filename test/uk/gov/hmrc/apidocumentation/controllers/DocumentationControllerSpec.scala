@@ -82,13 +82,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
                                         termsOfUseView,
                                         usingTheHubView)
 
-
-    def verifyErrorPageRendered(actualPageFuture: Future[Result], expectedStatus: Int, expectedError: String) {
-      val actualPage = await(actualPageFuture)
-      status(actualPage) shouldBe expectedStatus
-      bodyOf(actualPage) should include(expectedError)
-    }
-
     def verifyNotFoundPageRendered(actualPageFuture: Future[Result]) {
       val actualPage = await(actualPageFuture)
       status(actualPage) shouldBe NOT_FOUND
@@ -157,36 +150,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
       status(result) shouldBe MOVED_PERMANENTLY
       result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
     }
-
-//   "apiIndexPage" must {
-
-//     "render the API List" in new Setup {
-//       theUserIsLoggedIn()
-//       theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
-
-//       val result = underTest.apiIndexPage(None, None, None)(request)
-//       verifyPageRendered(result, pageTitle("API Documentation"), bodyContains = Seq("API documentation"))
-
-//     }
-
-//     "render the filtered API list" in new Setup {
-//       theUserIsLoggedIn()
-//       theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
-
-//       val result = underTest.apiIndexPage(None, None, Some("vat"))(request)
-
-//       verifyPageRendered(result, pageTitle("Filtered API Documentation"), bodyContains = Seq("Filtered API documentation", "1 document found in", "VAT"))
-//     }
-
-//     "display the error page when the documentationService throws an exception" in new Setup {
-//       theUserIsLoggedIn()
-//       theDefinitionServiceWillFail(new Exception("Expected unit test failure"))
-
-//       val result = underTest.apiIndexPage(None, None, None)(request)
-
-//       verifyErrorPageRendered(result, expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Sorry, we’re experiencing technical difficulties")
-//     }
-//   }
 
 //   "redirectToApiDocumentation" must {
 //     "when given a version" should {

@@ -201,6 +201,12 @@ trait PageRenderVerification {
     breadcrumbs.foreach(verifyBreadcrumbRendered(actualPage, _))
     bodyContains.foreach { snippet => bodyOf(actualPage) should include(snippet) }
   }
+
+  def verifyErrorPageRendered(expectedStatus: Int, expectedError: String)(actualPageFuture: Future[Result]) {
+    val actualPage = await(actualPageFuture)
+    status(actualPage) shouldBe expectedStatus
+    bodyOf(actualPage) should include(expectedError)
+  }
 }
 
 trait ApiDefinitionServiceMock extends MockitoSugar {

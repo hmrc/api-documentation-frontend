@@ -37,36 +37,21 @@ import scala.util.{Failure, Success, Try}
 import play.api.i18n.MessagesProvider
 
 @Singleton
-class ApiDocumentationController @Inject()(documentationService: DocumentationService,
-                                        apiDefinitionService: ApiDefinitionService,
-                                        val navigationService: NavigationService,
-                                        partialsService: PartialsService,
-                                        loggedInUserProvider: LoggedInUserProvider,
-                                        errorHandler: ErrorHandler,
-                                        mcc: MessagesControllerComponents,
-                                        indexView: IndexView,
-                                        apiIndexView: ApiIndexView,
-                                        retiredVersionJumpView: RetiredVersionJumpView,
-                                        tutorialsView: TutorialsView,
-                                        authorisationView: AuthorisationView,
-                                        authorisation2SVView: Authorisation2SVView,
-                                        apisFilteredView: ApisFilteredView,
-                                        authorisationAppRestrictedEndpointsView: AuthorisationAppRestrictedEndpointsView,
-                                        authorisationOpenAccessEndpointsView: AuthorisationOpenAccessEndpointsView,
-                                        authorisationUserRestrictedEndpointsView: AuthorisationUserRestrictedEndpointsView,
-                                        credentialsView: CredentialsView,
-                                        developmentPracticesView: DevelopmentPracticesView,
-                                        fraudPreventionView: FraudPreventionView,
-                                        mtdIntroductionView: MtdIntroductionView,
-                                        namingGuidelinesView: NamingGuidelinesView,
-                                        previewDocumentationView: PreviewDocumentationView,
-                                        referenceView: ReferenceView,
-                                        termsOfUseView: TermsOfUseView,
-                                        serviceDocumentationView: ServiceDocumentationView,
-                                        usingTheHubView: UsingTheHubView,
-                                        xmlDocumentationView: XmlDocumentationView
-                                        )
-                                       (implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
+class ApiDocumentationController @Inject()(
+                                            documentationService: DocumentationService,
+                                            apiDefinitionService: ApiDefinitionService,
+                                            val navigationService: NavigationService,
+                                            loggedInUserProvider: LoggedInUserProvider,
+                                            errorHandler: ErrorHandler,
+                                            mcc: MessagesControllerComponents,
+                                            apiIndexView: ApiIndexView,
+                                            retiredVersionJumpView: RetiredVersionJumpView,
+                                            apisFilteredView: ApisFilteredView,
+                                            previewDocumentationView: PreviewDocumentationView,
+                                            serviceDocumentationView: ServiceDocumentationView,
+                                            xmlDocumentationView: XmlDocumentationView
+                                          )
+                                         (implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
   extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
