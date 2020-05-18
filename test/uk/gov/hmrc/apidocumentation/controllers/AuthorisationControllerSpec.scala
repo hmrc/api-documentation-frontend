@@ -18,10 +18,10 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.apidocumentation.views.html._
-
+import uk.gov.hmrc.apidocumentation.controllers.utils.NavigationServiceMock
 
 class AuthorisationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
-  trait Setup {
+  trait Setup extends NavigationServiceMock {
     val authorisationView = app.injector.instanceOf[AuthorisationView]
     val authorisation2SVView = app.injector.instanceOf[Authorisation2SVView]
     val authorisationAppRestrictedEndpointsView = app.injector.instanceOf[AuthorisationAppRestrictedEndpointsView]

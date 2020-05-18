@@ -37,7 +37,8 @@ import uk.gov.hmrc.apidocumentation.controllers.utils._
 
 class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 
-  trait Setup extends ApiDocumentationServiceMock with AppConfigMock {
+  trait Setup extends ApiDocumentationServiceMock with AppConfigMock with NavigationServiceMock {
+
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
     val partialsService = new PartialsService(developerFrontendConnector)
     val errorHandler = app.injector.instanceOf[ErrorHandler]

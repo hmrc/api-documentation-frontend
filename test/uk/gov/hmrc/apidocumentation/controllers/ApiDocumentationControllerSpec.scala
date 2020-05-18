@@ -33,7 +33,12 @@ import uk.gov.hmrc.apidocumentation.controllers.utils._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
-  trait Setup extends ApiDocumentationServiceMock with AppConfigMock with ApiDefinitionServiceMock with LoggedInUserProviderMock {
+  trait Setup
+      extends ApiDocumentationServiceMock
+      with AppConfigMock
+      with ApiDefinitionServiceMock
+      with LoggedInUserProviderMock
+      with NavigationServiceMock {
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
 

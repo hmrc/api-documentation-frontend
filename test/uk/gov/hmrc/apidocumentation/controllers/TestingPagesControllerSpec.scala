@@ -17,11 +17,12 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.controllers.utils.NavigationServiceMock
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class TestingPagesControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
-  trait Setup {
+  trait Setup extends NavigationServiceMock {
     val testingView = app.injector.instanceOf[TestingView]
     val testUsersDataStatefulBehaviourView = app.injector.instanceOf[TestUsersDataStatefulBehaviourView]
 

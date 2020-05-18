@@ -24,9 +24,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future.successful
 
 trait NavigationServiceMock extends MockitoSugar {
-
-  lazy val navLink = NavLink("Header Link", "/api-documentation/headerlink")
-  lazy val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
+  import NavigationServiceMock._
 
   import uk.gov.hmrc.apidocumentation.services.NavigationService
   val navigationService = mock[NavigationService]
