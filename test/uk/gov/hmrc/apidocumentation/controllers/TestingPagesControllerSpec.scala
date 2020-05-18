@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import uk.gov.hmrc.apidocumentation.views.html._
-import uk.gov.hmrc.apidocumentation.controllers.utils.NavigationServiceMock
+import uk.gov.hmrc.apidocumentation.controllers.utils.{NavigationServiceMock, PageRenderVerification}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

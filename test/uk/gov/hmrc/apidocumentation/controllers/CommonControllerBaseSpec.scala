@@ -31,7 +31,6 @@ import scala.concurrent.Future
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.apidocumentation.controllers.utils._
 
 class CommonControllerBaseSpec
   extends UnitSpec
@@ -125,82 +124,3 @@ class CommonControllerBaseSpec
   }
 }
 
-trait PageRenderVerification {
-  self: CommonControllerBaseSpec =>
-
-  import NavigationServiceMock.{navLink, sidebarLink}
-
-  lazy val homeBreadcrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
-  lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
-
-  def titleOf(result: Result) = {
-    val titleRegEx = """<title[^>]*>(.*)</title>""".r
-    val title = titleRegEx.findFirstMatchIn(bodyOf(result)).map(_.group(1))
-    title.isDefined shouldBe true
-    title.get
-  }
-
-  def subNavIsRendered(result: Result) = {
-    bodyOf(result).contains("<ul class=\"side-nav side-nav--child\">")
-  }
-
-  def sideNavLinkIsRendered(result: Result, sidebarLink: SidebarLink) = {
-    bodyOf(result).contains(s"""<a href="${sidebarLink.href}" class="side-nav__link">${sidebarLink.label}</a>""")
-  }
-
-  def userNavLinkIsRendered(result: Result, navLink: NavLink) = {
-    bodyOf(result).contains(navLink.href) && bodyOf(result).contains(navLink.label)
-  }
-
-  def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
-    bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
-  }
-
-  def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
-    bodyOf(actualPage) should include(s"""<li><a href="${crumb.url}">${crumb.name}</a></li>""")
-  }
-
-  def verifyBreadcrumbEndpointRendered(actualPage: Result, crumbText: String) = {
-    bodyOf(actualPage) should include(s"""<li>${crumbText}</li>""")
-  }
-
-  def verifyPageRendered(expectedTitle: String,
-                          breadcrumbs: List[Crumb] = List(homeBreadcrumb),
-                          sideNavLinkRendered: Boolean = true,
-                          subNavRendered: Boolean = false,
-                          bodyContains: Seq[String] = Seq.empty
-                          )(
-                            actualPageFuture: Future[Result]
-                          ): Unit = {
-    val actualPage = await(actualPageFuture)
-    status(actualPage) shouldBe 200
-    titleOf(actualPage) shouldBe expectedTitle
-
-    userNavLinkIsRendered(actualPage, navLink) shouldBe true
-    sideNavLinkIsRendered(actualPage, sidebarLink) shouldBe sideNavLinkRendered
-    subNavIsRendered(actualPage) shouldBe subNavRendered
-    breadcrumbs.foreach(verifyBreadcrumbRendered(actualPage, _))
-    bodyContains.foreach { snippet => bodyOf(actualPage) should include(snippet) }
-  }
-
-  def verifyNotFoundPageRendered(actualPageFuture: Future[Result]) {
-    val actualPage = await(actualPageFuture)
-    status(actualPage) shouldBe NOT_FOUND
-  }
-
-
-  def verifyErrorPageRendered(expectedStatus: Int, expectedError: String)(actualPageFuture: Future[Result]) {
-    val actualPage = await(actualPageFuture)
-    status(actualPage) shouldBe expectedStatus
-    bodyOf(actualPage) should include(expectedError)
-  }
-
-  def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
-    verifyPageRendered(pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))(actualPage)
-    verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
-  }
-
-  def verifyLinkToStableDocumentationRendered(actualPage: Result, service: String, version: String) = {
-    bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
-  }
-}
