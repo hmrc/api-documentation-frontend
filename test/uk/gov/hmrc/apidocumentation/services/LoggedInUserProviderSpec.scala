@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.controllers
+package uk.gov.hmrc.apidocumentation.services
 
 import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito._
@@ -24,13 +24,13 @@ import play.api.libs.crypto.CookieSigner
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
-import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+// TODO: Rename to LoggedInUserServiceSpec (using IntelliJ)
 class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSugar {
 
   import LoggedInUserProvider.cookieName

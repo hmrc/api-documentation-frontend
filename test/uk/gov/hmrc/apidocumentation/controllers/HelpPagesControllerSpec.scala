@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import uk.gov.hmrc.apidocumentation.controllers.utils.ApiDocumentationServiceMock
+import uk.gov.hmrc.apidocumentation.mocks.services.ApiDocumentationServiceMock
 import uk.gov.hmrc.apidocumentation.views.html.{CookiesView, PrivacyView, TermsAndConditionsView}
 
 class HelpPagesControllerSpec extends CommonControllerBaseSpec {

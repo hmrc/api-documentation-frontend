@@ -20,6 +20,7 @@ import play.api.http.Status._
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.controllers.{routes, CommonControllerBaseSpec}
 import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
 
 import scala.concurrent.Future
 

@@ -27,6 +27,9 @@ import uk.gov.hmrc.apidocumentation.controllers.utils._
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.PartialsService
 import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.mocks.services._
+import uk.gov.hmrc.apidocumentation.mocks.config._
+
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.HtmlPartial
 

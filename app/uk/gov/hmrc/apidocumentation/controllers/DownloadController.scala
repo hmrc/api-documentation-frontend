@@ -22,7 +22,7 @@ import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, ExtendedAPIDefinition, VersionVisibility}
-import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService}
+import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService, LoggedInUserProvider}
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 

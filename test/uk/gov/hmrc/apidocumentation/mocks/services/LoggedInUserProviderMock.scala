@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.controllers.utils
+package uk.gov.hmrc.apidocumentation.mocks.services
 
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
-import uk.gov.hmrc.apidocumentation.controllers.LoggedInUserProvider
+import uk.gov.hmrc.apidocumentation.services.LoggedInUserProvider
 import uk.gov.hmrc.apidocumentation.models.Developer
 
 import scala.concurrent.Future.successful

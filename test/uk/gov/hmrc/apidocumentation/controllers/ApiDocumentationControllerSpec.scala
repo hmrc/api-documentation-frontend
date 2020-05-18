@@ -23,11 +23,13 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
+import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.controllers.utils._
 import uk.gov.hmrc.apidocumentation.services.RAML
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
+import uk.gov.hmrc.apidocumentation.mocks.config._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed

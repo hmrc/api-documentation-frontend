@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.controllers
+package uk.gov.hmrc.apidocumentation.services
 
 import java.security.MessageDigest
 
@@ -23,7 +23,6 @@ import play.api.libs.crypto.CookieSigner
 import play.api.mvc.{Request, RequestHeader}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
-import uk.gov.hmrc.apidocumentation.services.SessionService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -32,6 +31,7 @@ import scala.util.Try
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 import play.api.mvc.ControllerComponents
 
+// TODO: Rename to LoggedInUserService (using IntelliJ)
 @Singleton
 class LoggedInUserProvider @Inject()(config: ApplicationConfig,
                                      sessionService: SessionService,
