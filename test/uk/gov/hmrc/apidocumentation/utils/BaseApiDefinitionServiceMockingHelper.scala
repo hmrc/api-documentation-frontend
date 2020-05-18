@@ -29,37 +29,37 @@ trait BaseApiDefinitionServiceMockingHelper {
   def whenFetchAllDefinitions[T <: BaseApiDefinitionService](base: T)
                              (apis: APIDefinition*)
                              (implicit hc: HeaderCarrier) = {
-    when(base.fetchAllDefinitions(any[None.type]())(any[HeaderCarrier]))
+    when(base.fetchAllDefinitions(any[None.type]())(eqTo(hc)))
       .thenReturn(Future.successful(apis.toSeq))
   }
   def whenFetchAllDefinitionsWithEmail[T <: BaseApiDefinitionService](base: T)
                                       (email: String)
                                       (apis: APIDefinition*)
                                       (implicit hc: HeaderCarrier) = {
-    when(base.fetchAllDefinitions(any[Some[String]]())(any[HeaderCarrier]))
+    when(base.fetchAllDefinitions(any[Some[String]]())(eqTo(hc)))
       .thenReturn(Future.successful(apis.toSeq))
   }
   def whenFetchExtendedDefinition[T <: BaseApiDefinitionService](base: T)
                                  (serviceName: String)
                                  (api: ExtendedAPIDefinition)
                                  (implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(any[HeaderCarrier]))
+    when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
   def whenFetchExtendedDefinitionWithEmail[T <: BaseApiDefinitionService](base: T)
                                           (serviceName: String, email: String)
                                           (api: ExtendedAPIDefinition)
                                           (implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(eqTo(serviceName), any[Some[String]]())(any[HeaderCarrier]))
+    when(base.fetchExtendedDefinition(eqTo(serviceName), any[Some[String]]())(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
   def whenApiDefinitionFails[T <: BaseApiDefinitionService](base: T)
                             (exception: Throwable)
                             (implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(any[String],any[None.type]())(any[HeaderCarrier]))
+    when(base.fetchExtendedDefinition(any[String],any[None.type]())(eqTo(hc)))
       .thenReturn(Future.failed(exception))
-    when(base.fetchAllDefinitions(any())(any[HeaderCarrier]))
+    when(base.fetchAllDefinitions(any())(eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 
