@@ -31,9 +31,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 // TODO: Rename to LoggedInUserServiceSpec (using IntelliJ)
-class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSugar {
+class LoggedInUserServiceSpec extends UnitSpec with ScalaFutures with MockitoSugar {
 
-  import LoggedInUserProvider.cookieName
+  import LoggedInUserService.cookieName
 
   "Fetching logged in user" should {
 
@@ -54,9 +54,9 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
 
     "Be None when no cookie" in {
       implicit val request = fakeRequestWithoutCookie
-      val loggedInUserProvider = new LoggedInUserProvider(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc)
+      val loggedInUserService = new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
+      val result: Option[Developer] = await(loggedInUserService.fetchLoggedInUser())
 
       result shouldBe None
     }
@@ -64,9 +64,9 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
     "Be None when cookie is present but there is no valid signed cookie token" in {
       implicit val request = fakeRequestWithoutCookie
 
-      val loggedInUserProvider = new LoggedInUserProvider(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc)
+      val loggedInUserService = new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc)
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
+      val result: Option[Developer] = await(loggedInUserService.fetchLoggedInUser())
 
       result shouldBe None
     }
@@ -80,12 +80,12 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
       when(mockSessionService.fetch(eqTo(fakeId))(any[HeaderCarrier]))
         .thenReturn(Future.successful(None))
 
-      val loggedInUserProvider =
-        new LoggedInUserProvider(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc) {
+      val loggedInUserService =
+        new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc) {
           override def decodeCookie(token: String) : Option[String] = decodeSessionResult
         }
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
+      val result: Option[Developer] = await(loggedInUserService.fetchLoggedInUser())
 
       result shouldBe None
     }
@@ -100,12 +100,12 @@ class LoggedInUserProviderSpec extends UnitSpec with ScalaFutures with MockitoSu
       when(mockSessionService.fetch(eqTo(fakeId))(any[HeaderCarrier]))
         .thenReturn(Future.successful(Some(session)))
 
-      val loggedInUserProvider =
-        new LoggedInUserProvider(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc) {
+      val loggedInUserService =
+        new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc) {
           override def decodeCookie(token: String) : Option[String] = decodeSessionResult
         }
 
-      val result: Option[Developer] = await(loggedInUserProvider.fetchLoggedInUser())
+      val result: Option[Developer] = await(loggedInUserService.fetchLoggedInUser())
 
       result shouldBe Some(developer)
     }

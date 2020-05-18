@@ -31,18 +31,17 @@ import scala.util.Try
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 import play.api.mvc.ControllerComponents
 
-// TODO: Rename to LoggedInUserService (using IntelliJ)
 @Singleton
-class LoggedInUserProvider @Inject()(config: ApplicationConfig,
-                                     sessionService: SessionService,
-                                     val cookieSigner : CookieSigner,
-                                     cc: ControllerComponents)
-                                    (implicit ec: ExecutionContext)
+class LoggedInUserService @Inject()(config: ApplicationConfig,
+                                    sessionService: SessionService,
+                                    val cookieSigner : CookieSigner,
+                                    cc: ControllerComponents)
+                                   (implicit ec: ExecutionContext)
                                     extends BackendController(cc)
                                     with CookieEncoding
                                     with HeaderCarrierConversion {
 
-  import LoggedInUserProvider._
+  import LoggedInUserService._
 
   def fetchLoggedInUser()(implicit request: Request[_]): Future[Option[Developer]] = {
     loadSession
@@ -63,7 +62,7 @@ class LoggedInUserProvider @Inject()(config: ApplicationConfig,
   }
 }
 
-object LoggedInUserProvider {
+object LoggedInUserService {
   val cookieName = "PLAY2AUTH_SESS_ID"
 }
 

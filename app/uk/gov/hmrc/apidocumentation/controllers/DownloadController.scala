@@ -22,7 +22,7 @@ import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, ExtendedAPIDefinition, VersionVisibility}
-import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService, LoggedInUserProvider}
+import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService, LoggedInUserService}
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DownloadController @Inject()(documentationService: DocumentationService,
                                    apiDefinitionService: ApiDefinitionService,
                                    downloadService: DownloadService,
-                                   loggedInUserProvider: LoggedInUserProvider,
+                                   loggedInUserService: LoggedInUserService,
                                    errorHandler: ErrorHandler,
                                    val appConfig: ApplicationConfig,
                                    cc: MessagesControllerComponents)
@@ -42,7 +42,7 @@ class DownloadController @Inject()(documentationService: DocumentationService,
   def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
 
     (for {
-      email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
+      email <- extractEmail(loggedInUserService.fetchLoggedInUser())
       api <- apiDefinitionService.fetchExtendedDefinition(service, email)
       validResource = validateResource(resource)
       result <- fetchResourceForApi(api, version, validResource)
