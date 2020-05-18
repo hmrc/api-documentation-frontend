@@ -145,4 +145,4 @@ lazy val allDeps = compile ++ test
 // Coverage configuration
 coverageMinimum := 83
 coverageFailOnMinimum := true
-coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;uk.gov.hmrc.apidocumentation.config.*;testOnlyDoNotUseInAppConf.*;app.*;config.*"
+coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;uk.gov.hmrc.apidocumentation.config.*;.*javascript;testOnlyDoNotUseInAppConf.*;app.*;config.*"
