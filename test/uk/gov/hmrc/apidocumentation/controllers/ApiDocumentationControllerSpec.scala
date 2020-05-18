@@ -17,15 +17,17 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, SEE_OTHER}
+import uk.gov.hmrc.apidocumentation.models.APIAccessType
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
+class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
   trait Setup {
     val documentationService = mock[DocumentationService]
 
@@ -106,6 +108,60 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           val result = await(underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request))
           status(result) shouldBe SEE_OTHER
           result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+        }
+
+        "redirect to the documentation page for api in private trial for user without authorisation" in new Setup {
+          theUserIsLoggedIn()
+          val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
+          APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
+          theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
+
+          val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
+          status(result) shouldBe SEE_OTHER
+          result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+        }
+
+        "redirect to the documentation page for api in private trial for user with authorisation" in new Setup {
+          theUserIsLoggedIn()
+          val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
+          APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
+          theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
+
+          val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
+          status(result) shouldBe SEE_OTHER
+          result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+        }
+
+        "redirect to the documentation page for the latest accessible version" in new Setup {
+          theUserIsLoggedIn()
+
+          val apiDefinition =
+            ExtendedAPIDefinition(
+              serviceName,
+              "http://service",
+              "Hello World",
+              "Say Hello World",
+              "hello",
+              requiresTrust = false,
+              isTestSupport = false,
+              Seq(
+                ExtendedAPIVersion(
+                  "1.0", APIStatus.BETA, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
+                  Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
+                  None
+                ),
+                ExtendedAPIVersion(
+                  "1.1", APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
+                  Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
+                  None
+                )
+              )
+            )
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          val result = await(underTest.redirectToApiDocumentation("hello-world", version, Option(true))(request))
+          status(result) shouldBe SEE_OTHER
+          result.header.headers.get("location") shouldBe Some("/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
         }
       }
     }
