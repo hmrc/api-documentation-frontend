@@ -36,7 +36,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
       extends ApiDocumentationServiceMock
       with AppConfigMock
       with ApiDefinitionServiceMock
-      with LoggedInUserProviderMock {
+      with LoggedInUserServiceMock {
 
     // val appConfig = mock[ApplicationConfig]
     val downloadService = mock[DownloadService]
@@ -47,7 +47,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
     val version = "2.0"
     val resourceName = "some/resource"
 
-    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadService, loggedInUserProvider, errorHandler, appConfig, mcc)
+    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadService, loggedInUserService, errorHandler, appConfig, mcc)
 
     def theDownloadServiceWillReturnTheResult(result: Results.Status) = {
       when(downloadService.fetchResource(any[String], any[String], any[String])).thenReturn(Future.successful(result))

@@ -39,7 +39,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       extends ApiDocumentationServiceMock
       with AppConfigMock
       with ApiDefinitionServiceMock
-      with LoggedInUserProviderMock
+      with LoggedInUserServiceMock
       with NavigationServiceMock {
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
@@ -55,7 +55,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       documentationService,
       apiDefinitionService,
       navigationService,
-      loggedInUserProvider,
+      loggedInUserService,
       errorHandler,
       mcc,
       apiIndexView,

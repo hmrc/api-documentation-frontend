@@ -41,7 +41,7 @@ class ApiDocumentationController @Inject()(
                                             documentationService: DocumentationService,
                                             apiDefinitionService: ApiDefinitionService,
                                             val navigationService: NavigationService,
-                                            loggedInUserProvider: LoggedInUserProvider,
+                                            loggedInUserService: LoggedInUserService,
                                             errorHandler: ErrorHandler,
                                             mcc: MessagesControllerComponents,
                                             apiIndexView: ApiIndexView,
@@ -72,7 +72,7 @@ class ApiDocumentationController @Inject()(
           Future.successful(Redirect(url))
         case None =>
           (for {
-            email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
+            email <- extractEmail(loggedInUserService.fetchLoggedInUser())
             apis <- apiDefinitionService.fetchAllDefinitions(email)
           } yield {
             val apisByCategory = Documentation.groupedByCategory(apis, XmlApiDocumentation.xmlApiDefinitions, ServiceGuide.serviceGuides)
@@ -104,7 +104,7 @@ class ApiDocumentationController @Inject()(
 
   private def redirectToCurrentApiDocumentation(service: String, cacheBuster: Option[Boolean]) = Action.async { implicit request =>
     (for {
-      email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
+      email <- extractEmail(loggedInUserService.fetchLoggedInUser())
       extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, email)
     } yield {
       extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(NotFound(errorHandler.notFoundTemplate)) { version =>
@@ -122,7 +122,7 @@ class ApiDocumentationController @Inject()(
     headerNavigation { implicit request =>
       navLinks =>
         (for {
-          email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
+          email <- extractEmail(loggedInUserService.fetchLoggedInUser())
           api <- apiDefinitionService.fetchExtendedDefinition(service, email)
           cacheBust = bustCache(appConfig.isStubMode, cacheBuster)
           apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, email)
