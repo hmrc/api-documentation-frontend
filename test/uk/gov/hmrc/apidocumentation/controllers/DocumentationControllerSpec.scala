@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import play.api.mvc._
-import play.api.http.Status.NOT_FOUND
+import play.api.http.Status.{MOVED_PERMANENTLY, NOT_FOUND}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.apidocumentation
@@ -119,12 +119,9 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
     def pageTitle(pagePurpose: String) = {
       s"$pagePurpose - HMRC Developer Hub - GOV.UK"
     }
-
-
   }
 
   "DocumentationController" should {
-
     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
       when(developerFrontendConnector.fetchTermsOfUsePartial()(any[HeaderCarrier]))
         .thenReturn(Future.successful(HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))))
@@ -151,15 +148,15 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
       verifyPageRendered(pageTitle("Fraud prevention"))(underTest.fraudPreventionPage()(request))
     }
 
-//     "display the Making Tax Digital guides page" in new Setup {
-//       verifyPageRendered(underTest.mtdIntroductionPage()(request), pageTitle("Making Tax Digital guides"))
-//     }
+    "display the Making Tax Digital guides page" in new Setup {
+      verifyPageRendered(pageTitle("Making Tax Digital guides"))(underTest.mtdIntroductionPage()(request))
+    }
 
-//     "display the Income Tax (MTD) End-to-End Service Guide page" in new Setup {
-//       val result = await(underTest.mtdIncomeTaxServiceGuidePage()(request))
-//       status(result) shouldBe MOVED_PERMANENTLY
-//       result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
-//     }
+    "display the Income Tax (MTD) End-to-End Service Guide page" in new Setup {
+      val result = await(underTest.mtdIncomeTaxServiceGuidePage()(request))
+      status(result) shouldBe MOVED_PERMANENTLY
+      result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
+    }
 
 //   "apiIndexPage" must {
 
