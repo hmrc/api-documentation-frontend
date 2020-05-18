@@ -25,6 +25,8 @@ import play.api.http.Status.{INTERNAL_SERVER_ERROR, SEE_OTHER}
 import uk.gov.hmrc.apidocumentation.models.APIAccessType
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
+import uk.gov.hmrc.http.NotFoundException
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
@@ -146,13 +148,13 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
               isTestSupport = false,
               Seq(
                 ExtendedAPIVersion(
-                  "1.0", APIStatus.BETA, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-                  Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
+                  "1.0", APIStatus.BETA, Seq(endpoint(endpointName, "/world")),
+                  Some(apiAvailability().asAuthorised),
                   None
                 ),
                 ExtendedAPIVersion(
-                  "1.1", APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-                  Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
+                  "1.1", APIStatus.STABLE, Seq(endpoint(endpointName, "/world")),
+                  Some(apiAvailability().asPrivate),
                   None
                 )
               )
@@ -162,6 +164,14 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           val result = await(underTest.redirectToApiDocumentation("hello-world", version, Option(true))(request))
           status(result) shouldBe SEE_OTHER
           result.header.headers.get("location") shouldBe Some("/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+        }
+
+        "display the not found page when invalid service specified" in new Setup {
+          theUserIsLoggedIn()
+          theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
+
+          val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
+          verifyNotFoundPageRendered(result)
         }
       }
     }

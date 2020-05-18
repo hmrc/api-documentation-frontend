@@ -202,6 +202,12 @@ trait PageRenderVerification {
     bodyContains.foreach { snippet => bodyOf(actualPage) should include(snippet) }
   }
 
+  def verifyNotFoundPageRendered(actualPageFuture: Future[Result]) {
+    val actualPage = await(actualPageFuture)
+    status(actualPage) shouldBe NOT_FOUND
+  }
+
+
   def verifyErrorPageRendered(expectedStatus: Int, expectedError: String)(actualPageFuture: Future[Result]) {
     val actualPage = await(actualPageFuture)
     status(actualPage) shouldBe expectedStatus

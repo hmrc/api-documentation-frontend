@@ -82,11 +82,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
                                         termsOfUseView,
                                         usingTheHubView)
 
-    def verifyNotFoundPageRendered(actualPageFuture: Future[Result]) {
-      val actualPage = await(actualPageFuture)
-      status(actualPage) shouldBe NOT_FOUND
-    }
-
     def verifyLinkToStableDocumentationRendered(actualPage: Result, service: String, version: String) = {
       bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
     }
@@ -150,19 +145,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
       status(result) shouldBe MOVED_PERMANENTLY
       result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
     }
-
-//   "redirectToApiDocumentation" must {
-//     "when given a version" should {
-//       val version = "2.0"
-
-//       "redirect to the documentation page for the specified version" in new Setup {
-//         theUserIsLoggedIn()
-//         theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
-//         val result = await(underTest.redirectToApiDocumentation(serviceName, Some(version), Option(true))(request))
-//         status(result) shouldBe SEE_OTHER
-//         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}?cacheBuster=true")
-//       }
-//     }
 
 //     "when not given a version" should {
 //       val version = None
