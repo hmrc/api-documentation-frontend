@@ -17,6 +17,6 @@
   },
   {
     "name": "Common Transit Convention API end-to-end service guide",
-    "context": "guides/common-transit-convention-traders-service-guide/"
+    "context": "/guides/common-transit-convention-traders-service-guide/"
   }
 ]
