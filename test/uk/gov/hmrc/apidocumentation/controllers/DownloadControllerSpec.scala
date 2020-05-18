@@ -38,11 +38,9 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
       with ApiDefinitionServiceMock
       with LoggedInUserServiceMock {
 
-    // val appConfig = mock[ApplicationConfig]
     val downloadService = mock[DownloadService]
 
     val errorHandler = app.injector.instanceOf[ErrorHandler]
-    // val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
     val version = "2.0"
     val resourceName = "some/resource"
