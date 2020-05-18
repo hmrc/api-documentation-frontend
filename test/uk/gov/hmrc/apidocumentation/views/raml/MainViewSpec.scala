@@ -24,7 +24,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.RAML
 import uk.gov.hmrc.apidocumentation.views.CommonViewSpec
-import scala.collection.JavaConvexrters._
+import scala.collection.JavaConverters._
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.apidocumentation.utils.FileRamlLoader
 import uk.gov.hmrc.apidocumentation.views.html.raml.MainView
@@ -35,11 +35,11 @@ class MainViewSpec extends CommonViewSpec with ApiDefinitionTestDataHelper {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val sandboxAvailability: String = environmentAvailability("sandbox")
     lazy val productionAvailability: String = environmentAvailability("production")
-    lazy val docHeadings: Set[String] = dom.getElementsByTag("h2").eachText.toSet
+    lazy val docHeadings: Set[String] = dom.getElementsByTag("h2").eachText.asScala.toSet
     lazy val callToSignIn: Option[Element] = Option(dom.getElementById("read-more-sign-in"))
 
     private def elementExistsByText(elementType: String, elementText: String): Boolean = {
-      dom.select(elementType).exists(node => node.text.trim == elementText)
+      dom.select(elementType).asScala.exists(node => node.text.trim == elementText)
     }
 
     private def environmentAvailability(env: String) =
@@ -61,7 +61,7 @@ class MainViewSpec extends CommonViewSpec with ApiDefinitionTestDataHelper {
 
     def authorisationTableDescription() = dom.select(".auth-table-description").text()
 
-    def requestHeadersTableExists() = dom.select("#request-headers").exists(e => e.id() == "request-headers")
+    def requestHeadersTableExists() = dom.select("#request-headers").asScala.exists(e => e.id() == "request-headers")
   }
 
   private def renderAllDocumentation(page: Page) = {

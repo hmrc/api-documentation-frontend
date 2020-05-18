@@ -22,17 +22,17 @@ import uk.gov.hmrc.apidocumentation.services.DocumentationService
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, SEE_OTHER}
-import uk.gov.hmrc.apidocumentation.models.APIAccessType
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import org.mockito.Mockito.{when,verify}
+import org.mockito.Matchers.any
+import uk.gov.hmrc.apidocumentation.services.{PartialsService, RAML}
 
 import uk.gov.hmrc.http.NotFoundException
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
-  trait Setup {
-    val documentationService = mock[DocumentationService]
-
+  trait Setup extends ApiDocumentationServiceMock {
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
@@ -60,7 +60,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
   }
 
   "ApiDocumentationController" when {
-    "routing to the ApiIndexPage" should {
+    "routing to the apiIndexPage" should {
       "render the API List" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
@@ -173,6 +173,20 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
           verifyNotFoundPageRendered(result)
         }
+      }
+    }
+
+    "routing to renderApiDocumentation" should {
+      "display the documentation page" in new Setup {
+        val mockRamlAndSchemas = RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
+
+        theUserIsLoggedIn()
+        theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
+        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
+
+        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+        verifyApiDocumentationPageRendered(result, "1.0", "Stable")
       }
     }
   }

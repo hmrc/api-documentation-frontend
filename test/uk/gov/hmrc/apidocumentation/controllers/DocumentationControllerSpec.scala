@@ -44,7 +44,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
     val partialsService = new PartialsService(developerFrontendConnector)
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
-    val mockRamlAndSchemas = apidocumentation.models.RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
     implicit lazy val materializer = app.materializer
 
@@ -60,7 +59,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
     private lazy val termsOfUseView = app.injector.instanceOf[TermsOfUseView]
     private lazy val usingTheHubView = app.injector.instanceOf[UsingTheHubView]
 
-    lazy val apiDocsBreadcrumb = Crumb("API Documentation", controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
     lazy val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
 
     when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
@@ -86,23 +84,12 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
       bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
     }
 
-    def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
-      verifyPageRendered(pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))(actualPage)
-      verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
-    }
-
 
     // def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
     //   bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
     // }
 
-    // def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
-    //   when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(ramlAndSchemas)
-    // }
 
-    // def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
-    //   when(documentationService.fetchRAML(any(), any(), any())(any[HeaderCarrier])).thenReturn(failed(exception))
-    // }
 
     def pageTitle(pagePurpose: String) = {
       s"$pagePurpose - HMRC Developer Hub - GOV.UK"
@@ -145,77 +132,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
       status(result) shouldBe MOVED_PERMANENTLY
       result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
     }
-
-//     "when not given a version" should {
-//       val version = None
-
-//       "redirect to the documentation page" in new Setup {
-//         theUserIsLoggedIn()
-//         theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
-//         val result = await(underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request))
-//         status(result) shouldBe SEE_OTHER
-//         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
-//       }
-
-//       "redirect to the documentation page for api in private trial for user without authorisation" in new Setup {
-//         theUserIsLoggedIn()
-//         val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
-//           APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
-//         theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
-
-//         val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
-//         status(result) shouldBe SEE_OTHER
-//         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
-//       }
-
-//       "redirect to the documentation page for api in private trial for user with authorisation" in new Setup {
-//         theUserIsLoggedIn()
-//         val privateTrialAPIDefinition = extendedApiDefinition(serviceName, "1.0",
-//           APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
-//         theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
-//         val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
-//         status(result) shouldBe SEE_OTHER
-//         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
-//       }
-
-//       "redirect to the documentation page for the latest accessible version" in new Setup {
-//         theUserIsLoggedIn()
-
-//         val apiDefinition =
-//           ExtendedAPIDefinition(
-//             serviceName,
-//             "http://service",
-//             "Hello World",
-//             "Say Hello World",
-//             "hello",
-//             requiresTrust = false,
-//             isTestSupport = false,
-//             Seq(
-//               ExtendedAPIVersion(
-//                 "1.0", APIStatus.BETA, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-//                 Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
-//                 None),
-//               ExtendedAPIVersion(
-//                 "1.1", APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-//                 Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
-//                 None)
-//             ))
-
-//         theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
-//         val result = await(underTest.redirectToApiDocumentation("hello-world", version, Option(true))(request))
-//         status(result) shouldBe SEE_OTHER
-//         result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
-//       }
-
-//       "display the not found page when invalid service specified" in new Setup {
-//         theUserIsLoggedIn()
-//         theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
-
-//         val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
-//         verifyNotFoundPageRendered(result)
-//       }
-//     }
-//   }
 
 //   "renderApiDocumentation" should {
 

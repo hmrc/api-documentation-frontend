@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 import scala.concurrent.Future
+import scala.concurrent.Future.{successful, failed}
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -143,12 +144,13 @@ trait PageRenderVerification {
   import uk.gov.hmrc.apidocumentation.services.NavigationService
 
   lazy val homeBreadcrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
+  lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
   lazy val navLink = NavLink("Header Link", "/api-documentation/headerlink")
   lazy val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
 
   val navigationService = mock[NavigationService]
-  when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(Future.successful(Seq(navLink)))
-  when(navigationService.sidebarNavigation()).thenReturn(Future.successful(Seq(sidebarLink)))
+  when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(successful(Seq(navLink)))
+  when(navigationService.sidebarNavigation()).thenReturn(successful(Seq(sidebarLink)))
   when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
 
 
@@ -213,21 +215,26 @@ trait PageRenderVerification {
     status(actualPage) shouldBe expectedStatus
     bodyOf(actualPage) should include(expectedError)
   }
+
+  def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
+    verifyPageRendered(pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))(actualPage)
+    verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
+  }
 }
 
 trait ApiDefinitionServiceMock extends MockitoSugar {
   val apiDefinitionService = mock[ApiDefinitionService]
 
   def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(Some(apiDefinition)))
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(successful(Some(apiDefinition)))
   }
 
   def theDefinitionServiceWillReturnNoApiDefinition() = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.successful(None))
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(successful(None))
   }
 
   def theDefinitionServiceWillFail(exception: Throwable) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(Future.failed(exception))
+    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(failed(exception))
 
     when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
       .thenReturn(Future.failed(exception))
@@ -239,6 +246,18 @@ trait ApiDefinitionServiceMock extends MockitoSugar {
   }
 }
 
+trait ApiDocumentationServiceMock extends MockitoSugar {
+  val documentationService = mock[DocumentationService]
+
+  def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
+    when(documentationService.fetchRAML(any(), any(), any())).thenReturn(successful(ramlAndSchemas))
+  }
+
+  def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
+    when(documentationService.fetchRAML(any(), any(), any())).thenReturn(failed(exception))
+  }
+}
+
 trait LoggedInUserProviderMock extends MockitoSugar {
   val loggedInEmail = "mr.abcd@example.com"
   val noUserLoggedIn = None
@@ -247,10 +266,10 @@ trait LoggedInUserProviderMock extends MockitoSugar {
   lazy val loggedInUserProvider: LoggedInUserProvider = mock[LoggedInUserProvider]
 
   def theUserIsLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(Future.successful(userLoggedIn))
+    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(successful(userLoggedIn))
   }
 
   def theUserIsNotLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(Future.successful(noUserLoggedIn))
+    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(successful(noUserLoggedIn))
   }
 }
