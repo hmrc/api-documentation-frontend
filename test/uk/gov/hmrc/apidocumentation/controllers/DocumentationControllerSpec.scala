@@ -135,25 +135,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
 
 //   "renderApiDocumentation" should {
 
-//     "display the documentation page" in new Setup {
-//       theUserIsLoggedIn()
-//       theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
-//       theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-//       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-//       verifyApiDocumentationPageRendered(result, "1.0", "Stable")
-//     }
-
-//     "display the not found page when invalid service specified" in new Setup {
-//       theUserIsLoggedIn()
-//       theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
-
-//       val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-//       verifyNotFoundPageRendered(result)
-//     }
-
 //     "display the not found page when RAML file not found" in new Setup {
 //       theUserIsLoggedIn()
 //       theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))

@@ -26,6 +26,7 @@ import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import org.mockito.Mockito.{when,verify}
 import org.mockito.Matchers.any
 import uk.gov.hmrc.apidocumentation.services.{PartialsService, RAML}
+import uk.gov.hmrc.ramltools.domain.RamlNotFoundException
 
 import uk.gov.hmrc.http.NotFoundException
 
@@ -187,6 +188,25 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
         verifyApiDocumentationPageRendered(result, "1.0", "Stable")
+      }
+
+      "display the not found page when invalid service specified" in new Setup {
+        theUserIsLoggedIn()
+        theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
+
+        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+        verifyNotFoundPageRendered(result)
+      }
+
+      "display the not found page when RAML file not found" in new Setup {
+        theUserIsLoggedIn()
+        theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
+        theDocumentationServiceWillFailWhenFetchingRaml(RamlNotFoundException("not found"))
+
+        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+        verifyNotFoundPageRendered(result)
       }
     }
   }
