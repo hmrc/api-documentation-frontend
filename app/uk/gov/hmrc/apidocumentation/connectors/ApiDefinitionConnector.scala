@@ -36,22 +36,6 @@ class ApiDefinitionConnector @Inject()(
 
   private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 
-  def fetchAllApiDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-    Logger.info(s"${this.getClass.getSimpleName} - fetchAllApiDefinitions")
-    val r= http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(email))
-
-    r.map(defns => defns.foreach(defn => Logger.info(s"Found ${defn.name}")))
-
-    r.map(e => e.sortBy(
-      _.name
-    ))
-    .recover {
-      case _ : NotFoundException => { Logger.info("Not found"); Seq.empty}
-      case e : Upstream5xxResponse => { Logger.error(s"Failed ${e}"); throw e}
-      case e => { Logger.error(s"Failed ${e}"); throw e}
-    }
-  }
-
   def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
     Logger.info(s"${this.getClass.getSimpleName} - fetchApiDefinition")
     val r = http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl,serviceName), queryParams(email))

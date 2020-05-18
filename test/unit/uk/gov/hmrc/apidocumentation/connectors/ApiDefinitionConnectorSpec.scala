@@ -104,31 +104,6 @@ class ApiDefinitionConnectorSpec
       }
     }
 
-    "when requesting all api definitions" should {
-      "call the underlying http client with the email argument" in new LocalSetup {
-        whenGetAllDefinitionsByEmail(userEmail)(apiDefinition(apiName1), apiDefinition(apiName2))
 
-        val result = await(underTest.fetchAllApiDefinitions(Some(userEmail)))
-
-        result.size shouldBe 2
-        result.map(_.name) shouldBe Seq(apiName1, apiName2)
-      }
-
-      "call the underlying http client without an email argument" in new LocalSetup {
-        whenGetAllDefinitions(apiDefinition(apiName1), apiDefinition(apiName2))
-
-        val result = await(underTest.fetchAllApiDefinitions(None))
-
-        result.size shouldBe 2
-        result.map(_.name) shouldBe Seq(apiName1, apiName2)
-      }
-      "throw an exception correctly" in new LocalSetup {
-        whenGetAllDefinitionsFails(UpstreamException)
-
-        intercept[UpstreamException.type] {
-          await(underTest.fetchAllApiDefinitions(None))
-        }
-      }
-    }
   }
 }

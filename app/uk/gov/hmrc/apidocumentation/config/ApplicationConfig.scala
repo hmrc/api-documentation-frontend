@@ -58,6 +58,7 @@ class ApplicationConfig @Inject()(override val runModeConfiguration: Configurati
   lazy val xmlApiBaseUrl = runModeConfiguration.getString(s"$env.xml-api.base-url").getOrElse("https://www.gov.uk")
 
   lazy val apiDefinitionBaseUrl = baseUrl("api-definition")
+  lazy val apiPlatformMicroserviceBaseUrl = baseUrl("api-platform-microservice")
 
   private def buildRamlLoaderRewrites: Map[String, String] = {
     Map(runModeConfiguration.getString(s"$env.ramlLoaderUrlRewrite.from").getOrElse("") ->

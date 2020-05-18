@@ -18,12 +18,12 @@ package unit.uk.gov.hmrc.apidocumentation.services
 
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
+import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, ApiPlatformMicroserviceConnector}
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.NoopMetrics
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionConnectorMockingHelper, ApiDefinitionTestDataHelper}
+import unit.uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionConnectorMockingHelper, ApiDefinitionTestDataHelper, ApiPlatformMicroserviceConnectorMockingHelper}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -33,20 +33,21 @@ class ApiDefinitionServiceSpec extends UnitSpec
   with ScalaFutures
   with ApiDefinitionTestDataHelper {
 
-  trait LocalSetup extends ApiDefinitionConnectorMockingHelper {
+  trait LocalSetup extends ApiDefinitionConnectorMockingHelper with ApiPlatformMicroserviceConnectorMockingHelper{
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val loggedInUserEmail = "3rdparty@example.com"
 
-    val connector = mock[ApiDefinitionConnector]
+    val apiDefinitionConnector = mock[ApiDefinitionConnector]
+    val apiPlatformMicroserviceConnector = mock[ApiPlatformMicroserviceConnector]
 
-    val underTest = new ApiDefinitionService(connector, NoopMetrics)
+    val underTest = new ApiDefinitionService(apiDefinitionConnector, apiPlatformMicroserviceConnector, NoopMetrics)
 
   }
 
   "fetchAllDefinitions with user session handling" should {
 
     "fetch all APIs if there is no user logged in" in new LocalSetup {
-      whenFetchAllDefinitions(connector)(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
+      whenFetchAllDefinitions(apiPlatformMicroserviceConnector)(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
 
       val result = await(underTest.fetchAllDefinitions(None))
 
@@ -55,7 +56,7 @@ class ApiDefinitionServiceSpec extends UnitSpec
     }
 
     "fetch APIs for user email if a user is logged in" in new LocalSetup {
-      whenFetchAllDefinitionsWithEmail(connector)(loggedInUserEmail)(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
+      whenFetchAllDefinitionsWithEmail(apiPlatformMicroserviceConnector)(loggedInUserEmail)(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
 
       val result = await(underTest.fetchAllDefinitions(Some(loggedInUserEmail)))
 
@@ -67,7 +68,7 @@ class ApiDefinitionServiceSpec extends UnitSpec
   "fetchExtendedDefinition with user session handling" should {
 
     "fetch a single API if there is no user logged in" in new LocalSetup {
-      whenFetchExtendedDefinition(connector)("buddist-calendar")(extendedApiDefinition("buddist-calendar"))
+      whenFetchExtendedDefinition(apiDefinitionConnector)("buddist-calendar")(extendedApiDefinition("buddist-calendar"))
 
       val result = await(underTest.fetchExtendedDefinition("buddist-calendar", None))
 
@@ -76,7 +77,7 @@ class ApiDefinitionServiceSpec extends UnitSpec
     }
 
     "fetch a single API for user email if a user is logged in" in new LocalSetup {
-      whenFetchExtendedDefinitionWithEmail(connector)("buddist-calendar", loggedInUserEmail)(extendedApiDefinition("buddist-calendar"))
+      whenFetchExtendedDefinitionWithEmail(apiDefinitionConnector)("buddist-calendar", loggedInUserEmail)(extendedApiDefinition("buddist-calendar"))
 
       val result = await(underTest.fetchExtendedDefinition("buddist-calendar", Some(loggedInUserEmail)))
 
@@ -85,7 +86,7 @@ class ApiDefinitionServiceSpec extends UnitSpec
     }
 
     "reject for an unsubscribed API for user email if a user is logged in" in new LocalSetup {
-      whenApiDefinitionFails(connector)(new NotFoundException("Expected unit test exception"))
+      whenFetchExtendedDefinitionFails(apiDefinitionConnector)(new NotFoundException("Expected unit test exception"))
 
       intercept[NotFoundException] {
         await(underTest.fetchExtendedDefinition("buddist-calendar", Some(loggedInUserEmail)))
