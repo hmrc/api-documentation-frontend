@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import org.mockito.Matchers._
-import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
@@ -34,7 +32,6 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.apidocumentation.controllers.utils._
-import scala.concurrent.Future.successful
 
 class CommonControllerBaseSpec
   extends UnitSpec
@@ -128,21 +125,11 @@ class CommonControllerBaseSpec
   }
 }
 
-
-trait PageRenderVerification {
+trait PageRenderVerification extends NavigationServiceMock {
   self: CommonControllerBaseSpec =>
-  import uk.gov.hmrc.apidocumentation.services.NavigationService
 
   lazy val homeBreadcrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
   lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
-  lazy val navLink = NavLink("Header Link", "/api-documentation/headerlink")
-  lazy val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
-
-  val navigationService = mock[NavigationService]
-  when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(successful(Seq(navLink)))
-  when(navigationService.sidebarNavigation()).thenReturn(successful(Seq(sidebarLink)))
-  when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
-
 
   def titleOf(result: Result) = {
     val titleRegEx = """<title[^>]*>(.*)</title>""".r
