@@ -17,8 +17,9 @@
 package uk.gov.hmrc.apidocumentation.controllers.utils
 
 import org.mockito.Matchers._
-import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
+
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.http.Status._

@@ -26,10 +26,15 @@ import uk.gov.hmrc.apidocumentation.services.DownloadService
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.apidocumentation.controllers.utils._
 
 class DownloadControllerSpec extends CommonControllerBaseSpec {
 
-  trait Setup {
+  trait Setup
+      extends ApiDocumentationServiceMock
+      with AppConfigMock
+      with ApiDefinitionServiceMock
+      with LoggedInUserProviderMock {
 
     // val appConfig = mock[ApplicationConfig]
     val downloadService = mock[DownloadService]

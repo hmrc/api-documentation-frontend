@@ -24,29 +24,23 @@ import play.api.mvc._
 import play.api.http.Status._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
-import uk.gov.hmrc.apidocumentation.models.Developer
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.apidocumentation.models._
 
 import scala.concurrent.Future
-import scala.concurrent.Future.{successful, failed}
-import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.apidocumentation.services.DocumentationService
-import uk.gov.hmrc.apidocumentation.controllers.utils._ 
+import uk.gov.hmrc.apidocumentation.controllers.utils._
+import scala.concurrent.Future.successful
 
 class CommonControllerBaseSpec
   extends UnitSpec
     with ScalaFutures
     with MockitoSugar
     with ApiDefinitionTestDataHelper
-    with LoggedInUserProviderMock
-    with ApiDefinitionServiceMock
     with GuiceOneAppPerSuite
     {
 
@@ -58,11 +52,6 @@ class CommonControllerBaseSpec
   implicit lazy val request: Request[AnyContent] = FakeRequest()
   implicit lazy val materializer = app.materializer
   lazy val mcc = app.injector.instanceOf[MessagesControllerComponents]
-
-  // TODO - move to another layer
-  val documentationService = mock[DocumentationService]
-
-  implicit val appConfig = mock[ApplicationConfig]
 
   implicit val hc = HeaderCarrier()
 
@@ -139,13 +128,6 @@ class CommonControllerBaseSpec
   }
 }
 
-trait RamlPreviewBaseSpec {
-  self: CommonControllerBaseSpec =>
-  
-  trait RamlPreviewEnabled {
-    when(appConfig.ramlPreviewEnabled).thenReturn(true)
-  }
-}
 
 trait PageRenderVerification {
   self: CommonControllerBaseSpec =>
@@ -233,28 +215,3 @@ trait PageRenderVerification {
     bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
   }
 }
-
-trait ApiDefinitionServiceMock extends MockitoSugar {
-  val apiDefinitionService = mock[ApiDefinitionService]
-
-  def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(successful(Some(apiDefinition)))
-  }
-
-  def theDefinitionServiceWillReturnNoApiDefinition() = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(successful(None))
-  }
-
-  def theDefinitionServiceWillFail(exception: Throwable) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(failed(exception))
-
-    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
-      .thenReturn(Future.failed(exception))
-  }
-
-  def theDefinitionServiceWillReturnApiDefinitions(apis: Seq[APIDefinition]) = {
-    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
-      .thenReturn(Future.successful(apis))
-  }
-}
-

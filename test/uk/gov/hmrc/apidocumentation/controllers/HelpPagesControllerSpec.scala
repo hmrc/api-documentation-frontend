@@ -16,14 +16,12 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import play.api.http.Status._
-import play.api.mvc.Result
-import scala.concurrent.Future
 import uk.gov.hmrc.apidocumentation.views.html.{CookiesView, PrivacyView, TermsAndConditionsView}
+import uk.gov.hmrc.apidocumentation.controllers.utils.ApiDocumentationServiceMock
 
 class HelpPagesControllerSpec extends CommonControllerBaseSpec {
 
-  trait Setup {
+  trait Setup extends ApiDocumentationServiceMock {
     val cookiesView = app.injector.instanceOf[CookiesView]
     val privacyView = app.injector.instanceOf[PrivacyView]
     val termsAndConditionsView = app.injector.instanceOf[TermsAndConditionsView]

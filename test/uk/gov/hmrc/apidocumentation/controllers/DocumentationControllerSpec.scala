@@ -34,10 +34,11 @@ import org.mockito.Mockito.when
 import org.mockito.Matchers.any
 import play.twirl.api.Html
 
+import uk.gov.hmrc.apidocumentation.controllers.utils._
+
 class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 
-  class Setup(ramlPreviewEnabled: Boolean = false) {
-    implicit val appConfig = mock[ApplicationConfig]
+  trait Setup extends ApiDocumentationServiceMock with AppConfigMock {
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
     val partialsService = new PartialsService(developerFrontendConnector)
     val errorHandler = app.injector.instanceOf[ErrorHandler]
@@ -59,8 +60,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
 
     lazy val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
 
-    when(appConfig.ramlPreviewEnabled).thenReturn(ramlPreviewEnabled)
-    when(appConfig.title).thenReturn("HMRC Developer Hub")
     when(documentationService.defaultExpiration).thenReturn(1.hour)
 
     val underTest: DocumentationController = new DocumentationController(
