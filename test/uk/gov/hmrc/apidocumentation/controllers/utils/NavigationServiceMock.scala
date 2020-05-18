@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.apidocumentation.controllers.utils
 
-import org.mockito.Mockito.when
 import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
+
 import scala.concurrent.Future.successful
 
 trait NavigationServiceMock extends MockitoSugar {
   import NavigationServiceMock._
-
   import uk.gov.hmrc.apidocumentation.services.NavigationService
   val navigationService = mock[NavigationService]
   when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(successful(Seq(navLink)))

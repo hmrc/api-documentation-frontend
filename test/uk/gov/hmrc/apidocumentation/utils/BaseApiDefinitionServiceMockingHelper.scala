@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.utils
 
-import org.mockito.Mockito.when
 import org.mockito.Matchers.{any, eq => eqTo}
-import scala.concurrent.Future
-
+import org.mockito.Mockito.when
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.services.BaseApiDefinitionService
 import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.Future
 
 trait BaseApiDefinitionServiceMockingHelper {
 

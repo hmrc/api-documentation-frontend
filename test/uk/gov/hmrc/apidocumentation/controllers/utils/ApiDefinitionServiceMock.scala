@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.apidocumentation.controllers.utils
 
-import org.mockito.Mockito.when
 import org.mockito.Matchers._
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import scala.concurrent.Future.{successful, failed}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.Future.{failed, successful}
 
 trait ApiDefinitionServiceMock extends MockitoSugar {
   val apiDefinitionService = mock[ApiDefinitionService]

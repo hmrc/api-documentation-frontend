@@ -16,21 +16,21 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SEE_OTHER}
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK, SEE_OTHER, NOT_FOUND}
-import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
-import org.mockito.Mockito.when
-import org.mockito.Matchers.any
-import uk.gov.hmrc.apidocumentation.services.RAML
-import uk.gov.hmrc.ramltools.domain.{RamlParseException, RamlNotFoundException}
-import scala.concurrent.Future.failed
-import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.apidocumentation.controllers.utils._
+import uk.gov.hmrc.apidocumentation.services.RAML
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.http.NotFoundException
+import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future.failed
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
   trait Setup

@@ -22,18 +22,17 @@ import org.raml.v2.api.model.v10.api.DocumentationItem
 import org.raml.v2.api.model.v10.system.types.AnnotableStringType
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import play.api.cache.CacheApi
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.{UnitSpec}
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.collection.JavaConversions._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
-import play.api.cache.CacheApi
 
 class NavigationServiceSpec extends UnitSpec with GuiceOneAppPerTest with MockitoSugar with ScalaFutures {
 

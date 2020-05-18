@@ -21,8 +21,8 @@ import org.raml.v2.api.model.v10.api.DocumentationItem
 import org.raml.v2.api.model.v10.system.types.AnnotableStringType
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.collection.JavaConverters._
 

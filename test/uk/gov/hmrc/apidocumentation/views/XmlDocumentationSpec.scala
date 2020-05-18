@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.apidocumentation.views
 
+import java.util.Locale
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Mockito.{when => When}
-import play.api.i18n.{Messages, DefaultMessagesApi, Lang}
-import java.util.Locale
+import play.api.i18n.{DefaultMessagesApi, Lang, Messages}
 import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._

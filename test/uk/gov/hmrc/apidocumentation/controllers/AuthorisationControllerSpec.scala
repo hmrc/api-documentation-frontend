@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.controllers.utils.{NavigationServiceMock, PageRenderVerification}
+import uk.gov.hmrc.apidocumentation.views.html._
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class AuthorisationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
   trait Setup extends NavigationServiceMock {

@@ -16,24 +16,23 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import play.api.mvc._
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import play.api.http.Status.MOVED_PERMANENTLY
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.partials.HtmlPartial
+import play.api.mvc._
+import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
+import uk.gov.hmrc.apidocumentation.controllers.utils._
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.PartialsService
 import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.partials.HtmlPartial
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.concurrent.duration._
-import org.mockito.Mockito.when
-import org.mockito.Matchers.any
-import play.twirl.api.Html
-
-import uk.gov.hmrc.apidocumentation.controllers.utils._
 
 class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 

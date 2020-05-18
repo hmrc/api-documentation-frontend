@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.apidocumentation.controllers.utils
 
-import play.api.mvc._
 import play.api.http.Status._
-import uk.gov.hmrc.apidocumentation.controllers.CommonControllerBaseSpec
+import play.api.mvc._
+import uk.gov.hmrc.apidocumentation.controllers.{routes, CommonControllerBaseSpec}
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.controllers.routes
 
 import scala.concurrent.Future
 

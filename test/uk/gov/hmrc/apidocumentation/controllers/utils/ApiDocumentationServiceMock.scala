@@ -17,27 +17,12 @@
 package uk.gov.hmrc.apidocumentation.controllers.utils
 
 import org.mockito.Matchers._
-import org.scalatest.concurrent.ScalaFutures
-
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc._
-import play.api.http.Status._
-import play.api.test.FakeRequest
-import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
-import uk.gov.hmrc.apidocumentation.models.{Developer, _}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
-
-import scala.concurrent.Future
-import scala.concurrent.Future.{successful, failed}
-import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
+
+import scala.concurrent.Future.{failed, successful}
 
 trait ApiDocumentationServiceMock extends MockitoSugar {
   val documentationService = mock[DocumentationService]

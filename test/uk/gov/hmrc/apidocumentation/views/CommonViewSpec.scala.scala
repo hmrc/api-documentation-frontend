@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.apidocumentation.views
 
+import java.util.Locale
+
+import org.scalatest.{Matchers, OptionValues, WordSpec}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n._
-import java.util.Locale
-import play.api.mvc.{Request,AnyContent}
-import org.scalatest.{Matchers,WordSpec,OptionValues}
 import org.scalatestplus.play.WsScalaTestClient
+import play.api.i18n._
+import play.api.mvc.{AnyContent, Request}
 
 trait CommonViewSpec extends WordSpec with Matchers with OptionValues with WsScalaTestClient with MockitoSugar with GuiceOneAppPerSuite {
   implicit val messagesProvider: MessagesProvider = MessagesImpl(Lang(Locale.ENGLISH), new DefaultMessagesApi())

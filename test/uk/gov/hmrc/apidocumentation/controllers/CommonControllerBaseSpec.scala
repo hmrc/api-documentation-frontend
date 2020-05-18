@@ -18,19 +18,19 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc._
-import play.api.http.Status._
-import play.api.test.FakeRequest
-import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
-import uk.gov.hmrc.apidocumentation.models._
-
-import scala.concurrent.Future
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.http.Status._
+import play.api.mvc._
+import play.api.test.FakeRequest
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.test.UnitSpec
+
+import scala.concurrent.Future
 
 class CommonControllerBaseSpec
   extends UnitSpec

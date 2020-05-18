@@ -22,9 +22,9 @@ import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionHttpMockingHelper
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionHttpMockingHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

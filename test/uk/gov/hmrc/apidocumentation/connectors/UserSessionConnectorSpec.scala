@@ -24,8 +24,8 @@ import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics.{API, NoopApiMetrics}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class UserSessionConnectorSpec extends ConnectorSpec {
   val thirdPartyDeveloperUrl = "https://third-party-developer.example.com"

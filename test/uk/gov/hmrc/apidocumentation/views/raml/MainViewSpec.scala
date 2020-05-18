@@ -23,11 +23,11 @@ import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.RAML
+import uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, FileRamlLoader}
 import uk.gov.hmrc.apidocumentation.views.CommonViewSpec
-import scala.collection.JavaConverters._
-import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
-import uk.gov.hmrc.apidocumentation.utils.FileRamlLoader
 import uk.gov.hmrc.apidocumentation.views.html.raml.MainView
+
+import scala.collection.JavaConverters._
 
 class MainViewSpec extends CommonViewSpec with ApiDefinitionTestDataHelper {
 

@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import org.mockito.Mockito.when
 import org.mockito.Matchers.{any, eq => meq}
+import org.mockito.Mockito.when
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
@@ -26,8 +26,8 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics.{API, NoopApiMetrics}
 import uk.gov.hmrc.play.partials.HtmlPartial
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   val developerFrontendUrl = "http://developer-frontend.example.com"
