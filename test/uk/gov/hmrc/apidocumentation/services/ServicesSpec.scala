@@ -39,7 +39,7 @@ class ServicesSpec extends UnitSpec with MockitoSugar with ApiDefinitionTestData
     when(overview.title).thenReturn(overviewTitle)
     when(versioning.title).thenReturn(versioningTitle)
     when(errors.title).thenReturn(errorsTitle)
-    when(raml.documentation).thenReturn(documentation)
+    when(raml.documentation).thenReturn(documentation.asJava)
   }
 
   "documentationForVersion" should {

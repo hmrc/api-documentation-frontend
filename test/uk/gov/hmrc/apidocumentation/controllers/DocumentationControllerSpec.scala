@@ -34,7 +34,6 @@ import org.mockito.Mockito.when
 import org.mockito.Matchers.any
 import play.twirl.api.Html
 
-// TODO - Make this test work !!!
 class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 
   class Setup(ramlPreviewEnabled: Boolean = false) {
@@ -122,56 +121,5 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
       status(result) shouldBe MOVED_PERMANENTLY
       result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
     }
-
-//   "bustCache" should {
-//     "override value of the query parameter if in stub mode" in new Setup {
-//       underTest.bustCache(stubMode = false, Some(true)) shouldBe true
-//       underTest.bustCache(stubMode = false, Some(false)) shouldBe false
-//       underTest.bustCache(stubMode = true, Some(true)) shouldBe true
-//       underTest.bustCache(stubMode = true, Some(false)) shouldBe true
-//     }
-
-//     "return true if no query parameter was provided and the app is running in Stub mode" in new Setup {
-//       underTest.bustCache(stubMode = false, None) shouldBe false
-//       underTest.bustCache(stubMode = true, None) shouldBe true
-//     }
-//   }
-
-//   "fetchTestEndpointJson" should {
-//     "sort the results by URL" in new Setup(ramlPreviewEnabled = true) {
-//       val endpoints = Seq(
-//         TestEndpoint("{service-url}/employers-paye/www"),
-//         TestEndpoint("{service-url}/employers-paye/aaa"),
-//         TestEndpoint("{service-url}/employers-paye/zzz"),
-//         TestEndpoint("{service-url}/employers-paye/ddd")
-//       )
-//       when(documentationService.buildTestEndpoints(any(), any())(any[HeaderCarrier])).thenReturn(endpoints)
-//       val result = underTest.fetchTestEndpointJson("employers-paye", "1.0")(request)
-//       val actualPage = await(result)
-//       actualPage.header.status shouldBe OK
-//       bodyOf(actualPage) should include regex s"aaa.*ddd.*www.*zzz"
-//     }
-//   }
-
-//   "renderXmlApiDocumentation" must {
-
-//     "render the XML API landing page when the XML API definition exists" in new Setup {
-//       theUserIsLoggedIn()
-
-//       val existingXmlApiName = "Charities Online"
-//       val result = underTest.renderXmlApiDocumentation(existingXmlApiName)(request)
-
-//       verifyPageRendered(result, pageTitle(existingXmlApiName), bodyContains = Seq(existingXmlApiName))
-//     }
-
-//     "return 404 not found when the XML API definition does not exist" in new Setup {
-//       theUserIsLoggedIn()
-
-//       val nonExistingXmlApiName = "Fake XML API name"
-//       val result = underTest.renderXmlApiDocumentation(nonExistingXmlApiName)(request)
-
-//       status(result) shouldBe NOT_FOUND
-//     }
-
   }
 }

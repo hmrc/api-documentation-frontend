@@ -24,10 +24,11 @@ import play.api.mvc._
 import play.api.http.Status._
 import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
-import uk.gov.hmrc.apidocumentation.models.{Developer, _}
+import uk.gov.hmrc.apidocumentation.models.Developer
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.apidocumentation.models._
 
 import scala.concurrent.Future
 import scala.concurrent.Future.{successful, failed}
@@ -37,7 +38,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
-
+import uk.gov.hmrc.apidocumentation.controllers.utils._ 
 
 class CommonControllerBaseSpec
   extends UnitSpec
@@ -257,30 +258,3 @@ trait ApiDefinitionServiceMock extends MockitoSugar {
   }
 }
 
-trait ApiDocumentationServiceMock extends MockitoSugar {
-  val documentationService = mock[DocumentationService]
-
-  def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
-    when(documentationService.fetchRAML(any(), any(), any())).thenReturn(successful(ramlAndSchemas))
-  }
-
-  def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
-    when(documentationService.fetchRAML(any(), any(), any())).thenReturn(failed(exception))
-  }
-}
-
-trait LoggedInUserProviderMock extends MockitoSugar {
-  val loggedInEmail = "mr.abcd@example.com"
-  val noUserLoggedIn = None
-  val userLoggedIn = Some(Developer(loggedInEmail, "Anony", "Mouse"))
-
-  lazy val loggedInUserProvider: LoggedInUserProvider = mock[LoggedInUserProvider]
-
-  def theUserIsLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(successful(userLoggedIn))
-  }
-
-  def theUserIsNotLoggedIn() = {
-    when(loggedInUserProvider.fetchLoggedInUser()(any[Request[_]])).thenReturn(successful(noUserLoggedIn))
-  }
-}

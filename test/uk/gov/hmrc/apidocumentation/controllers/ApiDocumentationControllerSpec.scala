@@ -21,7 +21,7 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, SEE_OTHER}
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK, SEE_OTHER, NOT_FOUND}
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import org.mockito.Mockito.{when,verify}
 import org.mockito.Matchers.any
@@ -29,6 +29,7 @@ import uk.gov.hmrc.apidocumentation.services.{PartialsService, RAML}
 import uk.gov.hmrc.ramltools.domain.{RamlParseException, RamlNotFoundException}
 import scala.concurrent.Future.failed
 import uk.gov.hmrc.http.NotFoundException
+import uk.gov.hmrc.apidocumentation.controllers.utils._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -180,7 +181,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     "routing to renderApiDocumentation" should {
         val mockRamlAndSchemas = RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
-      "display the documentation page" in new Setup {
+      "display the documentation page" in new Setup with ApiDocumentationServiceMock {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
         theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
@@ -392,6 +393,58 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         val result = underTest.previewApiDocumentation(Some(url))(request)
         verifyErrorPageRendered(expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Expected unit test failure")(result)
       }
+    }
+  }
+
+  "bustCache" should {
+    "override value of the query parameter if in stub mode" in new Setup {
+      underTest.bustCache(stubMode = false, Some(true)) shouldBe true
+      underTest.bustCache(stubMode = false, Some(false)) shouldBe false
+      underTest.bustCache(stubMode = true, Some(true)) shouldBe true
+      underTest.bustCache(stubMode = true, Some(false)) shouldBe true
+    }
+
+    "return true if no query parameter was provided and the app is running in Stub mode" in new Setup {
+      underTest.bustCache(stubMode = false, None) shouldBe false
+      underTest.bustCache(stubMode = true, None) shouldBe true
+    }
+  }
+
+  "fetchTestEndpointJson" should {
+    "sort the results by URL" in new Setup with RamlPreviewEnabled {
+      val endpoints = Seq(
+        TestEndpoint("{service-url}/employers-paye/www"),
+        TestEndpoint("{service-url}/employers-paye/aaa"),
+        TestEndpoint("{service-url}/employers-paye/zzz"),
+        TestEndpoint("{service-url}/employers-paye/ddd")
+      )
+
+      when(documentationService.buildTestEndpoints(any(), any())).thenReturn(endpoints)
+      val result = underTest.fetchTestEndpointJson("employers-paye", "1.0")(request)
+      val actualPage = await(result)
+      actualPage.header.status shouldBe OK
+      bodyOf(actualPage) should include regex s"aaa.*ddd.*www.*zzz"
+    }
+  }
+
+  "renderXmlApiDocumentation" must {
+
+    "render the XML API landing page when the XML API definition exists" in new Setup {
+      theUserIsLoggedIn()
+
+      val existingXmlApiName = "Charities Online"
+      val result = underTest.renderXmlApiDocumentation(existingXmlApiName)(request)
+
+      verifyPageRendered(pageTitle(existingXmlApiName), bodyContains = Seq(existingXmlApiName))(result)
+    }
+
+    "return 404 not found when the XML API definition does not exist" in new Setup {
+      theUserIsLoggedIn()
+
+      val nonExistingXmlApiName = "Fake XML API name"
+      val result = underTest.renderXmlApiDocumentation(nonExistingXmlApiName)(request)
+
+      status(result) shouldBe NOT_FOUND
     }
   }
 }
