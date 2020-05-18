@@ -21,7 +21,7 @@ import uk.gov.hmrc.apidocumentation.services.DocumentationService
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 
-import play.api.http.Status.INTERNAL_SERVER_ERROR
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, SEE_OTHER}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -81,6 +81,32 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         val result = underTest.apiIndexPage(None, None, None)(request)
 
         verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, we’re experiencing technical difficulties")(result)
+      }
+    }
+
+    "redirecting to Api Documentation" must {
+      "when given a version" should {
+        val version = "2.0"
+
+        "redirect to the documentation page for the specified version" in new Setup {
+          theUserIsLoggedIn()
+          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
+          val result = await(underTest.redirectToApiDocumentation(serviceName, Some(version), Option(true))(request))
+          status(result) shouldBe SEE_OTHER
+          result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}?cacheBuster=true")
+        }
+      }
+
+      "when not given a version" should {
+        val version = None
+
+        "redirect to the documentation page" in new Setup {
+          theUserIsLoggedIn()
+          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
+          val result = await(underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request))
+          status(result) shouldBe SEE_OTHER
+          result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+        }
       }
     }
   }
