@@ -37,7 +37,7 @@ class DownloadController @Inject()(documentationService: DocumentationService,
                                    val appConfig: ApplicationConfig,
                                    cc: MessagesControllerComponents)
                                   (implicit val ec: ExecutionContext)
-                                  extends FrontendController(cc) {
+  extends FrontendController(cc) {
 
   def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
 

@@ -18,10 +18,10 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
+import uk.gov.hmrc.apidocumentation.models.{Breadcrumbs, Crumb}
 import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import uk.gov.hmrc.apidocumentation.models.{Breadcrumbs, Crumb}
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import play.api.libs.json._
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+
 import scala.io.Source
 
 object APICategory extends Enumeration {

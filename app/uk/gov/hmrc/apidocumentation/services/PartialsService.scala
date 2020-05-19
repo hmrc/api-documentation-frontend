@@ -17,7 +17,6 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.Inject
-
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.HtmlPartial

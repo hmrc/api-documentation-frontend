@@ -16,22 +16,22 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import javax.inject.{Singleton, Inject}
+import javax.inject.{Inject, Singleton}
 import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.services.NavigationService
+import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TestingPagesController @Inject() (
-                                          val navigationService: NavigationService,
-                                          mcc: MessagesControllerComponents,
-                                          testingView: TestingView,
-                                          testUsersDataStatefulBehaviourView: TestUsersDataStatefulBehaviourView
-                                        )
-                                        (implicit ec: ExecutionContext) extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
+class TestingPagesController @Inject()(
+                                        val navigationService: NavigationService,
+                                        mcc: MessagesControllerComponents,
+                                        testingView: TestingView,
+                                        testUsersDataStatefulBehaviourView: TestUsersDataStatefulBehaviourView
+                                      )
+                                      (implicit ec: ExecutionContext) extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
   def testingPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       Future.successful(Ok(testingView(pageAttributes("Testing in the sandbox", routes.TestingPagesController.testingPage().url, navLinks))))

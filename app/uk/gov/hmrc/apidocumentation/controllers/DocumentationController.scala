@@ -43,7 +43,7 @@ class DocumentationController @Inject()(val navigationService: NavigationService
                                         referenceView: ReferenceView,
                                         termsOfUseView: TermsOfUseView,
                                         usingTheHubView: UsingTheHubView
-                                        )
+                                       )
                                        (implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
   extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
 

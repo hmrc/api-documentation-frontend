@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import javax.inject.{Inject, Singleton}
-
 import akka.stream.Materializer
+import javax.inject.{Inject, Singleton}
 import play.api.http.DefaultHttpFilters
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.controllers._

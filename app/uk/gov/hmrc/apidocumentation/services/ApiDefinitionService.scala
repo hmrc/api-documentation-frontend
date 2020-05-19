@@ -22,9 +22,7 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics._
 
-import scala.concurrent.ExecutionContext
-
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait BaseApiDefinitionService {
   def fetchExtendedDefinition(serviceName: String, email: Option[String])

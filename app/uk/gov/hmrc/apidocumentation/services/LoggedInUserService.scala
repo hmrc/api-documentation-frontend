@@ -20,16 +20,15 @@ import java.security.MessageDigest
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.crypto.CookieSigner
-import play.api.mvc.{Request, RequestHeader}
+import play.api.mvc.{ControllerComponents, Request, RequestHeader}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
-import play.api.mvc.ControllerComponents
 
 @Singleton
 class LoggedInUserService @Inject()(config: ApplicationConfig,

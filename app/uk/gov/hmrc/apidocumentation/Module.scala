@@ -21,10 +21,8 @@ import uk.gov.hmrc.apidocumentation.raml.{DocumentationRamlLoader, Documentation
 import uk.gov.hmrc.ramltools.loaders.{RamlLoader, UrlRewriter}
 
 class Module extends AbstractModule {
-
   override def configure() = {
     bind(classOf[RamlLoader]).to(classOf[DocumentationRamlLoader])
     bind(classOf[UrlRewriter]).to(classOf[DocumentationUrlRewriter])
   }
-
 }

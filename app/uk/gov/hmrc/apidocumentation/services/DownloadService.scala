@@ -17,7 +17,6 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc.Result
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 

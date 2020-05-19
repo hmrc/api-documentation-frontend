@@ -24,11 +24,9 @@ import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint}
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
 import scala.collection.JavaConverters._
-import scala.concurrent._
+import scala.concurrent.{ExecutionContext, Future, _}
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
-import scala.concurrent.{ExecutionContext, Future}
-
 
 object DocumentationService {
   def ramlUrl(serviceBaseUrl: String, serviceName: String, version: String): String =

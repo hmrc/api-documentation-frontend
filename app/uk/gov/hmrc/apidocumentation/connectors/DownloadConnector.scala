@@ -20,8 +20,8 @@ import javax.inject.{Inject, Singleton}
 import play.api.http.HttpEntity
 import play.api.http.Status._
 import play.api.libs.ws._
-import play.api.mvc.Results._
 import play.api.mvc._
+import play.api.mvc.Results._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.http.{InternalServerException, NotFoundException}
 

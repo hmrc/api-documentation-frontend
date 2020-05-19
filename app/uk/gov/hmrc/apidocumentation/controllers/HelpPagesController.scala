@@ -16,21 +16,19 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import javax.inject.{Inject, Singleton}
 import play.api.mvc._
-import play.api.mvc._
-import javax.inject.{Singleton, Inject}
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-
 @Singleton
 class HelpPagesController @Inject()(
-                                            mcc: MessagesControllerComponents,
-                                            cookiesView: CookiesView,
-                                            privacyView:PrivacyView,
-                                            termsAndConditionsView: TermsAndConditionsView
-                                          )
-                                          extends FrontendController(mcc) {
+                                     mcc: MessagesControllerComponents,
+                                     cookiesView: CookiesView,
+                                     privacyView: PrivacyView,
+                                     termsAndConditionsView: TermsAndConditionsView
+                                   )
+  extends FrontendController(mcc) {
   def cookiesPage(): Action[AnyContent] = Action { implicit request =>
     Ok(cookiesView())
   }
