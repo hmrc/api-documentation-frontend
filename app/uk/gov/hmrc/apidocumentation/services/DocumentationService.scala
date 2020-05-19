@@ -16,20 +16,17 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import org.raml.v2.api.model.v10.resources.Resource
 import play.api.cache._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
-import scala.collection.JavaConversions._
-import scala.concurrent._
+import scala.collection.JavaConverters._
+import scala.concurrent.{ExecutionContext, Future, _}
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
-import scala.concurrent.{ExecutionContext, Future}
-
 
 object DocumentationService {
   def ramlUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
@@ -40,19 +37,19 @@ object DocumentationService {
 
 }
 
+@Singleton
 class DocumentationService @Inject()(appConfig: ApplicationConfig,
                                      cache: CacheApi,
                                      ramlLoader: RamlLoader,
                                      schemaService: SchemaService)
                                      (implicit ec: ExecutionContext) {
-
   import DocumentationService.ramlUrl
 
   val defaultExpiration = 1.hour
 
   private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
 
-  def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[RamlAndSchemas] = {
+  def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean): Future[RamlAndSchemas] = {
       val url = ramlUrl(serviceBaseUrl,serviceName,version)
       fetchRAML(url, cacheBuster)
   }
@@ -61,7 +58,7 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
     if (cacheBuster) cache.remove(url)
 
     Future {
-      blocking {
+      blocking {  // ramlLoader is blocking and synchronous
         cache.getOrElse[Try[RamlAndSchemas]](url, defaultExpiration) {
           ramlLoader.load(url).map(raml => {
             val schemaBasePath =  s"${url.take(url.lastIndexOf('/'))}/schemas"
@@ -77,18 +74,18 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
     }
   }
 
-  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier): Future[Seq[TestEndpoint]] = {
+  def buildTestEndpoints(service: String, version: String): Future[Seq[TestEndpoint]] = {
     fetchRAML(service, version, cacheBuster = true).map { ramlAndSchemas =>
-      buildResources(ramlAndSchemas.raml.resources.toSeq)
+      buildResources(ramlAndSchemas.raml.resources.asScala.toSeq)
     }
   }
 
   private def buildResources(resources: Seq[Resource]): Seq[TestEndpoint] = {
     resources.flatMap { res =>
-      val nested = buildResources(res.resources())
-      res.methods.headOption match {
+      val nested = buildResources(res.resources().asScala)
+      res.methods.asScala.headOption match {
         case Some(_) =>
-          val methods = res.methods.map(_.method.toUpperCase).sorted
+          val methods = res.methods.asScala.map(_.method.toUpperCase).sorted
           val endpoint = TestEndpoint(s"{service-url}${res.resourcePath}", methods:_*)
 
           endpoint +: nested

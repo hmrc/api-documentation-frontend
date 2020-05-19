@@ -20,7 +20,7 @@ import org.raml.v2.api.model.v10.api.{Api, DocumentationItem}
 import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 package object services {
 
@@ -29,8 +29,8 @@ package object services {
   implicit class RicherRAML(val x: Api) {
 
     def documentationForVersion(version: Option[ExtendedAPIVersion]): Seq[DocumentationItem] = versionVisibility(version) match {
-      case DocsVisibility.VISIBLE => x.documentation.toSeq
-      case DocsVisibility.OVERVIEW_ONLY => x.documentation.filter(_.title.value == "Overview")
+      case DocsVisibility.VISIBLE => x.documentation.asScala.toSeq
+      case DocsVisibility.OVERVIEW_ONLY => x.documentation.asScala.filter(_.title.value == "Overview")
       case _ => Seq.empty
     }
 

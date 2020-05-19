@@ -1,0 +1,248 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.models._
+@import partials.pagination
+
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
+
+@(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+
+@apiMain(pageAttributes) {
+
+    <h1 class="heading-xlarge">Authorisation</h1>
+
+    <nav role="navigation" aria-labelledby="onThisPage">
+        <h2 id="onThisPage" class="visually-hidden">On this page</h2>
+        <ul class="list">
+            <li><a href="@controllers.routes.AuthorisationController.authorisationPage().url">Introduction</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationCredentialsPage().url">Credentials</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
+            <li>Application-restricted endpoints</li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
+            <li><a href="@controllers.routes.AuthorisationController.authorisation2SVPage().url">2-step verification</a></li>
+        </ul>
+    </nav>
+
+    <hr aria-hidden="true">
+
+    <section id="application-restricted">
+
+        <h2 class="heading-large">Application-restricted endpoints</h2>
+
+        <div class="panel panel-border-wide">
+            Previous application-restricted endpoints used <code class="code--slim">server_token</code>, this is now
+            deprecated.
+        </div>
+
+        <p>Application-restricted endpoints do not require authorisation from the end user. They do not give access to sensitive personal data.</p>
+        <p>We use the open standard <a href="https://oauth.net/2/">OAuth 2.0</a>
+            with the <a href="https://oauth.net/2/grant-types/client-credentials/">Client Credentials Grant</a> to
+            generate an access token.
+        </p>
+        <p>
+            If the endpoint requires a <a href="@controllers.routes.DocumentationController.referenceGuidePage()#scopes">scope</a>,
+            your application must include this scope when creating the access token.
+        </p>
+        <p>Read the <a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None)">API documentation</a> for authorisation rules for specific API endpoints.</p>
+
+        <div class="panel panel-border-wide">
+            <p>The access token lasts for 4 hours. When it expires you must generate a new token.</p>
+        </div>
+        <p>
+            See the <a href="@controllers.routes.DocumentationController.tutorialsPage().url#app-restricted">application-restricted endpoint tutorial</a> for a working example.
+        </p>
+        <p>
+            The example URLs shown below are for the sandbox environment only.
+            In the production environment you should use @{applicationConfig.productionApiBaseUrl}
+        </p>
+
+        <section>
+            <h3 class="heading-medium" id="getting-access-token" name="getting-access-token">Getting an OAuth 2.0 access token</h3>
+            <p>The authorisation user journey is an important part of our security, and may be changed without notice.</p>
+            <section>
+                <h4 class="heading-small">1. Generate an access token</h4>
+
+                <p>Do this via a POST to our token endpoint.</p>
+                <div class="panel panel-border-wide">
+                    <p>Include the request parameters in the request body, not as request headers.</p>
+                </div>
+
+
+                <h5 class="heading-small faded-text">Example request</h5>
+                <pre class="code--block">curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
+"client_secret=[YOUR-CLIENT-SECRET]\
+&amp;client_id=[YOUR-CLIENT-ID]\
+&amp;grant_type=client_credentials\
+&amp;scope=[REQUESTED-SCOPE]" \
+@{applicationConfig.sandboxApiBaseUrl}/oauth/token</pre>
+
+                <table>
+                    <caption class="visually-hidden">Token endpoint request body parameters and descriptions</caption>
+                    <thead>
+                    <tr>
+                        <th scope="col">Parameter</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><code class="code--slim">client_secret</code></td>
+                        <td>One of the client secrets for your application.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="code--slim">client_id</code></td>
+                        <td>The Client ID for your application.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="code--slim">grant_type</code></td>
+                        <td>The OAuth 2.0 grant type. For an application-restricted endpoint this must be
+                            <code class="code--slim">client_credentials</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code class="code--slim">scope</code></td>
+                        <td>A space-delimited list of
+                            <a href="@controllers.routes.DocumentationController.referenceGuidePage()#scopes">scopes</a>
+                            you would like to have permission to access.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>The response contains the access token used for calling the APIs.</p>
+                <h5 class="heading-small faded-text">Example response</h5>
+                <pre class="code--block">{
+  "access_token": "QGbWG8KckncuwwD4uYXgWxF4HQvuPmrmUqKgkpQP",
+  "token_type": "bearer",
+  "expires_in": 14400,
+  "scope": "hello"
+}</pre>
+                <h5 class="heading-small faded-text">Error scenarios</h5>
+                <p>If there are issues with your call to our token endpoint, we return an HTTP error status.</p>
+                <p>Any errors not listed are probably not from us. One possible cause is a <a href="@controllers.routes.DocumentationController.referenceGuidePage().url#network-access">network access issue</a>, for example, your network might allow GET requests but not POST requests.</p>
+                <div class="panel panel-border-wide">
+                    <p>The error codes listed are fixed, but the associated error messages may change without notice.</p>
+                </div>
+                <table>
+                    <caption class="visually-hidden">Error scenarios</caption>
+                    <thead>
+                    <tr>
+                        <th class="table__col--1-4">Error scenario</th>
+                        <th>HTTP status</th>
+                        <th>Error code</th>
+                        <th>Error message</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Client ID is missing</td>
+                        <td><code class="code--slim">400</code> (Bad Request)</td>
+                        <td><code class="code--slim">invalid_request</code></td>
+                        <td><code class="code--slim">client_id is required</code></td>
+                    </tr>
+                    <tr>
+                        <td>Client ID is invalid</td>
+                        <td><code class="code--slim">401</code> (Unauthorized)</td>
+                        <td><code class="code--slim">invalid_client</code></td>
+                        <td><code class="code--slim">invalid client id or secret</code></td>
+                    </tr>
+                    <tr>
+                        <td>Client Secret is missing</td>
+                        <td><code class="code--slim">400</code> (Bad Request)</td>
+                        <td><code class="code--slim">invalid_request</code></td>
+                        <td><code class="code--slim">client_secret is required</code></td>
+                    </tr>
+                    <tr>
+                        <td>Client Secret is invalid</td>
+                        <td><code class="code--slim">401</code> (Unauthorized)</td>
+                        <td><code class="code--slim">invalid_client</code></td>
+                        <td><code class="code--slim">invalid client id or secret</code></td>
+                    </tr>
+                    <tr>
+                        <td>Grant Type is missing</td>
+                        <td><code class="code--slim">400</code> (Bad Request)</td>
+                        <td><code class="code--slim">invalid_request</code></td>
+                        <td><code class="code--slim">grant_type is required</code></td>
+                    </tr>
+                    <tr>
+                        <td>Grant Type is invalid</td>
+                        <td><code class="code--slim">400</code> (Bad Request)</td>
+                        <td><code class="code--slim">invalid_request</code></td>
+                        <td><code class="code--slim">unsupported grant_type</code></td>
+                    </tr>
+                    <tr>
+                        <td>Unexpected error occurred</td>
+                        <td><code class="code--slim">500</code> (Internal Server Error)</td>
+                        <td><code class="code--slim">server_error</code></td>
+                        <td>Various</td>
+                    </tr>
+                    <tr>
+                        <td>Scope is invalid</td>
+                        <td><code class="code--slim">400</code> (Bad Request)</td>
+                        <td><code class="code--slim">invalid_scope</code></td>
+                        <td><code class="code--slim">scope is invalid</code></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </section>
+
+            <section>
+                <h4 class="heading-small">2. Call an API</h4>
+                <p>You can now call an API using the <code class="code--slim">access_token</code> we issued. Do this with an
+                    Authorization header containing this <code class="code--slim">access_token</code> as an OAuth 2.0 Bearer
+                    Token with the correct API <a href="@controllers.routes.DocumentationController.referenceGuidePage()#scopes">scope</a>.
+                </p>
+                <h5 class="heading-small faded-text">Example request</h5>
+                <pre class="code--block">curl -X GET @{applicationConfig.sandboxApiBaseUrl}/hello/application \
+-H ‘Accept: application/vnd.hmrc.1.0+json’ \
+-H ‘Authorization: Bearer [ACCESS-TOKEN]’</pre>
+            </section>
+        </section>
+
+        <section>
+
+            <h3 class="heading-medium">Managing your client secret</h3>
+
+            <div class="notice">
+                <i class="icon icon-important">
+                    <span class="visually-hidden">Warning</span>
+                </i>
+                <strong class="bold-small">
+                    Your <code class="code--slim">client_secret</code> is embedded in the source code of your application
+                    and may be discoverable.
+                </strong>
+            </div>
+            <p>
+                You should periodically rotate your <code class="code--slim">client_secret</code> to a new value.
+            </p>
+            <p>
+                We support 5 <code class="code--slim">client_secret</code> values for a single application.
+            </p>
+
+        </section>
+
+    </section>
+
+   @pagination(
+        previous = Some(Pagination("Open access endpoints", controllers.routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url)),
+        next = Some(Pagination("User-restricted endpoints", controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url)))
+
+}
