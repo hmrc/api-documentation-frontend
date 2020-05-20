@@ -1,0 +1,41 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain)
+
+@(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+
+@apiMain(pageAttributes) {
+    <h1 class="heading-xlarge">Making Tax Digital guides</h1>
+
+    <p>These guides have now moved to our <a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
+
+    <h2 class="heading-large">
+      VAT (MTD) end-to-end service guide
+    </h2>
+    <p>You can now find this guide and related VAT (MTD) documentation here:</p>
+    <p><a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("vat")).url">VAT (MTD) API documentation</a></p>
+    <h2 class="heading-large">
+      Income Tax (MTD) end-to-end service guide
+    </h2>
+    <p>You can now find this guide and related Income Tax (MTD) documentation here:</p>
+    <p><a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("income-tax")).url">Income Tax (MTD) API documentation</a></p>
+
+}

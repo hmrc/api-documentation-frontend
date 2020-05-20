@@ -14,5 +14,9 @@
   {
     "name": "Safety and security import declarations service guide",
     "context": "/guides/safety-and-security-import-declarations-end-to-end-service-guide/"
+  },
+  {
+    "name": "Common Transit Convention API end-to-end service guide",
+    "context": "/guides/common-transit-convention-traders-service-guide/"
   }
 ]

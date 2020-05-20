@@ -68,7 +68,7 @@ case class XmlApiDocumentation(name: String, context: String, description: Strin
 
   val label: DocumentationLabel = XML_API
 
-  def documentationUrl: String = routes.DocumentationController.renderXmlApiDocumentation(name).url
+  def documentationUrl: String = routes.ApiDocumentationController.renderXmlApiDocumentation(name).url
 }
 
 object XmlApiDocumentation {
@@ -107,7 +107,7 @@ object APIAccess {
 
   def build(config: Option[Configuration]): APIAccess = APIAccess(
     `type` = APIAccessType.PRIVATE,
-    whitelistedApplicationIds = config.flatMap(_.getStringSeq("whitelistedApplicationIds")).orElse(Some(Seq.empty)),
+    whitelistedApplicationIds = config.flatMap(_.getOptional[Seq[String]]("whitelistedApplicationIds")).orElse(Some(Seq.empty)),
     isTrial = None)
 }
 
@@ -137,7 +137,7 @@ case class APIDefinition(
   lazy val hasActiveVersions = statusSortedActiveVersions.nonEmpty
   val label: DocumentationLabel = if(isTestSupport.contains(true)) TEST_SUPPORT_API else REST_API
 
-  def documentationUrl: String = routes.DocumentationController.renderApiDocumentation(serviceName, defaultVersion.get.version, None).url
+  def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(serviceName, defaultVersion.get.version, None).url
 }
 
 object APIDefinition {

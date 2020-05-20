@@ -16,12 +16,11 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import javax.inject.{Inject, Singleton}
-
 import akka.stream.Materializer
+import javax.inject.{Inject, Singleton}
 import play.api.http.DefaultHttpFilters
 import play.api.mvc._
-import uk.gov.hmrc.apidocumentation.controllers.DocumentationController
+import uk.gov.hmrc.apidocumentation.controllers._
 import uk.gov.hmrc.play.bootstrap.filters.FrontendFilters
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,14 +32,23 @@ class Filters @Inject()(defaultFilters: FrontendFilters, sessionRedirectFilter: 
 class SessionRedirectFilter @Inject()(implicit override val mat: Materializer,
                             exec: ExecutionContext) extends Filter {
 
+  private val classesToReWrite = List(
+    classOf[ApiDocumentationController],
+    classOf[DocumentationController],
+    classOf[AuthorisationController],
+    classOf[TestingPagesController],
+    classOf[HelpPagesController]
+    )
+
+  private val rewriteControllers = classesToReWrite.map(_.getCanonicalName)
+
   override def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     nextFilter(requestHeader).map { result =>
       val root = "/api-documentation"
       val routePattern = requestHeader.tags.getOrElse("ROUTE_PATTERN", root)
-      var controllerName = requestHeader.tags.getOrElse("ROUTE_CONTROLLER", "")
-      val documentationControllerName = classOf[DocumentationController].getCanonicalName
+      val controllerName = requestHeader.tags.getOrElse("ROUTE_CONTROLLER", "")
 
-      if (controllerName == documentationControllerName) {
+      if (rewriteControllers.contains(controllerName)) {
         val newSession = if (routePattern == root) {
           requestHeader.session - "access_uri"
         } else {

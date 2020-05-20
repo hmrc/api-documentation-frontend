@@ -16,29 +16,33 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, ExtendedAPIDefinition, VersionVisibility}
-import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService}
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService, LoggedInUserService}
+import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class DownloadController @Inject()(documentationService: DocumentationService,
                                    apiDefinitionService: ApiDefinitionService,
                                    downloadService: DownloadService,
-                                   loggedInUserProvider: LoggedInUserProvider,
-                                   errorHandler: ErrorHandler)(implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
-  extends FrontendController {
+                                   loggedInUserService: LoggedInUserService,
+                                   errorHandler: ErrorHandler,
+                                   val appConfig: ApplicationConfig,
+                                   cc: MessagesControllerComponents)
+                                  (implicit val ec: ExecutionContext)
+  extends FrontendController(cc) {
 
   def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
 
     (for {
-      email <- extractEmail(loggedInUserProvider.fetchLoggedInUser())
+      email <- extractEmail(loggedInUserService.fetchLoggedInUser())
       api <- apiDefinitionService.fetchExtendedDefinition(service, email)
       validResource = validateResource(resource)
       result <- fetchResourceForApi(api, version, validResource)
@@ -55,7 +59,7 @@ class DownloadController @Inject()(documentationService: DocumentationService,
   }
 
   private def fetchResourceForApi(apiOption: Option[ExtendedAPIDefinition], version: String, validResource: String)
-                                 (implicit hc: HeaderCarrier, request: Request[_]): Future[Result] = {
+                                 (implicit request: Request[_]): Future[Result] = {
     def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
       for {
         api <- apiOption
@@ -68,7 +72,7 @@ class DownloadController @Inject()(documentationService: DocumentationService,
 
     def redirectToLoginPage(service: String) =
       Future.successful(Redirect("/developer/login").withSession(
-        "access_uri" -> routes.DocumentationController.renderApiDocumentation(service, version, None).url))
+        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url))
 
     findVersion(apiOption) match {
       case Some((api, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _))) =>

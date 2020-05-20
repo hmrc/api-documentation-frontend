@@ -19,9 +19,9 @@ package uk.gov.hmrc.apidocumentation.connectors
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector.{definitionUrl, definitionsUrl, queryParams}
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector.{definitionsUrl, definitionUrl, queryParams}
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 

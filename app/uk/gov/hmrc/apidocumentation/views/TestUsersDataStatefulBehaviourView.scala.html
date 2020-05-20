@@ -1,0 +1,86 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.controllers
+@import partials.pagination
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain)
+
+@(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+
+@apiMain(pageAttributes) {
+
+    <h1 class="heading-xlarge">Testing in the sandbox</h1>
+
+    <nav role="navigation" aria-labelledby="onThisPage">
+        <h2 id="onThisPage" class="visually-hidden">On this page</h2>
+        <ul class="list">
+            <li><a href="@controllers.routes.TestingPagesController.testingPage()">Getting started</a></li>
+            <li>Test users, test data and stateful behaviour</li>
+        </ul>
+    </nav>
+    <hr aria-hidden="true">
+
+    <h2 class="heading-large">Test users, test data and stateful behaviour</h2>
+
+    <h3 class="heading-medium">Test users</h3>
+    <p>To test <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>,
+        you must create a test user. You can use:
+    </p>
+    <ul class="list list-bullet">
+        <li>the <a href="https://developer.service.hmrc.gov.uk/api-test-user">create test user service</a>
+            to create individuals or organisations with a default set of enrolments
+        </li>
+        <li>the <a href="https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/api-platform-test-user/1.0">Create Test User API</a>
+            to create a wider variety of test users including agents or if you use automated testing
+        </li>
+    </ul>
+    <p>Each test user is unique, with its own user ID, password and tax identifiers (for example SA UTR and NINO for an
+        individual). We generate the test user details automatically - you cannot choose them.
+    </p>
+    <p>Use the test user’s user ID and password to sign in during the
+        <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">authorisation process</a>.
+    </p>
+    <p>Use the same test user’s tax identifiers when testing calls to our APIs. You should also test failure cases by
+        using different tax identifiers.
+    </p>
+    <p>You can create as many test users as you like. Each new test user effectively provides a clean test environment.
+        You can share test users across applications and between test team members, but they do have a
+        <a href="https://developer.service.hmrc.gov.uk/api-documentation/docs/testing/data-cleardown">limited life span</a>.
+    </p>
+
+    <h3 class="heading-medium">Other test data</h3>
+    <p>Some APIs on the sandbox are stateless - they return hard-coded happy path responses. You don’t need to set up
+        any other test data for these APIs.
+    </p>
+    <p>Some APIs on the sandbox are stateful - they let you send test data through create (POST) or update (PUT)
+        requests and then read back that same data through retrieval (GET) requests.
+    </p>
+    <p>Some stateful APIs have an accompanying test support API for setting up test data, which you can find on our
+        <a href="https://developer.service.hmrc.gov.uk/api-documentation/docs/api">API documentation page</a>.
+        For example, the Individual Tax API only supports retrieval (GET) requests so the accompanying Individual PAYE
+        Test Support API can create (POST) test data for it.
+    </p>
+    <p>For stateful APIs where there is no way to clear down test data, the best way to start anew is to
+        <a href="https://developer.service.hmrc.gov.uk/api-test-user">create a new test user</a>.
+    </p>
+
+    @pagination(
+        previous = Some(Pagination("Getting started", controllers.routes.TestingPagesController.testingPage().url)))
+
+}
