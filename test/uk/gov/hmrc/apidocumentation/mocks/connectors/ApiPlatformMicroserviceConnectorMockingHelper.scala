@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.utils
+package uk.gov.hmrc.apidocumentation.mocks.connectors
 
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when

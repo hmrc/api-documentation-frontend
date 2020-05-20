@@ -19,8 +19,8 @@ package uk.gov.hmrc.apidocumentation.services
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, ApiPlatformMicroserviceConnector}
-import uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, ApiPlatformMicroserviceConnectorMockingHelper}
-import uk.gov.hmrc.apidocumentation.mocks.connectors.ApiDefinitionConnectorMockingHelper
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import uk.gov.hmrc.apidocumentation.mocks.connectors.{ApiDefinitionConnectorMockingHelper, ApiPlatformMicroserviceConnectorMockingHelper}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.NoopApiMetrics
 import uk.gov.hmrc.play.test.UnitSpec

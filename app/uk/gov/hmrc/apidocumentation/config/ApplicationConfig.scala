@@ -36,6 +36,7 @@ trait ApplicationConfig {
   def developerFrontendBaseUrl: String
   def thirdPartyDeveloperUrl: String
   def apiDefinitionBaseUrl: String
+  def apiPlatformMicroserviceBaseUrl: String
 
   def securedCookie: Boolean
   def ramlPreviewEnabled: Boolean

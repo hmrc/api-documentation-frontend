@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation.utils
+package uk.gov.hmrc.apidocumentation.utils
 
-import org.mockito.Mockito.when
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{noParams, Params, definitionsUrl, queryParams}
-import uk.gov.hmrc.apidocumentation.models.APIDefinition
 import org.mockito.Matchers.{any, eq => eqTo}
+import org.mockito.Mockito.when
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{Params, definitionsUrl, noParams, queryParams}
+import uk.gov.hmrc.apidocumentation.models.APIDefinition
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.Future
 
