@@ -971,5 +971,9 @@ class HelpersSpec extends WordSpec with Matchers {
     "provide an enriched string for the status code" in {
       HttpStatus(200) shouldBe "200 (OK)"
     }
+
+    "parse invalid status code like 498" in {
+      HttpStatus(498) shouldBe "498 (non-standard)"
+    }
   }
 }

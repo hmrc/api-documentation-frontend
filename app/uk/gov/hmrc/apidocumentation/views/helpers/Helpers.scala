@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.views.helpers
 
-import akka.http.scaladsl.model.StatusCode
+import akka.http.scaladsl.model.{StatusCode, StatusCodes}
 import org.raml.v2.api.model.v10.bodies.Response
 import org.raml.v2.api.model.v10.common.Annotable
 import org.raml.v2.api.model.v10.datamodel._
@@ -328,7 +328,13 @@ object HttpStatus {
   def apply(statusCode: String): String = apply(statusCode.toInt)
 
   def apply(statusCode: Int): String = {
-    val responseStatus = StatusCode.int2StatusCode(statusCode)
+
+    val responseStatus: StatusCode = try {
+       StatusCode.int2StatusCode(statusCode)
+    } catch {
+      case _ : RuntimeException => StatusCodes.custom(statusCode,"non-standard", "" )
+    }
+
     s"$statusCode (${responseStatus.reason})"
   }
 }
