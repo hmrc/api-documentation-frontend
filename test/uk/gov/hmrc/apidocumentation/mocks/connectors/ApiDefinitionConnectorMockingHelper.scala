@@ -25,19 +25,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
 trait ApiDefinitionConnectorMockingHelper {
-  def whenFetchAllDefinitions[T <: ApiDefinitionConnector](base: T)
-                             (apis: APIDefinition*)
-                             (implicit hc: HeaderCarrier) = {
-    when(base.fetchAllApiDefinitions(any[None.type]())(eqTo(hc)))
-      .thenReturn(Future.successful(apis.toSeq))
-  }
-  def whenFetchAllDefinitionsWithEmail[T <: ApiDefinitionConnector](base: T)
-                                      (email: String)
-                                      (apis: APIDefinition*)
-                                      (implicit hc: HeaderCarrier) = {
-    when(base.fetchAllApiDefinitions(any[Some[String]]())(eqTo(hc)))
-      .thenReturn(Future.successful(apis.toSeq))
-  }
+
   def whenFetchExtendedDefinition[T <: ApiDefinitionConnector](base: T)
                                  (serviceName: String)
                                  (api: ExtendedAPIDefinition)
@@ -53,19 +41,11 @@ trait ApiDefinitionConnectorMockingHelper {
       .thenReturn(Future.successful(Some(api)))
   }
 
-  def whenApiDefinitionFails[T <: ApiDefinitionConnector](base: T)
-                            (exception: Throwable)
-                            (implicit hc: HeaderCarrier) = {
+  def whenFetchExtendedDefinitionFails[T <: ApiDefinitionConnector](base: T)
+                                                                   (exception: Throwable)
+                                                                   (implicit hc: HeaderCarrier) = {
     when(base.fetchApiDefinition(any[String],any[None.type]())(eqTo(hc)))
-      .thenReturn(Future.failed(exception))
-    when(base.fetchAllApiDefinitions(any())(eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 
-  def whenNoApiDefinitions[T <: ApiDefinitionConnector](base: T)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinition(any[String],any())(eqTo(hc)))
-      .thenReturn(Future.successful(None))
-    when(base.fetchAllApiDefinitions(any())(eqTo(hc)))
-      .thenReturn(Future.successful(Seq.empty))
-  }
 }

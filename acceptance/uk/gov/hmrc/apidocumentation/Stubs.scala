@@ -26,21 +26,23 @@ import scala.collection.immutable.Seq
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-trait Stubs extends ApiDefinition with ApiMicroservice with DeveloperFrontend with ServiceLocator
+trait Stubs extends ApiDefinition with ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice
 
-trait ApiDefinition {
-
+trait ApiPlatformMicroservice{
   def fetchAll() {
     val allDefinitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/all.json")).mkString
 
     stubFor(
-      get(urlMatching("/api-definition"))
+      get(urlMatching("/combined-api-definitions"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody(allDefinitionJson))
     )
   }
+}
+
+trait ApiDefinition {
 
   def fetchDefinition(serviceName: String) {
     val definitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/$serviceName.json")).mkString
@@ -180,18 +182,7 @@ trait DeveloperFrontend {
   }
 }
 
-trait ServiceLocator {
 
-  def register(serviceName: String) {
-    stubFor(
-      get(urlPathEqualTo(s"/service/$serviceName"))
-        .willReturn(
-          aResponse()
-            .withStatus(200)
-            .withBody( s"""{"serviceName":"$serviceName","serviceUrl":"${ExternalServicesConfig.wireMockUrl}"}"""))
-    )
-  }
-}
 
 object ExternalServicesConfig {
 

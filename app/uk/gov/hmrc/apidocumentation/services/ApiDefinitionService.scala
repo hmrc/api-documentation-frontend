@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.apidocumentation.connectors.ApiDefinitionConnector
+import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, ApiPlatformMicroserviceConnector}
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics._
@@ -26,25 +26,26 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait BaseApiDefinitionService {
   def fetchExtendedDefinition(serviceName: String, email: Option[String])
-                            (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
+                             (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
 
   def fetchAllDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 }
 
 @Singleton
 class ApiDefinitionService @Inject()(val raw: ApiDefinitionConnector,
-                                      val apiMetrics: ApiMetrics)
-                                      (implicit ec: ExecutionContext) extends BaseApiDefinitionService with RecordMetrics {
+                                     val apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector,
+                                     val apiMetrics: ApiMetrics)
+                                    (implicit ec: ExecutionContext) extends BaseApiDefinitionService with RecordMetrics{
   val api: API = API("api-definition")
 
   def fetchExtendedDefinition(serviceName: String, email: Option[String] = None)
                             (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
     record {
-      raw.fetchApiDefinition(serviceName, email)
+        raw.fetchApiDefinition(serviceName, email)
     }
 
   def fetchAllDefinitions(email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
     record {
-      raw.fetchAllApiDefinitions(email)
+        apiPlatformMicroserviceConnector.fetchApiDefinitionsByCollaborator(email)
     }
 }
