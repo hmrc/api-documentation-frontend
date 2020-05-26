@@ -75,7 +75,7 @@ class ApiDocumentationController @Inject()(
             email <- extractEmail(loggedInUserService.fetchLoggedInUser())
             apis <- apiDefinitionService.fetchAllDefinitions(email)
           } yield {
-            val apisByCategory = Documentation.groupedByCategory(apis, XmlApiDocumentation.xmlApiDefinitions, ServiceGuide.serviceGuides)
+            val apisByCategory = Documentation.groupedByCategory(apis, XmlApiDocumentation.xmlApiDefinitions, ServiceGuide.serviceGuides, RoadMap.roadMaps)
 
             filter match {
               case Some(f) => Ok(apisFilteredView(pageAttributes("Filtered API Documentation"), apisByCategory, APICategory.fromFilter(f)))

@@ -52,9 +52,10 @@ object Documentation {
   def groupedByCategory(apiDefinitions: Seq[APIDefinition],
                         xmlDefinitions: Seq[XmlApiDocumentation],
                         serviceGuides: Seq[ServiceGuide],
+                        roadMaps: Seq[RoadMap],
                         catMap: Map[String, Seq[APICategory]] = categoryMap): ListMap[APICategory, Seq[Documentation]] = {
     val categorised: Map[APICategory, Seq[Documentation]] =
-      (apiDefinitions ++ xmlDefinitions ++ serviceGuides).foldLeft(Map(): Map[APICategory, Seq[Documentation]]) {
+      (apiDefinitions ++ xmlDefinitions ++ serviceGuides ++ roadMaps).foldLeft(Map(): Map[APICategory, Seq[Documentation]]) {
         (groupings, apiDefinition) =>
           groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
       }.filter(_._2.exists(_.isRestOrXmlApi))
@@ -91,6 +92,21 @@ object ServiceGuide {
 
   def serviceGuides: Seq[ServiceGuide] =
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/service_guides.json")).mkString).as[Seq[ServiceGuide]]
+}
+
+case class RoadMap(name: String, context: String, categories: Option[Seq[APICategory]] = None)
+  extends Documentation {
+
+  val label: DocumentationLabel = ROADMAP
+
+  def documentationUrl: String = context
+}
+
+object RoadMap {
+  implicit val format = Json.format[RoadMap]
+
+  def roadMaps: Seq[RoadMap] =
+    Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/roadmap.json")).mkString).as[Seq[RoadMap]]
 }
 
 object APIAccessType extends Enumeration {
