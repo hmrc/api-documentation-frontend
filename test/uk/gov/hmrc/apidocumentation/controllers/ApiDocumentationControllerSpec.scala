@@ -148,7 +148,6 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           val apiDefinition =
             ExtendedAPIDefinition(
               serviceName,
-              "http://service",
               "Hello World",
               "Say Hello World",
               "hello",

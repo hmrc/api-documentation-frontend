@@ -36,7 +36,7 @@ class DownloadConnectorSpec extends ConnectorSpec {
   trait Setup {
     implicit val hc = HeaderCarrier()
     val mockAppConfig = mock[ApplicationConfig]
-    when(mockAppConfig.apiDefinitionBaseUrl).thenReturn("")
+    when(mockAppConfig.apiPlatformMicroserviceBaseUrl).thenReturn("")
   }
 
   "downloadResource" should {
@@ -45,7 +45,7 @@ class DownloadConnectorSpec extends ConnectorSpec {
         import Results._
         import components.{defaultActionBuilder => Action}
         {
-          case GET(p"/api-definition/hello-world/1.0/documentation/some/resource") => Action {
+          case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resource") => Action {
             Ok("hello world")
           }
         }
@@ -63,7 +63,7 @@ class DownloadConnectorSpec extends ConnectorSpec {
         import Results._
         import components.{defaultActionBuilder => Action}
         {
-          case GET(p"/api-definition/hello-world/1.0/documentation/some/resourceNotThere") => Action {
+          case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resourceNotThere") => Action {
             NotFound
           }
         }
@@ -83,10 +83,10 @@ class DownloadConnectorSpec extends ConnectorSpec {
         import Results._
         import components.{defaultActionBuilder => Action}
         {
-          case GET(p"/api-definition/hello-world/1.0/documentation/some/resourceInvalid") => Action {
+          case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resourceInvalid") => Action {
             ServiceUnavailable
           }
-          case GET(p"/api-definition/hello-world/1.0/documentation/some/timeout") => Action {
+          case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/timeout") => Action {
             RequestTimeout
           }
         }

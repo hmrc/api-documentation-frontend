@@ -22,7 +22,7 @@ import org.mockito.Mockito.when
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.utils.ApiPlatformMicroserviceHttpMockingHelper
-import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,7 +43,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
     when(mockConfig.apiPlatformMicroserviceBaseUrl).thenReturn(apiPlatformMicroserviceBaseUrl)
 
     val serviceName = "someService"
-    val userEmail = Some("3rdparty@example.com")
+    val userEmail = "3rdparty@example.com"
 
     val apiName1 = "Calendar"
     val apiName2 = "HelloWorld"
@@ -54,9 +54,9 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
 
   "fetchApiDefinitionsByCollaborator" should {
     "call the underlying http client with the email argument" in new LocalSetup {
-      whenGetAllDefinitionsByEmail(userEmail)(apiDefinition(apiName1), apiDefinition(apiName2))
+      whenGetAllDefinitionsByEmail(Some(userEmail))(apiDefinition(apiName1), apiDefinition(apiName2))
 
-      val result = await(underTest.fetchApiDefinitionsByCollaborator(userEmail))
+      val result = await(underTest.fetchApiDefinitionsByCollaborator(Some(userEmail)))
 
       result.size shouldBe 2
       result.map(_.name) shouldBe Seq(apiName1, apiName2)
@@ -76,6 +76,42 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
       intercept[UpstreamException.type] {
         await(underTest.fetchApiDefinitionsByCollaborator(None))
       }
+    }
+  }
+
+  "fetchApiDefinition" should {
+
+    "call the underlying http client with the email argument" in new LocalSetup {
+      whenGetDefinitionByEmail(serviceName, userEmail)(extendedApiDefinition(apiName1))
+
+      val result = await(underTest.fetchApiDefinition(serviceName, Some(userEmail)))
+
+      result should be('defined)
+      result.head.name shouldBe apiName1
+    }
+
+    "call the underlying http client without an email argument" in new LocalSetup {
+      whenGetDefinition(serviceName)(extendedApiDefinition(apiName1))
+
+      val result = await(underTest.fetchApiDefinition(serviceName, None))
+
+      result should be('defined)
+      result.head.name shouldBe apiName1
+    }
+
+    "throw an exception correctly" in new LocalSetup {
+      whenGetDefinitionFails(serviceName)(UpstreamException)
+
+      intercept[UpstreamException.type] {
+        await(underTest.fetchApiDefinition(serviceName, None))
+      }
+    }
+
+    "do not throw exception when not found but instead return None" in new LocalSetup {
+      whenGetDefinitionFails(serviceName)(new NotFoundException("Bang"))
+
+      val result = await(underTest.fetchApiDefinition(serviceName, None))
+      result should not be 'defined
     }
   }
 }

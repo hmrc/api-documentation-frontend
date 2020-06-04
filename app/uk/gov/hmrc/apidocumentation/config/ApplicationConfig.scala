@@ -35,7 +35,6 @@ trait ApplicationConfig {
 
   def developerFrontendBaseUrl: String
   def thirdPartyDeveloperUrl: String
-  def apiDefinitionBaseUrl: String
   def apiPlatformMicroserviceBaseUrl: String
 
   def securedCookie: Boolean
@@ -90,7 +89,6 @@ class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
    *
    * DO NOT REMOVE
    */
-  lazy val apiDefinitionBaseUrl = baseUrl("api-definition")
   lazy val apiPlatformMicroserviceBaseUrl = baseUrl("api-platform-microservice")
 
   val securedCookie = getConfigDefaulted(s"$env.cookie.secure", true)

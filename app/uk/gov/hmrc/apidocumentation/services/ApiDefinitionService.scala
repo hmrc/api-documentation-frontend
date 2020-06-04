@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.apidocumentation.connectors.{ApiDefinitionConnector, ApiPlatformMicroserviceConnector}
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics._
@@ -32,16 +32,14 @@ trait BaseApiDefinitionService {
 }
 
 @Singleton
-class ApiDefinitionService @Inject()(val raw: ApiDefinitionConnector,
-                                     val apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector,
-                                     val apiMetrics: ApiMetrics)
-                                    (implicit ec: ExecutionContext) extends BaseApiDefinitionService with RecordMetrics{
+class ApiDefinitionService @Inject()(val apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector, val apiMetrics: ApiMetrics)
+                                    (implicit ec: ExecutionContext) extends BaseApiDefinitionService with RecordMetrics {
   val api: API = API("api-definition")
 
   def fetchExtendedDefinition(serviceName: String, email: Option[String] = None)
                             (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
     record {
-        raw.fetchApiDefinition(serviceName, email)
+      apiPlatformMicroserviceConnector.fetchApiDefinition(serviceName, email)
     }
 
   def fetchAllDefinitions(email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =

@@ -198,7 +198,6 @@ case class APIVersion(
 }
 
 case class ExtendedAPIDefinition(serviceName: String,
-                                 serviceBaseUrl: String,
                                  name: String,
                                  description: String,
                                  context: String,

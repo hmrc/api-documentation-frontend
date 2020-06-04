@@ -26,7 +26,7 @@ import scala.collection.immutable.Seq
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-trait Stubs extends ApiDefinition with ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice
+trait Stubs extends ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice
 
 trait ApiPlatformMicroservice{
   def fetchAll() {
@@ -40,25 +40,11 @@ trait ApiPlatformMicroservice{
           .withBody(allDefinitionJson))
     )
   }
-}
-
-trait ApiDefinition {
 
   def fetchDefinition(serviceName: String) {
     val definitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/$serviceName.json")).mkString
     stubFor(
-      get(urlMatching(s"/api-definition/$serviceName/extended"))
-        .willReturn(aResponse()
-          .withStatus(200)
-          .withHeader("Content-Type", "application/json")
-          .withBody(definitionJson))
-    )
-  }
-
-  def fetchDefinitionExtended(serviceName: String) {
-    val definitionJson = Source.fromURL(getClass.getResource(s"/acceptance/$serviceName/definition.json")).mkString
-    stubFor(
-      get(urlMatching(s"/api-definition/$serviceName/definition/extended"))
+      get(urlMatching(s"/combined-api-definitions/$serviceName"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
@@ -71,7 +57,7 @@ trait ApiDefinition {
     def fetchFile(filename: String, contentType: String) = {
       val url = getClass.getResource(s"/services/$serviceName/conf/$version/$filename")
       val file = Source.fromURL(url).mkString
-      stubFor(get(urlMatching(s"/api-definition/$serviceName/$version/documentation/$filename"))
+      stubFor(get(urlMatching(s"/combined-api-definitions/$serviceName/$version/documentation/$filename"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", contentType)
@@ -89,7 +75,7 @@ trait ApiDefinition {
 
     def fetchFile(filename: String, contentType: String) = {
       val file = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$filename")).mkString
-      stubFor(get(urlMatching(s"/api-definition/$serviceName/$version/documentation/$filename"))
+      stubFor(get(urlMatching(s"/combined-api-definitions/$serviceName/$version/documentation/$filename"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", contentType)
@@ -105,11 +91,11 @@ trait ApiDefinition {
           val dir = new File(URLDecoder.decode(s, "UTF-8"))
 
           if (dir.exists()) {
-             dir.listFiles
-               .filter(f => f.exists() && f.isFile)
-               .toList
-           }
-           else {
+            dir.listFiles
+              .filter(f => f.exists() && f.isFile)
+              .toList
+          }
+          else {
             List.empty[File]
           }
         case Failure(f) => List.empty[File]
@@ -118,7 +104,7 @@ trait ApiDefinition {
       listOfFiles.foreach {
         r =>
           val file: String = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$path/${r.getName}")).mkString
-          stubFor(get(urlMatching(s"/api-definition/$serviceName/$version/documentation/$path/${r.getName}"))
+          stubFor(get(urlMatching(s"/combined-api-definitions/$serviceName/$version/documentation/$path/${r.getName}"))
             .willReturn(aResponse()
               .withStatus(200)
               .withHeader("Content-Type", ContentTypes.JSON)
@@ -135,7 +121,7 @@ trait ApiDefinition {
 
   def failToFetch(serviceName: String) {
     stubFor(
-      get(urlMatching(s"/api-definition/$serviceName/definition"))
+      get(urlMatching(s"/combined-api-definitions/$serviceName/definition"))
         .willReturn(aResponse()
           .withStatus(404))
     )
@@ -150,7 +136,7 @@ trait ApiMicroservice {
     ).mkString
 
     stubFor(
-      get(urlPathEqualTo(s"/api-definition/$serviceName/$version/documentation/${UriEncoding.encodePathSegment(endpointName, "UTF-8")}"))
+      get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/$version/documentation/${UriEncoding.encodePathSegment(endpointName, "UTF-8")}"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/xml")

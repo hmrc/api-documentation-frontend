@@ -181,7 +181,7 @@ trait ApiDefinitionTestDataHelper {
   }
 
   def extendedApiDefinition(name: String) = {
-    ExtendedAPIDefinition(name, "http://service", name, name, name, requiresTrust = false, isTestSupport = false,
+    ExtendedAPIDefinition(name, name, name, name, requiresTrust = false, isTestSupport = false,
       Seq(
         ExtendedAPIVersion(
           version = "1.0",

@@ -61,7 +61,7 @@ class DocumentationServiceSpec extends UnitSpec
     val ramlLoader = mock[RamlLoader]
     val schemaLoader = mock[SchemaService]
     val appConfig = mock[ApplicationConfig]
-    when(appConfig.apiDefinitionBaseUrl).thenReturn(serviceUrl)
+    when(appConfig.apiPlatformMicroserviceBaseUrl).thenReturn(serviceUrl)
 
     val underTest = new DocumentationService(appConfig, cache, ramlLoader, schemaLoader)
   }
