@@ -70,7 +70,7 @@ class CommonControllerBaseSpec
                             loggedIn: Boolean,
                             authorised: Boolean,
                             isTrial: Option[Boolean] = None): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(serviceName, "http://service", "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
       Seq(
         ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(access, whitelistedApplicationIds = Some(Seq.empty), isTrial = isTrial), loggedIn, authorised)), None)
@@ -78,7 +78,7 @@ class CommonControllerBaseSpec
   }
 
   def extendedApiDefinitionWithRetiredVersion(serviceName: String, retiredVersion: String, nonRetiredVersion: String) = {
-    ExtendedAPIDefinition(serviceName, "http://service", "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
       Seq(
         ExtendedAPIVersion(retiredVersion, APIStatus.RETIRED, Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
@@ -90,7 +90,7 @@ class CommonControllerBaseSpec
   }
 
   def extendedApiDefinitionWithRetiredVersionAndInaccessibleLatest(serviceName: String): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(serviceName, "http://service", "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
       Seq(
         ExtendedAPIVersion("1.0", APIStatus.RETIRED, Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),

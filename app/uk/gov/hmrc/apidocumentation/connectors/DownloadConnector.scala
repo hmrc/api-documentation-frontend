@@ -31,12 +31,12 @@ import scala.concurrent.duration._
 @Singleton
 class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
 
-  private lazy val serviceBaseUrl = appConfig.apiDefinitionBaseUrl
+  private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
   private def buildRequest(resourceUrl: String): WSRequest = ws.url(resourceUrl).withRequestTimeout(10.seconds)
 
   private def makeRequest(serviceName: String, version: String, resource: String): Future[WSResponse] = {
-    buildRequest(s"$serviceBaseUrl/api-definition/$serviceName/$version/documentation/$resource").withMethod("GET").stream()
+    buildRequest(s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/$resource").withMethod("GET").stream()
   }
 
   def fetch(serviceName: String, version: String, resource: String): Future[Result] = {

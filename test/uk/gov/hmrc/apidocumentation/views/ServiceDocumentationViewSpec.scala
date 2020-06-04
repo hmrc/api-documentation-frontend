@@ -55,7 +55,7 @@ class ServiceDocumentationViewSpec extends CommonViewSpec with ApiDefinitionTest
     val privateVersion: ExtendedAPIVersion = ExtendedAPIVersion("2.0", APIStatus.BETA, Seq(), privateAvailability, privateAvailability)
     val privateTrialVersion: ExtendedAPIVersion = ExtendedAPIVersion("3.0", APIStatus.BETA, Seq(), privateTrialAvailability, privateTrialAvailability)
     val versions: Seq[ExtendedAPIVersion] = Seq(publicVersion, privateVersion, privateTrialVersion)
-    val api: ExtendedAPIDefinition = ExtendedAPIDefinition("test", "", "Test Service", "", "a context", requiresTrust = true, isTestSupport = true, versions)
+    val api: ExtendedAPIDefinition = ExtendedAPIDefinition("test", "Test Service", "", "a context", requiresTrust = true, isTestSupport = true, versions)
     val currentVersion = versions.head
 
     val apiMain = app.injector.instanceOf[apiMain]

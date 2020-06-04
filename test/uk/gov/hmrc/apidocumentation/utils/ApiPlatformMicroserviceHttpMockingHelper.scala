@@ -18,8 +18,8 @@ package uk.gov.hmrc.apidocumentation.utils
 
 import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.when
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{Params, definitionsUrl, noParams, queryParams}
-import uk.gov.hmrc.apidocumentation.models.APIDefinition
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{Params, definitionUrl, definitionsUrl, noParams, queryParams}
+import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.Future
@@ -47,6 +47,42 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
       mockHttpClient.GET[Seq[APIDefinition]](
         eqTo(url),
         any[Params]
+      )
+        (any(), any(), any())
+    )
+      .thenReturn(Future.failed(exception))
+  }
+
+  def whenGetDefinitionByEmail(serviceName: String, email: String)(definition: ExtendedAPIDefinition): Unit = {
+    val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
+    when(
+      mockHttpClient.GET[ExtendedAPIDefinition](
+        eqTo(url),
+        eqTo(queryParams(Some(email)))
+      )
+        (any(), any(), any())
+    )
+      .thenReturn(Future.successful(definition))
+  }
+
+  def whenGetDefinition(serviceName: String)(definition: ExtendedAPIDefinition): Unit = {
+    val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
+    when(
+      mockHttpClient.GET[ExtendedAPIDefinition](
+        eqTo(url),
+        eqTo(noParams)
+      )
+        (any(), any(), any())
+    )
+      .thenReturn(Future.successful(definition))
+  }
+
+  def whenGetDefinitionFails(serviceName: String)(exception: Throwable): Unit = {
+    val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
+    when(
+      mockHttpClient.GET[ExtendedAPIDefinition](
+        eqTo(url),
+        eqTo(noParams)
       )
         (any(), any(), any())
     )

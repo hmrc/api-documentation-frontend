@@ -19,11 +19,11 @@ package uk.gov.hmrc.apidocumentation.connectors
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionsUrl, queryParams}
-import uk.gov.hmrc.apidocumentation.models.APIDefinition
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,12 +34,25 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
   def fetchApiDefinitionsByCollaborator(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-    Logger.info(s"${this.getClass.getSimpleName} - fetchAllApiDefinitions")
+    Logger.info(s"${getClass.getSimpleName} - fetchApiDefinitionsByCollaborator")
     val r = http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(email))
 
     r.map(defns => defns.foreach(defn => Logger.info(s"Found ${defn.name}")))
 
     r.map(e => e.sortBy(_.name))
+  }
+
+  def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
+    Logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
+    val r = http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl, serviceName), queryParams(email))
+
+    r.map(defn => Logger.info(s"Found ${defn.name}"))
+
+    r.map(Some(_))
+      .recover {
+        case _: NotFoundException => Logger.info("Not found"); None
+        case e => Logger.error(s"Failed $e"); throw e
+      }
   }
 }
 
@@ -52,5 +65,5 @@ object ApiPlatformMicroserviceConnector {
     oemail.fold(noParams)(email => Seq("collaboratorEmail" -> email))
 
   def definitionsUrl(serviceBaseUrl: String) = s"$serviceBaseUrl/combined-api-definitions"
-
+  def definitionUrl(serviceBaseUrl: String, serviceName: String) = s"$serviceBaseUrl/combined-api-definitions/$serviceName"
 }
