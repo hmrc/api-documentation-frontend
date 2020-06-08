@@ -86,10 +86,10 @@
             </div>
         }
         <div class="bold-small float--right">
-            <a href="#">
-                Back to top
-            </a>
+            <a href="#main">skip to main content </a>
+            <div id="main" tabindex="-1"></div>
         </div>
+
 
         @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.flatMap(_.visibility)))) { case (isPreview, visibility) =>
             @if(isPreview || visibility == DocsVisibility.VISIBLE) {
@@ -119,9 +119,10 @@
         }
 
         <div class="bold-small float--right">
-            <a href="#">
-                Back to top
-            </a>
+            <div class="bold-small float--right">
+                <a href="#main">skip to main content </a>
+                <div id="main" tabindex="-1"></div>
+            </div>
         </div>
     </div>
 </div>
