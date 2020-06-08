@@ -37,7 +37,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       on(HelloWorldPage)
       loadPage()
 
-      Then("user is navigated to the Top of the page when back to the top link is clicked from the section below")
+      Then("user is navigated to the Top of the page when skip to main content link is clicked from the section below")
       val topLinkClickedFromSection =
         Table(
           "Section",

@@ -156,9 +156,9 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   def checkBackToTopLinkAfterErrorsSection(): Unit = {
     assert(errorsBackToTop.isDisplayed)
-    errorsBackToTop.text shouldBe "Back to top"
+    errorsBackToTop.text shouldBe "Skip to main content"
     assert(endpointsBackToTop.isDisplayed)
-    endpointsBackToTop.text shouldBe "Back to top"
+    endpointsBackToTop.text shouldBe "Skip to main content"
   }
 }
 
