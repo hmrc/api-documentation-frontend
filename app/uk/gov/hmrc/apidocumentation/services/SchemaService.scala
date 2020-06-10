@@ -24,7 +24,7 @@ import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import uk.gov.hmrc.apidocumentation.models.JsonSchema.JsonSchemaWithReference
 import uk.gov.hmrc.ramltools.Implicits._
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.collection.immutable.ListMap
 import scala.io.Source
 
@@ -33,7 +33,7 @@ class SchemaService {
   def loadSchemas(basePath: String, raml: RAML): Map[String, JsonSchema] = {
     val schemas = for {
       resource  <- raml.flattenedResources
-      method    <- resource.methods
+      method    <- resource.methods.asScala
       schema    <- payloadSchemas(method)
     } yield {
       schema -> parseSchema(schema, basePath)
@@ -60,8 +60,8 @@ class SchemaService {
   }
 
   private def payloadSchemas(method: Method): Seq[String] = {
-    val requestTypes = method.body.map(_.`type`)
-    val responseTypes = method.responses.flatMap(_.body).map(_.`type`)
+    val requestTypes = method.body.asScala.map(_.`type`)
+    val responseTypes = method.responses.asScala.flatMap(_.body.asScala).map(_.`type`)
 
     (requestTypes ++ responseTypes).filter(_.trim.startsWith("{"))
   }
@@ -75,8 +75,6 @@ class SchemaService {
   }
 
   private def resolveRefs(schema: JsonSchema, basePath: String, enclosingSchema: JsonSchema): JsonSchema = {
-    val name = schema.oneOf
-
     def resolve(schema: JsonSchema, basePath: String, enclosingSchema: JsonSchema)(ref: String) = {
       val (referredSchemaPath, jsonPointerPathParts) = getPath(ref)
 

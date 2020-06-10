@@ -1,0 +1,34 @@
+#%RAML 1.0
+---
+title: Hello World
+version: 1.0
+
+protocols: [ HTTPS ]
+baseUri: https://helloworld.service.hmrc.gov.uk/
+
+documentation:
+ - title: Overview
+   content: An overview
+
+mediaType: application/hal+json
+
+uses:
+  headers: ../../../public/common/modules/headers.raml
+
+/hello:
+  /world:
+    get:
+      displayName: Say hello world
+      description: |
+        A simple example for integrating with an unrestricted service.
+
+        Any request to this endpoint initiates a 'Hello World' response.
+      is: [headers.acceptHeader]
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "message" : "Hello World"
+                }

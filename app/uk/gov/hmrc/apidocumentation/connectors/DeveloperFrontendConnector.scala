@@ -17,29 +17,28 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
-
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.http.metrics.{API, Metrics}
+import uk.gov.hmrc.play.http.metrics._
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.connectionExceptionsAsHtmlPartialFailure
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig,  metrics: Metrics)(implicit ec: ExecutionContext) {
+class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
 
   val api = API("third-party-developer-frontend")
   private lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
 
-  def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = metrics.record(api) {
+  def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = record {
     http.GET[Seq[NavLink]](s"$serviceBaseUrl/developer/user-navlinks")
   }
 
-  def fetchTermsOfUsePartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = metrics.record(api) {
+  def fetchTermsOfUsePartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = record {
     http.GET[HtmlPartial](s"$serviceBaseUrl/developer/partials/terms-of-use") recover connectionExceptionsAsHtmlPartialFailure
   }
 }

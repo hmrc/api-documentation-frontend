@@ -1,0 +1,71 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.controllers
+@import partials.pagination
+
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain)
+
+@(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+
+@apiMain(pageAttributes) {
+
+
+    <h1 class="heading-xlarge">Testing in the sandbox</h1>
+
+    <nav role="navigation" aria-labelledby="onThisPage">
+        <h2 id="onThisPage" class="visually-hidden">On this page</h2>
+        <ul class="list">
+            <li>Getting started</li>
+            <li><a href="@controllers.routes.TestingPagesController.testUsersDataStatefulBehaviourPage()">Test users, test data and stateful behaviour</a></li>
+        </ul>
+    </nav>
+    <hr aria-hidden="true">
+
+    <h2 class="heading-large">Getting started</h2>
+    <p>Use our sandbox environment to test your application against our RESTful APIs before going live.
+        This environment does not support our XML APIs which must be tested as explained in the
+        <a href="https://www.gov.uk/government/publications/basic-guide-for-software-developers">Basic guide for software developers</a>.
+    </p>
+    <h3 class="heading-medium">1. Add an application</h3>
+    <p><a href="https://developer.service.hmrc.gov.uk/developer/applications/add/sandbox">Add a sandbox application</a> to use for testing.</p>
+    <p>Sandbox applications that have not made an API call for 12 months will be deleted.</p>
+    <h3 class="heading-medium">2. Subscribe to APIs</h3>
+    <p>You must subscribe to APIs before your application can access them. Subscribe on the manage API subscriptions page.</p>
+    <h3 class="heading-medium">3. Get sandbox credentials</h3>
+    <p>Get these from the manage credentials page. They are only valid for the sandbox environment.</p>
+    <h3 class="heading-medium">4. Configure your application for sandbox</h3>
+    <p>Configure your application to make authorisation and API calls to sandbox endpoints using your sandbox credentials and the base URL <code class="code--slim">https://test-api.service.hmrc.gov.uk</code>.</p>
+    <h3 class="heading-medium">5. Create test users and other test data</h3>
+    <p>To test <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, you need to create <a href="@controllers.routes.TestingPagesController.testUsersDataStatefulBehaviourPage()">test users and potentially other test data</a>.</p>
+    <h3 class="heading-medium">6. Test the authorisation process</h3>
+    <p>If you’re testing <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">user-restricted endpoints</a>, trigger the authorisation process from your application:</p>
+    <ul class="list list-bullet">
+        <li>Sign in with the credentials for the test user you created. Note that sandbox doesn’t include 2-step verification or identity checks.</li>
+        <li>Complete the journey by granting authority to your application.</li>
+        <li>We will return control back to your application, which should then obtain an OAuth token for use in subsequent API calls.</li>
+    </ul>
+    <p>Remember to test failure cases by selecting “Do not grant authority” after signing in.</p>
+    <h3 class="heading-medium">7. Test API calls</h3>
+    <p>Use your application to make calls to our sandbox APIs.</p>
+    <p>Remember to test the error scenarios mentioned in the API documentation.</p>
+
+    @pagination(next = Some(Pagination("Test users, test data and stateful behaviour", controllers.routes.TestingPagesController.testUsersDataStatefulBehaviourPage().url)))
+
+}

@@ -14,13 +14,14 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.layouts
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.views.html.include._
 @import uk.gov.hmrc.apidocumentation.views.html.partials
+@import play.twirl.api.HtmlFormat
 
-@(pageAttributes: PageAttributes, additionalTopContent: Html = HtmlFormat.empty)(mainContent: Html)(implicit request: Request[_], applicationConfig: ApplicationConfig, messages: Messages)
+@this(main: main, applicationConfig: ApplicationConfig)
+
+@(pageAttributes: PageAttributes, additionalTopContent: Html = HtmlFormat.empty)(mainContent: Html)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 
 @userBanner = {

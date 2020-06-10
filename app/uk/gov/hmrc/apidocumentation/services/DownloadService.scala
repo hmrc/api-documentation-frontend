@@ -16,18 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import javax.inject.Inject
-
+import javax.inject.{Inject, Singleton}
 import play.api.mvc.Result
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent._
 
+@Singleton
 class DownloadService @Inject()(downloadConnector: DownloadConnector) {
-
-  def fetchResource(serviceName: String, version: String, resource: String)
-                   (implicit hc: HeaderCarrier): Future[Result] = {
+  def fetchResource(serviceName: String, version: String, resource: String): Future[Result] = {
     downloadConnector.fetch(serviceName, version, resource)
   }
 

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.views.helpers
 
-import io.netty.handler.codec.http.HttpResponseStatus
+import akka.http.scaladsl.model.{StatusCode, StatusCodes}
 import org.raml.v2.api.model.v10.bodies.Response
 import org.raml.v2.api.model.v10.common.Annotable
 import org.raml.v2.api.model.v10.datamodel._
@@ -29,7 +29,7 @@ import uk.gov.hmrc.apidocumentation.models.DocsVisibility.DocsVisibility
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.language.reflectiveCalls
 import scala.util.Try
 
@@ -66,12 +66,13 @@ object HeaderVal {
 
 object FindProperty {
   def apply(typeInstance: TypeInstance, names: String*): Option[String] = {
+    val properties = typeInstance.properties.asScala
     names match {
       case head +: Nil => {
-        typeInstance.properties.find(_.name == head).map(scalarValue)
+        properties.find(_.name == head).map(scalarValue)
       }
       case head +: tail => {
-        typeInstance.properties.find(_.name == head) match {
+        properties.find(_.name == head) match {
           case Some(property) => FindProperty(property.value, tail: _*)
           case _ => None
         }
@@ -90,7 +91,7 @@ object Annotation {
   def exists(context: Annotable, names: String*): Boolean = getAnnotation(context, names: _*).isDefined
 
   def getAnnotation(context: Annotable, names: String*): Option[String] = {
-    val matches = context.annotations.find { ann =>
+    val matches = context.annotations.asScala.find { ann =>
       Option(ann.name).exists(stripNamespace(_) == names.head)
     }
 
@@ -123,7 +124,7 @@ object Annotation {
 
   private def getProperty(annotation: TypeInstance, property: AnyRef) =
     annotation
-      .properties
+      .properties.asScala
       .find(prop => prop.name == property)
       .map(ti => transformScalars(ti.value))
 
@@ -190,7 +191,7 @@ object GroupedResources {
   private def flatten(resources: Seq[Resource], acc: Seq[Resource] = Nil): Seq[Resource] = {
     resources match {
       case head +: tail => {
-        flatten(tail, flatten(head.resources, acc :+ head))
+        flatten(tail, flatten(head.resources.asScala, acc :+ head))
       }
       case _ => acc
     }
@@ -204,7 +205,7 @@ object Methods {
   )
 
   def apply(resource: Resource): List[Method] =
-    resource.methods.toList.sortWith { (left, right) =>
+    resource.methods.asScala.toList.sortWith { (left, right) =>
       (for {
         l <- correctOrder.get(left.method)
         r <- correctOrder.get(right.method)
@@ -216,7 +217,7 @@ object Authorisation {
   def apply(method: Method): (String, Option[String]) = fetchAuthorisation(method)
 
   private def fetchAuthorisation(method: Method): (String, Option[String]) = {
-    if (method.securedBy().nonEmpty) {
+    if (method.securedBy().asScala.nonEmpty) {
       method.securedBy.get(0).securityScheme.`type` match {
         case "OAuth 2.0" => ("user", Some(Annotation(method, "(scope)")))
         case _ => ("application", None)
@@ -230,9 +231,9 @@ object Authorisation {
 
 
 object Responses {
-  def success(method: Method) = method.responses.filter(isSuccessResponse)
+  def success(method: Method) = method.responses.asScala.filter(isSuccessResponse)
 
-  def error(method: Method) = method.responses.filter(isErrorResponse)
+  def error(method: Method) = method.responses.asScala.filter(isErrorResponse)
 
   private def isSuccessResponse(response: Response) = {
     val code = Val(response.code)
@@ -250,7 +251,7 @@ object ErrorScenarios {
   def apply(method: Method): Seq[Map[String, String]] = {
     val errorScenarios = for {
       response <- Responses.error(method)
-      body <- response.body
+      body <- response.body.asScala
       example <- BodyExamples(body)
       scenarioDescription <- scenarioDescription(body, example)
       errorResponse <- errorResponse(example)
@@ -319,17 +320,22 @@ case class BodyExample(example: ExampleSpec) {
 
 object BodyExamples {
   def apply(body: TypeDeclaration): Seq[BodyExample] = {
-    if (body.examples.size > 0) body.examples.toSeq.map(ex => BodyExample(ex)) else Seq(BodyExample(body.example))
+    if (body.examples.size > 0) body.examples.asScala.toSeq.map(ex => BodyExample(ex)) else Seq(BodyExample(body.example))
   }
 }
 
 object HttpStatus {
-
   def apply(statusCode: String): String = apply(statusCode.toInt)
 
   def apply(statusCode: Int): String = {
-    val responseStatus = HttpResponseStatus.valueOf(statusCode)
-    s"$statusCode (${responseStatus.reasonPhrase})"
+
+    val responseStatus: StatusCode = try {
+       StatusCode.int2StatusCode(statusCode)
+    } catch {
+      case _ : RuntimeException => StatusCodes.custom(statusCode,"non-standard", "" )
+    }
+
+    s"$statusCode (${responseStatus.reason})"
   }
 }
 

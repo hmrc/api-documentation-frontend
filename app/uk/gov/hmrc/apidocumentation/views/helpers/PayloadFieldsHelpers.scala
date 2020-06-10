@@ -20,7 +20,7 @@ import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration
 import org.raml.v2.api.model.v10.methods.Method
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 case class EnumValue(
                       name: String,
@@ -119,7 +119,7 @@ object ResponseFields extends RequestResponseFields {
   def apply(method: Method, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
     val responseBodies = for {
       response <- Responses.success(method)
-      body <- response.body
+      body <- response.body.asScala
     } yield {
       body
     }
@@ -130,7 +130,7 @@ object ResponseFields extends RequestResponseFields {
 
 object RequestFields extends RequestResponseFields {
   def apply(method: Method, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
-    extractFields(method.body, schemas)
+    extractFields(method.body.asScala, schemas)
   }
 }
 
