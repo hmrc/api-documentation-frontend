@@ -23,6 +23,10 @@ import utils.uk.gov.hmrc.apidocumentation.mocks.TableDrivenPropertyMocks
 
 class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPropertyChecks with TableDrivenPropertyMocks {
 
+  def getPageYOffset(): Int = {
+    executeScript("return window.pageYOffset;").toString.toInt
+  }
+
   feature("Navigation across documentation") {
 
     scenario("User is navigated to the top when Back to top link is clicked") {
@@ -45,13 +49,17 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
           "Endpoints"
         )
       executeScript("window.scrollTo(0, document.body.scrollHeight)")
+      val bottomY = getPageYOffset()
+
       forAll(topLinkClickedFromSection) {
         case "Errors" =>
           HelloWorldPage.selectErrorsBackToTop()
-          assert(executeScript("return window.pageYOffset;").toString.equalsIgnoreCase("0"))
+          val nowY = getPageYOffset()
+          assert(nowY < bottomY)
         case "Endpoints" =>
           HelloWorldPage.selectEndpointsBackToTop()
-          assert(executeScript("return window.pageYOffset;").toString.equalsIgnoreCase("0"))
+          val nowY = getPageYOffset()
+          assert(nowY < bottomY)
       }
     }
 

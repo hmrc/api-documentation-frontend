@@ -30,9 +30,9 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   def breadCrumbText = cssSelector(".breadcrumbs").element.text
 
-  def errorsBackToTop = find(cssSelector("div.bold-small > a")).get
+  def errorsBackToTop = find(id("bottom-skip-to-main")).get
 
-  def endpointsBackToTop = find(cssSelector("#section > div.bold-small > a")).get
+  def endpointsBackToTop = find(id("middle-skip-to-main")).get
 
   def applicationName = className("header__menu__proposition-name").element.text
 
@@ -149,7 +149,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
       do {
         position = executeScript(s"return document.getElementById('$id').getBoundingClientRect().top;").toString.toDouble.toInt
         val elapsed = System.currentTimeMillis() - startTime
-        if (elapsed > 5000) throw new RuntimeException(s"Did not scroll to $id within 5 seconds")
+        if (elapsed > 10000) throw new RuntimeException(s"Did not scroll to $id within 10 seconds")
       } while (position != 0)
     }
   }
