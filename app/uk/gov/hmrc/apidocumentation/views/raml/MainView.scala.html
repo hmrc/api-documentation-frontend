@@ -52,9 +52,8 @@
 <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section raml" aria-busy="false">
     <div id="section">
         <h1 id="title" class="heading-xlarge">
-            @Val(raml.title) API
+            @Val(raml.title) API<a name="title"></a>
         </h1>
-
         @for(version <- maybeVersion) {
             <table>
                 <col width="50%" />
@@ -89,10 +88,9 @@
             </div>
         }
         <div class="bold-small float--right">
-            <a href="#">
-                Back to top
-            </a>
+            <a id="middle-skip-to-main" tabIndex="-1" href="#title">Skip to main content</a>
         </div>
+
 
         @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.flatMap(_.visibility)))) { case (isPreview, visibility) =>
             @if(isPreview || visibility == DocsVisibility.VISIBLE) {
@@ -122,9 +120,7 @@
         }
 
         <div class="bold-small float--right">
-            <a href="#">
-                Back to top
-            </a>
+            <a id="bottom-skip-to-main" href="#title" tabindex="-1">Skip to main content </a>
         </div>
     </div>
 </div>

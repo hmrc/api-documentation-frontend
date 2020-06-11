@@ -21,6 +21,8 @@ import org.openqa.selenium.By
 import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.Select
 import org.scalatest.prop.TableDrivenPropertyChecks
+import org.openqa.selenium.support.ui.WebDriverWait
+import org.openqa.selenium.support.ui.ExpectedConditions
 
 object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
@@ -30,9 +32,9 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   def breadCrumbText = cssSelector(".breadcrumbs").element.text
 
-  def errorsBackToTop = find(cssSelector("div.bold-small > a")).get
+  def errorsBackToTop = find(id("bottom-skip-to-main")).get
 
-  def endpointsBackToTop = find(cssSelector("#section > div.bold-small > a")).get
+  def endpointsBackToTop = find(id("middle-skip-to-main")).get
 
   def applicationName = className("header__menu__proposition-name").element.text
 
@@ -144,21 +146,19 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
       val links = find(linkText(navigationLink)).get
       click on links
       val id = navigationLink.toLowerCase
-      val startTime = System.currentTimeMillis()
       var position = 0
-      do {
-        position = executeScript(s"return document.getElementById('$id').getBoundingClientRect().top;").toString.toDouble.toInt
-        val elapsed = System.currentTimeMillis() - startTime
-        if (elapsed > 5000) throw new RuntimeException(s"Did not scroll to $id within 5 seconds")
-      } while (position != 0)
+
+      new WebDriverWait(webDriver, 5).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
+      position = executeScript(s"return document.getElementById('$id').getBoundingClientRect().top;").toString.toDouble.toInt
+      assert(position == 0)
     }
   }
 
   def checkBackToTopLinkAfterErrorsSection(): Unit = {
     assert(errorsBackToTop.isDisplayed)
-    errorsBackToTop.text shouldBe "Back to top"
+    errorsBackToTop.text shouldBe "Skip to main content"
     assert(endpointsBackToTop.isDisplayed)
-    endpointsBackToTop.text shouldBe "Back to top"
+    endpointsBackToTop.text shouldBe "Skip to main content"
   }
 }
 
