@@ -14,6 +14,22 @@
  * limitations under the License.
  */
 
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.gov.hmrc.apidocumentation.models
 
 import org.raml.v2.api.model.v10.datamodel.{ExampleSpec, TypeDeclaration}
@@ -23,27 +39,140 @@ import uk.gov.hmrc.apidocumentation.services.RAML
 import uk.gov.hmrc.apidocumentation.views.helpers.{Annotation, GroupedResources, MethodParameters, ResourceGroup, VersionDocsVisible}
 
 import scala.collection.JavaConverters._
+import org.raml.v2.api.model.v10.methods.Method
+import uk.gov.hmrc.apidocumentation.views.helpers.Val
 
 case class RamlAndSchemas(raml: RAML, schemas: Map[String, JsonSchema])
 
 case class DocumentationItem(title: String, content: String)
 
-case class OurResource(parentResource: OurResource, uriParameters: List[TypeDeclaration2])
+case class HmrcMethod(method: String, displayName: String, body: List[TypeDeclaration2], headers: List[TypeDeclaration2], queryParameters: List[TypeDeclaration2], description: String)
+
+object HmrcMethod {
+  private val correctOrder = Map(
+    "get" -> 0, "post" -> 1, "put" -> 2, "delete" -> 3,
+    "head" -> 4, "patch" -> 5, "options" -> 6
+  )
+
+  def apply(method: Method): HmrcMethod = {
+    val queryParameters = method.queryParameters.asScala.toList.map(TypeDeclaration2.apply)
+    val headers = method.headers.asScala.toList.map(TypeDeclaration2.apply)
+    val body = method.body.asScala.toList.map(TypeDeclaration2.apply)
+
+    HmrcMethod(
+      method.method,
+      method.displayName.value,
+      body,
+      headers,
+      queryParameters,
+      method.description.value)
+  }
+
+  def apply(resource: Resource): List[HmrcMethod] =
+    resource.methods.asScala.toList.sortWith { (left, right) =>
+      (for {
+        l <- correctOrder.get(left.method)
+        r <- correctOrder.get(right.method)
+      } yield l < r).getOrElse(false)
+    }
+    .map(m => HmrcMethod.apply(m))
+}
+
+case class HmrcResource(resourcePath: String, methods: List[HmrcMethod], uriParameters: List[TypeDeclaration2], relativeUri: String, displayName: String, children: List[HmrcResource])
+
+// If we had some useful key we could use a Tree
+// Could we use resourcePath ???
+
+object HmrcResources {
+  type Child = HmrcResource
+  type MaybeParent = Option[HmrcResource]
+}
+
+import HmrcResources._
+
+case class HmrcResources(resources: List[HmrcResource], relationships: Map[Child, MaybeParent]) {
+
+  def combine(other: HmrcResources): HmrcResources = {
+    HmrcResources(this.resources ++ other.resources, this.relationships ++ other.relationships)
+  }
+
+  def isRoot(resource: HmrcResource): Boolean = {
+    relationships.get(resource).flatten.isEmpty
+  }
+
+  def roots: List[HmrcResource] = {
+    this.resources.filter(isRoot)
+  }
+
+  def parentOf(child: HmrcResource): Option[HmrcResource] = {
+    relationships.find(t => t._1 == child)map(_._1)
+  }
+
+  def ancestorsOf(resource: HmrcResource): List[HmrcResource] = {
+    def recursiveAncestor(lookAt: HmrcResource, ancestorsSoFar: List[HmrcResource]): List[HmrcResource] = {
+      parentOf(lookAt) match {
+        case None => ancestorsSoFar
+        case Some(a) => recursiveAncestor(a, a :: ancestorsSoFar)
+      }
+    }
+    recursiveAncestor(resource, List())
+  }
+}
 
 //TODO: Change description from MarkDown and example from ExampleSpec
-case class TypeDeclaration2(name: String, required: Boolean, description: MarkdownString, example: ExampleSpec, `type`: String)
+case class TypeDeclaration2(name: String, displayName: String, required: Boolean, description: MarkdownString, /* TODO */ example: ExampleSpec, examples: List[ExampleSpec], `type`: String)
+
+object TypeDeclaration2 {
+  def apply(td: TypeDeclaration): TypeDeclaration2 =
+    TypeDeclaration2(td.name, Val(td.displayName), td.required, td.description, td.example, td.examples.asScala.toList, td.`type`)
+}
 
 case class OurModel(
   title: String,
   version: String,
   deprecationMessage: Option[String],
   documentationItems: List[DocumentationItem],
+  resources: HmrcResources,
   resourceGroups: List[ResourceGroup],
   types: List[TypeDeclaration2]
 )
 
 object OurModel {
   def apply(raml: RAML): OurModel = {
+
+    def asHmrcResources: HmrcResources = {
+
+      def recurseHR(resource: Resource): HmrcResources = {
+        val childTrees: List[HmrcResources] = resource.resources().asScala.toList.map(recurseHR)
+
+        val immediateChildren: List[HmrcResource] = childTrees.flatMap(_.roots)
+
+        val theResource = HmrcResource(
+          resourcePath = resource.resourcePath,
+          methods = HmrcMethod(resource),
+          relativeUri = resource.relativeUri.value,
+          uriParameters = resource.uriParameters.asScala.toList.map(TypeDeclaration2.apply),
+          displayName = resource.displayName.value,
+          children = immediateChildren
+        )
+
+        val currentRelationships = theResource.children.map(c => (c -> Some(theResource))).toMap
+
+        val thisHR = HmrcResources(List(theResource), currentRelationships)
+
+        childTrees.foldRight(thisHR)( (l,r) => l.combine(r))
+      }
+
+      val roots = raml.resources.asScala.toList.map(r => recurseHR(r))
+
+      val finalHR = roots match {
+        case Nil => HmrcResources(List(), Map())
+        case head :: Nil => head
+        case head :: tail => tail.foldRight(head)( (l,r) => l.combine(r) )
+      }
+
+      finalHR
+    }
 
     def title: String = raml.title.value
 
@@ -55,7 +184,7 @@ object OurModel {
 
     def resourceGroups: List[ResourceGroup] = GroupedResources(raml.resources.asScala).toList
 
-    def typeDeclaration2Converter(td: TypeDeclaration): TypeDeclaration2 = TypeDeclaration2(td.name, td.required, td.description, td.example, td.`type`)
+    def typeDeclaration2Converter(td: TypeDeclaration): TypeDeclaration2 = TypeDeclaration2.apply(td)
 
     def types: List[TypeDeclaration2] = (raml.types.asScala.toList ++ raml.uses.asScala.flatMap(_.types.asScala)).map(typeDeclaration2Converter)
 
@@ -64,6 +193,7 @@ object OurModel {
       version,
       deprecationMessage,
       documentationItems,
+      resources = asHmrcResources,
       resourceGroups,
       types
     )

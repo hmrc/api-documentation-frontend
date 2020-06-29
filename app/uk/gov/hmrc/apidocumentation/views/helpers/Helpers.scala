@@ -62,6 +62,18 @@ object HeaderVal {
       case _  => example
     }
   }
+
+  def apply(header: TypeDeclaration2, version: String): String = {
+    def replace(example: String) = {
+      example.replace("application/vnd.hmrc.1.0", "application/vnd.hmrc." + version)
+    }
+    val example = Val(header.example) // TODO
+    header.displayName match {
+      case "Accept"=> replace(example)
+      case "Content-Type" => replace(example)
+      case _  => example
+    }
+  }
 }
 
 object FindProperty {
@@ -323,6 +335,10 @@ case class BodyExample(example: ExampleSpec) {
 object BodyExamples {
   def apply(body: TypeDeclaration): Seq[BodyExample] = {
     if (body.examples.size > 0) body.examples.asScala.toSeq.map(ex => BodyExample(ex)) else Seq(BodyExample(body.example))
+  }
+
+  def apply(body: TypeDeclaration2): Seq[BodyExample] = {
+    if (body.examples.size > 0) body.examples.map(ex => BodyExample(ex)) else Seq(BodyExample(body.example))
   }
 }
 

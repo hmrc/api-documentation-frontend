@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services.RAML
 
-@(res: OurResource, meth: Method, raml: RAML, ourModel: OurModel, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
+@(res: HmrcResource, meth: HmrcMethod, raml: RAML, ourModel: OurModel, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
 
 <section id="authorisation_@contentID" class="section">
     <h4 class="heading-small">Authorisation</h4>
@@ -50,7 +50,7 @@
     }
 </section>
 
-@defining(UriParams2(res, ourModel)) { params =>
+@defining(UriParams2(Some(res), ourModel)) { params =>
     @if(params.nonEmpty) {
         <section id="request-parameters_@contentID" class="section">
             <h4 class="heading-small">Path parameters</h4>
@@ -72,7 +72,7 @@
     }
 }
 
-@defining(QueryParams(meth, raml)) { params =>
+@defining(QueryParams2(Some(meth), ourModel)) { params =>
     @if(params.nonEmpty) {
         <section id="query-parameters_@contentID" class="section">
             <h4 class="heading-small first">Query parameters</h4>
@@ -95,7 +95,7 @@
 }
 
 @if(meth.headers.nonEmpty || authorisation._1 != "none") {
-    @headers(meth.headers.toSeq, ourModel.version, "Request headers", "required", authorisation)
+    @headers(meth.headers, ourModel.version, "Request headers", "required", authorisation)
 }
 
 @for(body <- meth.body) {
@@ -110,6 +110,7 @@
         }
     </section>
 }
+@*
 @fields(RequestFields(meth, schemas), "Request table", !Annotation.exists(raml, "(fieldOptionalityUnknown)"))
 
 @for(resp <- Responses.success(meth)) {
@@ -183,3 +184,4 @@
         </section>
     }
 }
+*@

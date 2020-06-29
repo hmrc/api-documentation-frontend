@@ -15,9 +15,9 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.views.helpers._
-@import org.raml.v2.api.model.v10.datamodel.TypeDeclaration
+@import uk.gov.hmrc.apidocumentation.models.TypeDeclaration2
 
-@(headers: Seq[TypeDeclaration], version: String, caption: String, required: String, authorisation: (String, Option[String]))
+@(headers: Seq[TypeDeclaration2], version: String, caption: String, required: String, authorisation: (String, Option[String]))
 
     <section id="request-headers" class="section">
         <h4 class="heading-small">@caption</h4>
