@@ -1,0 +1,185 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import org.raml.v2.api.model.v10.methods.Method
+@import org.raml.v2.api.model.v10.resources.Resource
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.controllers.routes
+@import uk.gov.hmrc.apidocumentation.views.helpers._
+@import uk.gov.hmrc.apidocumentation.services.RAML
+
+@(res: OurResource, meth: Method, raml: RAML, ourModel: OurModel, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
+
+<section id="authorisation_@contentID" class="section">
+    <h4 class="heading-small">Authorisation</h4>
+    @{
+    authorisation match {
+    case ("user", Some(scope)) => {
+    <p class="endpoint-description">
+        This endpoint is
+        <a href = "/api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted</a>
+        and requires an <code class="code--slim">Authorization</code> header containing an OAuth 2.0 Bearer Token with the <code class="code--slim">{scope}</code> scope.
+    </p>
+    }
+    case ("application", _) => {
+    <p class="endpoint-description">
+        This endpoint is
+        <a href = "/api-documentation/docs/authorisation/application-restricted-endpoints">application-restricted</a>
+        and requires an <code class="code--slim">Authorization</code> header containing an OAuth 2.0 Bearer Token.
+    </p>
+    }
+    case _ => {
+    <p class="endpoint-description">This endpoint is
+        <a href = "/api-documentation/docs/authorisation/open-access-endpoints">open access</a>
+        and requires no <code class="code--slim">Authorization</code> header.</p>
+    }
+    }
+    }
+</section>
+
+@defining(UriParams2(res, ourModel)) { params =>
+    @if(params.nonEmpty) {
+        <section id="request-parameters_@contentID" class="section">
+            <h4 class="heading-small">Path parameters</h4>
+            <table class="table--align-top">
+                <caption class="table__caption--low-vis">
+                    <div class="visually-hidden">Path parameters table</div>
+                </caption>
+                <thead>
+                    <tr class="table__row--desktop-heading">
+                        <th class="table__col--1-3">Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @method_params(params)
+                </tbody>
+            </table>
+        </section>
+    }
+}
+
+@defining(QueryParams(meth, raml)) { params =>
+    @if(params.nonEmpty) {
+        <section id="query-parameters_@contentID" class="section">
+            <h4 class="heading-small first">Query parameters</h4>
+            <table class="table--align-top">
+                <caption class="table__caption--low-vis">
+                    <div class="visually-hidden">Query parameters table</div>
+                </caption>
+                <thead>
+                    <tr class="table__row--desktop-heading">
+                        <th class="table__col--1-3">Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @method_params(params)
+                </tbody>
+            </table>
+        </section>
+    }
+}
+
+@if(meth.headers.nonEmpty || authorisation._1 != "none") {
+    @headers(meth.headers.toSeq, ourModel.version, "Request headers", "required", authorisation)
+}
+
+@for(body <- meth.body) {
+    <section id="sample-request_@contentID" class="section">
+        <h4 class="heading-small">Request</h4>
+        @for(example <- BodyExamples(body)) {
+            <section>
+                @if(example.description().isDefined){<strong>Scenario: @example.description()</strong>}
+                @if(example.documentation().isDefined){<p>@Markdown(example.documentation.get)</p>}
+                <pre class="code--block">@example.value()</pre>
+            </section>
+        }
+    </section>
+}
+@fields(RequestFields(meth, schemas), "Request table", !Annotation.exists(raml, "(fieldOptionalityUnknown)"))
+
+@for(resp <- Responses.success(meth)) {
+    <section id="sample-response_@contentID" class="section">
+        @if(resp.headers().nonEmpty) {
+            @headers(resp.headers.toSeq, ourModel.version, "Response headers", "", ("none", None))
+        }
+
+        <h4 class="heading-small">Response</h4>
+        <p>HTTP status: <code class="code--slim">@HttpStatus(Val(resp.code))</code></p>
+        @for(body <- resp.body) {
+            @for(example <- BodyExamples(body)) {
+                <section>
+                    @if(example.description().isDefined){@example.description()}
+                    @if(example.documentation().isDefined){<p>@Markdown(example.documentation.get)</p>}
+                    <pre class="code--block">@example.value()</pre>
+                </section>
+            }
+        }
+    </section>
+}
+@fields(ResponseFields(meth, schemas), "Response table", !Annotation.exists(raml, "(fieldOptionalityUnknown)"))
+
+@defining(ErrorScenarios(meth)) { errorScenarios =>
+    @if(errorScenarios.nonEmpty) {
+        <section id="error-responses_@contentID" class="section">
+            <h4 class="heading-small">Error scenarios</h4>
+            <table class="table--align-top">
+                <caption class="table__caption--low-vis">
+                    <div class="visually-hidden">Error scenarios table</div>
+                </caption>
+                <thead>
+                    <tr class="table__row--desktop-heading">
+                        <th>Scenario</th>
+                        <th>HTTP status</th>
+                        <th>Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for(errorScenario <- errorScenarios) {
+                    <tr class="table__row--responsive">
+                        <td data-heading="Error Scenario" class="table__detail--responsive">
+                            <div class="table__cell-contents--responsive">
+                                <p>@errorScenario("scenario")</p>
+                            </div>
+                        </td>
+                        <td data-heading="HTTP Status" class="table__detail--responsive">
+                            <div class="table__cell-contents--responsive">
+                                <p>@HttpStatus(errorScenario("httpStatus"))</p>
+                            </div>
+                        </td>
+                        <td data-heading="Code" class="table__detail--responsive">
+                            <div class="table__cell-contents--responsive">
+                                <p>@errorScenario("code")</p>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <p>For error scenarios that are common across all APIs, and for error formats, see our <a href = "/api-documentation/docs/reference-guide#errors">reference guide</a>.</p>
+        </section>
+    }
+}
+
+@defining(Annotation(meth, "(sandboxData)")) { sandboxData =>
+    @if(sandboxData.nonEmpty) {
+        <section id="sandbox-data_@contentID" class="section">
+            <h4 class="heading-small">Test data</h4>
+            @Markdown(sandboxData)
+        </section>
+    }
+}

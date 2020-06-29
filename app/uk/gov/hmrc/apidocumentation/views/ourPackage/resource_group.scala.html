@@ -1,0 +1,89 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.views.helpers._
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.services._
+
+@(resourceGroup: ResourceGroup, raml: RAML, ourModel: OurModel, schemas: Map[String, JsonSchema])
+
+@defining(resourceGroup.name.getOrElse("")) { titleSection =>
+
+    @if(resourceGroup.name.isDefined) {
+        <div id="@Slugify(resourceGroup.name.get)">
+            <h3 class="heading-medium">@resourceGroup.name.get</h3>
+            @if(resourceGroup.description.isDefined) {
+                <p>@Markdown(resourceGroup.description.get)</p>
+            }
+            <h4 class="heading-small">@titleSection resources</h4>
+        </div>
+    }
+
+    <div class="endpoint_group">
+        @for(res <- resourceGroup.resources) {
+            @if(Methods(res).nonEmpty) {
+                <div class="border__top-bottom border__top-bottom--open border--light-grey">
+                @for((method, index) <- Methods(res).zipWithIndex) {
+                    @if(!method.method().equalsIgnoreCase("OPTIONS")) {
+                        @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method().toLowerCase()}_accordion") { methodSlug =>
+                            <div
+                            id="@methodSlug"
+                            data-accordion
+                            data-accordion-animate
+                            data-accordion-set-hash
+                            aria-expanded="false">
+                                @if(index == 0) {
+                                    <div class="api-accordion__row persist-method">
+                                        @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
+                                            <code class="code--slim">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
+                                        }
+                                    </div>
+                                }
+                                <div class="persist-area">
+                                    <div class="accordion__row api-accordion__row persist-header">
+                                        <div>
+                                            <a class="accordion__button no--underline" href="#@methodSlug" data-accordion-button role="button">
+                                                <i class="arrow arrow--right" data-accordion-arrow></i>
+                                                <span class="font-xsmall underline">@Val(method.displayName)</span>
+                                            </a>
+                                        </div>
+                                        <div class="accordion__row__right align--middle table__col--1-4">
+                                            <span class="http-verb http-verb--@method.method().toLowerCase float--right">
+                                                @method.method().toUpperCase
+                                            </span>
+                                        </div>
+                                    </div>
+                                    @defining(s"${Slugify(method.displayName)}-${method.method().toLowerCase}") { contentID =>
+                                        <div id="@contentID" class="accordion__body indent" data-accordion-reveal data-accordion-body aria-hidden="true">
+                                            @Markdown(method.description)
+                                            @*  @resource_content(res, method, raml, ourModel, schemas, contentID, Authorisation(method)) *@
+                                            <div class="close-accordion">
+                                                <a href="#@methodSlug" data-accordion-button role="button">
+                                                    Close section
+                                                </a>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+                </div>
+            }
+        }
+    </div>
+}

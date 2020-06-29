@@ -20,6 +20,7 @@ import org.raml.v2.api.model.v10.datamodel.{ExampleSpec, StringTypeDeclaration, 
 import org.raml.v2.api.model.v10.methods.Method
 import org.raml.v2.api.model.v10.resources.Resource
 import org.raml.v2.api.model.v10.system.types.MarkdownString
+import uk.gov.hmrc.apidocumentation.models.{OurModel, OurResource, TypeDeclaration2}
 import uk.gov.hmrc.apidocumentation.services._
 
 import scala.collection.JavaConverters._
@@ -29,6 +30,14 @@ case class MethodParameter(name: String, typeName: String, baseTypeName: String,
 
 case object MethodParameter {
   def fromTypeDeclaration(td: TypeDeclaration) = {
+    val typeName = td.`type` match {
+      case "date-only" => "date"
+      case other => other
+    }
+    MethodParameter(td.name, typeName, typeName, td.required, td.description, td.example)
+  }
+
+  def fromTypeDeclaration(td: TypeDeclaration2) = {
     val typeName = td.`type` match {
       case "date-only" => "date"
       case other => other
@@ -61,12 +70,43 @@ trait MethodParameters {
       }
     }
   }
+
+  def resolveTypes2(parameters: Seq[TypeDeclaration2], ourModel: OurModel): Seq[MethodParameter] = {
+
+    def findType(param: TypeDeclaration2) = {
+      def findInTypes(types: List[TypeDeclaration2]) = types.find(_.name == param.`type`)
+
+      findInTypes(ourModel.types)
+    }
+
+    parameters.map { p =>
+
+      findType(p).fold(MethodParameter.fromTypeDeclaration(p)) {
+        case t: StringTypeDeclaration => {
+          MethodParameter.fromTypeDeclaration(p).copy(baseTypeName = t.`type`, pattern = Option(t.pattern),
+            enumValues = t.enumValues.asScala, example = Option(p.example).getOrElse(t.example))
+        }
+        case t => {
+          MethodParameter.fromTypeDeclaration(p).copy(baseTypeName = t.`type`,
+            example = Option(p.example).getOrElse(t.example))
+        }
+      }
+    }
+  }
 }
 
 object UriParams extends MethodParameters {
   def apply(resource: Resource, raml: RAML): Seq[MethodParameter] = {
     Option(resource).fold(Seq.empty[MethodParameter]) { res =>
       apply(res.parentResource, raml) ++ resolveTypes(res.uriParameters.asScala, raml)
+    }
+  }
+}
+
+object UriParams2 extends MethodParameters {
+  def apply(resource: OurResource, ourModel: OurModel): Seq[MethodParameter] = {
+    Option(resource).fold(Seq.empty[MethodParameter]) { res =>
+      apply(res.parentResource, ourModel) ++ resolveTypes2(res.uriParameters, ourModel)
     }
   }
 }

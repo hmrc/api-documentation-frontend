@@ -90,6 +90,8 @@ object Annotation {
 
   def exists(context: Annotable, names: String*): Boolean = getAnnotation(context, names: _*).isDefined
 
+  def optional(context: Annotable, names: String*): Option[String] = getAnnotation(context, names: _*).filterNot(_.isEmpty)
+
   def getAnnotation(context: Annotable, names: String*): Option[String] = {
     val matches = context.annotations.asScala.find { ann =>
       Option(ann.name).exists(stripNamespace(_) == names.head)
