@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.services._
 
-@(resourceGroup: ResourceGroup, raml: RAML, ourModel: OurModel, schemas: Map[String, JsonSchema])
+@(resourceGroup: ResourceGroup2, raml: RAML, ourModel: OurModel, schemas: Map[String, JsonSchema])
 
 @defining(resourceGroup.name.getOrElse("")) { titleSection =>
 
@@ -34,11 +34,11 @@
 
     <div class="endpoint_group">
         @for(res <- resourceGroup.resources) {
-            @if(Methods(res).nonEmpty) {
+            @if(HmrcMethod(res).nonEmpty) {
                 <div class="border__top-bottom border__top-bottom--open border--light-grey">
-                @for((method, index) <- Methods(res).zipWithIndex) {
-                    @if(!method.method().equalsIgnoreCase("OPTIONS")) {
-                        @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method().toLowerCase()}_accordion") { methodSlug =>
+                @for((method, index) <- HmrcMethod(res).zipWithIndex) {
+                    @if(!method.method.equalsIgnoreCase("OPTIONS")) {
+                        @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
                             <div
                             id="@methodSlug"
                             data-accordion
@@ -61,15 +61,15 @@
                                             </a>
                                         </div>
                                         <div class="accordion__row__right align--middle table__col--1-4">
-                                            <span class="http-verb http-verb--@method.method().toLowerCase float--right">
-                                                @method.method().toUpperCase
+                                            <span class="http-verb http-verb--@method.method.toLowerCase float--right">
+                                                @method.method.toUpperCase
                                             </span>
                                         </div>
                                     </div>
-                                    @defining(s"${Slugify(method.displayName)}-${method.method().toLowerCase}") { contentID =>
+                                    @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
                                         <div id="@contentID" class="accordion__body indent" data-accordion-reveal data-accordion-body aria-hidden="true">
                                             @Markdown(method.description)
-                                            @*  @resource_content(res, method, raml, ourModel, schemas, contentID, Authorisation(method)) *@
+                                            @resource_content(res, method, raml, ourModel, schemas, contentID, Authorisation(method))
                                             <div class="close-accordion">
                                                 <a href="#@methodSlug" data-accordion-button role="button">
                                                     Close section

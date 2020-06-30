@@ -41,15 +41,31 @@ import uk.gov.hmrc.apidocumentation.views.helpers.{Annotation, GroupedResources,
 import scala.collection.JavaConverters._
 import org.raml.v2.api.model.v10.methods.Method
 import uk.gov.hmrc.apidocumentation.views.helpers.Val
+import uk.gov.hmrc.apidocumentation.views.helpers.ResourceGroup2
 
 case class RamlAndSchemas(raml: RAML, schemas: Map[String, JsonSchema])
 
 case class DocumentationItem(title: String, content: String)
 
-case class HmrcMethod(method: String, displayName: String, body: List[TypeDeclaration2], headers: List[TypeDeclaration2], queryParameters: List[TypeDeclaration2], description: String)
+case class SecurityScheme(`type`: String, scope: Option[String])
+
+case class HmrcResponse(code: String,  body: List[TypeDeclaration2], headers: List[TypeDeclaration2], description: Option[String])
+
+case class HmrcMethod(
+  method: String,
+  displayName: String,
+  body: List[TypeDeclaration2],
+  headers: List[TypeDeclaration2],
+  queryParameters: List[TypeDeclaration2],
+  description: String,
+  securedBy: Option[SecurityScheme],
+  responses: List[HmrcResponse],
+  sandboxData: Option[String]
+)
 
 object HmrcMethod {
-  private val correctOrder = Map(
+
+private val correctOrder = Map(
     "get" -> 0, "post" -> 1, "put" -> 2, "delete" -> 3,
     "head" -> 4, "patch" -> 5, "options" -> 6
   )
@@ -59,13 +75,42 @@ object HmrcMethod {
     val headers = method.headers.asScala.toList.map(TypeDeclaration2.apply)
     val body = method.body.asScala.toList.map(TypeDeclaration2.apply)
 
+
+    def fetchAuthorisation: Option[SecurityScheme] = {
+      if (method.securedBy().asScala.nonEmpty) {
+        method.securedBy.get(0).securityScheme.`type` match {
+          case "OAuth 2.0" => Some(SecurityScheme("user", Some(Annotation(method, "(scope)"))))
+          case _ => Some(SecurityScheme("application", None))
+        }
+      } else {
+        None
+      }
+    }
+
+    def responses: List[HmrcResponse] = {
+      method.responses().asScala.toList.map(r => {
+        HmrcResponse(
+          code = r.code().value(),
+          body = r.body.asScala.toList.map(TypeDeclaration2.apply),
+          headers = r.headers().asScala.toList.map(TypeDeclaration2.apply),
+          description = Option(r.description()).map(_.value())
+        )
+      })
+    }
+
+    def sandboxData = Annotation.optional(method, "(sandboxData)")
+
     HmrcMethod(
       method.method,
       method.displayName.value,
       body,
       headers,
       queryParameters,
-      method.description.value)
+      method.description.value,
+      fetchAuthorisation,
+      responses,
+      sandboxData
+    )
   }
 
   def apply(resource: Resource): List[HmrcMethod] =
@@ -76,9 +121,19 @@ object HmrcMethod {
       } yield l < r).getOrElse(false)
     }
     .map(m => HmrcMethod.apply(m))
+
+  def apply(resource: HmrcResource): List[HmrcMethod] =
+    resource.methods.sortWith { (left, right) =>
+      (for {
+        l <- correctOrder.get(left.method)
+        r <- correctOrder.get(right.method)
+      } yield l < r).getOrElse(false)
+    }
 }
 
-case class HmrcResource(resourcePath: String, methods: List[HmrcMethod], uriParameters: List[TypeDeclaration2], relativeUri: String, displayName: String, children: List[HmrcResource])
+case class Group(name: String, description: String)
+
+case class HmrcResource(resourcePath: String, group: Option[Group], methods: List[HmrcMethod], uriParameters: List[TypeDeclaration2], relativeUri: String, displayName: String, children: List[HmrcResource])
 
 // If we had some useful key we could use a Tree
 // Could we use resourcePath ???
@@ -108,6 +163,10 @@ case class HmrcResources(resources: List[HmrcResource], relationships: Map[Child
     relationships.find(t => t._1 == child)map(_._1)
   }
 
+  def depthFirstDescendants(resource: HmrcResource): List[HmrcResource] = {
+    ???
+  }
+
   def ancestorsOf(resource: HmrcResource): List[HmrcResource] = {
     def recursiveAncestor(lookAt: HmrcResource, ancestorsSoFar: List[HmrcResource]): List[HmrcResource] = {
       parentOf(lookAt) match {
@@ -120,11 +179,11 @@ case class HmrcResources(resources: List[HmrcResource], relationships: Map[Child
 }
 
 //TODO: Change description from MarkDown and example from ExampleSpec
-case class TypeDeclaration2(name: String, displayName: String, required: Boolean, description: MarkdownString, /* TODO */ example: ExampleSpec, examples: List[ExampleSpec], `type`: String)
+case class TypeDeclaration2(name: String, displayName: String, `type`: String, required: Boolean, description: Option[String], /* TODO */ example: ExampleSpec, examples: List[ExampleSpec])
 
 object TypeDeclaration2 {
   def apply(td: TypeDeclaration): TypeDeclaration2 =
-    TypeDeclaration2(td.name, Val(td.displayName), td.required, td.description, td.example, td.examples.asScala.toList, td.`type`)
+    TypeDeclaration2(td.name, Val(td.displayName), td.`type`, td.required, Option(td.description).map(_.value()), td.example, td.examples.asScala.toList)
 }
 
 case class OurModel(
@@ -133,8 +192,9 @@ case class OurModel(
   deprecationMessage: Option[String],
   documentationItems: List[DocumentationItem],
   resources: HmrcResources,
-  resourceGroups: List[ResourceGroup],
-  types: List[TypeDeclaration2]
+  resourceGroups: List[ResourceGroup2],
+  types: List[TypeDeclaration2],
+  isFieldOptionalityKnown: Boolean
 )
 
 object OurModel {
@@ -147,9 +207,19 @@ object OurModel {
 
         val immediateChildren: List[HmrcResource] = childTrees.flatMap(_.roots)
 
+        val group = if (Annotation.exists(resource, "(group)")) {
+            val groupName = Annotation(resource, "(group)", "name")
+            val groupDesc = Annotation(resource, "(group)", "description")
+            Some(Group(groupName, groupDesc))
+        }
+        else {
+          None
+        }
+
         val theResource = HmrcResource(
           resourcePath = resource.resourcePath,
           methods = HmrcMethod(resource),
+          group = group,
           relativeUri = resource.relativeUri.value,
           uriParameters = resource.uriParameters.asScala.toList.map(TypeDeclaration2.apply),
           displayName = resource.displayName.value,
@@ -182,11 +252,13 @@ object OurModel {
 
     def documentationItems: List[DocumentationItem] = raml.documentation.asScala.toList.map(item => DocumentationItem(item.title.value, item.content.value))
 
-    def resourceGroups: List[ResourceGroup] = GroupedResources(raml.resources.asScala).toList
+    def resourceGroups: List[ResourceGroup2] = GroupedResources(asHmrcResources.resources).toList
 
     def typeDeclaration2Converter(td: TypeDeclaration): TypeDeclaration2 = TypeDeclaration2.apply(td)
 
     def types: List[TypeDeclaration2] = (raml.types.asScala.toList ++ raml.uses.asScala.flatMap(_.types.asScala)).map(typeDeclaration2Converter)
+
+    def isFieldOptionalityKnown: Boolean = !Annotation.exists(raml, "(fieldOptionalityUnknown)")
 
     OurModel(
       title,
@@ -195,7 +267,8 @@ object OurModel {
       documentationItems,
       resources = asHmrcResources,
       resourceGroups,
-      types
+      types,
+      isFieldOptionalityKnown
     )
   }
 }

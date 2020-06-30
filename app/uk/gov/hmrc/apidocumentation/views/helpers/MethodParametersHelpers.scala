@@ -26,7 +26,7 @@ import uk.gov.hmrc.apidocumentation.services._
 import scala.collection.JavaConverters._
 import uk.gov.hmrc.apidocumentation.models.HmrcMethod
 
-case class MethodParameter(name: String, typeName: String, baseTypeName: String, required: Boolean, description: MarkdownString,
+case class MethodParameter(name: String, typeName: String, baseTypeName: String, required: Boolean, description: String,
                            example: ExampleSpec, pattern: Option[String] = None, enumValues: Seq[String] = Seq.empty)
 
 case object MethodParameter {
@@ -35,7 +35,7 @@ case object MethodParameter {
       case "date-only" => "date"
       case other => other
     }
-    MethodParameter(td.name, typeName, typeName, td.required, td.description, td.example)
+    MethodParameter(td.name, typeName, typeName, td.required, td.description.value(), td.example)
   }
 
   def fromTypeDeclaration(td: TypeDeclaration2) = {
@@ -43,7 +43,7 @@ case object MethodParameter {
       case "date-only" => "date"
       case other => other
     }
-    MethodParameter(td.name, typeName, typeName, td.required, td.description, td.example)
+    MethodParameter(td.name, typeName, typeName, td.required, td.description.getOrElse(""), td.example)
   }
 }
 
@@ -102,9 +102,6 @@ object UriParams extends MethodParameters {
       apply(res.parentResource, raml) ++ resolveTypes(res.uriParameters.asScala, raml)
     }
   }
-}
-
-object UriParams2 extends MethodParameters {
   def apply(resource: Option[HmrcResource], ourModel: OurModel): Seq[MethodParameter] = {
     resource.fold(Seq.empty[MethodParameter]) { res =>
       apply(ourModel.resources.relationships.get(res).flatten, ourModel) ++ resolveTypes2(res.uriParameters, ourModel)
@@ -112,19 +109,16 @@ object UriParams2 extends MethodParameters {
   }
 }
 
+
 object QueryParams extends MethodParameters {
   def apply(method: Method, raml: RAML): Seq[MethodParameter] = {
     Option(method).fold(Seq.empty[MethodParameter]) { meth =>
       resolveTypes(meth.queryParameters.asScala, raml)
     }
   }
-}
-
-object QueryParams2 extends MethodParameters {
   def apply(method: Option[HmrcMethod], ourModel: OurModel): Seq[MethodParameter] = {
     method.fold(Seq.empty[MethodParameter]) { meth =>
       resolveTypes2(meth.queryParameters, ourModel)
     }
   }
 }
-

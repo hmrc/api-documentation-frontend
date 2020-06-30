@@ -151,6 +151,8 @@ object Markdown {
 
   def apply(text: String): Html = Html(process(text))
 
+  def apply(text: Option[String]): Html = apply(text.getOrElse(""))
+
   def apply(obj: {def value(): String}): Html = Option(obj).fold(emptyHtml)(node => apply(node.value()))
 
   import com.github.rjeschke.txtmark.{Configuration, Processor}
@@ -180,11 +182,43 @@ case class ResourceGroup(name: Option[String] = None, description: Option[String
     ResourceGroup(name, description, resources :+ resource)
   }
 }
+case class ResourceGroup2(name: Option[String] = None, description: Option[String] = None, resources: List[HmrcResource] = Nil) {
+  def +(resource: HmrcResource) = {
+    // TODO not efficient
+    ResourceGroup2(name, description, resources :+ resource)
+  }
+}
 
 
 object GroupedResources {
   def apply(resources: Seq[Resource]): Seq[ResourceGroup] = {
     group(flatten(resources)).filterNot(_.resources.length < 1)
+  }
+
+  def apply(resources: List[HmrcResource]): List[ResourceGroup2] = {
+    def flatten(resources: List[HmrcResource], acc: List[HmrcResource]): List[HmrcResource] = {
+      resources match {
+        case Nil => acc.reverse
+        case head :: tail =>
+          // TODO - not efficient to right concat
+          flatten(tail, flatten(head.children, head :: acc))
+      }
+    }
+
+    def group(resources: List[HmrcResource], currentGroup: ResourceGroup2 = ResourceGroup2(), groups: List[ResourceGroup2] = Nil): List[ResourceGroup2] = {
+      resources match {
+        case head :: tail => {
+          if (head.group.isDefined) {
+            group(tail, ResourceGroup2(head.group.map(_.name), head.group.map(_.description), List(head)), groups :+ currentGroup)
+          } else {
+            group(tail, currentGroup + head, groups)
+          }
+        }
+        case _ => groups :+ currentGroup
+      }
+    }
+
+    group(flatten(resources, Nil)).filterNot(_.resources.length < 1)
   }
 
   private def group(resources: Seq[Resource], currentGroup: ResourceGroup = ResourceGroup(), groups: Seq[ResourceGroup] = Nil): Seq[ResourceGroup] = {
@@ -228,6 +262,13 @@ object Methods {
 }
 
 object Authorisation {
+  def apply(method: HmrcMethod): (String, Option[String]) = {
+    method.securedBy.fold( ("none", Option.empty[String] ) )( _ match {
+      case SecurityScheme("OAuth 2.0", scope) => (("user", scope))
+      case _ => ("application", None)
+    })
+  }
+
   def apply(method: Method): (String, Option[String]) = fetchAuthorisation(method)
 
   private def fetchAuthorisation(method: Method): (String, Option[String]) = {
@@ -258,11 +299,26 @@ object Responses {
     val code = Val(response.code)
     code.startsWith("4") || code.startsWith("5")
   }
+
+
+  def success(method: HmrcMethod) = method.responses.filter(isSuccessResponse)
+
+  def error(method: HmrcMethod) = method.responses.filter(isErrorResponse)
+
+  private def isSuccessResponse(response: HmrcResponse) = {
+    response.code.startsWith("2") || response.code.startsWith("3")
+  }
+
+  private def isErrorResponse(response: HmrcResponse) = {
+    response.code.startsWith("4") || response.code.startsWith("5")
+  }
+
 }
 
 
 object ErrorScenarios {
   def apply(method: Method): Seq[Map[String, String]] = {
+
     val errorScenarios = for {
       response <- Responses.error(method)
       body <- response.body.asScala
@@ -306,6 +362,31 @@ object ErrorScenarios {
       ErrorResponse(Some(first.getTextContent))
     }
   }
+
+
+  def apply(method: HmrcMethod): Seq[Map[String, String]] = {
+
+    val errorScenarios = for {
+      response <- Responses.error(method)
+      body <- response.body
+      example <- BodyExamples(body)
+      scenarioDescription <- scenarioDescription(body, example)
+      errorResponse <- errorResponse(example)
+    } yield {
+      errorResponse.code.map(code =>
+        Map("scenario" -> scenarioDescription,
+          "code" -> code,
+          "httpStatus" -> response.code))
+    }
+
+    errorScenarios.flatten
+  }
+
+  private def scenarioDescription(body: TypeDeclaration2, example: BodyExample): Option[String] = {
+    example.description()
+    .orElse(body.description)
+  }
+
 }
 
 case class BodyExample(example: ExampleSpec) {
