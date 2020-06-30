@@ -50,6 +50,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     private lazy val previewDocumentationView = app.injector.instanceOf[PreviewDocumentationView]
     private lazy val serviceDocumentationView = app.injector.instanceOf[ServiceDocumentationView]
     private lazy val xmlDocumentationView = app.injector.instanceOf[XmlDocumentationView]
+    private lazy val serviceDocumentationView2 = app.injector.instanceOf[ServiceDocumentationView2]
 
     val underTest = new ApiDocumentationController(
       documentationService,
@@ -63,6 +64,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       apisFilteredView,
       previewDocumentationView,
       serviceDocumentationView,
+      serviceDocumentationView2,
       xmlDocumentationView
     )
   }
