@@ -14,14 +14,11 @@
  * limitations under the License.
  *@
 
-@import org.raml.v2.api.model.v10.methods.Method
-@import org.raml.v2.api.model.v10.resources.Resource
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.controllers.routes
 @import uk.gov.hmrc.apidocumentation.views.helpers._
-@import uk.gov.hmrc.apidocumentation.services.RAML
 
-@(res: HmrcResource, meth: HmrcMethod, raml: RAML, ourModel: OurModel, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
+@(res: HmrcResource, meth: HmrcMethod, ourModel: OurModel, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
 
 <section id="authorisation_@contentID" class="section">
     <h4 class="heading-small">Authorisation</h4>
@@ -132,7 +129,7 @@
         }
     </section>
 }
-@fields(ResponseFields(meth, schemas), "Response table", !Annotation.exists(raml, "(fieldOptionalityUnknown)"))
+@fields(ResponseFields(meth, schemas), "Response table", ourModel.isFieldOptionalityKnown)
 
 @defining(ErrorScenarios(meth)) { errorScenarios =>
     @if(errorScenarios.nonEmpty) {

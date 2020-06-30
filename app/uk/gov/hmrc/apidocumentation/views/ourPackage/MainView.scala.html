@@ -20,13 +20,12 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services._
-@import scala.collection.JavaConverters._
 
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 @this(applicationConfig: ApplicationConfig)
 
-@(raml: RAML, ourModel: OurModel, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)
+@(ourModel: OurModel, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)
 
 @renderGetApiVersionForm = {
 @for(api <- maybeApi) {
@@ -99,7 +98,7 @@
                     </h2>
 
                     @for(resourceGroup <- ourModel.resourceGroups) {
-                        @resource_group(resourceGroup, raml, ourModel, schemas)
+                        @resource_group(resourceGroup, ourModel, schemas)
                     }
                 </div>
             } else {

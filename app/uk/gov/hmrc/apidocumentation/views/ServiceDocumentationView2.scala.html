@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.apidocumentation.services._
 @import play.api.mvc.Request
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
@@ -24,7 +23,7 @@
 
 @this(apiMain: apiMain, ourMainView: ourPackage.MainView, applicationConfig: ApplicationConfig)
 
-@(raml: RAML, pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ourModel: OurModel, schemas: Map[String, JsonSchema], loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ourModel: OurModel, schemas: Map[String, JsonSchema], loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @topContent = {
     <div class="form-group">
@@ -75,5 +74,5 @@
             </div>
         </div>
     }
-    @ourMainView(raml, ourModel, schemas, Some(currentVersion), Some(api), loggedIn)
+    @ourMainView(ourModel, schemas, Some(currentVersion), Some(api), loggedIn)
 }

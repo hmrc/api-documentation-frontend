@@ -58,7 +58,7 @@ class ApiDocumentationController @Inject()(
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
   private lazy val apiDocCrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
-  
+
   def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       def pageAttributes(title: String = "API Documentation") = apidocumentation.models.PageAttributes(title,
@@ -257,7 +257,7 @@ class ApiDocumentationController @Inject()(
     def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) =
       documentationService.fetchRAML(service, version, cacheBuster).map { ramlAndSchemas =>
         val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation(service, selectedVersion, ramlAndSchemas.raml /* our object */))
-        Ok(serviceDocumentationView2(ramlAndSchemas.raml, attrs, api, selectedVersion, OurModel(ramlAndSchemas.raml), ramlAndSchemas.schemas, email.isDefined)).withHeaders(cacheControlHeaders)
+        Ok(serviceDocumentationView2(attrs, api, selectedVersion, OurModel(ramlAndSchemas.raml), ramlAndSchemas.schemas, email.isDefined)).withHeaders(cacheControlHeaders)
       }
 
     findVersion(apiOption) match {
