@@ -108,7 +108,7 @@ object UriParams extends MethodParameters {
   }
   def apply(resource: Option[HmrcResource], ourModel: OurModel): Seq[MethodParameter2] = {
     resource.fold(Seq.empty[MethodParameter2]) { res =>
-      apply(ourModel.resources.relationships.get(res).flatten, ourModel) ++ resolveTypes2(res.uriParameters, ourModel)
+      apply(ourModel.relationships.get(res).flatten, ourModel) ++ resolveTypes2(res.uriParameters, ourModel)
     }
   }
 }

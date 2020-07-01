@@ -34,9 +34,8 @@ package uk.gov.hmrc.apidocumentation.models
 
 import org.raml.v2.api.model.v10.datamodel.{ExampleSpec, TypeDeclaration}
 import org.raml.v2.api.model.v10.resources.Resource
-import org.raml.v2.api.model.v10.system.types.MarkdownString
 import uk.gov.hmrc.apidocumentation.services.RAML
-import uk.gov.hmrc.apidocumentation.views.helpers.{Annotation, GroupedResources, MethodParameters, ResourceGroup, VersionDocsVisible}
+import uk.gov.hmrc.apidocumentation.views.helpers.{Annotation, GroupedResources}
 
 import scala.collection.JavaConverters._
 import org.raml.v2.api.model.v10.methods.Method
@@ -58,7 +57,7 @@ case class HmrcMethod(
   body: List[TypeDeclaration2],
   headers: List[TypeDeclaration2],
   queryParameters: List[TypeDeclaration2],
-  description: String,
+  description: Option[String],
   securedBy: Option[SecurityScheme],
   responses: List[HmrcResponse],
   sandboxData: Option[String]
@@ -99,6 +98,11 @@ private val correctOrder = Map(
       })
     }
 
+    object SafeValue {
+      def apply(v: String): Option[String] = Option(v)
+      def apply(v: {def value(): String}): Option[String] = Option(v).map(_.value())
+    }
+
     def sandboxData = Annotation.optional(method, "(sandboxData)")
 
     HmrcMethod(
@@ -107,7 +111,7 @@ private val correctOrder = Map(
       body,
       headers,
       queryParameters,
-      method.description.value,
+      SafeValue(method.description),
       fetchAuthorisation,
       responses,
       sandboxData
@@ -136,46 +140,28 @@ case class Group(name: String, description: String)
 
 case class HmrcResource(resourcePath: String, group: Option[Group], methods: List[HmrcMethod], uriParameters: List[TypeDeclaration2], relativeUri: String, displayName: String, children: List[HmrcResource])
 
-// If we had some useful key we could use a Tree
-// Could we use resourcePath ???
+object HmrcResource {
+  def recursiveResource(resource: Resource): HmrcResource = {
+    val children: List[HmrcResource] = resource.resources().asScala.toList.map(recursiveResource)
 
-object HmrcResources {
-  type Child = HmrcResource
-  type MaybeParent = Option[HmrcResource]
-}
-
-import HmrcResources._
-
-case class HmrcResources(resources: List[HmrcResource], relationships: Map[Child, MaybeParent]) {
-
-  def combine(other: HmrcResources): HmrcResources = {
-    HmrcResources(this.resources ++ other.resources, this.relationships ++ other.relationships)
-  }
-
-  def isRoot(resource: HmrcResource): Boolean = {
-    relationships.get(resource).flatten.isEmpty
-  }
-
-  def roots: List[HmrcResource] = {
-    this.resources.filter(isRoot)
-  }
-
-  def parentOf(child: HmrcResource): Option[HmrcResource] = {
-    relationships.find(t => t._1 == child)map(_._1)
-  }
-
-  def depthFirstDescendants(resource: HmrcResource): List[HmrcResource] = {
-    ???
-  }
-
-  def ancestorsOf(resource: HmrcResource): List[HmrcResource] = {
-    def recursiveAncestor(lookAt: HmrcResource, ancestorsSoFar: List[HmrcResource]): List[HmrcResource] = {
-      parentOf(lookAt) match {
-        case None => ancestorsSoFar
-        case Some(a) => recursiveAncestor(a, a :: ancestorsSoFar)
-      }
+    val group = if (Annotation.exists(resource, "(group)")) {
+        val groupName = Annotation(resource, "(group)", "name")
+        val groupDesc = Annotation(resource, "(group)", "description")
+        Some(Group(groupName, groupDesc))
     }
-    recursiveAncestor(resource, List())
+    else {
+      None
+    }
+
+    HmrcResource(
+      resourcePath = resource.resourcePath,
+      methods = HmrcMethod(resource),
+      group = group,
+      relativeUri = resource.relativeUri.value,
+      uriParameters = resource.uriParameters.asScala.toList.map(TypeDeclaration2.apply),
+      displayName = resource.displayName.value,
+      children = children
+    )
   }
 }
 
@@ -236,55 +222,11 @@ case class OurModel(
   resourceGroups: List[ResourceGroup2],
   types: List[TypeDeclaration2],
   isFieldOptionalityKnown: Boolean,
-  resources: HmrcResources
+  relationships: Map[HmrcResource, Option[HmrcResource]]
 )
 
 object OurModel {
   def apply(raml: RAML): (OurModel,WireModel) = {
-
-    def asHmrcResources: HmrcResources = {
-
-      def recurseHR(resource: Resource): HmrcResources = {
-        val childTrees: List[HmrcResources] = resource.resources().asScala.toList.map(recurseHR)
-
-        val immediateChildren: List[HmrcResource] = childTrees.flatMap(_.roots)
-
-        val group = if (Annotation.exists(resource, "(group)")) {
-            val groupName = Annotation(resource, "(group)", "name")
-            val groupDesc = Annotation(resource, "(group)", "description")
-            Some(Group(groupName, groupDesc))
-        }
-        else {
-          None
-        }
-
-        val theResource = HmrcResource(
-          resourcePath = resource.resourcePath,
-          methods = HmrcMethod(resource),
-          group = group,
-          relativeUri = resource.relativeUri.value,
-          uriParameters = resource.uriParameters.asScala.toList.map(TypeDeclaration2.apply),
-          displayName = resource.displayName.value,
-          children = immediateChildren
-        )
-
-        val currentRelationships = theResource.children.map(c => (c -> Some(theResource))).toMap
-
-        val thisHR = HmrcResources(List(theResource), currentRelationships)
-
-        childTrees.foldRight(thisHR)( (l,r) => l.combine(r))
-      }
-
-      val roots = raml.resources.asScala.toList.map(r => recurseHR(r))
-
-      val finalHR = roots match {
-        case Nil => HmrcResources(List(), Map())
-        case head :: Nil => head
-        case head :: tail => tail.foldRight(head)( (l,r) => l.combine(r) )
-      }
-
-      finalHR
-    }
 
     def title: String = raml.title.value
 
@@ -294,7 +236,9 @@ object OurModel {
 
     def documentationItems: List[DocumentationItem] = raml.documentation.asScala.toList.map(item => DocumentationItem(item.title.value, item.content.value))
 
-    def resourceGroups: List[ResourceGroup2] = GroupedResources(asHmrcResources.resources).toList
+    def resources: List[HmrcResource] = raml.resources.asScala.toList.map(HmrcResource.recursiveResource)
+
+    def resourceGroups: List[ResourceGroup2] = GroupedResources(resources).toList
 
     def typeDeclaration2Converter(td: TypeDeclaration): TypeDeclaration2 = TypeDeclaration2.apply(td)
 
@@ -312,7 +256,19 @@ object OurModel {
       isFieldOptionalityKnown
     )
 
-    val om = OurModel(wm.title, wm.version, wm.deprecationMessage, wm.documentationItems, wm.resourceGroups, wm.types, wm.isFieldOptionalityKnown, resources = asHmrcResources)
+    val allResources: List[HmrcResource] = resourceGroups.flatMap(_.resources)
+
+    val parentChildRelationships: Map[HmrcResource, Option[HmrcResource]] = {
+      val startWithoutParents: Map[HmrcResource, Option[HmrcResource]] = allResources.map(r => (r->None)).toMap
+      allResources.map { p =>
+        p.children.map { c =>
+          (c -> Option(p))
+        }.toMap
+      }
+      .foldLeft(startWithoutParents)( (m1, m2) => m1 ++ m2)
+    }
+
+    val om = OurModel(wm.title, wm.version, wm.deprecationMessage, wm.documentationItems, wm.resourceGroups, wm.types, wm.isFieldOptionalityKnown, relationships = parentChildRelationships)
 
     (om,wm)
   }

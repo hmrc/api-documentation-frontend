@@ -25,33 +25,69 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.views.helpers.ResourceGroup2
 
 // TODO: Rebrand as wireModel spec
-class OurModelSpec extends UnitSpec {
-  "RAML to OurModel" should {
+class WireModelSpec extends UnitSpec {
+  "RAML to wireModel" should {
     "Simple.raml should parse title and version to our model" in {
-      val raml = loadRaml("simple.raml")
-      
-      val ourModel = OurModel(raml)._2
-      ourModel.title shouldBe "My simple title"
-      ourModel.version shouldBe "My version"
+      val raml = loadRaml("V2/simple.raml")
+
+      val wireModel: WireModel = OurModel(raml)._2
+      wireModel.title shouldBe "My simple title"
+      wireModel.version shouldBe "My version"
     }
 
     "With single method" in {
-      val raml = loadRaml("single-method.raml")
-      
-      val ourModel = OurModel(raml)._2
-      ourModel.resourceGroups.size shouldBe 1
+      val raml = loadRaml("V2/single-method.raml")
+
+      val wireModel = OurModel(raml)._2
+      wireModel.resourceGroups.size shouldBe 1
+
+      val rg = wireModel.resourceGroups(0)
+      rg.description shouldBe None
+      rg.name shouldBe None
+
+      val r = rg.resources(0)
+
+      r.resourcePath shouldBe "/my/endpoint"
+      r.methods.length shouldBe 1
+
+      val m = r.methods(0)
+      m.displayName shouldBe "My endpoint"
+      m.description shouldBe "My description"
+
+      // TODO: Check endpoint URL, description
+      // TODO: Doesn't handle missing description (null pointer)
+    }
+
+    "With multiple endpoints" in {
+      val raml = loadRaml("multiple-endpoints.raml")
+
+      // val wireModel = OurModel(raml)._2
+      // wireModel.resourceGroups.size shouldBe 1
+
+      // val rg = wireModel.resourceGroups(0)
+      // rg.description shouldBe None
+      // rg.name shouldBe None
+
+      // val r = rg.resources(0)
+
+      // r.resourcePath shouldBe "/my/endpoint"
+      // r.methods.length shouldBe 1
+
+      // val m = r.methods(0)
+      // m.displayName shouldBe "My endpoint"
+      // m.description shouldBe "My description"
 
       // TODO: Check endpoint URL, description
       // TODO: Doesn't handle missing description (null pointer)
     }
   }
 
-  object OurModelFormatters {
+  object wireModelFormatters {
     implicit val hmrcExampleSpecJF = Json.format[HmrcExampleSpec]
     implicit val typeDeclaration2JF = Json.format[TypeDeclaration2]
-    
+
     implicit val securitySchemeJF = Json.format[SecurityScheme]
-    
+
     implicit val groupJF = Json.format[Group]
     implicit val hmrcResponseJF = Json.format[HmrcResponse]
     implicit val hmrcMethodJF = Json.format[HmrcMethod]
@@ -64,17 +100,19 @@ class OurModelSpec extends UnitSpec {
   }
 
   "What does the JSON look like?" in {
-      import OurModelFormatters._
+      import wireModelFormatters._
 
-      val raml = loadRaml("simple.raml")
-      
+      val raml = loadRaml("multiple-endpoints.raml")
+
       val wireModel : WireModel = OurModel(raml)._2
 
       println(Json.prettyPrint(Json.toJson(wireModel)))
+
+      println(Map[String, Option[String]]("A" -> None) + ("A" -> Some("1")))
   }
 
   def loadRaml(filename: String) : RAML = {
-    new FileRamlLoader().load(s"test/resources/raml/v2/$filename") match {
+    new FileRamlLoader().load(s"test/resources/raml/$filename") match {
       case Failure(exception) => throw exception
       case Success(raml) => raml
     }
