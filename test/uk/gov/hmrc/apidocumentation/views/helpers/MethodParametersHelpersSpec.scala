@@ -91,7 +91,7 @@ class MethodParametersHelpersSpec extends WordSpec with Matchers {
     }
 
     "null resources should return an empty list" in {
-      val params = UriParams(null, null)
+      val params = UriParams(resource = null, raml = null)
       params.isEmpty shouldBe true
     }
 
@@ -285,7 +285,6 @@ class MethodParametersHelpersSpec extends WordSpec with Matchers {
           |    uriParameters:
           |      date:
           |        type: date-only
-          |
         """.stripMargin
 
       val ramlApi: Api = new StringRamlLoader().load(raml).get
@@ -341,7 +340,7 @@ class MethodParametersHelpersSpec extends WordSpec with Matchers {
     }
 
     "return an empty list when null method" in {
-      val params = QueryParams(null, null)
+      val params = QueryParams(method = null, raml = null)
       params.isEmpty shouldBe true
     }
   }
