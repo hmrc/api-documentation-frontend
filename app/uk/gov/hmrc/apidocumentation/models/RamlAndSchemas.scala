@@ -42,6 +42,7 @@ import scala.collection.JavaConverters._
 import org.raml.v2.api.model.v10.methods.Method
 import uk.gov.hmrc.apidocumentation.views.helpers.Val
 import uk.gov.hmrc.apidocumentation.views.helpers.ResourceGroup2
+import uk.gov.hmrc.apidocumentation.views.helpers.FindProperty
 
 case class RamlAndSchemas(raml: RAML, schemas: Map[String, JsonSchema])
 
@@ -179,26 +180,67 @@ case class HmrcResources(resources: List[HmrcResource], relationships: Map[Child
 }
 
 //TODO: Change description from MarkDown and example from ExampleSpec
-case class TypeDeclaration2(name: String, displayName: String, `type`: String, required: Boolean, description: Option[String], /* TODO */ example: ExampleSpec, examples: List[ExampleSpec])
+case class TypeDeclaration2(name: String, displayName: String, `type`: String, required: Boolean, description: Option[String], /* TODO */ example: HmrcExampleSpec, examples: List[HmrcExampleSpec])
 
 object TypeDeclaration2 {
   def apply(td: TypeDeclaration): TypeDeclaration2 =
-    TypeDeclaration2(td.name, Val(td.displayName), td.`type`, td.required, Option(td.description).map(_.value()), td.example, td.examples.asScala.toList)
+    TypeDeclaration2(td.name, Val(td.displayName), td.`type`, td.required, Option(td.description).map(_.value()), HmrcExampleSpec(td.example), td.examples.asScala.toList.map(HmrcExampleSpec.apply))
 }
+
+case class HmrcExampleSpec(description: Option[String] ,documentation: Option[String], code: Option[String], value: Option[String])
+
+object HmrcExampleSpec {
+  def apply(example : ExampleSpec) : HmrcExampleSpec = {
+
+    val description: Option[String] = {
+      FindProperty(example.structuredValue, "description", "value")
+    }
+
+    val documentation: Option[String] = {
+      if (Annotation.exists(example, "(documentation)")) {
+        Option(Annotation(example, "(documentation)"))
+      } else {
+        None
+      }
+    }
+
+    val code: Option[String] = {
+      FindProperty(example.structuredValue, "value", "code")
+        .orElse(FindProperty(example.structuredValue, "code"))
+    }
+
+    val value = {
+      FindProperty(example.structuredValue, "value")
+        .orElse(Some(example.value))
+    }
+
+    HmrcExampleSpec(description, documentation, code, value)
+  }
+}
+
+case class WireModel (
+  title: String,
+  version: String,
+  deprecationMessage: Option[String],
+  documentationItems: List[DocumentationItem],
+  resourceGroups: List[ResourceGroup2],
+  types: List[TypeDeclaration2],
+  isFieldOptionalityKnown: Boolean
+)
 
 case class OurModel(
   title: String,
   version: String,
   deprecationMessage: Option[String],
   documentationItems: List[DocumentationItem],
-  resources: HmrcResources,
   resourceGroups: List[ResourceGroup2],
   types: List[TypeDeclaration2],
-  isFieldOptionalityKnown: Boolean
+  isFieldOptionalityKnown: Boolean,
+  resources: HmrcResources
 )
 
 object OurModel {
-  def apply(raml: RAML): OurModel = {
+  def apply(raml: RAML): (OurModel,WireModel) = {
 
     def asHmrcResources: HmrcResources = {
 
@@ -260,15 +302,18 @@ object OurModel {
 
     def isFieldOptionalityKnown: Boolean = !Annotation.exists(raml, "(fieldOptionalityUnknown)")
 
-    OurModel(
+    val wm = WireModel(
       title,
       version,
       deprecationMessage,
       documentationItems,
-      resources = asHmrcResources,
       resourceGroups,
       types,
       isFieldOptionalityKnown
     )
+
+    val om = OurModel(wm.title, wm.version, wm.deprecationMessage, wm.documentationItems, wm.resourceGroups, wm.types, wm.isFieldOptionalityKnown, resources = asHmrcResources)
+
+    (om,wm)
   }
 }

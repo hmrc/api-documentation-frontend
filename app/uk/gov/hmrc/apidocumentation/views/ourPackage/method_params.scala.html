@@ -58,7 +58,7 @@
               </div>
           } else {
               <p>
-              @if(Val(param.example).nonEmpty) {For example: <code class="code--slim">@Val(param.example)</code>}
+              @if(Val(param.example.value).nonEmpty) {For example: <code class="code--slim">@Val(param.example.value)</code>}
               </p>
           }
       </div>

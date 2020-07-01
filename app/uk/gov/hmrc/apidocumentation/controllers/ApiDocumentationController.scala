@@ -257,7 +257,7 @@ class ApiDocumentationController @Inject()(
     def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) =
       documentationService.fetchRAML(service, version, cacheBuster).map { ramlAndSchemas =>
         val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation(service, selectedVersion, ramlAndSchemas.raml /* our object */))
-        Ok(serviceDocumentationView2(attrs, api, selectedVersion, OurModel(ramlAndSchemas.raml), ramlAndSchemas.schemas, email.isDefined)).withHeaders(cacheControlHeaders)
+        Ok(serviceDocumentationView2(attrs, api, selectedVersion, OurModel(ramlAndSchemas.raml)._1, ramlAndSchemas.schemas, email.isDefined)).withHeaders(cacheControlHeaders)
       }
 
     findVersion(apiOption) match {

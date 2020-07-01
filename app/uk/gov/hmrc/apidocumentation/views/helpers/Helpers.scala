@@ -47,6 +47,8 @@ object Slugify {
 object Val {
   def apply(obj: String): String = Option(obj).getOrElse("")
 
+  def apply(obj: Option[String]): String = obj.getOrElse("")
+
   def apply(obj: {def value(): String}): String = Option(obj).fold("")(_.value())
 }
 
@@ -67,11 +69,11 @@ object HeaderVal {
     def replace(example: String) = {
       example.replace("application/vnd.hmrc.1.0", "application/vnd.hmrc." + version)
     }
-    val example = Val(header.example) // TODO
+    val exampleValue = header.example.value.getOrElse("") // TODO
     header.displayName match {
-      case "Accept"=> replace(example)
-      case "Content-Type" => replace(example)
-      case _  => example
+      case "Accept"=> replace(exampleValue)
+      case "Content-Type" => replace(exampleValue)
+      case _  => exampleValue
     }
   }
 }
@@ -341,6 +343,11 @@ object ErrorScenarios {
       .fold(responseFromBody(bodyExample))(code => Some(ErrorResponse(code = Some(code))))
   }
 
+  private def errorResponse2(example: HmrcExampleSpec): Option[ErrorResponse] = {
+    example.code.fold(responseFromBody2(example))(code => Some(ErrorResponse(code = Some(code))))
+  }
+
+
   private def scenarioDescription(body: TypeDeclaration, example: BodyExample): Option[String] = {
     example.description()
       .orElse(Option(body.description).map(_.value))
@@ -348,12 +355,28 @@ object ErrorScenarios {
   private def responseFromBody(example: BodyExample): Option[ErrorResponse] = {
     responseFromJson(example).orElse(responseFromXML(example))
   }
-
   private def responseFromJson(example: BodyExample): Option[ErrorResponse] = {
     example.value.flatMap(v => Try(Json.parse(v).as[ErrorResponse]).toOption)
   }
 
   private def responseFromXML(example: BodyExample): Option[ErrorResponse] = {
+    for {
+      v <- example.value
+      codes <- Try(XML.fromString(v).getElementsByTagName("code")).toOption
+      first <- Option(codes.item(0))
+    } yield {
+      ErrorResponse(Some(first.getTextContent))
+    }
+  }
+
+  private def responseFromBody2(example: HmrcExampleSpec): Option[ErrorResponse] = {
+    responseFromJson2(example).orElse(responseFromXML2(example))
+  }
+
+  private def responseFromJson2(example: HmrcExampleSpec): Option[ErrorResponse] = {
+    example.value.flatMap(v => Try(Json.parse(v).as[ErrorResponse]).toOption)
+  }
+  private def responseFromXML2(example: HmrcExampleSpec): Option[ErrorResponse] = {
     for {
       v <- example.value
       codes <- Try(XML.fromString(v).getElementsByTagName("code")).toOption
@@ -371,7 +394,7 @@ object ErrorScenarios {
       body <- response.body
       example <- BodyExamples(body)
       scenarioDescription <- scenarioDescription(body, example)
-      errorResponse <- errorResponse(example)
+      errorResponse <- errorResponse2(example)
     } yield {
       errorResponse.code.map(code =>
         Map("scenario" -> scenarioDescription,
@@ -383,10 +406,13 @@ object ErrorScenarios {
   }
 
   private def scenarioDescription(body: TypeDeclaration2, example: BodyExample): Option[String] = {
-    example.description()
+    example.description
     .orElse(body.description)
   }
 
+  private def scenarioDescription(body: TypeDeclaration2, example: HmrcExampleSpec): Option[String] = {
+    example.description.orElse(body.description)
+  }
 }
 
 case class BodyExample(example: ExampleSpec) {
@@ -418,8 +444,8 @@ object BodyExamples {
     if (body.examples.size > 0) body.examples.asScala.toSeq.map(ex => BodyExample(ex)) else Seq(BodyExample(body.example))
   }
 
-  def apply(body: TypeDeclaration2): Seq[BodyExample] = {
-    if (body.examples.size > 0) body.examples.map(ex => BodyExample(ex)) else Seq(BodyExample(body.example))
+  def apply(body: TypeDeclaration2): Seq[HmrcExampleSpec] = {
+    if (body.examples.size > 0) body.examples else Seq(body.example)
   }
 }
 

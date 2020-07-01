@@ -100,9 +100,9 @@
         <h4 class="heading-small">Request</h4>
         @for(example <- BodyExamples(body)) {
             <section>
-                @if(example.description().isDefined){<strong>Scenario: @example.description()</strong>}
-                @if(example.documentation().isDefined){<p>@Markdown(example.documentation.get)</p>}
-                <pre class="code--block">@example.value()</pre>
+                @if(example.description.isDefined){<strong>Scenario: @example.description</strong>}
+                @if(example.documentation.isDefined){<p>@Markdown(example.documentation.get)</p>}
+                <pre class="code--block">@example.value</pre>
             </section>
         }
     </section>
@@ -121,9 +121,9 @@
         @for(body <- resp.body) {
             @for(example <- BodyExamples(body)) {
                 <section>
-                    @if(example.description().isDefined){@example.description()}
-                    @if(example.documentation().isDefined){<p>@Markdown(example.documentation.get)</p>}
-                    <pre class="code--block">@example.value()</pre>
+                    @if(example.description.isDefined){@example.description}
+                    @if(example.documentation.isDefined){<p>@Markdown(example.documentation.get)</p>}
+                    <pre class="code--block">@example.value</pre>
                 </section>
             }
         }
