@@ -1,0 +1,18 @@
+{
+  "clientOrganisationId": 123,
+  "uarn": 5365669000,
+  "capacity": "OWNER",
+  "providedEvidence": "RATES_BILL",
+  "evidence": [
+    {
+      "fileName": "ratesBill.pdf",
+      "evidenceType": "ratesBill"
+    },
+    {
+      "fileName": "otherDocument.pdf",
+      "evidenceType": "otherSupportingDocument"
+    }
+  ],
+  "startDate": "2018-04-06",
+  "endDate": "2019-04-06"
+}

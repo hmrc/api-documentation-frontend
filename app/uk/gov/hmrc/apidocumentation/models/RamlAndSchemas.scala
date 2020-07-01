@@ -166,11 +166,25 @@ object HmrcResource {
 }
 
 //TODO: Change description from MarkDown and example from ExampleSpec
-case class TypeDeclaration2(name: String, displayName: String, `type`: String, required: Boolean, description: Option[String], /* TODO */ example: HmrcExampleSpec, examples: List[HmrcExampleSpec])
+case class TypeDeclaration2(
+  name: String,
+  displayName: String,
+  `type`: String,
+  required: Boolean,
+  description: Option[String],
+  example: HmrcExampleSpec,
+  examples: List[HmrcExampleSpec])
 
 object TypeDeclaration2 {
   def apply(td: TypeDeclaration): TypeDeclaration2 =
-    TypeDeclaration2(td.name, Val(td.displayName), td.`type`, td.required, Option(td.description).map(_.value()), HmrcExampleSpec(td.example), td.examples.asScala.toList.map(HmrcExampleSpec.apply))
+    TypeDeclaration2(
+      td.name,
+      Val(td.displayName),
+      td.`type`,
+      td.required,
+      Option(td.description).map(_.value()),
+      HmrcExampleSpec(td.example),
+      td.examples.asScala.toList.map(HmrcExampleSpec.apply))
 }
 
 case class HmrcExampleSpec(description: Option[String] ,documentation: Option[String], code: Option[String], value: Option[String])

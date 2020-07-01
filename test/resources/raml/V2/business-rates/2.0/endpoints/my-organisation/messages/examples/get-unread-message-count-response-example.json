@@ -1,0 +1,9 @@
+{
+  "_links": {
+    "self": {
+      "href": "http://api.service.hmrc.gov.uk/my-organisation/messages/unreadCount",
+      "template": false
+    }
+  },
+  "messageCount": 10
+}

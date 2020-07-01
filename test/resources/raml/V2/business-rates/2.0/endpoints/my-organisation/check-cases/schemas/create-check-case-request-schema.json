@@ -1,0 +1,3913 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Check Case Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "valuationId": {
+      "description": "Unique valuation reference number",
+      "$ref": "#/definitions/iddef"
+    },
+    "propertyLinkSubmissionId": {
+      "description": "Unique reference number for the property link",
+      "type": "string",
+      "minLength": 1
+    },
+    "reasonCode": {
+      "description": "Reason for Check case. Uses a lookup code.",
+      "lookup": "codeOfGroundsDfe",
+      "type": "string",
+      "minLength": 1
+    },
+    "attachments": {
+      "description": "File attachments supporting the case",
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/definitions/attachments"
+      }
+    },
+    "declaration": {
+      "description": "Declaration that the information given in this form is correct and complete.",
+      "type": "boolean",
+      "enum": [
+        true
+      ]
+    },
+    "smallerProposer": {
+      "description": "Are you a smaller proposer (you are a smaller proposer if you have employed fewer than 10 people on average during the last 12 months. In that same period, you must also have had a turnover or balance sheet total of no more than £2 million.",
+      "type": "boolean"
+    },
+    "experiencingHardship": {
+      "description": "Are you experiencing hardship",
+      "type": "boolean"
+    },
+    "reliefsReceived": {
+      "description": "Forms of relief you are currently receiving",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SMALL_BUSINESS_RATE_RELIEF",
+          "RURAL_RATE_RELIEF",
+          "BUS_RATE_HOL_CHILD_DAY_NURSERY",
+          "EXPANDED_RETAIL_DISCOUNT",
+          "RETAIL_HOSPITALITY_LEISURE_GRANT",
+          "COVID-19_BUSINESS_SUPPORT_GRANT",
+          "PAYMENTS_DEFERRED"
+        ]
+      }
+    },
+    "originalValuation": {
+      "$ref": "#/definitions/detailedvaluation"
+    },
+    "proposedCharacteristics": {
+      "description": "Proposed Characteristics is required when Reason Code is: confirm/change property details, court decision, or change in local area. Proposed Characteristics is not allowed when Reason Code is: split, merge, or remove property.",
+      "$ref": "#/definitions/proposedCharacteristics"
+    }
+  },
+  "title": "Check case submission request",
+  "required": [
+    "valuationId",
+    "propertyLinkSubmissionId",
+    "reasonCode",
+    "declaration",
+    "smallerProposer",
+    "originalValuation"
+  ],
+  "definitions": {
+    "adjustment": {
+      "description": "Adjustments",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "adjustment": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The type of adjustment. Uses a lookup code.",
+          "lookup": "adjCode"
+        },
+        "polarity": {
+          "description": "Polarity of adjustment",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "MINUS",
+            "ZERO",
+            "PLUS"
+          ]
+        }
+      },
+      "title": "Adjustment",
+      "required": [
+        "adjustment",
+        "polarity"
+      ]
+    },
+    "assessmentaddress": {
+      "description": "Address",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "Property name",
+          "type": "string",
+          "maxLength": 72,
+          "minLength": 1
+        },
+        "firm": {
+          "description": "Firm name",
+          "type": "string",
+          "maxLength": 50,
+          "minLength": 1
+        },
+        "number": {
+          "description": "Property number",
+          "type": "string",
+          "maxLength": 4,
+          "minLength": 1
+        },
+        "street": {
+          "description": "Street",
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 1
+        },
+        "subStreet1": {
+          "description": "Sub street 1",
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 1
+        },
+        "subStreet2": {
+          "description": "Sub street 2",
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 1
+        },
+        "subStreet3": {
+          "description": "Sub street 3",
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 1
+        },
+        "postalDistrict": {
+          "description": "Postal district",
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 1
+        },
+        "town": {
+          "description": "Town",
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 1
+        },
+        "county": {
+          "description": "County",
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 1
+        },
+        "postcode": {
+          "description": "Postcode",
+          "type": "string",
+          "maxLength": 8,
+          "minLength": 1
+        }
+      },
+      "title": "Assessment address"
+    },
+    "attachments": {
+      "description": "Attachments",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "description": "File name",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "title": "Attachments",
+      "required": [
+        "filename"
+      ]
+    },
+    "banding": {
+      "description": "Banding information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accommodationBanding": {
+          "$ref": "#/definitions/bandingdef"
+        },
+        "foodBanding": {
+          "$ref": "#/definitions/bandingdef"
+        },
+        "liquorBanding": {
+          "$ref": "#/definitions/bandingdef"
+        },
+        "region": {
+          "description": "Region",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "title": "Banding",
+      "required": [
+        "region"
+      ]
+    },
+    "bandingdef": {
+      "description": "Bandings",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "description": "Category of banding (Food, liquor etc.)",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "title": "Banding def",
+      "required": [
+        "category"
+      ]
+    },
+    "basis": {
+      "description": "Basis of valuation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "basisFairMaintainableTurnover": {
+          "$ref": "#/definitions/basisfairmaintainableturnover"
+        }
+      },
+      "title": "Basis",
+      "required": [
+        "basisFairMaintainableTurnover"
+      ]
+    },
+    "basisfairmaintainableturnover": {
+      "description": "Basis of valuation - fair maintainable turnover",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "adoptedFmrTotal": {
+          "description": "Fair maintainable turnover",
+          "maximum": 9223372036854775807,
+          "type": "integer"
+        },
+        "adoptedTotalPct": {
+          "description": "The percentage of the fair maintainable turnover used for the rateable value",
+          "type": "number"
+        },
+        "banding": {
+          "$ref": "#/definitions/banding"
+        },
+        "calculatedRv": {
+          "description": "Receipts rateable value",
+          "maximum": 9223372036854775807,
+          "type": "integer"
+        },
+        "receipts": {
+          "$ref": "#/definitions/receipts"
+        }
+      },
+      "title": "Basis fair maintainable turnover"
+    },
+    "booleanDated": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "boolean"
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "bulkchanges": {
+      "description": "Changes made to Survey information (Bulk)",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "basisOfMeasurementCode": {
+          "description": "Basis of measurement. Uses a lookup code.",
+          "lookup": "basisOfMeasurement",
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 3
+        },
+        "surveyUnit": {
+          "$ref": "#/definitions/surveyunitchangeslist"
+        },
+        "parking": {
+          "$ref": "#/definitions/parkingchanges"
+        },
+        "otherAdditions": {
+          "description": "Other land or features",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/otheradditionschanges"
+          }
+        }
+      },
+      "title": "Bulk changes",
+      "required": [
+        "basisOfMeasurementCode",
+        "surveyUnit",
+        "parking",
+        "otherAdditions"
+      ]
+    },
+    "bulkvaluation": {
+      "description": "Valuation and survey information for a Bulk property",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "bulkValuationDetails": {
+          "$ref": "#/definitions/bulkvaluationdetails"
+        }
+      },
+      "title": "Bulk valuation",
+      "required": [
+        "bulkValuationDetails"
+      ]
+    },
+    "bulkvaluationdetails": {
+      "description": "Valuation and survey details for a Bulk property",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valuationSchemeReference": {
+          "description": "Valuation scheme reference",
+          "$ref": "#/definitions/iddef"
+        },
+        "basisOfMeasurement": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The basis of measurement. Uses a lookup code.",
+          "lookup": "basisOfMeasurement"
+        },
+        "surveyId": {
+          "description": "Unique identifier for the Survey Unit",
+          "$ref": "#/definitions/iddef"
+        },
+        "surveyUnit": {
+          "$ref": "#/definitions/surveyunits"
+        },
+        "otherAdditions": {
+          "$ref": "#/definitions/otheradditions"
+        },
+        "parking": {
+          "$ref": "#/definitions/parking"
+        },
+        "plantAndMachinery": {
+          "$ref": "#/definitions/plantandmachinery"
+        },
+        "totalBeforeEndAdjustments": {
+          "description": "Total rateable value before any final adjustments",
+          "type": "number"
+        },
+        "endAdjustment": {
+          "$ref": "#/definitions/endadjustments"
+        },
+        "total": {
+          "description": "Total rateable value before rounding applied",
+          "type": "number"
+        },
+        "composite": {
+          "description": "Part domestic (composite) property",
+          "type": "boolean"
+        }
+      },
+      "title": "Bulk valuation details",
+      "required": [
+        "valuationSchemeReference",
+        "basisOfMeasurement",
+        "surveyId",
+        "surveyUnit",
+        "totalBeforeEndAdjustments",
+        "total",
+        "composite"
+      ]
+    },
+    "proposedCharacteristics": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/bulkchanges"
+        },
+        {
+          "$ref": "#/definitions/licensedpremiseschanges"
+        }
+      ]
+    },
+    "coverage": {
+      "description": "Extent of coverage",
+      "type": "string",
+      "enum": [
+        "Full",
+        "Partial",
+        "None"
+      ]
+    },
+    "coverageDated": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "Full",
+            "Partial",
+            "None"
+          ]
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "detailedvaluation": {
+      "description": "Detailed valuation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valuationId": {
+          "description": "Unique valuation Id",
+          "$ref": "#/definitions/iddef"
+        },
+        "valuationType": {
+          "$ref": "#/definitions/valuationtype"
+        },
+        "uarn": {
+          "description": "Unique address reference number",
+          "$ref": "#/definitions/iddef"
+        },
+        "address": {
+          "$ref": "#/definitions/assessmentaddress"
+        },
+        "listYear": {
+          "description": "List Year relating to the assessment",
+          "type": "string",
+          "minLength": 1
+        },
+        "effectiveDate": {
+          "description": "Effective date of the assessment",
+          "type": "string",
+          "format": "date"
+        },
+        "rateableValue": {
+          "description": "Rateable value",
+          "type": "number"
+        },
+        "compositeProperty": {
+          "description": "Part domestic (composite) property",
+          "type": "boolean"
+        },
+        "valuationCharacteristics": {
+          "$ref": "#/definitions/valuationdetails"
+        }
+      },
+      "title": "Detailed valuation ",
+      "required": [
+        "valuationId",
+        "valuationType",
+        "uarn",
+        "address",
+        "listYear",
+        "effectiveDate",
+        "rateableValue",
+        "compositeProperty",
+        "valuationCharacteristics"
+      ]
+    },
+    "endadjustment": {
+      "description": "Adjustments to the whole",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "adjustment": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The type of adjustment. Uses a lookup code.",
+          "lookup": "adjCode"
+        },
+        "polarity": {
+          "description": "Polarity of adjustment",
+          "type": "string",
+          "enum": [
+            "MINUS",
+            "ZERO",
+            "PLUS"
+          ],
+          "minLength": 1
+        },
+        "adjPercent": {
+          "description": "Percentage of the Adjustment",
+          "type": "number"
+        }
+      },
+      "title": "End adjustment",
+      "required": [
+        "adjustment",
+        "polarity",
+        "adjPercent"
+      ]
+    },
+    "endadjustments": {
+      "description": "Adjustments to the whole",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "endAdjustmentsList": {
+          "description": "List of adjustments to the whole",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/endadjustment"
+          }
+        },
+        "value": {
+          "description": "Value of the adjustment",
+          "type": "number"
+        }
+      },
+      "title": "End adjustments",
+      "required": [
+        "endAdjustmentsList",
+        "value"
+      ]
+    },
+    "factorywarehousechanges": {
+      "description": "Changes made to a factory or warehouse survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - factory or warehouse",
+          "type": "string",
+          "enum": [
+            "FACTORY",
+            "WAREHOUSE"
+          ]
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "eavesHeight": {
+          "description": "Eaves height",
+          "type": "number",
+          "maximum": 9999999.99,
+          "minimum": 0
+        },
+        "numberOfStoreys": {
+          "description": "Number of storeys, this should be the number of floors in the whole property",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999
+        },
+        "floorRangeStartCode": {
+          "description": "Lowest floor of your property (this should be the lowest floor of your part of the property, not the lowest floor of the whole property). Uses a lookup code.",
+          "lookup": "floor",
+          "type": "string",
+          "minLength": 1
+        },
+        "floorRangeEndCode": {
+          "description": "Highest floor of your property (this should be the highest floor of your part of the property, not the highest floor of the whole property). Uses a lookup code.",
+          "lookup": "floor",
+          "type": "string",
+          "minLength": 1
+        },
+        "yearBuiltCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "yearRefurbishedCode": {
+          "description": "Year refurbished. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklersDated"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        }
+      },
+      "title": "Factory warehouse changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "eavesHeight",
+        "numberOfStoreys",
+        "floorRangeStartCode",
+        "floorRangeEndCode",
+        "yearBuiltCode",
+        "yearRefurbishedCode",
+        "centralHeating",
+        "airConditioning",
+        "sprinklers",
+        "passengerLift",
+        "passengerLiftAllFloors",
+        "goodsLift",
+        "goodsLiftAllFloors"
+      ]
+    },
+    "factorywarehousesurveyunit": {
+      "description": "Factory or Warehouse specific information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - factory or warehouse",
+          "type": "string",
+          "enum": [
+            "FACTORY",
+            "WAREHOUSE"
+          ]
+        },
+        "eavesHeight": {
+          "description": "Eaves height",
+          "type": "number",
+          "maximum": 9999999.99
+        },
+        "numberOfStoreys": {
+          "description": "Number of storeys, this should be the number of floors in the whole property",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999
+        },
+        "floorRangeStart": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The floor range start. Uses a lookup code.",
+          "lookup": "floor"
+        },
+        "floorRangeEnd": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The floor range end. Uses a lookup code.",
+          "lookup": "floor"
+        },
+        "yearBuilt": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was built. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "yearRefurbished": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was refurbished. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverage"
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverage"
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklers"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "type": "boolean"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "type": "boolean"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "type": "boolean"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "type": "boolean"
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Factory warehouse survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "hotelchanges": {
+      "description": "Changes made to a hotel or guesthouse survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitType": {
+          "description": "Type of Survey unit - hotel or guesthouse",
+          "type": "string",
+          "enum": [
+            "HOTEL",
+            "GUESTHOUSE"
+          ]
+        },
+        "liquor": {
+          "description": "Liquor sales",
+          "type": "boolean"
+        },
+        "food": {
+          "description": "Food sales",
+          "type": "boolean"
+        },
+        "ownerAccommodation": {
+          "description": "Manager/Owner accommodation",
+          "type": "boolean"
+        },
+        "typeCode": {
+          "description": "Type of property. Uses a lookup code.",
+          "lookup": "lpType",
+          "type": "string",
+          "minLength": 1
+        },
+        "locationCode": {
+          "description": "Property location. Uses a lookup code.",
+          "lookup": "lpLocation",
+          "type": "string",
+          "minLength": 1
+        },
+        "ageCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "lpAgeDfe",
+          "type": "string",
+          "minLength": 1
+        },
+        "extensionCode": {
+          "description": "Extension to the property. Uses a lookup code.",
+          "lookup": "lpExtension",
+          "$ref": "#/definitions/stringLength1Dated"
+        },
+        "latestRefurb": {
+          "description": "Year of any major refurbishment/modernisation.",
+          "type": "integer",
+          "maximum": 9999
+        },
+        "restaurantCovers": {
+          "description": "Number of restaurant covers",
+          "$ref": "#/definitions/numericLength4Dated"
+        },
+        "lettingRooms": {
+          "description": "Number of letting rooms",
+          "$ref": "#/definitions/numericLength5_1Dated"
+        },
+        "parkingSpaces": {
+          "description": "Number of parking spaces",
+          "$ref": "#/definitions/numericLength4Dated"
+        },
+        "staffAccommodation": {
+          "description": "Staff accommodation",
+          "$ref": "#/definitions/numericLength4Dated"
+        },
+        "passengerLifts": {
+          "description": "Number of passenger lift",
+          "$ref": "#/definitions/numericLength4Dated"
+        },
+        "gradeCode": {
+          "description": "Hotel grading. Uses a lookup code.",
+          "lookup": "lpGrade",
+          "$ref": "#/definitions/stringLength40Dated"
+        },
+        "concessionFranchise": {
+          "description": "Concession or franchise",
+          "type": "boolean"
+        },
+        "subletting": {
+          "description": "Subletting",
+          "type": "boolean"
+        }
+      },
+      "title": "Hotel changes",
+      "required": [
+        "surveyUnitType",
+        "liquor",
+        "food",
+        "ownerAccommodation",
+        "typeCode",
+        "locationCode",
+        "ageCode",
+        "extensionCode",
+        "latestRefurb",
+        "restaurantCovers",
+        "lettingRooms",
+        "parkingSpaces",
+        "staffAccommodation",
+        "passengerLifts",
+        "gradeCode",
+        "concessionFranchise",
+        "subletting"
+      ]
+    },
+    "hotelguesthousefeatures": {
+      "description": "hotel or guesthouse specific information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitType": {
+          "description": "Type of Survey unit - hotel or guesthouse",
+          "type": "string",
+          "enum": [
+            "HOTEL",
+            "GUESTHOUSE"
+          ]
+        },
+        "liquor": {
+          "description": "Liquor sales",
+          "type": "boolean"
+        },
+        "food": {
+          "description": "Food sales",
+          "type": "boolean"
+        },
+        "ownerAccommodation": {
+          "description": "Manager/Owner accommodation",
+          "type": "boolean"
+        },
+        "class": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The class of this licensed property. Uses a lookup code.",
+          "lookup": "lpClass"
+        },
+        "type": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The type of this licensed property. Uses a lookup code.",
+          "lookup": "lpType"
+        },
+        "location": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The location of this licensed property. Uses a lookup code.",
+          "lookup": "lpLocation"
+        },
+        "age": {
+          "$ref": "#/definitions/referencedata",
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "lpAgeDfe"
+        },
+        "extension": {
+          "$ref": "#/definitions/referencedata",
+          "description": "Indicates whether this licensed property has an extension. Uses a lookup code.",
+          "lookup": "lpExtension"
+        },
+        "refurb": {
+          "$ref": "#/definitions/refurb"
+        },
+        "restaurantCovers": {
+          "description": "Number of restaurant covers",
+          "type": "integer",
+          "maximum": 9999
+        },
+        "lettingRooms": {
+          "description": "Number of letting rooms",
+          "type": "number",
+          "multipleOf": 0.1,
+          "maximum": 99999.9,
+          "minimum": 0
+        },
+        "parkingSpaces": {
+          "description": "Number of parking spaces",
+          "type": "integer",
+          "maximum": 9999
+        },
+        "staffAccommodation": {
+          "description": "Staff accommodation",
+          "type": "integer",
+          "maximum": 9999
+        },
+        "passengerLifts": {
+          "description": "Number of passenger lifts",
+          "type": "integer",
+          "maximum": 9999
+        },
+        "grade": {
+          "$ref": "#/definitions/referencedata",
+          "description": "Hotel grading. Uses a lookup code.",
+          "lookup": "lpGrade"
+        },
+        "concessionFranchise": {
+          "description": "Concession or franchise",
+          "type": "boolean"
+        }
+      },
+      "title": "Hotel guest house features",
+      "required": [
+        "surveyUnitType",
+        "type"
+      ]
+    },
+    "iddef": {
+      "type": "integer",
+      "maximum": 9223372036854775807
+    },
+    "landsurveyunit": {
+      "description": "Land specific information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - land",
+          "type": "string",
+          "enum": [
+            "LAND"
+          ],
+          "minLength": 1
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Land survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "landchanges": {
+      "description": "Changes to land survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - land",
+          "type": "string",
+          "enum": [
+            "LAND"
+          ]
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        }
+      },
+      "title": "Land changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "licencedpremisesvaluationdetails": {
+      "description": "Valuation details for licensed premises",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lpValuationId": {
+          "description": "Unique identifier",
+          "type": "number"
+        },
+        "valuationMethod": {
+          "$ref": "#/definitions/valuationmethod"
+        },
+        "basis": {
+          "$ref": "#/definitions/basis"
+        },
+        "totalRateableValue": {
+          "description": "Total rateable value",
+          "type": "number"
+        },
+        "validatedRateableValue": {
+          "description": "Rateable value",
+          "type": "number"
+        },
+        "propertyFeatures": {
+          "$ref": "#/definitions/propertyfeature"
+        }
+      },
+      "title": "Licenced premises valuation details",
+      "required": [
+        "lpValuationId",
+        "valuationMethod",
+        "basis",
+        "totalRateableValue",
+        "validatedRateableValue",
+        "propertyFeatures"
+      ]
+    },
+    "licensedpremiseschanges": {
+      "description": "Changes made to licensed premises information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lpValuationId": {
+          "description": "Unique identifier for licensed premises valuation",
+          "$ref": "#/definitions/iddef"
+        },
+        "propertyFeatures": {
+          "$ref": "#/definitions/propertyfeatureschanges"
+        },
+        "receipts": {
+          "description": "Receipt information",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/receiptschanges"
+          }
+        }
+      },
+      "title": "Licensed premises changes",
+      "required": [
+        "lpValuationId",
+        "propertyFeatures",
+        "receipts"
+      ]
+    },
+    "licensedpremisesvaluation": {
+      "description": "Licensed premises valuation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lpValuationDetails": {
+          "$ref": "#/definitions/licencedpremisesvaluationdetails"
+        }
+      },
+      "title": "Licensed premises valuation",
+      "required": [
+        "lpValuationDetails"
+      ]
+    },
+    "misc11changes": {
+      "description": "Changes to miscellaneous (type 11) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-11)",
+          "type": "string",
+          "enum": [
+            "misc-11"
+          ]
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        }
+      },
+      "title": "Misc11 changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "misc11surveyunit": {
+      "description": "Miscellaneous (type 11) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-11)",
+          "type": "string",
+          "enum": [
+            "misc-11"
+          ],
+          "minLength": 1
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Miscellaneous type 11 - survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "misc15changes": {
+      "description": "Changes to miscellaneous (type 15) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-15)",
+          "type": "string",
+          "enum": [
+            "misc-15"
+          ]
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "yearBuiltCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "yearRefurbishedCode": {
+          "description": "Year refurbished. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklersDated"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        }
+      },
+      "title": "Misc15 changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "yearBuiltCode",
+        "yearRefurbishedCode",
+        "sprinklers",
+        "passengerLift",
+        "passengerLiftAllFloors",
+        "goodsLift",
+        "goodsLiftAllFloors"
+      ]
+    },
+    "misc15surveyunit": {
+      "description": "Miscellaneous (type 15) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-15)",
+          "type": "string",
+          "enum": [
+            "misc-15"
+          ],
+          "minLength": 1
+        },
+        "yearBuilt": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was built. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "yearRefurbished": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was refurbished. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklers"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "type": "boolean"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "type": "boolean"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "type": "boolean"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "type": "boolean"
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Miscellaneous type 15 - survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "misc16changes": {
+      "description": "Changes to miscellaneous (type 16) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-16)",
+          "type": "string",
+          "enum": [
+            "misc-16"
+          ]
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "yearBuiltCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "yearRefurbishedCode": {
+          "description": "Year refurbished. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklersDated"
+        }
+      },
+      "title": "Misc16 changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "centralHeating",
+        "airConditioning",
+        "yearBuiltCode",
+        "yearRefurbishedCode",
+        "sprinklers"
+      ]
+    },
+    "misc16surveyunit": {
+      "description": "Miscellaneous (type 16) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-16)",
+          "type": "string",
+          "enum": [
+            "misc-16"
+          ],
+          "minLength": 1
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverage"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverage"
+        },
+        "yearBuilt": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was built. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "yearRefurbished": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was refurbished. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklers"
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Miscellaneous type 16 - survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "misc18changes": {
+      "description": "Changes to miscellaneous (type 18) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-18)",
+          "type": "string",
+          "enum": [
+            "misc-18"
+          ],
+          "minLength": 1
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "yearBuiltCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "yearRefurbishedCode": {
+          "description": "Year refurbished. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        }
+      },
+      "title": "Misc18 changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "centralHeating",
+        "airConditioning",
+        "yearBuiltCode",
+        "yearRefurbishedCode"
+      ]
+    },
+    "misc18surveyunit": {
+      "description": "Miscellaneous (type 19) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-18)",
+          "type": "string",
+          "enum": [
+            "misc-18"
+          ],
+          "minLength": 1
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverage"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverage"
+        },
+        "yearBuilt": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was built. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "yearRefurbished": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was refurbished. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Miscellaneous type 18 - survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "misc3changes": {
+      "description": "Changes to miscellaneous (type 3) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-3)",
+          "type": "string",
+          "enum": [
+            "misc-3"
+          ],
+          "minLength": 1
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "eavesHeight": {
+          "description": "Eaves height",
+          "type": "number",
+          "maximum": 9999999.99,
+          "minimum": 0
+        },
+        "yearBuiltCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklersDated"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        }
+      },
+      "title": "Misc3 changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "centralHeating",
+        "airConditioning",
+        "eavesHeight",
+        "yearBuiltCode",
+        "sprinklers",
+        "passengerLift",
+        "passengerLiftAllFloors",
+        "goodsLift",
+        "goodsLiftAllFloors"
+      ]
+    },
+    "misc3surveyunit": {
+      "description": "Miscellaneous (type 3) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-3)",
+          "type": "string",
+          "enum": [
+            "misc-3"
+          ],
+          "minLength": 1
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverage"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverage"
+        },
+        "eavesHeight": {
+          "description": "Eaves height",
+          "type": "number",
+          "maximum": 9999999.99
+        },
+        "yearBuilt": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was built. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklers"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "type": "boolean"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "type": "boolean"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "type": "boolean"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "type": "boolean"
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Miscellaneous type 3 - survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "misc4changes": {
+      "description": "Changes to miscellaneous (type 4) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-4)",
+          "type": "string",
+          "enum": [
+            "misc-4"
+          ],
+          "minLength": 1
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "yearBuiltCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "yearRefurbishedCode": {
+          "description": "Year refurbished. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklersDated"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        }
+      },
+      "title": "Misc4 changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "centralHeating",
+        "airConditioning",
+        "yearBuiltCode",
+        "yearRefurbishedCode",
+        "sprinklers",
+        "passengerLift",
+        "passengerLiftAllFloors",
+        "goodsLift",
+        "goodsLiftAllFloors"
+      ]
+    },
+    "misc4surveyunit": {
+      "description": "Miscellaneous (type 4) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-4)",
+          "type": "string",
+          "enum": [
+            "misc-4"
+          ],
+          "minLength": 1
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverage"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverage"
+        },
+        "yearBuilt": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was built. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "yearRefurbished": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was refurbished. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklers"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "type": "boolean"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "type": "boolean"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "type": "boolean"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "type": "boolean"
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Miscellaneous type 4 - survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "misc5changes": {
+      "description": "Changes to miscellaneous (type 5) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-5)",
+          "type": "string",
+          "enum": [
+            "misc-5"
+          ],
+          "minLength": 1
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "yearBuiltCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklersDated"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        }
+      },
+      "title": "Misc5 changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "centralHeating",
+        "airConditioning",
+        "yearBuiltCode",
+        "sprinklers",
+        "passengerLift",
+        "passengerLiftAllFloors"
+      ]
+    },
+    "misc5surveyunit": {
+      "description": "Miscellaneous (type 5) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-5)",
+          "type": "string",
+          "enum": [
+            "misc-5"
+          ],
+          "minLength": 1
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverage"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverage"
+        },
+        "yearBuilt": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was built. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "sprinklers": {
+          "$ref": "#/definitions/sprinklers"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "type": "boolean"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "type": "boolean"
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Miscellaneous type 5 - survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "misc7changes": {
+      "description": "Changes to miscellaneous (type 7) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-7)",
+          "type": "string",
+          "enum": [
+            "misc-7"
+          ],
+          "minLength": 1
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "yearBuiltCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        }
+      },
+      "title": "Misc7 changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "yearBuiltCode"
+      ]
+    },
+    "misc7surveyunit": {
+      "description": "Miscellaneous (type 7) survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - miscellaneous (misc-7)",
+          "type": "string",
+          "enum": [
+            "misc-7"
+          ],
+          "minLength": 1
+        },
+        "yearBuilt": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was built. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Miscellaneous type 7 - survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "numericLength4Dated": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer",
+          "maximum": 9999,
+          "minimum": 0
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "numericLength5_1Dated": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "multipleOf": 0.1,
+          "maximum": 99999.9,
+          "minimum": 0
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "officechanges": {
+      "description": "Changes to office survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - office",
+          "type": "string",
+          "enum": [
+            "OFFICE"
+          ]
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "raisedFloor": {
+          "description": "Raised floors",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "numberOfStoreys": {
+          "description": "Number of storeys, this should be the number of floors in the whole property",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999
+        },
+        "floorRangeStartCode": {
+          "description": "Lowest floor of your property (this should be the lowest floor of your part of the property, not the lowest floor of the whole property). Uses a lookup code.",
+          "lookup": "floor",
+          "type": "string",
+          "minLength": 1
+        },
+        "floorRangeEndCode": {
+          "description": "Highest floor of your property (this should be the highest floor of your part of the property, not the highest floor of the whole property). Uses a lookup code.",
+          "lookup": "floor",
+          "type": "string",
+          "minLength": 1
+        },
+        "yearBuiltCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        },
+        "yearRefurbishedCode": {
+          "description": "Year refurbished. Uses a lookup code.",
+          "lookup": "year",
+          "type": "string",
+          "maxLength": 2,
+          "minLength": 1
+        }
+      },
+      "title": "Office changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "raisedFloor",
+        "centralHeating",
+        "airConditioning",
+        "passengerLift",
+        "passengerLiftAllFloors",
+        "numberOfStoreys",
+        "floorRangeStartCode",
+        "floorRangeEndCode",
+        "yearBuiltCode",
+        "yearRefurbishedCode"
+      ]
+    },
+    "officesurveyunit": {
+      "description": "Office survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - office",
+          "type": "string",
+          "enum": [
+            "OFFICE"
+          ],
+          "minLength": 1
+        },
+        "raisedFloor": {
+          "description": "Raised floors",
+          "type": "boolean"
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverage"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverage"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "type": "boolean"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "type": "boolean"
+        },
+        "numberOfStoreys": {
+          "description": "Number of storeys, this should be the number of floors in the whole property",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999
+        },
+        "floorRangeStart": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The floor range start. Uses a lookup code.",
+          "lookup": "floor"
+        },
+        "floorRangeEnd": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The floor range end. Uses a lookup code.",
+          "lookup": "floor"
+        },
+        "numberOfSalesFloors": {
+          "description": "Number of sales floors",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 999
+        },
+        "yearBuilt": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was built. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "yearRefurbished": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The year the property was refurbished. Uses a lookup code.",
+          "lookup": "year"
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Office survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "otheraddition": {
+      "description": "Other land or features",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "otherAdditionsId": {
+          "$ref": "#/definitions/otheradditionsiddef"
+        },
+        "otherAddition": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The code for the type of addition. Uses a lookup code.",
+          "lookup": "otherAdditionsDfe"
+        },
+        "sizeQuantity": {
+          "description": "Area m2 or unit",
+          "type": "number",
+          "maximum": 999999999.99
+        },
+        "adoptedAmount": {
+          "description": "£ per m2 or unit",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of other land or feature",
+          "type": "number"
+        }
+      },
+      "title": "Other addition",
+      "required": [
+        "otherAdditionsId",
+        "otherAddition",
+        "sizeQuantity",
+        "value"
+      ]
+    },
+    "otheradditions": {
+      "description": "Other land or features",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "otherAdditionsList": {
+          "description": "List of other land or features",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/otheraddition"
+          }
+        },
+        "value": {
+          "description": "Value of other land or features",
+          "type": "number"
+        }
+      },
+      "title": "Other additions",
+      "required": [
+        "otherAdditionsList",
+        "value"
+      ]
+    },
+    "otheradditionsadded": {
+      "description": "Other land or features that have been added",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "changeStatus": {
+          "description": "Type of change being made - addition",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "NEW"
+          ]
+        },
+        "code": {
+          "$ref": "#/definitions/otheradditionscode"
+        },
+        "sizeQuantity": {
+          "description": "Other Addition Area m2 or unit",
+          "type": "number",
+          "maximum": 999999999.99,
+          "minimum": 0
+        },
+        "effectiveDate": {
+          "description": "The date the change was effective from",
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "Other additions added",
+      "required": [
+        "changeStatus",
+        "code",
+        "sizeQuantity",
+        "effectiveDate"
+      ]
+    },
+    "otheradditionsamended": {
+      "description": "Other land or features that have been amended",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "otherAdditionsId": {
+          "$ref": "#/definitions/otheradditionsiddef"
+        },
+        "changeStatus": {
+          "description": "Type of change being made - amendment",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "AMENDED"
+          ]
+        },
+        "code": {
+          "$ref": "#/definitions/otheradditionscode"
+        },
+        "sizeQuantity": {
+          "description": "Other Addition Area m2 or unit",
+          "type": "number",
+          "maximum": 999999999.99,
+          "minimum": 0
+        },
+        "effectiveDate": {
+          "description": "The date the change was effective from",
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "Other additions amended",
+      "required": [
+        "otherAdditionsId",
+        "changeStatus",
+        "code",
+        "sizeQuantity",
+        "effectiveDate"
+      ]
+    },
+    "otheradditionschanges": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/otheradditionsadded"
+        },
+        {
+          "$ref": "#/definitions/otheradditionsamended"
+        },
+        {
+          "$ref": "#/definitions/otheradditionsdeleted"
+        },
+        {
+          "$ref": "#/definitions/otheradditionsunchanged"
+        }
+      ]
+    },
+    "otheradditionscode": {
+      "description": "Other land or feature. Uses a lookup code.",
+      "lookup": "oaCode",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 3
+    },
+    "otheradditionsdeleted": {
+      "description": "Other land or features that have been deleted",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "otherAdditionsId": {
+          "$ref": "#/definitions/otheradditionsiddef"
+        },
+        "changeStatus": {
+          "description": "Type of change being made - deletion",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "DELETED"
+          ]
+        },
+        "effectiveDate": {
+          "description": "The date the change was effective from",
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "Other additions deleted",
+      "required": [
+        "otherAdditionsId",
+        "changeStatus",
+        "effectiveDate"
+      ]
+    },
+    "otheradditionsiddef": {
+      "description": "Unique identifier for other land or features",
+      "$ref": "#/definitions/iddef"
+    },
+    "otheradditionsunchanged": {
+      "description": "Other land or features that remain unchanged",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "otherAdditionsId": {
+          "$ref": "#/definitions/otheradditionsiddef"
+        },
+        "changeStatus": {
+          "description": "Type of change being made - no change",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "UNCHANGED"
+          ]
+        },
+        "code": {
+          "$ref": "#/definitions/otheradditionscode"
+        },
+        "sizeQuantity": {
+          "description": "Other Addition Area m2 or unit",
+          "type": "number",
+          "maximum": 999999999.99,
+          "minimum": 0
+        }
+      },
+      "title": "Other additions unchanged",
+      "required": [
+        "otherAdditionsId",
+        "changeStatus",
+        "code",
+        "sizeQuantity"
+      ]
+    },
+    "parking": {
+      "description": "Parking",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "description": "Value of the parking",
+          "type": "number"
+        },
+        "parkingSpaces": {
+          "$ref": "#/definitions/parkingspaces"
+        },
+        "parkingAreas": {
+          "$ref": "#/definitions/parkingareas"
+        }
+      },
+      "title": "Parking",
+      "required": [
+        "value"
+      ]
+    },
+    "parkingarea": {
+      "description": "Parking areas",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "area": {
+          "description": "Parking area",
+          "type": "number",
+          "maximum": 9999999.99,
+          "minimum": 0
+        },
+        "adoptedAmount": {
+          "description": "Area - £ per m2",
+          "type": "number"
+        },
+        "value": {
+          "description": "Area - value",
+          "type": "number"
+        }
+      },
+      "title": "Parking area",
+      "required": [
+        "area",
+        "adoptedAmount",
+        "value"
+      ]
+    },
+    "parkingareachange": {
+      "description": "Parking areas change",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "area": {
+          "description": "Parking area",
+          "type": "number",
+          "maximum": 9999999.99,
+          "minimum": 0
+        },
+        "effectiveDate": {
+          "description": "Effective date of the change",
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "Parking area change",
+      "required": [
+        "area"
+      ]
+    },
+    "parkingareas": {
+      "description": "Parking areas",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surfacedCovered": {
+          "$ref": "#/definitions/parkingarea"
+        },
+        "surfacedOpen": {
+          "$ref": "#/definitions/parkingarea"
+        },
+        "unsurfacedCovered": {
+          "$ref": "#/definitions/parkingarea"
+        },
+        "unsurfacedOpen": {
+          "$ref": "#/definitions/parkingarea"
+        },
+        "garages": {
+          "$ref": "#/definitions/parkingarea"
+        }
+      },
+      "title": "Parking areas"
+    },
+    "parkingareaschanges": {
+      "description": "Parking areas changes",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surfacedCovered": {
+          "$ref": "#/definitions/parkingareachange"
+        },
+        "surfacedOpen": {
+          "$ref": "#/definitions/parkingareachange"
+        },
+        "unsurfacedCovered": {
+          "$ref": "#/definitions/parkingareachange"
+        },
+        "unsurfacedOpen": {
+          "$ref": "#/definitions/parkingareachange"
+        },
+        "garages": {
+          "$ref": "#/definitions/parkingareachange"
+        }
+      },
+      "title": "Parking areas changes"
+    },
+    "parkingchanges": {
+      "description": "Changes to parking information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "parkingSpaces": {
+          "$ref": "#/definitions/parkingspaceschanges"
+        },
+        "parkingAreas": {
+          "$ref": "#/definitions/parkingareaschanges"
+        }
+      },
+      "title": "Parking changes"
+    },
+    "parkingspace": {
+      "description": "Parking spaces",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "spaces": {
+          "description": "Number of spaces",
+          "type": "integer",
+          "maximum": 99999999999,
+          "minimum": 0
+        },
+        "adoptedAmount": {
+          "description": "£ per space",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of spaces",
+          "type": "number"
+        }
+      },
+      "title": "Parking space",
+      "required": [
+        "spaces",
+        "adoptedAmount",
+        "value"
+      ]
+    },
+    "parkingspacechange": {
+      "description": "Parking space change",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "spaces": {
+          "description": "Number of spaces",
+          "type": "integer",
+          "maximum": 99999999999,
+          "minimum": 0
+        },
+        "effectiveDate": {
+          "description": "Effective date of the change",
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "Parking space change",
+      "required": [
+        "spaces"
+      ]
+    },
+    "parkingspaces": {
+      "description": "Parking spaces",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surfacedCovered": {
+          "$ref": "#/definitions/parkingspace"
+        },
+        "surfacedOpen": {
+          "$ref": "#/definitions/parkingspace"
+        },
+        "unsurfacedCovered": {
+          "$ref": "#/definitions/parkingspace"
+        },
+        "unsurfacedOpen": {
+          "$ref": "#/definitions/parkingspace"
+        },
+        "garages": {
+          "$ref": "#/definitions/parkingspace"
+        }
+      },
+      "title": "Parking spaces"
+    },
+    "parkingspaceschanges": {
+      "description": "Parking spaces changes",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surfacedCovered": {
+          "$ref": "#/definitions/parkingspacechange"
+        },
+        "surfacedOpen": {
+          "$ref": "#/definitions/parkingspacechange"
+        },
+        "unsurfacedCovered": {
+          "$ref": "#/definitions/parkingspacechange"
+        },
+        "unsurfacedOpen": {
+          "$ref": "#/definitions/parkingspacechange"
+        },
+        "garages": {
+          "$ref": "#/definitions/parkingspacechange"
+        }
+      },
+      "title": "Parking spaces changes"
+    },
+    "plantandmachinery": {
+      "description": "Plant and machinery",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "plantAndMachineryAnnualEquivalent": {
+          "description": "Plant and machinery annual equivalent",
+          "type": "integer",
+          "maximum": 99999999999
+        }
+      },
+      "title": "Plant and machinery"
+    },
+    "propertyfeatureschanges": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/hotelchanges"
+        },
+        {
+          "$ref": "#/definitions/publichousechanges"
+        }
+      ]
+    },
+    "propertyfeature": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/hotelguesthousefeatures"
+        },
+        {
+          "$ref": "#/definitions/publichousefeatures"
+        }
+      ]
+    },
+    "publichousechanges": {
+      "description": "Changes to public houses",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitType": {
+          "description": "Type of Survey unit - pub",
+          "type": "string",
+          "enum": [
+            "PUB"
+          ]
+        },
+        "liquor": {
+          "description": "Liquor sales",
+          "type": "boolean"
+        },
+        "food": {
+          "description": "Food sales",
+          "type": "boolean"
+        },
+        "ownerAccommodation": {
+          "description": "Manager/Owner accommodation",
+          "type": "boolean"
+        },
+        "typeCode": {
+          "description": "Type of property. Uses a lookup code.",
+          "lookup": "lpType",
+          "type": "string",
+          "minLength": 1
+        },
+        "locationCode": {
+          "description": "Property location. Uses a lookup code.",
+          "lookup": "lpLocation",
+          "type": "string",
+          "minLength": 1
+        },
+        "ageCode": {
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "lpAgeDfe",
+          "type": "string",
+          "minLength": 1
+        },
+        "extensionCode": {
+          "description": "Extension to the property. Uses a lookup code.",
+          "lookup": "lpExtension",
+          "$ref": "#/definitions/stringLength1Dated"
+        },
+        "latestRefurb": {
+          "description": "Year of any major refurbishment/modernisation.",
+          "type": "integer",
+          "maximum": 9999
+        },
+        "restaurantCovers": {
+          "description": "Number of restaurant covers",
+          "$ref": "#/definitions/numericLength4Dated"
+        },
+        "lettingRooms": {
+          "description": "Number of letting rooms",
+          "$ref": "#/definitions/numericLength5_1Dated"
+        },
+        "parkingSpaces": {
+          "description": "Number of parking spaces",
+          "$ref": "#/definitions/numericLength4Dated"
+        },
+        "centralHeating": {
+          "description": "Central heating",
+          "$ref": "#/definitions/coverageDated"
+        },
+        "airConditioning": {
+          "description": "Air conditioning",
+          "$ref": "#/definitions/coverageDated"
+        },
+        "gamingMachines": {
+          "description": "Gaming machines",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "concessionFranchise": {
+          "description": "Concession or franchise",
+          "type": "boolean"
+        },
+        "subletting": {
+          "description": "Subletting",
+          "type": "boolean"
+        }
+      },
+      "title": "Public house changes",
+      "required": [
+        "surveyUnitType",
+        "liquor",
+        "food",
+        "ownerAccommodation",
+        "typeCode",
+        "locationCode",
+        "ageCode",
+        "extensionCode",
+        "latestRefurb",
+        "restaurantCovers",
+        "lettingRooms",
+        "parkingSpaces",
+        "centralHeating",
+        "airConditioning",
+        "gamingMachines",
+        "concessionFranchise",
+        "subletting"
+      ]
+    },
+    "publichousefeatures": {
+      "description": "Public house information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitType": {
+          "description": "Type of Survey unit - pub",
+          "type": "string",
+          "enum": [
+            "PUB"
+          ],
+          "minLength": 1
+        },
+        "liquor": {
+          "description": "Liquor sales",
+          "type": "boolean"
+        },
+        "food": {
+          "description": "Food sales",
+          "type": "boolean"
+        },
+        "ownerAccommodation": {
+          "description": "Manager/Owner accommodation",
+          "type": "boolean"
+        },
+        "class": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The class of this licensed property. Uses a lookup code.",
+          "lookup": "lpClass"
+        },
+        "type": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The type of licensed premises. Uses a lookup code.",
+          "lookup": "lpType"
+        },
+        "location": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The location of the licensed premises. Uses a lookup code.",
+          "lookup": "lpLocation"
+        },
+        "age": {
+          "$ref": "#/definitions/referencedata",
+          "description": "Year built. Uses a lookup code.",
+          "lookup": "lpAgeDfe"
+        },
+        "extension": {
+          "$ref": "#/definitions/referencedata",
+          "description": "Indicates whether the licensed premises has been extended. Uses a lookup code.",
+          "lookup": "lpExtension"
+        },
+        "refurb": {
+          "$ref": "#/definitions/refurb"
+        },
+        "restaurantCovers": {
+          "description": "Number of restaurant covers",
+          "type": "integer",
+          "maximum": 9999
+        },
+        "lettingRooms": {
+          "description": "Number of letting rooms",
+          "type": "number",
+          "multipleOf": 0.1,
+          "maximum": 99999.9,
+          "minimum": 0
+        },
+        "parkingSpaces": {
+          "description": "Number of parking spaces",
+          "type": "integer",
+          "maximum": 9999
+        },
+        "centralHeating": {
+          "$ref": "#/definitions/coverage"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverage"
+        },
+        "gamingMachines": {
+          "description": "Gaming machines",
+          "type": "boolean"
+        },
+        "concessionFranchise": {
+          "description": "Concession or franchise",
+          "type": "boolean"
+        }
+      },
+      "title": "Public house features",
+      "required": [
+        "surveyUnitType",
+        "type"
+      ]
+    },
+    "receipts": {
+      "description": "Receipt information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accommodationReceipts": {
+          "$ref": "#/definitions/receiptsdef"
+        },
+        "foodReceipts": {
+          "$ref": "#/definitions/receiptsdef"
+        },
+        "liquorReceipts": {
+          "$ref": "#/definitions/receiptsdef"
+        },
+        "otherReceipts": {
+          "$ref": "#/definitions/receiptsdef"
+        },
+        "totalReceiptsRv": {
+          "description": "Total value of the receipts",
+          "type": "number"
+        }
+      },
+      "title": "Receipts",
+      "required": [
+        "accommodationReceipts",
+        "foodReceipts",
+        "liquorReceipts",
+        "otherReceipts",
+        "totalReceiptsRv"
+      ]
+    },
+    "receiptschanges": {
+      "description": "Receipt information provided",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "yearWeeks": {
+          "description": "Year ending (if partial weeks in brackets e.g. 1/4/2015 (51 weeks)) ",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "amountDrink": {
+          "description": "Drink - The Gross receipts excluding VAT in GBP",
+          "type": "integer",
+          "maximum": 9999999999,
+          "minimum": 0
+        },
+        "amountFood": {
+          "description": "Food - The Gross receipts excluding VAT in GBP",
+          "type": "integer",
+          "maximum": 9999999999,
+          "minimum": 0
+        },
+        "amountAccommodation": {
+          "description": "Accommodation - The Gross receipts excluding VAT in GBP",
+          "type": "integer",
+          "maximum": 9999999999,
+          "minimum": 0
+        },
+        "amountOther": {
+          "description": "Other - The Gross receipts excluding VAT in GBP",
+          "type": "integer",
+          "maximum": 9999999999,
+          "minimum": 0
+        }
+      },
+      "title": "Receipts changes",
+      "required": [
+        "yearWeeks",
+        "amountDrink",
+        "amountFood",
+        "amountAccommodation",
+        "amountOther"
+      ]
+    },
+    "receiptsdef": {
+      "description": "Receipt information for Liquor sales, Food sales, Accommodation or Other",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "adoptedFMT": {
+          "description": "An estimate of the annual trade (excluding VAT) that a property of this type would be expected to achieve if run in a reasonably efficient way",
+          "type": "number"
+        },
+        "rentalPercentage": {
+          "description": "The percentage of the fair maintainable turnover used for the rateable value.",
+          "type": "number"
+        },
+        "adoptedRateableValue": {
+          "description": "Value of the receipt",
+          "type": "number"
+        }
+      },
+      "title": "Receipts def",
+      "required": [
+        "adoptedFMT",
+        "rentalPercentage",
+        "adoptedRateableValue"
+      ]
+    },
+    "referencedata": {
+      "description": "Reference data",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "description": "Reference code",
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "description": "Description for the code",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "title": "Reference data",
+      "required": [
+        "code",
+        "description"
+      ]
+    },
+    "refurb": {
+      "description": "Year of any major refurbishment/modernisation.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "latestRefurb": {
+          "description": "Year of any major refurbishment/modernisation.",
+          "type": "number",
+          "maximum": 9999
+        }
+      },
+      "title": "Refurb"
+    },
+    "shopchanges": {
+      "description": "Changes made to Shop survey information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - shop",
+          "type": "string",
+          "enum": [
+            "SHOP"
+          ]
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveylines"
+          }
+        },
+        "escalator": {
+          "description": "Escalator",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "escalatorAllFloors": {
+          "description": "Escalator all floors",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverageDated"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "$ref": "#/definitions/booleanDated"
+        },
+        "numberOfStoreys": {
+          "description": "Number of storeys, this should be the number of floors in the whole property",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999
+        },
+        "floorRangeStartCode": {
+          "description": "Lowest floor of your property (this should be the lowest floor of your part of the property, not the lowest floor of the whole property). Uses a lookup code.",
+          "lookup": "floor",
+          "type": "string",
+          "minLength": 1
+        },
+        "floorRangeEndCode": {
+          "description": "Highest floor of your property (this should be the highest floor of your part of the property, not the highest floor of the whole property). Uses a lookup code.",
+          "lookup": "floor",
+          "type": "string",
+          "minLength": 1
+        },
+        "numberOfSalesFloors": {
+          "description": "Number of sales floors",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999
+        }
+      },
+      "title": "Shop changes",
+      "required": [
+        "surveyUnitId",
+        "surveyUnitType",
+        "surveyLinesList",
+        "escalator",
+        "escalatorAllFloors",
+        "airConditioning",
+        "passengerLift",
+        "passengerLiftAllFloors",
+        "goodsLift",
+        "goodsLiftAllFloors",
+        "numberOfStoreys",
+        "floorRangeStartCode",
+        "floorRangeEndCode",
+        "numberOfSalesFloors"
+      ]
+    },
+    "shopsurveyunit": {
+      "description": "Shop information",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valueBeforeAdjustments": {
+          "description": "Value of survey unit before adjustments",
+          "type": "number"
+        },
+        "value": {
+          "description": "Value of survey unit",
+          "type": "number"
+        },
+        "surveyUnitId": {
+          "$ref": "#/definitions/surveyunitiddef"
+        },
+        "surveyUnitNumber": {
+          "$ref": "#/definitions/surveyunitnumberdef"
+        },
+        "surveyUnitType": {
+          "description": "Type of Survey unit - shop",
+          "type": "string",
+          "enum": [
+            "SHOP"
+          ],
+          "minLength": 1
+        },
+        "escalator": {
+          "description": "Escalator",
+          "type": "boolean"
+        },
+        "escalatorAllFloors": {
+          "description": "Escalator goes to all floors",
+          "type": "boolean"
+        },
+        "airConditioning": {
+          "$ref": "#/definitions/coverage"
+        },
+        "passengerLift": {
+          "description": "Passenger lift",
+          "type": "boolean"
+        },
+        "passengerLiftAllFloors": {
+          "description": "Passenger lift - all floors",
+          "type": "boolean"
+        },
+        "goodsLift": {
+          "description": "Goods lift",
+          "type": "boolean"
+        },
+        "goodsLiftAllFloors": {
+          "description": "Goods lift - all floors",
+          "type": "boolean"
+        },
+        "numberOfStoreys": {
+          "description": "Number of storeys, this should be the number of floors in the whole property",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999
+        },
+        "floorRangeStart": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The floor range start. Uses a lookup code.",
+          "lookup": "floor"
+        },
+        "floorRangeEnd": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The floor range end. Uses a lookup code.",
+          "lookup": "floor"
+        },
+        "numberOfSalesFloors": {
+          "description": "Number of sales floors",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 999
+        },
+        "surveyLinesList": {
+          "description": "List of floor areas",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunitline"
+          }
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitadjustments"
+        }
+      },
+      "title": "Shop survey unit",
+      "required": [
+        "valueBeforeAdjustments",
+        "value",
+        "surveyUnitId",
+        "surveyUnitNumber",
+        "surveyUnitType",
+        "surveyLinesList"
+      ]
+    },
+    "sprinklers": {
+      "description": "Sprinklers",
+      "type": "string",
+      "enum": [
+        "A",
+        "M",
+        "N"
+      ]
+    },
+    "sprinklersDated": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "A",
+            "M",
+            "N"
+          ]
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "stringLength40Dated": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "stringLength1Dated": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "surveylineiddef": {
+      "description": "Unique identifier for the floor area",
+      "$ref": "#/definitions/iddef"
+    },
+    "surveylines": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/surveylinesadded"
+        },
+        {
+          "$ref": "#/definitions/surveylinesamended"
+        },
+        {
+          "$ref": "#/definitions/surveylinesdeleted"
+        },
+        {
+          "$ref": "#/definitions/surveylinesunchanged"
+        }
+      ]
+    },
+    "surveylinesadded": {
+      "description": "Floor areas that have been added",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "changeStatus": {
+          "description": "Type of change being made - addition",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "NEW"
+          ]
+        },
+        "floorCode": {
+          "description": "Floor Use Code. Uses a lookup code.",
+          "lookup": "floor",
+          "type": "string",
+          "minLength": 1
+        },
+        "useCode": {
+          "description": "Accommodation Use Code. Uses a lookup code.",
+          "lookup": "useCode",
+          "type": "string",
+          "minLength": 1
+        },
+        "sizeQuantity": {
+          "description": "Floor area m2 or unit",
+          "type": "number",
+          "maximum": 999999.99,
+          "minimum": 0
+        },
+        "effectiveDate": {
+          "description": "The date the change was effective from",
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "Survey lines added",
+      "required": [
+        "changeStatus",
+        "useCode",
+        "floorCode",
+        "sizeQuantity",
+        "effectiveDate"
+      ]
+    },
+    "surveylinesamended": {
+      "description": "Floor areas that have been amended",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyLineId": {
+          "$ref": "#/definitions/surveylineiddef"
+        },
+        "changeStatus": {
+          "description": "Type of change being made - amendment",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "AMENDED"
+          ]
+        },
+        "useCode": {
+          "description": "Accommodation Use Code. Uses a lookup code.",
+          "lookup": "useCode",
+          "type": "string",
+          "minLength": 1
+        },
+        "sizeQuantity": {
+          "description": "Floor area m2 or unit",
+          "type": "number",
+          "maximum": 999999.99,
+          "minimum": 0
+        },
+        "effectiveDate": {
+          "description": "The date the change was effective from",
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "Survey lines amended",
+      "required": [
+        "surveyLineId",
+        "changeStatus",
+        "useCode",
+        "sizeQuantity",
+        "effectiveDate"
+      ]
+    },
+    "surveylinesdeleted": {
+      "description": "Floor areas that have been deleted",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyLineId": {
+          "$ref": "#/definitions/surveylineiddef"
+        },
+        "changeStatus": {
+          "description": "Type of change being made - deletion",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "DELETED"
+          ]
+        },
+        "effectiveDate": {
+          "description": "The date the change was effective from",
+          "type": "string",
+          "format": "date"
+        },
+        "deletionReasonCode": {
+          "description": "Reason for deletion",
+          "type": "string",
+          "enum": [
+            "DOMESTIC",
+            "DEMOLISHED"
+          ]
+        }
+      },
+      "title": "Survey lines deleted",
+      "required": [
+        "surveyLineId",
+        "changeStatus",
+        "effectiveDate",
+        "deletionReasonCode"
+      ]
+    },
+    "surveylinesunchanged": {
+      "description": "Floor areas that remain the same",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyLineId": {
+          "$ref": "#/definitions/surveylineiddef"
+        },
+        "changeStatus": {
+          "description": "Type of change being made - no change",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "UNCHANGED"
+          ]
+        },
+        "useCode": {
+          "description": "Accommodation Use Code. Uses a lookup code.",
+          "lookup": "useCode",
+          "type": "string",
+          "minLength": 1
+        },
+        "sizeQuantity": {
+          "description": "Floor area m2 or unit",
+          "type": "number",
+          "maximum": 999999.99,
+          "minimum": 0
+        }
+      },
+      "title": "Survey lines unchanged",
+      "required": [
+        "surveyLineId",
+        "changeStatus",
+        "useCode",
+        "sizeQuantity"
+      ]
+    },
+    "surveyunit": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/factorywarehousesurveyunit"
+        },
+        {
+          "$ref": "#/definitions/landsurveyunit"
+        },
+        {
+          "$ref": "#/definitions/misc11surveyunit"
+        },
+        {
+          "$ref": "#/definitions/misc15surveyunit"
+        },
+        {
+          "$ref": "#/definitions/misc16surveyunit"
+        },
+        {
+          "$ref": "#/definitions/misc18surveyunit"
+        },
+        {
+          "$ref": "#/definitions/misc3surveyunit"
+        },
+        {
+          "$ref": "#/definitions/misc4surveyunit"
+        },
+        {
+          "$ref": "#/definitions/misc5surveyunit"
+        },
+        {
+          "$ref": "#/definitions/misc7surveyunit"
+        },
+        {
+          "$ref": "#/definitions/officesurveyunit"
+        },
+        {
+          "$ref": "#/definitions/shopsurveyunit"
+        }
+      ]
+    },
+    "surveyunitadjustments": {
+      "description": "Adjustments to the survey unit",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "adjustmentsList": {
+          "description": "List of adjustments to the survey unit",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/adjustment"
+          }
+        },
+        "value": {
+          "description": "Value of adjustments",
+          "type": "number"
+        },
+        "compoundPercent": {
+          "description": "Percentage adjustment for the survey unit",
+          "type": "number"
+        }
+      },
+      "title": "Survey unit adjustments",
+      "required": [
+        "adjustmentsList"
+      ]
+    },
+    "surveyunitchanges": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/factorywarehousechanges"
+        },
+        {
+          "$ref": "#/definitions/landchanges"
+        },
+        {
+          "$ref": "#/definitions/misc11changes"
+        },
+        {
+          "$ref": "#/definitions/misc15changes"
+        },
+        {
+          "$ref": "#/definitions/misc16changes"
+        },
+        {
+          "$ref": "#/definitions/misc18changes"
+        },
+        {
+          "$ref": "#/definitions/misc3changes"
+        },
+        {
+          "$ref": "#/definitions/misc4changes"
+        },
+        {
+          "$ref": "#/definitions/misc5changes"
+        },
+        {
+          "$ref": "#/definitions/misc7changes"
+        },
+        {
+          "$ref": "#/definitions/officechanges"
+        },
+        {
+          "$ref": "#/definitions/shopchanges"
+        }
+      ]
+    },
+    "surveyunitchangeslist": {
+      "description": "List of survey unit changes",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitsList": {
+          "description": "List of survey units",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/surveyunitchanges"
+          }
+        }
+      },
+      "title": "Survey unit changes list",
+      "required": [
+        "surveyUnitsList"
+      ]
+    },
+    "surveyunitiddef": {
+      "description": "Unique identifier for the Survey Unit",
+      "$ref": "#/definitions/iddef"
+    },
+    "surveyunitline": {
+      "description": "A list of Floor Areas within the Survey Unit, there will be at least one for each Survey Unit",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lineNumber": {
+          "description": "Floor area - line reference",
+          "type": "integer"
+        },
+        "surveyLineId": {
+          "$ref": "#/definitions/surveylineiddef"
+        },
+        "floor": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The floor. Uses a lookup code.",
+          "lookup": "floor"
+        },
+        "useCode": {
+          "$ref": "#/definitions/referencedata",
+          "description": "The use code for this survey unit line. Uses a lookup code.",
+          "lookup": "useCode"
+        },
+        "sizeQuantity": {
+          "description": "Floor area m2 or unit",
+          "type": "number",
+          "maximum": 999999.99
+        },
+        "pricePerM2orUnit": {
+          "description": "Floor Area £ per m2 or unit",
+          "type": "number"
+        },
+        "basicRelativity": {
+          "description": "Relativity",
+          "type": "number"
+        },
+        "adjustment": {
+          "$ref": "#/definitions/surveyunitlineadjustments"
+        },
+        "value": {
+          "description": "Floor area value",
+          "type": "number"
+        }
+      },
+      "title": "Survey unit line",
+      "required": [
+        "lineNumber",
+        "surveyLineId",
+        "useCode",
+        "sizeQuantity",
+        "pricePerM2orUnit",
+        "basicRelativity",
+        "value"
+      ]
+    },
+    "surveyunitlineadjustments": {
+      "description": "Adjustments for a floor area",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "adjustmentsList": {
+          "description": "Adjustment list",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/adjustment"
+          }
+        },
+        "value": {
+          "description": "Value of the adjustment",
+          "type": "number"
+        },
+        "compoundPercent": {
+          "description": "Percentage adjustment for the floor area",
+          "type": "number"
+        }
+      },
+      "title": "Survey unit line adjustments",
+      "required": [
+        "adjustmentsList"
+      ]
+    },
+    "surveyunitnumberdef": {
+      "description": "Survey unit number",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99
+    },
+    "surveyunits": {
+      "description": "Survey units",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surveyUnitsList": {
+          "description": "Survey units",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/surveyunit"
+          }
+        },
+        "value": {
+          "description": "Value for the survey unit",
+          "type": "number"
+        }
+      },
+      "title": "Survey units",
+      "required": [
+        "surveyUnitsList",
+        "value"
+      ]
+    },
+    "surveyunittype": {
+      "description": "Type of survey unit",
+      "type": "string",
+      "enum": [
+        "SHOP",
+        "OFFICE",
+        "FACTORY",
+        "WAREHOUSE",
+        "LAND"
+      ]
+    },
+    "valuationdetails": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/bulkvaluation"
+        },
+        {
+          "$ref": "#/definitions/licensedpremisesvaluation"
+        }
+      ]
+    },
+    "valuationmethod": {
+      "description": "Licensed premises valuation method",
+      "type": "string",
+      "enum": [
+        "RECEIPTS",
+        "FLOOR_AREA",
+        "SURVEY",
+        "MULTIPLE"
+      ]
+    },
+    "valuationtype": {
+      "description": "Type of Valuation",
+      "type": "string",
+      "enum": [
+        "BULK",
+        "LICENSED_PREMISES"
+      ]
+    }
+  }
+}

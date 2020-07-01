@@ -1,0 +1,450 @@
+{
+  "_links": {
+    "self": {
+      "href": "http://api.service.hmrc.gov.uk/properties/4008726000/valuations/10000461?projection=detailed&propertyLinkSubmissionId=PL2DQ80QZ",
+      "template": false
+    }
+  },
+  "detailedValuation": {
+    "valuationId": 10000461,
+    "valuationType": "BULK",
+    "uarn": 4008726000,
+    "address": {
+      "number": "79",
+      "street": "CLARENCE ROAD",
+      "town": "LEEDS",
+      "postcode": "LS10 1LW"
+    },
+    "listYear": "2017",
+    "effectiveDate": "2017-04-01",
+    "rateableValue": 118899.61,
+    "compositeProperty": false,
+    "valuationCharacteristics": {
+      "bulkValuationDetails": {
+        "valuationSchemeReference": 1916779,
+        "basisOfMeasurement": {
+          "code": "GIA",
+          "description": "Gross Internal Area"
+        },
+        "surveyId": 100148,
+        "surveyUnit": {
+          "surveyUnitsList": [
+            {
+              "valueBeforeAdjustments": 36989.81,
+              "value": 40688.8,
+              "surveyUnitId": 200220,
+              "surveyUnitNumber": 1,
+              "surveyUnitType": "FACTORY",
+              "eavesHeight": 9920.26,
+              "numberOfStoreys": 4,
+              "floorRangeStart": {
+                "code": "LG",
+                "description": "LOWER GROUND FLOOR"
+              },
+              "floorRangeEnd": {
+                "code": "02",
+                "description": "SECOND FLOOR"
+              },
+              "yearBuilt": {
+                "code": "85",
+                "description": "1985"
+              },
+              "yearRefurbished": {
+                "code": "00",
+                "description": "2000"
+              },
+              "airConditioning": "Partial",
+              "centralHeating": "Full",
+              "sprinklers": "A",
+              "passengerLift": true,
+              "passengerLiftAllFloors": false,
+              "goodsLift": true,
+              "goodsLiftAllFloors": false,
+              "surveyLinesList": [
+                {
+                  "lineNumber": 1,
+                  "surveyLineId": 300641,
+                  "floor": {
+                    "code": "LG",
+                    "description": "LOWER GROUND FLOOR"
+                  },
+                  "useCode": {
+                    "code": "CAN",
+                    "description": "CANTEEN"
+                  },
+                  "sizeQuantity": 84.56,
+                  "pricePerM2orUnit": 37.64,
+                  "basicRelativity": 0.9,
+                  "adjustment": {
+                    "adjustmentsList": [
+                      {
+                        "adjustment": {
+                          "code": "FPT",
+                          "description": "FIRE PROTECTION"
+                        },
+                        "polarity": "MINUS"
+                      },
+                      {
+                        "adjustment": {
+                          "code": "ZL0",
+                          "description": "MISCELLANEOUS ADJUSTMENT"
+                        },
+                        "polarity": "MINUS"
+                      }
+                    ],
+                    "value": -200.28,
+                    "compoundPercent": 0.9408
+                  },
+                  "value": 3182.84
+                },
+                {
+                  "lineNumber": 2,
+                  "surveyLineId": 300642,
+                  "floor": {
+                    "code": "GF",
+                    "description": "GROUND FLOOR"
+                  },
+                  "useCode": {
+                    "code": "PLT",
+                    "description": "PLANT ROOM"
+                  },
+                  "sizeQuantity": 38.96,
+                  "pricePerM2orUnit": 171.84,
+                  "basicRelativity": 1.1,
+                  "adjustment": {
+                    "adjustmentsList": [],
+                    "value": 0,
+                    "compoundPercent": 1
+                  },
+                  "value": 6694.89
+                },
+                {
+                  "lineNumber": 3,
+                  "surveyLineId": 300643,
+                  "floor": {
+                    "code": "01",
+                    "description": "FIRST FLOOR"
+                  },
+                  "useCode": {
+                    "code": "OWK",
+                    "description": "WORKS OFFICE"
+                  },
+                  "sizeQuantity": 51.43,
+                  "pricePerM2orUnit": 177.91,
+                  "basicRelativity": 1.1,
+                  "adjustment": {
+                    "adjustmentsList": [
+                      {
+                        "adjustment": {
+                          "code": "WCS",
+                          "description": "TOILET FACILITIES"
+                        },
+                        "polarity": "PLUS"
+                      }
+                    ],
+                    "value": 435.71,
+                    "compoundPercent": 1.05
+                  },
+                  "value": 9149.91
+                },
+                {
+                  "lineNumber": 4,
+                  "surveyLineId": 300644,
+                  "floor": {
+                    "code": "02",
+                    "description": "SECOND FLOOR"
+                  },
+                  "useCode": {
+                    "code": "XNC",
+                    "description": "UNCLASSIFIED AREA"
+                  },
+                  "sizeQuantity": 68.71,
+                  "pricePerM2orUnit": 261.42,
+                  "basicRelativity": 0.9,
+                  "adjustment": {
+                    "adjustmentsList": [],
+                    "value": 0,
+                    "compoundPercent": 1
+                  },
+                  "value": 17962.17
+                }
+              ],
+              "adjustment": {
+                "adjustmentsList": [
+                  {
+                    "adjustment": {
+                      "code": "REP",
+                      "description": "REPAIR"
+                    },
+                    "polarity": "PLUS"
+                  }
+                ],
+                "value": 3698.99,
+                "compoundPercent": 1.1
+              }
+            },
+            {
+              "valueBeforeAdjustments": 51997.28,
+              "value": 51997.28,
+              "surveyUnitId": 200221,
+              "surveyUnitNumber": 2,
+              "surveyUnitType": "FACTORY",
+              "eavesHeight": 2345.72,
+              "numberOfStoreys": 4,
+              "floorRangeStart": {
+                "code": "GF",
+                "description": "GROUND FLOOR"
+              },
+              "floorRangeEnd": {
+                "code": "03",
+                "description": "THIRD FLOOR"
+              },
+              "yearBuilt": {
+                "code": "85",
+                "description": "1985"
+              },
+              "yearRefurbished": {
+                "code": "94",
+                "description": "1994"
+              },
+              "airConditioning": "Partial",
+              "centralHeating": "None",
+              "sprinklers": "N",
+              "passengerLift": true,
+              "passengerLiftAllFloors": false,
+              "goodsLift": true,
+              "goodsLiftAllFloors": false,
+              "surveyLinesList": [
+                {
+                  "lineNumber": 1,
+                  "surveyLineId": 300645,
+                  "floor": {
+                    "code": "GF",
+                    "description": "GROUND FLOOR"
+                  },
+                  "useCode": {
+                    "code": "CLD",
+                    "description": "COLD STORE"
+                  },
+                  "sizeQuantity": 83.53,
+                  "pricePerM2orUnit": 35.97,
+                  "basicRelativity": 0.9,
+                  "adjustment": {
+                    "adjustmentsList": [
+                      {
+                        "adjustment": {
+                          "code": "ZL0",
+                          "description": "MISCELLANEOUS ADJUSTMENT"
+                        },
+                        "polarity": "PLUS"
+                      }
+                    ],
+                    "value": 170.07,
+                    "compoundPercent": 1.06
+                  },
+                  "value": 3004.57
+                },
+                {
+                  "lineNumber": 2,
+                  "surveyLineId": 300646,
+                  "floor": {
+                    "code": "01",
+                    "description": "FIRST FLOOR"
+                  },
+                  "useCode": {
+                    "code": "LOK",
+                    "description": "LOCKER ROOM"
+                  },
+                  "sizeQuantity": 47.55,
+                  "pricePerM2orUnit": 490.59,
+                  "basicRelativity": 1,
+                  "adjustment": {
+                    "adjustmentsList": [
+                      {
+                        "adjustment": {
+                          "code": "CP4",
+                          "description": "COVERED SPACES"
+                        },
+                        "polarity": "MINUS"
+                      },
+                      {
+                        "adjustment": {
+                          "code": "INS",
+                          "description": "INSULATION"
+                        },
+                        "polarity": "MINUS"
+                      }
+                    ],
+                    "value": -2250.9,
+                    "compoundPercent": 0.912
+                  },
+                  "value": 23327.55
+                },
+                {
+                  "lineNumber": 3,
+                  "surveyLineId": 300647,
+                  "floor": {
+                    "code": "02",
+                    "description": "SECOND FLOOR"
+                  },
+                  "useCode": {
+                    "code": "WKS",
+                    "description": "WORKSHOP"
+                  },
+                  "sizeQuantity": 83.68,
+                  "pricePerM2orUnit": 139.94,
+                  "basicRelativity": 1,
+                  "adjustment": {
+                    "adjustmentsList": [],
+                    "value": 0,
+                    "compoundPercent": 1
+                  },
+                  "value": 11710.18
+                },
+                {
+                  "lineNumber": 4,
+                  "surveyLineId": 300648,
+                  "floor": {
+                    "code": "03",
+                    "description": "THIRD FLOOR"
+                  },
+                  "useCode": {
+                    "code": "WKS",
+                    "description": "WORKSHOP"
+                  },
+                  "sizeQuantity": 94.79,
+                  "pricePerM2orUnit": 147.22,
+                  "basicRelativity": 0.9,
+                  "adjustment": {
+                    "adjustmentsList": [],
+                    "value": 0,
+                    "compoundPercent": 1
+                  },
+                  "value": 13954.98
+                }
+              ]
+            }
+          ],
+          "value": 92686.08
+        },
+        "otherAdditions": {
+          "otherAdditionsList": [
+            {
+              "otherAdditionsId": 20000224,
+              "otherAddition": {
+                "code": "WKS",
+                "description": "WORKSHOP"
+              },
+              "sizeQuantity": 30.43,
+              "adoptedAmount": 21.38,
+              "value": 650.59
+            },
+            {
+              "otherAdditionsId": 20000225,
+              "otherAddition": {
+                "code": "FIT",
+                "description": "FITNESS ROOM"
+              },
+              "sizeQuantity": 93.67,
+              "adoptedAmount": 48.89,
+              "value": 4579.53
+            }
+          ],
+          "value": 5230.12
+        },
+        "parking": {
+          "value": 7985,
+          "parkingSpaces": {
+            "surfacedCovered": {
+              "spaces": 1,
+              "adoptedAmount": 23,
+              "value": 23
+            },
+            "surfacedOpen": {
+              "spaces": 1,
+              "adoptedAmount": 23,
+              "value": 23
+            },
+            "unsurfacedCovered": {
+              "spaces": 1,
+              "adoptedAmount": 23,
+              "value": 23
+            },
+            "unsurfacedOpen": {
+              "spaces": 1,
+              "adoptedAmount": 23,
+              "value": 23
+            },
+            "garages": {
+              "spaces": 1,
+              "adoptedAmount": 23,
+              "value": 23
+            }
+          },
+          "parkingAreas": {
+            "surfacedCovered": {
+              "area": 66.6,
+              "adoptedAmount": 25,
+              "value": 1665
+            },
+            "surfacedOpen": {
+              "area": 66.6,
+              "adoptedAmount": 25,
+              "value": 1665
+            },
+            "unsurfacedCovered": {
+              "area": 66.6,
+              "adoptedAmount": 25,
+              "value": 1665
+            },
+            "unsurfacedOpen": {
+              "area": 66.6,
+              "adoptedAmount": 25,
+              "value": 1665
+            },
+            "garages": {
+              "area": 66.6,
+              "adoptedAmount": 25,
+              "value": 1665
+            }
+          }
+        },
+        "plantAndMachinery": {
+          "plantAndMachineryAnnualEquivalent": 226
+        },
+        "totalBeforeEndAdjustments": 106127.2,
+        "endAdjustment": {
+          "endAdjustmentsList": [
+            {
+              "adjustment": {
+                "code": "WCS",
+                "description": "TOILET FACILITIES"
+              },
+              "polarity": "PLUS",
+              "adjPercent": 1.05
+            },
+            {
+              "adjustment": {
+                "code": "HTG",
+                "description": "HEATING"
+              },
+              "polarity": "MINUS",
+              "adjPercent": 0.97
+            },
+            {
+              "adjustment": {
+                "code": "MSK",
+                "description": "MASKED AREAS"
+              },
+              "polarity": "PLUS",
+              "adjPercent": 1.1
+            }
+          ],
+          "value": 12772.41
+        },
+        "total": 118899.61,
+        "composite": false
+      }
+    }
+  }
+}

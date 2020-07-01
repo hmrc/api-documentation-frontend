@@ -1,0 +1,13 @@
+queryParameters:
+  pageSize:
+    description: "The results for this endpoint are paginated and this refers to the number of elements per page. </br> </br> Default: 15 </br> </br> Minimum: 10 </br> </br> Maximum: 100"
+    type: integer
+    required: false
+  afterAddress:
+    description: "The last property address you've retrieved if you want to get to the next page of results. The search will only return properties with address alphabetically after the specified address"
+    type: string
+    required: false
+  afterUarn:
+    description: "return only properties with UARNs greater than the specified UARN. Must be used in conjunction with afterAddress"
+    type: integer
+    required: false

@@ -1,0 +1,369 @@
+{
+  "title": "HateoasDetailedMessage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "emailRecipient",
+    "effectiveDateTime",
+    "address",
+    "fileReferences",
+    "createdDateTime",
+    "uarn",
+    "submissionId",
+    "recipientOrganisationName",
+    "recipientOrganisationId",
+    "messageBody",
+    "subject",
+    "messageId",
+    "_links"
+  ],
+  "properties": {
+    "_links": {
+      "title": "SelfLink",
+      "type": "object",
+      "properties": {
+        "self": {
+          "title": "HateoasLink",
+          "type": "object",
+          "required": [
+            "template",
+            "href"
+          ],
+          "properties": {
+            "href": {
+              "type": "string"
+            },
+            "template": {
+              "type": "boolean"
+            }
+          }
+        },
+        "markAsRead": {
+          "title": "HateoasLink",
+          "type": "object",
+          "required": [
+            "template",
+            "href"
+          ],
+          "properties": {
+            "href": {
+              "type": "string"
+            },
+            "template": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "agentOrganisationId": {
+      "type": "number",
+      "format": "number"
+    },
+    "agentOrganisationName": {
+      "type": "string"
+    },
+    "caseRef": {
+      "type": "string"
+    },
+    "createdDateTime": {
+      "type": "string"
+    },
+    "effectiveDateTime": {
+      "type": "string",
+      "description": "The effective date as an ISO Date Time String"
+    },
+    "emailRecipient": {
+      "type": "string"
+    },
+    "fileReferences": {
+      "type": "array",
+      "items": {
+        "title": "File References",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileName": {
+            "type": "string"
+          },
+          "reference": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "fileName",
+          "reference"
+        ]
+      }
+    },
+    "address": {
+      "type": "string"
+    },
+    "ipOrganisationId": {
+      "type": "number",
+      "format": "number"
+    },
+    "ipOrganisationName": {
+      "type": "string"
+    },
+    "lastRead": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lastReadAt": {
+          "type": "string",
+          "description": "The effective date as an ISO Date Time String"
+        },
+        "lastReadBy": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "lastReadAt",
+        "lastReadBy"
+      ]
+    },
+    "messageBody": {
+      "title": "MessageBodyItem",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "footer",
+        "items",
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "title": "Message Part",
+            "type": "object",
+            "required": [
+              "items",
+              "orderNumber"
+            ],
+            "properties": {
+              "heading": {
+                "type": "string"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "title": "ParagraphPart",
+                      "type": "object",
+                      "required": [
+                        "paragraphContent",
+                        "contentType",
+                        "orderNumber"
+                      ],
+                      "properties": {
+                        "contentType": {
+                          "title": "ContentType",
+                          "type": "string",
+                          "enum": [
+                            "PARAGRAPH"
+                          ]
+                        },
+                        "heading": {
+                          "type": "string"
+                        },
+                        "orderNumber": {
+                          "type": "number",
+                          "format": "number"
+                        },
+                        "paragraphContent": {
+                          "type": "array",
+                          "items": {
+                            "title": "ParagraphContent",
+                            "type": "object",
+                            "required": [
+                              "content",
+                              "orderNumber"
+                            ],
+                            "properties": {
+                              "content": {
+                                "type": "string"
+                              },
+                              "orderNumber": {
+                                "type": "number",
+                                "format": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "ListPart",
+                      "type": "object",
+                      "required": [
+                        "listEntry",
+                        "contentType",
+                        "orderNumber"
+                      ],
+                      "properties": {
+                        "contentType": {
+                          "title": "ContentType",
+                          "type": "string",
+                          "enum": [
+                            "LIST"
+                          ]
+                        },
+                        "heading": {
+                          "type": "string"
+                        },
+                        "listEntry": {
+                          "type": "array",
+                          "items": {
+                            "title": "ListEntry",
+                            "type": "object",
+                            "required": [
+                              "listContent",
+                              "orderNumber"
+                            ],
+                            "properties": {
+                              "label": {
+                                "type": "string"
+                              },
+                              "listContent": {
+                                "type": "array",
+                                "items": {
+                                  "title": "ListContent",
+                                  "type": "object",
+                                  "required": [
+                                    "content",
+                                    "orderNumber"
+                                  ],
+                                  "properties": {
+                                    "content": {
+                                      "type": "string"
+                                    },
+                                    "orderNumber": {
+                                      "type": "number",
+                                      "format": "number"
+                                    }
+                                  }
+                                }
+                              },
+                              "orderNumber": {
+                                "type": "number",
+                                "format": "number"
+                              }
+                            }
+                          }
+                        },
+                        "orderNumber": {
+                          "type": "number",
+                          "format": "number"
+                        }
+                      }
+                    },
+                    {
+                      "title": "TablePart",
+                      "type": "object",
+                      "required": [
+                        "tableRows",
+                        "contentType",
+                        "orderNumber"
+                      ],
+                      "properties": {
+                        "contentType": {
+                          "title": "ContentType",
+                          "type": "string",
+                          "enum": [
+                            "TABLE"
+                          ]
+                        },
+                        "heading": {
+                          "type": "string"
+                        },
+                        "orderNumber": {
+                          "type": "number",
+                          "format": "number"
+                        },
+                        "tableRows": {
+                          "type": "array",
+                          "items": {
+                            "title": "TableRow",
+                            "type": "object",
+                            "required": [
+                              "tableColumns",
+                              "isHeaderRow",
+                              "orderNumber"
+                            ],
+                            "properties": {
+                              "isHeaderRow": {
+                                "type": "boolean"
+                              },
+                              "orderNumber": {
+                                "type": "number",
+                                "format": "number"
+                              },
+                              "tableColumns": {
+                                "type": "array",
+                                "items": {
+                                  "title": "TableColumn",
+                                  "type": "object",
+                                  "required": [
+                                    "content",
+                                    "orderNumber"
+                                  ],
+                                  "properties": {
+                                    "content": {
+                                      "type": "string"
+                                    },
+                                    "orderNumber": {
+                                      "type": "number",
+                                      "format": "number"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "orderNumber": {
+                "type": "number",
+                "format": "number"
+              }
+            }
+          }
+        },
+        "footer": {
+          "type": "string"
+        }
+      }
+    },
+    "messageId": {
+      "type": "number",
+      "format": "number"
+    },
+    "recipientOrganisationId": {
+      "type": "number",
+      "format": "number"
+    },
+    "recipientOrganisationName": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "submissionId": {
+      "type": "string"
+    },
+    "uarn": {
+      "type": "number",
+      "format": "number"
+    }
+  }
+}

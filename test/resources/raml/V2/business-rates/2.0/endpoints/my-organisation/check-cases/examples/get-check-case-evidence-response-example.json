@@ -1,0 +1,31 @@
+{
+  "_links": {
+    "self": {
+      "href": "http://api.service.hmrc.gov.uk/my-organisation/check-cases/CHK-1ZRPBP3/evidence/cd1dffba-c7f0-422e-882b-607dcab115cf",
+      "template": false
+    }
+  },
+  "evidence": {
+    "fileName": "someFile.pdf",
+    "mimeType": "application/pdf",
+    "destination": "CHECK_CASE_EVIDENCE",
+    "data": {
+      "checkCaseSubmissionId": "CHK-1ZRPBP3"
+    },
+    "state": "Complete",
+    "history": [
+      {
+        "state": "Complete",
+        "timeStamp": "2018-09-17T13:42:05.009Z"
+      },
+      {
+        "state": "Processing",
+        "timeStamp": "2018-09-17T13:42:04.843Z"
+      },
+      {
+        "state": "Received",
+        "timeStamp": "2018-09-17T13:40:00.819Z"
+      }
+    ]
+  }
+}

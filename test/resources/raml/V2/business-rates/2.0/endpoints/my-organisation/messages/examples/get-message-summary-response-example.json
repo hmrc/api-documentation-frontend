@@ -1,0 +1,35 @@
+{
+  "_links" : {
+    "self" : {
+      "href" : "http://api.service.hmrc.gov.uk/my-organisation/messages?page=1&pageSize=15&sortDirection=ASC",
+      "template" : false
+    },
+    "first" : {
+      "href" : "http://api.service.hmrc.gov.uk/my-organisation/messages?page=1&pageSize=15&sortDirection=ASC",
+      "template" : false
+    },
+    "last" : {
+      "href" : "http://api.service.hmrc.gov.uk/my-organisation/messages?page=1&pageSize=15&sortDirection=ASC",
+      "template" : false
+    }
+  },
+  "page" : 1,
+  "pageSize" : 15,
+  "total" : 1,
+  "messages" : [ {
+    "_links" : {
+      "detailed": {
+        "href": "http://api.service.hmrc.gov.uk/my-organisation/messages/1",
+        "template": false
+      }
+    },
+    "messageId" : 1,
+    "subject" : "Check Acknowledgement",
+    "recipientOrganisationName" : "Acme",
+    "ipOrganisationName" : "Acme",
+    "submissionId" : "PLZ60Y",
+    "createdDateTime" : "2018-11-16T12:08:05.213Z",
+    "address" : "47, Test",
+    "effectiveDateTime" : "2018-11-16T12:08:05.213Z"
+  } ]
+}

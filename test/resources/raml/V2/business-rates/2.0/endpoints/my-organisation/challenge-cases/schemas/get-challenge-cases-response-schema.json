@@ -1,0 +1,284 @@
+{
+  "title": "HateoasChallengeCasesWithAgent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_links",
+    "page",
+    "pageSize",
+    "total",
+    "challengeCases"
+  ],
+  "properties": {
+    "_links": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "HATEOAS links",
+      "required": [
+        "first",
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to this resource",
+          "required": [
+            "href",
+            "template"
+          ],
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          }
+        },
+        "first": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to the first page of results for this resource",
+          "required": [
+            "href",
+            "template"
+          ],
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          }
+        },
+        "previous": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to the previous page of results for this resource",
+          "required": [
+            "href",
+            "template"
+          ],
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          }
+        },
+        "next": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to the next page of results for this resource",
+          "required": [
+            "href",
+            "template"
+          ],
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          }
+        },
+        "last": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to the last page of results for this resource",
+          "required": [
+            "href",
+            "template"
+          ],
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          }
+        }
+      }
+    },
+    "page": {
+      "type": "integer",
+      "description": "The page number"
+    },
+    "pageSize": {
+      "type": "integer",
+      "description": "The page size",
+      "minimum": 10,
+      "maximum": 100
+    },
+    "total": {
+      "type": "integer",
+      "description": "The total number of elements"
+    },
+    "challengeCases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "a created challenge case",
+        "required": [
+          "_links",
+          "submittedBy",
+          "createdDateTime",
+          "uarn",
+          "address",
+          "valuationId",
+          "challengeCaseStatus",
+          "challengeCaseReference",
+          "challengeCaseSubmissionId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "_links": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "self": {
+                "type": "object",
+                "required": [
+                  "template",
+                  "href"
+                ],
+                "properties": {
+                  "href": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https?://\\w+",
+                    "description": "URL for this link"
+                  },
+                  "template": {
+                    "type": "boolean",
+                    "description": "Is the HREF a RFC-6570 compliant URI Template"
+                  }
+                }
+              },
+              "detailed": {
+                "type": "object",
+                "required": [
+                  "template",
+                  "href"
+                ],
+                "properties": {
+                  "href": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https?://\\w+",
+                    "description": "URL for this link"
+                  },
+                  "template": {
+                    "type": "boolean",
+                    "description": "Is the HREF a RFC-6570 compliant URI Template"
+                  }
+                }
+              }
+            }
+          },
+          "address": {
+            "type": "string",
+            "description": "the address of the property"
+          },
+          "agent": {
+            "type": "object",
+            "description": "Details of the agent that submitted the challenge case",
+            "required": [
+              "organisationName",
+              "code",
+              "organisationId"
+            ],
+            "properties": {
+              "code": {
+                "type": "number",
+                "format": "number",
+                "description": "The unique code of the agent"
+              },
+              "organisationId": {
+                "type": "number",
+                "format": "number",
+                "description": "Unique ID for the agent organisation"
+              },
+              "organisationName": {
+                "type": "string",
+                "description": "The name of the agent organisation"
+              }
+            },
+            "additionalProperties": false
+          },
+          "challengeCaseReference": {
+            "type": "string",
+            "description": "the reference number for this challenge case"
+          },
+          "challengeCaseStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "RECEIVED",
+              "ASSIGNED",
+              "UNDER_REVIEW",
+              "MORE_INFO_NEEDED",
+              "INITIAL_RESPONSE",
+              "DECISION_SENT",
+              "CANCELLED",
+              "OPEN",
+              "CLOSED"
+            ]
+          },
+          "challengeCaseSubmissionId": {
+            "type": "string",
+            "description": "the submission ID for this challenge case"
+          },
+          "createdDateTime": {
+            "type": "string",
+            "description": "the date/time this challenge case was created"
+          },
+          "settledDate": {
+            "type": "string",
+            "description": "The date this challenge case was settled"
+          },
+          "submittedBy": {
+            "type": "string",
+            "description": "the organisation that submitted challenge case"
+          },
+          "uarn": {
+            "type": "number",
+            "format": "number",
+            "description": "the unique address reference of the property"
+          },
+          "valuationId": {
+            "type": "number",
+            "format": "number",
+            "description": "the unique valuation reference number"
+          }
+        }
+      }
+    }
+  }
+}

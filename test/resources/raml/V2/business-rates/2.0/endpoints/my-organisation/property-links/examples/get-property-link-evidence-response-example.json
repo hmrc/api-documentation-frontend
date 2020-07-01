@@ -1,0 +1,31 @@
+{
+  "_links": {
+    "self": {
+      "href": "http://api.service.hmrc.gov.uk/my-organisation/property-links/PL1ZRPWHJ/evidence/49fb5413-137a-42c5-8cda-7adc6f44238d",
+      "template": false
+    }
+  },
+  "evidence": {
+    "fileName": "someFile.jpg",
+    "mimeType": "application/pdf",
+    "destination": "PROPERTY_LINK_EVIDENCE",
+    "data": {
+      "propertyLinkSubmissionId": "PL1ZRPWHJ"
+    },
+    "state": "ReadyForUpload",
+    "history": [
+      {
+        "state": "ReadyForUpload",
+        "timeStamp": "2018-06-28T16:36:18.539Z"
+      },
+      {
+        "state": "ScanPending",
+        "timeStamp": "2018-06-28T16:36:18.520Z"
+      },
+      {
+        "state": "Received",
+        "timeStamp": "2018-06-28T16:36:18.484Z"
+      }
+    ]
+  }
+}

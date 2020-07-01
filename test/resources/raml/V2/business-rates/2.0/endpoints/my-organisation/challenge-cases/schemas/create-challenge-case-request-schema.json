@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Challenge Case Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "title": "Challenge case submission request",
+  "properties": {
+    "valuationId": {
+      "description": "Unique valuation reference number",
+      "type": "integer",
+      "maximum": 9223372036854775807
+    },
+    "checkCaseReference": {
+      "description": "Check case reference that relates to the challenge",
+      "type": "string",
+      "minLength": 1
+    },
+    "propertyLinkSubmissionId": {
+      "description": "Submission ID of the property link that the challenge relates to",
+      "type": "string",
+      "minLength": 1
+    },
+    "reasonCode": {
+      "description": "Reason for challenge case. Uses a lookup code.",
+      "lookup": "challengeCodeOfGroundsDfe",
+      "type": "string",
+      "minLength": 1
+    },
+    "proposedRateableValue": {
+      "description": "The value you want to propose as the property's rateable value, the property’s rateable value is the estimate of the yearly rent it could have been let for on a date set in law (currently 1 April 2015). It might not be the actual rent as there are other factors to consider",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999999999
+    },
+    "proposedEffectiveDate": {
+      "description": "When should your changes take effect? This date cannot be before the list of business rates valuations was published (currently 1 April 2017).",
+      "type": "string",
+      "format": "date"
+    },
+    "attachments": {
+      "description": "File attachments supporting the case",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/definitions/attachment"
+      }
+    },
+    "challengeRentalData": {
+      "$ref": "#/definitions/challengerentaldata"
+    },
+    "groupPreChallengeReviewId": {
+      "description": " A group pre-challenge review (GPCR) is an option offered by the Valuation Office Agency (VOA) to groups of property occupiers, owners or ratepayers of business and other non-domestic properties. It allows them to challenge the basis of the valuation in respect of local, regional or national schemes of valuation.  ",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99999999
+    },
+    "declaration": {
+      "description": "I declare that the information I have given is correct. If the information provided during a challenge is incorrect, this could lead to a penalty. The rateable value could also change, leading to a backdated business rates bill.",
+      "type": "boolean",
+      "enum": [
+        true
+      ]
+    }
+  },
+  "required": [
+    "valuationId",
+    "checkCaseReference",
+    "propertyLinkSubmissionId",
+    "reasonCode",
+    "proposedEffectiveDate",
+    "attachments",
+    "declaration"
+  ],
+  "definitions": {
+    "attachment": {
+      "description": "File attachment",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "description": "File name",
+          "type": "string",
+          "minLength": 1
+        },
+        "fileType": {
+          "$ref": "#/definitions/filetype"
+        }
+      },
+      "title": "Attachment",
+      "required": [
+        "filename",
+        "fileType"
+      ]
+    },
+    "challengerentaldata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amountOfRentPayable": {
+          "description": "How much is the annual rent",
+          "type": "number",
+          "minimum": 1,
+          "maximum": 999999999.99
+        },
+        "timePeriodOfRentPayable": {
+          "description": "The rental period",
+          "type": "string",
+          "enum": [
+            "ANNUALLY",
+            "MONTHLY",
+            "WEEKLY"
+          ]
+        },
+        "startDateOfRentPayable": {
+          "description": "This cannot be a future date. If you are in a rent-free period, enter the date the agreement started",
+          "type": "string",
+          "format": "date"
+        },
+        "rentFreeMonths": {
+          "description": "If the lease includes a rent-free period, how long is it (in months)",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 999
+        }
+      },
+      "required": [
+        "amountOfRentPayable",
+        "timePeriodOfRentPayable",
+        "startDateOfRentPayable"
+      ]
+    },
+    "filetype": {
+      "description": "Type of file attachment",
+      "type": "string",
+      "enum": [
+        "EVIDENCE",
+        "STATEMENT"
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "_links": {
+    "self": {
+      "href": "http://api.service.hmrc.gov.uk/my-organisation/messages/1",
+      "template": false
+    },
+    "markAsRead": {
+      "href": "http://api.service.hmrc.gov.uk/my-organisation/messages/1",
+      "template": false
+    }
+  },
+  "messageId": 1,
+  "subject": "Check Acknowledgement",
+  "messageBody": {
+    "title": "Some Title",
+    "items": [
+      {
+        "orderNumber": 1,
+        "heading": "Some Heading",
+        "items": [
+          {
+            "orderNumber": 1,
+            "contentType": "PARAGRAPH",
+            "heading": "Some Heading",
+            "paragraphContent": [
+              {
+                "orderNumber": 1,
+                "content": "Some Content"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "footer": "Some Footer"
+  },
+  "recipientOrganisationId": 1,
+  "recipientOrganisationName": "Acme",
+  "ipOrganisationId": 1,
+  "ipOrganisationName": "Acme",
+  "agentOrganisationId": 1,
+  "agentOrganisationName": "Acme",
+  "caseRef": "CHKZ60Y",
+  "submissionId": "PLZ60Y",
+  "uarn": 5,
+  "createdDateTime": "2018-11-16T12:08:05.213Z",
+  "address": "47, Test",
+  "effectiveDateTime": "2018-11-16T12:08:05.213Z",
+  "lastRead": {
+    "lastReadBy": "Dave Tester",
+    "lastReadAt": "2018-11-16T10:15:12"
+  },
+  "emailRecipient": "dave@test.com",
+  "fileReferences": [
+    {
+      "fileName": "aFileName",
+      "reference": "Ref123456"
+    }
+  ]
+}

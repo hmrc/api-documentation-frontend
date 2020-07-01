@@ -23,6 +23,7 @@ import scala.util.Success
 import uk.gov.hmrc.apidocumentation.services.RAML
 import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.views.helpers.ResourceGroup2
+import uk.gov.hmrc.ramltools.loaders.ComprehensiveClasspathRamlLoader
 
 // TODO: Rebrand as wireModel spec
 class WireModelSpec extends UnitSpec {
@@ -52,7 +53,7 @@ class WireModelSpec extends UnitSpec {
 
       val m = r.methods(0)
       m.displayName shouldBe "My endpoint"
-      m.description shouldBe "My description"
+      m.description shouldBe Some("My description")
 
       // TODO: Check endpoint URL, description
       // TODO: Doesn't handle missing description (null pointer)
@@ -107,12 +108,20 @@ class WireModelSpec extends UnitSpec {
       val wireModel : WireModel = OurModel(raml)._2
 
       println(Json.prettyPrint(Json.toJson(wireModel)))
+  }
 
-      println(Map[String, Option[String]]("A" -> None) + ("A" -> Some("1")))
+  "What does business-rates look like?" in {
+    import wireModelFormatters._
+
+    val raml = loadRaml("V2/business-rates/2.0/application.raml")
+
+    val wireModel : WireModel = OurModel(raml)._2
+
+    println(Json.prettyPrint(Json.toJson(wireModel)))
   }
 
   def loadRaml(filename: String) : RAML = {
-    new FileRamlLoader().load(s"test/resources/raml/$filename") match {
+    new ComprehensiveClasspathRamlLoader().load(s"test/resources/raml/$filename") match {
       case Failure(exception) => throw exception
       case Success(raml) => raml
     }

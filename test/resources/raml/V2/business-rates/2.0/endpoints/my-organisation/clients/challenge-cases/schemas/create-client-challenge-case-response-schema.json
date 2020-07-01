@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Submit Challenge Case Response",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "challengeSubmissionId": {
+      "description": "Unique submission ID for the challenge case",
+      "type": "string"
+    }
+  },
+  "required": [
+    "challengeSubmissionId"
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Messages Summary",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {},
+  "properties": {
+    "_links": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "HATEOAS links",
+      "properties": {
+        "self": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to this resource",
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          },
+          "required": [
+            "href",
+            "template"
+          ]
+        },
+        "first": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to the first page of results for this resource",
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          },
+          "required": [
+            "href",
+            "template"
+          ]
+        },
+        "previous": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to the previous page of results for this resource",
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          },
+          "required": [
+            "href",
+            "template"
+          ]
+        },
+        "next": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to the next page of results for this resource",
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          },
+          "required": [
+            "href",
+            "template"
+          ]
+        },
+        "last": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Links to the last page of results for this resource",
+          "properties": {
+            "href": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://\\w+",
+              "description": "URL for this link"
+            },
+            "template": {
+              "type": "boolean",
+              "description": "Is the HREF a RFC-6570 compliant URI Template"
+            }
+          },
+          "required": [
+            "href",
+            "template"
+          ]
+        }
+      },
+      "required": [
+        "self",
+        "first"
+      ]
+    },
+    "page": {
+      "type": "integer",
+      "description": "The page number"
+    },
+    "pageSize": {
+      "type": "integer",
+      "description": "The page size",
+      "minimum": 10,
+      "maximum": 100
+    },
+    "total": {
+      "type": "integer",
+      "description": "The total number of elements"
+    },
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "_links": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "HATEOAS links",
+            "properties": {
+              "detailed": {
+                "type": "object",
+                "additionalProperties": false,
+                "description": "Links to the detailed message",
+                "properties": {
+                  "href": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https?://\\w+",
+                    "description": "URL for this link"
+                  },
+                  "template": {
+                    "type": "boolean",
+                    "description": "Is the HREF a RFC-6570 compliant URI Template"
+                  }
+                },
+                "required": [
+                  "href",
+                  "template"
+                ]
+              }
+            }
+          },
+          "messageId": {
+            "type": "integer"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "recipientOrganisationName": {
+            "type": "string"
+          },
+          "ipOrganisationName": {
+            "type": "string"
+          },
+          "agentOrganisationName": {
+            "type": "string"
+          },
+          "caseRef": {
+            "type": "string"
+          },
+          "submissionId": {
+            "type": "string"
+          },
+          "createdDateTime": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "effectiveDateTime": {
+            "type": "string"
+          },
+          "lastReadAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "_links",
+          "messageId",
+          "subject",
+          "recipientOrganisationName",
+          "ipOrganisationName",
+          "submissionId",
+          "createdDateTime",
+          "address",
+          "effectiveDateTime"
+        ]
+      }
+    }
+  },
+  "required": [
+    "_links",
+    "page",
+    "pageSize",
+    "total",
+    "messages"
+  ]
+}

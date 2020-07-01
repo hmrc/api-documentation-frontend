@@ -1,0 +1,19 @@
+{
+  "reference": "31dda931-596a-4ada-8faa-fa275d1ebb21",
+  "uploadRequest": {
+    "href": "http://api.service.hmrc.gov.uk/upscan/upload",
+    "fields": {
+      "x-amz-meta-callback-url": "http://api.service.hmrc.gov.uk/business-rates-attachments/callback",
+      "x-amz-date": "20180607T114447Z",
+      "x-amz-credential": "ASIAxxxxxxxxx/20180202/eu-west-2/s3/aws4_request",
+      "x-amz-algorithm": "AWS4-HMAC-SHA256",
+      "key": "31dda931-596a-4ada-8faa-fa275d1ebb21",
+      "acl": "private",
+      "x-amz-signature": "xxxx",
+      "Content-Type": "image/jpeg",
+      "policy": "eyJjb25kaXRpb25zIjpbWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsMTAyNDAwLDIwOTcxNTIwXV19",
+      "success_action_redirect": "http://example.com/success",
+      "error_action_redirect": "http://example.com/error"
+    }
+  }
+}

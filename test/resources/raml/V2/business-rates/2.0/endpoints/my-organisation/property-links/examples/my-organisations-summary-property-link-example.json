@@ -1,0 +1,27 @@
+{
+  "_links": {
+    "self": {
+      "href": "http://api.service.hmrc.gov.uk/my-organisation/property-links/PL1ZR7QBN1?projection=summary",
+      "template": false
+    }
+  },
+  "propertyLink": {
+    "id": 10000000000001,
+    "submissionId": "PL1ZR7QBN1",
+    "status": "APPROVED",
+    "startDate": "2019-01-22",
+    "uarn": 8735379000,
+    "address": "BLOCK J UNIT 215 TOWER BRIDGE BUSINESS COMPLEX, CLEMENTS ROAD, LONDON, SE16 4DG",
+    "localAuthorityRef": "1940002152213J",
+    "agents": [
+      {
+        "organisationId": 1093,
+        "organisationName": "Property Management Ltd"
+      },
+      {
+        "organisationId": 1094,
+        "organisationName": "Business Management Ltd"
+      }
+    ]
+  }
+}
