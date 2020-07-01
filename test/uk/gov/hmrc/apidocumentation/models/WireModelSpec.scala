@@ -117,7 +117,16 @@ class WireModelSpec extends UnitSpec {
 
     val wireModel : WireModel = OurModel(raml)._2
 
-    println(Json.prettyPrint(Json.toJson(wireModel)))
+    val json = Json.toJson(wireModel)
+    println(Json.prettyPrint(json))
+
+    saveToFile("business-rates-as-json.json", Json.prettyPrint(json))
+  }
+
+
+  def saveToFile(filename: String, contents: String) = {
+    import java.io.PrintWriter
+    new PrintWriter(filename) { write(contents); close }
   }
 
   def loadRaml(filename: String) : RAML = {

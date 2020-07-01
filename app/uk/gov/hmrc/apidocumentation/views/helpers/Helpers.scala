@@ -69,7 +69,7 @@ object HeaderVal {
     def replace(example: String) = {
       example.replace("application/vnd.hmrc.1.0", "application/vnd.hmrc." + version)
     }
-    val exampleValue = header.example.value.getOrElse("") // TODO
+    val exampleValue = header.example.fold("")(e => e.value.getOrElse(""))
     header.displayName match {
       case "Accept"=> replace(exampleValue)
       case "Content-Type" => replace(exampleValue)
@@ -445,7 +445,12 @@ object BodyExamples {
   }
 
   def apply(body: TypeDeclaration2): Seq[HmrcExampleSpec] = {
-    if (body.examples.size > 0) body.examples else Seq(body.example)
+    if (body.examples.size > 0) body.examples else {
+      body.example match {
+        case Some(e) => Seq(e)
+        case None => Seq.empty
+      }
+    }
   }
 }
 

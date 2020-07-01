@@ -172,8 +172,9 @@ case class TypeDeclaration2(
   `type`: String,
   required: Boolean,
   description: Option[String],
-  example: HmrcExampleSpec,
-  examples: List[HmrcExampleSpec])
+  examples: List[HmrcExampleSpec]){
+    val example : Option[HmrcExampleSpec] = examples.headOption
+  }
 
 object TypeDeclaration2 {
   def apply(td: TypeDeclaration): TypeDeclaration2 =
@@ -183,8 +184,7 @@ object TypeDeclaration2 {
       td.`type`,
       td.required,
       Option(td.description).map(_.value()),
-      HmrcExampleSpec(td.example),
-      td.examples.asScala.toList.map(HmrcExampleSpec.apply))
+      td.examples.asScala.toList.map(HmrcExampleSpec.apply)) // TODO: Single example?
 }
 
 case class HmrcExampleSpec(description: Option[String] ,documentation: Option[String], code: Option[String], value: Option[String])

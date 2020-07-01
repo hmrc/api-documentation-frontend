@@ -30,8 +30,15 @@ import uk.gov.hmrc.apidocumentation.models.HmrcExampleSpec
 case class MethodParameter(name: String, typeName: String, baseTypeName: String, required: Boolean, description: MarkdownString,
                            example: ExampleSpec, pattern: Option[String] = None, enumValues: Seq[String] = Seq.empty)
 
-case class MethodParameter2(name: String, typeName: String, baseTypeName: String, required: Boolean, description: String,
-            example: HmrcExampleSpec, pattern: Option[String] = None, enumValues: Seq[String] = Seq.empty)
+case class MethodParameter2(
+  name: String,
+  typeName: String,
+  baseTypeName: String,
+  required: Boolean,
+  description: String,
+  example: Option[HmrcExampleSpec],
+  pattern: Option[String] = None,
+  enumValues: Seq[String] = Seq.empty)
 
 case object MethodParameter {
   def fromTypeDeclaration(td: TypeDeclaration) = {
@@ -47,7 +54,7 @@ case object MethodParameter {
       case "date-only" => "date"
       case other => other
     }
-    MethodParameter2(td.name, typeName, typeName, td.required, td.description.getOrElse(""), td.example)
+    MethodParameter2(td.name, typeName, typeName, td.required, td.description.getOrElse(""), td.examples.headOption)
   }
 }
 
