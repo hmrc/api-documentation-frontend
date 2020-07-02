@@ -21,17 +21,14 @@ import org.raml.v2.api.model.v10.datamodel.TypeDeclaration
 import org.raml.v2.api.model.v10.methods.Method
 
 import scala.collection.JavaConverters._
+import uk.gov.hmrc.apidocumentation.models.HmrcMethod
+import uk.gov.hmrc.apidocumentation.models.TypeDeclaration2
 
-case class EnumValue(
-                      name: String,
-                      description: Option[String] = None
-                    )
+case class RequestResponseField2(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: Option[String],
+                                description: Option[String], pattern: Option[String], depth: Int, enumValues: Seq[EnumValue])
 
-case class RequestResponseField(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: String,
-                                description: String, pattern: String, depth: Int, enumValues: Seq[EnumValue])
-
-trait RequestResponseFields {
-  def extractFields(requestResponseBodies: Seq[TypeDeclaration], schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
+object RequestResponseField2 {
+  def extractFields(requestResponseBodies: List[TypeDeclaration2], schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
     val fields = for {
       body    <- requestResponseBodies
       schema  <- schema(body, schemas)
@@ -42,8 +39,8 @@ trait RequestResponseFields {
     fields.flatten
   }
 
-  private def schema(body: TypeDeclaration, schemas: Map[String, JsonSchema]): Option[JsonSchema] = {
-    body.`type`() match {
+  private def schema(body: TypeDeclaration2, schemas: Map[String, JsonSchema]): Option[JsonSchema] = {
+    body.`type` match {
       case json if json.trim.startsWith("{") => Some(schemas(json))
       case _ => None
     }
@@ -54,9 +51,9 @@ trait RequestResponseFields {
                             description: Option[String] = None,
                             required: Boolean = false,
                             depth: Int = -1,
-                            acc: Seq[RequestResponseField] = Nil,
+                            acc: Seq[RequestResponseField2] = Nil,
                             isArray: Boolean = false,
-                            isPatternproperty: Boolean = false): Seq[RequestResponseField] = {
+                            isPatternproperty: Boolean = false): Seq[RequestResponseField2] = {
 
     def extractEnumValues(schema: JsonSchema): Seq[EnumValue] = {
 
@@ -72,14 +69,15 @@ trait RequestResponseFields {
     val currentField = fieldName match {
       case Some(name) if schema.`type` != "array" => {
         val fieldOrTitle = if (isPatternproperty) schema.title.getOrElse(name) else name
-        Some(RequestResponseField(fieldOrTitle,
+        Some(RequestResponseField2(
+          fieldOrTitle,
           schema.`type`.getOrElse(""),
           schema.id.getOrElse(""),
           isArray,
           required,
-          schema.example.getOrElse(""),
-          schema.description.orElse(description).getOrElse(""),
-          schema.pattern.getOrElse(""),
+          schema.example.filter(_.nonEmpty),
+          schema.description.orElse(description).filter(_.nonEmpty),
+          schema.pattern.filter(_.nonEmpty),
           depth,
           extractEnumValues(schema)))
       }
@@ -114,22 +112,23 @@ trait RequestResponseFields {
   }
 }
 
-object ResponseFields extends RequestResponseFields {
-  def apply(method: Method, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
+object ResponseFields2 extends RequestResponseFields {
+  def apply(method: HmrcMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
     val responseBodies = for {
       response <- Responses.success(method)
-      body <- response.body.asScala
+      body <- response.body
     } yield {
       body
     }
 
-    extractFields(responseBodies, schemas)
+    RequestResponseField2.extractFields(responseBodies, schemas)
   }
 }
 
-object RequestFields extends RequestResponseFields {
-  def apply(method: Method, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
-    extractFields(method.body.asScala, schemas)
+object RequestFields2 extends RequestResponseFields {
+  
+  def apply(method: HmrcMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
+    RequestResponseField2.extractFields(method.body, schemas)
   }
 }
 

@@ -108,7 +108,7 @@
     </section>
 }
 
-@fields(RequestFields(meth, schemas), "Request table", viewModel.isFieldOptionalityKnown)
+@fields(RequestFields2(meth, schemas), "Request table", viewModel.isFieldOptionalityKnown)
 
 @for(resp <- Responses.success(meth)) {
     <section id="sample-response_@contentID" class="section">
@@ -129,7 +129,7 @@
         }
     </section>
 }
-@fields(ResponseFields(meth, schemas), "Response table", viewModel.isFieldOptionalityKnown)
+@fields(ResponseFields2(meth, schemas), "Response table", viewModel.isFieldOptionalityKnown)
 
 @defining(ErrorScenarios(meth)) { errorScenarios =>
     @if(errorScenarios.nonEmpty) {
