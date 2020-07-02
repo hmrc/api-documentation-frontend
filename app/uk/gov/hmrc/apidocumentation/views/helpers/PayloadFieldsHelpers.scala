@@ -29,11 +29,14 @@ case class EnumValue(
                       description: Option[String] = None
                     )
 
-case class RequestResponseField(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: Option[String],
+case class RequestResponseField(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: String,
+                                description: String, pattern: String, depth: Int, enumValues: Seq[EnumValue])
+
+case class RequestResponseField2(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: Option[String],
                                 description: Option[String], pattern: Option[String], depth: Int, enumValues: Seq[EnumValue])
 
-object RequestResponseField {
-  def extractFields(requestResponseBodies: List[TypeDeclaration2], schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
+object RequestResponseField2 {
+  def extractFields(requestResponseBodies: List[TypeDeclaration2], schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
     val fields = for {
       body    <- requestResponseBodies
       schema  <- schema(body, schemas)
@@ -56,9 +59,9 @@ object RequestResponseField {
                             description: Option[String] = None,
                             required: Boolean = false,
                             depth: Int = -1,
-                            acc: Seq[RequestResponseField] = Nil,
+                            acc: Seq[RequestResponseField2] = Nil,
                             isArray: Boolean = false,
-                            isPatternproperty: Boolean = false): Seq[RequestResponseField] = {
+                            isPatternproperty: Boolean = false): Seq[RequestResponseField2] = {
 
     def extractEnumValues(schema: JsonSchema): Seq[EnumValue] = {
 
@@ -74,7 +77,7 @@ object RequestResponseField {
     val currentField = fieldName match {
       case Some(name) if schema.`type` != "array" => {
         val fieldOrTitle = if (isPatternproperty) schema.title.getOrElse(name) else name
-        Some(RequestResponseField(
+        Some(RequestResponseField2(
           fieldOrTitle,
           schema.`type`.getOrElse(""),
           schema.id.getOrElse(""),
@@ -164,9 +167,9 @@ trait RequestResponseFields {
           schema.id.getOrElse(""),
           isArray,
           required,
-          schema.example.filter(_.nonEmpty),
-          schema.description.orElse(description).filter(_.nonEmpty),
-          schema.pattern.filter(_.nonEmpty),
+          schema.example.getOrElse(""),
+          schema.description.orElse(description).getOrElse(""),
+          schema.pattern.getOrElse(""),
           depth,
           extractEnumValues(schema)))
       }
@@ -213,7 +216,7 @@ object ResponseFields extends RequestResponseFields {
     extractFields(responseBodies, schemas)
   }
 
-  def apply(method: HmrcMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
+  def apply(method: HmrcMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
     val responseBodies = for {
       response <- Responses.success(method)
       body <- response.body
@@ -221,7 +224,7 @@ object ResponseFields extends RequestResponseFields {
       body
     }
 
-    RequestResponseField.extractFields(responseBodies, schemas)
+    RequestResponseField2.extractFields(responseBodies, schemas)
   }
 }
 
@@ -230,8 +233,8 @@ object RequestFields extends RequestResponseFields {
     extractFields(method.body.asScala, schemas)
   }
 
-  def apply(method: HmrcMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
-    RequestResponseField.extractFields(method.body, schemas)
+  def apply(method: HmrcMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
+    RequestResponseField2.extractFields(method.body, schemas)
   }
 }
 
