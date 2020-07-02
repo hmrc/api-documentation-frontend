@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services._
+@import org.raml.v2.api.model.v10.api.DocumentationItem
 
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
@@ -51,7 +52,7 @@
     <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section raml" aria-busy="false">
         <div id="section">
             <h1 id="title" class="heading-xlarge">
-                @Val(viewModel.title) API<a name="title"></a>
+                @{viewModel.title} API<a name="title"></a>
             </h1>
             @for(version <- maybeVersion) {
             <table>
@@ -74,10 +75,11 @@
             </table>
             }
 
-            @for(doc <- viewModel.documentationForVersion(maybeVersion)) {
+            @* // TODO: Remove dependency on RamlDocumentationItem *@
+            @for(doc: RamlDocumentationItem <- viewModel.documentationForVersion(maybeVersion)) {
             <div class="section">
                 <h2 id="@Slugify(doc.title)" class="heading-large">
-                    @Val(doc.title)
+                    @{doc.title}
                 </h2>
 
                 <div>

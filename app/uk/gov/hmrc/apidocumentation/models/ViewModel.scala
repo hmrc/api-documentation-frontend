@@ -84,11 +84,6 @@ private val correctOrder = Map(
       })
     }
 
-    object SafeValue {
-      def apply(v: String): Option[String] = Option(v)
-      def apply(v: {def value(): String}): Option[String] = Option(v).map(_.value())
-    }
-
     def sandboxData = Annotation.optional(method, "(sandboxData)")
 
     HmrcMethod(
@@ -234,7 +229,7 @@ case class ViewModel(
 object ViewModel {
   def apply(raml: RAML): (ViewModel,WireModel) = {
 
-    def title: String = raml.title.value
+    def title: String = DefaultToEmptyValue(raml.title)
 
     def version: String = raml.version.value
 
@@ -278,4 +273,16 @@ object ViewModel {
 
     (vm,wm)
   }
+}
+
+// TODO: Add some tests
+object SafeValue {
+  def apply(v: String): Option[String] = Option(v)
+  def apply(v: {def value(): String}): Option[String] = Option(v).map(_.value())
+}
+
+// TODO: Add some tests
+object DefaultToEmptyValue {
+  // def apply(v: String): Option[String] = Option(v)
+  def apply(v: {def value(): String}): String = SafeValue(v.value()).getOrElse("")
 }
