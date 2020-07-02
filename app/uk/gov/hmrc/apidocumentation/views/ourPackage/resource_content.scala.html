@@ -113,11 +113,11 @@
 @for(resp <- Responses.success(meth)) {
     <section id="sample-response_@contentID" class="section">
         @if(resp.headers.nonEmpty) {
-            @headers(resp.headers.toSeq, viewModel.version, "Response headers", "", ("none", None))
+            @headers(resp.headers, viewModel.version, "Response headers", "", ("none", None))
         }
 
         <h4 class="heading-small">Response</h4>
-        <p>HTTP status: <code class="code--slim">@HttpStatus(Val(resp.code))</code></p>
+        <p>HTTP status: <code class="code--slim">@HttpStatus(resp.code)</code></p>
         @for(body <- resp.body) {
             @for(example <- BodyExamples(body)) {
                 <section>

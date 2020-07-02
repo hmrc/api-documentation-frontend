@@ -23,7 +23,6 @@ import uk.gov.hmrc.apidocumentation.views.helpers.{Annotation, GroupedResources}
 
 import scala.collection.JavaConverters._
 import org.raml.v2.api.model.v10.methods.Method
-import uk.gov.hmrc.apidocumentation.views.helpers.Val
 import uk.gov.hmrc.apidocumentation.views.helpers.ResourceGroup2
 import uk.gov.hmrc.apidocumentation.views.helpers.FindProperty
 
@@ -76,7 +75,7 @@ private val correctOrder = Map(
     def responses: List[HmrcResponse] = {
       method.responses().asScala.toList.map(r => {
         HmrcResponse(
-          code = r.code().value(),
+          code = DefaultToEmptyValue(r.code()),
           body = r.body.asScala.toList.map(TypeDeclaration2.apply),
           headers = r.headers().asScala.toList.map(TypeDeclaration2.apply),
           description = Option(r.description()).map(_.value())
@@ -88,7 +87,7 @@ private val correctOrder = Map(
 
     HmrcMethod(
       method.method,
-      method.displayName.value,
+      DefaultToEmptyValue(method.displayName),
       body,
       headers,
       queryParameters,
@@ -165,7 +164,10 @@ object TypeDeclaration2 {
       td.`type`,
       td.required,
       Option(td.description).map(_.value()),
-      td.examples.asScala.toList.map(HmrcExampleSpec.apply) // TODO: Single example?
+      if(td.example != null)
+        List(HmrcExampleSpec(td.example))
+      else
+        td.examples.asScala.toList.map(HmrcExampleSpec.apply)
     )
 }
 

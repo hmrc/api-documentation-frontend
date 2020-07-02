@@ -29,8 +29,8 @@ case class EnumValue(
                       description: Option[String] = None
                     )
 
-case class RequestResponseField(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: String,
-                                description: String, pattern: String, depth: Int, enumValues: Seq[EnumValue])
+case class RequestResponseField(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: Option[String],
+                                description: Option[String], pattern: Option[String], depth: Int, enumValues: Seq[EnumValue])
 
 object RequestResponseField {
   def extractFields(requestResponseBodies: List[TypeDeclaration2], schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
@@ -74,14 +74,15 @@ object RequestResponseField {
     val currentField = fieldName match {
       case Some(name) if schema.`type` != "array" => {
         val fieldOrTitle = if (isPatternproperty) schema.title.getOrElse(name) else name
-        Some(RequestResponseField(fieldOrTitle,
+        Some(RequestResponseField(
+          fieldOrTitle,
           schema.`type`.getOrElse(""),
           schema.id.getOrElse(""),
           isArray,
           required,
-          schema.example.getOrElse(""),
-          schema.description.orElse(description).getOrElse(""),
-          schema.pattern.getOrElse(""),
+          schema.example.filter(_.nonEmpty),
+          schema.description.orElse(description).filter(_.nonEmpty),
+          schema.pattern.filter(_.nonEmpty),
           depth,
           extractEnumValues(schema)))
       }
@@ -163,9 +164,9 @@ trait RequestResponseFields {
           schema.id.getOrElse(""),
           isArray,
           required,
-          schema.example.getOrElse(""),
-          schema.description.orElse(description).getOrElse(""),
-          schema.pattern.getOrElse(""),
+          schema.example.filter(_.nonEmpty),
+          schema.description.orElse(description).filter(_.nonEmpty),
+          schema.pattern.filter(_.nonEmpty),
           depth,
           extractEnumValues(schema)))
       }
