@@ -20,8 +20,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services._
-@import org.raml.v2.api.model.v10.api.DocumentationItem
-
+@import uk.gov.hmrc.apidocumentation.models.DocumentationItem
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 @this(applicationConfig: ApplicationConfig)
@@ -75,8 +74,7 @@
             </table>
             }
 
-            @* // TODO: Remove dependency on RamlDocumentationItem *@
-            @for(doc: RamlDocumentationItem <- viewModel.documentationForVersion(maybeVersion)) {
+            @for(doc <- viewModel.documentationForVersion(maybeVersion)) {
             <div class="section">
                 <h2 id="@Slugify(doc.title)" class="heading-large">
                     @{doc.title}

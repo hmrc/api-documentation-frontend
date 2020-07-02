@@ -161,7 +161,7 @@ object TypeDeclaration2 {
   def apply(td: TypeDeclaration): TypeDeclaration2 =
     TypeDeclaration2(
       td.name,
-      Val(td.displayName),
+      DefaultToEmptyValue(td.displayName),
       td.`type`,
       td.required,
       Option(td.description).map(_.value()),
@@ -197,8 +197,8 @@ object HmrcExampleSpec {
     }
 
     val value = {
-      FindProperty(example.structuredValue, "value")
-        .orElse(Some(example.value))
+      SafeValue(FindProperty(example.structuredValue, "value"))
+        .orElse(SafeValue(example))
     }
 
     HmrcExampleSpec(description, documentation, code, value)
@@ -235,7 +235,10 @@ object ViewModel {
 
     def deprecationMessage: Option[String] = Annotation.optional(raml, "(deprecationMessage)")
 
-    def documentationItems: List[DocumentationItem] = raml.documentation.asScala.toList.map(item => DocumentationItem(item.title.value, item.content.value))
+    def documentationItems: List[DocumentationItem] =
+      raml.documentation.asScala.toList.map(item => DocumentationItem(
+        DefaultToEmptyValue(item.title), DefaultToEmptyValue(item.content)
+      ))
 
     def resources: List[HmrcResource] = raml.resources.asScala.toList.map(HmrcResource.recursiveResource)
 
@@ -277,12 +280,17 @@ object ViewModel {
 
 // TODO: Add some tests
 object SafeValue {
-  def apply(v: String): Option[String] = Option(v)
-  def apply(v: {def value(): String}): Option[String] = Option(v).map(_.value())
+  //Convert nulls and empty strings to Option.None
+  def apply(v: String): Option[String] = apply(Option(v))
+  def apply(v: {def value(): String}): Option[String] = apply(Option(v).map(_.value()))
+  def apply(v: Option[String]): Option[String] = v.filter(_.nonEmpty)
 }
 
 // TODO: Add some tests
 object DefaultToEmptyValue {
   // def apply(v: String): Option[String] = Option(v)
+  //Convert nulls to empty strings
   def apply(v: {def value(): String}): String = SafeValue(v.value()).getOrElse("")
 }
+
+

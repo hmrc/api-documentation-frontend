@@ -58,9 +58,9 @@
               </div>
           } else {
               <p>
-                  @if(param.example.isDefined){
-                    @if(param.example.get.value.nonEmpty) {For example: <code class="code--slim">@Val(param.example.get.value)</code>}
-                  }
+                @param.example.flatMap(_.value).map{value =>
+                  For example: <code class="code--slim">@value</code>
+                }
               </p>
           }
       </div>
