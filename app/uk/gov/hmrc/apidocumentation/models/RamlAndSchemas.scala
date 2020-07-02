@@ -49,7 +49,11 @@ case class DocumentationItem(title: String, content: String)
 
 case class SecurityScheme(`type`: String, scope: Option[String])
 
-case class HmrcResponse(code: String,  body: List[TypeDeclaration2], headers: List[TypeDeclaration2], description: Option[String])
+case class HmrcResponse(
+  code: String,
+  body: List[TypeDeclaration2],
+  headers: List[TypeDeclaration2],
+  description: Option[String])
 
 case class HmrcMethod(
   method: String,
@@ -184,10 +188,16 @@ object TypeDeclaration2 {
       td.`type`,
       td.required,
       Option(td.description).map(_.value()),
-      td.examples.asScala.toList.map(HmrcExampleSpec.apply)) // TODO: Single example?
+      td.examples.asScala.toList.map(HmrcExampleSpec.apply) // TODO: Single example?
+    )
 }
 
-case class HmrcExampleSpec(description: Option[String] ,documentation: Option[String], code: Option[String], value: Option[String])
+case class HmrcExampleSpec(
+  description: Option[String],
+  documentation: Option[String],
+  code: Option[String],
+  value: Option[String]
+)
 
 object HmrcExampleSpec {
   def apply(example : ExampleSpec) : HmrcExampleSpec = {

@@ -200,7 +200,7 @@ object GroupedResources {
   def apply(resources: List[HmrcResource]): List[ResourceGroup2] = {
     def flatten(resources: List[HmrcResource], acc: List[HmrcResource]): List[HmrcResource] = {
       resources match {
-        case Nil => acc.reverse
+        case Nil => acc
         case head :: tail =>
           // TODO - not efficient to right concat
           flatten(tail, flatten(head.children, head :: acc))
@@ -220,7 +220,7 @@ object GroupedResources {
       }
     }
 
-    group(flatten(resources, Nil)).filterNot(_.resources.length < 1)
+    group(flatten(resources, Nil).reverse).filterNot(_.resources.length < 1)
   }
 
   private def group(resources: Seq[Resource], currentGroup: ResourceGroup = ResourceGroup(), groups: Seq[ResourceGroup] = Nil): Seq[ResourceGroup] = {

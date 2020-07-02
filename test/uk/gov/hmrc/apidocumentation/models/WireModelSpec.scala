@@ -81,6 +81,21 @@ class WireModelSpec extends UnitSpec {
       // TODO: Check endpoint URL, description
       // TODO: Doesn't handle missing description (null pointer)
     }
+
+    "With multiple endpoints maintain RAML ordering" in {
+      val raml = loadRaml("multiple-methods.raml")
+
+      val wireModel = OurModel(raml)._2
+      wireModel.resourceGroups.size shouldBe 1
+
+      val rg = wireModel.resourceGroups(0)
+
+      println("**** Actual Method Ordering: " + rg.resources.map(r=>r.displayName).mkString(","))
+
+      rg.resources(0).displayName shouldBe "/endpoint1"
+      rg.resources(1).displayName shouldBe "/endpoint2"
+      rg.resources(2).displayName shouldBe "/endpoint3"
+    }
   }
 
   object wireModelFormatters {
@@ -100,29 +115,30 @@ class WireModelSpec extends UnitSpec {
     implicit val wireModelJF = Json.format[WireModel]
   }
 
-  "What does the JSON look like?" in {
+  "convert to json experiments" should {
+    "What does the JSON look like?" ignore {
+        import wireModelFormatters._
+
+        val raml = loadRaml("multiple-endpoints.raml")
+
+        val wireModel : WireModel = OurModel(raml)._2
+
+        println(Json.prettyPrint(Json.toJson(wireModel)))
+    }
+
+    "What does business-rates look like?" ignore {
       import wireModelFormatters._
 
-      val raml = loadRaml("multiple-endpoints.raml")
+      val raml = loadRaml("V2/business-rates/2.0/application.raml")
 
       val wireModel : WireModel = OurModel(raml)._2
 
-      println(Json.prettyPrint(Json.toJson(wireModel)))
+      val json = Json.toJson(wireModel)
+      println(Json.prettyPrint(json))
+
+      saveToFile("business-rates-as-json.json", Json.prettyPrint(json))
+    }
   }
-
-  "What does business-rates look like?" in {
-    import wireModelFormatters._
-
-    val raml = loadRaml("V2/business-rates/2.0/application.raml")
-
-    val wireModel : WireModel = OurModel(raml)._2
-
-    val json = Json.toJson(wireModel)
-    println(Json.prettyPrint(json))
-
-    saveToFile("business-rates-as-json.json", Json.prettyPrint(json))
-  }
-
 
   def saveToFile(filename: String, contents: String) = {
     import java.io.PrintWriter
