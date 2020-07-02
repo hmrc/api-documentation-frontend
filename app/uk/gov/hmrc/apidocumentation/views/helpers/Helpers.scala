@@ -264,16 +264,11 @@ object Methods {
 }
 
 object Authorisation {
-  def apply(method: HmrcMethod): (String, Option[String]) = {
-    method.securedBy.fold( ("none", Option.empty[String] ) )( _ match {
-      case SecurityScheme("OAuth 2.0", scope) => (("user", scope))
-      case _ => ("application", None)
-    })
-  }
 
   def apply(method: Method): (String, Option[String]) = fetchAuthorisation(method)
 
   private def fetchAuthorisation(method: Method): (String, Option[String]) = {
+    
     if (method.securedBy().asScala.nonEmpty) {
       method.securedBy.get(0).securityScheme.`type` match {
         case "OAuth 2.0" => ("user", Some(Annotation(method, "(scope)")))

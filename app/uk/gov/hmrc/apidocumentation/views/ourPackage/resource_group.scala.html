@@ -68,7 +68,7 @@
                                     @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
                                         <div id="@contentID" class="accordion__body indent" data-accordion-reveal data-accordion-body aria-hidden="true">
                                             @Markdown(method.description)
-                                            @resource_content(res, method, viewModel, schemas, contentID, Authorisation(method))
+                                            @resource_content(res, method, viewModel, schemas, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
                                             <div class="close-accordion">
                                                 <a href="#@methodSlug" data-accordion-button role="button">
                                                     Close section
