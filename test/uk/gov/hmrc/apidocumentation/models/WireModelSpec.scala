@@ -31,7 +31,7 @@ class WireModelSpec extends UnitSpec {
     "Simple.raml should parse title and version to our model" in {
       val raml = loadRaml("V2/simple.raml")
 
-      val wireModel: WireModel = OurModel(raml)._2
+      val wireModel: WireModel = ViewModel(raml)._2
       wireModel.title shouldBe "My simple title"
       wireModel.version shouldBe "My version"
     }
@@ -39,7 +39,7 @@ class WireModelSpec extends UnitSpec {
     "With single method" in {
       val raml = loadRaml("V2/single-method.raml")
 
-      val wireModel = OurModel(raml)._2
+      val wireModel = ViewModel(raml)._2
       wireModel.resourceGroups.size shouldBe 1
 
       val rg = wireModel.resourceGroups(0)
@@ -85,7 +85,7 @@ class WireModelSpec extends UnitSpec {
     "With multiple endpoints maintain RAML ordering" in {
       val raml = loadRaml("multiple-methods.raml")
 
-      val wireModel = OurModel(raml)._2
+      val wireModel = ViewModel(raml)._2
       wireModel.resourceGroups.size shouldBe 1
 
       val rg = wireModel.resourceGroups(0)
@@ -121,7 +121,7 @@ class WireModelSpec extends UnitSpec {
 
         val raml = loadRaml("multiple-endpoints.raml")
 
-        val wireModel : WireModel = OurModel(raml)._2
+        val wireModel : WireModel = ViewModel(raml)._2
 
         println(Json.prettyPrint(Json.toJson(wireModel)))
     }
@@ -131,7 +131,7 @@ class WireModelSpec extends UnitSpec {
 
       val raml = loadRaml("V2/business-rates/2.0/application.raml")
 
-      val wireModel : WireModel = OurModel(raml)._2
+      val wireModel : WireModel = ViewModel(raml)._2
 
       val json = Json.toJson(wireModel)
       println(Json.prettyPrint(json))

@@ -25,7 +25,7 @@ import play.api.mvc._
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.OurModel
+import uk.gov.hmrc.apidocumentation.models.ViewModel
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.services._
@@ -257,7 +257,7 @@ class ApiDocumentationController @Inject()(
     def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) =
       documentationService.fetchRAML(service, version, cacheBuster).map { ramlAndSchemas =>
         val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation(service, selectedVersion, ramlAndSchemas.raml /* our object */))
-        Ok(serviceDocumentationView2(attrs, api, selectedVersion, OurModel(ramlAndSchemas.raml)._1, ramlAndSchemas.schemas, email.isDefined)).withHeaders(cacheControlHeaders)
+        Ok(serviceDocumentationView2(attrs, api, selectedVersion, ViewModel(ramlAndSchemas.raml)._1, ramlAndSchemas.schemas, email.isDefined)).withHeaders(cacheControlHeaders)
       }
 
     findVersion(apiOption) match {

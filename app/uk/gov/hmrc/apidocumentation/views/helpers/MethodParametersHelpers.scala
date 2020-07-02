@@ -20,7 +20,7 @@ import org.raml.v2.api.model.v10.datamodel.{ExampleSpec, StringTypeDeclaration, 
 import org.raml.v2.api.model.v10.methods.Method
 import org.raml.v2.api.model.v10.resources.Resource
 import org.raml.v2.api.model.v10.system.types.MarkdownString
-import uk.gov.hmrc.apidocumentation.models.{OurModel, HmrcResource, TypeDeclaration2}
+import uk.gov.hmrc.apidocumentation.models.{ViewModel, HmrcResource, TypeDeclaration2}
 import uk.gov.hmrc.apidocumentation.services._
 
 import scala.collection.JavaConverters._
@@ -83,7 +83,7 @@ trait MethodParameters {
     }
   }
 
-  def resolveTypes2(parameters: Seq[TypeDeclaration2], ourModel: OurModel): Seq[MethodParameter2] = {
+  def resolveTypes2(parameters: Seq[TypeDeclaration2], ourModel: ViewModel): Seq[MethodParameter2] = {
 
     def findType(param: TypeDeclaration2) = {
       def findInTypes(types: List[TypeDeclaration2]) = types.find(_.name == param.`type`)
@@ -113,7 +113,7 @@ object UriParams extends MethodParameters {
       apply(res.parentResource, raml) ++ resolveTypes(res.uriParameters.asScala, raml)
     }
   }
-  def apply(resource: Option[HmrcResource], ourModel: OurModel): Seq[MethodParameter2] = {
+  def apply(resource: Option[HmrcResource], ourModel: ViewModel): Seq[MethodParameter2] = {
     resource.fold(Seq.empty[MethodParameter2]) { res =>
       apply(ourModel.relationships.get(res).flatten, ourModel) ++ resolveTypes2(res.uriParameters, ourModel)
     }
@@ -127,7 +127,7 @@ object QueryParams extends MethodParameters {
       resolveTypes(meth.queryParameters.asScala, raml)
     }
   }
-  def apply(method: Option[HmrcMethod], ourModel: OurModel): Seq[MethodParameter2] = {
+  def apply(method: Option[HmrcMethod], ourModel: ViewModel): Seq[MethodParameter2] = {
     method.fold(Seq.empty[MethodParameter2]) { meth =>
       resolveTypes2(meth.queryParameters, ourModel)
     }

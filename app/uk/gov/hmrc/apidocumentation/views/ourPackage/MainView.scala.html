@@ -25,7 +25,7 @@
 
 @this(applicationConfig: ApplicationConfig)
 
-@(ourModel: OurModel, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)
+@(viewModel: ViewModel, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)
 
 @renderGetApiVersionForm = {
 @for(api <- maybeApi) {
@@ -51,7 +51,7 @@
     <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section raml" aria-busy="false">
         <div id="section">
             <h1 id="title" class="heading-xlarge">
-                @Val(ourModel.title) API<a name="title"></a>
+                @Val(viewModel.title) API<a name="title"></a>
             </h1>
             @for(version <- maybeVersion) {
             <table>
@@ -74,7 +74,7 @@
             </table>
             }
 
-            @for(doc <- ourModel.documentationForVersion(maybeVersion)) {
+            @for(doc <- viewModel.documentationForVersion(maybeVersion)) {
             <div class="section">
                 <h2 id="@Slugify(doc.title)" class="heading-large">
                     @Val(doc.title)
@@ -97,8 +97,8 @@
                         Endpoints
                     </h2>
 
-                    @for(resourceGroup <- ourModel.resourceGroups) {
-                        @resource_group(resourceGroup, ourModel, schemas)
+                    @for(resourceGroup <- viewModel.resourceGroups) {
+                        @resource_group(resourceGroup, viewModel, schemas)
                     }
                 </div>
             } else {

@@ -23,7 +23,7 @@
 
 @this(apiMain: apiMain, ourMainView: ourPackage.MainView, applicationConfig: ApplicationConfig)
 
-@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, ourModel: OurModel, schemas: Map[String, JsonSchema], loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, viewModel: ViewModel, schemas: Map[String, JsonSchema], loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @topContent = {
     <div class="form-group">
@@ -69,10 +69,10 @@
                     <span class="visually-hidden">Alert</span>
                 </i>
                 <strong class="bold-small">
-                    @{ourModel.deprecationMessage.getOrElse("This version is deprecated - it’s going to be removed.")}.
+                    @{viewModel.deprecationMessage.getOrElse("This version is deprecated - it’s going to be removed.")}.
                 </strong>
             </div>
         </div>
     }
-    @ourMainView(ourModel, schemas, Some(currentVersion), Some(api), loggedIn)
+    @ourMainView(viewModel, schemas, Some(currentVersion), Some(api), loggedIn)
 }

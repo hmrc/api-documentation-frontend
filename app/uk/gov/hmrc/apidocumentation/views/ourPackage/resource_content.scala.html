@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.controllers.routes
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 
-@(res: HmrcResource, meth: HmrcMethod, ourModel: OurModel, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
+@(res: HmrcResource, meth: HmrcMethod, viewModel: ViewModel, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
 
 <section id="authorisation_@contentID" class="section">
     <h4 class="heading-small">Authorisation</h4>
@@ -47,7 +47,7 @@
     }
 </section>
 
-@defining(UriParams(Some(res), ourModel)) { params =>
+@defining(UriParams(Some(res), viewModel)) { params =>
     @if(params.nonEmpty) {
         <section id="request-parameters_@contentID" class="section">
             <h4 class="heading-small">Path parameters</h4>
@@ -69,7 +69,7 @@
     }
 }
 
-@defining(QueryParams(Some(meth), ourModel)) { params =>
+@defining(QueryParams(Some(meth), viewModel)) { params =>
     @if(params.nonEmpty) {
         <section id="query-parameters_@contentID" class="section">
             <h4 class="heading-small first">Query parameters</h4>
@@ -92,7 +92,7 @@
 }
 
 @if(meth.headers.nonEmpty || authorisation._1 != "none") {
-    @headers(meth.headers, ourModel.version, "Request headers", "required", authorisation)
+    @headers(meth.headers, viewModel.version, "Request headers", "required", authorisation)
 }
 
 @for(body <- meth.body) {
@@ -108,12 +108,12 @@
     </section>
 }
 
-@fields(RequestFields(meth, schemas), "Request table", ourModel.isFieldOptionalityKnown)
+@fields(RequestFields(meth, schemas), "Request table", viewModel.isFieldOptionalityKnown)
 
 @for(resp <- Responses.success(meth)) {
     <section id="sample-response_@contentID" class="section">
         @if(resp.headers.nonEmpty) {
-            @headers(resp.headers.toSeq, ourModel.version, "Response headers", "", ("none", None))
+            @headers(resp.headers.toSeq, viewModel.version, "Response headers", "", ("none", None))
         }
 
         <h4 class="heading-small">Response</h4>
@@ -129,7 +129,7 @@
         }
     </section>
 }
-@fields(ResponseFields(meth, schemas), "Response table", ourModel.isFieldOptionalityKnown)
+@fields(ResponseFields(meth, schemas), "Response table", viewModel.isFieldOptionalityKnown)
 
 @defining(ErrorScenarios(meth)) { errorScenarios =>
     @if(errorScenarios.nonEmpty) {

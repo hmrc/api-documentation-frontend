@@ -220,7 +220,7 @@ case class WireModel (
   isFieldOptionalityKnown: Boolean
 )
 
-case class OurModel(
+case class ViewModel(
   title: String,
   version: String,
   deprecationMessage: Option[String],
@@ -231,8 +231,8 @@ case class OurModel(
   relationships: Map[HmrcResource, Option[HmrcResource]]
 )
 
-object OurModel {
-  def apply(raml: RAML): (OurModel,WireModel) = {
+object ViewModel {
+  def apply(raml: RAML): (ViewModel,WireModel) = {
 
     def title: String = raml.title.value
 
@@ -274,8 +274,8 @@ object OurModel {
       .foldLeft(startWithoutParents)( (m1, m2) => m1 ++ m2)
     }
 
-    val om = OurModel(wm.title, wm.version, wm.deprecationMessage, wm.documentationItems, wm.resourceGroups, wm.types, wm.isFieldOptionalityKnown, relationships = parentChildRelationships)
+    val vm = ViewModel(wm.title, wm.version, wm.deprecationMessage, wm.documentationItems, wm.resourceGroups, wm.types, wm.isFieldOptionalityKnown, relationships = parentChildRelationships)
 
-    (om,wm)
+    (vm,wm)
   }
 }

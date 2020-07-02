@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation
 
 import org.raml.v2.api.model.v10.api.{Api, DocumentationItem => RamlDocumentationItem}
-import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, DocumentationItem, ExtendedAPIVersion, OurModel}
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, DocumentationItem, ExtendedAPIVersion, ViewModel}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 
 import scala.collection.JavaConverters._
@@ -40,7 +40,7 @@ package object services {
     }
   }
 
-  implicit class RicherModel(val x: OurModel) {
+  implicit class RicherModel(val x: ViewModel) {
 
     def documentationForVersion(version: Option[ExtendedAPIVersion]): List[DocumentationItem] = versionVisibility(version) match {
       case DocsVisibility.VISIBLE => x.documentationItems
