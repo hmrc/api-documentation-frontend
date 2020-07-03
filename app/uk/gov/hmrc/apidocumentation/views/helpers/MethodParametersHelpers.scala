@@ -20,12 +20,11 @@ import org.raml.v2.api.model.v10.datamodel.{ExampleSpec, StringTypeDeclaration, 
 import org.raml.v2.api.model.v10.methods.Method
 import org.raml.v2.api.model.v10.resources.Resource
 import org.raml.v2.api.model.v10.system.types.MarkdownString
-import uk.gov.hmrc.apidocumentation.models.{ViewModel, HmrcResource, TypeDeclaration2}
+import uk.gov.hmrc.apidocumentation.models.ViewModel
+import uk.gov.hmrc.apidocumentation.models.wiremodel.{HmrcResource, HmrcMethod, TypeDeclaration2, HmrcExampleSpec}
 import uk.gov.hmrc.apidocumentation.services._
 
 import scala.collection.JavaConverters._
-import uk.gov.hmrc.apidocumentation.models.HmrcMethod
-import uk.gov.hmrc.apidocumentation.models.HmrcExampleSpec
 
 case class MethodParameter(name: String, typeName: String, baseTypeName: String, required: Boolean, description: MarkdownString,
                            example: ExampleSpec, pattern: Option[String] = None, enumValues: Seq[String] = Seq.empty)
@@ -38,7 +37,7 @@ case class MethodParameter2(
   description: String,
   example: Option[HmrcExampleSpec],
   pattern: Option[String] = None,
-  enumValues: Seq[String] = Seq.empty)
+  enumValues: List[String] = List.empty)
 
 case object MethodParameter {
   def fromTypeDeclaration(td: TypeDeclaration) = {

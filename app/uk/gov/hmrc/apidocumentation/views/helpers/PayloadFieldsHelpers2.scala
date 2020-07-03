@@ -17,12 +17,7 @@
 package uk.gov.hmrc.apidocumentation.views.helpers
 
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
-import org.raml.v2.api.model.v10.datamodel.TypeDeclaration
-import org.raml.v2.api.model.v10.methods.Method
-
-import scala.collection.JavaConverters._
-import uk.gov.hmrc.apidocumentation.models.HmrcMethod
-import uk.gov.hmrc.apidocumentation.models.TypeDeclaration2
+import uk.gov.hmrc.apidocumentation.models.wiremodel.{HmrcMethod,TypeDeclaration2}
 
 case class RequestResponseField2(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: Option[String],
                                 description: Option[String], pattern: Option[String], depth: Int, enumValues: Seq[EnumValue])
@@ -126,7 +121,7 @@ object ResponseFields2 extends RequestResponseFields {
 }
 
 object RequestFields2 extends RequestResponseFields {
-  
+
   def apply(method: HmrcMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
     RequestResponseField2.extractFields(method.body, schemas)
   }

@@ -17,7 +17,8 @@
 package uk.gov.hmrc.apidocumentation
 
 import org.raml.v2.api.model.v10.api.{Api, DocumentationItem => RamlDocumentationItem}
-import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, DocumentationItem, ExtendedAPIVersion, ViewModel}
+import uk.gov.hmrc.apidocumentation.models.wiremodel.{DocumentationItem}
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, ViewModel}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 
 import scala.collection.JavaConverters._

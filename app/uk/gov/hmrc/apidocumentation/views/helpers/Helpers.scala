@@ -28,6 +28,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation.models.DocsVisibility.DocsVisibility
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.wiremodel._
 
 import scala.collection.JavaConverters._
 import scala.language.reflectiveCalls
@@ -184,13 +185,6 @@ case class ResourceGroup(name: Option[String] = None, description: Option[String
     ResourceGroup(name, description, resources :+ resource)
   }
 }
-case class ResourceGroup2(name: Option[String] = None, description: Option[String] = None, resources: List[HmrcResource] = Nil) {
-  def +(resource: HmrcResource) = {
-    // TODO not efficient
-    ResourceGroup2(name, description, resources :+ resource)
-  }
-}
-
 
 object GroupedResources {
   def apply(resources: Seq[Resource]): Seq[ResourceGroup] = {
@@ -268,7 +262,7 @@ object Authorisation {
   def apply(method: Method): (String, Option[String]) = fetchAuthorisation(method)
 
   private def fetchAuthorisation(method: Method): (String, Option[String]) = {
-    
+
     if (method.securedBy().asScala.nonEmpty) {
       method.securedBy.get(0).securityScheme.`type` match {
         case "OAuth 2.0" => ("user", Some(Annotation(method, "(scope)")))
@@ -398,11 +392,6 @@ object ErrorScenarios {
     }
 
     errorScenarios.flatten
-  }
-
-  private def scenarioDescription(body: TypeDeclaration2, example: BodyExample): Option[String] = {
-    example.description
-    .orElse(body.description)
   }
 
   private def scenarioDescription(body: TypeDeclaration2, example: HmrcExampleSpec): Option[String] = {

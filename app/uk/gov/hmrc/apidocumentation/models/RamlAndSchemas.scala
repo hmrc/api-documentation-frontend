@@ -16,15 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import org.raml.v2.api.model.v10.datamodel.{ExampleSpec, TypeDeclaration}
-import org.raml.v2.api.model.v10.resources.Resource
 import uk.gov.hmrc.apidocumentation.services.RAML
-import uk.gov.hmrc.apidocumentation.views.helpers.{Annotation, GroupedResources}
-
-import scala.collection.JavaConverters._
-import org.raml.v2.api.model.v10.methods.Method
-import uk.gov.hmrc.apidocumentation.views.helpers.Val
-import uk.gov.hmrc.apidocumentation.views.helpers.ResourceGroup2
-import uk.gov.hmrc.apidocumentation.views.helpers.FindProperty
 
 case class RamlAndSchemas(raml: RAML, schemas: Map[String, JsonSchema])

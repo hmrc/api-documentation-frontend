@@ -17,21 +17,19 @@
 package uk.gov.hmrc.apidocumentation.models
 
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.ramltools.loaders.FileRamlLoader
-import scala.util.Failure
-import scala.util.Success
+import scala.util.{Failure, Success}
 import uk.gov.hmrc.apidocumentation.services.RAML
 import play.api.libs.json.Json
-import uk.gov.hmrc.apidocumentation.views.helpers.ResourceGroup2
 import uk.gov.hmrc.ramltools.loaders.ComprehensiveClasspathRamlLoader
+import uk.gov.hmrc.apidocumentation.models.wiremodel.WireModelFormatters._
+import uk.gov.hmrc.apidocumentation.models.wiremodel.WireModel
 
-// TODO: Rebrand as wireModel spec
 class WireModelSpec extends UnitSpec {
   "RAML to wireModel" should {
     "Simple.raml should parse title and version to our model" in {
       val raml = loadRaml("V2/simple.raml")
 
-      val wireModel: WireModel = ViewModel(raml)._2
+      val wireModel = WireModel(raml)
       wireModel.title shouldBe "My simple title"
       wireModel.version shouldBe "My version"
     }
@@ -39,7 +37,7 @@ class WireModelSpec extends UnitSpec {
     "With single method" in {
       val raml = loadRaml("V2/single-method.raml")
 
-      val wireModel = ViewModel(raml)._2
+      val wireModel = WireModel(raml)
       wireModel.resourceGroups.size shouldBe 1
 
       val rg = wireModel.resourceGroups(0)
@@ -60,7 +58,7 @@ class WireModelSpec extends UnitSpec {
     }
 
     "With multiple endpoints" in {
-      val raml = loadRaml("multiple-endpoints.raml")
+      /*val raml = */loadRaml("multiple-endpoints.raml")
 
       // val wireModel = OurModel(raml)._2
       // wireModel.resourceGroups.size shouldBe 1
@@ -85,7 +83,7 @@ class WireModelSpec extends UnitSpec {
     "With multiple endpoints maintain RAML ordering" in {
       val raml = loadRaml("multiple-methods.raml")
 
-      val wireModel = ViewModel(raml)._2
+      val wireModel = WireModel(raml)
       wireModel.resourceGroups.size shouldBe 1
 
       val rg = wireModel.resourceGroups(0)
@@ -96,42 +94,41 @@ class WireModelSpec extends UnitSpec {
       rg.resources(1).displayName shouldBe "/endpoint2"
       rg.resources(2).displayName shouldBe "/endpoint3"
     }
-  }
 
-  object wireModelFormatters {
-    implicit val hmrcExampleSpecJF = Json.format[HmrcExampleSpec]
-    implicit val typeDeclaration2JF = Json.format[TypeDeclaration2]
+    "With global type with enums" in {
+      val raml = loadRaml("V2/typed-enums.raml")
 
-    implicit val securitySchemeJF = Json.format[SecurityScheme]
+      val wireModel = WireModel(raml)
+      wireModel.resourceGroups.size shouldBe 1
 
-    implicit val groupJF = Json.format[Group]
-    implicit val hmrcResponseJF = Json.format[HmrcResponse]
-    implicit val hmrcMethodJF = Json.format[HmrcMethod]
-    implicit val hmrcResourceJF = Json.format[HmrcResource]
+      val rg = wireModel.resourceGroups(0)
 
-    implicit val documentationItemJF = Json.format[DocumentationItem]
-    implicit val resourceGroup2JF = Json.format[ResourceGroup2]
+      rg.resources(0).displayName shouldBe "/my/endpoint"
+      val qps = rg.resources(0).methods.head.queryParameters
+      val qp1 = qps.head
+      qp1.name shouldBe "aParam"
+      qp1.enumValues shouldBe List("1","2")
 
-    implicit val wireModelJF = Json.format[WireModel]
+      val qp2 = qps.tail.head
+
+      qp2.name shouldBe "anotherParam"
+      qp2.enumValues shouldBe List("a","b","c")
+    }
   }
 
   "convert to json experiments" should {
     "What does the JSON look like?" ignore {
-        import wireModelFormatters._
+      val raml = loadRaml("multiple-endpoints.raml")
 
-        val raml = loadRaml("multiple-endpoints.raml")
-
-        val wireModel : WireModel = ViewModel(raml)._2
+      val wireModel = WireModel(raml)
 
         println(Json.prettyPrint(Json.toJson(wireModel)))
     }
 
     "What does business-rates look like?" ignore {
-      import wireModelFormatters._
-
       val raml = loadRaml("V2/business-rates/2.0/application.raml")
 
-      val wireModel : WireModel = ViewModel(raml)._2
+      val wireModel = WireModel(raml)
 
       val json = Json.toJson(wireModel)
       println(Json.prettyPrint(json))
