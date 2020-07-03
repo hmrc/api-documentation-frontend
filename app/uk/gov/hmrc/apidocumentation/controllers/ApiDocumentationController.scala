@@ -262,7 +262,11 @@ class ApiDocumentationController @Inject()(
         val wireModel = WireModel(ramlAndSchemas.raml)
         import WireModelFormatters._
         val jsonText = Json.stringify(Json.toJson(wireModel))
-        Logger.warn(s"RAML replacement intermediate JSON model size ${jsonText.length}")
+
+        val context = api.context
+        val version = selectedVersion.version
+
+        Logger.warn(s"RAML replacement intermediate JSON model size ${jsonText.length} for context(verison): $context ($version)")
         val viewModel = ViewModel(wireModel)
         Ok(serviceDocumentationView2(attrs, api, selectedVersion, viewModel, ramlAndSchemas.schemas, email.isDefined)).withHeaders(cacheControlHeaders)
       }
