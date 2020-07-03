@@ -25,6 +25,8 @@ import scala.collection.JavaConverters._
 import org.raml.v2.api.model.v10.methods.Method
 import uk.gov.hmrc.apidocumentation.views.helpers.ResourceGroup2
 import uk.gov.hmrc.apidocumentation.views.helpers.FindProperty
+import org.raml.v2.api.model.v08.parameters.StringTypeDeclaration
+import uk.gov.hmrc.apidocumentation.views.helpers.EnumValue
 
 case class DocumentationItem(title: String, content: String)
 
@@ -152,23 +154,41 @@ case class TypeDeclaration2(
   `type`: String,
   required: Boolean,
   description: Option[String],
-  examples: List[HmrcExampleSpec]){
+  examples: List[HmrcExampleSpec],
+  enumValues: List[String],
+  pattern: Option[String]){
     val example : Option[HmrcExampleSpec] = examples.headOption
   }
 
 object TypeDeclaration2 {
-  def apply(td: TypeDeclaration): TypeDeclaration2 =
+  def apply(td: TypeDeclaration): TypeDeclaration2 = {
+    val examples =
+      if(td.example != null)
+        List(HmrcExampleSpec(td.example))
+      else
+        td.examples.asScala.toList.map(HmrcExampleSpec.apply)
+
+    val enumValues = td match {
+      case t: StringTypeDeclaration => t.enumValues().asScala.toList
+      case _                        => List()
+    }
+
+    val patterns = td match {
+      case t: StringTypeDeclaration => Some(t.pattern())
+      case _                        => None
+    }
+
     TypeDeclaration2(
       td.name,
       DefaultToEmptyValue(td.displayName),
       td.`type`,
       td.required,
       Option(td.description).map(_.value()),
-      if(td.example != null)
-        List(HmrcExampleSpec(td.example))
-      else
-        td.examples.asScala.toList.map(HmrcExampleSpec.apply)
+      examples,
+      enumValues,
+      patterns
     )
+  }
 }
 
 case class HmrcExampleSpec(

@@ -93,16 +93,13 @@ trait MethodParameters {
 
     parameters.map { p =>
 
-      findType(p).fold(MethodParameter.fromTypeDeclaration(p)) {
-        case t: StringTypeDeclaration => {
-          MethodParameter.fromTypeDeclaration(p).copy(baseTypeName = t.`type`, pattern = Option(t.pattern),
-            enumValues = t.enumValues.asScala, example = Option(p.example).getOrElse(t.example))
-        }
-        case t => {
-          MethodParameter.fromTypeDeclaration(p).copy(baseTypeName = t.`type`,
-            example = Option(p.example).getOrElse(t.example))
-        }
-      }
+      findType(p).fold(MethodParameter.fromTypeDeclaration(p))(t =>
+        MethodParameter.fromTypeDeclaration(p).copy(
+          baseTypeName = t.`type`,
+          pattern = t.pattern,
+          enumValues = t.enumValues,
+          example = Option(p.example).getOrElse(t.example))
+      )
     }
   }
 }
