@@ -18,6 +18,8 @@ package uk.gov.hmrc.apidocumentation.views.helpers
 
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import uk.gov.hmrc.apidocumentation.models.wiremodel.{HmrcMethod,TypeDeclaration2}
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
 
 case class RequestResponseField2(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: Option[String],
                                 description: Option[String], pattern: Option[String], depth: Int, enumValues: Seq[EnumValue])
@@ -36,7 +38,10 @@ object RequestResponseField2 {
 
   private def schema(body: TypeDeclaration2, schemas: Map[String, JsonSchema]): Option[JsonSchema] = {
     body.`type` match {
-      case json if json.trim.startsWith("{") => Some(schemas(json))
+      case jsonText if jsonText.trim.startsWith("{") => {
+        val json: JsValue = Json.parse(jsonText)
+        json.validate[JsonSchema].asOpt
+      }
       case _ => None
     }
   }

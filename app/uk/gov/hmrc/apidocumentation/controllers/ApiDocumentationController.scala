@@ -257,18 +257,18 @@ class ApiDocumentationController @Inject()(
     import uk.gov.hmrc.apidocumentation.models.wiremodel._
 
     def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) =
-      documentationService.fetchRAML(service, version, cacheBuster).map { ramlAndSchemas =>
-        val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation(service, selectedVersion, ramlAndSchemas.raml /* our object */))
-        val wireModel = WireModel(ramlAndSchemas.raml)
+      documentationService.fetchWireModel(service, version, cacheBuster).map { wireModel =>
+        val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation2(service, selectedVersion, wireModel))
         import WireModelFormatters._
         val jsonText = Json.stringify(Json.toJson(wireModel))
 
+        val schemas: SchemaService.Schemas = Map.empty
         val context = api.context
         val version = selectedVersion.version
 
         Logger.warn(s"RAML replacement intermediate JSON model size ${jsonText.length} for context(verison): $context ($version)")
         val viewModel = ViewModel(wireModel)
-        Ok(serviceDocumentationView2(attrs, api, selectedVersion, viewModel, ramlAndSchemas.schemas, email.isDefined)).withHeaders(cacheControlHeaders)
+        Ok(serviceDocumentationView2(attrs, api, selectedVersion, viewModel, schemas, email.isDefined)).withHeaders(cacheControlHeaders)
       }
 
     findVersion(apiOption) match {
