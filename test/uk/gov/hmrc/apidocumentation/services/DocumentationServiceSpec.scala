@@ -36,6 +36,7 @@ import uk.gov.hmrc.ramltools.loaders.RamlLoader
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 
 class DocumentationServiceSpec extends UnitSpec
   with GuiceOneAppPerTest
@@ -61,9 +62,10 @@ class DocumentationServiceSpec extends UnitSpec
     val ramlLoader = mock[RamlLoader]
     val schemaLoader = mock[SchemaService]
     val appConfig = mock[ApplicationConfig]
+    val apm = mock[ApiPlatformMicroserviceConnector]
     when(appConfig.apiPlatformMicroserviceBaseUrl).thenReturn(serviceUrl)
 
-    val underTest = new DocumentationService(appConfig, cache, ramlLoader, schemaLoader)
+    val underTest = new DocumentationService(appConfig, cache, apm, ramlLoader, schemaLoader)
   }
 
   "fetchRAML" should {
