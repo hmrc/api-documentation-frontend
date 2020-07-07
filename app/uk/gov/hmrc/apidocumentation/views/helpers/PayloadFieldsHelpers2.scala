@@ -25,10 +25,10 @@ case class RequestResponseField2(name: String, `type`: String, typeId: String, i
                                 description: Option[String], pattern: Option[String], depth: Int, enumValues: Seq[EnumValue])
 
 object RequestResponseField2 {
-  def extractFields(requestResponseBodies: List[TypeDeclaration2], schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
+  def extractFields(requestResponseBodies: List[TypeDeclaration2]): Seq[RequestResponseField2] = {
     val fields = for {
       body    <- requestResponseBodies
-      schema  <- schema(body, schemas)
+      schema  <- schema(body)
     } yield {
       extractFields(schema)
     }
@@ -36,7 +36,7 @@ object RequestResponseField2 {
     fields.flatten
   }
 
-  private def schema(body: TypeDeclaration2, schemas: Map[String, JsonSchema]): Option[JsonSchema] = {
+  private def schema(body: TypeDeclaration2): Option[JsonSchema] = {
     body.`type` match {
       case jsonText if jsonText.trim.startsWith("{") => {
         val json: JsValue = Json.parse(jsonText)
@@ -113,7 +113,7 @@ object RequestResponseField2 {
 }
 
 object ResponseFields2 extends RequestResponseFields {
-  def apply(method: HmrcMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
+  def apply(method: HmrcMethod): Seq[RequestResponseField2] = {
     val responseBodies = for {
       response <- Responses.success(method)
       body <- response.body
@@ -121,14 +121,14 @@ object ResponseFields2 extends RequestResponseFields {
       body
     }
 
-    RequestResponseField2.extractFields(responseBodies, schemas)
+    RequestResponseField2.extractFields(responseBodies)
   }
 }
 
 object RequestFields2 extends RequestResponseFields {
 
-  def apply(method: HmrcMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField2] = {
-    RequestResponseField2.extractFields(method.body, schemas)
+  def apply(method: HmrcMethod): Seq[RequestResponseField2] = {
+    RequestResponseField2.extractFields(method.body)
   }
 }
 

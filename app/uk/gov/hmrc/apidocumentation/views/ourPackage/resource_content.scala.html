@@ -20,7 +20,7 @@
 
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 
-@(res: HmrcResource, meth: HmrcMethod, viewModel: ViewModel, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
+@(res: HmrcResource, meth: HmrcMethod, viewModel: ViewModel, contentID: String, authorisation: (String, Option[String]))
 
 <section id="authorisation_@contentID" class="section">
     <h4 class="heading-small">Authorisation</h4>
@@ -110,7 +110,7 @@
     </section>
 }
 
-@fields(RequestFields2(meth, schemas), "Request table", viewModel.isFieldOptionalityKnown)
+@fields(RequestFields2(meth), "Request table", viewModel.isFieldOptionalityKnown)
 
 @for(resp <- Responses.success(meth)) {
     <section id="sample-response_@contentID" class="section">
@@ -131,7 +131,7 @@
         }
     </section>
 }
-@fields(ResponseFields2(meth, schemas), "Response table", viewModel.isFieldOptionalityKnown)
+@fields(ResponseFields2(meth), "Response table", viewModel.isFieldOptionalityKnown)
 
 @defining(ErrorScenarios(meth)) { errorScenarios =>
     @if(errorScenarios.nonEmpty) {

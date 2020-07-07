@@ -20,12 +20,11 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services._
-@import uk.gov.hmrc.apidocumentation.models.wiremodel.DocumentationItem
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 @this(applicationConfig: ApplicationConfig)
 
-@(viewModel: ViewModel, schemas: Map[String, JsonSchema], maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)
+@(viewModel: ViewModel, maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)
 
 @renderGetApiVersionForm = {
 @for(api <- maybeApi) {
@@ -98,7 +97,7 @@
                     </h2>
 
                     @for(resourceGroup <- viewModel.resourceGroups) {
-                        @resource_group(resourceGroup, viewModel, schemas)
+                        @resource_group(resourceGroup, viewModel)
                     }
                 </div>
             } else {

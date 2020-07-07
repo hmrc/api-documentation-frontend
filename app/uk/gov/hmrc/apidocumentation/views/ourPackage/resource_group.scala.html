@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.models.wiremodel._
 
-@(resourceGroup: ResourceGroup2, viewModel: ViewModel, schemas: Map[String, JsonSchema])
+@(resourceGroup: ResourceGroup2, viewModel: ViewModel)
 
 @defining(resourceGroup.name.getOrElse("")) { titleSection =>
 
@@ -69,7 +69,7 @@
                                     @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
                                         <div id="@contentID" class="accordion__body indent" data-accordion-reveal data-accordion-body aria-hidden="true">
                                             @Markdown(method.description)
-                                            @resource_content(res, method, viewModel, schemas, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
+                                            @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
                                             <div class="close-accordion">
                                                 <a href="#@methodSlug" data-accordion-button role="button">
                                                     Close section
