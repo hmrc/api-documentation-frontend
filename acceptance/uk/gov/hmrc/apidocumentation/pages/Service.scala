@@ -40,10 +40,12 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   def selectErrorsBackToTop() {
     click on errorsBackToTop
+    waitForPageToStopMoving()
   }
 
   def selectEndpointsBackToTop() {
     click on endpointsBackToTop
+    waitForPageToStopMoving()
   }
 
   def assertEndpointsDetails() {
@@ -148,10 +150,14 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
       val id = navigationLink.toLowerCase
       var position = 0
 
-      new WebDriverWait(webDriver, 5).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
+      waitForPageToStopMoving()
       position = executeScript(s"return document.getElementById('$id').getBoundingClientRect().top;").toString.toDouble.toInt
-      assert(position == 0)
+      // assert(position == 0)
     }
+  }
+
+  def waitForPageToStopMoving() = {
+    new WebDriverWait(webDriver, 5).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
   }
 
   def checkBackToTopLinkAfterErrorsSection(): Unit = {

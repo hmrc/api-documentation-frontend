@@ -23,7 +23,7 @@
 
 @this(apiMain: apiMain, ourMainView: ourPackage.MainView, applicationConfig: ApplicationConfig)
 
-@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, viewModel: ViewModel, schemas: Map[String, JsonSchema], loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, viewModel: ViewModel, loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @topContent = {
     <div class="form-group">

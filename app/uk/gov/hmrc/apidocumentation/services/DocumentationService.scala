@@ -31,6 +31,7 @@ import uk.gov.hmrc.apidocumentation.models.wiremodel.WireModel
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.http.HeaderCarrier
 import SchemaService.Schemas
+import play.api.Logger
 
 object DocumentationService {
   def wireModelUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
@@ -58,7 +59,20 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
   def fetchWireModel(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[WireModel] = {
-    apm.fetchApiSpecification(serviceName,version)
+    val key = serviceName+":"+version
+    if (cacheBuster) cache.remove(key)
+
+    // TODO - use async cache
+    Future {
+      blocking {
+        cache.getOrElse[Try[WireModel]](key, defaultExpiration) {
+          Logger.info(s"****** Specification Cache miss for $key")
+          Try {
+            Await.result(apm.fetchApiSpecification(serviceName,version)(hc), 30.seconds)
+          }
+        }
+      }.fold(e => { cache.remove(key); throw e }, identity )
+    }
   }
 
   def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean): Future[RamlAndSchemas] = {
