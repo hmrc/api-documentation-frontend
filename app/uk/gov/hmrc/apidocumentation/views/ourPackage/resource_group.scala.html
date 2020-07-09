@@ -34,9 +34,9 @@
 
     <div class="endpoint_group">
         @for(res <- resourceGroup.resources) {
-            @if(HmrcMethod(res).nonEmpty) {
+            @if(res.methods.nonEmpty) {
                 <div class="border__top-bottom border__top-bottom--open border--light-grey">
-                @for((method, index) <- HmrcMethod(res).zipWithIndex) {
+                @for((method, index) <- res.methods.zipWithIndex) {
                     @if(!method.method.equalsIgnoreCase("OPTIONS")) {
                         @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
                             <div

@@ -191,32 +191,6 @@ object GroupedResources {
     group(flatten(resources)).filterNot(_.resources.length < 1)
   }
 
-  def apply(resources: List[HmrcResource]): List[ResourceGroup2] = {
-    def flatten(resources: List[HmrcResource], acc: List[HmrcResource]): List[HmrcResource] = {
-      resources match {
-        case Nil => acc
-        case head :: tail =>
-          // TODO - not efficient to right concat
-          flatten(tail, flatten(head.children, head :: acc))
-      }
-    }
-
-    def group(resources: List[HmrcResource], currentGroup: ResourceGroup2 = ResourceGroup2(), groups: List[ResourceGroup2] = Nil): List[ResourceGroup2] = {
-      resources match {
-        case head :: tail => {
-          if (head.group.isDefined) {
-            group(tail, ResourceGroup2(head.group.map(_.name), head.group.map(_.description), List(head)), groups :+ currentGroup)
-          } else {
-            group(tail, currentGroup + head, groups)
-          }
-        }
-        case _ => groups :+ currentGroup
-      }
-    }
-
-    group(flatten(resources, Nil).reverse).filterNot(_.resources.length < 1)
-  }
-
   private def group(resources: Seq[Resource], currentGroup: ResourceGroup = ResourceGroup(), groups: Seq[ResourceGroup] = Nil): Seq[ResourceGroup] = {
     resources match {
       case head +: tail => {
