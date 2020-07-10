@@ -51,9 +51,10 @@ class ApiDocumentationController @Inject()(
                                             previewDocumentationView: PreviewDocumentationView,
                                             serviceDocumentationView: ServiceDocumentationView,
                                             serviceDocumentationView2: ServiceDocumentationView2,
-                                            xmlDocumentationView: XmlDocumentationView
+                                            xmlDocumentationView: XmlDocumentationView,
+                                            appConfig: ApplicationConfig
                                           )
-                                         (implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
+                                         (implicit val ec: ExecutionContext)
   extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
@@ -121,6 +122,12 @@ class ApiDocumentationController @Inject()(
   }
 
   def renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean]): Action[AnyContent] =
+    appConfig.documentationRenderVersion match {
+      case "specification" => renderApiDocumentation2(service, version, cacheBuster)
+      case _               => renderApiDocumentation1(service, version, cacheBuster)
+    }
+
+  def renderApiDocumentation1(service: String, version: String, cacheBuster: Option[Boolean]): Action[AnyContent] =
     headerNavigation { implicit request =>
       navLinks =>
         (for {
@@ -207,7 +214,8 @@ class ApiDocumentationController @Inject()(
         Ok(serviceDocumentationView(attrs, api, selectedVersion, ramlAndSchemas, email.isDefined)).withHeaders(cacheControlHeaders)
       }
 
-    findVersion(apiOption) match {
+    Logger.info("Using renderApiDocumentation1")
+  findVersion(apiOption) match {
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED =>
         renderRetiredVersionJumpPage(api, selectedVersion)
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) => renderDocumentationPage(api, selectedVersion)
@@ -265,11 +273,12 @@ class ApiDocumentationController @Inject()(
         val context = api.context
         val version = selectedVersion.version
 
-        Logger.warn(s"RAML replacement intermediate JSON model size ${jsonText.length} for context(verison): $context ($version)")
+        Logger.debug(s"RAML replacement intermediate JSON model size ${jsonText.length} for context(verison): $context ($version)")
         val viewModel = ViewModel(wireModel)
         Ok(serviceDocumentationView2(attrs, api, selectedVersion, viewModel, email.isDefined)).withHeaders(cacheControlHeaders)
       }
 
+    Logger.info("Using renderApiDocumentation2")
     findVersion(apiOption) match {
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED =>
         renderRetiredVersionJumpPage(api, selectedVersion)
