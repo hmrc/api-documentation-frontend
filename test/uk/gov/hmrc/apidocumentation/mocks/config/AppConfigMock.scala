@@ -24,4 +24,5 @@ trait AppConfigMock extends MockitoSugar {
   implicit val appConfig = mock[ApplicationConfig]
 
   when(appConfig.title).thenReturn("HMRC Developer Hub")
+  when(appConfig.documentationRenderVersion).thenReturn("raml")
 }

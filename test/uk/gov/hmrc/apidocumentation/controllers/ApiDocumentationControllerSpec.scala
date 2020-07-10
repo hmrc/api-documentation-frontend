@@ -33,6 +33,7 @@ import uk.gov.hmrc.apidocumentation.mocks.config._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
   trait Setup
@@ -65,7 +66,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       previewDocumentationView,
       serviceDocumentationView,
       serviceDocumentationView2,
-      xmlDocumentationView
+      xmlDocumentationView,
+      appConfig
     )
   }
 
