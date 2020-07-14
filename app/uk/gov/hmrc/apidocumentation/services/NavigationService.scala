@@ -27,7 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.apidocumentation.models.wiremodel.WireModel
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 @Singleton
 class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
@@ -61,7 +61,7 @@ class NavigationService @Inject()(connector: DeveloperFrontendConnector, appConf
 
 
 
-  def apiSidebarNavigation2(service: String, version: ExtendedAPIVersion, wireModel: WireModel): Seq[SidebarLink] = {
+  def apiSidebarNavigation2(service: String, version: ExtendedAPIVersion, wireModel: ApiSpecification): Seq[SidebarLink] = {
     val subLinks = wireModel.resourceGroups
                   .map(group => group.name)
                   .filter(_.nonEmpty)

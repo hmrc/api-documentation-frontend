@@ -26,7 +26,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.apidocumentation.models.wiremodel.WireModel
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 @Singleton
 class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appConfig: ApplicationConfig)
@@ -34,9 +34,9 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
-  def fetchApiSpecification(serviceName: String, version: String)(implicit hc: HeaderCarrier): Future[WireModel] = {
-    import uk.gov.hmrc.apidocumentation.models.wiremodel.WireModelFormatters._
-    http.GET[WireModel](s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)")
+  def fetchApiSpecification(serviceName: String, version: String)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
+    import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
+    http.GET[ApiSpecification](s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)")
   }
 
   def fetchApiDefinitionsByCollaborator(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {

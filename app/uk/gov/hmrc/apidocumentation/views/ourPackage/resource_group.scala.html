@@ -15,10 +15,10 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.views.helpers._
-@import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.models.wiremodel._
+@import uk.gov.hmrc.apidocumentation.models.ViewModel
+@import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
 
-@(resourceGroup: ResourceGroup2, viewModel: ViewModel)
+@(resourceGroup: ResourceGroup, viewModel: ViewModel)
 
 @defining(resourceGroup.name.getOrElse("")) { titleSection =>
 

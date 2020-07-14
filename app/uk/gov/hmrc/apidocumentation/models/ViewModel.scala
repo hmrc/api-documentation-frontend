@@ -16,26 +16,27 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import uk.gov.hmrc.apidocumentation.models.wiremodel._
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
+import uk.gov.hmrc.apidocumentation.models.apispecification._
 
 case class ViewModel(
   title: String,
   version: String,
   deprecationMessage: Option[String],
   documentationItems: List[DocumentationItem],
-  resourceGroups: List[ResourceGroup2],
-  types: List[TypeDeclaration2],
+  resourceGroups: List[ResourceGroup],
+  types: List[TypeDeclaration],
   isFieldOptionalityKnown: Boolean,
-  relationships: Map[HmrcResource, Option[HmrcResource]]
+  relationships: Map[Resource, Option[Resource]]
 )
 
 object ViewModel {
-  def apply(wireModel: WireModel): ViewModel = {
+  def apply(wireModel: ApiSpecification): ViewModel = {
 
-    val allResources: List[HmrcResource] = wireModel.resourceGroups.flatMap(_.resources)
+    val allResources: List[Resource] = wireModel.resourceGroups.flatMap(_.resources)
 
-    val parentChildRelationships: Map[HmrcResource, Option[HmrcResource]] = {
-      val startWithoutParents: Map[HmrcResource, Option[HmrcResource]] = allResources.map(r => (r->None)).toMap
+    val parentChildRelationships: Map[Resource, Option[Resource]] = {
+      val startWithoutParents: Map[Resource, Option[Resource]] = allResources.map(r => (r->None)).toMap
       allResources.map { p =>
         p.children.map { c =>
           (c -> Option(p))

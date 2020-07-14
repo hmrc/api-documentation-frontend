@@ -28,7 +28,6 @@ import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation.models.DocsVisibility.DocsVisibility
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.models.wiremodel._
 
 import scala.collection.JavaConverters._
 import scala.language.reflectiveCalls
@@ -66,7 +65,7 @@ object HeaderVal {
     }
   }
 
-  def apply(header: TypeDeclaration2, version: String): String = {
+  def apply(header: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration, version: String): String = {
     def replace(example: String) = {
       example.replace("application/vnd.hmrc.1.0", "application/vnd.hmrc." + version)
     }
@@ -266,15 +265,15 @@ object Responses {
   }
 
 
-  def success(method: HmrcMethod) = method.responses.filter(isSuccessResponse)
+  def success(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method) = method.responses.filter(isSuccessResponse)
 
-  def error(method: HmrcMethod) = method.responses.filter(isErrorResponse)
+  def error(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method) = method.responses.filter(isErrorResponse)
 
-  private def isSuccessResponse(response: HmrcResponse) = {
+  private def isSuccessResponse(response: uk.gov.hmrc.apidocumentation.models.apispecification.Response) = {
     response.code.startsWith("2") || response.code.startsWith("3")
   }
 
-  private def isErrorResponse(response: HmrcResponse) = {
+  private def isErrorResponse(response: uk.gov.hmrc.apidocumentation.models.apispecification.Response) = {
     response.code.startsWith("4") || response.code.startsWith("5")
   }
 
@@ -306,7 +305,7 @@ object ErrorScenarios {
       .fold(responseFromBody(bodyExample))(code => Some(ErrorResponse(code = Some(code))))
   }
 
-  private def errorResponse2(example: HmrcExampleSpec): Option[ErrorResponse] = {
+  private def errorResponse2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
     example.code.fold(responseFromBody2(example))(code => Some(ErrorResponse(code = Some(code))))
   }
 
@@ -332,14 +331,14 @@ object ErrorScenarios {
     }
   }
 
-  private def responseFromBody2(example: HmrcExampleSpec): Option[ErrorResponse] = {
+  private def responseFromBody2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
     responseFromJson2(example).orElse(responseFromXML2(example))
   }
 
-  private def responseFromJson2(example: HmrcExampleSpec): Option[ErrorResponse] = {
+  private def responseFromJson2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
     example.value.flatMap(v => Try(Json.parse(v).as[ErrorResponse]).toOption)
   }
-  private def responseFromXML2(example: HmrcExampleSpec): Option[ErrorResponse] = {
+  private def responseFromXML2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
     for {
       v <- example.value
       codes <- Try(XML.fromString(v).getElementsByTagName("code")).toOption
@@ -350,7 +349,7 @@ object ErrorScenarios {
   }
 
 
-  def apply(method: HmrcMethod): Seq[Map[String, String]] = {
+  def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[Map[String, String]] = {
 
     val errorScenarios = for {
       response <- Responses.error(method)
@@ -368,7 +367,7 @@ object ErrorScenarios {
     errorScenarios.flatten
   }
 
-  private def scenarioDescription(body: TypeDeclaration2, example: HmrcExampleSpec): Option[String] = {
+  private def scenarioDescription(body: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration, example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[String] = {
     example.description.orElse(body.description)
   }
 }
@@ -402,7 +401,7 @@ object BodyExamples {
     if (body.examples.size > 0) body.examples.asScala.toSeq.map(ex => BodyExample(ex)) else Seq(BodyExample(body.example))
   }
 
-  def apply(body: TypeDeclaration2): Seq[HmrcExampleSpec] = {
+  def apply(body: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration): Seq[uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec] = {
     if (body.examples.size > 0) body.examples else {
       body.example match {
         case Some(e) => Seq(e)

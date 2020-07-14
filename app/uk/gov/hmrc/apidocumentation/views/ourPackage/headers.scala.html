@@ -15,9 +15,9 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.views.helpers._
-@import uk.gov.hmrc.apidocumentation.models.wiremodel.TypeDeclaration2
+@import uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration
 
-@(headers: List[TypeDeclaration2], version: String, caption: String, required: String, authorisation: (String, Option[String]))
+@(headers: List[TypeDeclaration], version: String, caption: String, required: String, authorisation: (String, Option[String]))
 
     <section id="request-headers" class="section">
         <h4 class="heading-small">@caption</h4>

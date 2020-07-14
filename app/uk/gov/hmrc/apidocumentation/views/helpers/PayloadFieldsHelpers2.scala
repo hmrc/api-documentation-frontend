@@ -17,7 +17,6 @@
 package uk.gov.hmrc.apidocumentation.views.helpers
 
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
-import uk.gov.hmrc.apidocumentation.models.wiremodel.{HmrcMethod,TypeDeclaration2}
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 
@@ -25,7 +24,7 @@ case class RequestResponseField2(name: String, `type`: String, typeId: String, i
                                 description: Option[String], pattern: Option[String], depth: Int, enumValues: Seq[EnumValue])
 
 object RequestResponseField2 {
-  def extractFields(requestResponseBodies: List[TypeDeclaration2]): Seq[RequestResponseField2] = {
+  def extractFields(requestResponseBodies: List[uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration]): Seq[RequestResponseField2] = {
     val fields = for {
       body    <- requestResponseBodies
       schema  <- schema(body)
@@ -36,7 +35,7 @@ object RequestResponseField2 {
     fields.flatten
   }
 
-  private def schema(body: TypeDeclaration2): Option[JsonSchema] = {
+  private def schema(body: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration): Option[JsonSchema] = {
     body.`type` match {
       case jsonText if jsonText.trim.startsWith("{") => {
         val json: JsValue = Json.parse(jsonText)
@@ -113,7 +112,7 @@ object RequestResponseField2 {
 }
 
 object ResponseFields2 extends RequestResponseFields {
-  def apply(method: HmrcMethod): Seq[RequestResponseField2] = {
+  def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = {
     val responseBodies = for {
       response <- Responses.success(method)
       body <- response.body
@@ -127,7 +126,7 @@ object ResponseFields2 extends RequestResponseFields {
 
 object RequestFields2 extends RequestResponseFields {
 
-  def apply(method: HmrcMethod): Seq[RequestResponseField2] = {
+  def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = {
     RequestResponseField2.extractFields(method.body)
   }
 }

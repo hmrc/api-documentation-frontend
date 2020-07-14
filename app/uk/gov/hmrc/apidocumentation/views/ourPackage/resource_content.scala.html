@@ -15,12 +15,12 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.models.wiremodel._
+@import uk.gov.hmrc.apidocumentation.models.apispecification._
 @import uk.gov.hmrc.apidocumentation.controllers.routes
 
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 
-@(res: HmrcResource, meth: HmrcMethod, viewModel: ViewModel, contentID: String, authorisation: (String, Option[String]))
+@(res: Resource, meth: Method, viewModel: ViewModel, contentID: String, authorisation: (String, Option[String]))
 
 <section id="authorisation_@contentID" class="section">
     <h4 class="heading-small">Authorisation</h4>
