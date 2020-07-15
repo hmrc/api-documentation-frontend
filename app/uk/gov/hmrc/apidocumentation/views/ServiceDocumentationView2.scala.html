@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, ourMainView: ourPackage.MainView, applicationConfig: ApplicationConfig)
+@this(apiMain: apiMain, ourMainView: apiSpecificationViews.MainView, applicationConfig: ApplicationConfig)
 
 @(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, viewModel: ViewModel, loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
