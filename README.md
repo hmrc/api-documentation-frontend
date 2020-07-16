@@ -10,7 +10,7 @@ Frontend for API documentation - part of the Developer Hub
 
 2. Install chrome driver if you have not done already .
 
-   2a. If using MAC OS this can be done using command ```brew install chromedriver```
+   2a. If using MAC OS this can be done using command ```brew cask install chromedriver```
    
    2b. If not using MAC chromedriver can be downloaded from **https://chromedriver.storage.googleapis.com/index.html?path=2.29/**
    
