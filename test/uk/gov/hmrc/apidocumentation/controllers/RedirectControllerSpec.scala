@@ -26,7 +26,8 @@ class RedirectControllerSpec extends CommonControllerBaseSpec {
 
     val underTest = new RedirectController(mcc)
 
-    def verifyPageRedirected(actualPageFuture: Future[Result], expectedUrl: String) {
+    def verifyPageRedirected(actualPageFuture: Future[Result],
+                             expectedUrl: String) {
       val actualPage = await(actualPageFuture)
       status(actualPage) shouldBe 301
       actualPage.header.headers.get("Location") shouldBe Some(expectedUrl)
@@ -35,19 +36,36 @@ class RedirectControllerSpec extends CommonControllerBaseSpec {
 
   "RedirectController" should {
     "redirect to the index page" in new Setup {
-      verifyPageRedirected(underTest.redirectToDocumentationIndexPage()(request), "/api-documentation/docs/api")
+      verifyPageRedirected(
+        underTest.redirectToDocumentationIndexPage()(request),
+        "/api-documentation/docs/api"
+      )
     }
 
     "redirect to the service resource page" in new Setup {
       verifyPageRedirected(
-        underTest.redirectToApiDocumentationPage("my-service", "1.0", "my-endpoint")(request),
+        underTest.redirectToApiDocumentationPage(
+          "my-service",
+          "1.0",
+          "my-endpoint"
+        )(request),
         "/api-documentation/docs/api/service/my-service/1.0"
       )
 
-
       verifyPageRedirected(
-        underTest.redirectToApiDocumentationPage("my-other-service", "7.3", "my-other-endpoint")(request),
+        underTest.redirectToApiDocumentationPage(
+          "my-other-service",
+          "7.3",
+          "my-other-endpoint"
+        )(request),
         "/api-documentation/docs/api/service/my-other-service/7.3"
+      )
+    }
+
+    "redirect from the legacy fraud prevention page to the fraud prevention guide" in new Setup {
+      verifyPageRedirected(
+        underTest.redirectToFraudPreventionGuide()(request),
+        "/guides/fraud-prevention"
       )
     }
   }

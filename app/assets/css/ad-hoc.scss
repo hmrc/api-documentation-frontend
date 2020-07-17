@@ -94,14 +94,6 @@
   }
 }
 
-.fraud-header-name-col {
-  width: 40%;
-}
-
-.fraud-header-description-col {
-  width: 60%;
-}
-
 ol.connection-method-list {
   list-style-type: upper-alpha;
 }
@@ -260,21 +252,6 @@ pre, code {
 
   .govuk-form-group {
     margin-bottom: 2rem;
-  }
-}
-
-.fraud-prevention {
-  .code--block {
-    margin: .25rem 0 1rem;
-  }
-
-  .code--slim-large {
-    font-size: 1.9rem;
-  }
-
-  .back_to_top {
-    margin: 3rem 0;
-    text-align: left;
   }
 }
 

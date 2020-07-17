@@ -23,14 +23,31 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.Future
 
 @Singleton
-class RedirectController @Inject()(cc: MessagesControllerComponents) extends FrontendController(cc) {
+class RedirectController @Inject()(cc: MessagesControllerComponents)
+    extends FrontendController(cc) {
   def redirectToDocumentationIndexPage(): Action[AnyContent] = {
-    val redirectTo = routes.ApiDocumentationController.apiIndexPage(None, None, None).url
-    Action.async { _ => Future.successful(MovedPermanently(redirectTo)) }
+    val redirectTo =
+      routes.ApiDocumentationController.apiIndexPage(None, None, None).url
+    Action.async { _ =>
+      Future.successful(MovedPermanently(redirectTo))
+    }
   }
 
-  def redirectToApiDocumentationPage(service: String, version: String, endpoint: String): Action[AnyContent] = {
-    val redirectTo = routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url
-    Action.async { _ => Future.successful(MovedPermanently(redirectTo)) }
+  def redirectToApiDocumentationPage(service: String,
+                                     version: String,
+                                     endpoint: String): Action[AnyContent] = {
+    val redirectTo = routes.ApiDocumentationController
+      .renderApiDocumentation(service, version, None)
+      .url
+    Action.async { _ =>
+      Future.successful(MovedPermanently(redirectTo))
+    }
+  }
+
+  def redirectToFraudPreventionGuide(): Action[AnyContent] = {
+    val redirectTo = "/guides/fraud-prevention"
+    Action.async { _ =>
+      Future.successful(MovedPermanently(redirectTo))
+    }
   }
 }

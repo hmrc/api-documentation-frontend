@@ -37,9 +37,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
+class DocumentationControllerSpec
+    extends CommonControllerBaseSpec
+    with PageRenderVerification {
 
-  trait Setup extends ApiDocumentationServiceMock with AppConfigMock with NavigationServiceMock {
+  trait Setup
+      extends ApiDocumentationServiceMock
+      with AppConfigMock
+      with NavigationServiceMock {
 
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
     val partialsService = new PartialsService(developerFrontendConnector)
@@ -49,18 +54,24 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
     implicit lazy val materializer = app.materializer
 
     private lazy val indexView = app.injector.instanceOf[IndexView]
-    private lazy val retiredVersionJumpView = app.injector.instanceOf[RetiredVersionJumpView]
+    private lazy val retiredVersionJumpView =
+      app.injector.instanceOf[RetiredVersionJumpView]
     private lazy val tutorialsView = app.injector.instanceOf[TutorialsView]
     private lazy val credentialsView = app.injector.instanceOf[CredentialsView]
-    private lazy val developmentPracticesView = app.injector.instanceOf[DevelopmentPracticesView]
-    private lazy val fraudPreventionView = app.injector.instanceOf[FraudPreventionView]
-    private lazy val mtdIntroductionView = app.injector.instanceOf[MtdIntroductionView]
-    private lazy val namingGuidelinesView = app.injector.instanceOf[NamingGuidelinesView]
+    private lazy val developmentPracticesView =
+      app.injector.instanceOf[DevelopmentPracticesView]
+    private lazy val mtdIntroductionView =
+      app.injector.instanceOf[MtdIntroductionView]
+    private lazy val namingGuidelinesView =
+      app.injector.instanceOf[NamingGuidelinesView]
     private lazy val referenceView = app.injector.instanceOf[ReferenceView]
     private lazy val termsOfUseView = app.injector.instanceOf[TermsOfUseView]
     private lazy val usingTheHubView = app.injector.instanceOf[UsingTheHubView]
 
-    lazy val usingTheHubBreadcrumb = Crumb("Using the Developer Hub", controllers.routes.DocumentationController.usingTheHubPage().url)
+    lazy val usingTheHubBreadcrumb = Crumb(
+      "Using the Developer Hub",
+      controllers.routes.DocumentationController.usingTheHubPage().url
+    )
 
     when(documentationService.defaultExpiration).thenReturn(1.hour)
 
@@ -73,7 +84,6 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
       tutorialsView,
       credentialsView,
       developmentPracticesView,
-      fraudPreventionView,
       mtdIntroductionView,
       namingGuidelinesView,
       referenceView,
@@ -88,39 +98,57 @@ class DocumentationControllerSpec extends CommonControllerBaseSpec with PageRend
 
   "DocumentationController" should {
     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
-      when(developerFrontendConnector.fetchTermsOfUsePartial()(any[HeaderCarrier]))
-        .thenReturn(Future.successful(HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))))
+      when(
+        developerFrontendConnector.fetchTermsOfUsePartial()(any[HeaderCarrier])
+      ).thenReturn(
+          Future.successful(
+            HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))
+          )
+        )
 
-      verifyPageRendered(pageTitle("Terms Of Use"),
-        bodyContains = Seq("blah blah blah"))(underTest.termsOfUsePage()(request))
+      verifyPageRendered(
+        pageTitle("Terms Of Use"),
+        bodyContains = Seq("blah blah blah")
+      )(underTest.termsOfUsePage()(request))
     }
 
     "display the reference guide page" in new Setup {
-      when(underTest.appConfig.productionApiBaseUrl).thenReturn("https://api.service.hmrc.gov.uk")
-      verifyPageRendered(pageTitle("Reference guide"),
-        bodyContains = Seq("The base URL for sandbox APIs is:", "https://api.service.hmrc.gov.uk"))(underTest.referenceGuidePage()(request))
+      when(underTest.appConfig.productionApiBaseUrl)
+        .thenReturn("https://api.service.hmrc.gov.uk")
+      verifyPageRendered(
+        pageTitle("Reference guide"),
+        bodyContains = Seq(
+          "The base URL for sandbox APIs is:",
+          "https://api.service.hmrc.gov.uk"
+        )
+      )(underTest.referenceGuidePage()(request))
     }
 
     "display the using the hub page" in new Setup {
-      verifyPageRendered(pageTitle("Using the Developer Hub"))(underTest.usingTheHubPage()(request))
+      verifyPageRendered(pageTitle("Using the Developer Hub"))(
+        underTest.usingTheHubPage()(request)
+      )
     }
 
     "display the naming guidelines page" in new Setup {
-      verifyPageRendered(pageTitle("Application naming guidelines"), breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb))(underTest.nameGuidelinesPage()(request))
-    }
-
-    "display the fraud prevention page" in new Setup {
-      verifyPageRendered(pageTitle("Fraud prevention"))(underTest.fraudPreventionPage()(request))
+      verifyPageRendered(
+        pageTitle("Application naming guidelines"),
+        breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb)
+      )(underTest.nameGuidelinesPage()(request))
     }
 
     "display the Making Tax Digital guides page" in new Setup {
-      verifyPageRendered(pageTitle("Making Tax Digital guides"))(underTest.mtdIntroductionPage()(request))
+      verifyPageRendered(pageTitle("Making Tax Digital guides"))(
+        underTest.mtdIntroductionPage()(request)
+      )
     }
 
     "display the Income Tax (MTD) End-to-End Service Guide page" in new Setup {
       val result = await(underTest.mtdIncomeTaxServiceGuidePage()(request))
       status(result) shouldBe MOVED_PERMANENTLY
-      result.header.headers.get("Location") shouldBe Some("/guides/income-tax-mtd-end-to-end-service-guide/")
+      result.header.headers.get("Location") shouldBe Some(
+        "/guides/income-tax-mtd-end-to-end-service-guide/"
+      )
     }
   }
 }
