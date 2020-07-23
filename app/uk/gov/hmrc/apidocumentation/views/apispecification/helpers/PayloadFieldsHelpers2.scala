@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.views.helpers
+package uk.gov.hmrc.apidocumentation.views.apispecification.helpers
 
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
+
+case class EnumValue(
+                      name: String,
+                      description: Option[String] = None
+                    )
 
 case class RequestResponseField2(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: Option[String],
                                 description: Option[String], pattern: Option[String], depth: Int, enumValues: Seq[EnumValue])
@@ -109,10 +114,8 @@ object RequestResponseField2 {
       }
     }
   }
-}
 
-object ResponseFields2 extends RequestResponseFields {
-  def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = {
+  def responseFields(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = {
     val responseBodies = for {
       response <- Responses.success(method)
       body <- response.body
@@ -120,14 +123,21 @@ object ResponseFields2 extends RequestResponseFields {
       body
     }
 
-    RequestResponseField2.extractFields(responseBodies)
+    extractFields(responseBodies)
   }
+
+  def requestFields(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = {
+    extractFields(method.body)
+  }
+
 }
 
-object RequestFields2 extends RequestResponseFields {
+object ResponseFields2 {
+  def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = RequestResponseField2.responseFields(method)
+}
 
-  def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = {
-    RequestResponseField2.extractFields(method.body)
-  }
+object RequestFields2 {
+
+  def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = RequestResponseField2.requestFields(method)
 }
 

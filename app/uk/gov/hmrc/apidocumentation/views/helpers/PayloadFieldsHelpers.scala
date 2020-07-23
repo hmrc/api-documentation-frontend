@@ -17,8 +17,8 @@
 package uk.gov.hmrc.apidocumentation.views.helpers
 
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
-import org.raml.v2.api.model.v10.datamodel.TypeDeclaration
-import org.raml.v2.api.model.v10.methods.Method
+import org.raml.v2.api.model.v10.datamodel.{TypeDeclaration => RamlTypeDeclaration}
+import org.raml.v2.api.model.v10.methods.{Method => RamlMethod}
 
 import scala.collection.JavaConverters._
 
@@ -31,7 +31,7 @@ case class RequestResponseField(name: String, `type`: String, typeId: String, is
                                 description: String, pattern: String, depth: Int, enumValues: Seq[EnumValue])
 
 trait RequestResponseFields {
-  def extractFields(requestResponseBodies: Seq[TypeDeclaration], schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
+  def extractFields(requestResponseBodies: Seq[RamlTypeDeclaration], schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
     val fields = for {
       body    <- requestResponseBodies
       schema  <- schema(body, schemas)
@@ -42,7 +42,7 @@ trait RequestResponseFields {
     fields.flatten
   }
 
-  private def schema(body: TypeDeclaration, schemas: Map[String, JsonSchema]): Option[JsonSchema] = {
+  private def schema(body: RamlTypeDeclaration, schemas: Map[String, JsonSchema]): Option[JsonSchema] = {
     body.`type`() match {
       case json if json.trim.startsWith("{") => Some(schemas(json))
       case _ => None
@@ -115,7 +115,7 @@ trait RequestResponseFields {
 }
 
 object ResponseFields extends RequestResponseFields {
-  def apply(method: Method, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
+  def apply(method: RamlMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
     val responseBodies = for {
       response <- Responses.success(method)
       body <- response.body.asScala
@@ -128,7 +128,7 @@ object ResponseFields extends RequestResponseFields {
 }
 
 object RequestFields extends RequestResponseFields {
-  def apply(method: Method, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
+  def apply(method: RamlMethod, schemas: Map[String, JsonSchema]): Seq[RequestResponseField] = {
     extractFields(method.body.asScala, schemas)
   }
 }

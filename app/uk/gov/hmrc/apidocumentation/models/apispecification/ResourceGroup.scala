@@ -16,39 +16,4 @@
 
 package uk.gov.hmrc.apidocumentation.models.apispecification
 
-case class ResourceGroup(name: Option[String] = None, description: Option[String] = None, resources: List[Resource] = Nil) {
-  def +(resource: Resource) = {
-    // TODO: ebridge not efficient
-    ResourceGroup(name, description, resources :+ resource)
-  }
-}
-
-object ResourceGroup {
-  def generateFrom(rootResources: List[Resource], groupMap: ResourcesAndGroups.GroupMap): List[ResourceGroup] = {
-
-    def flatten(resources: List[Resource], acc: List[Resource]): List[Resource] = {
-      resources match {
-        case Nil => acc
-        case head :: tail =>
-          // TODO: ebridge - not efficient to right concat
-          flatten(tail, flatten(head.children, head :: acc))
-      }
-    }
-
-    def group(flattenedResources: List[Resource], currentGroup: ResourceGroup = ResourceGroup(), groups: List[ResourceGroup] = Nil): List[ResourceGroup] = {
-      flattenedResources match {
-        case head :: tail => {
-          val ogrp = groupMap.get(head)
-          if (ogrp.isDefined) {
-            group(tail, ResourceGroup(ogrp.map(_.name), ogrp.map(_.description), List(head)), groups :+ currentGroup)
-          } else {
-            group(tail, currentGroup + head, groups)
-          }
-        }
-        case _ => groups :+ currentGroup
-      }
-    }
-
-    group(flatten(rootResources, Nil).reverse).filterNot(_.resources.length < 1)
-  }
-}
+case class ResourceGroup(name: Option[String] = None, description: Option[String] = None, resources: List[Resource] = Nil)

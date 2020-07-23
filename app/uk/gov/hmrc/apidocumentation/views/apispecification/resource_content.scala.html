@@ -16,9 +16,8 @@
 
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.models.apispecification._
-@import uk.gov.hmrc.apidocumentation.controllers.routes
-
-@import uk.gov.hmrc.apidocumentation.views.helpers._
+@import uk.gov.hmrc.apidocumentation.views.apispecification.helpers._
+@import uk.gov.hmrc.apidocumentation.views.helpers.{Markdown, HttpStatus}
 
 @(res: Resource, meth: Method, viewModel: ViewModel, contentID: String, authorisation: (String, Option[String]))
 
@@ -49,7 +48,7 @@
     }
 </section>
 
-@defining(UriParams(Some(res), viewModel)) { params =>
+@defining(Parameters.uriParams(Some(res), viewModel)) { params =>
     @if(params.nonEmpty) {
         <section id="request-parameters_@contentID" class="section">
             <h4 class="heading-small">Path parameters</h4>
@@ -71,7 +70,7 @@
     }
 }
 
-@defining(QueryParams(Some(meth), viewModel)) { params =>
+@defining(Parameters.queryParams(Some(meth), viewModel)) { params =>
     @if(params.nonEmpty) {
         <section id="query-parameters_@contentID" class="section">
             <h4 class="heading-small first">Query parameters</h4>

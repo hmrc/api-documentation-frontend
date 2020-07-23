@@ -263,20 +263,6 @@ object Responses {
     val code = Val(response.code)
     code.startsWith("4") || code.startsWith("5")
   }
-
-
-  def success(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method) = method.responses.filter(isSuccessResponse)
-
-  def error(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method) = method.responses.filter(isErrorResponse)
-
-  private def isSuccessResponse(response: uk.gov.hmrc.apidocumentation.models.apispecification.Response) = {
-    response.code.startsWith("2") || response.code.startsWith("3")
-  }
-
-  private def isErrorResponse(response: uk.gov.hmrc.apidocumentation.models.apispecification.Response) = {
-    response.code.startsWith("4") || response.code.startsWith("5")
-  }
-
 }
 
 
@@ -306,10 +292,6 @@ object ErrorScenarios {
     x.fold(responseFromBody(bodyExample))(code => Some(ErrorResponse(code = Some(code))))
   }
 
-  private def errorResponse2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
-    example.code.fold(responseFromBody2(example))(code => Some(ErrorResponse(code = Some(code))))
-  }
-
   private def scenarioDescription(body: TypeDeclaration, example: BodyExample): Option[String] = {
     example.description()
       .orElse(Option(body.description).map(_.value))
@@ -330,49 +312,6 @@ object ErrorScenarios {
     } yield {
       ErrorResponse(Some(first.getTextContent))
     }
-  }
-
-  private def  responseFromBody2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
-    responseFromJson2(example).orElse(responseFromXML2(example))
-  }
-
-  private def responseFromJson2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
-    example.value.flatMap(v => Try(Json.parse(v).as[ErrorResponse]).toOption)
-  }
-  private def responseFromXML2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
-    for {
-      v <- example.value
-      codes <- Try(XML.fromString(v).getElementsByTagName("code")).toOption
-      first <- Option(codes.item(0))
-    } yield {
-      ErrorResponse(Some(first.getTextContent))
-    }
-  }
-
-
-  def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[Map[String, String]] = {
-
-    val errorScenarios = for {
-      response <- Responses.error(method)
-      body <- response.body
-      example <- BodyExamples(body)
-      scenarioDescription <- scenarioDescription(body, example)
-      errorResponse <- errorResponse2(example)
-    } yield {
-      errorResponse.code.fold(
-        Map("scenario" -> scenarioDescription,
-          "code" -> "",
-          "httpStatus" -> response.code)
-        )(code =>
-        Map("scenario" -> scenarioDescription,
-          "code" -> code,
-          "httpStatus" -> response.code))
-    }
-    errorScenarios
-  }
-
-  private def scenarioDescription(body: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration, example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[String] = {
-    example.description.orElse(body.description)
   }
 }
 
@@ -403,15 +342,6 @@ case class BodyExample(example: ExampleSpec) {
 object BodyExamples {
   def apply(body: TypeDeclaration): Seq[BodyExample] = {
     if (body.examples.size > 0) body.examples.asScala.toSeq.map(ex => BodyExample(ex)) else Seq(BodyExample(body.example))
-  }
-
-  def apply(body: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration): Seq[uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec] = {
-    if (body.examples.size > 0) body.examples else {
-      body.example match {
-        case Some(e) => Seq(e)
-        case None => Seq.empty
-      }
-    }
   }
 }
 

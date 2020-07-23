@@ -20,20 +20,22 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.models.apispecification._
 
 case class ViewModel(
-  title: String,
-  version: String,
-  deprecationMessage: Option[String],
-  documentationItems: List[DocumentationItem],
-  resourceGroups: List[ResourceGroup],
-  types: List[TypeDeclaration],
-  isFieldOptionalityKnown: Boolean,
+  apiSpecification: ApiSpecification,
   relationships: Map[Resource, Option[Resource]]
-)
+) {
+  lazy val title: String = apiSpecification.title
+  lazy val version: String = apiSpecification.version
+  lazy val deprecationMessage: Option[String] = apiSpecification.deprecationMessage
+  lazy val documentationItems: List[DocumentationItem] = apiSpecification.documentationItems
+  lazy val resourceGroups: List[ResourceGroup] = apiSpecification.resourceGroups
+  lazy val types: List[TypeDeclaration] = apiSpecification.types
+  lazy val isFieldOptionalityKnown: Boolean = apiSpecification.isFieldOptionalityKnown
+}
 
 object ViewModel {
-  def apply(wireModel: ApiSpecification): ViewModel = {
+  def apply(apiSpecification: ApiSpecification): ViewModel = {
 
-    val allResources: List[Resource] = wireModel.resourceGroups.flatMap(_.resources)
+    val allResources: List[Resource] = apiSpecification.resourceGroups.flatMap(_.resources)
 
     val parentChildRelationships: Map[Resource, Option[Resource]] = {
       val startWithoutParents: Map[Resource, Option[Resource]] = allResources.map(r => (r->None)).toMap
@@ -46,13 +48,7 @@ object ViewModel {
     }
 
     ViewModel(
-      wireModel.title,
-      wireModel.version,
-      wireModel.deprecationMessage,
-      wireModel.documentationItems,
-      wireModel.resourceGroups,
-      wireModel.types,
-      wireModel.isFieldOptionalityKnown,
+      apiSpecification,
       relationships = parentChildRelationships
    )
   }
