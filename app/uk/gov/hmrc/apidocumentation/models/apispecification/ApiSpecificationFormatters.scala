@@ -17,15 +17,51 @@
 package uk.gov.hmrc.apidocumentation.models.apispecification
 
 object ApiSpecificationFormatters {
-  import play.api.libs.json.Json
+  import play.api.libs.json._
+  import play.api.libs.functional.syntax._
 
   implicit val hmrcExampleSpecJF = Json.format[ExampleSpec]
-  implicit val typeDeclarationJF = Json.format[TypeDeclaration]
+
+  implicit val typeDeclarationWrites: OWrites[TypeDeclaration] = (
+    ( __ \ "name" ).write[String] and
+    ( __ \ "displayName" ).write[String] and
+    ( __ \ "type" ).write[String] and
+    ( __ \ "required" ).write[Boolean] and
+    ( __ \ "description" ).writeNullable[String] and
+    ( __ \ "examples" ).writeNullable[Seq[ExampleSpec]].contramap[Seq[ExampleSpec]](notIfEmpty) and
+    ( __ \ "enumValues" ).writeNullable[Seq[String]].contramap[Seq[String]](notIfEmpty) and
+    ( __ \ "pattern" ).writeNullable[String]
+  )(unlift(TypeDeclaration.unapply))
+
+  implicit val typeDeclarationReads: Reads[TypeDeclaration] = (
+    ( __ \ "name" ).read[String] and
+    ( __ \ "displayName" ).read[String] and
+    ( __ \ "type" ).read[String] and
+    ( __ \ "required" ).read[Boolean] and
+    ( __ \ "description" ).readNullable[String] and
+    ( __ \ "examples" ).readNullable[List[ExampleSpec]].map(_.getOrElse(List())) and
+    ( __ \ "enumValues" ).readNullable[List[String]].map(_.getOrElse(List())) and
+    ( __ \ "pattern" ).readNullable[String]
+  )(TypeDeclaration.apply _)
 
   implicit val securitySchemeJF = Json.format[SecurityScheme]
 
   implicit val groupJF = Json.format[Group]
-  implicit val hmrcResponseJF = Json.format[Response]
+
+  implicit val responseWrites: OWrites[Response] = (
+    ( __ \ "code" ).write[String] and
+    ( __ \ "body" ).writeNullable[Seq[TypeDeclaration]].contramap[Seq[TypeDeclaration]](notIfEmpty) and
+    ( __ \ "headers" ).writeNullable[Seq[TypeDeclaration]].contramap[Seq[TypeDeclaration]](notIfEmpty) and
+    ( __ \ "description" ).writeNullable[String]
+  )(unlift(Response.unapply))
+
+  implicit val reponseReads: Reads[Response] = (
+    ( __ \ "code" ).read[String] and
+    ( __ \ "body" ).readNullable[List[TypeDeclaration]].map(_.getOrElse(List())) and
+    ( __ \ "headers" ).readNullable[List[TypeDeclaration]].map(_.getOrElse(List())) and
+    ( __ \ "description" ).readNullable[String]
+  )(Response.apply _)
+
   implicit val hmrcMethodJF = Json.format[Method]
   implicit val hmrcResourceJF = Json.format[Resource]
 
@@ -33,4 +69,7 @@ object ApiSpecificationFormatters {
   implicit val hmrcResourceGroupJF = Json.format[ResourceGroup]
 
   implicit val apiSpecificationJF = Json.format[ApiSpecification]
+
+  def notIfEmpty[A](seq: Seq[A]): Option[Seq[A]] = if(seq.isEmpty) None else Some(seq)
+
 }

@@ -300,20 +300,21 @@ object ErrorScenarios {
   }
 
   private def errorResponse(bodyExample: BodyExample): Option[ErrorResponse] = {
-    FindProperty(bodyExample.example.structuredValue, "value", "code")
+    val x= FindProperty(bodyExample.example.structuredValue, "value", "code")
       .orElse(FindProperty(bodyExample.example.structuredValue, "code"))
-      .fold(responseFromBody(bodyExample))(code => Some(ErrorResponse(code = Some(code))))
+
+    x.fold(responseFromBody(bodyExample))(code => Some(ErrorResponse(code = Some(code))))
   }
 
   private def errorResponse2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
     example.code.fold(responseFromBody2(example))(code => Some(ErrorResponse(code = Some(code))))
   }
 
-
   private def scenarioDescription(body: TypeDeclaration, example: BodyExample): Option[String] = {
     example.description()
       .orElse(Option(body.description).map(_.value))
   }
+
   private def responseFromBody(example: BodyExample): Option[ErrorResponse] = {
     responseFromJson(example).orElse(responseFromXML(example))
   }
@@ -331,7 +332,7 @@ object ErrorScenarios {
     }
   }
 
-  private def responseFromBody2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
+  private def  responseFromBody2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
     responseFromJson2(example).orElse(responseFromXML2(example))
   }
 
@@ -358,13 +359,16 @@ object ErrorScenarios {
       scenarioDescription <- scenarioDescription(body, example)
       errorResponse <- errorResponse2(example)
     } yield {
-      errorResponse.code.map(code =>
+      errorResponse.code.fold(
+        Map("scenario" -> scenarioDescription,
+          "code" -> "",
+          "httpStatus" -> response.code)
+        )(code =>
         Map("scenario" -> scenarioDescription,
           "code" -> code,
           "httpStatus" -> response.code))
     }
-
-    errorScenarios.flatten
+    errorScenarios
   }
 
   private def scenarioDescription(body: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration, example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[String] = {
