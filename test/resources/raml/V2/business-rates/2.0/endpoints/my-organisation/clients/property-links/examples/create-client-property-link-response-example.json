@@ -1,9 +1,0 @@
-{
-  "_links": {
-    "self": {
-      "href": "http://api.service.hmrc.gov.uk/my-organisation/clients/all/property-links/PL1ZR7QBN1?projection=detailed",
-      "template": false
-    }
-  },
-  "submissionId": "PL1ZR7QBN1"
-}

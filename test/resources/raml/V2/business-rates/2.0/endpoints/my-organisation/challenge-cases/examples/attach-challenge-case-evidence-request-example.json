@@ -1,6 +1,0 @@
-{
-  "fileName": "some_file.jpg",
-  "mimeType": "image/jpeg",
-  "successRedirect": "http://example.com/success",
-  "errorRedirect": "http://example.com/error"
-}
