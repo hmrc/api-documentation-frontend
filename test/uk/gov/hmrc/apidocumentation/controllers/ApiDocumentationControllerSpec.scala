@@ -33,6 +33,7 @@ import uk.gov.hmrc.apidocumentation.mocks.config._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
   trait Setup
@@ -50,6 +51,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     private lazy val previewDocumentationView = app.injector.instanceOf[PreviewDocumentationView]
     private lazy val serviceDocumentationView = app.injector.instanceOf[ServiceDocumentationView]
     private lazy val xmlDocumentationView = app.injector.instanceOf[XmlDocumentationView]
+    private lazy val serviceDocumentationView2 = app.injector.instanceOf[ServiceDocumentationView2]
 
     val underTest = new ApiDocumentationController(
       documentationService,
@@ -63,7 +65,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       apisFilteredView,
       previewDocumentationView,
       serviceDocumentationView,
-      xmlDocumentationView
+      serviceDocumentationView2,
+      xmlDocumentationView,
+      appConfig
     )
   }
 

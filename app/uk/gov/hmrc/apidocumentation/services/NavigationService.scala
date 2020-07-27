@@ -32,6 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 @Singleton
 class NavigationService @Inject()(
@@ -91,26 +92,47 @@ class NavigationService @Inject()(
 
   def sidebarNavigation() = sidebarNavigationLinks
 
-  private def traverse(
-    resources: Seq[Resource],
-    accum: Seq[SidebarLink] = Seq.empty
-  ): Seq[SidebarLink] = {
-    if (resources.isEmpty)
-      accum
-    else {
-      (for {
-        res <- resources
-        ann = Annotation.getAnnotation(res, "(group)", "name")
-        link = ann.map(
-          name => SidebarLink(label = name, href = s"#${Slugify(name)}")
-        )
-      } yield link ++: traverse(res.resources.asScala, accum)).flatten
+  def apiSidebarNavigation2(service: String, version: ExtendedAPIVersion, wireModel: ApiSpecification): Seq[SidebarLink] = {
+    val subLinks = wireModel.resourceGroups
+                  .map(group => group.name)
+                  .filter(_.nonEmpty)
+                  .flatten
+                  .map(name => SidebarLink(label = name, href = s"#${Slugify(name)}"))
+
+    val sections = wireModel.documentationItems.map { doc =>
+      SidebarLink(label = doc.title, href = s"#${Slugify(doc.title)}")
     }
+
+    val resources = if (VersionDocsVisible(version.visibility) == DocsVisibility.OVERVIEW_ONLY) {
+      SidebarLink(
+        label = "Read more",
+        href = "#read-more")
+    } else {
+      SidebarLink(
+        label = "Endpoints",
+        href = "#endpoints",
+        subLinks = subLinks,
+        showSubLinks = true)
+    }
+
+    sections :+ resources
   }
 
   def apiSidebarNavigation(service: String,
                            version: ExtendedAPIVersion,
                            raml: RAML): Seq[SidebarLink] = {
+    def traverse(resources: Seq[Resource], accum: Seq[SidebarLink] = Seq.empty): Seq[SidebarLink] = {
+      if (resources.isEmpty)
+        accum
+      else {
+        (for {
+          res <- resources
+          ann = Annotation.getAnnotation(res, "(group)", "name")
+          link = ann.map(name => SidebarLink(label = name, href = s"#${Slugify(name)}"))
+        } yield link ++: traverse(res.resources.asScala, accum)).flatten
+      }
+    }
+
     val sections = raml.documentationForVersion(Option(version)).map { doc =>
       SidebarLink(
         label = doc.title.value,

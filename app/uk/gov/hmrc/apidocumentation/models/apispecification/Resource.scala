@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.mocks.config
+package uk.gov.hmrc.apidocumentation.models.apispecification
 
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+case class Resource(resourcePath: String, methods: List[Method], uriParameters: List[TypeDeclaration], relativeUri: String, displayName: String, children: List[Resource])
 
-trait AppConfigMock extends MockitoSugar {
-  implicit val appConfig = mock[ApplicationConfig]
+object ResourcesAndGroups {
+  type GroupMap = Map[Resource,Group]
 
-  when(appConfig.title).thenReturn("HMRC Developer Hub")
-  when(appConfig.documentationRenderVersion).thenReturn("raml")
+  val emptyGroupMap: GroupMap = Map.empty
+
+  def flatten(gm: GroupMap, gms: List[GroupMap]): GroupMap = gms.fold(gm)( (l,r) => l ++ r)
+
+  def flatten(gms: List[GroupMap]): GroupMap = flatten(emptyGroupMap, gms)
 }
+
+case class ResourcesAndGroups(resource: Resource, groupMap: ResourcesAndGroups.GroupMap)
+

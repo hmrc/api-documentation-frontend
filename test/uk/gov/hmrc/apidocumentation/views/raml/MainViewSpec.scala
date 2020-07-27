@@ -254,7 +254,7 @@ class MainViewSpec extends CommonViewSpec with ApiDefinitionTestDataHelper {
       val availability = someApiAvailability()
         .asPublic
         .asTrial
-        .asLoggedIn // TODO - really ???
+        .asLoggedIn
         .asAuthorised
 
       val version = ExtendedAPIVersion("1.0", APIStatus.BETA, Seq.empty, availability, availability)

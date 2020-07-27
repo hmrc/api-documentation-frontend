@@ -47,6 +47,8 @@ object Slugify {
 object Val {
   def apply(obj: String): String = Option(obj).getOrElse("")
 
+  def apply(obj: Option[String]): String = obj.getOrElse("")
+
   def apply(obj: {def value(): String}): String = Option(obj).fold("")(_.value())
 }
 
@@ -60,6 +62,18 @@ object HeaderVal {
       case "Accept"=> replace(example)
       case "Content-Type" => replace(example)
       case _  => example
+    }
+  }
+
+  def apply(header: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration, version: String): String = {
+    def replace(example: String) = {
+      example.replace("application/vnd.hmrc.1.0", "application/vnd.hmrc." + version)
+    }
+    val exampleValue = header.example.fold("")(e => e.value.getOrElse(""))
+    header.displayName match {
+      case "Accept"=> replace(exampleValue)
+      case "Content-Type" => replace(exampleValue)
+      case _  => exampleValue
     }
   }
 }
@@ -89,6 +103,8 @@ object Annotation {
   def apply(context: Annotable, names: String*): String = getAnnotation(context, names: _*).getOrElse("")
 
   def exists(context: Annotable, names: String*): Boolean = getAnnotation(context, names: _*).isDefined
+
+  def optional(context: Annotable, names: String*): Option[String] = getAnnotation(context, names: _*).filterNot(_.isEmpty)
 
   def getAnnotation(context: Annotable, names: String*): Option[String] = {
     val matches = context.annotations.asScala.find { ann =>
@@ -137,6 +153,8 @@ object Markdown {
 
   def apply(text: String): Html = Html(process(text))
 
+  def apply(text: Option[String]): Html = apply(text.getOrElse(""))
+
   def apply(obj: {def value(): String}): Html = Option(obj).fold(emptyHtml)(node => apply(node.value()))
 
   import com.github.rjeschke.txtmark.{Configuration, Processor}
@@ -166,7 +184,6 @@ case class ResourceGroup(name: Option[String] = None, description: Option[String
     ResourceGroup(name, description, resources :+ resource)
   }
 }
-
 
 object GroupedResources {
   def apply(resources: Seq[Resource]): Seq[ResourceGroup] = {
@@ -214,9 +231,11 @@ object Methods {
 }
 
 object Authorisation {
+
   def apply(method: Method): (String, Option[String]) = fetchAuthorisation(method)
 
   private def fetchAuthorisation(method: Method): (String, Option[String]) = {
+
     if (method.securedBy().asScala.nonEmpty) {
       method.securedBy.get(0).securityScheme.`type` match {
         case "OAuth 2.0" => ("user", Some(Annotation(method, "(scope)")))
@@ -249,6 +268,7 @@ object Responses {
 
 object ErrorScenarios {
   def apply(method: Method): Seq[Map[String, String]] = {
+
     val errorScenarios = for {
       response <- Responses.error(method)
       body <- response.body.asScala
@@ -266,19 +286,20 @@ object ErrorScenarios {
   }
 
   private def errorResponse(bodyExample: BodyExample): Option[ErrorResponse] = {
-    FindProperty(bodyExample.example.structuredValue, "value", "code")
+    val x= FindProperty(bodyExample.example.structuredValue, "value", "code")
       .orElse(FindProperty(bodyExample.example.structuredValue, "code"))
-      .fold(responseFromBody(bodyExample))(code => Some(ErrorResponse(code = Some(code))))
+
+    x.fold(responseFromBody(bodyExample))(code => Some(ErrorResponse(code = Some(code))))
   }
 
   private def scenarioDescription(body: TypeDeclaration, example: BodyExample): Option[String] = {
     example.description()
       .orElse(Option(body.description).map(_.value))
   }
+
   private def responseFromBody(example: BodyExample): Option[ErrorResponse] = {
     responseFromJson(example).orElse(responseFromXML(example))
   }
-
   private def responseFromJson(example: BodyExample): Option[ErrorResponse] = {
     example.value.flatMap(v => Try(Json.parse(v).as[ErrorResponse]).toOption)
   }

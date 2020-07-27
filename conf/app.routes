@@ -20,7 +20,11 @@ GET         /docs/authorisation/two-step-verification               uk.gov.hmrc.
 
 GET         /docs/api                                               uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.apiIndexPage(service: Option[String], version: Option[String], filter: Option[String])
 GET         /docs/api/service/:service                              uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.redirectToApiDocumentation(service: String, version: Option[String], cacheBuster: Option[Boolean])
+
 GET         /docs/api/service/:service/:version                     uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
+GET         /docs/api1/service/:service/:version                    uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation1(service: String, version: String, cacheBuster: Option[Boolean])
+GET         /docs/api2/service/:service/:version                    uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation2(service: String, version: String, cacheBuster: Option[Boolean])
+
 GET         /docs/api/preview                                       uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.previewApiDocumentation(url: Option[String])
 GET         /docs/api/testdata/:service/:version                    uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.fetchTestEndpointJson(service: String, version: String)
 GET         /docs/api/xml/:name                                     uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderXmlApiDocumentation(name: String)

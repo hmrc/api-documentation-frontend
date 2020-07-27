@@ -1,0 +1,80 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import play.api.mvc.Request
+@import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.views.apispecification.helpers._
+@import uk.gov.hmrc.apidocumentation.views.apispecification._
+@import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain, ourMainView: apispecification.MainView, applicationConfig: ApplicationConfig)
+
+@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, viewModel: ViewModel, loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+
+@topContent = {
+    <div class="form-group">
+        <select class="form-control form-control-version"
+                id="version"
+                name="version"
+                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version, None).url"
+                onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+            @for(v <- api.sortedActiveVersions;
+                if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
+                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url">v@v.version (@v.displayedStatus)</option>
+            }
+        </select>
+    </div>
+}
+
+@apiMain(pageAttributes, topContent) {
+    @if(currentVersion.status == APIStatus.ALPHA) {
+    <div class="section">
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Alert</span>
+            </i>
+                <strong class ="bold-small">
+                    This version is in alpha - You will not be able to subscribe to this API.
+                </strong>
+        </div>
+    </div>
+    }
+
+    @if(currentVersion.status == APIStatus.BETA || currentVersion.status == APIStatus.PROTOTYPED) {
+    <div class="section">
+        <div class="panel panel-border-wide" role="alert">
+            <p>This version is in beta - expect some breaking changes.</p>
+        </div>
+    </div>
+    }
+
+    @if(currentVersion.status == APIStatus.DEPRECATED) {
+        <div class="section">
+            <div class="notice">
+                <i class="icon icon-important">
+                    <span class="visually-hidden">Alert</span>
+                </i>
+                <strong class="bold-small">
+                    @{viewModel.deprecationMessage.getOrElse("This version is deprecated - it’s going to be removed.")}.
+                </strong>
+            </div>
+        </div>
+    }
+    @ourMainView(viewModel, Some(currentVersion), Some(api), loggedIn)
+}

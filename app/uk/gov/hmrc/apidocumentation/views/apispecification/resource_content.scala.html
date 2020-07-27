@@ -14,13 +14,12 @@
  * limitations under the License.
  *@
 
-@import org.raml.v2.api.model.v10.methods.Method
-@import org.raml.v2.api.model.v10.resources.Resource
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.views.helpers._
-@import uk.gov.hmrc.apidocumentation.services.RAML
+@import uk.gov.hmrc.apidocumentation.models.apispecification._
+@import uk.gov.hmrc.apidocumentation.views.apispecification.helpers._
+@import uk.gov.hmrc.apidocumentation.views.helpers.{Markdown, HttpStatus}
 
-@(res: Resource, meth: Method, raml: RAML, schemas: Map[String, JsonSchema], contentID: String, authorisation: (String, Option[String]))
+@(res: Resource, meth: Method, viewModel: ViewModel, contentID: String, authorisation: (String, Option[String]))
 
 <section id="authorisation_@contentID" class="section">
     <h4 class="heading-small">Authorisation</h4>
@@ -49,7 +48,7 @@
     }
 </section>
 
-@defining(UriParams(res, raml)) { params =>
+@defining(Parameters.uriParams(Some(res), viewModel)) { params =>
     @if(params.nonEmpty) {
         <section id="request-parameters_@contentID" class="section">
             <h4 class="heading-small">Path parameters</h4>
@@ -71,7 +70,7 @@
     }
 }
 
-@defining(QueryParams(meth, raml)) { params =>
+@defining(Parameters.queryParams(Some(meth), viewModel)) { params =>
     @if(params.nonEmpty) {
         <section id="query-parameters_@contentID" class="section">
             <h4 class="heading-small first">Query parameters</h4>
@@ -94,7 +93,7 @@
 }
 
 @if(meth.headers.nonEmpty || authorisation._1 != "none") {
-    @headers(meth.headers.toSeq, raml.version.value, "Request headers", "required", authorisation)
+    @headers(meth.headers, viewModel.version, "Request headers", "required", authorisation)
 }
 
 @for(body <- meth.body) {
@@ -102,35 +101,36 @@
         <h4 class="heading-small">Request</h4>
         @for(example <- BodyExamples(body)) {
             <section>
-                @if(example.description().isDefined){<strong>Scenario: @example.description()</strong>}
-                @if(example.documentation().isDefined){<p>@Markdown(example.documentation.get)</p>}
-                <pre class="code--block">@example.value()</pre>
+                @if(example.description.isDefined){<strong>Scenario: @example.description</strong>}
+                @if(example.documentation.isDefined){<p>@Markdown(example.documentation.get)</p>}
+                <pre class="code--block">@example.value</pre>
             </section>
         }
     </section>
 }
-@fields(RequestFields(meth, schemas), "Request table", !Annotation.exists(raml, "(fieldOptionalityUnknown)"))
+
+@fields(RequestFields2(meth), "Request table", viewModel.isFieldOptionalityKnown)
 
 @for(resp <- Responses.success(meth)) {
     <section id="sample-response_@contentID" class="section">
-        @if(resp.headers().nonEmpty) {
-            @headers(resp.headers.toSeq, raml.version.value, "Response headers", "", ("none", None))
+        @if(resp.headers.nonEmpty) {
+            @headers(resp.headers, viewModel.version, "Response headers", "", ("none", None))
         }
 
         <h4 class="heading-small">Response</h4>
-        <p>HTTP status: <code class="code--slim">@HttpStatus(Val(resp.code))</code></p>
+        <p>HTTP status: <code class="code--slim">@HttpStatus(resp.code)</code></p>
         @for(body <- resp.body) {
             @for(example <- BodyExamples(body)) {
                 <section>
-                    @if(example.description().isDefined){@example.description()}
-                    @if(example.documentation().isDefined){<p>@Markdown(example.documentation.get)</p>}
-                    <pre class="code--block">@example.value()</pre>
+                    @if(example.description.isDefined){@example.description}
+                    @if(example.documentation.isDefined){<p>@Markdown(example.documentation.get)</p>}
+                    <pre class="code--block">@example.value</pre>
                 </section>
             }
         }
     </section>
 }
-@fields(ResponseFields(meth, schemas), "Response table", !Annotation.exists(raml, "(fieldOptionalityUnknown)"))
+@fields(ResponseFields2(meth), "Response table", viewModel.isFieldOptionalityKnown)
 
 @defining(ErrorScenarios(meth)) { errorScenarios =>
     @if(errorScenarios.nonEmpty) {
@@ -174,11 +174,11 @@
     }
 }
 
-@defining(Annotation(meth, "(sandboxData)")) { sandboxData =>
-    @if(sandboxData.nonEmpty) {
+@defining(meth.sandboxData) { sandboxData =>
+    @if(sandboxData.isDefined) {
         <section id="sandbox-data_@contentID" class="section">
             <h4 class="heading-small">Test data</h4>
-            @Markdown(sandboxData)
+            @Markdown(sandboxData.get)
         </section>
     }
 }

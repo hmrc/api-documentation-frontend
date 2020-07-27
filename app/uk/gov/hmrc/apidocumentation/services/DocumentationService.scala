@@ -27,8 +27,16 @@ import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future, _}
 import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
+import uk.gov.hmrc.http.HeaderCarrier
+import SchemaService.Schemas
+import play.api.Logger
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 object DocumentationService {
+  def wireModelUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
+    s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)"
+
   def ramlUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
     s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/application.raml"
 
@@ -40,6 +48,7 @@ object DocumentationService {
 @Singleton
 class DocumentationService @Inject()(appConfig: ApplicationConfig,
                                      cache: CacheApi,
+                                     apm: ApiPlatformMicroserviceConnector,
                                      ramlLoader: RamlLoader,
                                      schemaService: SchemaService)
                                      (implicit ec: ExecutionContext) {
@@ -48,6 +57,23 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
   val defaultExpiration = 1.hour
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
+
+  def fetchWireModel(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
+    val key = serviceName+":"+version
+    if (cacheBuster) cache.remove(key)
+
+    // TODO - use async cache
+    Future {
+      blocking {
+        cache.getOrElse[Try[ApiSpecification]](key, defaultExpiration) {
+          Logger.info(s"****** Specification Cache miss for $key")
+          Try {
+            Await.result(apm.fetchApiSpecification(serviceName,version)(hc), 30.seconds)
+          }
+        }
+      }.fold(e => { cache.remove(key); throw e }, identity )
+    }
+  }
 
   def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean): Future[RamlAndSchemas] = {
       val url = ramlUrl(serviceBaseUrl,serviceName,version)

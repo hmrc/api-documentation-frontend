@@ -28,9 +28,14 @@ import scala.collection.JavaConverters._
 import scala.collection.immutable.ListMap
 import scala.io.Source
 
-class SchemaService {
+object SchemaService {
+  type Schemas = Map[String, JsonSchema]
+}
 
-  def loadSchemas(basePath: String, raml: RAML): Map[String, JsonSchema] = {
+class SchemaService {
+  import SchemaService.Schemas
+
+  def loadSchemas(basePath: String, raml: RAML): Schemas = {
     val schemas = for {
       resource  <- raml.flattenedResources
       method    <- resource.methods.asScala

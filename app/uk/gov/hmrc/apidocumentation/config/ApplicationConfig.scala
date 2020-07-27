@@ -54,6 +54,8 @@ trait ApplicationConfig {
   def sandboxApiBaseUrl: String
   def sandboxWwwBaseUrl: String
 
+  def documentationRenderVersion: String
+
   def title: String
   def isStubMode: Boolean
   def xmlApiBaseUrl: String
@@ -105,6 +107,8 @@ class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
   val sandboxWwwHost = getString("platform.sandbox.www.host")
   val sandboxApiBaseUrl = platformBaseUrl("platform.sandbox.api")
   val sandboxWwwBaseUrl = platformBaseUrl("platform.sandbox.www")
+
+  val documentationRenderVersion = getConfigDefaulted(s"$env.features.documentationRenderVersion", "raml")
 
   val title = "HMRC Developer Hub"
   val isStubMode = env == "Stub"

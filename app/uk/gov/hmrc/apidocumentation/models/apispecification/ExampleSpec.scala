@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.mocks.config
+package uk.gov.hmrc.apidocumentation.models.apispecification
 
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-
-trait AppConfigMock extends MockitoSugar {
-  implicit val appConfig = mock[ApplicationConfig]
-
-  when(appConfig.title).thenReturn("HMRC Developer Hub")
-  when(appConfig.documentationRenderVersion).thenReturn("raml")
-}
+case class ExampleSpec(
+  description: Option[String],
+  documentation: Option[String],
+  code: Option[String],
+  value: Option[String]
+)

@@ -1,0 +1,93 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.views.apispecification.helpers._
+
+@(fields: Seq[RequestResponseField2], caption: String, fieldOptionalityKnown: Boolean)
+
+@if(fields.nonEmpty) {
+    <table class="table--align-top">
+        <caption class="table__caption--low-vis">
+            <div class="visually-hidden">@caption</div>
+        </caption>
+        <thead>
+            <tr class="table__row--desktop-heading">
+                <th class="table__col--1-2">Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(field <- fields) {
+            <tr class="table__row--responsive
+                    @if(field.depth == 0 || field.`type` == "object") {table__row--parent}
+                @if(field.depth > 0) {table__row--nested-@{field.depth}}">
+                <td data-heading="Name" class="table__detail--responsive table__col--1-2">
+                    <div class="table__cell-contents--responsive">
+                        <div class="parameter-name">@{field.name}</div>
+                        <div class="parameter-type">@if(field.isArray) {array} else {@{field.`type`}}</div>
+                        @if(fieldOptionalityKnown) {
+                            @if(field.required) {
+                                <div class="parameter-required">required</div>
+                            } else {
+                                <div class="parameter-optional">optional</div>
+                            }
+                        }
+                    </div>
+                </td>
+                <td data-heading="Description" class="table__detail--responsive">
+                    <div class="table__cell-contents--responsive">
+                    @if(field.description.isDefined) {
+                        <p>@{field.description}</p>
+                    }
+
+                    @field.typeId match {
+                        case "full-date" => { <p>Date in the format <code class="code--slim">YYYY-MM-DD</code></p> }
+                        case "tax-year" => { <p>Tax year in the format <code class="code--slim">YYYY-YY</code></p> }
+                        case _ => {
+                            @if(field.pattern.isDefined) {
+                                <p>
+                                    Must conform to the regular expression <code class="code--slim">@{field.pattern}</code>
+                                </p>
+                            }
+                        }
+                    }
+
+                    @if(field.enumValues.nonEmpty) {
+                        <p>
+                            Limited to the following possible values:
+                        </p>
+                        <div>
+                            @for(enumValue <- field.enumValues) {
+                                <div class="margin-top">
+                                    <code class="code--slim">@{enumValue.name}</code>
+                                    @if(enumValue.description.isDefined) { - @{enumValue.description} }
+                                </div>
+                            }
+                        </div>
+                    } else {
+                        @if(field.example.isDefined) {
+                            <p>
+                                For example: <code class="code--slim">@{field.example}</code>
+                            </p>
+                        }
+                    }
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

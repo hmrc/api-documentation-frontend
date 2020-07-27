@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import org.raml.v2.api.model.v10.api.{Api, DocumentationItem}
-import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion}
+import org.raml.v2.api.model.v10.api.{Api, DocumentationItem => RamlDocumentationItem}
+import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, ViewModel}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 
 import scala.collection.JavaConverters._
@@ -28,10 +29,24 @@ package object services {
 
   implicit class RicherRAML(val x: Api) {
 
-    def documentationForVersion(version: Option[ExtendedAPIVersion]): Seq[DocumentationItem] = versionVisibility(version) match {
+    def documentationForVersion(version: Option[ExtendedAPIVersion]): Seq[RamlDocumentationItem] = versionVisibility(version) match {
       case DocsVisibility.VISIBLE => x.documentation.asScala.toSeq
       case DocsVisibility.OVERVIEW_ONLY => x.documentation.asScala.filter(_.title.value == "Overview")
       case _ => Seq.empty
+    }
+
+    private def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
+      case Some(v) => VersionDocsVisible(v.visibility)
+      case _ => DocsVisibility.VISIBLE
+    }
+  }
+
+  implicit class RicherModel(val x: ViewModel) {
+
+    def documentationForVersion(version: Option[ExtendedAPIVersion]): List[DocumentationItem] = versionVisibility(version) match {
+      case DocsVisibility.VISIBLE => x.documentationItems
+      case DocsVisibility.OVERVIEW_ONLY => x.documentationItems.filter(_.title == "Overview")
+      case _ => List.empty
     }
 
     private def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
