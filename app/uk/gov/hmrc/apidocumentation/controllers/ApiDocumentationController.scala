@@ -262,19 +262,10 @@ class ApiDocumentationController @Inject()(
         makePageAttributes(apiDefinition, selectedVersion, navigationService.sidebarNavigation()), apiDefinition)))
     }
 
-    import uk.gov.hmrc.apidocumentation.models.apispecification._
-
     def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) =
-      documentationService.fetchWireModel(service, version, cacheBuster).map { wireModel =>
-        val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation2(service, selectedVersion, wireModel))
-        import ApiSpecificationFormatters._
-//        val jsonText = Json.stringify(Json.toJson(wireModel))
-
-        val context = api.context
-        val version = selectedVersion.version
-
-//        Logger.debug(s"RAML replacement intermediate JSON model size ${jsonText.length} for context(verison): $context ($version)")
-        val viewModel = ViewModel(wireModel)
+      documentationService.fetchApiSpecification(service, version, cacheBuster).map { apiSpecification =>
+        val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation2(service, selectedVersion, apiSpecification))
+        val viewModel = ViewModel(apiSpecification)
         Ok(serviceDocumentationView2(attrs, api, selectedVersion, viewModel, email.isDefined)).withHeaders(cacheControlHeaders)
       }
 
