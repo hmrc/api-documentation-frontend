@@ -29,14 +29,10 @@ import scala.concurrent.duration._
 import scala.util.{Failure, Success, Try}
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.http.HeaderCarrier
-import SchemaService.Schemas
 import play.api.Logger
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 object DocumentationService {
-  def wireModelUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
-    s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)"
-
   def ramlUrl(serviceBaseUrl: String, serviceName: String, version: String): String =
     s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/application.raml"
 
@@ -58,7 +54,7 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
-  def fetchWireModel(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
+  def fetchApiSpecification(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
     val key = serviceName+":"+version
     if (cacheBuster) cache.remove(key)
 

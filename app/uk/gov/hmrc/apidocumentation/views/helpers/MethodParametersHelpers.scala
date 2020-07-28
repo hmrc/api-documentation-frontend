@@ -21,7 +21,6 @@ import org.raml.v2.api.model.v10.methods.{Method => RamlMethod}
 import org.raml.v2.api.model.v10.resources.{Resource => RamlResource}
 import org.raml.v2.api.model.v10.system.types.{MarkdownString => RamlMarkdownString}
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.models.apispecification._
 import uk.gov.hmrc.apidocumentation.services._
 
 import scala.collection.JavaConverters._

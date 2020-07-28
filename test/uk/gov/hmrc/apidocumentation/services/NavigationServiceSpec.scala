@@ -30,7 +30,7 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -98,7 +98,7 @@ class NavigationServiceSpec extends UnitSpec with GuiceOneAppPerTest with Mockit
       val visible = Some(VersionVisibility(APIAccessType.PUBLIC, loggedIn = true, authorised = true, isTrial = None))
 
       when(version.visibility).thenReturn(visible)
-      when(raml.documentation).thenReturn(documentation)
+      when(raml.documentation).thenReturn(documentation.asJava)
 
       val apiSidebarNavLinks = await(underTest.apiSidebarNavigation(service, version, raml))
 
@@ -114,7 +114,7 @@ class NavigationServiceSpec extends UnitSpec with GuiceOneAppPerTest with Mockit
       val overviewOnly = Some(VersionVisibility(APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true)))
 
       when(version.visibility).thenReturn(overviewOnly)
-      when(raml.documentation).thenReturn(documentation)
+      when(raml.documentation).thenReturn(documentation.asJava)
 
       val apiSidebarNavLinks = await(underTest.apiSidebarNavigation(service, version, raml))
 
