@@ -22,10 +22,16 @@ import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, 
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 
 import scala.collection.JavaConverters._
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 package object services {
 
   type RAML = Api
+
+  def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
+      case Some(v) => VersionDocsVisible(v.visibility)
+      case _ => DocsVisibility.VISIBLE
+  }
 
   implicit class RicherRAML(val x: Api) {
 
@@ -34,25 +40,22 @@ package object services {
       case DocsVisibility.OVERVIEW_ONLY => x.documentation.asScala.filter(_.title.value == "Overview")
       case _ => Seq.empty
     }
+  }
 
-    private def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
-      case Some(v) => VersionDocsVisible(v.visibility)
-      case _ => DocsVisibility.VISIBLE
+  def filterForVisibility(version: Option[ExtendedAPIVersion]): (List[DocumentationItem]) => List[DocumentationItem] = (input) => {
+    versionVisibility(version) match {
+      case DocsVisibility.VISIBLE       => input
+      case DocsVisibility.OVERVIEW_ONLY => input.filter(_.title == "Overview")
+      case _                            => List.empty
     }
   }
 
-  implicit class RicherModel(val x: ViewModel) {
+  implicit class RicherApiSpecification(val x: ApiSpecification) {
+    def documentationForVersionFilteredByVisibility(version: ExtendedAPIVersion): List[DocumentationItem] = filterForVisibility(Some(version))(x.documentationItems)
+  }
 
-    def documentationForVersion(version: Option[ExtendedAPIVersion]): List[DocumentationItem] = versionVisibility(version) match {
-      case DocsVisibility.VISIBLE => x.documentationItems
-      case DocsVisibility.OVERVIEW_ONLY => x.documentationItems.filter(_.title == "Overview")
-      case _ => List.empty
-    }
-
-    private def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
-      case Some(v) => VersionDocsVisible(v.visibility)
-      case _ => DocsVisibility.VISIBLE
-    }
+  implicit class RicherViewModel(val x: ViewModel) {
+    def documentationForVersion(version: Option[ExtendedAPIVersion]): List[DocumentationItem] = filterForVisibility(version)(x.documentationItems)
   }
 
 }

@@ -92,28 +92,31 @@ class NavigationService @Inject()(
 
   def sidebarNavigation() = sidebarNavigationLinks
 
-  def apiSidebarNavigation2(service: String, version: ExtendedAPIVersion, wireModel: ApiSpecification): Seq[SidebarLink] = {
-    val subLinks = wireModel.resourceGroups
+  def apiSidebarNavigation2(service: String, version: ExtendedAPIVersion, apiSpecification: ApiSpecification): Seq[SidebarLink] = {
+    val subLinks = apiSpecification.resourceGroups
                   .map(group => group.name)
                   .filter(_.nonEmpty)
                   .flatten
                   .map(name => SidebarLink(label = name, href = s"#${Slugify(name)}"))
 
-    val sections = wireModel.documentationItems.map { doc =>
+    val sections = apiSpecification.documentationForVersionFilteredByVisibility(version).map { doc =>
       SidebarLink(label = doc.title, href = s"#${Slugify(doc.title)}")
     }
 
-    val resources = if (VersionDocsVisible(version.visibility) == DocsVisibility.OVERVIEW_ONLY) {
-      SidebarLink(
-        label = "Read more",
-        href = "#read-more")
-    } else {
-      SidebarLink(
-        label = "Endpoints",
-        href = "#endpoints",
-        subLinks = subLinks,
-        showSubLinks = true)
-    }
+    val resources =
+      if (VersionDocsVisible(version.visibility) == DocsVisibility.OVERVIEW_ONLY) {
+        SidebarLink(
+          label = "Read more",
+          href = "#read-more"
+        )
+      } else {
+        SidebarLink(
+          label = "Endpoints",
+          href = "#endpoints",
+          subLinks = subLinks,
+          showSubLinks = true
+        )
+      }
 
     sections :+ resources
   }
@@ -133,7 +136,7 @@ class NavigationService @Inject()(
       }
     }
 
-    val sections = raml.documentationForVersion(Option(version)).map { doc =>
+    val sections = raml.documentationForVersion(Some(version)).map { doc =>
       SidebarLink(
         label = doc.title.value,
         href = s"#${Slugify(doc.title.value)}"
