@@ -80,5 +80,6 @@
   "Income Tax (MTD) end-to-end service guide": ["INCOME_TAX_MTD"],
   "Self Assessment end-to-end service guide": ["SELF_ASSESSMENT"],
   "Safety and security import declarations service guide": ["CUSTOMS"],
-  "Common Transit Convention Traders service guide": ["CUSTOMS"]
+  "Common Transit Convention Traders service guide": ["CUSTOMS"],
+  "Goods Vehicle Movements service guide": ["CUSTOMS"]
 }
