@@ -34,6 +34,7 @@ import uk.gov.hmrc.apidocumentation.mocks.config._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem, ResourceGroup, TypeDeclaration}
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
   trait Setup
@@ -69,6 +70,19 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       xmlDocumentationView,
       appConfig
     )
+  }
+
+  trait DocumentationRenderVersionSetup extends Setup {
+    when(appConfig.documentationRenderVersion).thenReturn("specification")
+    val mockApiSpecification =
+      ApiSpecification(
+        title = "mockTitle",
+        version = "1.0",
+        deprecationMessage = None,
+        documentationItems = List.empty[DocumentationItem],
+        resourceGroups = List.empty[ResourceGroup],
+        types = List.empty[TypeDeclaration],
+        isFieldOptionalityKnown = false)
   }
 
   "ApiDocumentationController" when {
@@ -189,6 +203,206 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
     "routing to renderApiDocumentation" should {
         val mockRamlAndSchemas = RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
+
+      "when documentationRenderVersion is specification" should {
+        "display the documentation and private API options when the API is private but the logged in user has access to it" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+          val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true)
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          verifyApiDocumentationPageRendered(result, "1.0", "Private Stable")
+          versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
+        }
+
+        "display the private API options when not logged in and is in trial" in new DocumentationRenderVersionSetup {
+          theUserIsNotLoggedIn()
+
+          val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false, isTrial = Some(true))
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
+        }
+
+        "display the private API options when logged in and is in trial but the user is not authorised" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+
+          val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
+        }
+
+        "display the private API options when logged in and is in trial and the user is authorised" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+
+          val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
+        }
+
+        "not display the private API options when not in trial, not logged in and (therefore) is not authorised" in new DocumentationRenderVersionSetup {
+          theUserIsNotLoggedIn()
+
+          val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false)
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe false
+        }
+
+        "display the not found page when the API is private and the logged in user does not have access to it" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+          theDefinitionServiceWillReturnAnApiDefinition(
+            extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false))
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          verifyNotFoundPageRendered(result)
+        }
+
+        "redirect to the login page when the API is private and the user is not logged in" in new DocumentationRenderVersionSetup {
+          theUserIsNotLoggedIn()
+          theDefinitionServiceWillReturnAnApiDefinition(
+            extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false))
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          verifyRedirectToLoginPage(result, serviceName, "1.0")
+        }
+
+        "display the not found page when Principal and Subordinate APIAvailability's are None" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+          val apiDefinition = extendedApiDefinitionWithNoAPIAvailability(serviceName, "1.0")
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          verifyNotFoundPageRendered(result)
+        }
+
+        "display the private API options when Principal APIAvailability is None but Subordinate APIAvailability is set" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+
+          val subordinateApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)
+          val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName, "1.0", None, Some(subordinateApiAvailability))
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
+        }
+        // APIS-4844
+        "display the not found page when Principal access is PUBLIC and Subordinate access is PRIVATE loggedIn and not authorised" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+
+          val principalApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)
+          val subordinateApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = true, authorised = false)
+
+          val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName, "1.0", Some(principalApiAvailability), Some(subordinateApiAvailability))
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          verifyNotFoundPageRendered(result)
+        }
+
+        "display the private API options when Principal access is PUBLIC and Subordinate access is PUBLIC" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+
+          val principalApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)
+          val subordinateApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)
+
+          val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName, "1.0", Some(principalApiAvailability), Some(subordinateApiAvailability))
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
+        }
+
+        "display the private API options when Principal access is PRIVATE and Subordinate access is PUBLIC" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+
+          val principalApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)
+          val subordinateApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)
+
+          val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName, "1.0", Some(principalApiAvailability), Some(subordinateApiAvailability))
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
+        }
+
+        "display the private API options when Principal access is PRIVATE and Subordinate access is PRIVATE, loggedIn and authorised" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+
+          val principalApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)
+          val subordinateApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = true, authorised = true)
+
+          val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName, "1.0", Some(principalApiAvailability), Some(subordinateApiAvailability))
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
+        }
+
+        "display the not found page when Principal access is PRIVATE and Subordinate access is PRIVATE and not authorised" in new DocumentationRenderVersionSetup {
+          theUserIsLoggedIn()
+
+          val principalApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)
+          val subordinateApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = true, authorised = false)
+
+          val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName, "1.0", Some(principalApiAvailability), Some(subordinateApiAvailability))
+
+          theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
+          theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          verifyNotFoundPageRendered(result)
+        }
+      }
 
       "display the documentation page" in new Setup with ApiDocumentationServiceMock {
         theUserIsLoggedIn()

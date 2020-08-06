@@ -395,7 +395,5 @@ class DocumentationSpec extends UnitSpec {
     def anEndpoint(uriPattern: String, parameters: Option[Seq[Parameter]]) = {
       Endpoint("Get Today's Date", uriPattern, HttpMethod.GET, parameters)
     }
-
   }
-
 }
