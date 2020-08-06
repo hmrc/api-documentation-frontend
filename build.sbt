@@ -144,6 +144,6 @@ lazy val allDeps = compile ++ test
 
 // Coverage configuration
 // TODO ebridge - Fix and set back to 85
-coverageMinimum := 60
+coverageMinimum := 64
 coverageFailOnMinimum := true
 coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;uk.gov.hmrc.apidocumentation.config.*;.*javascript;testOnlyDoNotUseInAppConf.*;app.*;config.*"

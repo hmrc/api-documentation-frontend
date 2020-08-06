@@ -20,7 +20,9 @@ import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.{failed, successful}
 
@@ -34,4 +36,9 @@ trait ApiDocumentationServiceMock extends MockitoSugar {
   def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
     when(documentationService.fetchRAML(any(), any(), any())).thenReturn(failed(exception))
   }
+
+  def theDocumentationServiceWillFetchApiSpecification(apiSpecification: ApiSpecification)(implicit hc: HeaderCarrier) = {
+    when(documentationService.fetchApiSpecification(any(), any(), any())(any())).thenReturn(successful(apiSpecification))
+  }
+
 }
