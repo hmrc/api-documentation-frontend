@@ -77,6 +77,25 @@ class CommonControllerBaseSpec
       ))
   }
 
+  def extendedApiDefinitionWithNoAPIAvailability(serviceName: String, version: String): ExtendedAPIDefinition = {
+    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+      Seq(
+        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)), None, None)
+      ))
+  }
+
+  def extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+      serviceName: String,
+      version: String,
+      principalApiAvailability: Option[APIAvailability],
+      subordinateApiAvailability: Option[APIAvailability]): ExtendedAPIDefinition = {
+    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+      Seq(
+        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
+          principalApiAvailability, subordinateApiAvailability)
+      ))
+  }
+
   def extendedApiDefinitionWithRetiredVersion(serviceName: String, retiredVersion: String, nonRetiredVersion: String) = {
     ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
       Seq(

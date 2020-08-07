@@ -250,15 +250,9 @@ case class ExtendedAPIVersion(version: String,
                               productionAvailability: Option[APIAvailability],
                               sandboxAvailability: Option[APIAvailability]) {
   def visibility: Option[VersionVisibility] = {
-    def highestAccess(production: APIAvailability, sandbox: APIAvailability) = {
-      if(production.access.`type` == APIAccessType.PUBLIC) APIAccessType.PUBLIC
-      else sandbox.access.`type`
-    }
+
     def isLoggedIn(production: APIAvailability, sandbox: APIAvailability) = {
       production.loggedIn || sandbox.loggedIn
-    }
-    def isAuthorised(production: APIAvailability, sandbox: APIAvailability) = {
-      production.authorised || sandbox.authorised
     }
 
     def isInTrial(production: APIAvailability, sandbox: APIAvailability) = (production.access.isTrial, sandbox.access.isTrial) match {
@@ -270,7 +264,7 @@ case class ExtendedAPIVersion(version: String,
       case (Some(prod), None) => Some(VersionVisibility(prod.access.`type`, prod.loggedIn, prod.authorised, prod.access.isTrial))
       case (None, Some(sandbox)) => Some(VersionVisibility(sandbox.access.`type`, sandbox.loggedIn, sandbox.authorised, sandbox.access.isTrial))
       case (Some(prod), Some(sandbox)) =>
-        Some(VersionVisibility(highestAccess(prod, sandbox), isLoggedIn(prod, sandbox), isAuthorised(prod, sandbox), isInTrial(prod, sandbox)))
+        Some(VersionVisibility(sandbox.access.`type`, isLoggedIn(prod, sandbox), sandbox.authorised, isInTrial(prod, sandbox)))
       case _ => None
     }
   }
