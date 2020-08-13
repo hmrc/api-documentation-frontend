@@ -55,6 +55,7 @@ trait ApplicationConfig {
   def sandboxWwwBaseUrl: String
 
   def documentationRenderVersion: String
+
   def nameOfPrincipalEnvironment: String
   def nameOfSubordinateEnvironment: String
   def principalBaseUrl: String
@@ -113,6 +114,7 @@ class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
   val sandboxWwwBaseUrl = platformBaseUrl("platform.sandbox.www")
 
   val documentationRenderVersion = getConfigDefaulted(s"$env.features.documentationRenderVersion", "raml")
+
   val nameOfPrincipalEnvironment = getConfigDefaulted(s"$env.features.nameOfPrincipalEnvironment", "Production")
   val nameOfSubordinateEnvironment = getConfigDefaulted(s"$env.features.nameOfSubordinateEnvironment", "Sandbox")
   val principalBaseUrl = getConfigDefaulted(s"$env.features.principalBaseUrl", "https://api.service.hmrc.gov.uk")
