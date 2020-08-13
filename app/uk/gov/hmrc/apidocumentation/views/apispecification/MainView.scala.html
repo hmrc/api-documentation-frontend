@@ -58,16 +58,16 @@
                 <col width="50%" />
                 <tr class="version-container"><th><label id="version-label" for="version" class="bold-small" aria-label="Choose a version and status">Version and status</label></th><td>@renderGetApiVersionForm</td></tr>
                 @if(applicationConfig.showSandboxAvailability) {
-                <tr><th><span class="bold-small">Available in Sandbox</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
+                <tr><th><span class="bold-small">Available in @applicationConfig.nameOfSubordinateEnvironment</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
                 }
                 @if(ShowBaseURL(version.sandboxAvailability)) {
-                <tr><th><span class="bold-small">Sandbox base URL</span></th><td>@applicationConfig.sandboxApiBaseUrl</td></tr>
+                <tr><th><span class="bold-small">@applicationConfig.nameOfSubordinateEnvironment base URL</span></th><td>@applicationConfig.subordinateBaseUrl</td></tr>
                 }
                 @if(applicationConfig.showProductionAvailability) {
-                <tr><th><span class="bold-small">Available in Production</span></th><td>@EndpointsAvailable(version.productionAvailability)</td></tr>
+                <tr><th><span class="bold-small">Available in @applicationConfig.nameOfPrincipalEnvironment</span></th><td>@EndpointsAvailable(version.productionAvailability)</td></tr>
                 }
                 @if(ShowBaseURL(version.productionAvailability)){
-                <tr><th><span class="bold-small">Production base URL</span></th><td>@applicationConfig.productionApiBaseUrl</td></tr>
+                <tr><th><span class="bold-small">@applicationConfig.nameOfPrincipalEnvironment base URL</span></th><td>@applicationConfig.principalBaseUrl</td></tr>
                 }
 
             </table>
