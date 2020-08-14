@@ -257,6 +257,12 @@ response_type=code\
                         <td><code class="code--slim">client_secret should NOT be present</code></td>
                     </tr>
                     <tr>
+                        <td>The token refresh operation is already in progress</td>
+                        <td><code class="code--slim">400</code> (Bad Request)</td>
+                        <td><code class="code--slim">invalid_request</code></td>
+                        <td><code class="code--slim">Refresh operation is already in progress</code></td>
+                    </tr>
+                    <tr>
                         <td>Unexpected error occurred</td>
                         <td><code class="code--slim">500</code> (Internal Server Error)</td>
                         <td><code class="code--slim">server_error</code></td>
