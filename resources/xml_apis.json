@@ -22,7 +22,7 @@
   {
     "name": "Construction Industry Scheme Online",
     "context": "/government/collections/construction-industry-scheme-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Construction Industry Scheme Online service."
+    "description": "<p>The <a href=\"../service/cis-deductions-api/1.0\">Construction Industry Scheme (CIS) deductions</a> REST API is listed under Income Tax (Making Tax Digital) on our <a href=\"../service/cis-deductions-api/1.0\">API documentation</a> page.</p>\n<p>Technical specifications for software developers working with the Construction Industry Scheme Online service.</p>"
   },
   {
     "name": "Corporation Tax Online",
