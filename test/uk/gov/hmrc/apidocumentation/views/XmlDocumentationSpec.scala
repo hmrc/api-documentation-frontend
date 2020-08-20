@@ -39,7 +39,7 @@ class XmlDocumentationSpec extends CommonViewSpec {
   trait Setup {
     val baseUrl = "http://example.com"
     val context = "/example/path"
-    val description = "An XML API for testing"
+    val description = "An XML API for testing with embedded <b>HTML</b>"
     val name = "Test Online Service"
 
     val appConfig = mock[ApplicationConfig]
@@ -67,7 +67,7 @@ class XmlDocumentationSpec extends CommonViewSpec {
     }
 
     "render the api definition's description" in new Setup {
-      page.description.text should include(description)
+      page.description.html should include(description)
     }
 
     "render a link to view the full documentation" in new Setup {
