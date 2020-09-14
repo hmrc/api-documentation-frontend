@@ -137,7 +137,7 @@ lazy val test = Seq(
   "org.seleniumhq.selenium" % "selenium-firefox-driver" % "3.141.59",
   "org.seleniumhq.selenium" % "selenium-chrome-driver" % "3.141.59",
   "com.github.tomakehurst" % "wiremock" % "1.58" % testScopes,
-  "org.jsoup" % "jsoup" % "1.11.3" % testScopes
+  "org.jsoup" % "jsoup" % "1.12.1" % testScopes
 )
 
 lazy val allDeps = compile ++ test
