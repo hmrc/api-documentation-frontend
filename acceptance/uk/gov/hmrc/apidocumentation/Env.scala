@@ -19,7 +19,7 @@ package uk.gov.hmrc.apidocumentation
 import java.net.URL
 
 import org.openqa.selenium._
-import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxProfile}
 import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
 
@@ -53,7 +53,12 @@ trait Env {
   }
 
   def createChromeDriver(): WebDriver = {
-    val driver = new ChromeDriver()
+    val options = new ChromeOptions()
+    options.addArguments("--headless")
+    options.addArguments("--proxy-server='direct://'")
+    options.addArguments("--proxy-bypass-list=*")
+
+    val driver = new ChromeDriver(options)
     driver.manage().deleteAllCookies()
     driver.manage().window().setSize(new Dimension(1280, 720))
     driver
