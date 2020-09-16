@@ -19,7 +19,7 @@
 
 @this(main: main, applicationConfig: ApplicationConfig)
 
-@()(implicit messagesProvider: MessagesProvider)
+@()(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
 
 @main(title = Some("Terms and conditions")) {

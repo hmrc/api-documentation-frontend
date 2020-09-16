@@ -21,7 +21,7 @@
 
 @this(main: main, applicationConfig: ApplicationConfig)
 
-@(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider)
+@(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
 @fullWidthBanner = {
 <header class="hero">
