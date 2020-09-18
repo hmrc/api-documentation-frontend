@@ -24,8 +24,11 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import org.scalatestplus.play.WsScalaTestClient
 import play.api.i18n._
 import play.api.mvc.{AnyContent, Request}
+import org.mockito.Mockito.when
 
 trait CommonViewSpec extends WordSpec with Matchers with OptionValues with WsScalaTestClient with MockitoSugar with GuiceOneAppPerSuite {
   implicit val messagesProvider: MessagesProvider = MessagesImpl(Lang(Locale.ENGLISH), new DefaultMessagesApi())
   implicit val request = mock[Request[AnyContent]]
+
+  when(request.uri).thenReturn("/fake/uri")
 }

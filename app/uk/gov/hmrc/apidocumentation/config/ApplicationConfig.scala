@@ -64,6 +64,8 @@ trait ApplicationConfig {
   def title: String
   def isStubMode: Boolean
   def xmlApiBaseUrl: String
+
+  def platformFrontendHost: String
 }
 
 @Singleton
@@ -119,6 +121,8 @@ class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
   val nameOfSubordinateEnvironment = getConfigDefaulted(s"$env.features.nameOfSubordinateEnvironment", "Sandbox")
   val principalBaseUrl = getConfigDefaulted(s"$env.features.principalBaseUrl", "https://api.service.hmrc.gov.uk")
   val subordinateBaseUrl = getConfigDefaulted(s"$env.features.subordinateBaseUrl", "https://test-api.service.hmrc.gov.uk")
+
+  val platformFrontendHost = getString("platform.frontend.host")
 
   val title = "HMRC Developer Hub"
   val isStubMode = env == "Stub"
