@@ -53,8 +53,8 @@ class NavigationServiceSpec extends UnitSpec with GuiceOneAppPerTest with Mockit
       sidebarNavLinks.size shouldBe 10
       sidebarNavLinks.head.href shouldBe "/api-documentation/docs/using-the-hub"
       sidebarNavLinks.head.label shouldBe "Using the Developer Hub"
-      sidebarNavLinks(7).href shouldBe "/api-documentation/docs/terms-of-use"
-      sidebarNavLinks(7).label shouldBe "Terms of use"
+      sidebarNavLinks(8).href shouldBe "/api-documentation/docs/terms-of-use"
+      sidebarNavLinks(8).label shouldBe "Terms of use"
     }
 
   }
