@@ -239,7 +239,7 @@ object Authorisation {
     if (method.securedBy().asScala.nonEmpty) {
       method.securedBy.get(0).securityScheme.`type` match {
         case "OAuth 2.0" => ("user", Some(Annotation(method, "(scope)")))
-        case _ => ("application", None)
+        case _           => ("application", Annotation.optional(method, "(scope)"))
       }
     } else {
       ("none", None)

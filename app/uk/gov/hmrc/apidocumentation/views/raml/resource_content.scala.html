@@ -33,6 +33,13 @@
         and requires an <code class="code--slim">Authorization</code> header containing an OAuth 2.0 Bearer Token with the <code class="code--slim">{scope}</code> scope.
     </p>
     }
+    case ("application", Some(scope)) => {
+    <p class="endpoint-description">
+        This endpoint is
+        <a href = "/api-documentation/docs/authorisation/application-restricted-endpoints">application-restricted</a>
+        and requires an <code class="code--slim">Authorization</code> header containing an OAuth 2.0 Bearer Token with the <code class="code--slim">{scope}</code> scope.
+    </p>
+    }
     case ("application", _) => {
     <p class="endpoint-description">
         This endpoint is

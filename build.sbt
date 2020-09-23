@@ -142,8 +142,25 @@ lazy val test = Seq(
 
 lazy val allDeps = compile ++ test
 
+val ScoverageExclusionPatterns = List(
+  "<empty>",
+  "definition.*",
+  "sandbox.*",
+  "live.*",
+  "prod.*",
+  "testOnlyDoNotUseInAppConf.*",
+  "uk.gov.hmrc.config.*",
+  "app.Routes",
+  "app.RoutesPrefix",
+  "controllers.javascript",
+  "com.kenshoo.play.metrics.javascript",
+  "com.kenshoo.play.metrics",
+  ".*Reverse.*",
+  "uk.gov.hmrc.controllers.Reverse*",
+)
+
 // Coverage configuration
 // TODO ebridge - Fix and set back to 85
-coverageMinimum := 64
+coverageMinimum := 60
 coverageFailOnMinimum := true
-coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;uk.gov.hmrc.apidocumentation.config.*;.*javascript;testOnlyDoNotUseInAppConf.*;app.*;config.*"
+coverageExcludedPackages := ScoverageExclusionPatterns.mkString("",";","")

@@ -441,6 +441,33 @@ class HelpersSpec extends WordSpec with Matchers {
       Authorisation(method) shouldBe ("application" -> None)
     }
 
+    "return authorisation type as 'application' with scope when using x-application security and scope annotation on the method" in {
+      val raml =
+        """#%RAML 1.0
+          |---
+          |title: Trivial Doc
+          |annotationTypes:
+          |  scope:
+          |securitySchemes:
+          |  oauth_2_0:
+          |    type: OAuth 2.0
+          |    settings:
+          |      authorizationUri: https://api.service.hmrc.gov.uk/oauth/authorize
+          |      accessTokenUri: https://api.service.hmrc.gov.uk/oauth/token
+          |      authorizationGrants: [ authorization_code, client_credentials ]
+          |  x-application:
+          |    type: x-application
+          |/cust:
+          |  get:
+          |    securedBy: [ x-application ]
+          |    (scope): "read:test-scope"
+        """.stripMargin
+      val ramlApi: Api = new StringRamlLoader().load(raml).get
+      val method = ramlApi.resources().get(0).methods().get(0)
+
+      Authorisation(method) shouldBe ("application" -> Some("read:test-scope"))
+    }
+
     "return authorisation type as 'none' with no scope when not secured" in {
       val raml =
         """#%RAML 1.0
