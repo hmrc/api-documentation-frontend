@@ -70,6 +70,7 @@ class NavigationService @Inject()(
       )
     ),
     SidebarLink(label = "Authorisation", href = authorisationUri),
+    SidebarLink(label = "Send fraud prevention data", href = fraudPreventionPageUrl),
     SidebarLink(label = "Tutorials", href = tutorialsUri),
     SidebarLink(
       label = "API documentation",
@@ -83,7 +84,6 @@ class NavigationService @Inject()(
       href = developmentPracticesUrl
     ),
     SidebarLink(label = "Terms of use", href = termsOfUseUri),
-    SidebarLink(label = "Send fraud prevention data", href = fraudPreventionPageUrl),
     SidebarLink(
       label = "Making Tax Digital guides",
       href = mtdIntroductionPageUrl
