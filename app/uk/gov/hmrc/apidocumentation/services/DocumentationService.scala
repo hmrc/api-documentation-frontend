@@ -42,12 +42,12 @@ object DocumentationService {
 }
 
 @Singleton
-class DocumentationService @Inject()(appConfig: ApplicationConfig,
-                                     cache: CacheApi,
-                                     apm: ApiPlatformMicroserviceConnector,
-                                     ramlLoader: RamlLoader,
-                                     schemaService: SchemaService)
-                                     (implicit ec: ExecutionContext) {
+class DocumentationService @Inject()( appConfig: ApplicationConfig,
+                                      cache: CacheApi,
+                                      apm: ApiPlatformMicroserviceConnector,
+                                      ramlLoader: RamlLoader,
+                                      schemaService: SchemaService)
+                                      (implicit ec: ExecutionContext) {
   import DocumentationService.ramlUrl
 
   val defaultExpiration = 1.hour
@@ -58,7 +58,7 @@ class DocumentationService @Inject()(appConfig: ApplicationConfig,
     val key = serviceName+":"+version
     if (cacheBuster) cache.remove(key)
 
-    // TODO - use async cache
+    // TODO - This microservice call is not blocking any threads in this microservice.  Remove the future blocking
     Future {
       blocking {
         cache.getOrElse[Try[ApiSpecification]](key, defaultExpiration) {

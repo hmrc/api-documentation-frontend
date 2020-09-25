@@ -36,10 +36,14 @@ import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
+import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
+import scala.util.control.NonFatal
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 @Singleton
 class ApiDocumentationController @Inject()(
                                             documentationService: DocumentationService,
+                                            ramlPreviewConnector: RamlPreviewConnector,
                                             apiDefinitionService: ApiDefinitionService,
                                             val navigationService: NavigationService,
                                             loggedInUserService: LoggedInUserService,
@@ -49,6 +53,7 @@ class ApiDocumentationController @Inject()(
                                             retiredVersionJumpView: RetiredVersionJumpView,
                                             apisFilteredView: ApisFilteredView,
                                             previewDocumentationView: PreviewDocumentationView,
+                                            previewDocumentationView2: PreviewDocumentationView2,
                                             serviceDocumentationView: ServiceDocumentationView,
                                             serviceDocumentationView2: ServiceDocumentationView2,
                                             xmlDocumentationView: XmlDocumentationView,
@@ -291,16 +296,18 @@ class ApiDocumentationController @Inject()(
           headerLinks = navLinks,
           sidebarLinks = navigationService.sidebarNavigation())
 
-        val page = (result: Try[Option[RamlAndSchemas]]) => previewDocumentationView(pageAttributes, url, result)
+        val page = (result: Try[Option[ViewModel]]) => previewDocumentationView2(pageAttributes, url, result)
 
         url match {
           case Some("") => Future.successful(InternalServerError(page(Failure(RamlParseException("No URL supplied")))))
           case None => Future.successful(Ok(page(Success(None))))
-          case _ =>
-            documentationService.fetchRAML(url.get, cacheBuster = true).map { ramlAndSchemas =>
-              Ok(page(Success(Some(ramlAndSchemas))))
-            } recover {
-              case e: Throwable =>
+          case Some(ramlUrl) =>
+            ramlPreviewConnector.fetchPreviewApiSpecification(ramlUrl)
+            .map { apiSpecification =>
+              Ok(page(Success(Some(ViewModel(apiSpecification)))))
+            }
+            .recover {
+              case NonFatal(e) =>
                 Logger.error("Could not load API Documentation service", e)
                 InternalServerError(page(Failure(e)))
             }
