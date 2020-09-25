@@ -33,29 +33,33 @@ import uk.gov.hmrc.apidocumentation.mocks.config._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem, ResourceGroup, TypeDeclaration}
+import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
   trait Setup
       extends ApiDocumentationServiceMock
       with AppConfigMock
       with ApiDefinitionServiceMock
-      with LoggedInUserServiceMock
+    with LoggedInUserServiceMock
       with NavigationServiceMock {
+
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
     private lazy val apiIndexView = app.injector.instanceOf[ApiIndexView]
+    lazy val ramlPreviewConnector = mock[RamlPreviewConnector]
     private lazy val retiredVersionJumpView = app.injector.instanceOf[RetiredVersionJumpView]
     private lazy val apisFilteredView = app.injector.instanceOf[ApisFilteredView]
     private lazy val previewDocumentationView = app.injector.instanceOf[PreviewDocumentationView]
+    private lazy val previewDocumentationView2 = app.injector.instanceOf[PreviewDocumentationView2]
     private lazy val serviceDocumentationView = app.injector.instanceOf[ServiceDocumentationView]
     private lazy val xmlDocumentationView = app.injector.instanceOf[XmlDocumentationView]
     private lazy val serviceDocumentationView2 = app.injector.instanceOf[ServiceDocumentationView2]
 
     val underTest = new ApiDocumentationController(
       documentationService,
+      ramlPreviewConnector,
       apiDefinitionService,
       navigationService,
       loggedInUserService,
@@ -65,6 +69,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       retiredVersionJumpView,
       apisFilteredView,
       previewDocumentationView,
+      previewDocumentationView2,
       serviceDocumentationView,
       serviceDocumentationView2,
       xmlDocumentationView,
@@ -612,7 +617,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
       "render 500 page when service throws exception" in new Setup with RamlPreviewEnabled {
         val url = "http://host:port/some.path.to.a.raml.document"
-        when(documentationService.fetchRAML(any(), any())).thenReturn(failed(RamlParseException("Expected unit test failure")))
+        when(ramlPreviewConnector.fetchPreviewApiSpecification(any())(any())).thenReturn(failed(RamlParseException("Expected unit test failure")))
         val result = underTest.previewApiDocumentation(Some(url))(request)
         verifyErrorPageRendered(expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Expected unit test failure")(result)
       }
