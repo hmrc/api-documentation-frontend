@@ -291,7 +291,6 @@ class ApiDocumentationController @Inject()(
         val pageAttributes = apidocumentation.models.PageAttributes(title = "API Documentation Preview",
           breadcrumbs = Breadcrumbs(
             Crumb("Preview RAML", routes.ApiDocumentationController.previewApiDocumentation(None).url),
-            apiDocCrumb,
             homeCrumb),
           headerLinks = navLinks,
           sidebarLinks = navigationService.sidebarNavigation())

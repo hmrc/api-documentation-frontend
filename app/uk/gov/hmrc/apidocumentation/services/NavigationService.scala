@@ -74,9 +74,11 @@ class NavigationService @Inject()(
     SidebarLink(label = "Tutorials", href = tutorialsUri),
     SidebarLink(
       label = "API documentation",
-      href = apiDocumentationUrl,
-      subLinks = previewSublinks()
-    ),
+      href = apiDocumentationUrl
+    )
+  ) ++
+  possiblePreviewRamlLink() ++
+  Seq(
     SidebarLink(label = "Testing in the sandbox", href = testingUri),
     SidebarLink(label = "Reference guide", href = referenceGuideUrl),
     SidebarLink(
@@ -158,18 +160,15 @@ class NavigationService @Inject()(
     sections :+ resources
   }
 
-  private def previewSublinks() = {
+  private def possiblePreviewRamlLink() =
     if (appConfig.ramlPreviewEnabled) {
-      Seq(
-        SidebarLink(
-          "Preview RAML",
-          routes.ApiDocumentationController.previewApiDocumentation(None).url
-        )
-      )
+      Seq(SidebarLink(
+        "Preview RAML",
+        routes.ApiDocumentationController.previewApiDocumentation(None).url
+      ))
     } else {
       Seq.empty
     }
-  }
 
   def headerNavigation()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] =
     connector.fetchNavLinks() map (
