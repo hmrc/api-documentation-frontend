@@ -38,7 +38,6 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
 import scala.util.control.NonFatal
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 @Singleton
 class ApiDocumentationController @Inject()(
