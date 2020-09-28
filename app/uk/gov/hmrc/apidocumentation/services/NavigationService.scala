@@ -69,8 +69,8 @@ class NavigationService @Inject()(
         )
       )
     ),
-    SidebarLink(label = "Authorisation", href = authorisationUri),
     SidebarLink(label = "Send fraud prevention data", href = fraudPreventionPageUrl),
+    SidebarLink(label = "Authorisation", href = authorisationUri),
     SidebarLink(label = "Tutorials", href = tutorialsUri),
     SidebarLink(
       label = "API documentation",
