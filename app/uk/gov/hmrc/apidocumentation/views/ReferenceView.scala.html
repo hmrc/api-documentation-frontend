@@ -40,11 +40,12 @@
                     <li><a href="#cors">Cross-origin resource sharing (CORS)</a></li>
                     <li><a href="#errors">Errors</a></li>
                     <li><a href="#fraud-prevention">Send fraud prevention data</a></li>
+                    <li><a href="#http-redirection">HTTP redirection</a></li>
                 </ul>
             </div>
             <div class="column-one-half">
                 <ul class="list">
-                    <li><a href="#http-redirection">HTTP redirection</a></li>
+                    <li><a href="#ip-allow-list">IP allow list</a></li>
                     <li><a href="#rate-limiting">Rate limiting</a></li>
                     <li><a href="#redirect-uris">Redirect URIs</a></li>
                     <li><a href="#scopes">Scopes</a></li>
@@ -432,6 +433,36 @@
         <h2 class="heading-large">HTTP redirection</h2>
         <p>Our API Platform uses HTTP redirection if endpoints move permanently or temporarily.<p>
         <p>Redirection responses have a <strong class="bold-small">Location</strong> header with the endpoint's new URI.</p>
+    </section>
+
+    <section id="ip-allow-list">
+        <h2 class="heading-large" name="ip-allow-list">IP allow list</h2>
+
+        <p>The IP allow list is a security feature that lets you control which IP addresses are allowed to make API requests to HMRC.</p>
+        <div class="panel panel-border-wide">
+            <p>The IP allow list is optional and is only suitable if you have a static set of IP addresses where your software is hosted.</p>
+        </div>
+        <p>If you have dynamic IP addresses, consider switching to static IP addresses to use the IP allow list.</p>
+        <p>The IP allow list limits access to HMRC services to approved IP addresses associated with your application.</p>
+
+        <h3 class="heading-medium">Allowed IP addresses</h3>
+        <p>We allow IP address ranges represented in CIDR notation, made up of an IP address and a netmask:&nbsp;</p>
+        <p><code class="code--slim">&lt;IP Address&gt;/&lt;netmask&gt;</code></p>
+        <p>Which looks like:</p>
+        <p><code class="code--slim">1.1.1.1/24</code></p>
+        <p>The netmask identifies how large the network is:&nbsp;</p>
+        <ul class="list list-bullet">
+            <li>1.1.1.1/32 allows access from only one IP address, for example 1.1.1.1</li>
+            <li>1.1.1.1/24 allows access from 254 IP addresses, for example 1.1.1.1 to 1.1.1.254</li>
+        </ul>
+        <p>Use /32 if you are unsure about CIDR notation but know the individual IP addresses your traffic comes from.</p>
+        <p>The largest netmask we allow is /24.</p>
+
+        <h3 class="heading-medium">Adding IP addresses to the allow list</h3>
+        <p>You will need a sandbox or production application to use the IP allow list.</p>
+        <p>When you set up a sandbox or production application, decide which IP addresses are allowed to make API requests to HMRC and add to the IP allow list.</p>
+        <p>It is important that you check the IP addresses you want to use are correct before making the IP allow list active.</p>
+        <p>While the allow list is active, only approved IP addresses associated with your application can make API requests to HMRC.</p>
     </section>
 
     <section id="rate-limiting">
