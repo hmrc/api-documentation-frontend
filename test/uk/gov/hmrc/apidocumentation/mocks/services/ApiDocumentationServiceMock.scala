@@ -29,13 +29,14 @@ import scala.concurrent.Future.{failed, successful}
 trait ApiDocumentationServiceMock extends MockitoSugar {
   val documentationService = mock[DocumentationService]
 
-  def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
-    when(documentationService.fetchRAML(any(), any(), any())).thenReturn(successful(ramlAndSchemas))
-  }
+  // TODO : 4837
+  // def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
+  //   when(documentationService.fetchRAML(any(), any(), any())).thenReturn(successful(ramlAndSchemas))
+  // }
 
-  def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
-    when(documentationService.fetchRAML(any(), any(), any())).thenReturn(failed(exception))
-  }
+  // def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
+  //   when(documentationService.fetchRAML(any(), any(), any())).thenReturn(failed(exception))
+  // }
 
   def theDocumentationServiceWillFetchApiSpecification(apiSpecification: ApiSpecification)(implicit hc: HeaderCarrier) = {
     when(documentationService.fetchApiSpecification(any(), any(), any())(any())).thenReturn(successful(apiSpecification))
