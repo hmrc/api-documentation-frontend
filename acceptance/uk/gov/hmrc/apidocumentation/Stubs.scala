@@ -17,16 +17,8 @@
 package uk.gov.hmrc.apidocumentation
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import java.io.File
-import java.net.URLDecoder
-import play.api.http.ContentTypes
 import play.utils.UriEncoding
-
-import scala.collection.immutable.Seq
 import scala.io.Source
-import scala.util.{Failure, Success, Try}
-import play.api.libs.json.Json
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 trait Stubs extends ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice
 
@@ -35,7 +27,7 @@ trait ApiPlatformMicroservice{
     val allDefinitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/all.json")).mkString
 
     stubFor(
-      get(urlMatching("/combined-api-definitions"))
+      get(urlPathEqualTo("/combined-api-definitions"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
@@ -46,7 +38,7 @@ trait ApiPlatformMicroservice{
   def fetchDefinition(serviceName: String) {
     val definitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/$serviceName.json")).mkString
     stubFor(
-      get(urlMatching(s"/combined-api-definitions/$serviceName"))
+      get(urlPathEqualTo(s"/combined-api-definitions/$serviceName"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
@@ -69,7 +61,7 @@ trait ApiPlatformMicroservice{
 
   def failToFetch(serviceName: String) {
     stubFor(
-      get(urlMatching(s"/combined-api-definitions/$serviceName/definition"))
+      get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/definition"))
         .willReturn(aResponse()
           .withStatus(404))
     )

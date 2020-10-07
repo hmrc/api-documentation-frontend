@@ -29,7 +29,6 @@ import uk.gov.hmrc.apidocumentation.models.TestEndpoint
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
