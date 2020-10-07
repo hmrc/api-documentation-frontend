@@ -32,13 +32,16 @@ import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
 import scala.util.control.NonFatal
+import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
 
+object ApiDocumentationController {
+    case class RamlParseException(msg: String) extends RuntimeException(msg)
+}
 @Singleton
 class ApiDocumentationController @Inject()(
                                             documentationService: DocumentationService,
@@ -135,9 +138,6 @@ class ApiDocumentationController @Inject()(
           case e: NotFoundException =>
             Logger.info(s"Upstream request not found: ${e.getMessage}")
             NotFound(errorHandler.notFoundTemplate)
-          case e: RamlNotFoundException =>
-            Logger.info(s"RAML document not found: ${e.getMessage}")
-            NotFound(errorHandler.notFoundTemplate)
           case e: Throwable =>
             Logger.error("Could not load API Documentation service", e)
             InternalServerError(errorHandler.internalServerErrorTemplate)
@@ -216,8 +216,8 @@ class ApiDocumentationController @Inject()(
         url match {
           case Some("") => Future.successful(InternalServerError(page(Failure(RamlParseException("No URL supplied")))))
           case None => Future.successful(Ok(page(Success(None))))
-          case Some(ramlUrl) =>
-            ramlPreviewConnector.fetchPreviewApiSpecification(ramlUrl)
+          case Some(url) =>
+            ramlPreviewConnector.fetchPreviewApiSpecification(url)
             .map { apiSpecification =>
               Ok(page(Success(Some(ViewModel(apiSpecification)))))
             }
@@ -237,9 +237,9 @@ class ApiDocumentationController @Inject()(
       documentationService.buildTestEndpoints(service, version) map { endpoints =>
         Ok(Json.toJson(endpoints.sortWith((x, y) => x.url < y.url)))
       } recover {
-        // case e: RamlNotFoundException =>
-        //   Logger.info(s"RAML document not found: ${e.getMessage}")
-        //   NotFound(Json.toJson(s"RAML Doc not found: ${e.getMessage}"))
+        case e: NotFoundException =>
+          Logger.info(s"RAML document not found: ${e.getMessage}")
+          NotFound(Json.toJson(s"RAML Doc not found: ${e.getMessage}"))
         case e: Throwable =>
           Logger.error("Could not build Endpoint Json for API Documentation service", e)
           InternalServerError(Json.toJson(s"Could not build Endpoint Json for API Documentation service: ${e.getMessage}"))

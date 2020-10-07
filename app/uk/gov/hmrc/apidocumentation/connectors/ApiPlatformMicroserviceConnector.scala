@@ -27,6 +27,8 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
+import uk.gov.hmrc.http.JsValidationException
+import scala.concurrent.Await
 
 @Singleton
 class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appConfig: ApplicationConfig)
@@ -35,6 +37,7 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
   def fetchApiSpecification(serviceName: String, version: String)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
+    import scala.concurrent.duration._
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
     val url = s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)"
     http.GET[ApiSpecification](url)

@@ -19,6 +19,8 @@ package uk.gov.hmrc.apidocumentation
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.utils.UriEncoding
 import scala.io.Source
+import play.api.libs.json.Json
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 trait Stubs extends ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice
 
@@ -27,7 +29,7 @@ trait ApiPlatformMicroservice{
     val allDefinitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/all.json")).mkString
 
     stubFor(
-      get(urlPathEqualTo("/combined-api-definitions"))
+      get(urlMatching("/combined-api-definitions"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
@@ -38,7 +40,7 @@ trait ApiPlatformMicroservice{
   def fetchDefinition(serviceName: String) {
     val definitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/$serviceName.json")).mkString
     stubFor(
-      get(urlPathEqualTo(s"/combined-api-definitions/$serviceName"))
+      get(urlMatching(s"/combined-api-definitions/$serviceName"))
         .willReturn(aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
@@ -49,6 +51,9 @@ trait ApiPlatformMicroservice{
   def fetchApiSpec(serviceName: String, version: String) = {
     val url = getClass.getResource(s"/services/$serviceName/spec_${version}.json")
     val file = Source.fromURL(url).mkString
+    import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
+    Json.fromJson[ApiSpecification](Json.parse(file))
+    
     stubFor(get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)"))
       .willReturn(
         aResponse()

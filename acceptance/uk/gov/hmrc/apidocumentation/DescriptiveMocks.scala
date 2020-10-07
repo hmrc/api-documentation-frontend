@@ -37,7 +37,6 @@ trait DescriptiveMocks extends Stubs {
     condition(s"$serviceName is deployed with version $version")
     developerIsSignedIn()
     fetchDefinition(serviceName)
-    // fetchDocRaml(serviceName, version)
     fetchApiSpec(serviceName,version)
   }
 

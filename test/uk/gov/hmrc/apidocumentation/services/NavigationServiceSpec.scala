@@ -18,8 +18,6 @@ package uk.gov.hmrc.apidocumentation.services
 
 import org.mockito.Matchers._
 import org.mockito.Mockito._
-import org.raml.v2.api.model.v10.api.DocumentationItem
-import org.raml.v2.api.model.v10.system.types.AnnotableStringType
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
@@ -30,7 +28,6 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -80,49 +77,6 @@ class NavigationServiceSpec extends UnitSpec with GuiceOneAppPerTest with Mockit
       val headerNavLinks = await(underTest.headerNavigation())
       verify(connector, times(1)).fetchNavLinks()(any())
       headerNavLinks.size shouldBe 0
-    }
-  }
-
-  "apiSidebarNavigation" should {
-    val raml = mock[RAML]
-    val version = mock[ExtendedAPIVersion]
-    val service = "a test service"
-    val overviewTitle = mock[AnnotableStringType]
-    val overview = mock[DocumentationItem]
-
-    when(overviewTitle.value).thenReturn("Overview")
-    when(overview.title).thenReturn(overviewTitle)
-
-    "render documentation and resources links when the api is visible" in new Setup {
-      val documentation: Seq[DocumentationItem] = List(overview)
-      val visible = Some(VersionVisibility(APIAccessType.PUBLIC, loggedIn = true, authorised = true, isTrial = None))
-
-      when(version.visibility).thenReturn(visible)
-      when(raml.documentation).thenReturn(documentation.asJava)
-
-      val apiSidebarNavLinks = await(underTest.apiSidebarNavigation(service, version, raml))
-
-      apiSidebarNavLinks.size shouldBe 2
-      apiSidebarNavLinks.head.href shouldBe "#overview"
-      apiSidebarNavLinks.head.label shouldBe "Overview"
-      apiSidebarNavLinks.last.href shouldBe "#endpoints"
-      apiSidebarNavLinks.last.label shouldBe "Endpoints"
-    }
-
-    "render overview documentation and 'read more' links when the api is not visible" in new Setup {
-      val documentation: Seq[DocumentationItem] = List(overview)
-      val overviewOnly = Some(VersionVisibility(APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true)))
-
-      when(version.visibility).thenReturn(overviewOnly)
-      when(raml.documentation).thenReturn(documentation.asJava)
-
-      val apiSidebarNavLinks = await(underTest.apiSidebarNavigation(service, version, raml))
-
-      apiSidebarNavLinks.size shouldBe 2
-      apiSidebarNavLinks.head.href shouldBe "#overview"
-      apiSidebarNavLinks.head.label shouldBe "Overview"
-      apiSidebarNavLinks.last.href shouldBe "#read-more"
-      apiSidebarNavLinks.last.label shouldBe "Read more"
     }
   }
 }

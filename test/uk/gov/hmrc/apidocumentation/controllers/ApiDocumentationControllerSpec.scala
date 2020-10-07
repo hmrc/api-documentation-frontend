@@ -25,16 +25,15 @@ import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.controllers.utils._
-import uk.gov.hmrc.apidocumentation.services.RAML
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.http.NotFoundException
-import uk.gov.hmrc.ramltools.domain.RamlParseException
 import uk.gov.hmrc.apidocumentation.mocks.config._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem, ResourceGroup, TypeDeclaration}
 import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
+import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
   trait Setup

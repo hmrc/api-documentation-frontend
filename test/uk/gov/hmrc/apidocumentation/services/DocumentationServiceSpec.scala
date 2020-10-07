@@ -60,12 +60,11 @@ class DocumentationServiceSpec extends UnitSpec
   trait Setup {
     implicit val hc = HeaderCarrier()
     val cache = app.injector.instanceOf[CacheApi]
-    val schemaLoader = mock[SchemaService]
     val appConfig = mock[ApplicationConfig]
     val apm = mock[ApiPlatformMicroserviceConnector]
     when(appConfig.apiPlatformMicroserviceBaseUrl).thenReturn(serviceUrl)
 
-    val underTest = new DocumentationService(appConfig, cache, apm, schemaLoader)
+    val underTest = new DocumentationService(appConfig, cache, apm)
   }
 
   "buildTestEndpoints" should {

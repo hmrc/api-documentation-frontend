@@ -22,7 +22,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 import scala.concurrent.{ExecutionContext, Future, _}
 import scala.concurrent.duration._
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.http.HeaderCarrier
 import play.api.Logger
@@ -30,13 +30,12 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.models.TestEndpoint
 import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
 import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
-import scala.util.control.NonFatal
 
 @Singleton
 class DocumentationService @Inject()( appConfig: ApplicationConfig,
                                       cache: CacheApi,
-                                      apm: ApiPlatformMicroserviceConnector,
-                                      schemaService: SchemaService)
+                                      apm: ApiPlatformMicroserviceConnector
+                                      )
                                       (implicit ec: ExecutionContext) {
   val defaultExpiration = 1.hour
 
