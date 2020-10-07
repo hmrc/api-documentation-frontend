@@ -1,0 +1,264 @@
+{
+  "title" : "Hello World",
+  "version" : "0.4",
+  "documentationItems" : [ {
+    "title" : "Overview",
+    "content" : "This is an example API that allows software developers to test that \ntheir applications can connect with the HMRC API Platform. It also acts \nas a hands-on tutorial for developers to get started with HMRC APIs.\n\nIt includes resources for testing access to the three different access \nlevels:\n\n- _Say hello world_ is an example of an unrestricted endpoint\n- _Say hello user_ is an example of a user-restricted endpoint\n- _Say hello application_ is an example of an application-restricted endpoint\n\nFurther details of the different access levels are given on the \n[Authorisation](/api-documentation/docs/authorisation) page.\n\nFor more information about how to develop your own client applications, including example clients for this API, \nsee [Tutorials](/api-documentation/docs/tutorials)."
+  }, {
+    "title" : "Versioning",
+    "content" : "When an API changes in a way that is backwards-incompatible, we increase the version number of the API. \nSee our [reference guide](/api-documentation/docs/reference-guide#versioning) for more on\nversioning.\n"
+  }, {
+    "title" : "Errors",
+    "content" : "We use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:\n* 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action\n* 400 to 499 if it failed because of a client error by your application\n* 500 to 599 if it failed because of an error on our server\n\nErrors specific to each API are shown in the Endpoints section, under Response. \nSee our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.\n\n"
+  } ],
+  "resourceGroups" : [ {
+    "resources" : [ {
+      "resourcePath" : "/hello",
+      "methods" : [ ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/hello",
+      "displayName" : "/hello",
+      "children" : [ {
+        "resourcePath" : "/hello/world",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "Say hello world",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "A simple example for integrating with an unrestricted service.\n\nAny request to this endpoint initiates a 'Hello World' response.\n",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"message\" : \"Hello World\"\n}\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/world",
+        "displayName" : "/world",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/hello/user",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "Say hello user",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "A simple example for integrating with a user-restricted service, using an OAuth 2.0 `access_token`.\n\nAny authorised request to this endpoint initiates a 'Hello User' response.\n",
+          "securedBy" : {
+            "type" : "user",
+            "scope" : "hello"
+          },
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"message\": \"Hello User\"\n}\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/user",
+        "displayName" : "/user",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/hello/application",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "Say hello application",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "A simple example for integrating with an application-restricted service, using an OAuth 2.0 `access_token`.\n\nAny authorised request to this endpoint initiates a 'Hello Application' response.\n",
+          "securedBy" : {
+            "type" : "application"
+          },
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"message\": \"Hello Application\"\n}\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/application",
+        "displayName" : "/application",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/hello/world",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "Say hello world",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "A simple example for integrating with an unrestricted service.\n\nAny request to this endpoint initiates a 'Hello World' response.\n",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"message\" : \"Hello World\"\n}\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/world",
+      "displayName" : "/world",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/hello/user",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "Say hello user",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "A simple example for integrating with a user-restricted service, using an OAuth 2.0 `access_token`.\n\nAny authorised request to this endpoint initiates a 'Hello User' response.\n",
+        "securedBy" : {
+          "type" : "user",
+          "scope" : "hello"
+        },
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"message\": \"Hello User\"\n}\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/user",
+      "displayName" : "/user",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/hello/application",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "Say hello application",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "A simple example for integrating with an application-restricted service, using an OAuth 2.0 `access_token`.\n\nAny authorised request to this endpoint initiates a 'Hello Application' response.\n",
+        "securedBy" : {
+          "type" : "application"
+        },
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"message\": \"Hello Application\"\n}\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/application",
+      "displayName" : "/application",
+      "children" : [ ]
+    } ]
+  } ],
+  "types" : [ {
+    "name" : "errorResponse",
+    "displayName" : "errorResponse",
+    "type" : "object",
+    "required" : true
+  }, {
+    "name" : "taxYear",
+    "displayName" : "taxYear",
+    "type" : "string",
+    "required" : true,
+    "examples" : [ {
+      "value" : "2016-17"
+    } ],
+    "pattern" : "^[0-9]{4}-[0-9]{2}$"
+  } ],
+  "isFieldOptionalityKnown" : true
+}

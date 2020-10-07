@@ -1,0 +1,1088 @@
+{
+  "title" : "Developer Forum",
+  "version" : "1.3",
+  "documentationItems" : [ {
+    "title" : "Overview",
+    "content" : "Private Beta API\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n"
+  }, {
+    "title" : "Versioning",
+    "content" : "We use versions."
+  } ],
+  "resourceGroups" : [ {
+    "name" : "Users",
+    "description" : "Manage forum users",
+    "resources" : [ {
+      "resourcePath" : "/users",
+      "methods" : [ {
+        "method" : "post",
+        "displayName" : "post",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"name\": \"user name\",\n  \"displayName\": \"display name\",\n  \"email\": \"user@example.com\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "create user",
+        "responses" : [ {
+          "code" : "200",
+          "description" : "User created"
+        }, {
+          "code" : "500",
+          "description" : "Failed to create user"
+        } ]
+      }, {
+        "method" : "put",
+        "displayName" : "put",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "{\"description\":\"User update\",\"type\":\"object\",\"properties\":{\"id\":{\"description\":\"The user ID\",\"type\":\"string\",\"example\":\"550e8400-e29b-41d4-a716-446655440000\"},\"name\":{\"description\":\"The user name\",\"type\":\"string\",\"example\":\"user name\"},\"displayName\":{\"description\":\"The display name\",\"type\":\"string\",\"example\":\"display name\"},\"email\":{\"description\":\"The email address\",\"type\":\"string\",\"example\":\"user@example.com\"}}}",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"name\": \"user name\",\n  \"displayName\": \"display name\",\n  \"email\": \"user@example.com\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "update the user details",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "{\"description\":\"User update\",\"type\":\"object\",\"properties\":{\"message\":{\"description\":\"A message\",\"type\":\"string\",\"example\":\"User updated\"}}}",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User updated\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User not found\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/users",
+      "displayName" : "/users",
+      "children" : [ {
+        "resourcePath" : "/users/{id}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "Get user details for the given id",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"name\": \"user name\",\n  \"displayName\": \"display name\",\n  \"email\": \"user@example.com\"\n}\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: User not found\n}"
+              } ]
+            } ]
+          } ]
+        }, {
+          "method" : "delete",
+          "displayName" : "delete",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "delete the given user",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{ \"message\": \"user deleted\" }\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{ \"message\": \"unknown user\" }\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/{id}",
+        "displayName" : "/{id}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/users/{id}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "Get user details for the given id",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"name\": \"user name\",\n  \"displayName\": \"display name\",\n  \"email\": \"user@example.com\"\n}\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User not found\n}"
+            } ]
+          } ]
+        } ]
+      }, {
+        "method" : "delete",
+        "displayName" : "delete",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "delete the given user",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{ \"message\": \"user deleted\" }\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{ \"message\": \"unknown user\" }\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/{id}",
+      "displayName" : "/{id}",
+      "children" : [ ]
+    } ]
+  }, {
+    "name" : "Posts",
+    "description" : "Manage forum posts",
+    "resources" : [ {
+      "resourcePath" : "/posts",
+      "methods" : [ {
+        "method" : "post",
+        "displayName" : "post",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"title\": \"post title\",\n  \"description\": \"post description\",\n  \"body\": \"post body\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "create a new post",
+        "responses" : [ ]
+      }, {
+        "method" : "put",
+        "displayName" : "put",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"id\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n  \"title\": \"new improved post title\",\n  \"description\": \"new improved post description\",\n  \"body\": \"new improved post body\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T15:25:12.145Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "update a post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Post updated\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "500",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: An error occurred, please try again\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/posts",
+      "displayName" : "/posts",
+      "children" : [ {
+        "resourcePath" : "/posts/{id}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "get the specific post by id",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"id\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n  \"title\": \"post title\",\n  \"description\": \"post description\",\n  \"body\": \"post body\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+              } ]
+            } ]
+          } ]
+        }, {
+          "method" : "delete",
+          "displayName" : "delete",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "delete the post",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: The post was deleted\n}"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Post not found\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/{id}",
+        "displayName" : "/{id}",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/posts/today",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "return all the posts for today",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T13:45:33.511Z\"\n  }\n]\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/today",
+        "displayName" : "/today",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/posts/week",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "return all the posts for the week",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-02T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-05T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"867e8400-e29b-41d4-a716-456281440000\",\n    \"title\" : \"third post\",\n    \"description\": \"third post description\",\n    \"body\": \"third post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }\n]\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/week",
+        "displayName" : "/week",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/posts/user/{userId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "Get all the posts for a user",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2012-04-23T18:25:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2015-11-12T18:25:43.511Z\"\n  },\n  {\n    \"id\": \"867e8400-e29b-41d4-a716-456281440000\",\n    \"title\" : \"third post\",\n    \"description\": \"third post description\",\n    \"body\": \"third post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }\n]\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: User has no posts\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/user/{userId}",
+        "displayName" : "/user/{userId}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/posts/{id}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "get the specific post by id",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"id\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n  \"title\": \"post title\",\n  \"description\": \"post description\",\n  \"body\": \"post body\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+            } ]
+          } ]
+        } ]
+      }, {
+        "method" : "delete",
+        "displayName" : "delete",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "delete the post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: The post was deleted\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Post not found\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/{id}",
+      "displayName" : "/{id}",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/posts/today",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "return all the posts for today",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T13:45:33.511Z\"\n  }\n]\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/today",
+      "displayName" : "/today",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/posts/week",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "return all the posts for the week",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-02T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-05T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"867e8400-e29b-41d4-a716-456281440000\",\n    \"title\" : \"third post\",\n    \"description\": \"third post description\",\n    \"body\": \"third post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }\n]\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/week",
+      "displayName" : "/week",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/posts/user/{userId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "Get all the posts for a user",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2012-04-23T18:25:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2015-11-12T18:25:43.511Z\"\n  },\n  {\n    \"id\": \"867e8400-e29b-41d4-a716-456281440000\",\n    \"title\" : \"third post\",\n    \"description\": \"third post description\",\n    \"body\": \"third post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }\n]\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User has no posts\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/user/{userId}",
+      "displayName" : "/user/{userId}",
+      "children" : [ ]
+    } ]
+  }, {
+    "name" : "Comments",
+    "description" : "Manage forum comments",
+    "resources" : [ {
+      "resourcePath" : "/comments",
+      "methods" : [ {
+        "method" : "post",
+        "displayName" : "post",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "post a new comment",
+        "responses" : [ ]
+      }, {
+        "method" : "put",
+        "displayName" : "put",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"edited comment on the post\",\n  \"original_comment\": \"comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "update a comment",
+        "responses" : [ ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/comments",
+      "displayName" : "/comments",
+      "children" : [ {
+        "resourcePath" : "/comments/{postId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "get all the comments for a post",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comments\": [{\n    \"comment\": \"I have something important to say about this\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T11:30:43.511Z\"\n  }, {\n    \"comment\": \"yes, well, I disagree wholeheartedly!\",\n    \"createdBy\": \"user2\",\n    \"createdAt\": \"2016-10-07T11:45:43.511Z\"\n  }, {\n    \"comment\": \"hmm well I disagree with your disagreement!\",\n    \"createdBy\": \"user3\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }, {\n    \"comment\": \"you sir are worse than hitler! I bid you good day!\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T12:16:43.511Z\"\n  }]\n}\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Be the first to comment!\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/{postId}",
+        "displayName" : "/{postId}",
+        "children" : [ {
+          "resourcePath" : "/comments/{postId}/{commentId}",
+          "methods" : [ {
+            "method" : "get",
+            "displayName" : "get",
+            "body" : [ ],
+            "headers" : [ ],
+            "queryParameters" : [ ],
+            "description" : "get all revisions of a comment",
+            "responses" : [ {
+              "code" : "200",
+              "body" : [ {
+                "name" : "application/json",
+                "displayName" : "application/json",
+                "type" : "any",
+                "required" : true,
+                "examples" : [ {
+                  "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"edited fixed comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\",\n  \"original_comments\": [{\n    \"comment\": \"comment on the post\",\n    \"createdAt\": \"2016-10-07T12:03:46.511Z\"\n  }, {\n    \"comment\": \"fixed comment on the post\",\n    \"createdAt\": \"2016-10-07T12:08:13.511Z\"\n  }]\n}\n"
+                } ]
+              } ]
+            } ]
+          }, {
+            "method" : "delete",
+            "displayName" : "delete",
+            "body" : [ ],
+            "headers" : [ ],
+            "queryParameters" : [ ],
+            "description" : "delete a comment from a post",
+            "responses" : [ {
+              "code" : "200",
+              "body" : [ {
+                "name" : "application/json",
+                "displayName" : "application/json",
+                "type" : "any",
+                "required" : true,
+                "examples" : [ {
+                  "value" : "{\nmessage: Comment deleted\n}"
+                } ]
+              } ]
+            }, {
+              "code" : "404",
+              "body" : [ {
+                "name" : "application/json",
+                "displayName" : "application/json",
+                "type" : "any",
+                "required" : true,
+                "examples" : [ {
+                  "value" : "{\nmessage: Comment not found to delete\n}"
+                } ]
+              } ]
+            } ]
+          } ],
+          "uriParameters" : [ ],
+          "relativeUri" : "/{commentId}",
+          "displayName" : "/{commentId}",
+          "children" : [ ]
+        } ]
+      } ]
+    }, {
+      "resourcePath" : "/comments/{postId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "get all the comments for a post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comments\": [{\n    \"comment\": \"I have something important to say about this\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T11:30:43.511Z\"\n  }, {\n    \"comment\": \"yes, well, I disagree wholeheartedly!\",\n    \"createdBy\": \"user2\",\n    \"createdAt\": \"2016-10-07T11:45:43.511Z\"\n  }, {\n    \"comment\": \"hmm well I disagree with your disagreement!\",\n    \"createdBy\": \"user3\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }, {\n    \"comment\": \"you sir are worse than hitler! I bid you good day!\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T12:16:43.511Z\"\n  }]\n}\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Be the first to comment!\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/{postId}",
+      "displayName" : "/{postId}",
+      "children" : [ {
+        "resourcePath" : "/comments/{postId}/{commentId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "get all revisions of a comment",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"edited fixed comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\",\n  \"original_comments\": [{\n    \"comment\": \"comment on the post\",\n    \"createdAt\": \"2016-10-07T12:03:46.511Z\"\n  }, {\n    \"comment\": \"fixed comment on the post\",\n    \"createdAt\": \"2016-10-07T12:08:13.511Z\"\n  }]\n}\n"
+              } ]
+            } ]
+          } ]
+        }, {
+          "method" : "delete",
+          "displayName" : "delete",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "delete a comment from a post",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Comment deleted\n}"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Comment not found to delete\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/{commentId}",
+        "displayName" : "/{commentId}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/comments/{postId}/{commentId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "get all revisions of a comment",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"edited fixed comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\",\n  \"original_comments\": [{\n    \"comment\": \"comment on the post\",\n    \"createdAt\": \"2016-10-07T12:03:46.511Z\"\n  }, {\n    \"comment\": \"fixed comment on the post\",\n    \"createdAt\": \"2016-10-07T12:08:13.511Z\"\n  }]\n}\n"
+            } ]
+          } ]
+        } ]
+      }, {
+        "method" : "delete",
+        "displayName" : "delete",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "delete a comment from a post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Comment deleted\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Comment not found to delete\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/{commentId}",
+      "displayName" : "/{commentId}",
+      "children" : [ ]
+    } ]
+  }, {
+    "name" : "Votes",
+    "description" : "Manage forum votes",
+    "resources" : [ {
+      "resourcePath" : "/votes",
+      "methods" : [ {
+        "method" : "post",
+        "displayName" : "post",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"up\": true,\n  \"createdBy\": \"user2\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "adds a vote to a post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Thanks for voting!\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "500",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Oops something went wrong, please try again\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/votes",
+      "displayName" : "/votes",
+      "children" : [ {
+        "resourcePath" : "/votes/post/{postId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "get the votes for a particular post",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"up\": 508,\n  \"down\": 9009\n}\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Be the first to vote\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/post/{postId}",
+        "displayName" : "/post/{postId}",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/votes/user/{userId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "get all of a users votes",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"userId\": \"user1\",\n  \"totalUp\": 3,\n  \"totalDown\": 2,\n  \"votes\": [{\n    \"postId\": \"375e3879-4259-4adb-9a91-926d92a0dc0a\",\n    \"up\": true\n  }, {\n    \"postId\": \"0b5af6b5-f784-4144-b2e9-37d570916e48\",\n    \"up\": false\n  }, {\n    \"postId\": \"8dcec218-56e9-4d54-be3c-ad5a554b6a1e\",\n    \"up\": false\n  }, {\n    \"postId\": \"0b1241d7-0444-4ec1-aaeb-2cee1ac25694\",\n    \"up\": true\n  }, {\n    \"postId\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n    \"up\": true\n  }]\n}\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: User is yet to vote\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/user/{userId}",
+        "displayName" : "/user/{userId}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/votes/post/{postId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "get the votes for a particular post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"up\": 508,\n  \"down\": 9009\n}\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Be the first to vote\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/post/{postId}",
+      "displayName" : "/post/{postId}",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/votes/user/{userId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "get all of a users votes",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"userId\": \"user1\",\n  \"totalUp\": 3,\n  \"totalDown\": 2,\n  \"votes\": [{\n    \"postId\": \"375e3879-4259-4adb-9a91-926d92a0dc0a\",\n    \"up\": true\n  }, {\n    \"postId\": \"0b5af6b5-f784-4144-b2e9-37d570916e48\",\n    \"up\": false\n  }, {\n    \"postId\": \"8dcec218-56e9-4d54-be3c-ad5a554b6a1e\",\n    \"up\": false\n  }, {\n    \"postId\": \"0b1241d7-0444-4ec1-aaeb-2cee1ac25694\",\n    \"up\": true\n  }, {\n    \"postId\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n    \"up\": true\n  }]\n}\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User is yet to vote\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/user/{userId}",
+      "displayName" : "/user/{userId}",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/{taxCalculationId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "Retrieve a tax calculation",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "Retrieve a tax calculation. Please note that in sandbox environment this API will return pre-defined responses that are representative of what may be returned in production.",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "{\"type\":\"object\",\"title\":\"Tax Calculation output for Income Tax Calculation\",\"properties\":{\"calcOutput\":{\"description\":\"The calculation output JSON\",\"type\":\"object\",\"properties\":{\"calcName\":{\"description\":\"The logical name of the calculator (e.g. meta data from the calculator)\",\"type\":\"string\"},\"calcVersion\":{\"description\":\"The version number of the calculation (meta data from the calculator)\",\"type\":\"string\"},\"calcVersionDate\":{\"description\":\"Date the calculator version became active (meta data from the calculator)\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"calcID\":{\"description\":\"The calculation ID – an 8 digit number with leading zeros that is unique to the identifier in the calculation input\",\"type\":\"string\",\"pattern\":\"^[0-9]{8}$\"},\"sourceName\":{\"description\":\"The name of the source system that requested the calculation\",\"type\":\"string\"},\"sourceRef\":{\"description\":\"Internal reference from source system (for traceability purposes)\",\"type\":\"string\"},\"identifier\":{\"description\":\"Identifies the entity for whom the calculation was performed (as supplied in calculation request)\",\"type\":\"string\"},\"year\":{\"description\":\"This identifies the Tax Year to which the calculation relates in the format yyyy. NB. this is the ending year (e.g. Tax Year 2017-2018 would be expressed as 2018)\",\"type\":\"number\"},\"periodFrom\":{\"description\":\"This defines the earliest point from which the calculation was performed. This will be the Accounting period start date (for self-employments) or the tax year start date, whichever occurs first.\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"periodTo\":{\"description\":\"This defines the latest point to which the calculation was performed and will be the point in the year to which income has been received.\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"calcAmount\":{\"description\":\"The high level calculated amount.  For Income Tax this is the year to date total amount of Income Tax and national Insurance.\",\"type\":\"number\"},\"calcTimestamp\":{\"description\":\"Timestamp of when the calculation was performed\",\"type\":\"string\"},\"calcResult\":{\"description\":\"An object containing the calculated result (this will be bespoke to the calcName)\",\"type\":\"object\",\"properties\":{\"incomeTaxNicYtd\":{\"description\":\"Total of calculated Income Tax and National Insurance\",\"type\":\"number\"},\"incomeTaxNicDelta\":{\"description\":\"Difference between the total of calculated Income Tax and National Insurance in this calculation and the previous calculation performed\",\"type\":\"number\"},\"crystallised\":{\"description\":\"Indicates if the data represents the crystallised position for the Tax Year; if N then it is Year to Date\",\"type\":\"boolean\"},\"nationalRegime\":{\"description\":\"This defines the national tax rates and rules to be applied. Values are UK and Scotland, May Change in future\",\"enum\":[\"UK\",\"Scotland\"]},\"totalTaxableIncome\":{\"description\":\"Total Taxable Income. This is Total Income Received less the Total of Allowances and Deductions\",\"type\":\"number\"},\"taxableIncome\":{\"description\":\"An object breaking down how taxable income is derived\",\"type\":\"object\",\"properties\":{\"totalIncomeReceived\":{\"description\":\"The total of income received\",\"type\":\"number\"},\"incomeReceived\":{\"description\":\"An object breaking down income received by income sources\",\"type\":\"object\",\"properties\":{\"employmentIncome\":{\"description\":\"Total employment income across all employments\",\"type\":\"number\"},\"employments\":{\"description\":\"An object detailing employment income\",\"type\":\"object\",\"properties\":{\"totalPay\":{\"description\":\"Net pay from all Employments\",\"type\":\"number\"},\"totalBenefitsAndExpenses\":{\"description\":\"Total of Benefits and Expenses from all employments\",\"type\":\"number\"},\"totalAllowableExpenses\":{\"description\":\"Total allowable expenses across all employments\",\"type\":\"number\"},\"employment\":{\"description\":\"An array for each employment\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Identifies the employment\",\"type\":\"string\"},\"latestDate\":{\"description\":\"latest date for which income data has been supplies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"netPay\":{\"description\":\"The net pay YTD for the employment\",\"type\":\"number\"},\"benefitsAndExpenses\":{\"description\":\"Benefits and expenses relating to the employment\",\"type\":\"number\"},\"allowableExpenses\":{\"description\":\"Allowable expenses relating to the employment\",\"type\":\"number\"}},\"required\":[\"incomeSourceID\",\"latestDate\",\"netPay\",\"benefitsAndExpenses\",\"allowableExpenses\"]}}},\"required\":[\"totalPay\",\"totalBenefitsAndExpenses\",\"totalAllowableExpenses\",\"employment\"]},\"shareSchemeIncome\":{\"description\":\"Taxable income from share schemes\",\"type\":\"number\"},\"shareSchemes\":{\"description\":\"An object containing share scheme information\",\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"}},\"required\":[\"incomeSourceID\",\"latestDate\"]},\"selfEmploymentIncome\":{\"description\":\"Total taxable profit for all self employments\",\"type\":\"number\"},\"selfEmployment\":{\"description\":\"An array of self employment income\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Identifies the self-employment income source\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"accountStartDate\":{\"description\":\"the accounting period start date\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"accountEndDate\":{\"description\":\"the accounting period end date\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"taxableIncome\":{\"description\":\"the taxable profit from the self-employment\",\"type\":\"number\"},\"finalised\":{\"description\":\"Indicates if the taxable income for this self-employment is finalised\",\"type\":\"boolean\"}},\"required\":[\"incomeSourceID\",\"latestDate\",\"taxableIncome\"]}},\"partnershipIncome\":{\"description\":\"Total taxable income from partnerships\",\"type\":\"number\"},\"partnership\":{\"description\":\"An array of partnership source income\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"taxableIncome\":{\"description\":\"the amount of taxable income from the partnership\",\"type\":\"number\"}},\"required\":[\"incomeSourceID\",\"latestDate\",\"taxableIncome\"]}},\"ukPropertyIncome\":{\"description\":\"Profit from UK land and property\",\"type\":\"number\"},\"ukProperty\":{\"description\":\"An object containing UK property income data\",\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"taxableProfit\":{\"description\":\"taxable profit for property\",\"type\":\"number\"},\"taxableProfitFhlUk\":{\"description\":\"taxable profit for UK furnished holiday lettings\",\"type\":\"number\"},\"taxableProfitFhlEea\":{\"description\":\"taxable profit for EEA furnished holiday lettings\",\"type\":\"number\"},\"finalised\":{\"description\":\"Indicates if the taxable income for all UK property is finalised\",\"type\":\"boolean\"}},\"required\":[\"latestDate\"]},\"foreignIncome\":{\"description\":\"Amount of taxable foreign income\",\"type\":\"number\"},\"foreign\":{\"description\":\"An object detailing foreign income\",\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"}},\"required\":[\"incomeSourceID\",\"latestDate\"]},\"foreignDividendIncome\":{\"description\":\"Amount of taxable income from foreign dividends\",\"type\":\"number\"},\"foreignDividends\":{\"description\":\"An object detailing foreign dividends\",\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"}},\"required\":[\"incomeSourceID\",\"latestDate\"]},\"trustsIncome\":{\"description\":\"Amount of taxable income from trust and estates\",\"type\":\"number\"},\"trusts\":{\"description\":\"An object detailing trust and estate income\",\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"}},\"required\":[\"incomeSourceID\",\"latestDate\"]},\"bbsiIncome\":{\"description\":\"The amount of Interest from UK banks, building societies and securities etc\",\"type\":\"number\"},\"bbsi\":{\"description\":\"An object detailing sources of bank and building society interest\",\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"},\"interestReceived\":{\"description\":\"Interest received\",\"type\":\"number\"}},\"required\":[\"incomeSourceID\",\"latestDate\",\"interestReceived\"]},\"ukDividendIncome\":{\"description\":\"Amount of taxable income from dividends from UK companies\",\"type\":\"number\"},\"ukDividends\":{\"description\":\"An object detailing UK dividend income\",\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"}},\"required\":[\"incomeSourceID\",\"latestDate\"]},\"ukPensionsIncome\":{\"description\":\"Amount of taxable UK pensions and state benefits\",\"type\":\"number\"},\"ukPensions\":{\"description\":\"An object detailing pensions and state benefit source\",\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"}},\"required\":[\"incomeSourceID\",\"latestDate\"]},\"gainsOnLifeInsuranceIncome\":{\"description\":\"Amount of taxable gains on life insurance policies etc.\",\"type\":\"number\"},\"gainsOnLifeInsurance\":{\"description\":\"An object detailing source for gains of life insurance\",\"type\":\"object\",\"properties\":{\"incomeSourceID\":{\"description\":\"Source identifier\",\"type\":\"string\"},\"latestDate\":{\"description\":\"the latest date to which source data applies\",\"type\":\"string\",\"pattern\":\"^\\\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$\"}},\"required\":[\"incomeSourceID\",\"latestDate\"]},\"otherIncome\":{\"description\":\"Other taxable income\",\"type\":\"number\"}}},\"totalAllowancesAndDeductions\":{\"description\":\"Total of allowances and deductions\",\"type\":\"number\"},\"allowancesAndDeductions\":{\"description\":\"An object detailing allowances and deductions\",\"type\":\"object\",\"properties\":{\"paymentsIntoARetirementAnnuity\":{\"description\":\"Payments into a retirement annuity contract etc.\",\"type\":\"number\"},\"foreignTaxOnEstates\":{\"description\":\"Foreign tax on estates (tax credit relief not claimed)\",\"type\":\"number\"},\"incomeTaxRelief\":{\"description\":\"Income tax relief\",\"type\":\"number\"},\"annuities\":{\"description\":\"Annuities\",\"type\":\"number\"},\"giftOfInvestmentsAndPropertyToCharity\":{\"description\":\"Gift of investments and property to charity\",\"type\":\"number\"},\"apportionedPersonalAllowance\":{\"description\":\"The apportioned Personal Allowance from annual allowance or reduced personal allowance (if applicable)\",\"type\":\"number\"},\"marriageAllowanceTransfer\":{\"description\":\"Marriage Allowance transfer\",\"type\":\"number\"},\"blindPersonAllowance\":{\"description\":\"Blind Person's Allowance\",\"type\":\"number\"},\"blindPersonSurplusAllowanceFromSpouse\":{\"description\":\"Blind Person's surplus allowance from spouse\",\"type\":\"number\"},\"incomeExcluded\":{\"description\":\"Income excluded from this calculation\",\"type\":\"number\"}},\"required\":[\"apportionedPersonalAllowance\"]}},\"required\":[\"totalIncomeReceived\",\"totalAllowancesAndDeductions\",\"allowancesAndDeductions\"]},\"totalIncomeTax\":{\"description\":\"Total calculated Income Tax after allowances and reliefs\",\"type\":\"number\"},\"incomeTax\":{\"description\":\"An object detailing the calculation of Income Tax\",\"type\":\"object\",\"properties\":{\"totalBeforeReliefs\":{\"description\":\"Total Income tax before allowances and reliefs and deductions are applied\",\"type\":\"number\"},\"taxableIncome\":{\"description\":\"The total income subject to Income Tax calculation\",\"type\":\"number\"},\"payPensionsProfit\":{\"description\":\"An object containing data to the calculation of income tax against Pay Pensions and profit\",\"type\":\"object\",\"properties\":{\"totalAmount\":{\"description\":\"Total amount of income tax relating to pay, pensions and profit\",\"type\":\"number\"},\"taxableIncome\":{\"description\":\"Total amount of taxable income relating to pay, pensions and profit\",\"type\":\"number\"},\"band\":{\"description\":\"An array of tax band data for pay, pensions and profit\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The name of the Tax band\",\"type\":\"string\"},\"rate\":{\"description\":\"The Tax band rate expressed as a percentage\",\"type\":\"number\"},\"threshold\":{\"description\":\"The upper threshold of the band\",\"type\":\"number\"},\"apportionedThreshold\":{\"description\":\"The apportioned upper threshold of the band\",\"type\":\"number\"},\"income\":{\"description\":\"Income attributed to the tax band\",\"type\":\"number\"},\"taxAmount\":{\"description\":\"The calculated amount of income tax for the band (bandIncome x bandRate)\",\"type\":\"number\"}},\"required\":[\"name\",\"rate\",\"income\",\"taxAmount\"]}}},\"required\":[\"totalAmount\",\"taxableIncome\",\"band\"],\"definitions\":{\"bandArray\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The name of the Tax band\",\"type\":\"string\"},\"rate\":{\"description\":\"The Tax band rate expressed as a percentage\",\"type\":\"number\"},\"threshold\":{\"description\":\"The upper threshold of the band\",\"type\":\"number\"},\"apportionedThreshold\":{\"description\":\"The apportioned upper threshold of the band\",\"type\":\"number\"},\"income\":{\"description\":\"Income attributed to the tax band\",\"type\":\"number\"},\"taxAmount\":{\"description\":\"The calculated amount of income tax for the band (bandIncome x bandRate)\",\"type\":\"number\"}},\"required\":[\"name\",\"rate\",\"income\",\"taxAmount\"]}}}},\"savingsAndGains\":{\"description\":\"An object containing tax band data for savings interest from banks or building societies, securities and gains on life policies\",\"type\":\"object\",\"properties\":{\"totalAmount\":{\"description\":\"Total amount of income tax relating to pay, pensions and profit\",\"type\":\"number\"},\"taxableIncome\":{\"description\":\"Total amount of taxable income relating to pay, pensions and profit\",\"type\":\"number\"},\"band\":{\"description\":\"An array of tax band data for pay, pensions and profit\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The name of the Tax band\",\"type\":\"string\"},\"rate\":{\"description\":\"The Tax band rate expressed as a percentage\",\"type\":\"number\"},\"threshold\":{\"description\":\"The upper threshold of the band\",\"type\":\"number\"},\"apportionedThreshold\":{\"description\":\"The apportioned upper threshold of the band\",\"type\":\"number\"},\"income\":{\"description\":\"Income attributed to the tax band\",\"type\":\"number\"},\"taxAmount\":{\"description\":\"The calculated amount of income tax for the band (bandIncome x bandRate)\",\"type\":\"number\"}},\"required\":[\"name\",\"rate\",\"income\",\"taxAmount\"]}}},\"required\":[\"totalAmount\",\"taxableIncome\",\"band\"],\"definitions\":{\"bandArray\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The name of the Tax band\",\"type\":\"string\"},\"rate\":{\"description\":\"The Tax band rate expressed as a percentage\",\"type\":\"number\"},\"threshold\":{\"description\":\"The upper threshold of the band\",\"type\":\"number\"},\"apportionedThreshold\":{\"description\":\"The apportioned upper threshold of the band\",\"type\":\"number\"},\"income\":{\"description\":\"Income attributed to the tax band\",\"type\":\"number\"},\"taxAmount\":{\"description\":\"The calculated amount of income tax for the band (bandIncome x bandRate)\",\"type\":\"number\"}},\"required\":[\"name\",\"rate\",\"income\",\"taxAmount\"]}}}},\"dividends\":{\"description\":\"An object containing data to the calculation of income tax against dividend income\",\"type\":\"object\",\"properties\":{\"totalAmount\":{\"description\":\"Total amount of income tax relating to pay, pensions and profit\",\"type\":\"number\"},\"taxableIncome\":{\"description\":\"Total amount of taxable income relating to pay, pensions and profit\",\"type\":\"number\"},\"band\":{\"description\":\"An array of tax band data for pay, pensions and profit\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The name of the Tax band\",\"type\":\"string\"},\"rate\":{\"description\":\"The Tax band rate expressed as a percentage\",\"type\":\"number\"},\"threshold\":{\"description\":\"The upper threshold of the band\",\"type\":\"number\"},\"apportionedThreshold\":{\"description\":\"The apportioned upper threshold of the band\",\"type\":\"number\"},\"income\":{\"description\":\"Income attributed to the tax band\",\"type\":\"number\"},\"taxAmount\":{\"description\":\"The calculated amount of income tax for the band (bandIncome x bandRate)\",\"type\":\"number\"}},\"required\":[\"name\",\"rate\",\"income\",\"taxAmount\"]}}},\"required\":[\"totalAmount\",\"taxableIncome\",\"band\"],\"definitions\":{\"bandArray\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The name of the Tax band\",\"type\":\"string\"},\"rate\":{\"description\":\"The Tax band rate expressed as a percentage\",\"type\":\"number\"},\"threshold\":{\"description\":\"The upper threshold of the band\",\"type\":\"number\"},\"apportionedThreshold\":{\"description\":\"The apportioned upper threshold of the band\",\"type\":\"number\"},\"income\":{\"description\":\"Income attributed to the tax band\",\"type\":\"number\"},\"taxAmount\":{\"description\":\"The calculated amount of income tax for the band (bandIncome x bandRate)\",\"type\":\"number\"}},\"required\":[\"name\",\"rate\",\"income\",\"taxAmount\"]}}}},\"excludedIncome\":{\"description\":\"Tax on excluded income\",\"type\":\"number\"},\"totalAllowancesAndReliefs\":{\"description\":\"The total of allowances and reliefs\",\"type\":\"number\"},\"allowancesAndReliefs\":{\"description\":\"An object containing the allowances and reliefs applied\",\"type\":\"object\",\"properties\":{\"deficiencyRelief\":{\"description\":\"Deficiency Relief\",\"type\":\"number\"},\"topSlicingRelief\":{\"description\":\"Top Slicing Relief\",\"type\":\"number\"},\"ventureCapitalTrustRelief\":{\"description\":\"Venture Capital Trust relief\",\"type\":\"number\"},\"enterpriseInvestmentSchemeRelief\":{\"description\":\"Enterprise Investment Scheme relief\",\"type\":\"number\"},\"seedEnterpriseInvestmentSchemeRelief\":{\"description\":\"Seed Enterprise Investment Scheme relief\",\"type\":\"number\"},\"communityInvestmentTaxRelief\":{\"description\":\"Community Investment Tax Relief\",\"type\":\"number\"},\"socialInvestmentTaxRelief\":{\"description\":\"Social Investment Tax Relief\",\"type\":\"number\"},\"maintenanceAndAlimonyPaid\":{\"description\":\"Maintenance and alimony paid\",\"type\":\"number\"},\"marriedCoupleAllowanceRate\":{\"description\":\"Rate for Married Couple's Allowance\",\"type\":\"number\"},\"marriedCoupleAllowanceAmount\":{\"description\":\"Amount of Married Couple's Allowance\",\"type\":\"number\"},\"marriedCoupleAllowanceRelief\":{\"description\":\"Relief on Married Couple's Allowance\",\"type\":\"number\"},\"surplusMarriedCoupleAllowanceAmount\":{\"description\":\"Amount of Surplus Married Couple's Allowance from spouse/partner\",\"type\":\"number\"},\"surplusMarriedCoupleAllowanceRelief\":{\"description\":\"Relief on Surplus Married Couple's Allowance from spouse/partner\",\"type\":\"number\"},\"notionalTaxFromLifePolicies\":{\"description\":\"Notional tax from gains on life policies etc.\",\"type\":\"number\"},\"notionalTaxFromDividendsAndOtherIncome\":{\"description\":\"Notional tax from stock dividends and other income\",\"type\":\"number\"},\"foreignTaxCreditRelief\":{\"description\":\"Foreign Tax Credit Relief\",\"type\":\"number\"},\"propertyFinanceRelief\":{\"description\":\"Relief against property finance costs\",\"type\":\"number\"}}}},\"required\":[\"totalBeforeReliefs\",\"taxableIncome\",\"totalAllowancesAndReliefs\"]},\"totalNic\":{\"description\":\"Total Calculated National Insurance Contributions\",\"type\":\"number\"},\"nic\":{\"description\":\"An object detailing the calculation of National Insurance Contributions\",\"type\":\"object\",\"properties\":{\"class2\":{\"description\":\"An object relating to NIC Class 2 Calculation\",\"type\":\"object\",\"properties\":{\"amount\":{\"description\":\"Calculated amount of NIC Class 2\",\"type\":\"number\"},\"weekRate\":{\"description\":\"The weekly rate\",\"type\":\"number\"},\"weeks\":{\"description\":\"the number of weeks applied in calculation\",\"type\":\"number\"},\"limit\":{\"description\":\"Annual limit for NIC Class 2\",\"type\":\"number\"},\"apportionedLimit\":{\"description\":\"Apportioned annual limit for NIC Class 2\",\"type\":\"number\"}},\"required\":[\"amount\",\"weekRate\",\"weeks\",\"limit\",\"apportionedLimit\"]},\"class4\":{\"description\":\"An object relating to NIC Class 4 Calculation\",\"type\":\"object\",\"properties\":{\"totalAmount\":{\"description\":\"Calculated amount of NIC Class 4\",\"type\":\"number\"},\"band\":{\"description\":\"An array detailing bands relating to NIC Class 4\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The name of the Tax band\",\"type\":\"string\"},\"rate\":{\"description\":\"The Tax band rate expressed as a percentage\",\"type\":\"number\"},\"threshold\":{\"description\":\"The upper threshold of the band\",\"type\":\"number\"},\"apportionedThreshold\":{\"description\":\"The apportioned upper threshold of the band\",\"type\":\"number\"},\"income\":{\"description\":\"Income attributed to the tax band\",\"type\":\"number\"},\"amount\":{\"description\":\"The calculated amount of income tax for the band (bandIncome x bandRate)\",\"type\":\"number\"}},\"required\":[\"name\",\"rate\",\"income\",\"amount\"]}}},\"required\":[\"totalAmount\",\"band\"]}},\"definitions\":{\"class2Object\":{\"type\":\"object\",\"properties\":{\"amount\":{\"description\":\"Calculated amount of NIC Class 2\",\"type\":\"number\"},\"weekRate\":{\"description\":\"The weekly rate\",\"type\":\"number\"},\"weeks\":{\"description\":\"the number of weeks applied in calculation\",\"type\":\"number\"},\"limit\":{\"description\":\"Annual limit for NIC Class 2\",\"type\":\"number\"},\"apportionedLimit\":{\"description\":\"Apportioned annual limit for NIC Class 2\",\"type\":\"number\"}},\"required\":[\"amount\",\"weekRate\",\"weeks\",\"limit\",\"apportionedLimit\"]},\"class4Object\":{\"type\":\"object\",\"properties\":{\"totalAmount\":{\"description\":\"Calculated amount of NIC Class 4\",\"type\":\"number\"},\"band\":{\"description\":\"An array detailing bands relating to NIC Class 4\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The name of the Tax band\",\"type\":\"string\"},\"rate\":{\"description\":\"The Tax band rate expressed as a percentage\",\"type\":\"number\"},\"threshold\":{\"description\":\"The upper threshold of the band\",\"type\":\"number\"},\"apportionedThreshold\":{\"description\":\"The apportioned upper threshold of the band\",\"type\":\"number\"},\"income\":{\"description\":\"Income attributed to the tax band\",\"type\":\"number\"},\"amount\":{\"description\":\"The calculated amount of income tax for the band (bandIncome x bandRate)\",\"type\":\"number\"}},\"required\":[\"name\",\"rate\",\"income\",\"amount\"]}}},\"required\":[\"totalAmount\",\"band\"]},\"nic4BandArray\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The name of the Tax band\",\"type\":\"string\"},\"rate\":{\"description\":\"The Tax band rate expressed as a percentage\",\"type\":\"number\"},\"threshold\":{\"description\":\"The upper threshold of the band\",\"type\":\"number\"},\"apportionedThreshold\":{\"description\":\"The apportioned upper threshold of the band\",\"type\":\"number\"},\"income\":{\"description\":\"Income attributed to the tax band\",\"type\":\"number\"},\"amount\":{\"description\":\"The calculated amount of income tax for the band (bandIncome x bandRate)\",\"type\":\"number\"}},\"required\":[\"name\",\"rate\",\"income\",\"amount\"]}}}},\"eoyEstimate\":{\"description\":\"An object containing end of year estimates\",\"type\":\"object\",\"properties\":{\"incomeSource\":{\"description\":\"An array of income sources\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"description\":\"The Income Source ID\",\"type\":\"string\"},\"type\":{\"description\":\"Indicates the income source type. Values are: 01=Employment; 02=Share schemes; 03=Self-Employment; 04=Partnership; 05=UK Land and Property;06=Foreign income; 07=Dividends from foreign companies; 08=Trusts and Estates; 09=Interest from UK banks, building societies and securities etc; 10=Dividends from UK companies; 11=UK pensions and state benefits; 12=Gains on life insurance policies etc.\",\"type\":\"string\",\"pattern\":\"^[0-9]{2}$\"},\"taxableIncome\":{\"description\":\"Estimated taxable income for source\",\"type\":\"number\"},\"supplied\":{\"description\":\"Indicates if the estimate taxable income is supplied by the taxpayer (true) or calculated (false)\",\"type\":\"boolean\"},\"finalised\":{\"description\":\"Indicates if the income source has been finalised for the tax year (only applies to self-employment and UK Property income types)\",\"type\":\"boolean\"}},\"required\":[\"id\",\"type\",\"taxableIncome\",\"supplied\"]}},\"totalTaxableIncome\":{\"description\":\"Sum of estimated taxable income for all income sources\",\"type\":\"number\"},\"incomeTaxAmount\":{\"description\":\"Calculated Income tax amount from estimated taxable income\",\"type\":\"number\"},\"nic2\":{\"description\":\"Calculated NIC Class 2 from estimates\",\"type\":\"number\"},\"nic4\":{\"description\":\"Calculated NIC Class 4 from estimates\",\"type\":\"number\"},\"totalNicAmount\":{\"description\":\"Sum of National Insurance amounts\",\"type\":\"number\"},\"incomeTaxNicAmount\":{\"description\":\"Total of calculated Income Tax and National Insurance from estimated annual taxable income\",\"type\":\"number\"}},\"required\":[\"incomeSource\",\"totalTaxableIncome\",\"incomeTaxAmount\",\"nic2\",\"nic4\",\"totalNicAmount\",\"incomeTaxNicAmount\"],\"definitions\":{\"eoyEstimateIncomeSourceArray\":{\"description\":\"An array of annualised estimated income by income source\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"description\":\"The Income Source ID\",\"type\":\"string\"},\"type\":{\"description\":\"Indicates the income source type. Values are: 01=Employment; 02=Share schemes; 03=Self-Employment; 04=Partnership; 05=UK Land and Property;06=Foreign income; 07=Dividends from foreign companies; 08=Trusts and Estates; 09=Interest from UK banks, building societies and securities etc; 10=Dividends from UK companies; 11=UK pensions and state benefits; 12=Gains on life insurance policies etc.\",\"type\":\"string\",\"pattern\":\"^[0-9]{2}$\"},\"taxableIncome\":{\"description\":\"Estimated taxable income for source\",\"type\":\"number\"},\"supplied\":{\"description\":\"Indicates if the estimate taxable income is supplied by the taxpayer (true) or calculated (false)\",\"type\":\"boolean\"},\"finalised\":{\"description\":\"Indicates if the income source has been finalised for the tax year (only applies to self-employment and UK Property income types)\",\"type\":\"boolean\"}},\"required\":[\"id\",\"type\",\"taxableIncome\",\"supplied\"]}}}},\"msgCount\":{\"description\":\"Count of messages\",\"type\":\"number\"},\"msg\":{\"description\":\"An array of messages\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"type\":{\"description\":\"Defines message type (INFO, WARN)\",\"type\":\"string\"},\"text\":{\"description\":\"message text\",\"type\":\"string\"}},\"required\":[\"type\",\"text\"]}},\"previousCalc\":{\"description\":\"An object detailing the previous calculation (used to derive the delta calculation)\",\"type\":\"object\",\"properties\":{\"calcTimestamp\":{\"description\":\"The date and timestamp of when the previous calculation was performed\",\"type\":\"string\"},\"calcID\":{\"description\":\"The previous calculation ID\",\"type\":\"string\",\"pattern\":\"^[0-9]{8}$\"},\"calcAmount\":{\"description\":\"The previous calculation for YTD income tax and national insurance\",\"type\":\"number\"}},\"required\":[\"calcTimestamp\",\"calcID\",\"calcAmount\"]},\"annualAllowances\":{\"description\":\"An object defining annual allowances\",\"type\":\"object\",\"properties\":{\"personalAllowance\":{\"description\":\"The full Personal Allowance applicable to the Tax Year\",\"type\":\"number\"},\"reducedPersonalAllowanceThreshold\":{\"description\":\"The income threshold at which the Personal Allowance is reduced\",\"type\":\"number\"},\"reducedPersonalisedAllowance\":{\"description\":\"Reduced annual personal allowance if annual (or estimated annual) income exceeds the income threshold. Estimated annual income will be used for non-finalised calculations\",\"type\":\"number\"}},\"required\":[\"personalAllowance\"]}},\"required\":[\"incomeTaxNicYtd\",\"incomeTaxNicDelta\",\"crystallised\",\"nationalRegime\",\"totalTaxableIncome\",\"taxableIncome\",\"totalIncomeTax\",\"incomeTax\",\"totalNic\",\"msgCount\",\"annualAllowances\"]}},\"required\":[\"calcName\",\"calcVersion\",\"calcVersionDate\",\"calcID\",\"sourceName\",\"sourceRef\",\"identifier\",\"year\",\"periodFrom\",\"periodTo\",\"calcAmount\",\"calcTimestamp\",\"calcResult\"]}},\"required\":[\"calcOutput\"]}",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"calcOutput\": {\n    \"calcName\": \"abcdefghijklmnopqr\",\n    \"calcVersion\": \"abcdef\",\n    \"calcVersionDate\": \"2016-01-01\",\n    \"calcID\": \"12345678\",\n    \"sourceName\": \"abcdefghijklmno\",\n    \"sourceRef\": \"abcdefghijklmnopqrs\",\n    \"identifier\": \"abcdefghijklm\",\n    \"year\": 2016,\n    \"periodFrom\": \"2016-01-01\",\n    \"periodTo\": \"2016-01-01\",\n    \"calcAmount\": 1000.25,\n    \"calcTimestamp\": \"4498-07-06T21:42:24.294Z\",\n    \"calcResult\": {\n      \"incomeTaxNicYtd\": 1000.25,\n      \"incomeTaxNicDelta\": 1000.25,\n      \"crystallised\": true,\n      \"nationalRegime\": \"UK\",\n      \"totalTaxableIncome\": 1000.25,\n      \"taxableIncome\": {\n        \"totalIncomeReceived\": 1000.25,\n        \"incomeReceived\": {\n          \"foreignDividendIncome\": 1000.25,\n          \"employments\": {\n            \"totalPay\": 1000.25,\n            \"totalBenefitsAndExpenses\": 1000.25,\n            \"totalAllowableExpenses\": 1000.25,\n            \"employment\": [\n              {\n                \"incomeSourceID\": \"abcdefghijklm\",\n                \"latestDate\": \"2016-01-01\",\n                \"netPay\": 1000.25,\n                \"benefitsAndExpenses\": 1000.25,\n                \"allowableExpenses\": 1000.25\n              }\n            ]\n          },\n          \"selfEmploymentIncome\": 1000.25,\n          \"ukProperty\": {\n            \"latestDate\": \"2016-01-01\",\n            \"taxableProfit\": 1000.25,\n            \"taxableProfitFhlUk\": 1000.25,\n            \"taxableProfitFhlEea\": 1000.25,\n            \"finalised\": true\n          },\n          \"partnershipIncome\": 1000.25,\n          \"ukPropertyIncome\": 1000.25,\n          \"partnership\": [\n            {\n              \"incomeSourceID\": \"abcdefghijklm\",\n              \"latestDate\": \"2016-01-01\",\n              \"taxableIncome\": 1000.25\n            }\n          ],\n          \"foreignIncome\": 1000.25,\n          \"foreign\": {\n            \"incomeSourceID\": \"abcdefghijklm\",\n            \"latestDate\": \"2016-01-01\"\n          },\n          \"shareSchemes\": {\n            \"incomeSourceID\": \"abcdefghijklm\",\n            \"latestDate\": \"2016-01-01\"\n          },\n          \"selfEmployment\": [\n            {\n              \"incomeSourceID\": \"abcdefghijklm\",\n              \"latestDate\": \"2016-01-01\",\n              \"accountStartDate\": \"2016-01-01\",\n              \"accountEndDate\": \"2016-01-01\",\n              \"taxableIncome\": 1000.25,\n              \"finalised\": true\n            }\n          ],\n          \"employmentIncome\": 1000.25,\n          \"shareSchemeIncome\": 1000.25,\n          \"foreignDividends\": {\n            \"incomeSourceID\": \"abcdefghijklm\",\n            \"latestDate\": \"2016-01-01\"\n          },\n          \"ukDividends\": {\n            \"incomeSourceID\": \"abcdefghijklm\",\n            \"latestDate\": \"2016-01-01\"\n          },\n          \"gainsOnLifeInsurance\": {\n            \"incomeSourceID\": \"abcdefghijklm\",\n            \"latestDate\": \"2016-01-01\"\n          },\n          \"bbsiIncome\": 1000.25,\n          \"gainsOnLifeInsuranceIncome\": 1000.25,\n          \"ukPensions\": {\n            \"incomeSourceID\": \"abcdefghijklm\",\n            \"latestDate\": \"2016-01-01\"\n          },\n          \"otherIncome\": 1000.25,\n          \"ukDividendIncome\": 1000.25,\n          \"trustsIncome\": 1000.25,\n          \"bbsi\": {\n            \"incomeSourceID\": \"abcdefghijklm\",\n            \"latestDate\": \"2016-01-01\",\n            \"interestReceived\": 1000.25\n          },\n          \"ukPensionsIncome\": 1000.25,\n          \"trusts\": {\n            \"incomeSourceID\": \"abcdefghijklm\",\n            \"latestDate\": \"2016-01-01\"\n          }\n        },\n        \"totalAllowancesAndDeductions\": 1000.25,\n        \"allowancesAndDeductions\": {\n          \"paymentsIntoARetirementAnnuity\": 1000.25,\n          \"foreignTaxOnEstates\": 1000.25,\n          \"incomeTaxRelief\": 1000.25,\n          \"annuities\": 1000.25,\n          \"giftOfInvestmentsAndPropertyToCharity\": 1000.25,\n          \"apportionedPersonalAllowance\": 1000.25,\n          \"marriageAllowanceTransfer\": 1000.25,\n          \"blindPersonAllowance\": 1000.25,\n          \"blindPersonSurplusAllowanceFromSpouse\": 1000.25,\n          \"incomeExcluded\": 1000.25\n        }\n      },\n      \"totalIncomeTax\": 1000.25,\n      \"incomeTax\": {\n        \"totalBeforeReliefs\": 1000.25,\n        \"taxableIncome\": 1000.25,\n        \"payPensionsProfit\": {\n          \"totalAmount\": 1000.25,\n          \"taxableIncome\": 1000.25,\n          \"band\": [\n            {\n              \"name\": \"abcdefghijklm\",\n              \"rate\": 99.99,\n              \"threshold\": 99999999,\n              \"apportionedThreshold\": 99999999,\n              \"income\": 1000.25,\n              \"taxAmount\": 1000.25\n            }\n          ]\n        },\n        \"savingsAndGains\": {\n          \"totalAmount\": 1000.25,\n          \"taxableIncome\": 1000.25,\n          \"band\": [\n            {\n              \"name\": \"abcdefghijklm\",\n              \"rate\": 99.99,\n              \"threshold\": 99999999,\n              \"apportionedThreshold\": 99999999,\n              \"income\": 1000.25,\n              \"taxAmount\": 1000.25\n            }\n          ]\n        },\n        \"dividends\": {\n          \"totalAmount\": 1000.25,\n          \"taxableIncome\": 1000.25,\n          \"band\": [\n            {\n              \"name\": \"abcdefghijklm\",\n              \"rate\": 99.99,\n              \"threshold\": 99999999,\n              \"apportionedThreshold\": 99999999,\n              \"income\": 1000.25,\n              \"taxAmount\": 1000.25\n            }\n          ]\n        },\n        \"excludedIncome\": 1000.25,\n        \"totalAllowancesAndReliefs\": 1000.25,\n        \"allowancesAndReliefs\": {\n          \"deficiencyRelief\": 1000.25,\n          \"topSlicingRelief\": 1000.25,\n          \"ventureCapitalTrustRelief\": 1000.25,\n          \"enterpriseInvestmentSchemeRelief\": 1000.25,\n          \"seedEnterpriseInvestmentSchemeRelief\": 1000.25,\n          \"communityInvestmentTaxRelief\": 1000.25,\n          \"socialInvestmentTaxRelief\": 1000.25,\n          \"maintenanceAndAlimonyPaid\": 1000.25,\n          \"marriedCoupleAllowanceRate\": 1000.25,\n          \"marriedCoupleAllowanceAmount\": 1000.25,\n          \"marriedCoupleAllowanceRelief\": 1000.25,\n          \"surplusMarriedCoupleAllowanceAmount\": 1000.25,\n          \"surplusMarriedCoupleAllowanceRelief\": 1000.25,\n          \"notionalTaxFromLifePolicies\": 1000.25,\n          \"notionalTaxFromDividendsAndOtherIncome\": 1000.25,\n          \"foreignTaxCreditRelief\": 1000.25,\n          \"propertyFinanceRelief\": 1000.25\n        }\n      },\n      \"totalNic\": 1000.25,\n      \"nic\": {\n        \"class2\": {\n          \"amount\": 1000.25,\n          \"weekRate\": 1000.25,\n          \"weeks\": 1,\n          \"limit\": 99999999,\n          \"apportionedLimit\": 2\n        },\n        \"class4\": {\n          \"totalAmount\": 1000.25,\n          \"band\": [\n            {\n              \"name\": \"abcdefghijklm\",\n              \"rate\": 99.99,\n              \"threshold\": 99999999,\n              \"apportionedThreshold\": 99999999,\n              \"income\": 1000.25,\n              \"amount\": 1000.25\n            }\n          ]\n        }\n      },\n      \"eoyEstimate\": {\n        \"incomeSource\": [\n          {\n            \"id\": \"abcdefghijklm\",\n            \"type\": \"01\",\n            \"taxableIncome\": 99999999,\n            \"supplied\": true,\n            \"finalised\": true\n          }\n        ],\n        \"totalTaxableIncome\": 99999999,\n        \"incomeTaxAmount\": 99999999,\n        \"nic2\": 99999999,\n        \"nic4\": 99999999,\n        \"totalNicAmount\": 99999999,\n        \"incomeTaxNicAmount\": 2\n      },\n      \"msgCount\": 1,\n      \"msg\": [\n        {\n          \"type\": \"abcdefghijklm\",\n          \"text\": \"abcdefghijklm\"\n        }\n      ],\n      \"previousCalc\": {\n        \"calcTimestamp\": \"4498-07-06T21:42:24.294Z\",\n        \"calcID\": \"00000000\",\n        \"calcAmount\": 1000.25\n      },\n      \"annualAllowances\": {\n        \"personalAllowance\": 99999999,\n        \"reducedPersonalAllowanceThreshold\": 99999999,\n        \"reducedPersonalisedAllowance\": 99999999\n      }\n    }\n  }\n}\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ {
+        "name" : "taxCalculationId",
+        "displayName" : "taxCalculationId",
+        "type" : "string",
+        "required" : true,
+        "description" : "The ID of the tax calculation"
+      } ],
+      "relativeUri" : "/{taxCalculationId}",
+      "displayName" : "/{taxCalculationId}",
+      "children" : [ ]
+    } ]
+  } ],
+  "types" : [ ],
+  "isFieldOptionalityKnown" : true
+}

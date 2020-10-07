@@ -183,12 +183,13 @@ class ApiDocumentationController @Inject()(
         makePageAttributes(apiDefinition, selectedVersion, navigationService.sidebarNavigation()), apiDefinition)))
     }
 
-    def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) =
+    def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) = {
       documentationService.fetchApiSpecification(service, version, cacheBuster).map { apiSpecification =>
         val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation2(service, selectedVersion, apiSpecification))
         val viewModel = ViewModel(apiSpecification)
         Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, email.isDefined)).withHeaders(cacheControlHeaders)
       }
+    }
 
     findVersion(apiOption) match {
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED =>

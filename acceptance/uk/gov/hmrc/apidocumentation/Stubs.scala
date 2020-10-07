@@ -25,6 +25,8 @@ import play.utils.UriEncoding
 import scala.collection.immutable.Seq
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
+import play.api.libs.json.Json
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 trait Stubs extends ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice
 
@@ -52,71 +54,17 @@ trait ApiPlatformMicroservice{
     )
   }
 
-  def fetchRaml(serviceName: String, version: String) = {
-
-    def fetchFile(filename: String, contentType: String) = {
-      val url = getClass.getResource(s"/services/$serviceName/conf/$version/$filename")
-      val file = Source.fromURL(url).mkString
-      stubFor(get(urlMatching(s"/combined-api-definitions/$serviceName/$version/documentation/$filename"))
-        .willReturn(aResponse()
-          .withStatus(200)
-          .withHeader("Content-Type", contentType)
-          .withBody(file))
+  def fetchApiSpec(serviceName: String, version: String) = {
+    val url = getClass.getResource(s"/services/$serviceName/spec_${version}.json")
+    val file = Source.fromURL(url).mkString
+    stubFor(get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)"))
+      .willReturn(
+        aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody(file)
       )
-    }
-
-    fetchFile("application.raml", "application/yaml+raml")
-    fetchFile("docs/overview.md", "text/markdown")
-    fetchFile("docs/versioning.md", "text/markdown")
-    fetchFile("modules/oauth2.raml", "application/yaml+raml")
-  }
-
-  def fetchDocRaml(serviceName: String, version: String) = {
-
-    def fetchFile(filename: String, contentType: String) = {
-      val file = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$filename")).mkString
-      stubFor(get(urlMatching(s"/combined-api-definitions/$serviceName/$version/documentation/$filename"))
-        .willReturn(aResponse()
-          .withStatus(200)
-          .withHeader("Content-Type", contentType)
-          .withBody(file))
-      )
-    }
-
-    def fetchJsonFile(path: String) = {
-      val smt: Try[String] = Try(getClass.getResource(s"/services/$serviceName/conf/$version/$path").getPath)
-
-      val listOfFiles: Seq[File] = smt match {
-        case Success(s) =>
-          val dir = new File(URLDecoder.decode(s, "UTF-8"))
-
-          if (dir.exists()) {
-            dir.listFiles
-              .filter(f => f.exists() && f.isFile)
-              .toList
-          }
-          else {
-            List.empty[File]
-          }
-        case Failure(f) => List.empty[File]
-      }
-
-      listOfFiles.foreach {
-        r =>
-          val file: String = Source.fromURL(getClass.getResource(s"/services/$serviceName/conf/$version/$path/${r.getName}")).mkString
-          stubFor(get(urlMatching(s"/combined-api-definitions/$serviceName/$version/documentation/$path/${r.getName}"))
-            .willReturn(aResponse()
-              .withStatus(200)
-              .withHeader("Content-Type", ContentTypes.JSON)
-              .withBody(file))
-          )
-      }
-    }
-
-    fetchFile("application.raml", "application/yaml+raml")
-    fetchFile("docs/overview.md", "text/markdown")
-    fetchJsonFile("examples")
-    fetchJsonFile("schemas")
+    )
   }
 
   def failToFetch(serviceName: String) {

@@ -14,6 +14,8 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
+import bloop.integrations.sbt.BloopDefaults
+
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = (project in file("."))
@@ -70,6 +72,7 @@ lazy val microservice = (project in file("."))
 
   .configs(AcceptanceTest)
   .settings(inConfig(AcceptanceTest)(Defaults.testSettings): _*)
+  .settings(inConfig(AcceptanceTest)(BloopDefaults.configSettings))
   .settings(
     testOptions in AcceptanceTest := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "acceptance",

@@ -19,26 +19,15 @@ package uk.gov.hmrc.apidocumentation.mocks.services
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
-import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future.{failed, successful}
+import scala.concurrent.Future.successful
 
 trait ApiDocumentationServiceMock extends MockitoSugar {
   val documentationService = mock[DocumentationService]
 
-  // TODO : 4837
-  // def theDocumentationServiceWillFetchRaml(ramlAndSchemas: RamlAndSchemas) = {
-  //   when(documentationService.fetchRAML(any(), any(), any())).thenReturn(successful(ramlAndSchemas))
-  // }
-
-  // def theDocumentationServiceWillFailWhenFetchingRaml(exception: Throwable) = {
-  //   when(documentationService.fetchRAML(any(), any(), any())).thenReturn(failed(exception))
-  // }
-
-  def theDocumentationServiceWillFetchApiSpecification(apiSpecification: ApiSpecification)(implicit hc: HeaderCarrier) = {
+  def theDocumentationServiceWillFetchApiSpecification(apiSpecification: ApiSpecification) = {
     when(documentationService.fetchApiSpecification(any(), any(), any())(any())).thenReturn(successful(apiSpecification))
   }
 

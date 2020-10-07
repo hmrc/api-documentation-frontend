@@ -61,7 +61,6 @@ class DocumentationServiceSpec extends UnitSpec
   trait Setup {
     implicit val hc = HeaderCarrier()
     val cache = app.injector.instanceOf[CacheApi]
-    val ramlLoader = mock[RamlLoader]
     val schemaLoader = mock[SchemaService]
     val appConfig = mock[ApplicationConfig]
     val apm = mock[ApiPlatformMicroserviceConnector]

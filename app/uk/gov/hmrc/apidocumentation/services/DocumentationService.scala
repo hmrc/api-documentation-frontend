@@ -30,6 +30,7 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.models.TestEndpoint
 import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
 import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
+import scala.util.control.NonFatal
 
 @Singleton
 class DocumentationService @Inject()( appConfig: ApplicationConfig,
@@ -55,32 +56,6 @@ class DocumentationService @Inject()( appConfig: ApplicationConfig,
       }.fold(e => { cache.remove(key); throw e }, identity )
     }
   }
-
-  // TODO 4837
-  // def fetchRAML(serviceName: String, version: String, cacheBuster: Boolean): Future[RamlAndSchemas] = {
-  //     val url = ramlUrl(serviceBaseUrl,serviceName,version)
-  //     fetchRAML(url, cacheBuster)
-  // }
-
-  // def fetchRAML(url: String, cacheBuster: Boolean): Future[RamlAndSchemas] = {
-  //   if (cacheBuster) cache.remove(url)
-
-  //   Future {
-  //     blocking {  // ramlLoader is blocking and synchronous
-  //       cache.getOrElse[Try[RamlAndSchemas]](url, defaultExpiration) {
-  //         ramlLoader.load(url).map(raml => {
-  //           val schemaBasePath =  s"${url.take(url.lastIndexOf('/'))}/schemas"
-  //           RamlAndSchemas(raml, schemaService.loadSchemas(schemaBasePath, raml))
-  //         })
-  //       }
-  //     }
-  //   } flatMap {
-  //     case Success(api) => Future.successful(api)
-  //     case Failure(e) =>
-  //       cache.remove(url)
-  //       Future.failed(e)
-  //   }
-  // }
 
   def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier): Future[Seq[TestEndpoint]] = {
     fetchApiSpecification(service, version, cacheBuster = true).map(buildResources)
