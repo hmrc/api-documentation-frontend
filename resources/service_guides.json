@@ -22,5 +22,9 @@
   {
     "name": "Goods Vehicle Movements service guide",
     "context": "/guides/gvms-end-to-end-service-guide/"
+  },
+  {
+    "name": "Customs Declarations end-to-end service guide",
+    "context": "/guides/customs-declarations-end-to-end-service-guide"
   }
 ]
