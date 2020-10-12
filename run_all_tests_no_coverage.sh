@@ -2,6 +2,6 @@
 
 export SBT_OPTS="-XX:+CMSClassUnloadingEnabled -XX:MaxMetaspaceSize=1G"
 
-sbt clean compile test acceptance:test
+sbt --mem 4000 clean compile test acceptance:test
 
 unset SBT_OPTS

@@ -25,16 +25,15 @@ import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.controllers.utils._
-import uk.gov.hmrc.apidocumentation.services.RAML
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.http.NotFoundException
-import uk.gov.hmrc.ramltools.domain.{RamlNotFoundException, RamlParseException}
 import uk.gov.hmrc.apidocumentation.mocks.config._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem, ResourceGroup, TypeDeclaration}
 import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
+import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
   trait Setup
@@ -51,11 +50,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     lazy val ramlPreviewConnector = mock[RamlPreviewConnector]
     private lazy val retiredVersionJumpView = app.injector.instanceOf[RetiredVersionJumpView]
     private lazy val apisFilteredView = app.injector.instanceOf[ApisFilteredView]
-    private lazy val previewDocumentationView = app.injector.instanceOf[PreviewDocumentationView]
-    private lazy val previewDocumentationView2 = app.injector.instanceOf[PreviewDocumentationView2]
-    private lazy val serviceDocumentationView = app.injector.instanceOf[ServiceDocumentationView]
+    private lazy val previewDocumentationView = app.injector.instanceOf[PreviewDocumentationView2]
     private lazy val xmlDocumentationView = app.injector.instanceOf[XmlDocumentationView]
-    private lazy val serviceDocumentationView2 = app.injector.instanceOf[ServiceDocumentationView2]
+    private lazy val serviceDocumentationView = app.injector.instanceOf[ServiceDocumentationView2]
 
     val underTest = new ApiDocumentationController(
       documentationService,
@@ -69,9 +66,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       retiredVersionJumpView,
       apisFilteredView,
       previewDocumentationView,
-      previewDocumentationView2,
       serviceDocumentationView,
-      serviceDocumentationView2,
       xmlDocumentationView,
       appConfig
     )
@@ -207,7 +202,6 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     }
 
     "routing to renderApiDocumentation" should {
-        val mockRamlAndSchemas = RamlAndSchemas(mock[RAML], mock[Map[String, JsonSchema]])
 
       "when documentationRenderVersion is specification" should {
         "display the documentation and private API options when the API is private but the logged in user has access to it" in new DocumentationRenderVersionSetup {
@@ -409,29 +403,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         }
       }
 
-      "display the documentation page" in new Setup with ApiDocumentationServiceMock {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        verifyApiDocumentationPageRendered(result, "1.0", "Stable")
-      }
-
       "display the not found page when invalid service specified" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        verifyNotFoundPageRendered(result)
-      }
-
-      "display the not found page when RAML file not found" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
-        theDocumentationServiceWillFailWhenFetchingRaml(RamlNotFoundException("not found"))
 
         val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
@@ -447,17 +421,6 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
         verifyApiDocumentationPageRendered(result, "1.0", "Retired")
         verifyLinkToStableDocumentationRendered(result, serviceName, "1.1")
-      }
-
-      "display the documentation when the API version is not marked as retired" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinitionWithRetiredVersion(serviceName, "1.0", "1.1"))
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.1", Option(true))(request)
-
-        verifyApiDocumentationPageRendered(result, "1.1", "Stable")
       }
 
       "display the not found page when invalid version specified" in new Setup {
@@ -477,124 +440,6 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
         verifyNotFoundPageRendered(result)
-      }
-
-      "display the documentation when the API is private but the logged in user has access to it" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true))
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        verifyApiDocumentationPageRendered(result, "1.0", "Private Stable")
-      }
-
-      "display the private API options when logged in and user has access to it" in new Setup {
-        theUserIsLoggedIn()
-
-        val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true)
-
-        theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
-      }
-
-      "display the private API options when not logged in and is in trial" in new Setup {
-        theUserIsNotLoggedIn()
-
-        val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false, isTrial = Some(true))
-
-        theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
-      }
-
-      "display the private API options when logged in and is in trial but the user is not authorised" in new Setup {
-        theUserIsLoggedIn()
-
-        val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
-
-        theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
-      }
-
-      "display the private API options when logged in and is in trial and the user is authorised" in new Setup {
-        theUserIsLoggedIn()
-
-        val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
-
-        theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
-      }
-
-      "not display the private API options when not in trial, not logged in and (therefore) is not authorised" in new Setup {
-        theUserIsNotLoggedIn()
-
-        val apiDefinition = extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false)
-
-        theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        versionOptionIsRendered(result, serviceName, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe false
-      }
-
-      "display the not found page when the API is private and the logged in user does not have access to it" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false))
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        verifyNotFoundPageRendered(result)
-      }
-
-      "redirect to the login page when the API is private and the user is not logged in" in new Setup {
-        theUserIsNotLoggedIn()
-        theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(serviceName, "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false))
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        verifyRedirectToLoginPage(result, serviceName, "1.0")
-      }
-
-      "display the error page when any other exception occurs" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
-        theDocumentationServiceWillFailWhenFetchingRaml(new Exception("expected unit test failure"))
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        verifyErrorPageRendered(expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Sorry, we’re experiencing technical difficulties")(result)
-      }
-
-      "tell clients not to cache the page" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
-        theDocumentationServiceWillFetchRaml(mockRamlAndSchemas)
-
-        val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
-
-        result.header.headers.get("Cache-Control") shouldBe Some("no-cache,no-store,max-age=0")
       }
     }
 
@@ -647,7 +492,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         TestEndpoint("{service-url}/employers-paye/ddd")
       )
 
-      when(documentationService.buildTestEndpoints(any(), any())).thenReturn(endpoints)
+      when(documentationService.buildTestEndpoints(any(), any())(any())).thenReturn(endpoints)
       val result = underTest.fetchTestEndpointJson("employers-paye", "1.0")(request)
       val actualPage = await(result)
       actualPage.header.status shouldBe OK

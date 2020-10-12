@@ -1,0 +1,1353 @@
+{
+  "title" : "Developer Forum",
+  "version" : "1.2",
+  "documentationItems" : [ {
+    "title" : "Overview",
+    "content" : "Private Trial Stable API\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n1. First item in a numbered list\n2. Second item in a numbered list\n3. Third item in a numbered list\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n* First bulleted item\n* Second bulleted item\n* Third bulleted item\n"
+  }, {
+    "title" : "Versioning",
+    "content" : "We use versions."
+  } ],
+  "resourceGroups" : [ {
+    "name" : "Users",
+    "description" : "Manage forum users",
+    "resources" : [ {
+      "resourcePath" : "/users",
+      "methods" : [ {
+        "method" : "post",
+        "displayName" : "post",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"name\": \"user name\",\n  \"displayName\": \"display name\",\n  \"email\": \"user@example.com\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "create user",
+        "responses" : [ {
+          "code" : "200",
+          "description" : "User created"
+        }, {
+          "code" : "500",
+          "description" : "Failed to create user"
+        } ]
+      }, {
+        "method" : "put",
+        "displayName" : "put",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "{\"description\":\"User update\",\"type\":\"object\",\"properties\":{\"id\":{\"description\":\"The user ID\",\"type\":\"string\",\"example\":\"550e8400-e29b-41d4-a716-446655440000\"},\"name\":{\"description\":\"The user name\",\"type\":\"string\",\"example\":\"user name\"},\"displayName\":{\"description\":\"The display name\",\"type\":\"string\",\"example\":\"display name\"},\"email\":{\"description\":\"The email address\",\"type\":\"string\",\"example\":\"user@example.com\"},\"profile\":{\"description\":\"The user's profile\",\"type\":\"object\",\"properties\":{\"active\":{\"description\":\"Whether the user is active or not\",\"type\":\"boolean\",\"example\":\"true\"},\"failedLoginAttempts\":{\"description\":\"How many times the user has failed to login\",\"type\":\"number\",\"example\":\"3\"},\"permissions\":{\"description\":\"Whether the user is active or not\",\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"preferences\":{\"description\":\"The user's preferences\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"description\":\"The preference name\",\"type\":\"string\",\"example\":\"COLOUR\"},\"value\":{\"description\":\"The preference value\",\"type\":\"string\",\"example\":\"RED\"}},\"required\":[\"name\",\"value\"]}}},\"required\":[\"active\",\"failedLoginAttempts\",\"permissions\"]}},\"required\":[\"id\",\"name\",\"email\",\"profile\"]}",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"name\": \"user name\",\n  \"displayName\": \"display name\",\n  \"email\": \"user@example.com\",\n  \"profile\": {\n    \"active\": true,\n    \"failedLoginAttempts\": 3,\n    \"permissions\": [\"POST\", \"MODERATOR\"],\n    \"preferences\": [\n      {\n        \"name\": \"COLOUR\",\n        \"value\": \"RED\"\n      },\n      {\n        \"name\": \"ORIENTATION\",\n        \"value\": \"LANDSCAPE\"\n      }\n    ]\n  }\n}\n"
+          } ]
+        } ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "update the user details",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "{\"description\":\"User update\",\"type\":\"object\",\"properties\":{\"message\":{\"description\":\"A message\",\"type\":\"string\",\"example\":\"User updated\"}}}",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User updated\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User not found\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/users",
+      "displayName" : "/users",
+      "children" : [ {
+        "resourcePath" : "/users/{id}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "Get user details for the given id",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"name\": \"user name\",\n  \"displayName\": \"display name\",\n  \"email\": \"user@example.com\"\n}\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: User not found\n}"
+              } ]
+            } ]
+          } ]
+        }, {
+          "method" : "delete",
+          "displayName" : "delete",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "delete the given user",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{ \"message\": \"user deleted\" }\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{ \"message\": \"unknown user\" }\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/{id}",
+        "displayName" : "/{id}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/users/{id}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "Get user details for the given id",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"name\": \"user name\",\n  \"displayName\": \"display name\",\n  \"email\": \"user@example.com\"\n}\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User not found\n}"
+            } ]
+          } ]
+        } ]
+      }, {
+        "method" : "delete",
+        "displayName" : "delete",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "delete the given user",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{ \"message\": \"user deleted\" }\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{ \"message\": \"unknown user\" }\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/{id}",
+      "displayName" : "/{id}",
+      "children" : [ ]
+    } ]
+  }, {
+    "name" : "Posts",
+    "description" : "Manage forum posts",
+    "resources" : [ {
+      "resourcePath" : "/posts",
+      "methods" : [ {
+        "method" : "post",
+        "displayName" : "post",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"title\": \"post title\",\n  \"description\": \"post description\",\n  \"body\": \"post body\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "create a new post",
+        "responses" : [ ]
+      }, {
+        "method" : "put",
+        "displayName" : "put",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"id\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n  \"title\": \"new improved post title\",\n  \"description\": \"new improved post description\",\n  \"body\": \"new improved post body\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T15:25:12.145Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "update a post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Post updated\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "500",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: An error occurred, please try again\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/posts",
+      "displayName" : "/posts",
+      "children" : [ {
+        "resourcePath" : "/posts/{id}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "get the specific post by id",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"id\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n  \"title\": \"post title\",\n  \"description\": \"post description\",\n  \"body\": \"post body\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+              } ]
+            } ]
+          } ]
+        }, {
+          "method" : "delete",
+          "displayName" : "delete",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "delete the post",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: The post was deleted\n}"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Post not found\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/{id}",
+        "displayName" : "/{id}",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/posts/today",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "return all the posts for today",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T13:45:33.511Z\"\n  }\n]\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/today",
+        "displayName" : "/today",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/posts/week",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "return all the posts for the week",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-02T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-05T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"867e8400-e29b-41d4-a716-456281440000\",\n    \"title\" : \"third post\",\n    \"description\": \"third post description\",\n    \"body\": \"third post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }\n]\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/week",
+        "displayName" : "/week",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/posts/user/{userId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "Get all the posts for a user",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2012-04-23T18:25:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2015-11-12T18:25:43.511Z\"\n  },\n  {\n    \"id\": \"867e8400-e29b-41d4-a716-456281440000\",\n    \"title\" : \"third post\",\n    \"description\": \"third post description\",\n    \"body\": \"third post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }\n]\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: User has no posts\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/user/{userId}",
+        "displayName" : "/user/{userId}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/posts/{id}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "get the specific post by id",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"id\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n  \"title\": \"post title\",\n  \"description\": \"post description\",\n  \"body\": \"post body\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+            } ]
+          } ]
+        } ]
+      }, {
+        "method" : "delete",
+        "displayName" : "delete",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "delete the post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: The post was deleted\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Post not found\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/{id}",
+      "displayName" : "/{id}",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/posts/today",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "return all the posts for today",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T13:45:33.511Z\"\n  }\n]\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/today",
+      "displayName" : "/today",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/posts/week",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "return all the posts for the week",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-02T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-05T12:15:43.511Z\"\n  },\n  {\n    \"id\": \"867e8400-e29b-41d4-a716-456281440000\",\n    \"title\" : \"third post\",\n    \"description\": \"third post description\",\n    \"body\": \"third post body\",\n    \"createdBy\": \"user id\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }\n]\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/week",
+      "displayName" : "/week",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/posts/user/{userId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "Get all the posts for a user",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "[\n  {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"title\" : \"first post\",\n    \"description\": \"first post description\",\n    \"body\": \"first post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2012-04-23T18:25:43.511Z\"\n  },\n  {\n    \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n    \"title\" : \"second post\",\n    \"description\": \"second post description\",\n    \"body\": \"second post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2015-11-12T18:25:43.511Z\"\n  },\n  {\n    \"id\": \"867e8400-e29b-41d4-a716-456281440000\",\n    \"title\" : \"third post\",\n    \"description\": \"third post description\",\n    \"body\": \"third post body\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }\n]\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User has no posts\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/user/{userId}",
+      "displayName" : "/user/{userId}",
+      "children" : [ ]
+    } ]
+  }, {
+    "name" : "Comments",
+    "description" : "Manage forum comments",
+    "resources" : [ {
+      "resourcePath" : "/comments",
+      "methods" : [ {
+        "method" : "post",
+        "displayName" : "post",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "post a new comment",
+        "responses" : [ ]
+      }, {
+        "method" : "put",
+        "displayName" : "put",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"edited comment on the post\",\n  \"original_comment\": \"comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "update a comment",
+        "responses" : [ ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/comments",
+      "displayName" : "/comments",
+      "children" : [ {
+        "resourcePath" : "/comments/{postId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "get all the comments for a post",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comments\": [{\n    \"comment\": \"I have something important to say about this\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T11:30:43.511Z\"\n  }, {\n    \"comment\": \"yes, well, I disagree wholeheartedly!\",\n    \"createdBy\": \"user2\",\n    \"createdAt\": \"2016-10-07T11:45:43.511Z\"\n  }, {\n    \"comment\": \"hmm well I disagree with your disagreement!\",\n    \"createdBy\": \"user3\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }, {\n    \"comment\": \"you sir are worse than hitler! I bid you good day!\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T12:16:43.511Z\"\n  }]\n}\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Be the first to comment!\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/{postId}",
+        "displayName" : "/{postId}",
+        "children" : [ {
+          "resourcePath" : "/comments/{postId}/{commentId}",
+          "methods" : [ {
+            "method" : "get",
+            "displayName" : "get",
+            "body" : [ ],
+            "headers" : [ {
+              "name" : "Accept",
+              "displayName" : "Accept",
+              "type" : "string",
+              "required" : true,
+              "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+              "examples" : [ {
+                "value" : "application/vnd.hmrc.1.0+json"
+              } ]
+            } ],
+            "queryParameters" : [ ],
+            "description" : "get all revisions of a comment",
+            "responses" : [ {
+              "code" : "200",
+              "body" : [ {
+                "name" : "application/json",
+                "displayName" : "application/json",
+                "type" : "any",
+                "required" : true,
+                "examples" : [ {
+                  "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"edited fixed comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\",\n  \"original_comments\": [{\n    \"comment\": \"comment on the post\",\n    \"createdAt\": \"2016-10-07T12:03:46.511Z\"\n  }, {\n    \"comment\": \"fixed comment on the post\",\n    \"createdAt\": \"2016-10-07T12:08:13.511Z\"\n  }]\n}\n"
+                } ]
+              } ]
+            } ]
+          }, {
+            "method" : "delete",
+            "displayName" : "delete",
+            "body" : [ ],
+            "headers" : [ {
+              "name" : "Accept",
+              "displayName" : "Accept",
+              "type" : "string",
+              "required" : true,
+              "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+              "examples" : [ {
+                "value" : "application/vnd.hmrc.1.0+json"
+              } ]
+            } ],
+            "queryParameters" : [ ],
+            "description" : "delete a comment from a post",
+            "responses" : [ {
+              "code" : "200",
+              "body" : [ {
+                "name" : "application/json",
+                "displayName" : "application/json",
+                "type" : "any",
+                "required" : true,
+                "examples" : [ {
+                  "value" : "{\nmessage: Comment deleted\n}"
+                } ]
+              } ]
+            }, {
+              "code" : "404",
+              "body" : [ {
+                "name" : "application/json",
+                "displayName" : "application/json",
+                "type" : "any",
+                "required" : true,
+                "examples" : [ {
+                  "value" : "{\nmessage: Comment not found to delete\n}"
+                } ]
+              } ]
+            } ]
+          } ],
+          "uriParameters" : [ ],
+          "relativeUri" : "/{commentId}",
+          "displayName" : "/{commentId}",
+          "children" : [ ]
+        } ]
+      } ]
+    }, {
+      "resourcePath" : "/comments/{postId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "get all the comments for a post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comments\": [{\n    \"comment\": \"I have something important to say about this\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T11:30:43.511Z\"\n  }, {\n    \"comment\": \"yes, well, I disagree wholeheartedly!\",\n    \"createdBy\": \"user2\",\n    \"createdAt\": \"2016-10-07T11:45:43.511Z\"\n  }, {\n    \"comment\": \"hmm well I disagree with your disagreement!\",\n    \"createdBy\": \"user3\",\n    \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n  }, {\n    \"comment\": \"you sir are worse than hitler! I bid you good day!\",\n    \"createdBy\": \"user1\",\n    \"createdAt\": \"2016-10-07T12:16:43.511Z\"\n  }]\n}\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Be the first to comment!\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/{postId}",
+      "displayName" : "/{postId}",
+      "children" : [ {
+        "resourcePath" : "/comments/{postId}/{commentId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "get all revisions of a comment",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"edited fixed comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\",\n  \"original_comments\": [{\n    \"comment\": \"comment on the post\",\n    \"createdAt\": \"2016-10-07T12:03:46.511Z\"\n  }, {\n    \"comment\": \"fixed comment on the post\",\n    \"createdAt\": \"2016-10-07T12:08:13.511Z\"\n  }]\n}\n"
+              } ]
+            } ]
+          } ]
+        }, {
+          "method" : "delete",
+          "displayName" : "delete",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "delete a comment from a post",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Comment deleted\n}"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Comment not found to delete\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/{commentId}",
+        "displayName" : "/{commentId}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/comments/{postId}/{commentId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "get all revisions of a comment",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"id\": \"44665500-e29b-41d4-a716-550e84440000\",\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"comment\": \"edited fixed comment on the post\",\n  \"createdBy\": \"user1\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\",\n  \"original_comments\": [{\n    \"comment\": \"comment on the post\",\n    \"createdAt\": \"2016-10-07T12:03:46.511Z\"\n  }, {\n    \"comment\": \"fixed comment on the post\",\n    \"createdAt\": \"2016-10-07T12:08:13.511Z\"\n  }]\n}\n"
+            } ]
+          } ]
+        } ]
+      }, {
+        "method" : "delete",
+        "displayName" : "delete",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "delete a comment from a post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Comment deleted\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Comment not found to delete\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/{commentId}",
+      "displayName" : "/{commentId}",
+      "children" : [ ]
+    } ]
+  }, {
+    "name" : "Votes",
+    "description" : "Manage forum votes",
+    "resources" : [ {
+      "resourcePath" : "/votes",
+      "methods" : [ {
+        "method" : "post",
+        "displayName" : "post",
+        "body" : [ {
+          "name" : "application/json",
+          "displayName" : "application/json",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "{\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"up\": true,\n  \"createdBy\": \"user2\",\n  \"createdAt\": \"2016-10-07T12:15:43.511Z\"\n}\n"
+          } ]
+        } ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "adds a vote to a post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Thanks for voting!\n}"
+            } ]
+          } ]
+        }, {
+          "code" : "500",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Oops something went wrong, please try again\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/votes",
+      "displayName" : "/votes",
+      "children" : [ {
+        "resourcePath" : "/votes/post/{postId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "get the votes for a particular post",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"up\": 508,\n  \"down\": 9009\n}\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: Be the first to vote\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/post/{postId}",
+        "displayName" : "/post/{postId}",
+        "children" : [ ]
+      }, {
+        "resourcePath" : "/votes/user/{userId}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "get",
+          "body" : [ ],
+          "headers" : [ {
+            "name" : "Accept",
+            "displayName" : "Accept",
+            "type" : "string",
+            "required" : true,
+            "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+            "examples" : [ {
+              "value" : "application/vnd.hmrc.1.0+json"
+            } ]
+          } ],
+          "queryParameters" : [ ],
+          "description" : "get all of a users votes",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"userId\": \"user1\",\n  \"totalUp\": 3,\n  \"totalDown\": 2,\n  \"votes\": [{\n    \"postId\": \"375e3879-4259-4adb-9a91-926d92a0dc0a\",\n    \"up\": true\n  }, {\n    \"postId\": \"0b5af6b5-f784-4144-b2e9-37d570916e48\",\n    \"up\": false\n  }, {\n    \"postId\": \"8dcec218-56e9-4d54-be3c-ad5a554b6a1e\",\n    \"up\": false\n  }, {\n    \"postId\": \"0b1241d7-0444-4ec1-aaeb-2cee1ac25694\",\n    \"up\": true\n  }, {\n    \"postId\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n    \"up\": true\n  }]\n}\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\nmessage: User is yet to vote\n}"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ ],
+        "relativeUri" : "/user/{userId}",
+        "displayName" : "/user/{userId}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/votes/post/{postId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "get the votes for a particular post",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"postId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"up\": 508,\n  \"down\": 9009\n}\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: Be the first to vote\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/post/{postId}",
+      "displayName" : "/post/{postId}",
+      "children" : [ ]
+    }, {
+      "resourcePath" : "/votes/user/{userId}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "get",
+        "body" : [ ],
+        "headers" : [ {
+          "name" : "Accept",
+          "displayName" : "Accept",
+          "type" : "string",
+          "required" : true,
+          "description" : "Specifies the response format and the [version](/api-documentation/docs/reference-guide#versioning) of the API to be used.",
+          "examples" : [ {
+            "value" : "application/vnd.hmrc.1.0+json"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "get all of a users votes",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"userId\": \"user1\",\n  \"totalUp\": 3,\n  \"totalDown\": 2,\n  \"votes\": [{\n    \"postId\": \"375e3879-4259-4adb-9a91-926d92a0dc0a\",\n    \"up\": true\n  }, {\n    \"postId\": \"0b5af6b5-f784-4144-b2e9-37d570916e48\",\n    \"up\": false\n  }, {\n    \"postId\": \"8dcec218-56e9-4d54-be3c-ad5a554b6a1e\",\n    \"up\": false\n  }, {\n    \"postId\": \"0b1241d7-0444-4ec1-aaeb-2cee1ac25694\",\n    \"up\": true\n  }, {\n    \"postId\": \"5f0e7157-abd3-49c5-97fa-4948c3587b77\",\n    \"up\": true\n  }]\n}\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\nmessage: User is yet to vote\n}"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/user/{userId}",
+      "displayName" : "/user/{userId}",
+      "children" : [ ]
+    } ]
+  } ],
+  "types" : [ ],
+  "isFieldOptionalityKnown" : true
+}

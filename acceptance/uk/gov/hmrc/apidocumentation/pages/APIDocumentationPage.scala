@@ -17,6 +17,9 @@
 package uk.gov.hmrc.apidocumentation.pages
 
 import uk.gov.hmrc.apidocumentation.{Env, WebPage}
+import org.openqa.selenium.support.ui.WebDriverWait
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.By
 
 object APIDocumentationPage extends WebPage {
 
@@ -32,13 +35,19 @@ object APIDocumentationPage extends WebPage {
   def selectHelloWorld() {
     val helloWorldLink = find(linkText("Hello World")).get
     click on helloWorldLink
+    waitForPageToStopMoving()
   }
 
   def selectAPIDocumentationTestService() {
     val apiDocumentationTestService = find(linkText("API Documentation Test")).get
     click on apiDocumentationTestService
+    waitForPageToStopMoving()
   }
 
   def applicationName = className("header__menu__proposition-name").element.text
+
+  def waitForPageToStopMoving() = {
+    new WebDriverWait(webDriver, 5).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
+  }
 
 }

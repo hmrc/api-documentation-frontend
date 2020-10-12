@@ -24,19 +24,20 @@ import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.Application
 import play.api.cache.CacheApi
-import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.{RamlAndSchemas, TestEndpoint, _}
-import uk.gov.hmrc.apidocumentation.utils.{ApiDefinitionTestDataHelper, FileRamlLoader}
+import uk.gov.hmrc.apidocumentation.models.TestEndpoint
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.ramltools.domain.RamlParseException
-import uk.gov.hmrc.ramltools.loaders.RamlLoader
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.util.{Failure, Success}
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
+import akka.http.scaladsl.model.headers.LinkParams.title
+import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
+import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
+import uk.gov.hmrc.apidocumentation.models.apispecification.Method
+import uk.gov.hmrc.apidocumentation.models.APIDefinition
 
 class DocumentationServiceSpec extends UnitSpec
   with GuiceOneAppPerTest
@@ -59,97 +60,112 @@ class DocumentationServiceSpec extends UnitSpec
   trait Setup {
     implicit val hc = HeaderCarrier()
     val cache = app.injector.instanceOf[CacheApi]
-    val ramlLoader = mock[RamlLoader]
-    val schemaLoader = mock[SchemaService]
     val appConfig = mock[ApplicationConfig]
     val apm = mock[ApiPlatformMicroserviceConnector]
     when(appConfig.apiPlatformMicroserviceBaseUrl).thenReturn(serviceUrl)
 
-    val underTest = new DocumentationService(appConfig, cache, apm, ramlLoader, schemaLoader)
-  }
-
-  "fetchRAML" should {
-
-    "fail when raml loader fails" in new Setup {
-      val url = DocumentationService.ramlUrl(serviceUrl,serviceName,"1.0")
-      when(ramlLoader.load(url)).thenReturn(Failure(RamlParseException("Expected test failure")))
-      intercept[RamlParseException] {
-        await(underTest.fetchRAML(serviceName, "1.0", cacheBuster = true))
-      }
-    }
-
-    "clear the cache key when the load fails" in new Setup {
-      val url = DocumentationService.ramlUrl(serviceUrl,serviceName,"1.0")
-      cache.set(url, mock[RAML])
-      when(ramlLoader.load(url)).thenReturn(Failure(RamlParseException("Expected test failure")))
-      intercept[RamlParseException] {
-        await(underTest.fetchRAML(serviceName, "1.0", cacheBuster = false))
-      }
-      cache.get(url) shouldBe None
-    }
-
-    "return a RAML API object when the load is successful" in new Setup {
-      val url = DocumentationService.ramlUrl(serviceUrl,serviceName,"1.1")
-      val schemaBase = DocumentationService.schemasUrl(serviceUrl,serviceName,"1.1")
-
-      val expectedRaml = mock[RAML]
-      when(ramlLoader.load(url)).thenReturn(Success(expectedRaml))
-      val expectedSchemas = mock[Map[String,JsonSchema]]
-      when(schemaLoader.loadSchemas(schemaBase, expectedRaml)).thenReturn(expectedSchemas)
-
-      await(underTest.fetchRAML(serviceName, "1.1", cacheBuster = true)) shouldBe apidocumentation.models.RamlAndSchemas(expectedRaml, expectedSchemas)
-    }
-
-    "clear the cached RAML when cachebuster is set" in new Setup {
-      val url = DocumentationService.ramlUrl(serviceUrl,serviceName,"1.1")
-      val schemaBase = DocumentationService.schemasUrl(serviceUrl,serviceName,"1.1")
-
-      val expectedRaml1 = mock[RAML]
-      when(ramlLoader.load(url)).thenReturn(Success(expectedRaml1))
-      val expectedSchemas1 = mock[Map[String,JsonSchema]]
-      when(schemaLoader.loadSchemas(schemaBase, expectedRaml1)).thenReturn(expectedSchemas1)
-      await(underTest.fetchRAML(serviceName, "1.1", cacheBuster = true)) shouldBe apidocumentation.models.RamlAndSchemas(expectedRaml1, expectedSchemas1)
-
-      val expectedRaml2 = mock[RAML]
-      when(ramlLoader.load(url)).thenReturn(Success(expectedRaml2))
-      val expectedSchemas2 = mock[Map[String,JsonSchema]]
-      when(schemaLoader.loadSchemas(schemaBase, expectedRaml2)).thenReturn(expectedSchemas2)
-      await(underTest.fetchRAML(serviceName, "1.1", cacheBuster = false)) shouldBe apidocumentation.models.RamlAndSchemas(expectedRaml1, expectedSchemas1)
-
-      val expectedRaml3 = mock[RAML]
-      when(ramlLoader.load(url)).thenReturn(Success(expectedRaml3))
-      val expectedSchemas3 = mock[Map[String,JsonSchema]]
-      when(schemaLoader.loadSchemas(schemaBase, expectedRaml3)).thenReturn(expectedSchemas3)
-      await(underTest.fetchRAML(serviceName, "1.1", cacheBuster = true)) shouldBe RamlAndSchemas(expectedRaml3, expectedSchemas3)
-    }
+    val underTest = new DocumentationService(appConfig, cache, apm)
   }
 
   "buildTestEndpoints" should {
 
+    val defaultApiSpecification = ApiSpecification(
+      title = "Title",
+      version = "1.0",
+      None,
+      List.empty,
+      List.empty,
+      List.empty,
+      false
+    )
+
+    def defaultResource(path: String, methods: String*) = 
+      Resource(
+        resourcePath = path,
+        methods = toMethods(methods:_*),
+        uriParameters = List.empty,
+        relativeUri = "",
+        displayName = "",
+        children = List.empty
+      )
+
+    def toMethods(methods: String*): List[Method] = {
+      methods.toList.map(m => defaultMethod(m))
+    }
+
+    def defaultMethod(verb: String) = Method(
+      method =  verb,
+      displayName = "name",
+      body = List.empty,
+      headers = List.empty,
+      queryParameters = List.empty,
+      description = None,
+      securedBy = None,
+      responses = List.empty,
+      sandboxData = None
+    )
+
     "create a simple testers URL output file with just endpoint information" in new Setup {
-      val service = "minimal"
-      val raml = new FileRamlLoader().load(s"test/resources/raml/$service.raml")
-      when(ramlLoader.load(any[String])).thenReturn(Future.successful(raml))
+      val specification = defaultApiSpecification
+      when(apm.fetchApiSpecification(any(),any())(any())).thenReturn(specification)
       await(underTest.buildTestEndpoints("minimal", "1.0")) shouldBe Seq.empty
     }
 
     "create a simple testers URL output file with just endpoint information for a single endpoint" in new Setup {
-      val service = "single-endpoint"
-      val raml = new FileRamlLoader().load(s"test/resources/raml/$service.raml")
-      when(ramlLoader.load(any[String])).thenReturn(Future.successful(raml))
+      val specification = defaultApiSpecification.copy(
+        resourceGroups = List(
+          ResourceGroup(
+            name = None,
+            description = None, 
+            resources = List(
+              defaultResource("/hello")
+              .copy(
+                children = List(
+                  defaultResource("/hello/world", "get")
+                )
+              )
+            )
+          )
+        )
+      )
+      when(apm.fetchApiSpecification(any(),any())(any())).thenReturn(specification)
+
       val expected = Seq(TestEndpoint("{service-url}/hello/world", "GET"))
       await(underTest.buildTestEndpoints("single-endpoint", "1.0")) shouldBe expected
     }
 
     "create a complex testers URL output file with just endpoint information for a multiple endpoints" in new Setup {
-      val service = "multiple-endpoints"
-      val raml = new FileRamlLoader().load(s"test/resources/raml/$service.raml")
-      when(ramlLoader.load(any[String])).thenReturn(Future.successful(raml))
+      val specification = defaultApiSpecification.copy(
+        resourceGroups = List(
+          ResourceGroup(
+            name = None,
+            description = None, 
+            resources = List(
+              defaultResource("/hello")
+              .copy(
+                children = List(
+                  defaultResource("/hello/there", "options", "get", "put").copy(
+                    children = List(
+                      defaultResource("/hello/there/{empref}", "delete").copy(
+                        children = List(
+                          defaultResource("/hello/there/{empref}/year", "post")
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      when(apm.fetchApiSpecification(any(),any())(any())).thenReturn(specification)
+
       val expected = Seq(
         TestEndpoint("{service-url}/hello/there", "GET", "OPTIONS", "PUT"),
         TestEndpoint("{service-url}/hello/there/{empref}", "DELETE"),
-        TestEndpoint("{service-url}/hello/there/{empref}/year", "POST"),
-        TestEndpoint("{service-url}/hello/there/{empref}/year/{taxYear}", "PUT"))
+        TestEndpoint("{service-url}/hello/there/{empref}/year", "POST")
+      )
       await(underTest.buildTestEndpoints("multiple-endpoints", "1.0")) shouldBe expected
     }
   }

@@ -17,21 +17,11 @@
 package uk.gov.hmrc.apidocumentation.views.helpers
 
 import akka.http.scaladsl.model.{StatusCode, StatusCodes}
-import org.raml.v2.api.model.v10.bodies.Response
-import org.raml.v2.api.model.v10.common.Annotable
-import org.raml.v2.api.model.v10.datamodel._
-import org.raml.v2.api.model.v10.methods.Method
-import org.raml.v2.api.model.v10.resources.Resource
-import play.api.libs.json.Json
-import play.libs.XML
-import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation.models.DocsVisibility.DocsVisibility
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
 
-import scala.collection.JavaConverters._
 import scala.language.reflectiveCalls
-import scala.util.Try
+import play.twirl.api.Html
 
 object Slugify {
   def apply(text: String): String = makeSlug(text)
@@ -53,18 +43,6 @@ object Val {
 }
 
 object HeaderVal {
-  def apply(header: TypeDeclaration, version: String): String = {
-    def replace(example: String) = {
-      example.replace("application/vnd.hmrc.1.0", "application/vnd.hmrc." + version)
-    }
-    val example = Val(header.example)
-    Val(header.displayName) match {
-      case "Accept"=> replace(example)
-      case "Content-Type" => replace(example)
-      case _  => example
-    }
-  }
-
   def apply(header: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration, version: String): String = {
     def replace(example: String) = {
       example.replace("application/vnd.hmrc.1.0", "application/vnd.hmrc." + version)
@@ -76,76 +54,6 @@ object HeaderVal {
       case _  => exampleValue
     }
   }
-}
-
-object FindProperty {
-  def apply(typeInstance: TypeInstance, names: String*): Option[String] = {
-    val properties = typeInstance.properties.asScala
-    names match {
-      case head +: Nil => {
-        properties.find(_.name == head).map(scalarValue)
-      }
-      case head +: tail => {
-        properties.find(_.name == head) match {
-          case Some(property) => FindProperty(property.value, tail: _*)
-          case _ => None
-        }
-      }
-    }
-  }
-
-  private def scalarValue(property: TypeInstanceProperty): String = {
-    if (!property.isArray && property.value.isScalar) property.value.value.toString else ""
-  }
-}
-
-object Annotation {
-  def apply(context: Annotable, names: String*): String = getAnnotation(context, names: _*).getOrElse("")
-
-  def exists(context: Annotable, names: String*): Boolean = getAnnotation(context, names: _*).isDefined
-
-  def optional(context: Annotable, names: String*): Option[String] = getAnnotation(context, names: _*).filterNot(_.isEmpty)
-
-  def getAnnotation(context: Annotable, names: String*): Option[String] = {
-    val matches = context.annotations.asScala.find { ann =>
-      Option(ann.name).exists(stripNamespace(_) == names.head)
-    }
-
-    val out = for {
-      m <- matches
-      annotation = m.structuredValue
-    } yield propertyForPath(annotation, names.tail.toList)
-
-    out.flatten.map(_.toString)
-  }
-
-  private def stripNamespace(name: String): String = {
-    name.replaceFirst("\\(.*\\.", "(")
-  }
-
-  private def propertyForPath(annotation: TypeInstance, path: List[AnyRef]): Option[AnyRef] =
-    if (annotation.isScalar) scalarValueOf(annotation, path)
-    else complexValueOf(annotation, path)
-
-  private def complexValueOf(annotation: TypeInstance, path: List[AnyRef]): Option[AnyRef] =
-    if (path.isEmpty) Option(annotation)
-    else getProperty(annotation, path.head) match {
-      case Some(ti: TypeInstance) => propertyForPath(ti, path.tail)
-      case other => other
-    }
-
-  private def scalarValueOf(annotation: TypeInstance, path: List[AnyRef]): Option[AnyRef] =
-    if (path.nonEmpty) throw new RuntimeException(s"Scalar annotations do not have properties")
-    else Option(annotation.value())
-
-  private def getProperty(annotation: TypeInstance, property: AnyRef) =
-    annotation
-      .properties.asScala
-      .find(prop => prop.name == property)
-      .map(ti => transformScalars(ti.value))
-
-  private def transformScalars(value: TypeInstance) =
-    if (value.isScalar) value.value() else value
 }
 
 
@@ -177,172 +85,6 @@ object Markdown {
       .setCodeBlockEmitter(new CodeBlockEmitter)
 
   private def process(text: String) = Processor.process(text, configuration.build)
-}
-
-case class ResourceGroup(name: Option[String] = None, description: Option[String] = None, resources: Seq[Resource] = Nil) {
-  def +(resource: Resource) = {
-    ResourceGroup(name, description, resources :+ resource)
-  }
-}
-
-object GroupedResources {
-  def apply(resources: Seq[Resource]): Seq[ResourceGroup] = {
-    group(flatten(resources)).filterNot(_.resources.length < 1)
-  }
-
-  private def group(resources: Seq[Resource], currentGroup: ResourceGroup = ResourceGroup(), groups: Seq[ResourceGroup] = Nil): Seq[ResourceGroup] = {
-    resources match {
-      case head +: tail => {
-        if (Annotation.exists(head, "(group)")) {
-          val groupName = Annotation(head, "(group)", "name")
-          val groupDesc = Annotation(head, "(group)", "description")
-          group(tail, ResourceGroup(Some(groupName), Some(groupDesc), Seq(head)), groups :+ currentGroup)
-        } else {
-          group(tail, currentGroup + head, groups)
-        }
-      }
-      case _ => groups :+ currentGroup
-    }
-  }
-
-  private def flatten(resources: Seq[Resource], acc: Seq[Resource] = Nil): Seq[Resource] = {
-    resources match {
-      case head +: tail => {
-        flatten(tail, flatten(head.resources.asScala, acc :+ head))
-      }
-      case _ => acc
-    }
-  }
-}
-
-object Methods {
-  private val correctOrder = Map(
-    "get" -> 0, "post" -> 1, "put" -> 2, "delete" -> 3,
-    "head" -> 4, "patch" -> 5, "options" -> 6
-  )
-
-  def apply(resource: Resource): List[Method] =
-    resource.methods.asScala.toList.sortWith { (left, right) =>
-      (for {
-        l <- correctOrder.get(left.method)
-        r <- correctOrder.get(right.method)
-      } yield l < r).getOrElse(false)
-    }
-}
-
-object Authorisation {
-
-  def apply(method: Method): (String, Option[String]) = fetchAuthorisation(method)
-
-  private def fetchAuthorisation(method: Method): (String, Option[String]) = {
-
-    if (method.securedBy().asScala.nonEmpty) {
-      method.securedBy.get(0).securityScheme.`type` match {
-        case "OAuth 2.0" => ("user", Some(Annotation(method, "(scope)")))
-        case _           => ("application", Annotation.optional(method, "(scope)"))
-      }
-    } else {
-      ("none", None)
-    }
-  }
-}
-
-
-
-object Responses {
-  def success(method: Method) = method.responses.asScala.filter(isSuccessResponse)
-
-  def error(method: Method) = method.responses.asScala.filter(isErrorResponse)
-
-  private def isSuccessResponse(response: Response) = {
-    val code = Val(response.code)
-    code.startsWith("2") || code.startsWith("3")
-  }
-
-  private def isErrorResponse(response: Response) = {
-    val code = Val(response.code)
-    code.startsWith("4") || code.startsWith("5")
-  }
-}
-
-
-object ErrorScenarios {
-  def apply(method: Method): Seq[Map[String, String]] = {
-
-    val errorScenarios = for {
-      response <- Responses.error(method)
-      body <- response.body.asScala
-      example <- BodyExamples(body)
-      scenarioDescription <- scenarioDescription(body, example)
-      errorResponse <- errorResponse(example)
-    } yield {
-      errorResponse.code.map(code =>
-        Map("scenario" -> scenarioDescription,
-          "code" -> code,
-          "httpStatus" -> response.code.value))
-    }
-
-    errorScenarios.flatten
-  }
-
-  private def errorResponse(bodyExample: BodyExample): Option[ErrorResponse] = {
-    val x= FindProperty(bodyExample.example.structuredValue, "value", "code")
-      .orElse(FindProperty(bodyExample.example.structuredValue, "code"))
-
-    x.fold(responseFromBody(bodyExample))(code => Some(ErrorResponse(code = Some(code))))
-  }
-
-  private def scenarioDescription(body: TypeDeclaration, example: BodyExample): Option[String] = {
-    example.description()
-      .orElse(Option(body.description).map(_.value))
-  }
-
-  private def responseFromBody(example: BodyExample): Option[ErrorResponse] = {
-    responseFromJson(example).orElse(responseFromXML(example))
-  }
-  private def responseFromJson(example: BodyExample): Option[ErrorResponse] = {
-    example.value.flatMap(v => Try(Json.parse(v).as[ErrorResponse]).toOption)
-  }
-
-  private def responseFromXML(example: BodyExample): Option[ErrorResponse] = {
-    for {
-      v <- example.value
-      codes <- Try(XML.fromString(v).getElementsByTagName("code")).toOption
-      first <- Option(codes.item(0))
-    } yield {
-      ErrorResponse(Some(first.getTextContent))
-    }
-  }
-}
-
-case class BodyExample(example: ExampleSpec) {
-  def description(): Option[String] = {
-    FindProperty(example.structuredValue, "description", "value")
-  }
-
-  def documentation(): Option[String] = {
-    if (Annotation.exists(example, "(documentation)")) {
-      Option(Annotation(example, "(documentation)"))
-    } else {
-      None
-    }
-  }
-
-  def code(): Option[String] = {
-    FindProperty(example.structuredValue, "value", "code")
-      .orElse(FindProperty(example.structuredValue, "code"))
-  }
-
-  def value() = {
-    FindProperty(example.structuredValue, "value")
-      .orElse(Some(example.value))
-  }
-}
-
-object BodyExamples {
-  def apply(body: TypeDeclaration): Seq[BodyExample] = {
-    if (body.examples.size > 0) body.examples.asScala.toSeq.map(ex => BodyExample(ex)) else Seq(BodyExample(body.example))
-  }
 }
 
 object HttpStatus {

@@ -41,8 +41,6 @@ trait ApplicationConfig {
   def securedCookie: Boolean
   def ramlPreviewEnabled: Boolean
 
-  def ramlLoaderRewrites: Map[String, String]
-
   def showProductionAvailability: Boolean
   def showSandboxAvailability: Boolean
 
@@ -104,7 +102,6 @@ class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
   
   val securedCookie = getConfigDefaulted(s"$env.cookie.secure", true)
   val ramlPreviewEnabled = getConfigDefaulted(s"$env.features.ramlPreview", false)
-  val ramlLoaderRewrites = buildRamlLoaderRewrites
 
   val showProductionAvailability = getConfigDefaulted(s"$env.features.showProductionAvailability", false)
   val showSandboxAvailability = getConfigDefaulted(s"$env.features.showSandboxAvailability", false)
@@ -129,13 +126,6 @@ class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
   val title = "HMRC Developer Hub"
   val isStubMode = env == "Stub"
   val xmlApiBaseUrl = getConfigDefaulted(s"$env.xml-api.base-url", "https://www.gov.uk")
-
-  private def buildRamlLoaderRewrites: Map[String, String] = {
-    Map(
-      getConfigDefaulted(s"$env.ramlLoaderUrlRewrite.from", "") ->
-      getConfigDefaulted(s"$env.ramlLoaderUrlRewrite.to", "")
-    )
-  }
 
   private def platformBaseUrl(key: String) = {
     (getConfigDefaulted(s"$key.protocol", ""), getConfigDefaulted(s"$key.host", "")) match {

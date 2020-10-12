@@ -1,0 +1,271 @@
+{
+  "title" : "Developer Forum",
+  "version" : "1.5",
+  "documentationItems" : [ {
+    "title" : "Overview",
+    "content" : "Public Alpha API\n\nDocumentation test service\n"
+  }, {
+    "title" : "Versioning",
+    "content" : "We use versions."
+  } ],
+  "resourceGroups" : [ {
+    "name" : "Users",
+    "description" : "Manage forum users",
+    "resources" : [ {
+      "resourcePath" : "/users",
+      "methods" : [ {
+        "method" : "post",
+        "displayName" : "Create user",
+        "body" : [ {
+          "name" : "application/xml",
+          "displayName" : "application/xml",
+          "type" : "any",
+          "required" : true,
+          "examples" : [ {
+            "value" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<user>\n  <name>John Smith</name>\n  <email>user@example.com</email>\n</user>\n"
+          } ]
+        } ],
+        "headers" : [ {
+          "name" : "Location",
+          "displayName" : "Location",
+          "type" : "string",
+          "required" : false,
+          "description" : "Location of the created users",
+          "examples" : [ {
+            "value" : "/users/{id}"
+          } ]
+        } ],
+        "queryParameters" : [ ],
+        "description" : "Create a new user",
+        "responses" : [ {
+          "code" : "201"
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/users",
+      "displayName" : "/users",
+      "children" : [ {
+        "resourcePath" : "/users/{id}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "Get user",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "Get user details for the given ID",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/xml",
+              "displayName" : "application/xml",
+              "type" : "any",
+              "required" : true,
+              "examples" : [ {
+                "value" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<user>\n  <id>ABC-123-XYZ</id>\n  <name>John Smith</name>\n  <email>user@example.com</email>\n</user>\n"
+              } ]
+            } ]
+          }, {
+            "code" : "404",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "any",
+              "required" : true,
+              "description" : "User not found",
+              "examples" : [ {
+                "value" : "{\n  \"code\": NOT_FOUND,\n  \"message\": \"User not found\"\n}\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ {
+          "name" : "id",
+          "displayName" : "id",
+          "type" : "userIdType",
+          "required" : true,
+          "description" : "The user's ID",
+          "pattern" : "^[A-Z]{3}-\\d{3}-[A-D]{3}$"
+        } ],
+        "relativeUri" : "/{id}",
+        "displayName" : "/{id}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/users/{id}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "Get user",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "Get user details for the given ID",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/xml",
+            "displayName" : "application/xml",
+            "type" : "any",
+            "required" : true,
+            "examples" : [ {
+              "value" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<user>\n  <id>ABC-123-XYZ</id>\n  <name>John Smith</name>\n  <email>user@example.com</email>\n</user>\n"
+            } ]
+          } ]
+        }, {
+          "code" : "404",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "any",
+            "required" : true,
+            "description" : "User not found",
+            "examples" : [ {
+              "value" : "{\n  \"code\": NOT_FOUND,\n  \"message\": \"User not found\"\n}\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ {
+        "name" : "id",
+        "displayName" : "id",
+        "type" : "userIdType",
+        "required" : true,
+        "description" : "The user's ID",
+        "pattern" : "^[A-Z]{3}-\\d{3}-[A-D]{3}$"
+      } ],
+      "relativeUri" : "/{id}",
+      "displayName" : "/{id}",
+      "children" : [ ]
+    } ]
+  }, {
+    "name" : "Tax returns",
+    "description" : "Manage tax returns",
+    "resources" : [ {
+      "resourcePath" : "/returns",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "List returns by tax year",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ {
+          "name" : "taxYearStart",
+          "displayName" : "taxYearStart",
+          "type" : "taxYear",
+          "required" : true,
+          "description" : "Starting tax year to list returns for",
+          "examples" : [ {
+            "value" : "2014-15"
+          } ],
+          "pattern" : "^[0-9]{4}-[0-9]{2}$"
+        }, {
+          "name" : "taxYearEnd",
+          "displayName" : "taxYearEnd",
+          "type" : "taxYear",
+          "required" : true,
+          "description" : "Ending tax year to list returns for",
+          "pattern" : "^[0-9]{4}-[0-9]{2}$"
+        } ],
+        "responses" : [ {
+          "code" : "200"
+        } ]
+      } ],
+      "uriParameters" : [ ],
+      "relativeUri" : "/returns",
+      "displayName" : "/returns",
+      "children" : [ {
+        "resourcePath" : "/returns/{taxYear}",
+        "methods" : [ {
+          "method" : "get",
+          "displayName" : "Get tax return",
+          "body" : [ ],
+          "headers" : [ ],
+          "queryParameters" : [ ],
+          "description" : "Get tax return for the given tax year",
+          "responses" : [ {
+            "code" : "200",
+            "body" : [ {
+              "name" : "application/json",
+              "displayName" : "application/json",
+              "type" : "{\"description\":\"Tax return\",\"type\":\"object\",\"properties\":{\"taxYear\":{\"description\":\"The tax year that the return applies to\",\"id\":\"tax-year\",\"type\":\"string\",\"example\":\"2015-16\",\"pattern\":\"^[0-9]{4}-[0-9]{2}$\"},\"submissionDate\":{\"description\":\"Date that the return was submitted\",\"id\":\"full-date\",\"type\":\"string\",\"example\":\"2017-01-25\",\"pattern\":\"^[0-9]{4}-[0-9]{2}-[0-9]{2}$\"}},\"definitions\":{\"fullDate\":{\"description\":\"Date in the format YYYY-MM-DD\",\"id\":\"full-date\",\"type\":\"string\",\"example\":\"2017-01-25\",\"pattern\":\"^[0-9]{4}-[0-9]{2}-[0-9]{2}$\"},\"taxYear\":{\"description\":\"Tax year in the format YYYY-YY\",\"id\":\"tax-year\",\"type\":\"string\",\"example\":\"2015-16\",\"pattern\":\"^[0-9]{4}-[0-9]{2}$\"}}}",
+              "required" : true,
+              "examples" : [ {
+                "value" : "{\n  \"taxYear\": \"2015-16\",\n  \"submissionDate\": \"2017-01-31\"\n}\n"
+              } ]
+            } ]
+          } ]
+        } ],
+        "uriParameters" : [ {
+          "name" : "taxYear",
+          "displayName" : "taxYear",
+          "type" : "taxYear",
+          "required" : true,
+          "description" : "Tax year to get a return for",
+          "examples" : [ {
+            "value" : "2014-15"
+          } ],
+          "pattern" : "^[0-9]{4}-[0-9]{2}$"
+        } ],
+        "relativeUri" : "/{taxYear}",
+        "displayName" : "/{taxYear}",
+        "children" : [ ]
+      } ]
+    }, {
+      "resourcePath" : "/returns/{taxYear}",
+      "methods" : [ {
+        "method" : "get",
+        "displayName" : "Get tax return",
+        "body" : [ ],
+        "headers" : [ ],
+        "queryParameters" : [ ],
+        "description" : "Get tax return for the given tax year",
+        "responses" : [ {
+          "code" : "200",
+          "body" : [ {
+            "name" : "application/json",
+            "displayName" : "application/json",
+            "type" : "{\"description\":\"Tax return\",\"type\":\"object\",\"properties\":{\"taxYear\":{\"description\":\"The tax year that the return applies to\",\"id\":\"tax-year\",\"type\":\"string\",\"example\":\"2015-16\",\"pattern\":\"^[0-9]{4}-[0-9]{2}$\"},\"submissionDate\":{\"description\":\"Date that the return was submitted\",\"id\":\"full-date\",\"type\":\"string\",\"example\":\"2017-01-25\",\"pattern\":\"^[0-9]{4}-[0-9]{2}-[0-9]{2}$\"}},\"definitions\":{\"fullDate\":{\"description\":\"Date in the format YYYY-MM-DD\",\"id\":\"full-date\",\"type\":\"string\",\"example\":\"2017-01-25\",\"pattern\":\"^[0-9]{4}-[0-9]{2}-[0-9]{2}$\"},\"taxYear\":{\"description\":\"Tax year in the format YYYY-YY\",\"id\":\"tax-year\",\"type\":\"string\",\"example\":\"2015-16\",\"pattern\":\"^[0-9]{4}-[0-9]{2}$\"}}}",
+            "required" : true,
+            "examples" : [ {
+              "value" : "{\n  \"taxYear\": \"2015-16\",\n  \"submissionDate\": \"2017-01-31\"\n}\n"
+            } ]
+          } ]
+        } ]
+      } ],
+      "uriParameters" : [ {
+        "name" : "taxYear",
+        "displayName" : "taxYear",
+        "type" : "taxYear",
+        "required" : true,
+        "description" : "Tax year to get a return for",
+        "examples" : [ {
+          "value" : "2014-15"
+        } ],
+        "pattern" : "^[0-9]{4}-[0-9]{2}$"
+      } ],
+      "relativeUri" : "/{taxYear}",
+      "displayName" : "/{taxYear}",
+      "children" : [ ]
+    } ]
+  } ],
+  "types" : [ {
+    "name" : "userIdType",
+    "displayName" : "userIdType",
+    "type" : "string",
+    "required" : true,
+    "pattern" : "^[A-Z]{3}-\\d{3}-[A-D]{3}$"
+  }, {
+    "name" : "errorResponse",
+    "displayName" : "errorResponse",
+    "type" : "object",
+    "required" : true
+  }, {
+    "name" : "taxYear",
+    "displayName" : "taxYear",
+    "type" : "string",
+    "required" : true,
+    "examples" : [ {
+      "value" : "2016-17"
+    } ],
+    "pattern" : "^[0-9]{4}-[0-9]{2}$"
+  } ],
+  "isFieldOptionalityKnown" : true
+}

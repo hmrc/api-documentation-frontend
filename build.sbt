@@ -14,6 +14,8 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
+import bloop.integrations.sbt.BloopDefaults
+
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = (project in file("."))
@@ -70,6 +72,7 @@ lazy val microservice = (project in file("."))
 
   .configs(AcceptanceTest)
   .settings(inConfig(AcceptanceTest)(Defaults.testSettings): _*)
+  .settings(inConfig(AcceptanceTest)(BloopDefaults.configSettings))
   .settings(
     testOptions in AcceptanceTest := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "acceptance",
@@ -105,10 +108,8 @@ lazy val compile = Seq(
   "uk.gov.hmrc" %% "bootstrap-play-26" % "1.7.0",
   "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-26",
   "uk.gov.hmrc" %% "http-metrics" % "1.10.0",
-  "uk.gov.hmrc" %% "raml-tools" % "1.18.0",
   "uk.gov.hmrc" %% "govuk-template" % "5.54.0-play-26",
   "uk.gov.hmrc" %% "play-ui" % "8.9.0-play-26",
-  "org.raml" % "raml-parser-2" % "1.0.13",
   "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
   "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1",
@@ -161,6 +162,6 @@ val ScoverageExclusionPatterns = List(
 
 // Coverage configuration
 // TODO ebridge - Fix and set back to 85
-coverageMinimum := 60
+coverageMinimum := 80
 coverageFailOnMinimum := true
 coverageExcludedPackages := ScoverageExclusionPatterns.mkString("",";","")

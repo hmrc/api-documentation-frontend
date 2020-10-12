@@ -30,7 +30,6 @@ trait NavigationServiceMock extends MockitoSugar {
   val navigationService = mock[NavigationService]
   when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(successful(Seq(navLink)))
   when(navigationService.sidebarNavigation()).thenReturn(Seq(sidebarLink))
-  when(navigationService.apiSidebarNavigation(any(), any(), any())).thenReturn(Seq(sidebarLink))
   when(navigationService.apiSidebarNavigation2(any(), any(), any())).thenReturn(Seq(sidebarLink))
 }
 

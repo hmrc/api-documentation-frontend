@@ -17,7 +17,6 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import org.raml.v2.api.model.v10.resources.Resource
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers.routes
@@ -30,7 +29,6 @@ import uk.gov.hmrc.apidocumentation.models.{
 import uk.gov.hmrc.apidocumentation.views.helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
@@ -134,43 +132,6 @@ class NavigationService @Inject()(
           label = "Endpoints",
           href = "#endpoints",
           subLinks = subLinks,
-          showSubLinks = true
-        )
-      }
-
-    sections :+ resources
-  }
-
-  def apiSidebarNavigation(service: String,
-                           version: ExtendedAPIVersion,
-                           raml: RAML): Seq[SidebarLink] = {
-    def traverse(resources: Seq[Resource], accum: Seq[SidebarLink] = Seq.empty): Seq[SidebarLink] = {
-      if (resources.isEmpty)
-        accum
-      else {
-        (for {
-          res <- resources
-          ann = Annotation.getAnnotation(res, "(group)", "name")
-          link = ann.map(name => SidebarLink(label = name, href = s"#${Slugify(name)}"))
-        } yield link ++: traverse(res.resources.asScala, accum)).flatten
-      }
-    }
-
-    val sections = raml.documentationForVersion(Some(version)).map { doc =>
-      SidebarLink(
-        label = doc.title.value,
-        href = s"#${Slugify(doc.title.value)}"
-      )
-    }
-
-    val resources =
-      if (VersionDocsVisible(version.visibility) == DocsVisibility.OVERVIEW_ONLY) {
-        SidebarLink(label = "Read more", href = "#read-more")
-      } else {
-        SidebarLink(
-          label = "Endpoints",
-          href = "#endpoints",
-          subLinks = traverse(raml.resources.asScala),
           showSubLinks = true
         )
       }
