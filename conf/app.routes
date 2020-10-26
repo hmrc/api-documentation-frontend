@@ -1,5 +1,7 @@
 # microservice specific routes
 
+->          /govuk-frontend                                         govuk.Routes
+
 GET         /                                                       uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
 GET         /docs/index                                             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
 GET         /docs/terms-of-use                                      uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUsePage()

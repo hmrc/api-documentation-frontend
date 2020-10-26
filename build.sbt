@@ -59,6 +59,13 @@ lazy val microservice = (project in file("."))
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     majorVersion := 0
   )
+  .settings(
+    TwirlKeys.templateImports ++= Seq(
+      "play.twirl.api.HtmlFormat",
+      "uk.gov.hmrc.govukfrontend.views.html.components._",
+      "uk.gov.hmrc.govukfrontend.views.html.helpers._"
+    )
+  )
   .settings(playPublishingSettings: _*)
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
 
@@ -111,6 +118,7 @@ lazy val compile = Seq(
   "uk.gov.hmrc" %% "govuk-template" % "5.54.0-play-26",
   "uk.gov.hmrc" %% "play-ui" % "8.9.0-play-26",
   "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
+  "uk.gov.hmrc" %% "play-frontend-govuk" % "0.49.0-play-26",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
   "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1",
 

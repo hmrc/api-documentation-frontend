@@ -1,3 +1,5 @@
+$govuk-assets-path: "/api-documentation/assets/lib/govuk-frontend/govuk/assets/";
+
 // Components
 @import "components/sticky-nav";
 @import "components/responsive-tables";
@@ -16,3 +18,5 @@
 
 // Ad-hoc fixes
 @import "ad-hoc";
+
+@import "lib/govuk-frontend/govuk/all";
