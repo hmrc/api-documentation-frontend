@@ -59,13 +59,6 @@ lazy val microservice = (project in file("."))
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     majorVersion := 0
   )
-  .settings(
-    TwirlKeys.templateImports ++= Seq(
-      "play.twirl.api.HtmlFormat",
-      "uk.gov.hmrc.govukfrontend.views.html.components._",
-      "uk.gov.hmrc.govukfrontend.views.html.helpers._"
-    )
-  )
   .settings(playPublishingSettings: _*)
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
 
