@@ -15,6 +15,7 @@
  *@
 
 @import play.twirl.api.HtmlFormat
+@import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
 @import uk.gov.hmrc.govukfrontend.views.html.helpers._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
@@ -30,7 +31,9 @@
   footerBlock: Option[Html] = None,
   footerItems: Seq[FooterItem] = Seq.empty,
   bodyEndBlock: Option[Html] = None,
-  scriptsBlock: Option[Html] = None
+  scriptsBlock: Option[Html] = None,
+  leftNav: Option[Html] = None,
+  breadcrumbs: Option[Breadcrumbs] = None
 )(contentBlock: Html)(implicit messages: Messages)
 
 @head = {
