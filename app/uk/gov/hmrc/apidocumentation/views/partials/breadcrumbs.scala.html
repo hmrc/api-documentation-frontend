@@ -22,7 +22,7 @@
     @*
       Note: The crumbs are in reverse order. The current page is FIRST, the top level link is LAST.
     *@
-    <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <!-- <nav class="breadcrumbs" aria-label="Breadcrumbs">
         <ol itemscope itemtype="http://schema.org/BreadcrumbList">
             @defining(crumbs.tail) { linkableCrumbs =>
                 @linkableCrumbs.reverse.map { crumb =>
@@ -31,5 +31,17 @@
             }
             <li>@crumbs.head.name</li>
         </ol>
-    </nav>
+    </nav> -->
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      @defining(crumbs.tail) { linkableCrumbs =>
+        @linkableCrumbs.reverse.map { crumb =>
+          <li class="govuk-breadcrumbs__list-item">
+            <a class="govuk-breadcrumbs__link" href="@crumb.url">@crumb.name</a>
+          </li>
+        }
+      }
+      <li class="govuk-breadcrumbs__list-item">@crumbs.head.name</li>
+    </ol>
+  </div>
 }
