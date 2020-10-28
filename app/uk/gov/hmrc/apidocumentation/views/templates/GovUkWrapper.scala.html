@@ -18,9 +18,12 @@
 @import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
 @import uk.gov.hmrc.govukfrontend.views.html.helpers._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.apidocumentation.views.html.partials
+@import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 @this(
-  govukLayout: GovukLayout
+  govukLayout: GovukLayout,
+  applicationConfig: ApplicationConfig
 )
 
 @(
@@ -33,7 +36,11 @@
   bodyEndBlock: Option[Html] = None,
   scriptsBlock: Option[Html] = None,
   leftNav: Option[Html] = None,
-  breadcrumbs: Option[Breadcrumbs] = None
+  breadcrumbs: Option[Breadcrumbs] = None,
+  sidebar: Option[Html] = None,
+  fullWidthBanner: Option[Html] = None,
+  serviceInfoContent : Option[Html] = None,
+  fullWidthContent: Boolean = false
 )(contentBlock: Html)(implicit messages: Messages)
 
 @head = {
@@ -45,12 +52,67 @@
   <script>window.GOVUKFrontend.initAll();</script>
 }
 
+@getHelpForm = {}
+
+@contentWithLeftNav = {
+    <div class="column-one-quarter">
+        @leftNav.getOrElse(HtmlFormat.empty)
+        &nbsp;
+    </div>
+    <div class="column-three-quarters">
+        <div id="content">
+            @contentBlock
+            @sidebar
+        </div>
+    </div>
+    @getHelpForm
+}
+
+@banner = {
+    @breadcrumbs.map {crumbs =>
+        @partials.breadcrumbs(crumbs.crumbs)
+    }
+}
+
+@content = {
+    <div class="@if(fullWidthContent) {column-full} else {column-three-quarters}">
+        <div id="content">
+            @contentBlock
+            @sidebar
+            @getHelpForm
+        </div>
+    </div>
+}
+
+@bodyContent = {
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ"
+                      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    @if(fullWidthBanner.isDefined) {
+    <div class="centered-content">
+        @banner
+        @serviceInfoContent.getOrElse(HtmlFormat.empty)
+    </div>
+    <section class="full-width-banner">
+        @fullWidthBanner
+    </section>
+    }
+
+    <main id="wrapper" role="main">
+        <div class="centered-content">
+            <div class="grid-row sticky-nav_wrapper">
+                @if(leftNav.isDefined) { @contentWithLeftNav } else { @content }
+            </div>
+        </div>
+    </main>
+}
+
 @govukLayout(
-  pageTitle = pageTitle,
+  pageTitle = Some(s"${pageTitle.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
   headBlock = Some(head),
   beforeContentBlock = beforeContentBlock,
   bodyEndBlock = bodyEndBlock,
   scriptsBlock = Some(scripts),
   headerBlock = headerBlock,
   footerItems = footerItems
-)(contentBlock)
+)(bodyContent)
