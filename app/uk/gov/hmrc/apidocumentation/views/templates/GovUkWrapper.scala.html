@@ -14,105 +14,75 @@
  * limitations under the License.
  *@
 
-@import play.twirl.api.HtmlFormat
-@import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
-@import uk.gov.hmrc.govukfrontend.views.html.helpers._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.apidocumentation.views.html.partials
-@import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+@import play.twirl.api.HtmlFormat
 
 @this(
-  govukLayout: GovukLayout,
-  applicationConfig: ApplicationConfig
+govukTemplate: GovukTemplate,
+govukHeader: GovukHeader,
+govukFooter: GovukFooter,
+govukBackLink: GovukBackLink
 )
 
 @(
-  pageTitle: Option[String] = None,
-  headBlock: Option[Html] = None,
-  headerBlock: Option[Html] = None,
-  beforeContentBlock: Option[Html] = None,
-  footerBlock: Option[Html] = None,
-  footerItems: Seq[FooterItem] = Seq.empty,
-  bodyEndBlock: Option[Html] = None,
-  scriptsBlock: Option[Html] = None,
-  leftNav: Option[Html] = None,
-  breadcrumbs: Option[Breadcrumbs] = None,
-  sidebar: Option[Html] = None,
-  fullWidthBanner: Option[Html] = None,
-  serviceInfoContent : Option[Html] = None,
-  fullWidthContent: Boolean = false
+pageTitle: Option[String] = None,
+headBlock: Option[Html] = None,
+headerBlock: Option[Html] = None,
+beforeContentBlock: Option[Html] = None,
+footerBlock: Option[Html] = None,
+footerItems: Seq[FooterItem] = Seq.empty,
+bodyEndBlock: Option[Html] = None,
+scriptsBlock: Option[Html] = None,
+leftNav: Option[Html] = None
 )(contentBlock: Html)(implicit messages: Messages)
 
 @head = {
-  <link href='@controllers.routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />
+<link href='@controllers.routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />
 }
-
 @scripts = {
-  <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
-  <script>window.GOVUKFrontend.initAll();</script>
+<script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+<script>window.GOVUKFrontend.initAll();</script>
 }
 
-@getHelpForm = {}
+@headerDefault = {
+@headerBlock.getOrElse {
+@govukHeader(Header(
+homepageUrl = Some("https://www.gov.uk/"),
+serviceName = Some(messages("service.name")),
+serviceUrl = Some(messages("service.homePageUrl")),
+containerClasses = None))
+}
+}
 
-@contentWithLeftNav = {
-    <div class="column-one-quarter">
+@footerDefault = {
+@footerBlock.getOrElse {
+@govukFooter(new Footer(meta = Some(Meta(items = Some(footerItems)))))
+}
+}
+
+@bodyEndDefault = {
+@bodyEndBlock
+@scripts
+}
+
+@mainContentDefault = {
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
         @leftNav.getOrElse(HtmlFormat.empty)
-        &nbsp;
     </div>
-    <div class="column-three-quarters">
-        <div id="content">
-            @contentBlock
-            @sidebar
-        </div>
+    <div class="govuk-grid-column-two-thirds">
+        @contentBlock
     </div>
-    @getHelpForm
+</div>
 }
 
-@banner = {
-    @breadcrumbs.map {crumbs =>
-        @partials.breadcrumbs(crumbs.crumbs)
-    }
-}
-
-@content = {
-    <div class="@if(fullWidthContent) {column-full} else {column-three-quarters}">
-        <div id="content">
-            @contentBlock
-            @sidebar
-            @getHelpForm
-        </div>
-    </div>
-}
-
-@bodyContent = {
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ"
-                      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-
-    @if(fullWidthBanner.isDefined) {
-    <div class="centered-content">
-        @banner
-        @serviceInfoContent.getOrElse(HtmlFormat.empty)
-    </div>
-    <section class="full-width-banner">
-        @fullWidthBanner
-    </section>
-    }
-
-    <main id="wrapper" role="main">
-        <div class="centered-content">
-            <div class="grid-row sticky-nav_wrapper">
-                @if(leftNav.isDefined) { @contentWithLeftNav } else { @content }
-            </div>
-        </div>
-    </main>
-}
-
-@govukLayout(
-  pageTitle = Some(s"${pageTitle.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
-  headBlock = Some(head),
-  beforeContentBlock = beforeContentBlock,
-  bodyEndBlock = bodyEndBlock,
-  scriptsBlock = Some(scripts),
-  headerBlock = headerBlock,
-  footerItems = footerItems
-)(bodyContent)
+@govukTemplate(
+htmlLang = Some(messages.lang.code),
+pageTitle = pageTitle,
+headBlock = Some(head),
+headerBlock = headerDefault,
+beforeContentBlock = beforeContentBlock,
+footerBlock = footerDefault,
+mainClasses = Some("govuk-main-wrapper--auto-spacing"),
+bodyEndBlock = Some(bodyEndDefault)
+)(mainContentDefault)

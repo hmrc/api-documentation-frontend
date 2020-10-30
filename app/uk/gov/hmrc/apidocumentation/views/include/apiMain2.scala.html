@@ -34,11 +34,7 @@
 }
 
 @govUkWrapper(pageTitle = Some(pageAttributes.title),
-    breadcrumbs = Some(pageAttributes.breadcrumbs),
-    leftNav = Some(partials.sideNavigation(request, pageAttributes.sidebarLinks)),
-    sidebar = None,
-    fullWidthBanner = None,
-    serviceInfoContent = Some(userBanner)
+    leftNav = Some(partials.sideNavigation(request, pageAttributes.sidebarLinks))
 ){
     @mainContent
 }
