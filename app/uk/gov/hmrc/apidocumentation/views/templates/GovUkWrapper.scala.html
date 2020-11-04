@@ -67,11 +67,14 @@ containerClasses = None))
 
 @mainContentDefault = {
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
+    <div class="govuk-grid-column-one-quarter">
         @leftNav.getOrElse(HtmlFormat.empty)
     </div>
     <div class="govuk-grid-column-two-thirds">
-        @contentBlock
+        <div class="govuk-side-nav-content">
+            @contentBlock
+        </div>
+        
     </div>
 </div>
 }
