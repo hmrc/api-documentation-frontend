@@ -15,13 +15,20 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import play.twirl.api.HtmlFormat
+@import views.templates.FooterLinks
+@import templates._
 
 @this(
 govukTemplate: GovukTemplate,
 govukHeader: GovukHeader,
 govukFooter: GovukFooter,
-govukBackLink: GovukBackLink
+govukBackLink: GovukBackLink,
+footerLinks: FooterLinks,
+siteFooter: SiteFooter,
+siteHeader: SiteHeader,
+applicationConfig: ApplicationConfig
 )
 
 @(
@@ -29,41 +36,42 @@ pageTitle: Option[String] = None,
 headBlock: Option[Html] = None,
 headerBlock: Option[Html] = None,
 beforeContentBlock: Option[Html] = None,
-footerBlock: Option[Html] = None,
 footerItems: Seq[FooterItem] = Seq.empty,
 bodyEndBlock: Option[Html] = None,
 scriptsBlock: Option[Html] = None,
 leftNav: Option[Html] = None
-)(contentBlock: Html)(implicit messages: Messages)
+)(contentBlock: Html)(implicit messages: Messages, request: play.api.mvc.Request[Any])
 
 @head = {
-<link href='@controllers.routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />
+    <link href='@controllers.routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />
 }
+
 @scripts = {
-<script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
-<script>window.GOVUKFrontend.initAll();</script>
+    <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script>window.GOVUKFrontend.initAll();</script>
 }
 
 @headerDefault = {
-@headerBlock.getOrElse {
-@govukHeader(Header(
-homepageUrl = Some("https://www.gov.uk/"),
-serviceName = Some(messages("service.name")),
-serviceUrl = Some(messages("service.homePageUrl")),
-containerClasses = None))
-}
+    @headerBlock.getOrElse {
+        @govukHeader(Header(
+            homepageUrl = Some("https://www.gov.uk/"),
+            serviceName = Some("HMRC Developer Hub"),
+            serviceUrl = Some("https://developer.service.hmrc.gov.uk/api-documentation"),
+            containerClasses = Some("govuk-width-container")
+        ))
+    }
 }
 
-@footerDefault = {
-@footerBlock.getOrElse {
-@govukFooter(new Footer(meta = Some(Meta(items = Some(footerItems)))))
-}
+@footerBlock = {
+    @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
 
 @bodyEndDefault = {
-@bodyEndBlock
-@scripts
+    @bodyEndBlock
+    @scripts
 }
+
+@getHelpForm = @{helpersReportAProblemLink(applicationConfig.reportAProblemPartialUrl, applicationConfig.reportAProblemNonJSUrl)}
 
 @mainContentDefault = {
 <div class="govuk-grid-row">
@@ -77,12 +85,11 @@ containerClasses = None))
 }
 
 @govukTemplate(
-htmlLang = Some(messages.lang.code),
-pageTitle = pageTitle,
-headBlock = Some(head),
-headerBlock = headerDefault,
-beforeContentBlock = beforeContentBlock,
-footerBlock = footerDefault,
-mainClasses = Some("govuk-main-wrapper--auto-spacing"),
-bodyEndBlock = Some(bodyEndDefault)
+    htmlLang = Some(messages.lang.code),
+    pageTitle = pageTitle,
+    headBlock = Some(head),
+    headerBlock = siteHeader(),
+    beforeContentBlock = beforeContentBlock,
+    footerBlock = footerBlock,
+    bodyEndBlock = Some(bodyEndDefault)
 )(mainContentDefault)
