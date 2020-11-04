@@ -112,6 +112,7 @@ lazy val compile = Seq(
   "uk.gov.hmrc" %% "play-ui" % "8.9.0-play-26",
   "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
   "uk.gov.hmrc" %% "play-frontend-govuk" % "0.49.0-play-26",
+  "uk.gov.hmrc" %% "play-frontend-hmrc" % "0.20.0-play-26",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
   "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1",
 

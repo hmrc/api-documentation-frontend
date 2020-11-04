@@ -1,4 +1,5 @@
 $govuk-assets-path: "/api-documentation/assets/lib/govuk-frontend/govuk/assets/";
+$hmrc-assets-path: "/api-test-user/assets/lib/hmrc-frontend/hmrc/";
 
 // Components
 @import "components/sticky-nav";
@@ -20,3 +21,4 @@ $govuk-assets-path: "/api-documentation/assets/lib/govuk-frontend/govuk/assets/"
 @import "ad-hoc";
 
 @import "lib/govuk-frontend/govuk/all";
+@import "lib/hmrc-frontend/hmrc/all";
