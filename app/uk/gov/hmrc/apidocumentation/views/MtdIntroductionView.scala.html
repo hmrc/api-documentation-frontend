@@ -24,33 +24,33 @@
 @(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain2(pageAttributes) {
-    <h1 class="govuk-heading-xl">Making Tax Digital guides</h1>
+  <h1 class="govuk-heading-xl">Making Tax Digital guides</h1>
 
-    <p class="govuk-body">
-      These guides have now moved to our <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.
-    </p>
+  <p class="govuk-body">
+    These guides have now moved to our <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.
+  </p>
 
-    <h2 class="govuk-heading-l">
-      VAT (MTD) end-to-end service guide
-    </h2>
+  <h2 class="govuk-heading-l">
+    VAT (MTD) end-to-end service guide
+  </h2>
 
-    <p class="govuk-body">
-      You can now find this guide and related VAT (MTD) documentation here:
-    </p>
+  <p class="govuk-body">
+    You can now find this guide and related VAT (MTD) documentation here:
+  </p>
 
-    <p class="govuk-body">
-      <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("vat")).url">VAT (MTD) API documentation</a>
-    </p>
+  <p class="govuk-body">
+    <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("vat")).url">VAT (MTD) API documentation</a>
+  </p>
 
-    <h2 class="govuk-heading-l">
-      Income Tax (MTD) end-to-end service guide
-    </h2>
+  <h2 class="govuk-heading-l">
+    Income Tax (MTD) end-to-end service guide
+  </h2>
 
-    <p class="govuk-body">
-      You can now find this guide and related Income Tax (MTD) documentation here:
-    </p>
+  <p class="govuk-body">
+    You can now find this guide and related Income Tax (MTD) documentation here:
+  </p>
 
-    <p class="govuk-body">
-      <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("income-tax")).url">Income Tax (MTD) API documentation</a>
-    </p>
+  <p class="govuk-body">
+    <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("income-tax")).url">Income Tax (MTD) API documentation</a>
+  </p>
 }
