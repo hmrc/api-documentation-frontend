@@ -58,10 +58,16 @@ ul.fixed-navigation__sub-list {
 
 // Nav link styling
 .side-nav__link {
+  color: #1d70b8;
+  font-family: "GDS Transport",Arial,sans-serif;
   display: block;
   position: relative;
   border-radius: 0;
   margin-bottom: 5px;
+  text-decoration: none;
+  &:visited {
+    color: #4c2c92;
+  }
 }
 
 .affix {
@@ -80,6 +86,10 @@ ul.fixed-navigation__sub-list {
   margin-top: 1.2em;
 }
 
+.govuk-side-nav-content {
+  padding-top: 30px;
+}
+
 @media screen and (min-width: 0px) and (max-width: 640px) {
   #fixed-navigation {
     display: none;
@@ -92,6 +102,8 @@ ul.fixed-navigation__sub-list {
 
 // APIS-1127 - iOS touch scroll jittery fixed elements fix
 .side-nav__component {
+  padding: 0;
+  list-style-type: none;
   background-color: white;
   transform: translate3d(0px, 0px, 0px) translateZ(0);
 }
