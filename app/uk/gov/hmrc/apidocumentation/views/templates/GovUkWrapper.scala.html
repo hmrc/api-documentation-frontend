@@ -16,31 +16,35 @@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+@import uk.gov.hmrc.apidocumentation.views.html.partials
+@import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
 @import play.twirl.api.HtmlFormat
 @import views.templates.FooterLinks
 @import templates._
 
 @this(
-govukTemplate: GovukTemplate,
-govukHeader: GovukHeader,
-govukFooter: GovukFooter,
-govukBackLink: GovukBackLink,
-footerLinks: FooterLinks,
-siteFooter: SiteFooter,
-siteHeader: SiteHeader,
-siteHelper: SiteHelper,
-applicationConfig: ApplicationConfig
+    govukTemplate: GovukTemplate,
+    govukHeader: GovukHeader,
+    govukFooter: GovukFooter,
+    govukBackLink: GovukBackLink,
+    footerLinks: FooterLinks,
+    siteFooter: SiteFooter,
+    siteHeader: SiteHeader,
+    siteHelper: SiteHelper,
+    applicationConfig: ApplicationConfig
 )
 
 @(
-pageTitle: Option[String] = None,
-headBlock: Option[Html] = None,
-headerBlock: Option[Html] = None,
-beforeContentBlock: Option[Html] = None,
-footerItems: Seq[FooterItem] = Seq.empty,
-bodyEndBlock: Option[Html] = None,
-scriptsBlock: Option[Html] = None,
-leftNav: Option[Html] = None
+    pageTitle: Option[String] = None,
+    headBlock: Option[Html] = None,
+    headerBlock: Option[Html] = None,
+    beforeContentBlock: Option[Html] = None,
+    footerItems: Seq[FooterItem] = Seq.empty,
+    bodyEndBlock: Option[Html] = None,
+    scriptsBlock: Option[Html] = None,
+    breadcrumbs: Option[Breadcrumbs] = None,
+    serviceInfoContent : Option[Html] = None,
+    leftNav: Option[Html] = None
 )(contentBlock: Html)(implicit messages: Messages, request: play.api.mvc.Request[Any])
 
 @head = {
@@ -63,6 +67,18 @@ leftNav: Option[Html] = None
     }
 }
 
+@serviceInfo = {
+        <div class="govuk-breadcrumbs ">
+            <ol class="govuk-breadcrumbs__list">
+                @breadcrumbs.map {crumbs =>
+                <li class="govuk-breadcrumbs__list-item">
+                    <a class="govuk-breadcrumbs__link" href="#">@partials.breadcrumbs(crumbs.crumbs)</a>
+                </li>
+                }
+            </ol>
+        </div>
+}
+
 @footerBlock = {
     @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
@@ -73,6 +89,9 @@ leftNav: Option[Html] = None
 }
 
 @mainContentDefault = {
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+@serviceInfo
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-quarter">
         @leftNav.getOrElse(HtmlFormat.empty)
