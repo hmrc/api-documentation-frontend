@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
+@import uk.gov.hmrc.apidocumentation.models.Crumb
 @import play.twirl.api.HtmlFormat
 @import views.templates.FooterLinks
 @import templates._
@@ -67,19 +68,13 @@
     }
 }
 
-@serviceInfo = {
-        <div class="govuk-breadcrumbs ">
-            <ol class="govuk-breadcrumbs__list">
-                @breadcrumbs.map {crumbs =>
-                <li class="govuk-breadcrumbs__list-item">
-                    <a class="govuk-breadcrumbs__link" href="#">@partials.breadcrumbs(crumbs.crumbs)</a>
-                </li>
-                }
-            </ol>
-        </div>
+@beforeContentBlock = {
+    @breadcrumbs.map {crumbs =>
+        @partials.breadcrumbs2(crumbs.crumbs)
+    }
 }
 
-@footerBlock = {
+@footerBlock = {    
     @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
 
@@ -89,20 +84,23 @@
 }
 
 @mainContentDefault = {
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ"
-                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-@serviceInfo
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-quarter">
-        @leftNav.getOrElse(HtmlFormat.empty)
-    </div>
-    <div class="govuk-grid-column-two-thirds">
-        <div class="govuk-side-nav-content">
-            @contentBlock
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter">
+            @leftNav.getOrElse(HtmlFormat.empty)
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-side-nav-content">
+                @contentBlock
+            </div>
         </div>
     </div>
-</div>
-@siteHelper()
+    <div class="govuk-get-help-container">
+        @siteHelper()
+    </div>
 }
 
 @govukTemplate(
@@ -110,7 +108,7 @@
     pageTitle = pageTitle,
     headBlock = Some(head),
     headerBlock = siteHeader(),
-    beforeContentBlock = beforeContentBlock,
+    beforeContentBlock = Some(beforeContentBlock),
     footerBlock = footerBlock,
     bodyEndBlock = Some(bodyEndDefault)
 )(mainContentDefault)
