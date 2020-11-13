@@ -105,7 +105,7 @@
 
 @govukTemplate(
     htmlLang = Some(messages.lang.code),
-    pageTitle = pageTitle,
+    pageTitle = Some(s"${pageTitle.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
     headerBlock = siteHeader(),
     beforeContentBlock = Some(beforeContentBlock),
