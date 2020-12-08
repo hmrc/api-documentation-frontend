@@ -27,7 +27,7 @@ import scala.concurrent.Future
 trait PageRenderVerification {
   self: CommonControllerBaseSpec =>
 
-  import NavigationServiceMock.{navLink, sidebarLink}
+  import NavigationServiceMock.sidebarLink
 
   lazy val homeBreadcrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
   lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)

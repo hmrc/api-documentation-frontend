@@ -35,6 +35,7 @@ class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: Applicat
   private lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = record {
+    import uk.gov.hmrc.http.HttpReads.Implicits._
     http.GET[Seq[NavLink]](s"$serviceBaseUrl/developer/user-navlinks")
   }
 
