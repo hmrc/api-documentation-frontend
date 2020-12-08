@@ -17,13 +17,7 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
-import play.api.http.HttpEntity
-import play.api.http.Status._
-import play.api.libs.ws._
-import play.api.mvc._
-import play.api.mvc.Results._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.http.{InternalServerException, NotFoundException}
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.play.http.metrics.API
@@ -32,6 +26,7 @@ import uk.gov.hmrc.play.http.metrics._
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.http.HeaderCarrier
 import java.net.URLEncoder
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 @Singleton
 class RamlPreviewConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {

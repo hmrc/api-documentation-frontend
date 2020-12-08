@@ -56,31 +56,43 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
   def whenGetDefinitionByEmail(serviceName: String, email: String)(definition: ExtendedAPIDefinition): Unit = {
     val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
     when(
-      mockHttpClient.GET[ExtendedAPIDefinition](
+      mockHttpClient.GET[Option[ExtendedAPIDefinition]](
         eqTo(url),
         eqTo(queryParams(Some(email)))
       )
         (any(), any(), any())
     )
-      .thenReturn(Future.successful(definition))
+      .thenReturn(Future.successful(Some(definition)))
   }
 
   def whenGetDefinition(serviceName: String)(definition: ExtendedAPIDefinition): Unit = {
     val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
     when(
-      mockHttpClient.GET[ExtendedAPIDefinition](
+      mockHttpClient.GET[Option[ExtendedAPIDefinition]](
         eqTo(url),
         eqTo(noParams)
       )
         (any(), any(), any())
     )
-      .thenReturn(Future.successful(definition))
+      .thenReturn(Future.successful(Some(definition)))
+  }
+
+    def whenGetDefinitionFindsNothing(serviceName: String): Unit = {
+    val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
+    when(
+      mockHttpClient.GET[Option[ExtendedAPIDefinition]](
+        eqTo(url),
+        eqTo(noParams)
+      )
+        (any(), any(), any())
+    )
+      .thenReturn(Future.successful(None))
   }
 
   def whenGetDefinitionFails(serviceName: String)(exception: Throwable): Unit = {
     val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
     when(
-      mockHttpClient.GET[ExtendedAPIDefinition](
+      mockHttpClient.GET[Option[ExtendedAPIDefinition]](
         eqTo(url),
         eqTo(noParams)
       )
