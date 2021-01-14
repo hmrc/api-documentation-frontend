@@ -1,5 +1,5 @@
 @*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,8 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
+
+@this(apiMain2: apiMain2, applicationConfig: ApplicationConfig)
 
 @(pageAttributes: PageAttributes, termsOfUsePartial: HtmlPartial)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
@@ -33,15 +34,15 @@
 </div>
 }
 
-@apiMain(pageAttributes){
-    <header class="page-header">
-        <h1 class="heading-xlarge">Terms of use</h1>
-    </header>
+@apiMain2(pageAttributes) {
+<header class="page-header">
+    <h1 class="heading-xlarge">Terms of use</h1>
+</header>
 
-    @termsOfUsePartial.successfulContentOrElse(failedToLoadTermsOfUse)
+@termsOfUsePartial.successfulContentOrElse(failedToLoadTermsOfUse)
 
-    <div class="panel panel-border-wide">
-        <p>To agree to the terms of use for each of your applications, you must
-            <a href="@{applicationConfig.developerFrontendUrl}/developer/login">sign in</a> to your account.</p>
-    </div>
+<div class="panel panel-border-wide">
+    <p>To agree to the terms of use for each of your applications, you must
+        <a href="@{applicationConfig.developerFrontendUrl}/developer/login">sign in</a> to your account.</p>
+</div>
 }
