@@ -97,16 +97,25 @@
 
     <section id="coding-in-the-open">
         <h2 class="govuk-heading-l">Coding in the open</h2>
-        <p class="govuk-body">The HMRC Developer Hub, the underlying API Platform and some of the APIs are coded in the open, as per the @Link.toExternalPage(url = "https://www.gov.uk/service-manual/service-standard/make-all-new-source-code-open", value = Some("GOV.UK Digital Service Standard (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:GOV.UK Digital Service Standard"))).toHtml.</p>
-        <p class="govuk-body">The source code is available at @Link.toExternalPage(url = "https://github.com/hmrc", value = Some("https://github.com/hmrc (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:https://github.com/hmrc"))).toHtml. For more details, please <a class="govuk-link" href="/developer/support">contact us</a>.</p>
+        <p class="govuk-body">The HMRC Developer Hub, the underlying API Platform and some of the APIs are coded in the open, as per the 
+            <a href="https://www.gov.uk/service-manual/service-standard/make-all-new-source-code-open" class="govuk-link" rel="noreferrer noopener" target="_blank">
+                GOV.UK Digital Service Standard (opens in a new tab)</a>.
+        </p>
+        <p class="govuk-body">The source code is available at 
+            <a href="https://github.com/hmrc" class="govuk-link" rel="noreferrer noopener" target="_blank">
+                https://github.com/hmrc (opens in a new tab)</a>. For more details, please <a class="govuk-link" href="/developer/support">contact us</a>.</p>
     </section>
 
     <section id="common-data-types">
         <h2 class="govuk-heading-l">Common data types</h2>
         <p class="govuk-body">Our APIs use consistent formats for common data types. We use ISO standards including:</p>
         <ul class="govuk-list govuk-list--bullet">
-            <li>@Link.toExternalPage(url = "http://www.iso.org/iso/iso8601", value = Some("ISO 8601 (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:ISO 8601"))).toHtml Time and Date Format</li>
-            <li>@Link.toExternalPage(url = "http://www.iso.org/iso/home/standards/currency_codes.htm", value = Some("ISO 4217 (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:ISO 4217"))).toHtml Currency Codes</li>
+            <li>
+                <a href="http://www.iso.org/iso/iso8601" class="govuk-link" rel="noreferrer noopener" target="_blank">ISO 8601 (opens in a new tab)</a>
+            </li>
+            <li>
+                <a href="http://www.iso.org/iso/home/standards/currency_codes.htm" class="govuk-link" rel="noreferrer noopener" target="_blank">ISO 4217 (opens in a new tab)</a>
+            </li>
         </ul>
 
         <p class="govuk-body">Some examples of common data types include:</p>
@@ -147,7 +156,8 @@
 
     <section id="cors">
         <h2 class="govuk-heading-l">Cross-origin resource sharing (CORS)</h2>
-        <p class="govuk-body">The API Platform does not support @Link.toExternalPage(url = "https://fetch.spec.whatwg.org/#http-cors-protocol", value = Some("cross-origin resource sharing (CORS) (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:https://fetch.spec.whatwg.org/#http-cors-protocol"))).toHtml. It is therefore not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
+        <p class="govuk-body">The API Platform does not support 
+            <a href="https://fetch.spec.whatwg.org/#http-cors-protocol" class="govuk-link" rel="noreferrer noopener" target="_blank">cross-origin resource sharing (CORS) (opens in a new tab)</a>. It is therefore not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
     </section>
 
     <section id="errors">

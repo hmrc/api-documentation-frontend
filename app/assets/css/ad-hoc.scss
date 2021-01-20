@@ -187,41 +187,43 @@ pre, code {
   }
 }
 
+.service-tag {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-left: -1rem;
+  min-width: 145px;
+  padding: .5rem;
+  text-align: center;
+  width: 100%;
+
+  &--service-guide {
+    background-color: #e7a09e;
+  }
+
+  &--rest {
+    background-color: #a3c5df;
+  }
+
+  &--roadmap {
+    background-color: #c4ccaa;
+  }
+
+  &--test {
+    background-color: #c39ac2;
+  }
+
+  &--xml {
+    background-color: #fbe0af;
+  }
+}
+
 .api-list {
   .api-group {
     font-weight: 700;
   }
 
-  .service-tag {
-    display: inline-block;
-    font-size: 14px;
-    font-weight: 700;
-    margin-left: -1rem;
-    min-width: 145px;
-    padding: .5rem;
-    text-align: center;
-    width: 100%;
 
-    &--service-guide {
-      background-color: #e7a09e;
-    }
-
-    &--rest {
-      background-color: #a3c5df;
-    }
-
-    &--roadmap {
-      background-color: #c4ccaa;
-    }
-
-    &--test {
-      background-color: #c39ac2;
-    }
-
-    &--xml {
-      background-color: #fbe0af;
-    }
-  }
 
   tbody {
     border-top: 3px solid #bfc1c3;
@@ -234,8 +236,8 @@ pre, code {
 
 .filter-container {
   background: #f8f8f8;
-  margin: 3rem 0;
-  padding: 4rem 2rem;
+  margin: 2rem 0;
+  padding: 2rem 2rem 1rem 2rem;
 
   .govuk-select {
     font-family: "nta",Arial,sans-serif;
