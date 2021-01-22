@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.views.html.XmlDocumentationView
-import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
+import uk.gov.hmrc.apidocumentation.views.html.include.apiMain2
 
 class XmlDocumentationSpec extends CommonViewSpec {
   case class Page(doc: Appendable) {
@@ -53,7 +53,7 @@ class XmlDocumentationSpec extends CommonViewSpec {
     When(pageAttributes.breadcrumbs).thenReturn(Breadcrumbs())
     When(pageAttributes.contentHeader).thenReturn(None)
 
-    val apiMain = app.injector.instanceOf[apiMain]
+    val apiMain = app.injector.instanceOf[apiMain2]
 
     val apiDefinition = XmlApiDocumentation(name, context, description)
     val xmlDocView = new XmlDocumentationView(apiMain, appConfig)(pageAttributes, apiDefinition)
