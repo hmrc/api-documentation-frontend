@@ -25,7 +25,7 @@ object APIDocumentationPage extends WebPage {
 
   override val url = s"http://localhost:${Env.port}/api-documentation/docs/api"
 
-  override def isCurrentPage: Boolean = find(className("heading-xlarge")).fold(false)(_.text == "API documentation")
+  override def isCurrentPage: Boolean = find(className("govuk-heading-xl")).fold(false)(_.text == "API documentation")
 
   def cookieBannerLocation() {
     val location = id("global-cookie-message").element.location.toString
@@ -44,7 +44,7 @@ object APIDocumentationPage extends WebPage {
     waitForPageToStopMoving()
   }
 
-  def applicationName = className("header__menu__proposition-name").element.text
+  def applicationName = className("govuk-header__link--service-name").element.text
 
   def waitForPageToStopMoving() = {
     new WebDriverWait(webDriver, 5).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
