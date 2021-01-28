@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends UnitSpec with MockitoSu
         .withTag("ROUTE_CONTROLLER", controller)
         .withTag("ROUTE_PATTERN", path)
 
-      val result = await(filter.apply(nextFilter)(requestHeader))
+      await(filter.apply(nextFilter)(requestHeader))
 
       verify(mockResult).withSession(meq(Session(defaultSession.toMap + ("access_uri" -> path))))
     }
@@ -64,7 +64,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends UnitSpec with MockitoSu
         .withTag("ROUTE_CONTROLLER", controller)
         .withTag("ROUTE_PATTERN", path)
 
-      val result = await(filter.apply(nextFilter)(requestHeader))
+      await(filter.apply(nextFilter)(requestHeader))
 
       verify(mockResult).withSession(meq(Session(defaultSession.toMap)))
     }
@@ -77,17 +77,16 @@ class FiltersSpec(implicit ec: ExecutionContext) extends UnitSpec with MockitoSu
         .withTag("ROUTE_CONTROLLER", controller)
         .withTag("ROUTE_PATTERN", path)
 
-      val result = await(filter.apply(nextFilter)(requestHeader))
+      await(filter.apply(nextFilter)(requestHeader))
 
       verify(mockResult, never).withSession(any[Session])
     }
 
     "not add the current uri to the session when the request is not tagged with the ROUTE_CONTROLLER or ROUTE_PATTERN" in new Setup {
-      val controller = "controllers.AssetsController"
       val path = s"$rootPath/assets/main.js"
       implicit val requestHeader = FakeRequest("OPTIONS", path).withSession(defaultSession: _*)
 
-      val result = await(filter.apply(nextFilter)(requestHeader))
+      await(filter.apply(nextFilter)(requestHeader))
 
       verify(mockResult, never).withSession(any[Session])
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,16 @@ import org.mockito.Mockito.when
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.utils.ApiPlatformMicroserviceHttpMockingHelper
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.http.UpstreamErrorResponse
 
 class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
-  val UpstreamException = Upstream5xxResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)
+  val UpstreamException = UpstreamErrorResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)
 
   val bearer = "TestBearerToken"
   val apiKeyTest = UUID.randomUUID().toString
@@ -107,8 +108,8 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
       }
     }
 
-    "do not throw exception when not found but instead return None" in new LocalSetup {
-      whenGetDefinitionFails(serviceName)(new NotFoundException("Bang"))
+    "handle the get returning None" in new LocalSetup {
+      whenGetDefinitionFindsNothing(serviceName)
 
       val result = await(underTest.fetchApiDefinition(serviceName, None))
       result should not be 'defined

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,12 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-import uk.gov.hmrc.http.JsValidationException
-import scala.concurrent.Await
 
 @Singleton
 class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appConfig: ApplicationConfig)
@@ -37,7 +36,6 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
   def fetchApiSpecification(serviceName: String, version: String)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
-    import scala.concurrent.duration._
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
     val url = s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)"
     http.GET[ApiSpecification](url)
@@ -54,15 +52,14 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
 
   def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
     Logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
-    val r = http.GET[ExtendedAPIDefinition](definitionUrl(serviceBaseUrl, serviceName), queryParams(email))
+    
+    val r = http.GET[Option[ExtendedAPIDefinition]](definitionUrl(serviceBaseUrl, serviceName), queryParams(email))
 
-    r.map(defn => Logger.info(s"Found ${defn.name}"))
-
-    r.map(Some(_))
-      .recover {
-        case _: NotFoundException => Logger.info("Not found"); None
-        case e => Logger.error(s"Failed $e"); throw e
-      }
+    r.map(_.map(defn => Logger.info(s"Found ${defn.name}")))
+    
+    r.recover {
+      case e => Logger.error(s"Failed $e"); throw e
+    }
   }
 }
 

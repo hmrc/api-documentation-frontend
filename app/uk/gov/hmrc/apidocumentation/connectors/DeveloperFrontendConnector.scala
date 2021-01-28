@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: Applicat
   private lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = record {
+    import uk.gov.hmrc.http.HttpReads.Implicits._
     http.GET[Seq[NavLink]](s"$serviceBaseUrl/developer/user-navlinks")
   }
 

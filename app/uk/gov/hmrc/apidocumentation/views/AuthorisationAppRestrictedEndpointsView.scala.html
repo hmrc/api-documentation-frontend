@@ -1,5 +1,5 @@
 @*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,7 @@
 
         <h2 class="heading-large">Application-restricted endpoints</h2>
 
-        <div class="panel panel-border-wide">
-            Using server token for application-restricted endpoints is now deprecated. Server token retires on 1 September 2020 in sandbox and 1 October 2020 in production.
-        </div>
-
-        <p>Application-restricted endpoints do not require authorisation from the end user. They do not give access to sensitive personal data.</p>
+        <p>Application-restricted endpoints do not require authorisation from the end user. They do not give access to secure data.</p>
         <p>We use the open standard <a href="https://oauth.net/2/">OAuth 2.0</a>
             with the <a href="https://oauth.net/2/grant-types/client-credentials/">Client Credentials Grant</a> to
             generate an access token.

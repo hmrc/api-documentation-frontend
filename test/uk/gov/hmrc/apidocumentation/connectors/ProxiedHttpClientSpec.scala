@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.{ConfigLoader, Configuration, Mode}
 import play.api.libs.ws.{WSClient, WSRequest}
-import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.config.RunMode
@@ -33,7 +32,6 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class ProxiedHttpClientSpec extends UnitSpec with ScalaFutures with MockitoSugar {
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val actorSystem = ActorSystem("test-actor-system")
 
   trait Setup {
