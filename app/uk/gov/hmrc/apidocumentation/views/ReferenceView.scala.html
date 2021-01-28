@@ -25,7 +25,6 @@
 @(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain2(pageAttributes){
-
     <h1 class="govuk-heading-xl">Reference guide</h1>
 
     <nav role="navigation" aria-labelledby="onThisPage">
@@ -229,12 +228,11 @@
   &lt;reactivationTimestamp&gt;1431448640718&lt;/reactivationTimestamp&gt;
 &lt;/error&gt;
 </pre>
-        <br />
-        <p class="govuk-body">These error responses are common across all APIs:</p>
-
+            <br />
+            <p class="govuk-body">These error responses are common across all APIs:</p>
         </div>
-        <div id="401">
 
+        <div id="401">
             <h3 class="govuk-heading-m">401 (Unauthorized)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
@@ -262,10 +260,9 @@
                 </tr>
                 </tbody>
             </table>
-
         </div>
-        <div id="403">
 
+        <div id="403">
             <h3 class="govuk-heading-m">403 (Forbidden)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
@@ -293,11 +290,9 @@
                 </tr>
                 </tbody>
             </table>
-
         </div>
 
         <div id="404">
-
             <h3 class="govuk-heading-m">404 (Not Found)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
@@ -314,6 +309,7 @@
                 </tbody>
             </table>
         </div>
+
         <div id="405">
             <h3 class="govuk-heading-m">405 (Method Not Allowed)</h3>
             <table class="govuk-table">
@@ -331,6 +327,7 @@
                 </tbody>
             </table>
         </div>
+
         <div id="406">
             <h3 class="govuk-heading-m">406 (Not Acceptable)</h3>
             <table class="govuk-table">
@@ -349,6 +346,7 @@
             </table>
 
         </div>
+
         <div id="429">
             <h3 class="govuk-heading-m">429 (Too Many Requests)</h3>
             <table class="govuk-table">
@@ -366,6 +364,7 @@
                 </tbody>
             </table>
         </div>
+
         <div id="500">
             <h3 class="govuk-heading-m">500 (Internal Server Error)</h3>
             <table class="govuk-table">
@@ -383,6 +382,7 @@
                 </tbody>
             </table>
         </div>
+
         <div id="501">
             <h3 class="govuk-heading-m">501 (Not Implemented)</h3>
             <table class="govuk-table">
@@ -400,8 +400,8 @@
                 </tbody>
             </table>
         </div>
-        <div id="503">
 
+        <div id="503">
             <h3 class="govuk-heading-m">503 (Service Unavailable)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
@@ -421,8 +421,8 @@
                 </tr>
                 </tbody>
             </table>
-
         </div>
+
         <div id="504">
             <h3 class="govuk-heading-m">504 (Gateway Timeout)</h3>
             <table class="govuk-table">
@@ -445,7 +445,8 @@
     <section id="fraud-prevention">
         <h2 class="govuk-heading-l">Send fraud prevention data</h2>
         <p class="govuk-body">You must help us protect our users’ confidential data by sending us particular types of user audit data which we will record.
-            Check <a class="govuk-link" href="/guides/fraud-prevention">what you need to send</a>.</p>
+            Check <a class="govuk-link" href="/guides/fraud-prevention">what you need to send</a>.
+        </p>
 
         <p class="govuk-body">It is mandatory to provide header data for the <a class="govuk-link" href="/api-documentation/docs/api/service/vat-api/1.0">VAT (MTD) API</a>.</p>
 
@@ -489,7 +490,6 @@
     </section>
 
     <section id="rate-limiting">
-
         <h2 class="govuk-heading-l">Rate limiting</h2>
 
         <p class="govuk-body">We limit the number of requests each application can make. This protects our service against excessive use and Denial-of-Service attacks, and also encourages you to use our APIs efficiently.</p>
@@ -501,7 +501,6 @@
         <p class="govuk-body">Our rate limits are designed to encourage real-time interactions.  As such we advise software developers to
             avoid batching requests if they wish to avoid being rate limited.</p>
         <p class="govuk-body">If you continually hit this rate limit, <a class="govuk-link" href="/developer/support">contact us</a> to discuss your application design and whether it’s appropriate to raise your rate limit. </p>
-
     </section>
 
     <section id="redirect-uris">
@@ -584,7 +583,6 @@
     </section>
 
     <section id="scopes">
-
         <h2 class="govuk-heading-l">Scopes</h2>
 
         <p class="govuk-body">When your application needs to access API endpoints on behalf of a user, the Developer Hub uses the <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
@@ -598,21 +596,17 @@
         <p class="govuk-body">The scope for each user-restricted endpoint is defined in the <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
 
         <p class="govuk-body">For details about OAuth 2.0 and scopes, see <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>.</p>
-
     </section>
 
     <section id ="tls-standards">
-
         <h2 class="govuk-heading-l">TLS standards</h2>
 
         <p class="govuk-body">HMRC APIs are only accessible over Transport Layer Security (TLS). For example, URLs that begin with https://.</p>
 
         <div class="govuk-inset-text">Applications must support TLS 1.2 or higher to avoid known weaknesses in previous versions.</div>
-
     </section>
 
     <section id="versioning">
-
         <h2 class="govuk-heading-l">Versioning</h2>
 
         <p class="govuk-body">Request the version of the API you want to use by including an <code class="code--slim">Accept</code> header with a media type of:</p>
@@ -624,7 +618,5 @@
         <pre class="code--block">application/vnd.hmrc.1.0+json</pre>
         <br />
         <p class="govuk-body">We release backwards-compatible changes in the same version, so you don't need to change your <code class="code--slim">Accept</code> header. We release backwards-incompatible changes in a new version, and you must change your <code class="code--slim">Accept</code> header to use it.</p>
-
     </section>
-
 }
