@@ -14,141 +14,84 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.layouts._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
-@import views.html.layouts.GovUkTemplate
 @import uk.gov.hmrc.apidocumentation.views.html.include
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
 @import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.views.html.templates._
+@import views.templates.FooterLinks
 
 @import play.twirl.api.HtmlFormat
 
-@this(layoutsHead: Head,
-      layoutsFooter: Footer,
-      layoutsFooterLinks: FooterLinks,
-      layoutsServiceInfo: ServiceInfo,
-      layoutsMainContentHeader: MainContentHeader,
+@this(
       helpersReportAProblemLink: ReportAProblemLink,
-      govUkTemplate: GovUkTemplate,
-      applicationConfig: ApplicationConfig)
+      govukTemplate: GovukTemplate,
+      applicationConfig: ApplicationConfig,
+      footerLinks: FooterLinks,
+      siteFooter: SiteFooter,
+      siteHeader: SiteHeader,
+      siteHelper: SiteHelper)
 
 @(title: Option[String] = None,
     navTitle: Option[String] = None,
     navTitleLink: Option[play.api.mvc.Call] = None,
     headerNavLinks: Option[Html] = None,
-    contentHeader: Option[Html] = None,
-    sidebar: Option[Html] = None,
     serviceInfoContent : Option[Html] = None,
     fullWidthBanner: Option[Html] = None,
     metaTitle: Option[Html] = None,
-    leftNav: Option[Html] = None,
     breadcrumbs: Option[Breadcrumbs] = None,
     additionalTopContent: Option[Html] = None,
-    fullWidthContent: Boolean = false
-  )(mainContent: Html = HtmlFormat.empty)(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
-
-@headScripts = {
-    <script src='@routes.Assets.versioned("javascripts/googleTagManager.js")'></script>
-}
+    fullWidthContent: Boolean = false,
+    bodyEndBlock: Option[Html] = None,
+  )(mainContent: Html = HtmlFormat.empty)(implicit messages: Messages, request: play.api.mvc.Request[Any])
 
 @head = {
-  @if(metaTitle.isDefined) {
-      @metaTitle.get
-  }
-  @layoutsHead(linkElem = None, headScripts = Some(headScripts))
-
-  <link rel="stylesheet" href='@routes.Assets.versioned("css/main.css")'>
+    <link href='@routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />
 }
 
-@insideHeader = {
-  @if(metaTitle.isDefined) {
-      metaTitle.get
-  }
-  @include.api_header_nav(
-      navTitle = navTitle,
-      navTitleLink = navTitleLink,
-      navLinks = headerNavLinks)
+@scripts = {
+    <script src='@routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script>window.GOVUKFrontend.initAll();</script>
 }
 
-@afterHeader = {
 
+@beforeContentBlock = {
+     @breadcrumbs.map {crumbs =>
+     @partials.breadcrumbs2(crumbs.crumbs)
+    }
 }
 
 @scriptElem = {
   <script src='@routes.Assets.versioned("javascripts/apis-app.min.js")' type="text/javascript"></script>
 }
 
-@bodyEnd = {
-  @layoutsFooter(
-      analyticsToken = applicationConfig.analyticsToken,
-      analyticsHost = applicationConfig.analyticsHost,
-      ssoUrl = None,
-      scriptElem = Some(scriptElem),
-      gaCalls = None)
+@footerBlock = {
+    @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
 
-@footerTop = {}
-
-@footerLinks = {
-    <ul class="platform-help-links">
-        <li><a href='/api-documentation/docs/help/cookies' target="_blank" rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:Cookies">@Messages("footer.links.cookies.text")</a></li>
-        <li><a href='/api-documentation/docs/help/privacy' target="_blank" rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:Privacy policy">@Messages("footer.links.privacy_policy.text")</a></li>
-        <li><a href='/api-documentation/docs/help/terms-and-conditions' target="_blank" rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:Terms and conditions">@Messages("footer.links.terms_and_conditions.text")</a></li>
-        <li><a href='@Messages("footer.links.help_page.url")' target="_blank" rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:Help">@Messages("footer.links.help_page.text")</a></li>
-        <li><a href='@{applicationConfig.platformFrontendHost}/accessibility-statement/hmrc-developer-hub?referrerUrl=@{helper.urlEncode(request.uri)}' rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:AccessibilityStatement">Accessibility statement</a></li>
-    </ul>
+@bodyEndDefault = {
+    @bodyEndBlock
+    @scripts
 }
-
 @banner = {
     @breadcrumbs.map {crumbs =>
         @partials.breadcrumbs(crumbs.crumbs)
     }
 }
 
-@serviceInfo = {
-    @if(fullWidthBanner.isEmpty) {
-        @layoutsServiceInfo(
-            betaBanner = banner,
-            includeGridWrapper = false,
-            includeHMRCBranding = false,
-            serviceInfoContent = serviceInfoContent
-        )
-    }
-}
-
-@mainContentHeader = {
-    @if(contentHeader.isDefined) {
-        @layoutsMainContentHeader(contentHeader = contentHeader.getOrElse(HtmlFormat.empty))
-    }
-}
-
-@getHelpForm = @{helpersReportAProblemLink(applicationConfig.reportAProblemPartialUrl, applicationConfig.reportAProblemNonJSUrl)}
-
-@contentWithLeftNav = {
-    <div class="column-one-quarter">
-        @leftNav.getOrElse(HtmlFormat.empty)
-        &nbsp;
-    </div>
-    <div class="column-three-quarters">
-        <div id="content">
-            @mainContentHeader
-            @mainContent
-            @sidebar
-        </div>
-    </div>
-    @getHelpForm
-}
-
 @content = {
-    <div class="@if(fullWidthContent) {column-full} else {column-three-quarters}">
-        <div id="content">
-            @mainContentHeader
-            @mainContent
-            @sidebar
-            @getHelpForm
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-side-nav-content">
+                @mainContent
+            </div>
         </div>
+    </div>
+    <div class="govuk-get-help-container">
+        @siteHelper()
     </div>
 }
 
@@ -168,20 +111,19 @@
 
     <main id="wrapper" role="main">
         <div class="centered-content">
-            @serviceInfo
             <div class="grid-row sticky-nav_wrapper">
-                @if(leftNav.isDefined) { @contentWithLeftNav } else { @content }
+                @content
             </div>
         </div>
     </main>
 }
 
-@govUkTemplate(
-    title = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
-    bodyClasses = None)(head = head,
-    bodyEnd = bodyEnd,
-    insideHeader = insideHeader,
-    afterHeader = afterHeader,
-    footerTop = footerTop,
-    footerLinks = Some(footerLinks),
-    nav = true)(bodyContent)
+@govukTemplate(
+    htmlLang = Some(messages.lang.code),
+    pageTitle = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
+    headBlock = Some(head),
+    headerBlock = siteHeader(),
+    beforeContentBlock = Some(beforeContentBlock),
+    footerBlock = footerBlock,
+    bodyEndBlock = Some(bodyEndDefault)
+)(bodyContent)

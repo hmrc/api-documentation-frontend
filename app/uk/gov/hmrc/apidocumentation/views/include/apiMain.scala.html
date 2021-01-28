@@ -37,12 +37,9 @@
     navTitleLink = Some(Call("GET", "/api-documentation")),
     headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks())),
     serviceInfoContent = Some(userBanner),
-    contentHeader = pageAttributes.contentHeader,
-    sidebar = None,
     fullWidthBanner = None,
     breadcrumbs = Some(pageAttributes.breadcrumbs),
     additionalTopContent = Some(additionalTopContent),
-    leftNav = Some(partials.sideNavigation(request, pageAttributes.sidebarLinks))
 ){
     @mainContent
 }
