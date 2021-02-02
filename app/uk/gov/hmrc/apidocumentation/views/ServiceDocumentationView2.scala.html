@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, ourMainView: apispecification.MainView, applicationConfig: ApplicationConfig)
+@this(apiMain2: apiMain2, ourMainView: apispecification.MainView, applicationConfig: ApplicationConfig)
 
 @(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, viewModel: ViewModel, loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
@@ -41,7 +41,7 @@
     </div>
 }
 
-@apiMain(pageAttributes, topContent) {
+@apiMain2(pageAttributes, topContent) {
     @if(currentVersion.status == APIStatus.ALPHA) {
     <div class="section">
         <div class="notice">
