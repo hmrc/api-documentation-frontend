@@ -259,6 +259,16 @@ pre, code {
   }
 }
 
+.warning-icon-fix {
+  display: flex;
+  align-items: center;
+}
+
+.warning-icon-ui-fix {
+  margin-top: 0;
+  box-sizing: unset;
+}
+
 .thumbnail img {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   outline: 5px solid rgba(11, 12, 12, 0.1);

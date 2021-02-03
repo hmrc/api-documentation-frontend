@@ -30,7 +30,8 @@
 ul.fixed-navigation__sub-list {
   display: block;
   border-left: 4px solid #bfc1c3;
-
+  list-style-type: none;
+  padding-left: 0;
   > li.side-nav__list {
     a:hover {
       color: #2e8aca;
