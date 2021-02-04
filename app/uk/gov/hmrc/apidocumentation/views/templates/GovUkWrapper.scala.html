@@ -25,7 +25,6 @@
 
 @this(
     govukTemplate: GovukTemplate,
-    govukHeader: GovukHeader,
     footerLinks: FooterLinks,
     siteFooter: SiteFooter,
     siteHeader: SiteHeader,
@@ -55,16 +54,6 @@
     <script>window.GOVUKFrontend.initAll();</script>
 }
 
-@headerDefault = {
-    @headerBlock.getOrElse {
-        @govukHeader(Header(
-            homepageUrl = Some("https://www.gov.uk/"),
-            serviceName = Some("HMRC Developer Hub"),
-            serviceUrl = Some("https://developer.service.hmrc.gov.uk/api-documentation"),
-            containerClasses = Some("govuk-width-container")
-        ))
-    }
-}
 
 @beforeContentBlock = {
     @breadcrumbs.map {crumbs =>
