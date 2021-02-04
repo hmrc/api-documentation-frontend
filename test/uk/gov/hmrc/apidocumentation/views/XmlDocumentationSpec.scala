@@ -26,7 +26,7 @@ import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.views.html.XmlDocumentationView
-import uk.gov.hmrc.apidocumentation.views.html.include.apiMain2
+import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
 
 class XmlDocumentationSpec extends CommonViewSpec {
   case class Page(doc: Appendable) {
@@ -53,7 +53,7 @@ class XmlDocumentationSpec extends CommonViewSpec {
     When(pageAttributes.breadcrumbs).thenReturn(Breadcrumbs())
     When(pageAttributes.contentHeader).thenReturn(None)
 
-    val apiMain = app.injector.instanceOf[apiMain2]
+    val apiMain = app.injector.instanceOf[apiMain]
 
     val apiDefinition = XmlApiDocumentation(name, context, description)
     val xmlDocView = new XmlDocumentationView(apiMain, appConfig)(pageAttributes, apiDefinition)
