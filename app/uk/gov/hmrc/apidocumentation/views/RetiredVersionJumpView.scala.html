@@ -20,11 +20,11 @@
 
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain2: apiMain2)
+@this(apiMain: apiMain)
 
 @(pageAttributes: PageAttributes, api: ExtendedAPIDefinition)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
-@apiMain2(pageAttributes) {
+@apiMain(pageAttributes) {
     <div class="browse-panes section">
         <div class="pane with-sort">
             <div class="pane-inner">
