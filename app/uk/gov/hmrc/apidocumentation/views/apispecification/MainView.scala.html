@@ -27,72 +27,94 @@
 @(viewModel: ViewModel, maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)
 
 @renderGetApiVersionForm = {
-@for(api <- maybeApi) {
-@for(version <- maybeVersion) {
-@* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
-    <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
-        <select class="form-control form-control-version"
-                id="version"
-                name="version"
-                aria-labelledby="version-label"
-                value="@version.version">
-            @for(v <- api.sortedActiveVersions;
-            if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
-            <option @if(v == version) {selected} value="@v.version" aria-label="Select to view documentation for v@v.version (@v.displayedStatus)">v@v.version (@v.displayedStatus)</option>
-            }
-        </select>
-        <button type="submit" class="button">View</button>
-    </form>
+    @for(api <- maybeApi) {
+        @for(version <- maybeVersion) {
+            @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
+            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
+                <label class="visually-hidden" for="version">
+                    Select version and status
+                </label>
+                <select class="govuk-select version-select" id="version" name="version" value="@version.version">
+                    @for(v <- api.sortedActiveVersions;
+                    if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
+                    <option @if(v == version) {selected} value="@v.version" aria-label="Select to view documentation for v@v.version (@v.displayedStatus)">v@v.version (@v.displayedStatus)</option>
+                    }
+                </select>
+                <button type="submit" class="govuk-button margin-bottom-0" data-module="govuk-button">View</button>
+            </form>
+        }
     }
-    }
-    }
+}
 
-    <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section raml" aria-busy="false">
-        <div id="section">
-            <h1 id="title" class="heading-xlarge">
-                @{viewModel.title} API<a name="title"></a>
-            </h1>
-            @for(version <- maybeVersion) {
-            <table>
-                <col width="50%" />
-                <col width="50%" />
-                <tr class="version-container"><th><label id="version-label" for="version" class="bold-small" aria-label="Choose a version and status">Version and status</label></th><td>@renderGetApiVersionForm</td></tr>
-                @if(applicationConfig.showSandboxAvailability) {
-                <tr><th><span class="bold-small">Available in @applicationConfig.nameOfSubordinateEnvironment</span></th><td>@EndpointsAvailable(version.sandboxAvailability)</td></tr>
-                }
-                @if(ShowBaseURL(version.sandboxAvailability)) {
-                <tr><th><span class="bold-small">@applicationConfig.nameOfSubordinateEnvironment base URL</span></th><td>@applicationConfig.subordinateBaseUrl</td></tr>
-                }
-                @if(applicationConfig.showProductionAvailability) {
-                <tr><th><span class="bold-small">Available in @applicationConfig.nameOfPrincipalEnvironment</span></th><td>@EndpointsAvailable(version.productionAvailability)</td></tr>
-                }
-                @if(ShowBaseURL(version.productionAvailability)){
-                <tr><th><span class="bold-small">@applicationConfig.nameOfPrincipalEnvironment base URL</span></th><td>@applicationConfig.principalBaseUrl</td></tr>
-                }
-
+<div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section raml" aria-busy="false">
+    <div id="section">
+        <h1 id="title" class="govuk-heading-xl">
+            @{viewModel.title} API<a name="title"></a>
+        </h1>
+        @for(version <- maybeVersion) {
+            <table class="govuk-table">
+                <caption class="visually-hidden">Dates and amounts</caption>
+                <thead class="visually-hidden">
+                  <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Date</th>
+                    <th scope="col" class="govuk-table__header">Amount</th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Version and status</th>
+                        <td class="govuk-table__cell">@renderGetApiVersionForm</td>
+                    </tr>
+                    @if(applicationConfig.showSandboxAvailability) {
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">Available in @applicationConfig.nameOfSubordinateEnvironment</th>
+                            <td class="govuk-table__cell">@EndpointsAvailable(version.sandboxAvailability)</td>
+                        </tr>
+                    }
+                    @if(ShowBaseURL(version.sandboxAvailability)) {
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@applicationConfig.nameOfSubordinateEnvironment base URL</th>
+                            <td class="govuk-table__cell">@applicationConfig.subordinateBaseUrl</td>
+                        </tr>
+                    }
+                    @if(applicationConfig.showProductionAvailability) {
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">Available in @applicationConfig.nameOfPrincipalEnvironment</th>
+                            <td class="govuk-table__cell">@EndpointsAvailable(version.productionAvailability)</td>
+                        </tr>
+                    }
+                    @if(ShowBaseURL(version.productionAvailability)){
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@applicationConfig.nameOfPrincipalEnvironment base URL</th>
+                            <td class="govuk-table__cell">@applicationConfig.principalBaseUrl</td>
+                        </tr>
+                    }
+                </tbody>
             </table>
-            }
+        }
 
-            @for(doc <- viewModel.documentationForVersion(maybeVersion)) {
+        @for(doc <- viewModel.documentationForVersion(maybeVersion)) {
             <div class="section">
-                <h2 id="@Slugify(doc.title)" class="heading-large">
+                <h2 id="@Slugify(doc.title)" class="govuk-heading-l">
                     @{doc.title}
                 </h2>
 
-                <div>
+                <div class="markdown-text-styles">
                     @Markdown(doc.content)
                 </div>
-
             </div>
-            }
-            <div class="bold-small float--right">
-                <a id="middle-skip-to-main" tabIndex="-1" href="#title">Skip to main content</a>
-            </div>
+        }
 
-            @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.flatMap(_.visibility)))) { case (isPreview, visibility) =>
+        <p class="govuk-body govuk-!-font-weight-bold">
+            <a class="govuk-link" id="middle-skip-to-main" href="#title">
+                Skip to main content
+            </a>
+        </p>
+
+        @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.flatMap(_.visibility)))) { case (isPreview, visibility) =>
             @if(isPreview || visibility == DocsVisibility.VISIBLE) {
                 <div class="section">
-                    <h2 id="endpoints" class="heading-large">
+                    <h2 id="endpoints" class="govuk-heading-l">
                         Endpoints
                     </h2>
 
@@ -103,23 +125,25 @@
             } else {
                 @if(visibility == DocsVisibility.OVERVIEW_ONLY) {
                     <div class="section">
-                        <h2 id="read-more" class="heading-large">
+                        <h2 id="read-more" class="govuk-heading-l">
                             Read more
                         </h2>
-                        <p>To see the complete documentation for this API and join the private trial,
-                            <a href="@{applicationConfig.developerFrontendUrl}/developer/support">contact support</a>.</p>
+                        <p class="govuk-body">To see the complete documentation for this API and join the private trial,
+                            <a href="@{applicationConfig.developerFrontendUrl}/developer/support">contact support</a>.
+                        </p>
                         @if(!loggedIn) {
-                            <p id="read-more-sign-in">If you have already joined, <a href="/developer/login">sign in</a>.</p>
+                            <p class="govuk-body" id="read-more-sign-in">
+                                If you have already joined, <a href="/developer/login">sign in</a>.
+                            </p>
                         }
                     </div>
                 }
             }
         }
-
-
-
-            <div class="bold-small float--right">
-                <a id="bottom-skip-to-main" href="#title" tabindex="-1">Skip to main content </a>
-            </div>
-        </div>
+        <p class="govuk-body govuk-!-font-weight-bold">
+            <a class="govuk-link" id="middle-skip-to-main" href="#title">
+                Skip to main content
+            </a>
+        </p>
     </div>
+</div>
