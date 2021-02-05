@@ -308,3 +308,69 @@ pre, code {
 .visually-hidden {
   display: none;
 }
+
+.markdown-text-styles {
+  margin-bottom: 15px;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #0b0c0c;
+  font-family: "GDS Transport",Arial,sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  margin-top: 0;
+  a:link {
+    color: #1d70b8;
+  }
+  a:hover {
+    color: #003078;
+  }
+  a:active {
+    color: #0b0c0c;
+  }
+  a:focus {
+    outline: 3px solid transparent;
+    color: #0b0c0c;
+    background-color: #fd0;
+    box-shadow: 0 -2px #fd0,0 4px #0b0c0c;
+    text-decoration: none;
+  }
+  ul {
+    font-family: "GDS Transport",Arial,sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    color: #0b0c0c;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.25;
+    padding-left: 20px;
+    list-style-type: disc;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .markdown-text-styles {
+    margin-bottom: 20px;
+    font-size: 1.1875rem;
+    line-height: 1.31579;
+
+    ul {
+      margin-bottom: 20px;
+      font-size: 1.1875rem;
+      line-height: 1.31579;
+    }
+  }
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0 !important;
+}
+
+.version-select {
+  width: 80%;
+}
+
+.method-container {
+  display: flex;
+  justify-content: space-between;
+}
