@@ -20,11 +20,11 @@
 @import uk.gov.hmrc.urls.Link
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain2: apiMain2, applicationConfig: ApplicationConfig)
+@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
 
 @(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
-@apiMain2(pageAttributes){
+@apiMain(pageAttributes){
 
 <h1 class="govuk-heading-xl">Tutorials</h1>
 

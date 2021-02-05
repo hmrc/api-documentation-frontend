@@ -21,11 +21,11 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain2: apiMain2, ourMainView: apispecification.MainView, applicationConfig: ApplicationConfig)
+@this(apiMain: apiMain, ourMainView: apispecification.MainView, applicationConfig: ApplicationConfig)
 
 @(pageAttributes: PageAttributes, url: Option[String], result: Try[Option[ViewModel]])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
-@apiMain2(pageAttributes) {
+@apiMain(pageAttributes) {
 
     <header class="page-header">
         <h1 class="flush--top">Preview RAML</h1>
