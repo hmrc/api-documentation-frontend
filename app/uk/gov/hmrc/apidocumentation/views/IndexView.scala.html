@@ -17,9 +17,9 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.views.html.include._
+@import uk.gov.hmrc.apidocumentation.views.html.templates.LayoutHomePage
 
-@this(main: main, applicationConfig: ApplicationConfig)
+@this(layoutHomePage: LayoutHomePage, applicationConfig: ApplicationConfig)
 
 @(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
@@ -49,47 +49,44 @@
     </div>
 }
 
-@main(
-    navTitle = Some(applicationConfig.title),
-    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(), navLinks)),
-    serviceInfoContent = Some(userBanner),
-    fullWidthBanner = Some(fullWidthBanner),
-    fullWidthContent = true
+@layoutHomePage(
+
 ) {
 
-    <div class="grid-row">
-        <div class="column-one-third">
-            <section class="section section--branded">
-                <h2>Get started</h2>
-                <ul>
-                    <li><a href="@controllers.routes.DocumentationController.usingTheHubPage()">Using the Developer Hub</a></li>
-                    <li><a href="/guides/fraud-prevention">Send fraud prevention data</a></li>
-                    <li><a href="@controllers.routes.AuthorisationController.authorisationPage()">Authorisation</a></li>
-                    <li><a href="@controllers.routes.DocumentationController.tutorialsPage()">Tutorials</a></li>
-                    <li><a href="@controllers.routes.DocumentationController.termsOfUsePage()">Terms of use</a></li>
-                </ul>
-            </section>
-        </div>
-        <div class="column-one-third">
-            <section class="section section--branded">
-                <h2>Explore APIs</h2>
-                <ul>
-                    <li><a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a></li>
-                    <li><a href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a></li>
-                    <li><a href="@controllers.routes.DocumentationController.referenceGuidePage()">Reference guide</a></li>
-                    <li><a href="@controllers.routes.DocumentationController.developmentPracticesPage()">Development practices</a></li>
-                </ul>
-            </section>
-        </div>
-        <div class="column-one-third">
-            <section class="section section--branded">
-                <h2>Integrate</h2>
-                <ul>
-                    <li><a href="@applicationConfig.developerFrontendUrl/developer/applications">Manage applications</a></li>
-                    <li><a href="@controllers.routes.TestingPagesController.testingPage()">Testing in the sandbox</a></li>
-                    <li><a href="@applicationConfig.developerFrontendUrl/api-test-user">Create a test user</a></li>
-                </ul>
-            </section>
-        </div>
+<div class="grid-row">
+    <div class="column-one-third">
+        <section class="section section--branded">
+            <h2>Get started</h2>
+            <ul>
+                <li><a href="@controllers.routes.DocumentationController.usingTheHubPage()">Using the Developer Hub</a></li>
+                <li><a href="/guides/fraud-prevention">Send fraud prevention data</a></li>
+                <li><a href="@controllers.routes.AuthorisationController.authorisationPage()">Authorisation</a></li>
+                <li><a href="@controllers.routes.DocumentationController.tutorialsPage()">Tutorials</a></li>
+                <li><a href="@controllers.routes.DocumentationController.termsOfUsePage()">Terms of use</a></li>
+            </ul>
+        </section>
     </div>
+    <div class="column-one-third">
+        <section class="section section--branded">
+            <h2>Explore APIs</h2>
+            <ul>
+                <li><a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a></li>
+                <li><a href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a></li>
+                <li><a href="@controllers.routes.DocumentationController.referenceGuidePage()">Reference guide</a></li>
+                <li><a href="@controllers.routes.DocumentationController.developmentPracticesPage()">Development practices</a></li>
+            </ul>
+        </section>
+    </div>
+    <div class="column-one-third">
+        <section class="section section--branded">
+            <h2>Integrate</h2>
+            <ul>
+                <li><a href="@applicationConfig.developerFrontendUrl/developer/applications">Manage applications</a></li>
+                <li><a href="@controllers.routes.TestingPagesController.testingPage()">Testing in the sandbox</a></li>
+                <li><a href="@applicationConfig.developerFrontendUrl/api-test-user">Create a test user</a></li>
+            </ul>
+        </section>
+    </div>
+</div>
 }
+
