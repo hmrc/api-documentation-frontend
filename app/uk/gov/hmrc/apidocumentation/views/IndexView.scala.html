@@ -24,19 +24,19 @@
 @(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
 @fullWidthBanner = {
-<header class="hero">
-    <section class="hero__content">
-        <div class="hero__body">
-            <h1 class="hero__title hero__heading-large">RESTful APIs for building smarter tax software</h1>
-            <a href="/developer/registration" role="button" class="hero-button">
-                Register for an account
-            </a>
-            <span class="hero-alternative-action"><br>
-              or <a href="/developer/login">sign in</a> to the Developer Hub
-            </span>
-        </div>
-    </section>
-</header>
+    <header class="hero">
+        <section class="hero__content">
+            <div class="hero__body">
+                <h1 class="hero__title hero__heading-large">RESTful APIs for building smarter tax software</h1>
+                <a class="govuk-link" href="/developer/registration" role="button" class="hero-button">
+                    Register for an account
+                </a>
+                <span class="hero-alternative-action"><br>
+                or <a class="govuk-link" href="/developer/login">sign in</a> to the Developer Hub
+                </span>
+            </div>
+        </section>
+    </header>
 }
 
 @userBanner = {
@@ -49,44 +49,35 @@
     </div>
 }
 
-@layoutHomePage(
-
-) {
-
-<div class="grid-row">
-    <div class="column-one-third">
-        <section class="section section--branded">
-            <h2>Get started</h2>
-            <ul>
-                <li><a href="@controllers.routes.DocumentationController.usingTheHubPage()">Using the Developer Hub</a></li>
-                <li><a href="/guides/fraud-prevention">Send fraud prevention data</a></li>
-                <li><a href="@controllers.routes.AuthorisationController.authorisationPage()">Authorisation</a></li>
-                <li><a href="@controllers.routes.DocumentationController.tutorialsPage()">Tutorials</a></li>
-                <li><a href="@controllers.routes.DocumentationController.termsOfUsePage()">Terms of use</a></li>
+@layoutHomePage() {
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <h2 class="govuk-heading-l">Get started</h2>
+            <ul class="govuk-list">
+                <li><a class="govuk-link" href="@controllers.routes.DocumentationController.usingTheHubPage()">Using the Developer Hub</a></li>
+                <li><a class="govuk-link" href="/guides/fraud-prevention">Send fraud prevention data</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationPage()">Authorisation</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.DocumentationController.tutorialsPage()">Tutorials</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.DocumentationController.termsOfUsePage()">Terms of use</a></li>
             </ul>
-        </section>
-    </div>
-    <div class="column-one-third">
-        <section class="section section--branded">
-            <h2>Explore APIs</h2>
-            <ul>
-                <li><a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a></li>
-                <li><a href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a></li>
-                <li><a href="@controllers.routes.DocumentationController.referenceGuidePage()">Reference guide</a></li>
-                <li><a href="@controllers.routes.DocumentationController.developmentPracticesPage()">Development practices</a></li>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <h2 class="govuk-heading-l">Explore APIs</h2>
+            <ul class="govuk-list">
+                <li><a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a></li>
+                <li><a class="govuk-link" href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage()">Reference guide</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.DocumentationController.developmentPracticesPage()">Development practices</a></li>
             </ul>
-        </section>
-    </div>
-    <div class="column-one-third">
-        <section class="section section--branded">
-            <h2>Integrate</h2>
-            <ul>
-                <li><a href="@applicationConfig.developerFrontendUrl/developer/applications">Manage applications</a></li>
-                <li><a href="@controllers.routes.TestingPagesController.testingPage()">Testing in the sandbox</a></li>
-                <li><a href="@applicationConfig.developerFrontendUrl/api-test-user">Create a test user</a></li>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <h2 class="govuk-heading-l">Integrate</h2>
+            <ul class="govuk-list">
+                <li><a class="govuk-link" href="@applicationConfig.developerFrontendUrl/developer/applications">Manage applications</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.TestingPagesController.testingPage()">Testing in the sandbox</a></li>
+                <li><a class="govuk-link" href="@applicationConfig.developerFrontendUrl/api-test-user">Create a test user</a></li>
             </ul>
-        </section>
+        </div>
     </div>
-</div>
 }
 
