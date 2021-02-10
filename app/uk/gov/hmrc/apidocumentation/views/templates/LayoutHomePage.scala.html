@@ -17,11 +17,14 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.apidocumentation.views.html.templates._
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+@import views.templates.FooterLinks
 
 @this(
     govukTemplate: GovukTemplate,
     footer: GovukFooter,
     siteHeader: HomePageHeader,
+    siteFooter: SiteFooter,
+    footerLinks: FooterLinks,
     applicationConfig: ApplicationConfig
 )
 
@@ -29,7 +32,6 @@
   navTitle: Option[String] = None,
   headerNavLinks: Option[Html] = None,
   serviceInfoContent : Option[Html] = None,
-  fullWidthContent: Boolean = false,
   fullWidthBanner: Option[Html] = None
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
@@ -38,13 +40,13 @@
 }
 
 @footerBlock = {
-    @footer()
+    @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
 
 @govukTemplate(
     pageTitle = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = siteHeader(),
+    headerBlock = siteHeader(navTitle, headerNavLinks),
     mainClasses = None,
     footerBlock = footerBlock,
     beforeContentBlock = None,

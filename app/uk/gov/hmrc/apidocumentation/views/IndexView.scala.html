@@ -50,7 +50,10 @@
 }
 
 @layoutHomePage(
-
+    navTitle = Some(applicationConfig.title),
+    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(), navLinks)),
+    serviceInfoContent = Some(userBanner),
+    fullWidthBanner = Some(fullWidthBanner),
 ) {
 
 <div class="grid-row">
