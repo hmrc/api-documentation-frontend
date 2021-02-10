@@ -15,17 +15,24 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.views.html.templates.SiteHeader
+@import uk.gov.hmrc.apidocumentation.views.html.partials
+@import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
+@import uk.gov.hmrc.apidocumentation.views.html.include
 
 @this(siteHeader: SiteHeader)
 
-@()(implicit messages: Messages)
+@(navTitle: Option[String] = None,
+headerNavLinks: Option[Html] = None)(implicit messages: Messages)
 
 @siteHeader()
 <!-- Notification Banner -->
 <div class="govuk-width-container">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <p>Call sign in register breadcrumbs</p>
+            @include.api_header_nav(
+                navTitle = None,
+                navTitleLink = None,
+                navLinks = headerNavLinks)
         </div>
     </div>
 </div>
