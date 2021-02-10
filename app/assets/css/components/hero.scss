@@ -15,6 +15,9 @@
     color: #1d70b8 !important;
     background-color: #ffffff !important;
     box-shadow: 0 2px 0 #003078 !important;
+    &:focus {
+      border-color: #003078 !important;
+    }
   }
   &-padding-top {
     padding-top: 25px;
