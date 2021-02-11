@@ -26,6 +26,7 @@ import uk.gov.hmrc.play.http.metrics.{API, NoopApiMetrics}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.apidocumentation.models.UserId
 
 class UserSessionConnectorSpec extends ConnectorSpec {
   val thirdPartyDeveloperUrl = "https://third-party-developer.example.com"
@@ -48,7 +49,7 @@ class UserSessionConnectorSpec extends ConnectorSpec {
 
   "fetchSession" should {
     "return the session when found" in new Setup {
-      val session = Session(sessionId, LoggedInState.LOGGED_IN, Developer("developer@example.com", "Firstname", "Lastname"))
+      val session = Session(sessionId, LoggedInState.LOGGED_IN, Developer("developer@example.com", "Firstname", "Lastname", UserId.random))
 
       when(mockHttpClient.GET[Option[Session]](meq(s"$thirdPartyDeveloperUrl/session/$sessionId"))(any(), any(), any()))
         .thenReturn(Future.successful(Some(session)))

@@ -23,6 +23,7 @@ import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
+import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
 
 trait ApiPlatformMicroserviceConnectorMockingHelper {
 
@@ -31,8 +32,8 @@ trait ApiPlatformMicroserviceConnectorMockingHelper {
       .thenReturn(Future.successful(apis.toSeq))
   }
 
-  def whenFetchAllDefinitionsWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)(email: String)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinitionsByCollaborator(any[Some[String]]())(eqTo(hc)))
+  def whenFetchAllDefinitionsWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)(userId: UuidIdentifier)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
+    when(base.fetchApiDefinitionsByCollaborator(any[Some[UuidIdentifier]]())(eqTo(hc)))
       .thenReturn(Future.successful(apis.toSeq))
   }
 
@@ -44,10 +45,10 @@ trait ApiPlatformMicroserviceConnectorMockingHelper {
       .thenReturn(Future.successful(Some(api)))
   }
   def whenFetchExtendedDefinitionWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)
-                                                                       (serviceName: String, email: String)
+                                                                       (serviceName: String, userId: UuidIdentifier)
                                                                        (api: ExtendedAPIDefinition)
                                                                        (implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinition(eqTo(serviceName), any[Some[String]]())(eqTo(hc)))
+    when(base.fetchApiDefinition(eqTo(serviceName), any[Some[UuidIdentifier]]())(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
