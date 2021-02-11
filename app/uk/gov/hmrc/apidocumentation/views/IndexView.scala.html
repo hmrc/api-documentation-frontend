@@ -23,22 +23,6 @@
 
 @(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
-@fullWidthBanner = {
-<header class="hero">
-    <section class="hero__content">
-        <div class="hero__body">
-            <h1 class="hero__title hero__heading-large">RESTful APIs for building smarter tax software</h1>
-            <a href="/developer/registration" role="button" class="hero-button">
-                Register for an account
-            </a>
-            <span class="hero-alternative-action"><br>
-              or <a href="/developer/login">sign in</a> to the Developer Hub
-            </span>
-        </div>
-    </section>
-</header>
-}
-
 @userBanner = {
     <div class="service-info">
         <div class="header__menu__proposition--sub-header">
@@ -53,7 +37,6 @@
     navTitle = Some(applicationConfig.title),
     headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(), navLinks)),
     serviceInfoContent = Some(userBanner),
-    fullWidthBanner = Some(fullWidthBanner),
 ) {
 
 <div class="grid-row">
