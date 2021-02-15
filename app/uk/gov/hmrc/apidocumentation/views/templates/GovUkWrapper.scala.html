@@ -18,6 +18,8 @@
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.views.html.include
 @import uk.gov.hmrc.apidocumentation.models.Crumb
 @import play.twirl.api.HtmlFormat
 @import views.templates.FooterLinks
@@ -41,7 +43,7 @@
     bodyEndBlock: Option[Html] = None,
     scriptsBlock: Option[Html] = None,
     breadcrumbs: Option[Breadcrumbs] = None,
-    serviceInfoContent : Option[Html] = None,
+    navLinks: Seq[NavLink] = Seq.empty,
     leftNav: Option[Html] = None
 )(contentBlock: Html)(implicit messages: Messages, request: play.api.mvc.Request[Any])
 
@@ -56,9 +58,11 @@
 
 
 @beforeContentBlock = {
-    @breadcrumbs.map {crumbs =>
-        @partials.breadcrumbs(crumbs.crumbs)
-    }
+        @breadcrumbs.map {crumbs =>
+            @partials.breadcrumbs(crumbs.crumbs)
+        }
+    @include.api_header_nav(navLinks = Some(partials.headerNavLinks(navLinks)))
+
 }
 
 @footerBlock = {    
