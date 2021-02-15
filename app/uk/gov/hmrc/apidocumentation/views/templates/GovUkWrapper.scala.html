@@ -61,9 +61,8 @@
         @breadcrumbs.map {crumbs =>
             @partials.breadcrumbs(crumbs.crumbs)
         }
-<div>
     @include.api_header_nav(navLinks = Some(partials.headerNavLinks(navLinks)))
-</div>
+
 }
 
 @footerBlock = {    
