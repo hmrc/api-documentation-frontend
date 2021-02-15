@@ -23,20 +23,8 @@
 
 @(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
-@userBanner = {
-    <div class="service-info">
-        <div class="header__menu__proposition--sub-header">
-            <ul class="header__menu__proposition-links">
-                @partials.headerNavLinks(navLinks, anchorClass=Some("link-style"))
-            </ul>
-        </div>
-    </div>
-}
-
 @layoutHomePage(
-    navTitle = Some(applicationConfig.title),
-    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(), navLinks)),
-    serviceInfoContent = Some(userBanner),
+    headerNavLinks = Some(partials.headerNavLinks(navLinks))
 ) {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">

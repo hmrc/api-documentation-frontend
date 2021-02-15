@@ -38,6 +38,15 @@
     <link href='@controllers.routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />
 }
 
+@scripts = {
+    <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script>window.GOVUKFrontend.initAll();</script>
+}
+
+@bodyEndDefault = {
+    @scripts
+}
+
 @footerBlock = {
     @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
@@ -45,8 +54,9 @@
 @govukTemplate(
     pageTitle = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = siteHeader(navTitle, headerNavLinks),
+    headerBlock = siteHeader(headerNavLinks),
     mainClasses = None,
     footerBlock = footerBlock,
     beforeContentBlock = None,
+    bodyEndBlock = Some(bodyEndDefault)
 )(contentBlock)

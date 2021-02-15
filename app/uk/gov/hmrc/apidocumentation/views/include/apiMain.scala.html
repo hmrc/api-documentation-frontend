@@ -36,5 +36,5 @@
 @govUkWrapper(pageTitle = Some(pageAttributes.title),
     leftNav = Some(partials.sideNavigation(request, pageAttributes.sidebarLinks)),
     breadcrumbs = Some(pageAttributes.breadcrumbs),
-    serviceInfoContent = Some(userBanner)
+    navLinks = pageAttributes.headerLinks
     ){@mainContent}
