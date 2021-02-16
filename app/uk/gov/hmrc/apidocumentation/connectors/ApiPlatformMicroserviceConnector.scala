@@ -26,6 +26,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
 
+import uk.gov.hmrc.apidocumentation.models.DeveloperIdentifier
+
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
@@ -41,19 +43,19 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
     http.GET[ApiSpecification](url)
   }
 
-  def fetchApiDefinitionsByCollaborator(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
+  def fetchApiDefinitionsByCollaborator(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
     Logger.info(s"${getClass.getSimpleName} - fetchApiDefinitionsByCollaborator")
-    val r = http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(email))
+    val r = http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(developerId))
 
     r.map(defns => defns.foreach(defn => Logger.info(s"Found ${defn.name}")))
 
     r.map(e => e.sortBy(_.name))
   }
 
-  def fetchApiDefinition(serviceName: String, email: Option[String])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
+  def fetchApiDefinition(serviceName: String, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
     Logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
     
-    val r = http.GET[Option[ExtendedAPIDefinition]](definitionUrl(serviceBaseUrl, serviceName), queryParams(email))
+    val r = http.GET[Option[ExtendedAPIDefinition]](definitionUrl(serviceBaseUrl, serviceName), queryParams(developerId))
 
     r.map(_.map(defn => Logger.info(s"Found ${defn.name}")))
     
@@ -68,8 +70,8 @@ object ApiPlatformMicroserviceConnector {
 
   val noParams: Params = Seq.empty
 
-  def queryParams(oemail: Option[String]): Params =
-    oemail.fold(noParams)(email => Seq("collaboratorEmail" -> email))
+  def queryParams(developerIdOpt: Option[DeveloperIdentifier]): Params =
+    developerIdOpt.fold(noParams)(developerId => Seq("developerId" -> developerId.asText))
 
   def definitionsUrl(serviceBaseUrl: String) = s"$serviceBaseUrl/combined-api-definitions"
   def definitionUrl(serviceBaseUrl: String, serviceName: String) = s"$serviceBaseUrl/combined-api-definitions/$serviceName"

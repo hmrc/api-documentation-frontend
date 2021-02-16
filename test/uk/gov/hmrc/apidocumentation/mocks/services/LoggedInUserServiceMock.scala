@@ -24,11 +24,12 @@ import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
 import uk.gov.hmrc.apidocumentation.models.Developer
 
 import scala.concurrent.Future.successful
+import uk.gov.hmrc.apidocumentation.models.UserId
 
 trait LoggedInUserServiceMock extends MockitoSugar {
   val loggedInEmail = "mr.abcd@example.com"
   val noUserLoggedIn = None
-  val userLoggedIn = Some(Developer(loggedInEmail, "Anony", "Mouse"))
+  val userLoggedIn = Some(Developer(loggedInEmail, "Anony", "Mouse", UserId.random))
 
   lazy val loggedInUserService: LoggedInUserService = mock[LoggedInUserService]
 

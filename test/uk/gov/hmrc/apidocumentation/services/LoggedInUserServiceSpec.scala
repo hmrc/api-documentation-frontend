@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.apidocumentation.models.UserId
 
 class LoggedInUserServiceSpec extends UnitSpec with ScalaFutures with MockitoSugar {
 
@@ -42,7 +43,7 @@ class LoggedInUserServiceSpec extends UnitSpec with ScalaFutures with MockitoSug
 
     val mcc = Helpers.stubControllerComponents()
 
-    val developer = Developer("email","John", "Smith")
+    val developer = Developer("email","John", "Smith", UserId.random)
     val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
 
     val cookie = play.api.mvc.Cookie(cookieName, "bobbins")

@@ -21,7 +21,7 @@ import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, ExtendedAPIDefinition, VersionVisibility}
+import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, DeveloperIdentifier, ExtendedAPIDefinition, UuidIdentifier, VersionVisibility}
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService, LoggedInUserService}
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -42,8 +42,8 @@ class DownloadController @Inject()(documentationService: DocumentationService,
   def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
 
     (for {
-      email <- extractEmail(loggedInUserService.fetchLoggedInUser())
-      api <- apiDefinitionService.fetchExtendedDefinition(service, email)
+      userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+      api <- apiDefinitionService.fetchExtendedDefinition(service, userId)
       validResource = validateResource(resource)
       result <- fetchResourceForApi(api, version, validResource)
     } yield {
@@ -91,8 +91,10 @@ class DownloadController @Inject()(documentationService: DocumentationService,
     resourceName
   }
 
-  private def extractEmail(fut: Future[Option[Developer]]): Future[Option[String]] = {
-    fut.map(opt => opt.map(dev => dev.email))
+  private def extractDeveloperIdentifier(f: Future[Option[Developer]]): Future[Option[DeveloperIdentifier]] = {
+    f.map( o =>
+      o.map(d => UuidIdentifier(d.userId))
+    )
   }
 }
 

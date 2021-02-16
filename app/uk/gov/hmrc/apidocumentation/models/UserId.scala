@@ -16,6 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-case class Developer(email: String, firstName: String, lastName: String, userId: UserId) {
-  val displayedName = s"$firstName $lastName"
+import java.{util => ju}
+
+case class UserId(value: ju.UUID) extends AnyVal
+
+object UserId {
+  import play.api.libs.json.Json
+  implicit val userIdFormat = Json.valueFormat[UserId]
+
+  def random: UserId = UserId(ju.UUID.randomUUID())
 }
