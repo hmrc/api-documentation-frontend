@@ -58,11 +58,14 @@
 
 
 @beforeContentBlock = {
-        @breadcrumbs.map {crumbs =>
-            @partials.breadcrumbs(crumbs.crumbs)
-        }
-    @include.api_header_nav(navLinks = Some(partials.headerNavLinks(navLinks)))
-
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full subnav">
+            @breadcrumbs.map {crumbs =>
+                @partials.breadcrumbs(crumbs.crumbs)
+            }
+            @include.api_header_nav(navLinks = Some(partials.headerNavLinks(navLinks)))
+        </div>
+    </div>
 }
 
 @footerBlock = {    
@@ -78,19 +81,20 @@
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ" height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
-
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter">
-            @leftNav.getOrElse(HtmlFormat.empty)
-        </div>
-        <div class="govuk-grid-column-two-thirds">
-            <div class="govuk-side-nav-content">
-                @contentBlock
+    <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-quarter">
+                @leftNav.getOrElse(HtmlFormat.empty)
+            </div>
+            <div class="govuk-grid-column-two-thirds">
+                <div class="govuk-side-nav-content">
+                    @contentBlock
+                </div>
             </div>
         </div>
-    </div>
-    <div class="govuk-get-help-container">
-        @siteHelper()
+        <div class="govuk-get-help-container">
+            @siteHelper()
+        </div>
     </div>
 }
 

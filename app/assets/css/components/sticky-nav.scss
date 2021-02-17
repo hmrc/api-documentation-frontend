@@ -88,7 +88,13 @@ ul.fixed-navigation__sub-list {
 }
 
 .govuk-side-nav-content {
-  padding-top: 30px;
+  padding-top: 0;
+}
+
+@media (min-width: 40.0625em) {
+  .govuk-side-nav-content {
+    padding-top: 30px;
+  }
 }
 
 @media screen and (min-width: 0px) and (max-width: 640px) {
@@ -104,9 +110,16 @@ ul.fixed-navigation__sub-list {
 // APIS-1127 - iOS touch scroll jittery fixed elements fix
 .side-nav__component {
   padding: 0;
+  margin-top: 0;
   list-style-type: none;
   background-color: white;
   transform: translate3d(0px, 0px, 0px) translateZ(0);
+}
+
+@media (min-width: 40.0625em) {
+  .side-nav__component {
+    margin-top: 16px;
+  }
 }
 
 // APIS-1198 - fix menu resize isssue, hide chevrons for in-page nav

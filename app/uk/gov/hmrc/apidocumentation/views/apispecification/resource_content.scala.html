@@ -108,11 +108,11 @@
     <section id="sample-request_@contentID" class="section">
         <h4 class="govuk-heading-s">Request</h4>
         @for(example <- BodyExamples(body)) {
-            <section>
+            <p class="govuk-body">
                 @if(example.description.isDefined){<strong>Scenario: @example.description</strong>}
                 @if(example.documentation.isDefined){<p class="govuk-body">@Markdown(example.documentation.get)</p>}
                 <pre class="code--block">@example.value</pre>
-            </section>
+            </p>
         }
     </section>
 }
@@ -129,11 +129,11 @@
         <p class="govuk-body">HTTP status: <code class="code--slim">@HttpStatus(resp.code)</code></p>
         @for(body <- resp.body) {
             @for(example <- BodyExamples(body)) {
-                <section>
+                <p class="govuk-body">
                     @if(example.description.isDefined){@example.description}
                     @if(example.documentation.isDefined){<p class="govuk-body">@Markdown(example.documentation.get)</p>}
                     <pre class="code--block">@example.value</pre>
-                </section>
+                </p>
             }
         }
     </section>
@@ -157,18 +157,18 @@
                 </thead>
                 <tbody class="govuk-table__body">
                 @for(errorScenario <- errorScenarios) {
-                    <tr class="table__row--responsive">
-                        <td data-heading="Error Scenario" class="table__detail--responsive">
+                    <tr class="govuk-table__row">
+                        <td data-heading="Error Scenario" class="govuk-table__cell">
                             <div class="table__cell-contents--responsive">
                                 <p class="govuk-body">@errorScenario("scenario")</p>
                             </div>
                         </td>
-                        <td data-heading="HTTP Status" class="table__detail--responsive">
+                        <td data-heading="HTTP Status" class="govuk-table__cell">
                             <div class="table__cell-contents--responsive">
                                 <p class="govuk-body">@HttpStatus(errorScenario("httpStatus"))</p>
                             </div>
                         </td>
-                        <td data-heading="Code" class="table__detail--responsive">
+                        <td data-heading="Code" class="govuk-table__cell">
                             <div class="table__cell-contents--responsive">
                                 <p class="govuk-body">@errorScenario("code")</p>
                             </div>

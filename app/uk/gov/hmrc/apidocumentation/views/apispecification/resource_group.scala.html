@@ -40,13 +40,15 @@
                     @if(!method.method.equalsIgnoreCase("OPTIONS")) {
                         @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
                             @if(index == 0) {
+                                <strong class="govuk-tag">
+                                    @method.method.toUpperCase
+                                </strong>
+                                <br />
+                                <br />
                                 <div class="method-container">
                                     @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
                                         <code class="code--slim">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
                                     }
-                                    <strong class="govuk-tag">
-                                        @method.method.toUpperCase
-                                    </strong>
                                 </div>
                             }
                             <br />

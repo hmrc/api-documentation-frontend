@@ -187,34 +187,26 @@ pre, code {
   }
 }
 
-.service-tag {
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 700;
-  margin-left: -1rem;
-  min-width: 145px;
-  padding: .5rem;
-  text-align: center;
-  width: 100%;
-
+.govuk-tag {
+  color: #000 !important;
   &--service-guide {
-    background-color: #e7a09e;
+    background-color: #e7a09e !important;
   }
 
   &--rest {
-    background-color: #a3c5df;
+    background-color: #a3c5df !important;
   }
 
   &--roadmap {
-    background-color: #c4ccaa;
+    background-color: #c4ccaa !important;
   }
 
   &--test {
-    background-color: #c39ac2;
+    background-color: #c39ac2 !important;
   }
 
   &--xml {
-    background-color: #fbe0af;
+    background-color: #fbe0af !important;
   }
 }
 
@@ -236,8 +228,8 @@ pre, code {
 
 .filter-container {
   background: #f8f8f8;
-  margin: 2rem 0;
-  padding: 2rem 2rem 1rem 2rem;
+  padding: 2rem 1rem;
+  margin: 1rem 0;
 
   .govuk-select {
     font-family: "nta",Arial,sans-serif;
@@ -256,6 +248,13 @@ pre, code {
 
   .govuk-form-group {
     margin-bottom: 2rem;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .filter-container {
+    padding: 2rem 2rem 1rem 2rem;
+    margin: 2rem 0;
   }
 }
 
@@ -310,6 +309,7 @@ pre, code {
 }
 
 .markdown-text-styles {
+  word-wrap: break-word;
   margin-bottom: 15px;
   font-size: 1rem;
   line-height: 1.25;
@@ -318,6 +318,15 @@ pre, code {
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
   margin-top: 0;
+  section {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #0b0c0c;
+    font-family: "GDS Transport",Arial,sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+  }
   a:link {
     color: #1d70b8;
   }
@@ -373,4 +382,33 @@ pre, code {
 .method-container {
   display: flex;
   justify-content: space-between;
+}
+
+.subnav {
+  display: flex;
+  &-auth {
+    display: none;
+  }
+  &-margins {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .subnav {
+    &-auth {
+      display: flex;
+      align-items: center;
+      margin: 0 !important;
+      margin-left: auto !important;
+      & > *:first-child {
+        padding-right: 15px;
+      }
+    }
+  }
+}
+
+.word-break {
+  word-wrap: anywhere;
 }

@@ -68,25 +68,25 @@
                     @if(applicationConfig.showSandboxAvailability) {
                         <tr class="govuk-table__row">
                             <th scope="row" class="govuk-table__header">Available in @applicationConfig.nameOfSubordinateEnvironment</th>
-                            <td class="govuk-table__cell">@EndpointsAvailable(version.sandboxAvailability)</td>
+                            <td class="govuk-table__cell word-break">@EndpointsAvailable(version.sandboxAvailability)</td>
                         </tr>
                     }
                     @if(ShowBaseURL(version.sandboxAvailability)) {
                         <tr class="govuk-table__row">
                             <th scope="row" class="govuk-table__header">@applicationConfig.nameOfSubordinateEnvironment base URL</th>
-                            <td class="govuk-table__cell">@applicationConfig.subordinateBaseUrl</td>
+                            <td class="govuk-table__cell word-break">@applicationConfig.subordinateBaseUrl</td>
                         </tr>
                     }
                     @if(applicationConfig.showProductionAvailability) {
                         <tr class="govuk-table__row">
                             <th scope="row" class="govuk-table__header">Available in @applicationConfig.nameOfPrincipalEnvironment</th>
-                            <td class="govuk-table__cell">@EndpointsAvailable(version.productionAvailability)</td>
+                            <td class="govuk-table__cell word-break">@EndpointsAvailable(version.productionAvailability)</td>
                         </tr>
                     }
                     @if(ShowBaseURL(version.productionAvailability)){
                         <tr class="govuk-table__row">
                             <th scope="row" class="govuk-table__header">@applicationConfig.nameOfPrincipalEnvironment base URL</th>
-                            <td class="govuk-table__cell">@applicationConfig.principalBaseUrl</td>
+                            <td class="govuk-table__cell word-break">@applicationConfig.principalBaseUrl</td>
                         </tr>
                     }
                 </tbody>

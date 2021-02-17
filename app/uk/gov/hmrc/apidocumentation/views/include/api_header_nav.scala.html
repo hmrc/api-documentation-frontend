@@ -16,13 +16,8 @@
 
 @(navLinks: Option[Html])
 
-<div class="header-proposition">
-        @if(navLinks) {
-        <ul id="proposition-links" class="header__menu__proposition-links">
-            @navLinks
-        </ul>
-        }
-
-    </nav>
-    </div>
-</div>
+@if(navLinks) {
+    <ul id="proposition-links" class="govuk-list subnav-auth">
+        @navLinks
+    </ul>
+}
