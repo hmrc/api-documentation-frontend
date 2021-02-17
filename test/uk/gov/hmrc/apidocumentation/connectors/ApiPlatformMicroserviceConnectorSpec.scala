@@ -56,8 +56,8 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
   }
 
   "fetchApiDefinitionsByCollaborator" should {
-    "call the underlying http client with the email argument" in new LocalSetup {
-      whenGetAllDefinitionsByEmail(Some(userId))(apiDefinition(apiName1), apiDefinition(apiName2))
+    "call the underlying http client with the user id argument" in new LocalSetup {
+      whenGetAllDefinitionsByUserId(Some(userId))(apiDefinition(apiName1), apiDefinition(apiName2))
 
       val result = await(underTest.fetchApiDefinitionsByCollaborator(Some(userId)))
 
@@ -65,14 +65,15 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
       result.map(_.name) shouldBe Seq(apiName1, apiName2)
     }
 
-    "call the underlying http client without an email argument" in new LocalSetup {
-      whenGetAllDefinitionsByEmail(None)(apiDefinition(apiName1), apiDefinition(apiName2))
+    "call the underlying http client without a user id argument" in new LocalSetup {
+      whenGetAllDefinitionsByUserId(None)(apiDefinition(apiName1), apiDefinition(apiName2))
 
       val result = await(underTest.fetchApiDefinitionsByCollaborator(None))
 
       result.size shouldBe 2
       result.map(_.name) shouldBe Seq(apiName1, apiName2)
     }
+    
     "throw an exception correctly" in new LocalSetup {
       whenGetAllDefinitionsFails(UpstreamException)
 

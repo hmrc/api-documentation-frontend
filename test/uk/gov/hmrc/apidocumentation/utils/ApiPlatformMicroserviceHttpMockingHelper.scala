@@ -30,7 +30,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
   val apiPlatformMicroserviceBaseUrl: String
 
 
-  def whenGetAllDefinitionsByEmail(userId: Option[UuidIdentifier])(definitions: APIDefinition*): Unit = {
+  def whenGetAllDefinitionsByUserId(userId: Option[UuidIdentifier])(definitions: APIDefinition*): Unit = {
     val url = definitionsUrl(apiPlatformMicroserviceBaseUrl)
     when(
       mockHttpClient.GET[Seq[APIDefinition]](
