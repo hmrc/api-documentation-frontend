@@ -39,8 +39,8 @@ trait Documentation {
   def documentationUrl: String
 
   def mappedCategories(catMap: Map[String, Seq[APICategory]] = categoryMap): Seq[APICategory] = categories match {
-    case Some(x) => x
-    case Some(Nil) | None => catMap.getOrElse(name, Seq(OTHER))
+    case Some(x) if(x.nonEmpty) => x
+    case _ => catMap.getOrElse(name, Seq(OTHER))
   }
 
   lazy val isRestOrXmlApi = label == REST_API || label == XML_API
