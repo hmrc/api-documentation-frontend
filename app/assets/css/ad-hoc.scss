@@ -133,6 +133,10 @@ pre, code {
   content: "";
 }
 
+.side-nav__link:visited {
+  color: #1d70b8;
+}
+
 // Remove sub navigation right border on a mobile phone
 .side-nav {
   border-right: none;
@@ -355,6 +359,22 @@ pre, code {
     padding-left: 20px;
     list-style-type: disc;
   }
+  ol {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.25;
+    color: #0b0c0c;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-left: 0;
+    padding-left: 20px;
+    list-style-type: decimal;
+  }
 }
 
 @media (min-width: 40.0625em) {
@@ -362,11 +382,24 @@ pre, code {
     margin-bottom: 20px;
     font-size: 1.1875rem;
     line-height: 1.31579;
-
     ul {
       margin-bottom: 20px;
       font-size: 1.1875rem;
       line-height: 1.31579;
+    }
+    ol {
+      font-size: 1.1875rem;
+      line-height: 1.31579;
+      margin-bottom: 20px;
+    }
+    section {
+      margin-bottom: 15px;
+      font-size: 1.1875rem;
+      line-height: 1.31579;
+      color: #0b0c0c;
+      font-family: "GDS Transport",Arial,sans-serif;
+      -moz-osx-font-smoothing: grayscale;
+      font-weight: 400;
     }
   }
 }

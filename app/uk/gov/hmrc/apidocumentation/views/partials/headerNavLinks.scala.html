@@ -20,7 +20,7 @@
 
 @for(link <- navLinks) {
   <li>
-    <a class="govuk-link" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>
+    <a class="govuk-link govuk-link--no-visited-state" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>
       @{link.label}
     </a>
   </li>

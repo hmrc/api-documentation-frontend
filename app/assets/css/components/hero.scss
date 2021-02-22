@@ -2,8 +2,13 @@
   overflow: hidden;
   background: #1d70b8;
   color: #ffffff;
+  &-title {
+    color: #ffffff !important;
+    margin: 25px 0 !important;
+  }
   &-text {
     color: #ffffff !important;
+    margin-bottom: 30px !important;
     &-link {
       color: #ffffff !important;
       &:focus {
@@ -15,6 +20,7 @@
     color: #1d70b8 !important;
     background-color: #ffffff !important;
     box-shadow: 0 2px 0 #003078 !important;
+    margin-bottom: 15px !important;
     &:focus {
       border-color: #003078 !important;
     }

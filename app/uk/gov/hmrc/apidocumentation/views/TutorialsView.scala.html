@@ -64,17 +64,27 @@
     <p class="govuk-body">All code snippets in these tutorials are in Java. They use:</p>
 
     <ul class="govuk-list govuk-list--bullet"">
-        <li>the @Link.toExternalPage(url = "http://hc.apache.org/", value = Some("Apache HttpClient (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:Apache HttpClient"))).toHtml
-            library for accessing HTTP resources</li>
-        <li>the @Link.toExternalPage(url = "http://oltu.apache.org/", value = Some("Apache Oltu (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:Apache Oltu"))).toHtml
+        <li>
+            the <a class="govuk-link" href="http://hc.apache.org/" rel="noreferrer noopener" target="_blank">Apache HttpClient (opens in a new tab)</a>
+            library for accessing HTTP resources
+        </li>
+        <li>
+            the <a class="govuk-link" href="http://oltu.apache.org/" rel="noreferrer noopener" target="_blank">Apache Oltu (opens in a new tab)</a>
             library for our <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> client
+        </li>
     </ul>
 
     <p class="govuk-body">You can find more code samples in our public GitHub repositories. They're available in:</p>
     <ul class="govuk-list govuk-list--bullet">
-        <li>@Link.toExternalPage(url = "https://github.com/hmrc/api-example-java-client", value = Some("Java (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:Java"))).toHtml</li>
-        <li>@Link.toExternalPage(url = "https://github.com/hmrc/api-example-scala-client", value = Some("Scala (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:Scala"))).toHtml</li>
-        <li>@Link.toExternalPage(url = "https://github.com/hmrc/api-example-nodejs-client", value = Some("Node.js (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:Node.js"))).toHtml</li>
+        <li>
+            <a class="govuk-link" href="https://github.com/hmrc/api-example-java-client" rel="noreferrer noopener" target="_blank">Java (opens in a new tab)</a>
+        </li>
+        <li>
+            <a class="govuk-link" href="https://github.com/hmrc/api-example-scala-client" rel="noreferrer noopener" target="_blank">Scala (opens in a new tab)</a>
+        </li>
+        <li>
+            <a class="govuk-link" href="https://github.com/hmrc/api-example-nodejs-client" rel="noreferrer noopener" target="_blank">Node.js (opens in a new tab)</a>
+        </li>
     </ul>
 
     <p class="govuk-body">Most of our APIs use HTTP verbs and a RESTful interface. You can find out more information on these online.</p>
