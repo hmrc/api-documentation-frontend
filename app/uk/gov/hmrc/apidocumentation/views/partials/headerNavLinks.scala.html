@@ -26,8 +26,8 @@
   </li>
 }
 
-<!-- @for(link <- mobileNavLinks) {
+@for(link <- mobileNavLinks) {
 <li class="@if(link == navLinks.last) {hard--right} desktop-only">
     Test2: <a class="align--middle inline-block@if(link.truncate) { truncate truncate--small no-wrap text--center} @anchorClass.getOrElse("")" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>@{link.label}</a>
 </li>
-} -->
+}

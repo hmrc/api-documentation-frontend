@@ -102,7 +102,7 @@
     htmlLang = Some(messages.lang.code),
     pageTitle = Some(s"${pageTitle.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = siteHeader(),
+    headerBlock = siteHeader(navLinks),
     beforeContentBlock = Some(beforeContentBlock),
     footerBlock = footerBlock,
     bodyEndBlock = Some(bodyEndDefault)

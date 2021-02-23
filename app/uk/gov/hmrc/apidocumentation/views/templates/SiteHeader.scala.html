@@ -16,10 +16,11 @@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import play.twirl.api.HtmlFormat
+@import uk.gov.hmrc.apidocumentation.models._
 
 @this(govukHeader: GovukHeader)
 
-@()(implicit messages: Messages)
+@(navLinks: Seq[NavLink] = Seq.empty)(implicit messages: Messages)
 
 @govukHeader(Header(
     homepageUrl = Some("https://www.gov.uk/"),

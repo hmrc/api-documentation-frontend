@@ -17,12 +17,13 @@
 @import uk.gov.hmrc.apidocumentation.views.html.templates.SiteHeader
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import uk.gov.hmrc.apidocumentation.views.html.include
+@import uk.gov.hmrc.apidocumentation.models._
 
 @this(siteHeader: SiteHeader)
 
-@(headerNavLinks: Option[Html] = None)(implicit messages: Messages)
+@(headerNavLinks: Option[Html] = None, navLinks: Seq[NavLink] = Seq.empty)(implicit messages: Messages)
 
-@siteHeader()
+@siteHeader(navLinks)
 <!-- Notification Banner -->
 <div class="govuk-width-container">
     <div class="govuk-grid-row">

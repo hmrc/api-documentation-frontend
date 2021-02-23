@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.apidocumentation.views.html.templates._
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+@import uk.gov.hmrc.apidocumentation.models._
 @import views.templates.FooterLinks
 
 @this(
@@ -29,6 +30,7 @@
 )
 
 @(title: Option[String] = None,
+  navLinks: Seq[NavLink] = Seq.empty,
   navTitle: Option[String] = None,
   headerNavLinks: Option[Html] = None,
   serviceInfoContent : Option[Html] = None
@@ -54,7 +56,7 @@
 @govukTemplate(
     pageTitle = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = siteHeader(headerNavLinks),
+    headerBlock = siteHeader(headerNavLinks, navLinks),
     mainClasses = None,
     footerBlock = footerBlock,
     beforeContentBlock = None,

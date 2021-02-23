@@ -445,3 +445,21 @@ pre, code {
 .word-break {
   word-wrap: anywhere;
 }
+
+.mobile {
+    display: block;
+}
+
+.desktop {
+        display: none;
+}
+
+@media (min-width: 40.0625em) {
+  .mobile {
+    display: none;
+  }
+  .desktop {
+    display: block;
+  }
+
+}
