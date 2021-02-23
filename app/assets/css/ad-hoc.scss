@@ -446,20 +446,12 @@ pre, code {
   word-wrap: anywhere;
 }
 
-.mobile {
-    display: block;
-}
-
-.desktop {
-        display: none;
+.auth-links {
+  display: block !important;
 }
 
 @media (min-width: 40.0625em) {
-  .mobile {
-    display: none;
+  .auth-links {
+    display: none !important;
   }
-  .desktop {
-    display: block;
-  }
-
 }
