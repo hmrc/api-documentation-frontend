@@ -24,7 +24,8 @@
 @(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
 @layoutHomePage(
-    headerNavLinks = Some(partials.headerNavLinks(navLinks, mobileNavLinks = navLinks))
+    headerNavLinks = Some(partials.headerNavLinks(navLinks)),
+    navLinks = navLinks
 ) {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">

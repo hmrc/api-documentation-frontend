@@ -64,16 +64,13 @@
                             Service Availability
                         </a>
                     </li>
+                   @navLinks.map { navLink =>
                     <li class="govuk-header__navigation-item auth-links">
-                        <a class="govuk-header__link" href="#">
-                            Register
+                        <a class="govuk-header__link" href=@navLink.href>
+                            @navLink.label
                         </a>
                     </li>
-                    <li class="govuk-header__navigation-item auth-links">
-                        <a class="govuk-header__link" href="#">
-                            Sign in
-                        </a>
-                    </li>
+                    }
                 </ul>
             </nav>
         </div>
