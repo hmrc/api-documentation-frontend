@@ -192,25 +192,29 @@ pre, code {
 }
 
 .govuk-tag {
-  color: #000 !important;
   &--service-guide {
-    background-color: #e7a09e !important;
+    color: #80224d !important;
+    background: #f7d7e6 !important;
   }
 
   &--rest {
-    background-color: #a3c5df !important;
+    color: #144e81 !important;
+    background: #d2e2f1 !important;
   }
 
   &--roadmap {
-    background-color: #c4ccaa !important;
+    color: #3d2375 !important;
+    background: #dbd5e9 !important;
   }
 
   &--test {
-    background-color: #c39ac2 !important;
+    color: #6e3619 !important;
+    background: #fcd6c3 !important;
   }
 
   &--xml {
-    background-color: #fbe0af !important;
+    color: #594d00 !important;
+    background: #fff7bf !important;
   }
 }
 
@@ -218,8 +222,6 @@ pre, code {
   .api-group {
     font-weight: 700;
   }
-
-
 
   tbody {
     border-top: 3px solid #bfc1c3;
