@@ -24,15 +24,6 @@
 
 @(pageAttributes: PageAttributes, additionalTopContent: Html = HtmlFormat.empty)(mainContent: Html)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
-
-@userBanner = {
-<div class="header__menu__proposition--sub-header">
-    <ul class="header__menu__proposition-links">
-        @partials.headerNavLinks(pageAttributes.headerLinks, anchorClass=Some("link-style"))
-    </ul>
-</div>
-}
-
 @govUkWrapper(pageTitle = Some(pageAttributes.title),
     leftNav = Some(partials.sideNavigation(request, pageAttributes.sidebarLinks)),
     breadcrumbs = Some(pageAttributes.breadcrumbs),

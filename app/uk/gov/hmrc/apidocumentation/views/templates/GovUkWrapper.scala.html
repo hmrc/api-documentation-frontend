@@ -20,10 +20,8 @@
 @import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.html.include
-@import uk.gov.hmrc.apidocumentation.models.Crumb
 @import play.twirl.api.HtmlFormat
 @import views.templates.FooterLinks
-@import templates._
 
 @this(
     govukTemplate: GovukTemplate,
@@ -36,12 +34,10 @@
 
 @(
     pageTitle: Option[String] = None,
-    headBlock: Option[Html] = None,
     headerBlock: Option[Html] = None,
     beforeContentBlock: Option[Html] = None,
     footerItems: Seq[FooterItem] = Seq.empty,
     bodyEndBlock: Option[Html] = None,
-    scriptsBlock: Option[Html] = None,
     breadcrumbs: Option[Breadcrumbs] = None,
     navLinks: Seq[NavLink] = Seq.empty,
     leftNav: Option[Html] = None

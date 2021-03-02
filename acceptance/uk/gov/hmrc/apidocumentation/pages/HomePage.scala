@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.apidocumentation.pages
 
+import org.scalatestplus.selenium.WebBrowser
 import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 
 object HomePage extends WebPage {
 
   override val url = s"http://localhost:${Env.port}/api-documentation"
 
-  override def isCurrentPage: Boolean = find(className("hero__heading-large")).fold(false)(_.text == "RESTful APIs for building smarter tax software")
+  override def isCurrentPage: Boolean = find("RESTful-APIs-Title").fold(false)(_.text == "RESTful APIs for building smarter tax software")
 
-  def applicationName = className("header__menu__proposition-name").element.text
+  def applicationName = WebBrowser.id("HMRC-Developer-Hub").element.text
 
   def selectApidoc() {
     val apiDocLInk = find(linkText("API documentation")).get

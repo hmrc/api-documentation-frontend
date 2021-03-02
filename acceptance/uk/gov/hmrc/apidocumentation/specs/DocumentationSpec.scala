@@ -133,8 +133,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       And("I select version 'v1.5 (Beta)")
       CommonPage.selectVersion("v1.5 (Beta)")
 
-      And("I click on the 'Create user' link")
-      APIDocumentationPage.clickOnLink("Create user")
+      And("I click on the 'Create user' button")
+      APIDocumentationPage.clickOn("Create user")
 
       Then("location field is optional")
       ApiDocumentationTestServicePage.checkLocationFieldIsOptional()

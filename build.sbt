@@ -109,7 +109,6 @@ lazy val compile = Seq(
   "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-26",
   "uk.gov.hmrc" %% "http-metrics" % "1.10.0",
   "uk.gov.hmrc" %% "govuk-template" % "5.54.0-play-26",
-  "uk.gov.hmrc" %% "play-ui" % "8.9.0-play-26",
   "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
   "uk.gov.hmrc" %% "play-frontend-govuk" % "0.49.0-play-26",
   "uk.gov.hmrc" %% "play-frontend-hmrc" % "0.20.0-play-26",

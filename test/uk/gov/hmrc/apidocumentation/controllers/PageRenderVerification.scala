@@ -56,11 +56,17 @@ trait PageRenderVerification {
   }
 
   def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
-    bodyOf(actualPage) should include(s""" <li class="govuk-breadcrumbs__list-item"><a class="govuk-breadcrumbs__link" href="@crumb.url">@crumb.name</a></li>""")
+    bodyOf(actualPage) should include(s"""
+                                         |                    <li class="govuk-breadcrumbs__list-item">
+                                         |                        <a class="govuk-breadcrumbs__link" href="${crumb.url}">${crumb.name}</a>
+                                         |                    </li>""".stripMargin)
   }
 
   def verifyBreadcrumbEndpointRendered(actualPage: Result, crumbText: String) = {
-    bodyOf(actualPage) should include(s"""<li>${crumbText}</li>""")
+    bodyOf(actualPage) should include(s"""
+                                         |            <li class="govuk-breadcrumbs__list-item">
+                                         |                ${crumbText}
+                                         |            </li>""".stripMargin)
   }
 
   def verifyPageRendered(expectedTitle: String,
