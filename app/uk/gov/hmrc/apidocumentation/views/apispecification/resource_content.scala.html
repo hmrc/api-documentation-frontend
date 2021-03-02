@@ -110,7 +110,7 @@
         @for(example <- BodyExamples(body)) {
             <p class="govuk-body">
                 @if(example.description.isDefined){<strong>Scenario: @example.description</strong>}
-                @if(example.documentation.isDefined){<p class="govuk-body">@Markdown(example.documentation.get)</p>}
+                @if(example.documentation.isDefined){<div class="markdown-text-styles">@Markdown(example.documentation.get)</div>}
                 <pre class="code--block">@example.value</pre>
             </p>
         }
@@ -131,7 +131,7 @@
             @for(example <- BodyExamples(body)) {
                 <p class="govuk-body">
                     @if(example.description.isDefined){@example.description}
-                    @if(example.documentation.isDefined){<p class="govuk-body">@Markdown(example.documentation.get)</p>}
+                    @if(example.documentation.isDefined){<div class="markdown-text-styles">@Markdown(example.documentation.get)</div>}
                     <pre class="code--block">@example.value</pre>
                 </p>
             }
@@ -186,7 +186,7 @@
     @if(sandboxData.isDefined) {
         <section id="sandbox-data_@contentID" class="section">
             <h4 class="govuk-heading-s">Test data</h4>
-            @Markdown(sandboxData.get)
+            <div class="markdown-text-styles">@Markdown(sandboxData.get)</div>
         </section>
     }
 }

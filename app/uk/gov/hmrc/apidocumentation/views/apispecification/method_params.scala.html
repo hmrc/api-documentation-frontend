@@ -34,7 +34,7 @@
     </td>
     <td data-heading="Description" class="govuk-table__cell">
       <div class="table__cell-contents--responsive">
-          @Markdown(param.description)
+          <div class="markdown-text-styles">@Markdown(param.description)</div>
 
           @param.typeName match {
             case "date" => { <p class="govuk-body">Date in the format <code class="code--slim">YYYY-MM-DD</code></p> }
