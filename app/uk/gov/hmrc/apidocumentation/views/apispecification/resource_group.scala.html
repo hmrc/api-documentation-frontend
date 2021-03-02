@@ -25,11 +25,11 @@
 
     @if(resourceGroup.name.isDefined) {
         <div id="@Slugify(resourceGroup.name.get)">
-            <h3 class="heading-medium">@resourceGroup.name.get</h3>
+            <h3 class="govuk-heading-m">@resourceGroup.name.get</h3>
             @if(resourceGroup.description.isDefined) {
-                <p>@Markdown(resourceGroup.description.get)</p>
+                <p class="govuk-body">@Markdown(resourceGroup.description.get)</p>
             }
-            <h4 class="heading-small">@titleSection resources</h4>
+            <h4 class="govuk-heading-s">@titleSection resources</h4>
         </div>
     }
 
