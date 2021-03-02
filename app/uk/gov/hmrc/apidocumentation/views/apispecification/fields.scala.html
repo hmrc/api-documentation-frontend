@@ -50,15 +50,15 @@
                 <td data-heading="Description" class="govuk-table__cell">
                     <div class="table__cell-contents--responsive">
                     @if(field.description.isDefined) {
-                        <p>@{field.description}</p>
+                        <p class="govuk-body">@{field.description}</p>
                     }
 
                     @field.typeId match {
-                        case "full-date" => { <p>Date in the format <code class="code--slim">YYYY-MM-DD</code></p> }
-                        case "tax-year" => { <p>Tax year in the format <code class="code--slim">YYYY-YY</code></p> }
+                        case "full-date" => { <p class="govuk-body">Date in the format <code class="code--slim">YYYY-MM-DD</code></p> }
+                        case "tax-year" => { <p class="govuk-body">Tax year in the format <code class="code--slim">YYYY-YY</code></p> }
                         case _ => {
                             @if(field.pattern.isDefined) {
-                                <p>
+                                <p class="govuk-body">
                                     Must conform to the regular expression <code class="code--slim">@{field.pattern}</code>
                                 </p>
                             }
@@ -66,7 +66,7 @@
                     }
 
                     @if(field.enumValues.nonEmpty) {
-                        <p>
+                        <p class="govuk-body">
                             Limited to the following possible values:
                         </p>
                         <div>
@@ -79,7 +79,7 @@
                         </div>
                     } else {
                         @if(field.example.isDefined) {
-                            <p>
+                            <p class="govuk-body">
                                 For example: <code class="code--slim">@{field.example}</code>
                             </p>
                         }
