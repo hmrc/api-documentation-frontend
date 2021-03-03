@@ -26,6 +26,8 @@ import uk.gov.hmrc.play.http.metrics.NoopApiMetrics
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.apidocumentation.models.UserId
+import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
 
 class ApiDefinitionServiceSpec extends UnitSpec
   with MockitoSugar
@@ -35,6 +37,7 @@ class ApiDefinitionServiceSpec extends UnitSpec
   trait LocalSetup extends ApiPlatformMicroserviceConnectorMockingHelper{
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val loggedInUserEmail = "3rdparty@example.com"
+    val loggedInUserId = UuidIdentifier(UserId.random)
 
     val apiPlatformMicroserviceConnector = mock[ApiPlatformMicroserviceConnector]
 
@@ -54,9 +57,9 @@ class ApiDefinitionServiceSpec extends UnitSpec
     }
 
     "fetch APIs for user email if a user is logged in" in new LocalSetup {
-      whenFetchAllDefinitionsWithEmail(apiPlatformMicroserviceConnector)(loggedInUserEmail)(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
+      whenFetchAllDefinitionsWithEmail(apiPlatformMicroserviceConnector)(loggedInUserId)(apiDefinition("gregorian-calendar"), apiDefinition("roman-calendar"))
 
-      val result = await(underTest.fetchAllDefinitions(Some(loggedInUserEmail)))
+      val result = await(underTest.fetchAllDefinitions(Some(loggedInUserId)))
 
       result.size shouldBe 2
       result.map(_.name) shouldBe Seq("gregorian-calendar", "roman-calendar")
@@ -75,9 +78,9 @@ class ApiDefinitionServiceSpec extends UnitSpec
     }
 
     "fetch a single API for user email if a user is logged in" in new LocalSetup {
-      whenFetchExtendedDefinitionWithEmail(apiPlatformMicroserviceConnector)("buddist-calendar", loggedInUserEmail)(extendedApiDefinition("buddist-calendar"))
+      whenFetchExtendedDefinitionWithEmail(apiPlatformMicroserviceConnector)("buddist-calendar", loggedInUserId)(extendedApiDefinition("buddist-calendar"))
 
-      val result = await(underTest.fetchExtendedDefinition("buddist-calendar", Some(loggedInUserEmail)))
+      val result = await(underTest.fetchExtendedDefinition("buddist-calendar", Some(loggedInUserId)))
 
       result shouldBe defined
       result.get.name shouldBe "buddist-calendar"
@@ -87,7 +90,7 @@ class ApiDefinitionServiceSpec extends UnitSpec
       whenFetchExtendedDefinitionFails(apiPlatformMicroserviceConnector)(new NotFoundException("Expected unit test exception"))
 
       intercept[NotFoundException] {
-        await(underTest.fetchExtendedDefinition("buddist-calendar", Some(loggedInUserEmail)))
+        await(underTest.fetchExtendedDefinition("buddist-calendar", Some(loggedInUserId)))
       }
     }
   }

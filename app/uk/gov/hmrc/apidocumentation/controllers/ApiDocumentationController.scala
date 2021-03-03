@@ -80,8 +80,8 @@ class ApiDocumentationController @Inject()(
           Future.successful(Redirect(url))
         case None =>
           (for {
-            email <- extractEmail(loggedInUserService.fetchLoggedInUser())
-            apis <- apiDefinitionService.fetchAllDefinitions(email)
+            userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+            apis <- apiDefinitionService.fetchAllDefinitions(userId)
           } yield {
             val apisByCategory = Documentation.groupedByCategory(apis, XmlApiDocumentation.xmlApiDefinitions, ServiceGuide.serviceGuides, RoadMap.roadMaps)
 
@@ -112,8 +112,8 @@ class ApiDocumentationController @Inject()(
 
   private def redirectToCurrentApiDocumentation(service: String, cacheBuster: Option[Boolean]) = Action.async { implicit request =>
     (for {
-      email <- extractEmail(loggedInUserService.fetchLoggedInUser())
-      extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, email)
+      userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+      extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, userId)
     } yield {
       extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(NotFound(errorHandler.notFoundTemplate)) { version =>
         Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version, cacheBuster))
@@ -130,10 +130,10 @@ class ApiDocumentationController @Inject()(
     headerNavigation { implicit request =>
       navLinks =>
         (for {
-          email <- extractEmail(loggedInUserService.fetchLoggedInUser())
-          api <- apiDefinitionService.fetchExtendedDefinition(service, email)
+          userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+          api <- apiDefinitionService.fetchExtendedDefinition(service, userId)
           cacheBust = bustCache(appConfig.isStubMode, cacheBuster)
-          apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, email)
+          apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, userId)
         } yield apiDocumentation) recover {
           case e: NotFoundException =>
             Logger.info(s"Upstream request not found: ${e.getMessage}")
@@ -147,7 +147,7 @@ class ApiDocumentationController @Inject()(
   def bustCache(stubMode: Boolean, cacheBuster: Option[Boolean]): Boolean = stubMode || cacheBuster.getOrElse(false)
 
   private def doRenderApiDocumentation(service: String, version: String, cacheBuster: Boolean, apiOption: Option[ExtendedAPIDefinition],
-                                       navLinks: Seq[NavLink], email: Option[String])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider): Future[Result] = {
+                                       navLinks: Seq[NavLink], developerId: Option[DeveloperIdentifier])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider): Future[Result] = {
     def makePageAttributes(apiDefinition: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, sidebarLinks: Seq[SidebarLink]): PageAttributes = {
       val breadcrumbs = Breadcrumbs(
         Crumb(
@@ -187,7 +187,7 @@ class ApiDocumentationController @Inject()(
       documentationService.fetchApiSpecification(service, version, cacheBuster).map { apiSpecification =>
         val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation2(service, selectedVersion, apiSpecification))
         val viewModel = ViewModel(apiSpecification)
-        Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, email.isDefined)).withHeaders(cacheControlHeaders)
+        Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, developerId.isDefined)).withHeaders(cacheControlHeaders)
       }
     }
 
@@ -268,8 +268,9 @@ class ApiDocumentationController @Inject()(
       }
   }
 
-
-  private def extractEmail(fut: Future[Option[Developer]]): Future[Option[String]] = {
-    fut.map(opt => opt.map(dev => dev.email))
+  private def extractDeveloperIdentifier(f: Future[Option[Developer]]): Future[Option[DeveloperIdentifier]] = {
+    f.map( o =>
+      o.map(d => UuidIdentifier(d.userId))
+    )
   }
 }

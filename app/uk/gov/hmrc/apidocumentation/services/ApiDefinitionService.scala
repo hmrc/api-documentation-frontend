@@ -25,10 +25,10 @@ import uk.gov.hmrc.play.http.metrics._
 import scala.concurrent.{ExecutionContext, Future}
 
 trait BaseApiDefinitionService {
-  def fetchExtendedDefinition(serviceName: String, email: Option[String])
+  def fetchExtendedDefinition(serviceName: String, developerId: Option[DeveloperIdentifier])
                              (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
 
-  def fetchAllDefinitions(email: Option[String])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
+  def fetchAllDefinitions(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 }
 
 @Singleton
@@ -36,14 +36,14 @@ class ApiDefinitionService @Inject()(val apiPlatformMicroserviceConnector: ApiPl
                                     (implicit ec: ExecutionContext) extends BaseApiDefinitionService with RecordMetrics {
   val api: API = API("api-definition")
 
-  def fetchExtendedDefinition(serviceName: String, email: Option[String] = None)
+  def fetchExtendedDefinition(serviceName: String, developerId: Option[DeveloperIdentifier] = None)
                             (implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
     record {
-      apiPlatformMicroserviceConnector.fetchApiDefinition(serviceName, email)
+      apiPlatformMicroserviceConnector.fetchApiDefinition(serviceName, developerId)
     }
 
-  def fetchAllDefinitions(email: Option[String] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
+  def fetchAllDefinitions(developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
     record {
-        apiPlatformMicroserviceConnector.fetchApiDefinitionsByCollaborator(email)
+        apiPlatformMicroserviceConnector.fetchApiDefinitionsByCollaborator(developerId)
     }
 }

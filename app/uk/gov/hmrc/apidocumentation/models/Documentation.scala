@@ -39,7 +39,7 @@ trait Documentation {
   def documentationUrl: String
 
   def mappedCategories(catMap: Map[String, Seq[APICategory]] = categoryMap): Seq[APICategory] = categories match {
-    case Some(head :: tail) => head +: tail
+    case Some(x) if(x.nonEmpty) => x
     case _ => catMap.getOrElse(name, Seq(OTHER))
   }
 

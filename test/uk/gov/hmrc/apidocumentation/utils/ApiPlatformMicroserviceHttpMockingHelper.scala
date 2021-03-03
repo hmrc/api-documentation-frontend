@@ -23,18 +23,19 @@ import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.Future
+import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
 
 trait ApiPlatformMicroserviceHttpMockingHelper {
   val mockHttpClient: HttpClient
   val apiPlatformMicroserviceBaseUrl: String
 
 
-  def whenGetAllDefinitionsByEmail(email: Option[String])(definitions: APIDefinition*): Unit = {
+  def whenGetAllDefinitionsByUserId(userId: Option[UuidIdentifier])(definitions: APIDefinition*): Unit = {
     val url = definitionsUrl(apiPlatformMicroserviceBaseUrl)
     when(
       mockHttpClient.GET[Seq[APIDefinition]](
         eqTo(url),
-        eqTo(email.map(e => queryParams(Some(e))).getOrElse(noParams))
+        eqTo(userId.map(e => queryParams(Some(e))).getOrElse(noParams))
       )
         (any(), any(), any())
     )
@@ -53,12 +54,12 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
       .thenReturn(Future.failed(exception))
   }
 
-  def whenGetDefinitionByEmail(serviceName: String, email: String)(definition: ExtendedAPIDefinition): Unit = {
+  def whenGetDefinitionByEmail(serviceName: String, userId: UuidIdentifier)(definition: ExtendedAPIDefinition): Unit = {
     val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
     when(
       mockHttpClient.GET[Option[ExtendedAPIDefinition]](
         eqTo(url),
-        eqTo(queryParams(Some(email)))
+        eqTo(queryParams(Some(userId)))
       )
         (any(), any(), any())
     )

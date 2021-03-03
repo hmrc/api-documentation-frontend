@@ -27,6 +27,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.apidocumentation.models.UserId
 
 class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
 
@@ -35,7 +36,7 @@ class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoS
   def sessionService = new SessionService(userSessionConnectorMock)
 
   "The SessionService" should {
-    val developer = Developer("email","John", "Smith")
+    val developer = Developer("email","John", "Smith", UserId.random)
 
     "Return session if the session is logged in" in {
       val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)

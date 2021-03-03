@@ -27,6 +27,8 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.http.UpstreamErrorResponse
+import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
+import uk.gov.hmrc.apidocumentation.models.UserId
 
 class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
 
@@ -44,7 +46,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
     when(mockConfig.apiPlatformMicroserviceBaseUrl).thenReturn(apiPlatformMicroserviceBaseUrl)
 
     val serviceName = "someService"
-    val userEmail = "3rdparty@example.com"
+    val userId = UuidIdentifier(UserId.random)
 
     val apiName1 = "Calendar"
     val apiName2 = "HelloWorld"
@@ -54,23 +56,24 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
   }
 
   "fetchApiDefinitionsByCollaborator" should {
-    "call the underlying http client with the email argument" in new LocalSetup {
-      whenGetAllDefinitionsByEmail(Some(userEmail))(apiDefinition(apiName1), apiDefinition(apiName2))
+    "call the underlying http client with the user id argument" in new LocalSetup {
+      whenGetAllDefinitionsByUserId(Some(userId))(apiDefinition(apiName1), apiDefinition(apiName2))
 
-      val result = await(underTest.fetchApiDefinitionsByCollaborator(Some(userEmail)))
+      val result = await(underTest.fetchApiDefinitionsByCollaborator(Some(userId)))
 
       result.size shouldBe 2
       result.map(_.name) shouldBe Seq(apiName1, apiName2)
     }
 
-    "call the underlying http client without an email argument" in new LocalSetup {
-      whenGetAllDefinitionsByEmail(None)(apiDefinition(apiName1), apiDefinition(apiName2))
+    "call the underlying http client without a user id argument" in new LocalSetup {
+      whenGetAllDefinitionsByUserId(None)(apiDefinition(apiName1), apiDefinition(apiName2))
 
       val result = await(underTest.fetchApiDefinitionsByCollaborator(None))
 
       result.size shouldBe 2
       result.map(_.name) shouldBe Seq(apiName1, apiName2)
     }
+    
     "throw an exception correctly" in new LocalSetup {
       whenGetAllDefinitionsFails(UpstreamException)
 
@@ -83,9 +86,9 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
   "fetchApiDefinition" should {
 
     "call the underlying http client with the email argument" in new LocalSetup {
-      whenGetDefinitionByEmail(serviceName, userEmail)(extendedApiDefinition(apiName1))
+      whenGetDefinitionByEmail(serviceName, userId)(extendedApiDefinition(apiName1))
 
-      val result = await(underTest.fetchApiDefinition(serviceName, Some(userEmail)))
+      val result = await(underTest.fetchApiDefinition(serviceName, Some(userId)))
 
       result should be('defined)
       result.head.name shouldBe apiName1
