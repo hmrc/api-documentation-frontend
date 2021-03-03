@@ -457,3 +457,21 @@ pre, code {
     display: none !important;
   }
 }
+
+.preview-yaml-button {
+  display: block;
+  a {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .preview-yaml-button {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    a {
+      margin-left: 15px;
+    }
+  }
+}
