@@ -104,15 +104,12 @@ class DocumentationSpec extends UnitSpec {
         api.defaultVersion shouldEqual expectedDefaultVersion
       }
     }
-
-    def version(version: String, apiStatus: APIStatus) = APIVersion(version, None, apiStatus, Seq.empty)
   }
 
   "APIDefinition.reverseSortedVersions" should {
 
     val v1Retired = APIVersion("1.0", None, RETIRED, Seq.empty)
     val v2Deprecated = APIVersion("2.0", None, DEPRECATED, Seq.empty)
-    val v3Deprecated = APIVersion("3.0", None, DEPRECATED, Seq.empty)
     val v3Prototyped = APIVersion("3.0", None, BETA, Seq.empty)
     val v3PrivatePublished = APIVersion("3.0rc", Some(APIAccess(APIAccessType.PRIVATE)), BETA, Seq.empty)
     val v3Published = APIVersion("3.0", None, STABLE, Seq.empty)

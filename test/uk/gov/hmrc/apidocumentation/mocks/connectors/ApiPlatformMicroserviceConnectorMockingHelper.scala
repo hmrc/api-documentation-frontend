@@ -27,12 +27,12 @@ import scala.concurrent.Future
 trait ApiPlatformMicroserviceConnectorMockingHelper {
 
   def whenFetchAllDefinitions[T <: ApiPlatformMicroserviceConnector](base: T)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinitionsByCollaborator(any[None.type]())(any[HeaderCarrier]))
+    when(base.fetchApiDefinitionsByCollaborator(any[None.type]())(eqTo(hc)))
       .thenReturn(Future.successful(apis.toSeq))
   }
 
   def whenFetchAllDefinitionsWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)(email: String)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinitionsByCollaborator(any[Some[String]]())(any[HeaderCarrier]))
+    when(base.fetchApiDefinitionsByCollaborator(any[Some[String]]())(eqTo(hc)))
       .thenReturn(Future.successful(apis.toSeq))
   }
 

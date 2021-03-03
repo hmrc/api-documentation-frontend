@@ -28,32 +28,25 @@
 
     <section id="before-start">
         <h2 class="govuk-heading-l">1. Before you start</h2>
-        <p class="govuk-body">Read about the <a class="govuk-link" href="https://developer.service.hmrc.gov.uk/api-documentation/docs/api">RESTful and XML APIs</a> offered by HMRC.</p>
+        <p class="govuk-body">Find out which <a class="govuk-link" href="/api-documentation/docs/api">APIs are available on the Developer Hub</a>.</p>
         <p class="govuk-body">Read our <a class="govuk-link" href="/api-documentation/docs/terms-of-use">terms of use</a>.</p>
-        <p class="govuk-body">Read up on <a class="govuk-link" href="https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation">authorisation</a>,
-        especially the <a class="govuk-link" href="https://oauth.net/2/" target="_blank" rel="noopener noreferrer">OAuth 2.0 specification (opens in a new tab)</a>.</p>
+        <p class="govuk-body">Read up on <a class="govuk-link" href="/api-documentation/docs/authorisation">authorisation</a>,
+        especially the <a href="https://oauth.net/2/" target="_blank" rel="noopener noreferrer">OAuth 2.0 specification (opens in a new tab)</a>.</p>
     </section>
 
     <section id="register_account">
         <h2 class="govuk-heading-l">2. Register for a developer account</h2>
         <p class="govuk-body"><a class="govuk-link" href="/developer/registration">Register for an account</a>, activate it by email and sign in.</p>
-        <div class="govuk-warning-text warning-icon-fix">
-            <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
-            <strong class="govuk-warning-text__text">
-              <span class="govuk-warning-text__assistive">Warning</span>
-              You have 30 days to verify your account. If you do not verify your account within 30 days, your account will be deleted.
-            </strong>
-          </div>
     </section>
 
     <section id="test_app">
-        <h2 class="govuk-heading-l">3. Test your application in the sandbox</h2>
-        <p class="govuk-body">Use the Developer Hub to:</p>
+        <h2 class="govuk-heading-l">3. Start using our APIs</h2>
+        <p class="govuk-body">To use our APIs you need to:</p>
         <ul class="govuk-list govuk-list--bullet">
-            <li>add your sandbox application for <a class="govuk-link" href="@controllers.routes.TestingPagesController.testingPage()">testing</a></li>
-            <li>subscribe it to the APIs you want to integrate with</li>
-            <li>get access to its sandbox credentials</li>
-            <li>use its sandbox credentials for integration testing</li>
+            <li><a class="govuk-link" href="/developer/applications/">create an application</a> in our test environment called the sandbox</li>
+            <li>choose which APIs you want to use</li>
+            <li>get credentials to use our APIs</li>
+            <li>test your software integrates with our APIs</li>
         </ul>
     </section>
 
@@ -69,7 +62,9 @@
     </section>
 
     <section id="apply_for_production">
-        <h2 class="govuk-heading-l">5. Start using live data</h2>
-        <p class="govuk-body">Once the check is successful, we'll invite you by email to collect your production credentials so your application can use live data.</p>
+        <h2 class="govuk-heading-l">5. Start using secure data</h2>
+        <p class="govuk-body">If your request for production access is successful, you can generate credentials and start using APIs with secure data.
+        </p>
     </section>
+
 }

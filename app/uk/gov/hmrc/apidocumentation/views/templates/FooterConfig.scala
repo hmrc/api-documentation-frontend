@@ -24,7 +24,6 @@ import views.html.helper
 @Singleton
 class FooterConfig @Inject()(config: Configuration) {
 
-  lazy val host: String = config.get[String]("platform.frontend.host")
   private lazy val urlFooterConfig = config.underlying.getConfig("urls.footer")
 
   lazy val cookies: String         = urlFooterConfig.getString("cookies")

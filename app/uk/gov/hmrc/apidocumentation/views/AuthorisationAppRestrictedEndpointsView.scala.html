@@ -47,10 +47,6 @@
 
         <h2 class="govuk-heading-l">Application-restricted endpoints</h2>
 
-        <div class="govuk-inset-text">
-            Using server token for application-restricted endpoints is now deprecated. Server token retires on 1 September 2020 in sandbox and 1 October 2020 in production.
-        </div>
-
         <p class="govuk-body">Application-restricted endpoints do not require authorisation from the end user. They do not give access to sensitive personal data.</p>
         <p class="govuk-body">We use the open standard <a class="govuk-link" href="https://oauth.net/2/">OAuth 2.0</a>
             with the <a class="govuk-link" href="https://oauth.net/2/grant-types/client-credentials/">Client Credentials Grant</a> to
@@ -136,7 +132,7 @@
   "expires_in": 14400,
   "scope": "hello"
 }</pre>
-                <br />               
+                <br />
                 <p class="govuk-caption-m">Error scenarios</p>
                 <p class="govuk-body">If there are issues with your call to our token endpoint, we return an HTTP error status.</p>
                 <p class="govuk-body">Any errors not listed are probably not from us. One possible cause is a <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#network-access">network access issue</a>, for example, your network might allow GET requests but not POST requests.</p>

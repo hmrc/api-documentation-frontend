@@ -20,9 +20,10 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Session, SessionInvalid}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics._
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,8 +34,10 @@ class UserSessionConnector @Inject()(http: HttpClient, appConfig: ApplicationCon
   private lazy val serviceBaseUrl: String = appConfig.thirdPartyDeveloperUrl
 
   def fetchSession(sessionId: String)(implicit hc: HeaderCarrier): Future[Session] = record {
-    http.GET[Session](s"$serviceBaseUrl/session/$sessionId") recover {
-      case e: NotFoundException => throw new SessionInvalid
+    http.GET[Option[Session]](s"$serviceBaseUrl/session/$sessionId")
+    .map {
+      case Some(session) => session
+      case None => throw new SessionInvalid
     }
   }
 }

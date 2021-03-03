@@ -57,7 +57,8 @@ lazy val microservice = (project in file("."))
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    majorVersion := 0
+    majorVersion := 0,
+    scalacOptions += "-Ypartial-unification"
   )
   .settings(playPublishingSettings: _*)
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
@@ -82,7 +83,9 @@ lazy val microservice = (project in file("."))
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
 
-  .settings(scalaVersion := "2.12.11")
+  .settings(scalaVersion := "2.12.12")
+
+  .settings(SilencerSettings())
 
 lazy val allPhases = "tt->test;test->test;test->compile;compile->compile"
 lazy val AcceptanceTest = config("acceptance") extend Test
@@ -100,29 +103,21 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
 lazy val appName = "api-documentation-frontend"
 lazy val appDependencies: Seq[ModuleID] = allDeps
 
-val jacksonVersion = "2.10.4"
 
 lazy val compile = Seq(
   ws,
   ehcache,
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.7.0",
-  "uk.gov.hmrc" %% "url-builder" % "3.3.0-play-26",
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "2.2.0",
+  "uk.gov.hmrc" %% "url-builder" % "3.4.0-play-26",
   "uk.gov.hmrc" %% "http-metrics" % "1.10.0",
   "uk.gov.hmrc" %% "govuk-template" % "5.54.0-play-26",
   "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
   "uk.gov.hmrc" %% "play-frontend-govuk" % "0.49.0-play-26",
   "uk.gov.hmrc" %% "play-frontend-hmrc" % "0.20.0-play-26",
   "io.dropwizard.metrics" % "metrics-graphite" % "3.2.0",
+  "org.typelevel" %% "cats-core" % "2.0.0",
   "org.commonjava.googlecode.markdown4j" % "markdown4j" % "2.2-cj-1.1",
-
-  /*
-    Jackson dependencies are transitive but the same versions are not pulled in for each one.
-    Therefore we explicitly pull them here at the same version to prevent problems running tests.
-   */
-  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
-  "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-  "com.fasterxml.jackson.module" % "jackson-module-jsonSchema" % jacksonVersion
+  "com.typesafe.play" %% "play-json" % "2.8.1"
 )
 
 lazy val testScopes = "test"
@@ -130,7 +125,7 @@ lazy val testScopes = "test"
 lazy val test = Seq(
   "io.cucumber" %% "cucumber-scala" % "5.7.0" % testScopes,
   "io.cucumber" % "cucumber-junit" % "5.7.0" % testScopes,
-  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % testScopes,
+  "uk.gov.hmrc" %% "hmrctest" % "3.10.0-play-26" % testScopes,
   "org.pegdown" % "pegdown" % "1.6.0" % testScopes,
   "com.typesafe.play" %% "play-test" % PlayVersion.current % testScopes,
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % testScopes,
