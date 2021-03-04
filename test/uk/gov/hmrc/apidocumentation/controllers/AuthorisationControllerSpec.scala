@@ -48,4 +48,16 @@ class AuthorisationControllerSpec extends CommonControllerBaseSpec with PageRend
   "display the authorisation credentials page" in new Setup {
     verifyPageRendered(pageTitle("Credentials"))(authorisationController.authorisationCredentialsPage()(request))
    }
+
+  "display the authorisation open Access Endpoints page" in new Setup {
+    verifyPageRendered(pageTitle("Open access endpoints"))(authorisationController.authorisationOpenAccessEndpointsPage()(request))
+  }
+
+  "display the authorisation app restricted endpoints page" in new Setup {
+    verifyPageRendered(pageTitle("Application-restricted endpoints"))(authorisationController.authorisationAppRestrictedEndpointsPage()(request))
+  }
+
+  "display the authorisation user restricted endpoints page" in new Setup {
+    verifyPageRendered(pageTitle("User-restricted endpoints"))(authorisationController.authorisationUserRestrictedEndpointsPage()(request))
+  }
 }
