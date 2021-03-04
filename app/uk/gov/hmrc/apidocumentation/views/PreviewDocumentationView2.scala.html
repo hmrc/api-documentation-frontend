@@ -27,27 +27,35 @@
 
 @apiMain(pageAttributes) {
 
-    <header class="page-header">
-        <h1 class="flush--top">Preview RAML</h1>
-    </header>
+    <h1 class="govuk-heading-xl">Preview RAML</h1>
 
     @if(result.isFailure) {
-    <div class="alert alert--important" role="alert">
-        <h2>Preview failed → @result.failed.get.getClass.getName</h2>
-        <pre class="alert__message word-wrap">@result.failed.get.getMessage</pre>
-    </div>
+        <div class="alert alert--important" role="alert">
+            <h2 class="govuk-heading-l">Preview failed → @result.failed.get.getClass.getName</h2>
+            <pre class="alert__message word-wrap">@result.failed.get.getMessage</pre>
+        </div>
     }
 
     <form action="@routes.ApiDocumentationController.previewApiDocumentation(None).url" method="get">
-
-        <label class="form-label bold" for="url">
-            URL
-            <span class="form-hint form-hint--small">Enter the full URL path to a RAML file</span>
-            <input class="input--fullwidth" type="text" id="url" name="url" value="@url"/>
-        </label>
-
-        <input class="button" type="submit" value="Submit"/>
-	<a class="button" href="@routes.ApiDocumentationController.previewApiDocumentation(None).url">Reset</a>
+        <div class="govuk-form-group">
+            <h2 class="govuk-label-wrapper">
+                <label class="govuk-label govuk-label--l" for="url">
+                    URL
+                </label>
+            </h2>
+            <div id="url-hint" class="govuk-hint">
+                Enter the full URL path to a RAML file
+            </div>
+            <input class="govuk-input" id="url" name="url" value="@url" type="text" aria-describedby="url-hint">
+        </div>
+        <div class="preview-yaml-button">
+            <button class="govuk-button" type="submit" value="Submit" data-module="govuk-button">
+                Submit
+            </button>
+            <a class="govuk-link govuk-link--no-visited-state" href="@routes.ApiDocumentationController.previewApiDocumentation(None).url">
+                Reset
+            </a>
+        </div>
     </form>
 
 

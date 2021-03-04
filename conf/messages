@@ -98,5 +98,11 @@ help.cookies.sm.table.5.name=ep202
 help.cookies.sm.table.5.purpose=This works with ep201 to help us identify how you use the survey
 help.cookies.sm.table.5.expires=1 year
 
+footer.links.cookies.text = Cookies
+footer.links.privacy_policy.text = Privacy Policy
+footer.links.terms_and_conditions.text = Terms and conditions
+footer.links.help_page.text = Help using GOV.UK
+footer.links.accessibility.text = Accessibility statement
+
 terms_of_use.fetch_failed=An error occurred retrieving the current Terms of Use
 

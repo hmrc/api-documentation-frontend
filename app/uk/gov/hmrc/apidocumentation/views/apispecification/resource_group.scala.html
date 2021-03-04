@@ -25,57 +25,48 @@
 
     @if(resourceGroup.name.isDefined) {
         <div id="@Slugify(resourceGroup.name.get)">
-            <h3 class="heading-medium">@resourceGroup.name.get</h3>
+            <h3 class="govuk-heading-m">@resourceGroup.name.get</h3>
             @if(resourceGroup.description.isDefined) {
-                <p>@Markdown(resourceGroup.description.get)</p>
+                <div class="markdown-text-styles">@Markdown(resourceGroup.description.get)</div>
             }
-            <h4 class="heading-small">@titleSection resources</h4>
+            <h4 class="govuk-heading-s">@titleSection resources</h4>
         </div>
     }
 
     <div class="endpoint_group">
         @for(res <- resourceGroup.resources) {
             @if(res.methods.nonEmpty) {
-                <div class="border__top-bottom border__top-bottom--open border--light-grey">
                 @for((method, index) <- res.methods.zipWithIndex) {
                     @if(!method.method.equalsIgnoreCase("OPTIONS")) {
                         @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
-                            <div
-                            id="@methodSlug"
-                            data-accordion
-                            data-accordion-animate
-                            data-accordion-set-hash
-                            aria-expanded="false">
-                                @if(index == 0) {
-                                    <div class="api-accordion__row persist-method">
-                                        @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
-                                            <code class="code--slim">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
-                                        }
-                                    </div>
-                                }
-                                <div class="persist-area">
-                                    <div class="accordion__row api-accordion__row persist-header">
-                                        <div>
-                                            <a class="accordion__button no--underline" href="#@methodSlug" data-accordion-button role="button">
-                                                <i class="arrow arrow--right" data-accordion-arrow></i>
-                                                <span class="font-xsmall underline">@{method.displayName}</span>
-                                            </a>
-                                        </div>
-                                        <div class="accordion__row__right align--middle table__col--1-4">
-                                            <span class="http-verb http-verb--@method.method.toLowerCase float--right">
-                                                @method.method.toUpperCase
+                            @if(index == 0) {
+                                <strong id="@method.method.toUpperCase" class="govuk-tag">
+                                    @method.method.toUpperCase
+                                </strong>
+                                <br />
+                                <br />
+                                <div class="method-container">
+                                    @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
+                                        <code id="@{head.mkString("/")}/@tail" class="code--slim">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
+                                    }
+                                </div>
+                            }
+                            <br />
+                            <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+                                <div class="govuk-accordion__section">
+                                    <div class="govuk-accordion__section-header">
+                                        <h3 class="govuk-accordion__section-heading">
+                                            <span class="govuk-accordion__section-button" id="@{method.displayName}">
+                                                @{method.displayName}
                                             </span>
-                                        </div>
+                                        </h3>
                                     </div>
                                     @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
-                                        <div id="@contentID" class="accordion__body indent" data-accordion-reveal data-accordion-body aria-hidden="true">
-                                            @Markdown(method.description)
-                                            @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
-                                            <div class="close-accordion">
-                                                <a href="#@methodSlug" data-accordion-button role="button">
-                                                    Close section
-                                                </a>
+                                        <div id="method-content" class="govuk-accordion__section-content" aria-labelledby="method-display-name">
+                                            <div class="markdown-text-styles">
+                                                @Markdown(method.description)
                                             </div>
+                                            @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
                                         </div>
                                     }
                                 </div>
@@ -83,7 +74,6 @@
                         }
                     }
                 }
-                </div>
             }
         }
     </div>
