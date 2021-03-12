@@ -41,7 +41,7 @@
                 @for((method, index) <- res.methods.zipWithIndex) {
                     @if(!method.method.equalsIgnoreCase("OPTIONS")) {
                         @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
-                            @if(index == 0) {
+                            @if(index == 0 || index == 1) {
                                 <strong id="@method.method.toUpperCase" class="govuk-tag">
                                     @method.method.toUpperCase
                                 </strong>
