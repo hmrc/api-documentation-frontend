@@ -398,6 +398,12 @@ pre, code {
     vertical-align: top;
     font-weight: 700;
   }
+  td {
+    padding: 5px 20px 5px 0;
+    border-bottom: 1px solid #b1b4b6;
+    text-align: left;
+    vertical-align: top;
+  }
   td:last-child {
     padding-right: 0;
   } 
