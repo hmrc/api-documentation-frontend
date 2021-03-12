@@ -27,7 +27,9 @@
         <div id="@Slugify(resourceGroup.name.get)">
             <h3 class="govuk-heading-m">@resourceGroup.name.get</h3>
             @if(resourceGroup.description.isDefined) {
-                <div class="markdown-text-styles">@Markdown(resourceGroup.description.get)</div>
+                <div class="markdown-text-styles">
+                    @Markdown(resourceGroup.description.get)
+                </div>
             }
             <h4 class="govuk-heading-s">@titleSection resources</h4>
         </div>
