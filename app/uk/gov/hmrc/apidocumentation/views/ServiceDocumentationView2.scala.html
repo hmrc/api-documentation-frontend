@@ -43,9 +43,16 @@
 
 @apiMain(pageAttributes, topContent) {
     @if(currentVersion.status == APIStatus.ALPHA) {
-        <div class="govuk-inset-text">
-            This version is in alpha - You will not be able to subscribe to this API.
+    <div class="section">
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Alert</span>
+            </i>
+                <strong class ="bold-small">
+                    This version is in alpha - You will not be able to subscribe to this API.
+                </strong>
         </div>
+    </div>
     }
 
     @if(currentVersion.status == APIStatus.BETA || currentVersion.status == APIStatus.PROTOTYPED) {
