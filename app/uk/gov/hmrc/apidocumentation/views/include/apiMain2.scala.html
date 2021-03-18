@@ -17,9 +17,10 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.html.partials
+@import uk.gov.hmrc.apidocumentation.views.html.templates._
 @import play.twirl.api.HtmlFormat
 
-@this(main: main, applicationConfig: ApplicationConfig)
+@this(govUkWrapper: GovUkWrapper, applicationConfig: ApplicationConfig)
 
 @(pageAttributes: PageAttributes, additionalTopContent: Html = HtmlFormat.empty)(mainContent: Html)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
@@ -32,17 +33,8 @@
 </div>
 }
 
-@main(title = Some(pageAttributes.title),
-    navTitle = Some(applicationConfig.title),
-    navTitleLink = Some(Call("GET", "/api-documentation")),
-    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks())),
-    serviceInfoContent = Some(userBanner),
-    contentHeader = pageAttributes.contentHeader,
-    sidebar = None,
-    fullWidthBanner = None,
+@govUkWrapper(pageTitle = Some(pageAttributes.title),
+    leftNav = Some(partials.sideNavigation(request, pageAttributes.sidebarLinks)),
     breadcrumbs = Some(pageAttributes.breadcrumbs),
-    additionalTopContent = Some(additionalTopContent),
-    leftNav = Some(partials.sideNavigation(request, pageAttributes.sidebarLinks))
-){
-    @mainContent
-}
+    serviceInfoContent = Some(userBanner)
+    ){@mainContent}

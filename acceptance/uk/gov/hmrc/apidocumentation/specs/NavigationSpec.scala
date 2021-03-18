@@ -63,6 +63,16 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       }
     }
 
+    scenario("Cookie banner is displayed to the top of the page") {
+      Given("I have navigated to the API documentation page")
+      Given apiServicesIsDeployed()
+      goOn(APIDocumentationPage)
+      on(APIDocumentationPage)
+
+      Then("cookie banner is displayed to the top of the page")
+      APIDocumentationPage.cookieBannerLocation()
+    }
+
     scenario("Left menu options are displayed when selected an API") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()

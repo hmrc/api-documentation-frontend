@@ -61,13 +61,21 @@
   }
 }
 
+.parameter-name {
+  font-size: 16px;
+}
+
 .parameter-required {
   color: #f47738;
+  font-size: 14px;
+  font-weight: normal;
 }
 
 .parameter-type,
 .parameter-optional {
-  color: #b1b4b6;
+  color: #888;
+  font-size: 14px;
+  font-weight: normal;
 }
 
 .table__col--1-2 {
@@ -167,6 +175,7 @@
 
   .table__cell-contents--responsive {
     display: block;
+    margin-left: 30%;
 
     p {
       margin-bottom: 0.3em;

@@ -17,43 +17,79 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.views.html.templates.LayoutHomePage
+@import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(layoutHomePage: LayoutHomePage, applicationConfig: ApplicationConfig)
+@this(main: main, applicationConfig: ApplicationConfig)
 
 @(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
-@layoutHomePage(
-    headerNavLinks = Some(partials.headerNavLinks(navLinks)),
-    navLinks = navLinks
+@fullWidthBanner = {
+<header class="hero">
+    <section class="hero__content">
+        <div class="hero__body">
+            <h1 class="hero__title hero__heading-large">RESTful APIs for building smarter tax software</h1>
+            <a href="/developer/registration" role="button" class="hero-button">
+                Register for an account
+            </a>
+            <span class="hero-alternative-action"><br>
+              or <a href="/developer/login">sign in</a> to the Developer Hub
+            </span>
+        </div>
+    </section>
+</header>
+}
+
+@userBanner = {
+    <div class="service-info">
+        <div class="header__menu__proposition--sub-header">
+            <ul class="header__menu__proposition-links">
+                @partials.headerNavLinks(navLinks, anchorClass=Some("link-style"))
+            </ul>
+        </div>
+    </div>
+}
+
+@main(
+    navTitle = Some(applicationConfig.title),
+    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(), navLinks)),
+    serviceInfoContent = Some(userBanner),
+    fullWidthBanner = Some(fullWidthBanner),
+    fullWidthContent = true
 ) {
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
-            <h2 class="govuk-heading-l">Get started</h2>
-            <ul class="govuk-list">
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.usingTheHubPage()">Using the Developer Hub</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="/guides/fraud-prevention">Send fraud prevention data</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.AuthorisationController.authorisationPage()">Authorisation</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.tutorialsPage()">Tutorials</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.termsOfUsePage()">Terms of use</a></li>
-            </ul>
+
+    <div class="grid-row">
+        <div class="column-one-third">
+            <section class="section section--branded">
+                <h2>Get started</h2>
+                <ul>
+                    <li><a href="@controllers.routes.DocumentationController.usingTheHubPage()">Using the Developer Hub</a></li>
+                    <li><a href="/guides/fraud-prevention">Send fraud prevention data</a></li>
+                    <li><a href="@controllers.routes.AuthorisationController.authorisationPage()">Authorisation</a></li>
+                    <li><a href="@controllers.routes.DocumentationController.tutorialsPage()">Tutorials</a></li>
+                    <li><a href="@controllers.routes.DocumentationController.termsOfUsePage()">Terms of use</a></li>
+                </ul>
+            </section>
         </div>
-        <div class="govuk-grid-column-one-third">
-            <h2 class="govuk-heading-l">Explore APIs</h2>
-            <ul class="govuk-list">
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.referenceGuidePage()">Reference guide</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.developmentPracticesPage()">Development practices</a></li>
-            </ul>
+        <div class="column-one-third">
+            <section class="section section--branded">
+                <h2>Explore APIs</h2>
+                <ul>
+                    <li><a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a></li>
+                    <li><a href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a></li>
+                    <li><a href="@controllers.routes.DocumentationController.referenceGuidePage()">Reference guide</a></li>
+                    <li><a href="@controllers.routes.DocumentationController.developmentPracticesPage()">Development practices</a></li>
+                </ul>
+            </section>
         </div>
-        <div class="govuk-grid-column-one-third">
-            <h2 class="govuk-heading-l">Integrate</h2>
-            <ul class="govuk-list">
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@applicationConfig.developerFrontendUrl/developer/applications">Manage applications</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.TestingPagesController.testingPage()">Testing in the sandbox</a></li>
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@applicationConfig.developerFrontendUrl/api-test-user">Create a test user</a></li>
-            </ul>
+        <div class="column-one-third">
+            <section class="section section--branded">
+                <h2>Integrate</h2>
+                <ul>
+                    <li><a href="@applicationConfig.developerFrontendUrl/developer/applications">Manage applications</a></li>
+                    <li><a href="@controllers.routes.TestingPagesController.testingPage()">Testing in the sandbox</a></li>
+                    <li><a href="@applicationConfig.developerFrontendUrl/api-test-user">Create a test user</a></li>
+                </ul>
+            </section>
         </div>
     </div>
 }
