@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.apidocumentation.models._
 
-@(navLinks: Seq[NavLink])
+@(navLinks: Seq[NavLink], mobileNavLinks: Seq[NavLink] = Seq.empty, anchorClass: Option[String] = None)
 
 @for(link <- navLinks) {
   <li>

@@ -19,7 +19,7 @@
 
 @this(hmrcReportTechnicalIssue: HmrcReportTechnicalIssue)
 
-@()(implicit messages: Messages)
+@()(implicit request: Request[_], messages: Messages)
 
 @hmrcReportTechnicalIssue(ReportTechnicalIssue(
    serviceCode = "api-documentation-frontend",
