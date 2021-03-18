@@ -26,14 +26,13 @@ import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable.ArrayBuffer
 
 class APIGroupsSpec extends UnitSpec {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val tableBodies = dom.getElementsByTag("tbody")
     lazy val tableHeadings = dom.getElementsByClass("api-group")
-    lazy val serviceTags = dom.getElementsByClass("govuk-tag")
+    lazy val serviceTags = dom.getElementsByClass("service-tag")
   }
 
   private def anApiDefinition(name: String, isTestSupport: Option[Boolean] = None) =
@@ -72,7 +71,7 @@ class APIGroupsSpec extends UnitSpec {
     }
 
     "sort the definitions by their label" in new Setup {
-      val classList = page.serviceTags.eachAttr("class").asScala.map(_.stripPrefix("govuk-tag govuk-tag--"))
+      val classList = page.serviceTags.eachAttr("class").asScala.map(_.stripPrefix("service-tag service-tag--"))
       classList shouldBe Seq("rest", "rest", "test", "test", "xml", "xml", "rest", "rest", "test", "test", "xml")
     }
   }

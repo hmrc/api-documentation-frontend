@@ -25,7 +25,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.NavLink
 import uk.gov.hmrc.apidocumentation.views.CommonViewSpec
 import uk.gov.hmrc.apidocumentation.views.html.IndexView
-import uk.gov.hmrc.apidocumentation.views.html.templates.LayoutHomePage
+import uk.gov.hmrc.apidocumentation.views.html.include.main
 
 class IndexViewSpec extends CommonViewSpec {
 
@@ -35,7 +35,7 @@ class IndexViewSpec extends CommonViewSpec {
   val mockApplicationConfig = mock[ApplicationConfig]
   val mockMessages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
 
-  val main = app.injector.instanceOf[LayoutHomePage]
+  val main = app.injector.instanceOf[main]
 
   "htmlView" must {
     "render with no indexing meta tags" in new TestCase {

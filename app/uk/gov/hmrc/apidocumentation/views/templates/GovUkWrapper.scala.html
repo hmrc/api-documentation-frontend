@@ -18,13 +18,15 @@
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
-@import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.views.html.include
+@import uk.gov.hmrc.apidocumentation.models.Crumb
 @import play.twirl.api.HtmlFormat
-@import views.templates.FooterLinks
+@import views.templates._
 
 @this(
     govukTemplate: GovukTemplate,
+    govukHeader: GovukHeader,
+    govukFooter: GovukFooter,
+    govukBackLink: GovukBackLink,
     footerLinks: FooterLinks,
     siteFooter: SiteFooter,
     siteHeader: SiteHeader,
@@ -34,12 +36,14 @@
 
 @(
     pageTitle: Option[String] = None,
+    headBlock: Option[Html] = None,
     headerBlock: Option[Html] = None,
     beforeContentBlock: Option[Html] = None,
     footerItems: Seq[FooterItem] = Seq.empty,
     bodyEndBlock: Option[Html] = None,
+    scriptsBlock: Option[Html] = None,
     breadcrumbs: Option[Breadcrumbs] = None,
-    navLinks: Seq[NavLink] = Seq.empty,
+    serviceInfoContent : Option[Html] = None,
     leftNav: Option[Html] = None
 )(contentBlock: Html)(implicit messages: Messages, request: play.api.mvc.Request[Any])
 
@@ -52,16 +56,21 @@
     <script>window.GOVUKFrontend.initAll();</script>
 }
 
+@headerDefault = {
+    @headerBlock.getOrElse {
+        @govukHeader(Header(
+            homepageUrl = Some("https://www.gov.uk/"),
+            serviceName = Some("HMRC Developer Hub"),
+            serviceUrl = Some("https://developer.service.hmrc.gov.uk/api-documentation"),
+            containerClasses = Some("govuk-width-container")
+        ))
+    }
+}
 
 @beforeContentBlock = {
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full subnav">
-            @breadcrumbs.map {crumbs =>
-                @partials.breadcrumbs(crumbs.crumbs)
-            }
-            @include.api_header_nav(navLinks = Some(partials.headerNavLinks(navLinks)))
-        </div>
-    </div>
+    @breadcrumbs.map {crumbs =>
+        @partials.breadcrumbs2(crumbs.crumbs)
+    }
 }
 
 @footerBlock = {    
@@ -77,20 +86,19 @@
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ" height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-quarter">
-                @leftNav.getOrElse(HtmlFormat.empty)
-            </div>
-            <div class="govuk-grid-column-two-thirds">
-                <div class="govuk-side-nav-content">
-                    @contentBlock
-                </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter">
+            @leftNav.getOrElse(HtmlFormat.empty)
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-side-nav-content">
+                @contentBlock
             </div>
         </div>
-        <div class="govuk-get-help-container">
-            @siteHelper()
-        </div>
+    </div>
+    <div class="govuk-get-help-container">
+        @siteHelper()
     </div>
 }
 
@@ -98,7 +106,7 @@
     htmlLang = Some(messages.lang.code),
     pageTitle = Some(s"${pageTitle.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = siteHeader(navLinks),
+    headerBlock = siteHeader(),
     beforeContentBlock = Some(beforeContentBlock),
     footerBlock = footerBlock,
     bodyEndBlock = Some(bodyEndDefault)

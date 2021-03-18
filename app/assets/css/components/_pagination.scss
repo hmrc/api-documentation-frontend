@@ -7,11 +7,9 @@
 
   display: block;
   margin-top: $gutter;
-
-  &--list {
-    padding: 0;
-    margin: 0;
-  }
+  margin-bottom: $gutter;
+  margin-left: -$gutter-half;
+  margin-right: -$gutter-half;
 
   &__item {
     font-size: 16px;
@@ -39,7 +37,6 @@
     }
 
     &-text {
-      font-family: "GDS Transport",Arial,sans-serif;
       font-weight: bold;
       font-size: 2rem;
       margin-left: $gutter / 3;
@@ -55,10 +52,10 @@
     }
 
     &-label {
-      font-family: "GDS Transport",Arial,sans-serif;
       display: inline-block;
       margin-top: 0.1em;
-      margin-left: 2.3em;
+      text-decoration: underline;
+      margin-left: $gutter;
     }
   }
 }

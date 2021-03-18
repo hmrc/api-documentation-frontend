@@ -16,12 +16,16 @@
 
 @import uk.gov.hmrc.apidocumentation.models._
 
-@(navLinks: Seq[NavLink])
+@(navLinks: Seq[NavLink], mobileNavLinks: Seq[NavLink] = Seq.empty, anchorClass: Option[String] = None)
 
 @for(link <- navLinks) {
-  <li>
-    <a class="govuk-link govuk-link--no-visited-state" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>
-      @{link.label}
-    </a>
-  </li>
+    <li @if(link == navLinks.last && mobileNavLinks.isEmpty) {class="hard--right"}>
+       <a class="align--middle inline-block@if(link.truncate) { truncate truncate--small no-wrap text--center} @anchorClass.getOrElse("")" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>@{link.label}</a>
+    </li>
+}
+
+@for(link <- mobileNavLinks) {
+<li class="@if(link == navLinks.last) {hard--right} desktop-only">
+    <a class="align--middle inline-block@if(link.truncate) { truncate truncate--small no-wrap text--center} @anchorClass.getOrElse("")" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>@{link.label}</a>
+</li>
 }

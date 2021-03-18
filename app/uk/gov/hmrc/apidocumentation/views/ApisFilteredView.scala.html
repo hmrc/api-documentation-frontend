@@ -25,7 +25,7 @@
 
 @apiMain(pageAttributes) {
 
-    <h1 class="govuk-heading-xl">Filtered API documentation</h1>
+    <h1 class="heading-xlarge">Filtered API documentation</h1>
 
     <a class="bold-small" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">View the full API list </a>
 
@@ -34,7 +34,7 @@
     @filter.map { f =>
         @defining(documentsByCategory.filterKeys(_.filter == f.filter)) { filteredDocuments =>
             @defining(filteredDocuments.values.toSeq.flatten.length) { numDocuments =>
-                <p class="govuk-body">@numDocuments document@if(numDocuments != 1){s} found in <strong class="bold-small">@f.displayName</strong></p>
+                <p>@numDocuments document@if(numDocuments != 1){s} found in <strong class="bold-small">@f.displayName</strong></p>
 
                 @documentGroups(filteredDocuments)
             }

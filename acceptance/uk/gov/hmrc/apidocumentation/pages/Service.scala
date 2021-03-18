@@ -17,13 +17,12 @@
 package uk.gov.hmrc.apidocumentation.pages
 
 import uk.gov.hmrc.apidocumentation.{Env, WebPage}
-import org.openqa.selenium.{By, WebElement}
+import org.openqa.selenium.By
 import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.Select
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
-import org.scalatestplus.selenium.WebBrowser
 
 object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
@@ -31,13 +30,13 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   override def isCurrentPage: Boolean = find(id("title")).fold(false)(_.text == "Hello World API")
 
-  def breadCrumbText = cssSelector(".govuk-breadcrumbs__list").element.text
+  def breadCrumbText = cssSelector(".breadcrumbs").element.text
 
   def errorsBackToTop = find(id("bottom-skip-to-main")).get
 
   def endpointsBackToTop = find(id("middle-skip-to-main")).get
 
-  def applicationName = WebBrowser.id("HMRC-Developer-Hub").element.text
+  def applicationName = className("header__menu__proposition-name").element.text
 
   def selectErrorsBackToTop() {
     click on errorsBackToTop
@@ -53,14 +52,16 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     val ids =
       Table(
         ("ID", "id"),
-        ("#_say-hello-world", "Say hello world"),
-        ("#_say-hello-user", "Say hello user"),
-        ("#_say-hello-application", "Say hello application")
+        ("#_say-hello-world", "#say-hello-world"),
+        ("#_say-hello-user", "#say-hello-user"),
+        ("#_say-hello-application", "#say-hello-application")
       )
     forAll(ids) { (ID: String, id: String) =>
+      val element = cssSelector(s"${ID}_get_accordion > div > div:nth-of-type(1) > div.accordion__row__right.align--middle > span.http-verb.http-verb--get.float--right").webElement
       val act = new Actions(webDriver)
-      clickOn(id)
-      find("method-content").get.isDisplayed
+      act.moveToElement(element).click().perform()
+      find(cssSelector(s"$id-get > section:nth-of-type(1) > h4")).get.isDisplayed
+      act.moveToElement(element).click().perform()
     }
   }
 
@@ -68,15 +69,15 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     val endpoints =
       Table(
         ("ID", "Endpoint Title", "Endpoint Request Type", "Endpoint URI"),
-        ("Say hello world", "Say hello world", "GET", "/hello/world"),
-        ("Say hello user", "Say hello user", "GET", "/hello/user"),
-        ("Say hello application", "Say hello application", "GET", "/hello/application")
+        ("#_say-hello-world", "Say hello world", "GET", "/hello/world"),
+        ("#_say-hello-user", "Say hello user", "GET", "/hello/user"),
+        ("#_say-hello-application", "Say hello application", "GET", "/hello/application")
       )
 
     forAll(endpoints) { (id: String, endpointTitle: String, endpointRequestType: String, endpointUri: String) =>
-      WebBrowser.id(id).element.text shouldBe endpointTitle
-      WebBrowser.id(endpointRequestType).element.text shouldBe endpointRequestType
-      WebBrowser.id(endpointUri).element.text shouldBe endpointUri
+      cssSelector(s"${id}_get_accordion .accordion__button").element.text shouldBe endpointTitle
+      cssSelector(s"${id}_get_accordion .http-verb.http-verb--get.float--right").element.text shouldBe endpointRequestType
+      cssSelector(s"${id}_get_accordion .code--slim").element.text shouldBe endpointUri
     }
   }
 
@@ -213,8 +214,8 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
   }
 
   def checkAPIVersionInRequestHeader(): Unit = {
-    clickOn("post")
-    waitForElement(By.id("application/vnd.hmrc.1.1+json")).getText should include("application/vnd.hmrc.1.1+json")
+    clickOnLink("post")
+    waitForElement(By.cssSelector("code[data-header-example]")).getText should include("application/vnd.hmrc.1.1+json")
 
   }
 

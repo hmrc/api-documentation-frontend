@@ -7,7 +7,7 @@
     color: #2e8aca;
 
     &:visited {
-      color: #1d70b8;
+      color: #4c2c92;
     }
 
     background-color: white;
@@ -30,8 +30,7 @@
 ul.fixed-navigation__sub-list {
   display: block;
   border-left: 4px solid #bfc1c3;
-  list-style-type: none;
-  padding-left: 0;
+
   > li.side-nav__list {
     a:hover {
       color: #2e8aca;
@@ -67,7 +66,7 @@ ul.fixed-navigation__sub-list {
   margin-bottom: 5px;
   text-decoration: none;
   &:visited {
-    color: #1d70b8;
+    color: #4c2c92;
   }
 }
 
@@ -88,13 +87,7 @@ ul.fixed-navigation__sub-list {
 }
 
 .govuk-side-nav-content {
-  padding-top: 0;
-}
-
-@media (min-width: 40.0625em) {
-  .govuk-side-nav-content {
-    padding-top: 30px;
-  }
+  padding-top: 30px;
 }
 
 @media screen and (min-width: 0px) and (max-width: 640px) {
@@ -110,16 +103,9 @@ ul.fixed-navigation__sub-list {
 // APIS-1127 - iOS touch scroll jittery fixed elements fix
 .side-nav__component {
   padding: 0;
-  margin-top: 0;
   list-style-type: none;
   background-color: white;
   transform: translate3d(0px, 0px, 0px) translateZ(0);
-}
-
-@media (min-width: 40.0625em) {
-  .side-nav__component {
-    margin-top: 16px;
-  }
 }
 
 // APIS-1198 - fix menu resize isssue, hide chevrons for in-page nav
