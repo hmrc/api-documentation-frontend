@@ -23,6 +23,12 @@ import uk.gov.hmrc.apidocumentation.models._
 import scala.language.reflectiveCalls
 import play.twirl.api.Html
 
+object IdHelper {
+  def contextId(prefix: String, context: String): String = {
+    (prefix + context).replace(" ","_").replace("/", "-slash-")
+  }
+}
+
 object Slugify {
   def apply(text: String): String = makeSlug(text)
 

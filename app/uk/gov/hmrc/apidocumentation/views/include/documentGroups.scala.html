@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.models.APICategory._
 @import uk.gov.hmrc.apidocumentation.models.Documentation
+@import uk.gov.hmrc.apidocumentation.views.helpers.IdHelper 
 
 @(documentsByCategory: Map[APICategory, Seq[Documentation]])
 
@@ -27,7 +28,7 @@
                 <tr>
                     @if(index == 0) { <td class="api-group">@category.displayName</td> } else { <td></td> }
                     <td>
-                        <a class="accordion__button link--no-underline" href="@document.documentationUrl">@document.name</a>
+                        <a id=@IdHelper.contextId("link-", document.context) class="accordion__button link--no-underline" href="@document.documentationUrl">@document.name</a>
                     </td>
                     <td>
                         <strong class="service-tag service-tag--@document.label.modifier">@document.label.displayName</strong>
