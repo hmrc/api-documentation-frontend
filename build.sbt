@@ -42,8 +42,6 @@ lazy val microservice = (project in file("."))
   )
   .settings(
     resolvers ++= Seq(
-      Resolver.bintrayRepo("hmrc", "releases"),
-      Resolver.jcenterRepo,
       Resolver.sonatypeRepo("releases")
     ),
     resolvers += "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/"
@@ -112,8 +110,8 @@ lazy val compile = Seq(
   "uk.gov.hmrc"                           %% "govuk-template"         % "5.61.0-play-26",
   "uk.gov.hmrc"                           %% "play-ui"                % "8.21.0-play-26",
   "uk.gov.hmrc"                           %% "play-partials"          % "7.1.0-play-26",
-  "uk.gov.hmrc"                           %% "play-frontend-govuk"    % "0.60.0-play-26",
-  "uk.gov.hmrc"                           %% "play-frontend-hmrc"     % "0.38.0-play-26",
+  "uk.gov.hmrc"                           %% "play-frontend-govuk"    % "0.63.0-play-26",
+  "uk.gov.hmrc"                           %% "play-frontend-hmrc"     % "0.57.0-play-26",
   "io.dropwizard.metrics"                 % "metrics-graphite"        % "3.2.0",
   "org.typelevel"                         %% "cats-core"              % "2.0.0",
   "org.commonjava.googlecode.markdown4j"  % "markdown4j"              % "2.2-cj-1.1",
