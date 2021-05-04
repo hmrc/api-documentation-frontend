@@ -377,6 +377,30 @@ pre, code {
     padding-left: 20px;
     list-style-type: decimal;
   }
+  table {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #0b0c0c;
+    width: 100%;
+    margin-bottom: 20px;
+    border-spacing: 0;
+    border-collapse: collapse;
+  }
+  th {
+    padding: 10px 20px 10px 0;
+    border-bottom: 1px solid #b1b4b6;
+    text-align: left;
+    vertical-align: top;
+    font-weight: 700;
+  }
+  td:last-child {
+    padding-right: 0;
+  } 
 }
 
 @media (min-width: 40.0625em) {
@@ -402,6 +426,11 @@ pre, code {
       font-family: "GDS Transport",Arial,sans-serif;
       -moz-osx-font-smoothing: grayscale;
       font-weight: 400;
+    }
+    table {
+      font-size: 19px;
+      font-size: 1.1875rem;
+      line-height: 1.31579;
     }
   }
 }
