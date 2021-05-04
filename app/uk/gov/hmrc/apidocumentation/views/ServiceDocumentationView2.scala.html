@@ -56,11 +56,9 @@
     }
 
     @if(currentVersion.status == APIStatus.BETA || currentVersion.status == APIStatus.PROTOTYPED) {
-    <div class="section">
-        <div class="panel panel-border-wide" role="alert">
-            <p>This version is in beta - expect some breaking changes.</p>
+        <div class="govuk-inset-text">
+            This version is in beta - expect some breaking changes.
         </div>
-    </div>
     }
 
     @if(currentVersion.status == APIStatus.DEPRECATED) {

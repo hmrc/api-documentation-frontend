@@ -25,167 +25,182 @@
 @(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes){
-
-    <h1 class="heading-xlarge">Reference guide</h1>
+    <h1 class="govuk-heading-xl">Reference guide</h1>
 
     <nav role="navigation" aria-labelledby="onThisPage">
         <h2 id="onThisPage" class="visually-hidden">on this page</h2>
-        <div class="grid-row">
-            <div class="column-one-half">
-                <ul class="list">
-                    <li><a href="#api-access">API access</a></li>
-                    <li><a href="#oauth-2.0-browser-support">Browser support for OAuth 2.0</a></li>
-                    <li><a href="#coding-in-the-open">Coding in the open</a></li>
-                    <li><a href="#common-data-types">Common data types</a></li>
-                    <li><a href="#cors">Cross-origin resource sharing (CORS)</a></li>
-                    <li><a href="#errors">Errors</a></li>
-                    <li><a href="#fraud-prevention">Send fraud prevention data</a></li>
-                    <li><a href="#http-redirection">HTTP redirection</a></li>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half">
+                <ul class="govuk-list">
+                    <li><a class="govuk-link" href="#api-access">API access</a></li>
+                    <li><a class="govuk-link" href="#oauth-2.0-browser-support">Browser support for OAuth 2.0</a></li>
+                    <li><a class="govuk-link" href="#coding-in-the-open">Coding in the open</a></li>
+                    <li><a class="govuk-link" href="#common-data-types">Common data types</a></li>
+                    <li><a class="govuk-link" href="#cors">Cross-origin resource sharing (CORS)</a></li>
+                    <li><a class="govuk-link" href="#errors">Errors</a></li>
+                    <li><a class="govuk-link" href="#fraud-prevention">Send fraud prevention data</a></li>
+                    <li><a class="govuk-link" href="#http-redirection">HTTP redirection</a></li>
                 </ul>
             </div>
-            <div class="column-one-half">
-                <ul class="list">
-                    <li><a href="#ip-allow-list">IP allow list</a></li>
-                    <li><a href="#rate-limiting">Rate limiting</a></li>
-                    <li><a href="#redirect-uris">Redirect URIs</a></li>
-                    <li><a href="#scopes">Scopes</a></li>
-                    <li><a href="#tls-standards">TLS standards</a></li>
-                    <li><a href="#versioning">Versioning</a></li>
+            <div class="govuk-grid-column-one-half">
+                <ul class="govuk-list">
+                    <li><a class="govuk-link" href="#ip-allow-list">IP allow list</a></li>
+                    <li><a class="govuk-link" href="#rate-limiting">Rate limiting</a></li>
+                    <li><a class="govuk-link" href="#redirect-uris">Redirect URIs</a></li>
+                    <li><a class="govuk-link" href="#scopes">Scopes</a></li>
+                    <li><a class="govuk-link" href="#tls-standards">TLS standards</a></li>
+                    <li><a class="govuk-link" href="#versioning">Versioning</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <br>
 
-    <p>Read the reference guide for actions you need to take to make sure your application integrates with HMRC.</p>
+    <p class="govuk-body">Read the reference guide for actions you need to take to make sure your application integrates with HMRC.</p>
 
-    <p>See the <a href="@controllers.routes.DocumentationController.developmentPracticesPage().url">development practices</a>
-       for how to avoid your application failing without warning when HMRC make changes.</p>
-    <hr aria-hidden="true">
+    <p class="govuk-body">See the <a class="govuk-link" href="@controllers.routes.DocumentationController.developmentPracticesPage().url">development practices</a>
+       for how to avoid your application failing without warning when HMRC make changes.
+    </p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
     <section id="api-access">
+        <h2 class="govuk-heading-l">API access</h2>
 
-        <h2 class="heading-large">API access</h2>
-
-        <p>The base URL for sandbox APIs is:</p>
+        <p class="govuk-body">The base URL for sandbox APIs is:</p>
         <pre class="code--block">@applicationConfig.sandboxApiBaseUrl</pre>
-        <p>The base URL for production APIs is:</p>
+        <br />
+        <p class="govuk-body">The base URL for production APIs is:</p>
         <pre class="code--block">@applicationConfig.productionApiBaseUrl</pre>
     </section>
 
     <section id="oauth-2.0-browser-support">
-        <h2 class="heading-large">Browser support for OAuth 2.0</h2>
+        <h2 class="govuk-heading-l">Browser support for OAuth 2.0</h2>
 
-        <p>The OAuth 2.0 <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
-
+        <p class="govuk-body">The OAuth 2.0 
+            <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
             journey is designed to work with most modern browsers as per the list specified on
-            <a href="https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices#browsers-to-test-in">
+            <a class="govuk-link" href="https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices#browsers-to-test-in">
                 Designing for different browsers and devices</a>, including mobile devices and tablets.
         </p>
-        <p class="panel panel-border-wide">If you are using the Microsoft Web Browser Control embedded browser for the
+        
+        <div class="govuk-inset-text">
+            If you are using the Microsoft Web Browser Control embedded browser for the
             authorisation journey, be aware that by default this will operate in IE7 compatibility mode which we do not
-            formally support. For details of one way to handle this, see
-            <a href="https://blogs.msdn.microsoft.com/patricka/2015/01/12/controlling-webbrowser-control-compatibility/" target="_blank" rel="noopener noreferrer">
-                Controlling WebBrowser Control Compatibility (opens in a new tab)</a>.
-        </p>
+            formally support. For details of one way to handle this, see 
+            <a class="govuk-link" href="https://blogs.msdn.microsoft.com/patricka/2015/01/12/controlling-webbrowser-control-compatibility/" target="_blank" rel="noopener noreferrer">
+                Controlling WebBrowser Control Compatibility (opens in a new tab)
+            </a>.
+        </div>
     </section>
 
     <section id="coding-in-the-open">
-        <h2 class="heading-large">Coding in the open</h2>
-        <p>The HMRC Developer Hub, the underlying API Platform and some of the APIs are coded in the open, as per the @Link.toExternalPage(url = "https://www.gov.uk/service-manual/service-standard/make-all-new-source-code-open", value = Some("GOV.UK Digital Service Standard (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:GOV.UK Digital Service Standard"))).toHtml.</p>
-        <p>The source code is available at @Link.toExternalPage(url = "https://github.com/hmrc", value = Some("https://github.com/hmrc (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:https://github.com/hmrc"))).toHtml. For more details, please <a href="/developer/support">contact us</a>.</p>
+        <h2 class="govuk-heading-l">Coding in the open</h2>
+        <p class="govuk-body">The HMRC Developer Hub, the underlying API Platform and some of the APIs are coded in the open, as per the 
+            <a href="https://www.gov.uk/service-manual/service-standard/make-all-new-source-code-open" class="govuk-link" rel="noreferrer noopener" target="_blank">
+                GOV.UK Digital Service Standard (opens in a new tab)</a>.
+        </p>
+        <p class="govuk-body">The source code is available at 
+            <a href="https://github.com/hmrc" class="govuk-link" rel="noreferrer noopener" target="_blank">
+                https://github.com/hmrc (opens in a new tab)</a>. For more details, please <a class="govuk-link" href="/developer/support">contact us</a>.</p>
     </section>
 
     <section id="common-data-types">
-
-        <h2 class="heading-large">Common data types</h2>
-
-        <p>Our APIs use consistent formats for common data types. We use ISO standards including:</p>
-
-        <ul class="list list-bullet">
-            <li>@Link.toExternalPage(url = "http://www.iso.org/iso/iso8601", value = Some("ISO 8601 (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:ISO 8601"))).toHtml Time and Date Format</li>
-            <li>@Link.toExternalPage(url = "http://www.iso.org/iso/home/standards/currency_codes.htm", value = Some("ISO 4217 (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:ISO 4217"))).toHtml Currency Codes</li>
+        <h2 class="govuk-heading-l">Common data types</h2>
+        <p class="govuk-body">Our APIs use consistent formats for common data types. We use ISO standards including:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>
+                <a href="http://www.iso.org/iso/iso8601" class="govuk-link" rel="noreferrer noopener" target="_blank">ISO 8601 (opens in a new tab)</a>
+            </li>
+            <li>
+                <a href="http://www.iso.org/iso/home/standards/currency_codes.htm" class="govuk-link" rel="noreferrer noopener" target="_blank">ISO 4217 (opens in a new tab)</a>
+            </li>
         </ul>
 
-        <p>Some examples of common data types include:</p>
+        <p class="govuk-body">Some examples of common data types include:</p>
 
-        <table>
+        <table class="govuk-table">
             <caption class="visually-hidden">Examples of common data types</caption>
-            <thead><tr>
-                <th>Type</th>
-                <th>Example</th>
-                <th>Description</th>
-            </tr></thead>
-            <tbody>
-                <tr>
-                    <td data-heading="Type"><code class="code--slim">date</code></td>
-                    <td data-heading="Example"><code class="code--slim">2015-09-08</code></td>
-                    <td data-heading="Description">Dates will be represented in the format YYYY-MM-DD.</td>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Type</th>
+                    <th scope="col" class="govuk-table__header">Example</th>
+                    <th scope="col" class="govuk-table__header">Description</th>
                 </tr>
-                <tr>
-                    <td data-heading="Type"><code class="code--slim">timestamp</code></td>
-                    <td data-heading="Example"><code class="code--slim">2015-09-08T01:55:28+00:00</code></td>
-                    <td data-heading="Description">Timestamps will be represented in the format YYYY-MM-DDThh:mm:ss±hh:mm.</td>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell" data-heading="Type"><code class="code--slim">date</code></td>
+                    <td class="govuk-table__cell" data-heading="Example"><code class="code--slim">2015-09-08</code></td>
+                    <td class="govuk-table__cell" data-heading="Description">Dates will be represented in the format YYYY-MM-DD.</td>
                 </tr>
-                <tr>
-                    <td data-heading="Type"><code class="code--slim">money</code></td>
-                    <td data-heading="Example"><code class="code--slim">123.45</code></td>
-                    <td data-heading="Description">Unless expressly documented, money will be represented with two decimal places and GBP currency.</td>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell" data-heading="Type"><code class="code--slim">timestamp</code></td>
+                    <td class="govuk-table__cell" data-heading="Example"><code class="code--slim">2015-09-08T01:55:28+00:00</code></td>
+                    <td class="govuk-table__cell" data-heading="Description">Timestamps will be represented in the format YYYY-MM-DDThh:mm:ss±hh:mm.</td>
                 </tr>
-                <tr>
-                    <td data-heading="Type"><code class="code--slim">NINO</code></td>
-                    <td data-heading="Example"><code class="code--slim">QQ123456A</code></td>
-                    <td data-heading="Description">A National Insurance number is made up of 2 letters, 6 numbers and a letter (A, B, C, or D).</td>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell" data-heading="Type"><code class="code--slim">money</code></td>
+                    <td class="govuk-table__cell" data-heading="Example"><code class="code--slim">123.45</code></td>
+                    <td class="govuk-table__cell" data-heading="Description">Unless expressly documented, money will be represented with two decimal places and GBP currency.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell" data-heading="Type"><code class="code--slim">NINO</code></td>
+                    <td class="govuk-table__cell" data-heading="Example"><code class="code--slim">QQ123456A</code></td>
+                    <td class="govuk-table__cell" data-heading="Description">A National Insurance number is made up of 2 letters, 6 numbers and a letter (A, B, C, or D).</td>
                 </tr>
             </tbody>
         </table>
     </section>
 
     <section id="cors">
-        <h2 class="heading-large">Cross-origin resource sharing (CORS)</h2>
-        <p>The API Platform does not support @Link.toExternalPage(url = "https://fetch.spec.whatwg.org/#http-cors-protocol", value = Some("cross-origin resource sharing (CORS) (opens in a new tab)"), dataAttributes = Some(Map("journey-click" -> "external-link:click:https://fetch.spec.whatwg.org/#http-cors-protocol"))).toHtml. It is therefore not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
+        <h2 class="govuk-heading-l">Cross-origin resource sharing (CORS)</h2>
+        <p class="govuk-body">The API Platform does not support 
+            <a href="https://fetch.spec.whatwg.org/#http-cors-protocol" class="govuk-link" rel="noreferrer noopener" target="_blank">cross-origin resource sharing (CORS) (opens in a new tab)</a>. It is therefore not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
     </section>
 
     <section id="errors">
 
-        <h2 class="heading-large">Errors</h2>
+        <h2 class="govuk-heading-l">Errors</h2>
 
-        <section id="intro">
-            <p>Errors during the <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation process</a> use the format specified in the OAuth 2.0 RFC.</p>
-            <p>Errors from APIs have a 4xx or 5xx HTTP status code and a consistently formed JSON or XML body, including:</p>
-            <table>
+        <div id="intro">
+            <p class="govuk-body">Errors during the <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation process</a> use the format specified in the OAuth 2.0 RFC.</p>
+            <p class="govuk-body">Errors from APIs have a 4xx or 5xx HTTP status code and a consistently formed JSON or XML body, including:</p>
+            <table class="govuk-table">
                 <colgroup>
                     <col width="15%">
                     <col width="20%">
                     <col width="65%">
                 </colgroup>
-                <thead><tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td><code class="code--slim">code</code></td>
-                    <td><code class="code--slim">string</code></td>
-                    <td>A machine-readable error code. This is unique for each error scenario.</td>
-                </tr>
-                <tr>
-                    <td><code class="code--slim">message</code></td>
-                    <td><code class="code--slim">string</code></td>
-                    <td>A human-readable explanation for the error.</td>
-                </tr>
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Name</th>
+                        <th scope="col" class="govuk-table__header">Type</th>
+                        <th scope="col" class="govuk-table__header">Description</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell"><code class="code--slim">code</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">string</code></td>
+                        <td class="govuk-table__cell">A machine-readable error code. This is unique for each error scenario.</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell"><code class="code--slim">message</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">string</code></td>
+                        <td class="govuk-table__cell">A human-readable explanation for the error.</td>
+                    </tr>
                 </tbody>
             </table>
-            <br aria-hidden="true"/>
-            <p>There might be other error-specific information (such as a list of fields that are in error). For example:</p>
+            <p class="govuk-body">There might be other error-specific information (such as a list of fields that are in error). For example:</p>
             <pre class="code--block">{
   "code" : "ACCOUNT_SUSPENDEDSA-100201",
   "message" : "Account is temporarily suspended",
   "reactivationTimestamp" : 1431448640718
 }
 </pre>
-            <p>Multiple errors can also be returned in a single field called errors. For example:</p>
+            <br />
+            <p class="govuk-body">Multiple errors can also be returned in a single field called errors. For example:</p>
             <pre class="code--block">
 {
   "code": "BAD_REQUEST",
@@ -204,7 +219,8 @@
   ]
 }
 </pre>
-            <p>Here is an example error response in XML format</p>
+            <br />
+            <p class="govuk-body">Here is an example error response in XML format</p>
             <pre class="code--block">
 &lt;error&gt;
   &lt;code&gt;ACCOUNT_SUSPENDEDSA-100201&lt;/code&gt;
@@ -212,304 +228,310 @@
   &lt;reactivationTimestamp&gt;1431448640718&lt;/reactivationTimestamp&gt;
 &lt;/error&gt;
 </pre>
+            <br />
+            <p class="govuk-body">These error responses are common across all APIs:</p>
+        </div>
 
-        <p>These error responses are common across all APIs:</p>
+        <div id="401">
+            <h3 class="govuk-heading-m">401 (Unauthorized)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">No OAuth token supplied for user-restricted or application-restricted endpoint</td>
+                    <td class="govuk-table__cell"><code class="code--slim">MISSING_CREDENTIALS</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Invalid OAuth token supplied for user-restricted or application-restricted endpoint (including expired token)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">INVALID_CREDENTIALS</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Other issue with authentication of the supplied OAuth token</td>
+                    <td class="govuk-table__cell"><code class="code--slim">UNAUTHORIZED</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">User-restricted API is being accessed with a server token</td>
+                    <td class="govuk-table__cell"><code class="code--slim">INCORRECT_ACCESS_TOKEN_TYPE</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-        </section>
-        <section id="401">
+        <div id="403">
+            <h3 class="govuk-heading-m">403 (Forbidden)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Request done with HTTP</td>
+                    <td class="govuk-table__cell"><code class="code--slim">HTTPS_REQUIRED</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">The OAuth token's application is not subscribed to the API</td>
+                    <td class="govuk-table__cell"><code class="code--slim">RESOURCE_FORBIDDEN</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">The scope of the OAuth token is not sufficient to access the API</td>
+                    <td class="govuk-table__cell"><code class="code--slim">INVALID_SCOPE</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Supplied OAuth token not authorised to access data for given tax identifier(s)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">FORBIDDEN</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-            <h3 class="heading-medium">401 (Unauthorized)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>No OAuth token supplied for user-restricted or application-restricted endpoint</td>
-                    <td><code class="code--slim">MISSING_CREDENTIALS</code></td>
+        <div id="404">
+            <h3 class="govuk-heading-m">404 (Not Found)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">No endpoint could be found in the API for the request path</td>
+                    <td class="govuk-table__cell"><code class="code--slim">MATCHING_RESOURCE_NOT_FOUND</code></td>
                 </tr>
-                <tr>
-                    <td>Invalid OAuth token supplied for user-restricted or application-restricted endpoint (including expired token)</td>
-                    <td><code class="code--slim">INVALID_CREDENTIALS</code></td>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="405">
+            <h3 class="govuk-heading-m">405 (Method Not Allowed)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Request method is not GET, PUT, POST, PATCH, DELETE or OPTIONS</td>
+                    <td class="govuk-table__cell"><code class="code--slim">METHOD_NOT_ALLOWED</code></td>
                 </tr>
-                <tr>
-                    <td>Other issue with authentication of the supplied OAuth token</td>
-                    <td><code class="code--slim">UNAUTHORIZED</code></td>
-                </tr>
-                <tr>
-                    <td>User-restricted API is being accessed with a server token</td>
-                    <td><code class="code--slim">INCORRECT_ACCESS_TOKEN_TYPE</code></td>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="406">
+            <h3 class="govuk-heading-m">406 (Not Acceptable)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Missing or invalid Accept header</td>
+                    <td class="govuk-table__cell"><code class="code--slim">ACCEPT_HEADER_INVALID</code></td>
                 </tr>
                 </tbody>
             </table>
 
-        </section>
-        <section id="403">
+        </div>
 
-            <h3 class="heading-medium">403 (Forbidden)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>Request done with HTTP</td>
-                    <td><code class="code--slim">HTTPS_REQUIRED</code></td>
-                </tr>
-                <tr>
-                    <td>The OAuth token's application is not subscribed to the API</td>
-                    <td><code class="code--slim">RESOURCE_FORBIDDEN</code></td>
-                </tr>
-                <tr>
-                    <td>The scope of the OAuth token is not sufficient to access the API</td>
-                    <td><code class="code--slim">INVALID_SCOPE</code></td>
-                </tr>
-                <tr>
-                    <td>Supplied OAuth token not authorised to access data for given tax identifier(s)</td>
-                    <td><code class="code--slim">FORBIDDEN</code></td>
+        <div id="429">
+            <h3 class="govuk-heading-m">429 (Too Many Requests)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">The application has reached its maximum <a class="govuk-link" href="#rate-limiting">rate limit</a></td>
+                    <td class="govuk-table__cell"><code class="code--slim">MESSAGE_THROTTLED_OUT</code></td>
                 </tr>
                 </tbody>
             </table>
+        </div>
 
-        </section>
-
-        <section id="404">
-
-            <h3 class="heading-medium">404 (Not Found)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>No endpoint could be found in the API for the request path</td>
-                    <td><code class="code--slim">MATCHING_RESOURCE_NOT_FOUND</code></td>
+        <div id="500">
+            <h3 class="govuk-heading-m">500 (Internal Server Error)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Internal server error</td>
+                    <td class="govuk-table__cell"><code class="code--slim">INTERNAL_SERVER_ERROR</code></td>
                 </tr>
                 </tbody>
             </table>
+        </div>
 
-        </section>
-
-        <section id="405">
-
-            <h3 class="heading-medium">405 (Method Not Allowed)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>Request method is not GET, PUT, POST, PATCH, DELETE or OPTIONS</td>
-                    <td><code class="code--slim">METHOD_NOT_ALLOWED</code></td>
+        <div id="501">
+            <h3 class="govuk-heading-m">501 (Not Implemented)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">API not implemented/deployed</td>
+                    <td class="govuk-table__cell"><code class="code--slim">NOT_IMPLEMENTED</code></td>
                 </tr>
                 </tbody>
             </table>
+        </div>
 
-        </section>
-        <section id="406">
-
-            <h3 class="heading-medium">406 (Not Acceptable)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>Missing or invalid Accept header</td>
-                    <td><code class="code--slim">ACCEPT_HEADER_INVALID</code></td>
+        <div id="503">
+            <h3 class="govuk-heading-m">503 (Service Unavailable)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Service unavailable</td>
+                    <td class="govuk-table__cell"><code class="code--slim">SERVER_ERROR</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Scheduled maintenance</td>
+                    <td class="govuk-table__cell"><code class="code--slim">SCHEDULED_MAINTENANCE</code></td>
                 </tr>
                 </tbody>
             </table>
+        </div>
 
-        </section>
-        <section id="429">
-
-            <h3 class="heading-medium">429 (Too Many Requests)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>The application has reached its maximum <a href="#rate-limiting">rate limit</a></td>
-                    <td><code class="code--slim">MESSAGE_THROTTLED_OUT</code></td>
+        <div id="504">
+            <h3 class="govuk-heading-m">504 (Gateway Timeout)</h3>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Scenario</th>
+                        <th scope="col" class="govuk-table__header" width="40%">Code</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Request timed out</td>
+                    <td class="govuk-table__cell"><code class="code--slim">GATEWAY_TIMEOUT</code></td>
                 </tr>
                 </tbody>
             </table>
-
-        </section>
-        <section id="500">
-
-            <h3 class="heading-medium">500 (Internal Server Error)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>Internal server error</td>
-                    <td><code class="code--slim">INTERNAL_SERVER_ERROR</code></td>
-                </tr>
-                </tbody>
-            </table>
-
-        </section>
-        <section id="501">
-
-            <h3 class="heading-medium">501 (Not Implemented)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>API not implemented/deployed</td>
-                    <td><code class="code--slim">NOT_IMPLEMENTED</code></td>
-                </tr>
-                </tbody>
-            </table>
-
-        </section>
-        <section id="503">
-
-            <h3 class="heading-medium">503 (Service Unavailable)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>Service unavailable</td>
-                    <td><code class="code--slim">SERVER_ERROR</code></td>
-                </tr>
-                <tr>
-                    <td>Scheduled maintenance</td>
-                    <td><code class="code--slim">SCHEDULED_MAINTENANCE</code></td>
-                </tr>
-                </tbody>
-            </table>
-
-        </section>
-        <section id="504">
-
-            <h3 class="heading-medium">504 (Gateway Timeout)</h3>
-            <table>
-                <thead><tr>
-                    <th>Scenario</th>
-                    <th width="40%">Code</th>
-                </tr></thead>
-                <tbody>
-                <tr>
-                    <td>Request timed out</td>
-                    <td><code class="code--slim">GATEWAY_TIMEOUT</code></td>
-                </tr>
-                </tbody>
-            </table>
-
-        </section>
-
+        </div>
     </section>
 
     <section id="fraud-prevention">
-        <h2 class="heading-large">Send fraud prevention data</h2>
-        <p>You must help us protect our users’ confidential data by sending us particular types of user audit data which we will record.
-            Check <a href="/guides/fraud-prevention">what you need to send</a>.</p>
+        <h2 class="govuk-heading-l">Send fraud prevention data</h2>
+        <p class="govuk-body">You must help us protect our users’ confidential data by sending us particular types of user audit data which we will record.
+            Check <a class="govuk-link" href="/guides/fraud-prevention">what you need to send</a>.
+        </p>
 
-        <p>You are required by law to submit header data for the <a href="/api-documentation/docs/api/service/vat-api/1.0">VAT (MTD)</a> and <a href="/guides/income-tax-mtd-end-to-end-service-guide/#overview">Income Tax Self Assessment (MTD) APIs</a>.</p>
+        <p class="govuk-body">It is mandatory to provide header data for the <a class="govuk-link" href="/api-documentation/docs/api/service/vat-api/1.0">VAT (MTD) API</a>.</p>
 
-        <p>Soon, you'll need to send user audit data in fraud prevention headers for all of our APIs. We recommend designing this into your applications now.</p>
+        <p class="govuk-body">Soon, you'll need to send user audit data in fraud prevention headers for all of our APIs. We recommend designing this into your applications now.</p>
     </section>
 
     <section id="http-redirection">
-        <h2 class="heading-large">HTTP redirection</h2>
-        <p>Our API Platform uses HTTP redirection if endpoints move permanently or temporarily.<p>
-        <p>Redirection responses have a <strong class="bold-small">Location</strong> header with the endpoint's new URI.</p>
+        <h2 class="govuk-heading-l">HTTP redirection</h2>
+        <p class="govuk-body">Our API Platform uses HTTP redirection if endpoints move permanently or temporarily.<p class="govuk-body">
+        <p class="govuk-body">Redirection responses have a <strong class="bold-small">Location</strong> header with the endpoint's new URI.</p>
     </section>
 
     <section id="ip-allow-list">
-        <h2 class="heading-large" name="ip-allow-list">IP allow list</h2>
+        <h2 class="govuk-heading-l" name="ip-allow-list">IP allow list</h2>
 
-        <p>The IP allow list is a security feature that lets you control which IP addresses are allowed to make API requests to HMRC.</p>
+        <p class="govuk-body">The IP allow list is a security feature that lets you control which IP addresses are allowed to make API requests to HMRC.</p>
         <div class="panel panel-border-wide">
-            <p>The IP allow list is optional and is only suitable if you have a static set of IP addresses where your software is hosted.</p>
+            <p class="govuk-body">The IP allow list is optional and is only suitable if you have a static set of IP addresses where your software is hosted.</p>
         </div>
-        <p>If you have dynamic IP addresses, consider switching to static IP addresses to use the IP allow list.</p>
-        <p>The IP allow list limits access to HMRC services to approved IP addresses associated with your application.</p>
+        <p class="govuk-body">If you have dynamic IP addresses, consider switching to static IP addresses to use the IP allow list.</p>
+        <p class="govuk-body">The IP allow list limits access to HMRC services to approved IP addresses associated with your application.</p>
 
-        <h3 class="heading-medium">Allowed IP addresses</h3>
-        <p>We allow IP address ranges represented in CIDR notation, made up of an IP address and a netmask:&nbsp;</p>
-        <p><code class="code--slim">&lt;IP Address&gt;/&lt;netmask&gt;</code></p>
-        <p>Which looks like:</p>
-        <p><code class="code--slim">1.1.1.1/24</code></p>
-        <p>The netmask identifies how large the network is:&nbsp;</p>
-        <ul class="list list-bullet">
+        <h3 class="govuk-heading-m">Allowed IP addresses</h3>
+        <p class="govuk-body">We allow IP address ranges represented in CIDR notation, made up of an IP address and a netmask:&nbsp;</p>
+        <p class="govuk-body"><code class="code--slim">&lt;IP Address&gt;/&lt;netmask&gt;</code></p>
+        <p class="govuk-body">Which looks like:</p>
+        <p class="govuk-body"><code class="code--slim">1.1.1.1/24</code></p>
+        <p class="govuk-body">The netmask identifies how large the network is:&nbsp;</p>
+        <ul class="govuk-list govuk-list--bullet">
             <li>1.1.1.1/32 allows access from only one IP address, for example 1.1.1.1</li>
             <li>1.1.1.1/24 allows access from 254 IP addresses, for example 1.1.1.1 to 1.1.1.254</li>
         </ul>
-        <p>Use /32 if you are unsure about CIDR notation but know the individual IP addresses your traffic comes from.</p>
-        <p>The largest netmask we allow is /24.</p>
+        <p class="govuk-body">Use /32 if you are unsure about CIDR notation but know the individual IP addresses your traffic comes from.</p>
+        <p class="govuk-body">The largest netmask we allow is /24.</p>
 
-        <h3 class="heading-medium">Adding IP addresses to the allow list</h3>
-        <p>You will need a sandbox or production application to use the IP allow list.</p>
-        <p>When you set up a sandbox or production application, decide which IP addresses are allowed to make API requests to HMRC and add to the IP allow list.</p>
-        <p>It is important that you check the IP addresses you want to use are correct before making the IP allow list active.</p>
-        <p>While the allow list is active, only approved IP addresses associated with your application can make API requests to HMRC.</p>
+        <h3 class="govuk-heading-m">Adding IP addresses to the allow list</h3>
+        <p class="govuk-body">You will need a sandbox or production application to use the IP allow list.</p>
+        <p class="govuk-body">When you set up a sandbox or production application, decide which IP addresses are allowed to make API requests to HMRC and add to the IP allow list.</p>
+        <p class="govuk-body">It is important that you check the IP addresses you want to use are correct before making the IP allow list active.</p>
+        <p class="govuk-body">While the allow list is active, only approved IP addresses associated with your application can make API requests to HMRC.</p>
     </section>
 
     <section id="rate-limiting">
+        <h2 class="govuk-heading-l">Rate limiting</h2>
 
-        <h2 class="heading-large">Rate limiting</h2>
-
-        <p>We limit the number of requests each application can make. This protects our service against excessive use and Denial-of-Service attacks, and also encourages you to use our APIs efficiently.</p>
-        <p>We set limits based on anticipated loads and peaks. Our standard limit is 3 requests per second per application.</p>
-        <p>If you reach this limit you’ll get a response with an HTTP status of <code class="code--slim">429</code>
+        <p class="govuk-body">We limit the number of requests each application can make. This protects our service against excessive use and Denial-of-Service attacks, and also encourages you to use our APIs efficiently.</p>
+        <p class="govuk-body">We set limits based on anticipated loads and peaks. Our standard limit is 3 requests per second per application.</p>
+        <p class="govuk-body">If you reach this limit you’ll get a response with an HTTP status of <code class="code--slim">429</code>
             (Too Many Requests). If a 429 response is received we recommend that your code should stop making additional
             API requests for a short period of time before retrying.
         </p>
-        <p>Our rate limits are designed to encourage real-time interactions.  As such we advise software developers to
+        <p class="govuk-body">Our rate limits are designed to encourage real-time interactions.  As such we advise software developers to
             avoid batching requests if they wish to avoid being rate limited.</p>
-        <p>If you continually hit this rate limit, <a href="/developer/support">contact us</a> to discuss your application design and whether it’s appropriate to raise your rate limit. </p>
-
+        <p class="govuk-body">If you continually hit this rate limit, <a class="govuk-link" href="/developer/support">contact us</a> to discuss your application design and whether it’s appropriate to raise your rate limit. </p>
     </section>
 
     <section id="redirect-uris">
-        <h2 class="heading-large">Redirect URIs</h2>
-        <p>We use redirect URIs to send the user back to your application after successful (or unsuccessful) authorisation,
+        <h2 class="govuk-heading-l">Redirect URIs</h2>
+        <p class="govuk-body">We use redirect URIs to send the user back to your application after successful (or unsuccessful) authorisation,
             prior to your application accessing
-            <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.</p>
-        <p>You must specify one or more redirect URIs when you create your application, and also specify one redirect
+            <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.</p>
+        <p class="govuk-body">You must specify one or more redirect URIs when you create your application, and also specify one redirect
             URI when you send your user to our authorisation endpoint.</p>
-        <p>To protect your application from phishing attacks,
+        <p class="govuk-body">To protect your application from phishing attacks,
             the redirect URI you use for authorisation (in your call to <code class="code--slim">/oauth/authorize</code>) must match one of those you specified when you created your application.</p>
-        <p>Also, you must use the same redirect URI when exchanging your authorisation code for an access token (in your call to <code class="code--slim">/oauth/token</code>) that you used for authorisation (in your call to <code class="code--slim">/oauth/authorize</code>).</p>
-        <p>You can specify a maximum of five redirect URIs.</p>
-        <h3 class="heading-medium">Examples</h3>
-        <p>Examples of valid (and invalid) redirect URIs are:</p>
-        <table>
+        <p class="govuk-body">Also, you must use the same redirect URI when exchanging your authorisation code for an access token (in your call to <code class="code--slim">/oauth/token</code>) that you used for authorisation (in your call to <code class="code--slim">/oauth/authorize</code>).</p>
+        <p class="govuk-body">You can specify a maximum of five redirect URIs.</p>
+        <h3 class="govuk-heading-m">Examples</h3>
+        <p class="govuk-body">Examples of valid (and invalid) redirect URIs are:</p>
+        <table class="govuk-table">
             <caption class="visually-hidden">Redirect Uris</caption>
             <colgroup>
                 <col width="50%">
                 <col width="50%">
             </colgroup>
-            <thead>
-            <tr>
-                <th>Redirect URI</th>
-                <th>Comments</th>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Redirect URI</th>
+                <th scope="col" class="govuk-table__header">Comments</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-                <td><code class="code--slim">https://www.example.com/auth-redirect</code></td>
-                <td><strong class="bold-small">Valid</strong> - when creating your application, you can use the full redirect URI or a partial URI, for example:
+            <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">https://www.example.com/auth-redirect</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Valid</strong> - when creating your application, you can use the full redirect URI or a partial URI, for example:
                     <br>
                     <br><code class="code--slim">https://www.example.com/auth-redirect</code>
                     <br>
@@ -520,88 +542,81 @@
                     <br><code class="code--slim">https%3A%2F%2Fwww.example.com%2Fauth-redirect</code>
                 </td>
             </tr>
-            <tr>
-                <td><code class="code--slim">https://www.example.com:8080/auth-redirect</code></td>
-                <td><strong class="bold-small">Valid</strong> - includes a port number</td>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">https://www.example.com:8080/auth-redirect</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Valid</strong> - includes a port number</td>
             </tr>
-            <tr>
-                <td><code class="code--slim">http://www.example.com:8080/auth-redirect</code></td>
-                <td><strong class="bold-small">Invalid</strong> - uses HTTP, not HTTPS (HTTP is OK for installed applications - see example below)</td>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">http://www.example.com:8080/auth-redirect</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Invalid</strong> - uses HTTP, not HTTPS (HTTP is OK for installed applications - see example below)</td>
             </tr>
-            <tr>
-                <td><code class="code--slim">/auth-redirect</code></td>
-                <td><strong class="bold-small">Invalid</strong> - is a relative URI, not an absolute URI</td>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">/auth-redirect</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Invalid</strong> - is a relative URI, not an absolute URI</td>
             </tr>
-            <tr>
-                <td><code class="code--slim">https://203.0.113.11/auth-redirect</code></td>
-                <td><strong class="bold-small">Invalid</strong> - uses an IP address, not a DNS name</td>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">https://203.0.113.11/auth-redirect</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Invalid</strong> - uses an IP address, not a DNS name</td>
             </tr>
-            <tr>
-                <td><code class="code--slim">https://www.example.com:8080/auth-redirect?some_parameter=some_value</code></td>
-                <td><strong class="bold-small">Valid</strong> - includes a query component</td>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">https://www.example.com:8080/auth-redirect?some_parameter=some_value</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Valid</strong> - includes a query component</td>
             </tr>
-            <tr>
-                <td><code class="code--slim">https://www.example.com:8080/auth-redirect#some_fragment</code></td>
-                <td><strong class="bold-small">Invalid</strong> - includes a fragment component</td>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">https://www.example.com:8080/auth-redirect#some_fragment</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Invalid</strong> - includes a fragment component</td>
             </tr>
-            <tr>
-                <td><code class="code--slim">http://localhost:8080</code></td>
-                <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">http://localhost:8080</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Valid</strong> - as explained in <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
             </tr>
-            <tr>
-                <td><code class="code--slim">urn:ietf:wg:oauth:2.0:oob</code></td>
-                <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">urn:ietf:wg:oauth:2.0:oob</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Valid</strong> - as explained in <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
             </tr>
-            <tr>
-                <td><code class="code--slim">urn:ietf:wg:oauth:2.0:oob:auto</code></td>
-                <td><strong class="bold-small">Valid</strong> - as explained in <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">urn:ietf:wg:oauth:2.0:oob:auto</code></td>
+                <td class="govuk-table__cell"><strong class="bold-small">Valid</strong> - as explained in <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#installed-applications">OAuth 2.0 for installed applications</a></td>
             </tr>
             </tbody>
         </table>
     </section>
 
     <section id="scopes">
+        <h2 class="govuk-heading-l">Scopes</h2>
 
-        <h2 class="heading-large">Scopes</h2>
+        <p class="govuk-body">When your application needs to access API endpoints on behalf of a user, the Developer Hub uses the <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
 
-        <p>When your application needs to access API endpoints on behalf of a user, the Developer Hub uses the <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
+        <p class="govuk-body">This authority is granted in terms of OAuth 2.0 'scopes'. Each 'scope' relates to one or more endpoints.</p>
 
-        <p>This authority is granted in terms of OAuth 2.0 'scopes'. Each 'scope' relates to one or more endpoints.</p>
+        <p class="govuk-body">When your application requests an OAuth 2.0 <code class="code--slim">Bearer</code> token, it must specify the scope(s) which the token should be granted for.</p>
 
-        <p>When your application requests an OAuth 2.0 <code class="code--slim">Bearer</code> token, it must specify the scope(s) which the token should be granted for.</p>
+        <p class="govuk-body">These are translated to human-readable descriptions that are shown to the user before they grant authority. This makes sure the user understands and gives access to your application.</p>
 
-        <p>These are translated to human-readable descriptions that are shown to the user before they grant authority. This makes sure the user understands and gives access to your application.</p>
+        <p class="govuk-body">The scope for each user-restricted endpoint is defined in the <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
 
-        <p>The scope for each user-restricted endpoint is defined in the <a href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.</p>
-
-        <p>For details about OAuth 2.0 and scopes, see <a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>.</p>
-
+        <p class="govuk-body">For details about OAuth 2.0 and scopes, see <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>.</p>
     </section>
 
     <section id ="tls-standards">
+        <h2 class="govuk-heading-l">TLS standards</h2>
 
-        <h2 class="heading-large">TLS standards</h2>
+        <p class="govuk-body">HMRC APIs are only accessible over Transport Layer Security (TLS). For example, URLs that begin with https://.</p>
 
-        <p>HMRC APIs are only accessible over Transport Layer Security (TLS). For example, URLs that begin with https://.</p>
-
-        <p class="panel panel-border-wide">Applications must support TLS 1.2 or higher to avoid known weaknesses in previous versions.</p>
-
+        <div class="govuk-inset-text">Applications must support TLS 1.2 or higher to avoid known weaknesses in previous versions.</div>
     </section>
 
     <section id="versioning">
+        <h2 class="govuk-heading-l">Versioning</h2>
 
-        <h2 class="heading-large">Versioning</h2>
-
-        <p>Request the version of the API you want to use by including an <code class="code--slim">Accept</code> header with a media type of:</p>
+        <p class="govuk-body">Request the version of the API you want to use by including an <code class="code--slim">Accept</code> header with a media type of:</p>
 
         <pre class="code--block">application/vnd.hmrc.[version]+[content-type]</pre>
-
-        <p>For example:</p>
+        <br />
+        <p class="govuk-body">For example:</p>
 
         <pre class="code--block">application/vnd.hmrc.1.0+json</pre>
-
-        <p>We release backwards-compatible changes in the same version, so you don't need to change your <code class="code--slim">Accept</code> header. We release backwards-incompatible changes in a new version, and you must change your <code class="code--slim">Accept</code> header to use it.</p>
-
+        <br />
+        <p class="govuk-body">We release backwards-compatible changes in the same version, so you don't need to change your <code class="code--slim">Accept</code> header. We release backwards-incompatible changes in a new version, and you must change your <code class="code--slim">Accept</code> header to use it.</p>
     </section>
-
 }

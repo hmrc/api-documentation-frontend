@@ -21,17 +21,17 @@
 
 <div class="filter-container">
     <form method="GET" action="">
-        <label class="form-label-bold" for="service-filter">Service</label>
         <div class="govuk-form-group">
+            <label class="govuk-label" for="service-filter">Service</label>
             <select class="govuk-select" id="service-filter" name="filter">
-              <option disabled selected>Select a service</option>
-              @for(service <- documentsByCategory.keys.toSeq.sorted) {
-                 <option @if(filter.map(_.displayName) == Some(service.displayName)) { selected } value="@service.filter">@service.displayName</option>
-              }
+                <option disabled selected>Select a service</option>
+                @for(service <- documentsByCategory.keys.toSeq.sorted) {
+                    <option @if(filter.map(_.displayName) == Some(service.displayName)) { selected } value="@service.filter">@service.displayName</option>
+                }
             </select>
         </div>
         <div>
-            <button class="button" type="submit">View the documentation</button>
+            <button class="govuk-button" data-module="govuk-button" type="submit">View the documentation</button>
         </div>
     </form>
 </div>
