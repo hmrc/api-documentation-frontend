@@ -24,37 +24,37 @@
 
 @apiMain(pageAttributes) {
 
-        <h1 class="govuk-heading-xl">
+        <h1 class="govuk-heading-l">
             Application naming guidelines
         </h1>
 
         <p class="govuk-body">We’ll check the name of your application before giving you access to production credentials. This is because we show its name to users during the <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationPage().url">authorisation</a> process. While you are testing your sandbox application, you can name it whatever you like.</p>
 
-        <h2 class="govuk-heading-l">Using HMRC in the name</h2>
+        <h2 class="govuk-heading-m">Using HMRC in the name</h2>
         <p class="govuk-body">Using HMRC, or making any reference to HMRC as part of the name is not allowed and will result in your application being rejected.</p>
 
-        <h2 class="govuk-heading-l">Existing names</h2>
+        <h2 class="govuk-heading-m">Existing names</h2>
         <p class="govuk-body">The name of your application can't be the same or similar to the name of an application which has already requested production credentials on the Developer Hub.</p>
         <p class="govuk-body">‘The same’ means a name that's either identical, or where the only difference is punctuation or a special character. For example, Fast Track Tax App is treated the same as F&#64;st Track Tax App.</p>
         <p class="govuk-body">‘Similar’ means a name that's close enough to another to confuse users. For example, Fast Track Tax App is too similar to Fast Trax Tax App.</p>
-        <h3 class="govuk-heading-m">Exceptions</h3>
+        <h3 class="govuk-heading-s">Exceptions</h3>
         <p class="govuk-body">This doesn't apply if it meets both these conditions:</p>
         <ul class="govuk-list govuk-list--bullet">
             <li>The name will be part of a group with an existing application with the same or similar name.</li>
             <li>The admins of the existing application give you permission to use the name.</li>
         </ul>
 
-        <h2 class="govuk-heading-l">Trademarked and registered names</h2>
+        <h2 class="govuk-heading-m">Trademarked and registered names</h2>
         <p class="govuk-body">Your application’s name must not be the same or similar to a trademarked name that's registered by another business outside the HMRC Developer Hub.</p>
         <p class="govuk-body">For example, you can't register the Barclays tax application, without permission from Barclays bank.</p>
 
-        <h2 class="govuk-heading-l">Offensive names</h2>
+        <h2 class="govuk-heading-m">Offensive names</h2>
         <p class="govuk-body">Your name can't contain offensive words or phrases.</p>
 
-        <h2 class="govuk-heading-l">Misleading names</h2>
+        <h2 class="govuk-heading-m">Misleading names</h2>
         <p class="govuk-body">Your application’s name can't mislead users into believing your application has special status or power. Such names might associate your application with government, local authorities or institutions. For example, the Royal Tax App could be misleading.</p>
 
-        <h2 class="govuk-heading-l">Removal from the Developer Hub</h2>
+        <h2 class="govuk-heading-m">Removal from the Developer Hub</h2>
         <p class="govuk-body">We have the right to delete your application at any point, for any reason.</p>
 
 }

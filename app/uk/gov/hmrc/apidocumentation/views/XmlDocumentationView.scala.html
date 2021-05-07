@@ -25,7 +25,7 @@
 @(pageAttributes: PageAttributes, api: XmlApiDocumentation)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
-  <h1 class="govuk-heading-xl">@api.name XML API</h1>
+  <h1 class="govuk-heading-l">@api.name XML API</h1>
 
   <p class="govuk-body" id="xml-api-description">@Html(api.description)</p>
 

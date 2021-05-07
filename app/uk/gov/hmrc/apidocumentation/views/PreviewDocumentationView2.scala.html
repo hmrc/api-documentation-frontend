@@ -27,11 +27,11 @@
 
 @apiMain(pageAttributes) {
 
-    <h1 class="govuk-heading-xl">Preview RAML</h1>
+    <h1 class="govuk-heading-l">Preview RAML</h1>
 
     @if(result.isFailure) {
         <div class="alert alert--important" role="alert">
-            <h2 class="govuk-heading-l">Preview failed → @result.failed.get.getClass.getName</h2>
+            <h2 class="govuk-heading-m">Preview failed → @result.failed.get.getClass.getName</h2>
             <pre class="alert__message word-wrap">@result.failed.get.getMessage</pre>
         </div>
     }

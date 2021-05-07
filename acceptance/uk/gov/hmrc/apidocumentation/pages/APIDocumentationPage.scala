@@ -26,7 +26,7 @@ object APIDocumentationPage extends WebPage {
 
   override val url = s"http://localhost:${Env.port}/api-documentation/docs/api"
 
-  override def isCurrentPage: Boolean = find(className("govuk-heading-xl")).fold(false)(_.text == "API documentation")
+  override def isCurrentPage: Boolean = find(className("govuk-heading-l")).fold(false)(_.text == "API documentation")
 
   def selectHelloWorld() {
     val helloWorldLink = find(linkText("Hello World")).get

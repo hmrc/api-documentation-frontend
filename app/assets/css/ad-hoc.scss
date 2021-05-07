@@ -510,3 +510,31 @@ pre, code {
     }
   }
 }
+
+.float-right  {
+  float: right;
+}
+
+.detail-summary-box {
+  width: 100%;
+  box-sizing: border-box;
+  strong {
+    float: right;
+  }
+}
+
+.custom-detail-box {
+  padding-left: 0 !important;
+  border: none !important;
+}
+
+.code--header {
+  border: 1px solid #DFE0E7;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 16px;
+  font-weight: normal;
+  display: inline-block;
+  background-color: #F7F7F7;
+  line-height: 1.1em;
+}

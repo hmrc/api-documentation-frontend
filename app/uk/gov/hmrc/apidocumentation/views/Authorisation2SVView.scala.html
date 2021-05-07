@@ -25,7 +25,7 @@
 
 @apiMain(pageAttributes) {
 
-    <h1 class="govuk-heading-xl">Authorisation</h1>
+    <h1 class="govuk-heading-l">Authorisation</h1>
 
     <nav role="navigation" aria-labelledby="onThisPage">
         <h2 id="onThisPage" class="visually-hidden">On this page</h2>
@@ -42,7 +42,7 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
     <section id="two-step-verification">
-            <h2 class="govuk-heading-l" id="2sv">2-step verification</h2>
+            <h2 class="govuk-heading-m" id="2sv">2-step verification</h2>
             <p class="govuk-body">2-step verification (2SV) is an extra security step that takes place during the process for getting an <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">OAuth 2.0 access token</a> for user-restricted endpoints.</p>
             <p class="govuk-body">It occurs immediately after the user has signed in, and requires them to have their mobile or landline phone to hand.</p>
             <p class="govuk-body">First time through, the user must register for 2SV. The options are:</p>

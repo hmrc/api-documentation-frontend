@@ -26,7 +26,7 @@
 
 @apiMain(pageAttributes){
 
-<h1 class="govuk-heading-xl">Tutorials</h1>
+<h1 class="govuk-heading-l">Tutorials</h1>
 
 <nav role="navigation" aria-labelledby="onThisPage">
     <h2 id="onThisPage" class="visually-hidden">on this page</h2>
@@ -59,7 +59,7 @@
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
 <section id="before-you-start">
-    <h2 class="govuk-heading-l" id="before-you-start">Before you start</h2>
+    <h2 class="govuk-heading-m" id="before-you-start">Before you start</h2>
     <p class="govuk-body">All base URLs in these tutorials use the sandbox environment.</p>
     <p class="govuk-body">All code snippets in these tutorials are in Java. They use:</p>
 
@@ -128,14 +128,14 @@
 </section>
 
 <section id="open-endpoint">
-    <h2 class="govuk-heading-l" id="open-endpoint">Accessing an open endpoint</h2>
+    <h2 class="govuk-heading-m" id="open-endpoint">Accessing an open endpoint</h2>
     <p class="govuk-body">In this example, you'll access the Hello World API ‘Hello World’ endpoint.</p>
     <p class="govuk-body">
         This endpoint is unrestricted so you can access it without an
         <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">OAuth2.0</a>
         <code class="code--slim">access_token</code>.
     </p>
-    <h3 class="govuk-heading-m">Issue a GET request</h3>
+    <h3 class="govuk-heading-s">Issue a GET request</h3>
     <p class="govuk-body">Issue a GET request to <span class="bold">@{applicationConfig.sandboxApiBaseUrl}/hello/world</span></p>
 
 <pre class="code--block">
@@ -154,7 +154,7 @@ String responseBody = EntityUtils.toString(response.getEntity());
 </section>
 
 <section id="app-restricted">
-    <h2 class="govuk-heading-l" id="application-restricted-endpoint">Accessing an application-restricted endpoint</h2>
+    <h2 class="govuk-heading-m" id="application-restricted-endpoint">Accessing an application-restricted endpoint</h2>
     <p class="govuk-body">In this example, you will request an OAuth 2.0 <code class="code--slim">access_token</code> and
         then use it to access the Hello World API ‘Hello Application’ endpoint.
     </p>
@@ -170,7 +170,7 @@ String responseBody = EntityUtils.toString(response.getEntity());
         See the <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationAppRestrictedEndpointsPage()">
         authorisation</a> section for information about requesting an OAuth 2.0 <code class="code--slim">access_token</code>.
     </p>
-    <h3 class="govuk-heading-m">1. Request an OAuth 2.0 access token with the required scope</h3>
+    <h3 class="govuk-heading-s">1. Request an OAuth 2.0 access token with the required scope</h3>
 <pre class="code--block">
 // extract the authorization code from the request querystring
 OAuthAuthzResponse response =
@@ -197,7 +197,7 @@ String grantedScope = response.getScope();
 Long expiresIn = response.getExpiresIn();
 </pre>
     <br />
-    <h3 class="govuk-heading-m">2. Issue a GET request</h3>
+    <h3 class="govuk-heading-s">2. Issue a GET request</h3>
     <p class="govuk-body">
         Issue a GET request to <span class="bold">https://test-api.service.hmrc.gov.uk/hello/application</span>,
         passing your newly issued <code class="code--slim">access_token</code> as an
@@ -222,7 +222,7 @@ String responseBody = EntityUtils.toString(response.getEntity());
 </section>
 
 <section id="user-restricted">
-    <h2 class="govuk-heading-l" id="user-restricted-endpoint">Accessing a user-restricted endpoint</h2>
+    <h2 class="govuk-heading-m" id="user-restricted-endpoint">Accessing a user-restricted endpoint</h2>
     <p class="govuk-body">In this example, you will request an OAuth 2.0<code class="code--slim">access_token</code>
         and then use it to access the Hello World API ‘Hello User’ endpoint.
     </p>
@@ -236,7 +236,7 @@ String responseBody = EntityUtils.toString(response.getEntity());
         <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">authorisation</a>
         section.
     </p>
-    <h3 class="govuk-heading-m">1. Request an OAuth 2.0 authorisation code with the required scope</h3>
+    <h3 class="govuk-heading-s">1. Request an OAuth 2.0 authorisation code with the required scope</h3>
 
 <pre class="code--block">
 // replace with your application's client_id and client_secret
@@ -270,7 +270,7 @@ httpServletResponse.sendRedirect(request.getLocationUri());
         and a <code class="code--slim">refresh_token</code>.
     </p>
 
-    <h3 class="govuk-heading-m">2. Exchange the OAuth 2.0 authorisation code for an access token</h3>
+    <h3 class="govuk-heading-s">2. Exchange the OAuth 2.0 authorisation code for an access token</h3>
 <pre class="code--block">
 // extract the authorization code from the request querystring
 OAuthAuthzResponse response =
@@ -300,7 +300,7 @@ String grantedScope = response.getScope();
 Long expiresIn = response.getExpiresIn();
 </pre>
     <br />
-    <h3 class="govuk-heading-m">3. Issue a GET request</h3>
+    <h3 class="govuk-heading-s">3. Issue a GET request</h3>
     <p class="govuk-body">Issue a GET request to <span class="bold">@{applicationConfig.sandboxApiBaseUrl}/hello/user</span>,
         passing your newly issued <code class="code--slim">access_token</code>
         as an <code class="code--slim">Authorization</code>
@@ -329,7 +329,7 @@ String responseBody = EntityUtils.toString(response.getEntity());
         <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">OAuth 2.0</a> flow.
     </p>
 
-    <h3 class="govuk-heading-m">4. Refresh an expired OAuth 2.0 <code class="code--slim">access_token</code></h3>
+    <h3 class="govuk-heading-s">4. Refresh an expired OAuth 2.0 <code class="code--slim">access_token</code></h3>
 
     <p class="govuk-body">This exchanges a <code class="code--slim">refresh_token</code> for a new <code class="code--slim">access_token</code>
         (and a new <code class="code--slim">refresh_token</code>).

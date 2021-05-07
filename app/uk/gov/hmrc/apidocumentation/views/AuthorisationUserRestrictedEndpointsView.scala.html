@@ -26,7 +26,7 @@
 
 @apiMain(pageAttributes) {
 
-    <h1 class="govuk-heading-xl">Authorisation</h1>
+    <h1 class="govuk-heading-l">Authorisation</h1>
 
     <nav role="navigation" aria-labelledby="onThisPage">
         <h2 id="onThisPage" class="visually-hidden">On this page</h2>
@@ -44,7 +44,7 @@
 
 <section id="user-restricted">
 
-    <h2 class="govuk-heading-l">User-restricted endpoints</h2>
+    <h2 class="govuk-heading-m">User-restricted endpoints</h2>
 
     <p class="govuk-body">These endpoints require specific authorisation from the end user. They generally give access to secure data.</p>
 
@@ -69,7 +69,7 @@
     </div>
 
     <div id="get-access-token">
-        <h3 class="govuk-heading-m">Getting an OAuth 2.0 access token</h3>
+        <h3 class="govuk-heading-s">Getting an OAuth 2.0 access token</h3>
 
         <p class="govuk-body">The authorisation user journey is an important part of our security, and may be changed without notice.</p>
 
@@ -616,7 +616,7 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
     <div>
 
-        <h3 class="govuk-heading-m">Requesting a new token</h3>
+        <h3 class="govuk-heading-s">Requesting a new token</h3>
 
         <p class="govuk-body">Unless revoked earlier by the user, or tampered with, the authorisation granted to your application expires after <strong class="bold-small">18 months</strong>, and you can no longer refresh the user's <code class="code--slim">access_token</code>.</p>
 
@@ -632,14 +632,14 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
     <div>
 
-        <h3 class="govuk-heading-m">Revoking authority</h3>
+        <h3 class="govuk-heading-s">Revoking authority</h3>
 
         <p class="govuk-body">A user can revoke the authority granted to your application at any time using the <a class="govuk-link" href="https://www.tax.service.gov.uk/applications-manage-authority">Manage authorised applications online service</a>.</p>
 
     </div>
     <div>
 
-        <h3 class="govuk-heading-m">Agents with multiple accounts</h3>
+        <h3 class="govuk-heading-s">Agents with multiple accounts</h3>
 
         <p class="govuk-body">Some agent organisations have more than one Government Gateway account, and their client relationships are spread across those accounts. There are a few ways to handle this:</p>
 
@@ -652,7 +652,7 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
     </div>
     <section>
 
-        <h3 class="govuk-heading-m" id="installed-applications" name="installed-applications">OAuth 2.0 for installed applications</h3>
+        <h3 class="govuk-heading-s" id="installed-applications" name="installed-applications">OAuth 2.0 for installed applications</h3>
 
         <p class="govuk-body">Our OAuth 2.0 implementation supports applications that are installed on a user's device, as long as it can access the system browser or an embedded browser.</p>
 

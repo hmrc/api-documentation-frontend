@@ -24,7 +24,7 @@
 
 @apiMain(pageAttributes){
 
-<h1 class="govuk-heading-xl">Development practices</h1>
+<h1 class="govuk-heading-l">Development practices</h1>
 
   <nav role="navigation" aria-labelledby="onThisPage">
     <h2 id="onThisPage" class="visually-hidden">On this page</h2>
@@ -44,14 +44,14 @@
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
   <section id="how-to-avoid-your-application-failing-without-warning">
-    <h2 class="govuk-heading-l">How to avoid your application failing without warning</h2>
+    <h2 class="govuk-heading-m">How to avoid your application failing without warning</h2>
     <p class="govuk-body">You should avoid unintentionally tightly coupling your application to HMRC.</p>
 
     <p class="govuk-body">Tight coupling means a set of systems are dependent on one another. Making a change in a tightly coupled setup requires changes to both systems.</p>
 
     <p class="govuk-body">Loose coupling reduces dependencies and ensures non-breaking changes have no impact on your application.</p>
 
-    <h3 class="govuk-heading-m">HTTPS certificates can change</h3>
+    <h3 class="govuk-heading-s">HTTPS certificates can change</h3>
 
     <p class="govuk-body">The HMRC API Platform’s HTTPS certificates can change. This includes the leaf certificate, intermediary certificates and the root certificate.</p>
 
@@ -65,7 +65,7 @@
 
     <p class="govuk-body">Use a global root CA keystore and do not pin HMRC specific certificates</p>
 
-    <h3 class="govuk-heading-m">IP addresses can change</h3>
+    <h3 class="govuk-heading-s">IP addresses can change</h3>
 
     <p class="govuk-body">You might need to configure your network so your software can access our API Platform and token generation.
       If your software is installed on end user devices, they might also need to configure their own network.</p>
@@ -88,20 +88,20 @@
       <li><code class="code--slim">www.tax.service.gov.uk</code></li>
     </ul>
 
-    <h3 class="govuk-heading-m">Oauth flow can change</h3>
+    <h3 class="govuk-heading-s">Oauth flow can change</h3>
 
     <p class="govuk-body">We do not support software that automatically drives the web interfaces of the OAuth grant flow.</p>
 
     <p class="govuk-body">We regularly make changes to the OAuth grant flow and any changes could break automated logins. We will not advise you of any OAuth changes in advance.</p>
 
-    <h3 class="govuk-heading-m">Cross-origin resource sharing (CORS)</h3>
+    <h3 class="govuk-heading-s">Cross-origin resource sharing (CORS)</h3>
 
     <p class="govuk-body">The HMRC API Platform does not support <a class="govuk-link" href="https://fetch.spec.whatwg.org/#http-cors-protocol">cross-origin resource sharing (CORS).</a>
       It is not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
   </section>
 
   <section id="hmrc-changes-that-will-affect-your-application">
-    <h2 class="govuk-heading-l">HMRC changes that will affect your application</h2>
+    <h2 class="govuk-heading-m">HMRC changes that will affect your application</h2>
 
     <p class="govuk-body">A breaking change is a change to the HMRC API platform that requires you to make changes to your software, so it continues to work.</p>
 

@@ -24,13 +24,13 @@
 @(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
-  <h1 class="govuk-heading-xl">Making Tax Digital guides</h1>
+  <h1 class="govuk-heading-l">Making Tax Digital guides</h1>
 
   <p class="govuk-body">
     These guides have now moved to our <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.
   </p>
 
-  <h2 class="govuk-heading-l">
+  <h2 class="govuk-heading-m">
     VAT (MTD) end-to-end service guide
   </h2>
 
@@ -42,7 +42,7 @@
     <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("vat")).url">VAT (MTD) API documentation</a>
   </p>
 
-  <h2 class="govuk-heading-l">
+  <h2 class="govuk-heading-m">
     Income Tax (MTD) end-to-end service guide
   </h2>
 

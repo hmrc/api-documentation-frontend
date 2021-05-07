@@ -25,7 +25,7 @@
 @(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes){
-    <h1 class="govuk-heading-xl">Reference guide</h1>
+    <h1 class="govuk-heading-l">Reference guide</h1>
 
     <nav role="navigation" aria-labelledby="onThisPage">
         <h2 id="onThisPage" class="visually-hidden">on this page</h2>
@@ -65,7 +65,7 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
     <section id="api-access">
-        <h2 class="govuk-heading-l">API access</h2>
+        <h2 class="govuk-heading-m">API access</h2>
 
         <p class="govuk-body">The base URL for sandbox APIs is:</p>
         <pre class="code--block">@applicationConfig.sandboxApiBaseUrl</pre>
@@ -75,7 +75,7 @@
     </section>
 
     <section id="oauth-2.0-browser-support">
-        <h2 class="govuk-heading-l">Browser support for OAuth 2.0</h2>
+        <h2 class="govuk-heading-m">Browser support for OAuth 2.0</h2>
 
         <p class="govuk-body">The OAuth 2.0 
             <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
@@ -95,7 +95,7 @@
     </section>
 
     <section id="coding-in-the-open">
-        <h2 class="govuk-heading-l">Coding in the open</h2>
+        <h2 class="govuk-heading-m">Coding in the open</h2>
         <p class="govuk-body">The HMRC Developer Hub, the underlying API Platform and some of the APIs are coded in the open, as per the 
             <a href="https://www.gov.uk/service-manual/service-standard/make-all-new-source-code-open" class="govuk-link" rel="noreferrer noopener" target="_blank">
                 GOV.UK Digital Service Standard (opens in a new tab)</a>.
@@ -106,7 +106,7 @@
     </section>
 
     <section id="common-data-types">
-        <h2 class="govuk-heading-l">Common data types</h2>
+        <h2 class="govuk-heading-m">Common data types</h2>
         <p class="govuk-body">Our APIs use consistent formats for common data types. We use ISO standards including:</p>
         <ul class="govuk-list govuk-list--bullet">
             <li>
@@ -154,14 +154,14 @@
     </section>
 
     <section id="cors">
-        <h2 class="govuk-heading-l">Cross-origin resource sharing (CORS)</h2>
+        <h2 class="govuk-heading-m">Cross-origin resource sharing (CORS)</h2>
         <p class="govuk-body">The API Platform does not support 
             <a href="https://fetch.spec.whatwg.org/#http-cors-protocol" class="govuk-link" rel="noreferrer noopener" target="_blank">cross-origin resource sharing (CORS) (opens in a new tab)</a>. It is therefore not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
     </section>
 
     <section id="errors">
 
-        <h2 class="govuk-heading-l">Errors</h2>
+        <h2 class="govuk-heading-m">Errors</h2>
 
         <div id="intro">
             <p class="govuk-body">Errors during the <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation process</a> use the format specified in the OAuth 2.0 RFC.</p>
@@ -233,7 +233,7 @@
         </div>
 
         <div id="401">
-            <h3 class="govuk-heading-m">401 (Unauthorized)</h3>
+            <h3 class="govuk-heading-s">401 (Unauthorized)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -263,7 +263,7 @@
         </div>
 
         <div id="403">
-            <h3 class="govuk-heading-m">403 (Forbidden)</h3>
+            <h3 class="govuk-heading-s">403 (Forbidden)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -293,7 +293,7 @@
         </div>
 
         <div id="404">
-            <h3 class="govuk-heading-m">404 (Not Found)</h3>
+            <h3 class="govuk-heading-s">404 (Not Found)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -311,7 +311,7 @@
         </div>
 
         <div id="405">
-            <h3 class="govuk-heading-m">405 (Method Not Allowed)</h3>
+            <h3 class="govuk-heading-s">405 (Method Not Allowed)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -329,7 +329,7 @@
         </div>
 
         <div id="406">
-            <h3 class="govuk-heading-m">406 (Not Acceptable)</h3>
+            <h3 class="govuk-heading-s">406 (Not Acceptable)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -348,7 +348,7 @@
         </div>
 
         <div id="429">
-            <h3 class="govuk-heading-m">429 (Too Many Requests)</h3>
+            <h3 class="govuk-heading-s">429 (Too Many Requests)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -366,7 +366,7 @@
         </div>
 
         <div id="500">
-            <h3 class="govuk-heading-m">500 (Internal Server Error)</h3>
+            <h3 class="govuk-heading-s">500 (Internal Server Error)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -384,7 +384,7 @@
         </div>
 
         <div id="501">
-            <h3 class="govuk-heading-m">501 (Not Implemented)</h3>
+            <h3 class="govuk-heading-s">501 (Not Implemented)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -402,7 +402,7 @@
         </div>
 
         <div id="503">
-            <h3 class="govuk-heading-m">503 (Service Unavailable)</h3>
+            <h3 class="govuk-heading-s">503 (Service Unavailable)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -424,7 +424,7 @@
         </div>
 
         <div id="504">
-            <h3 class="govuk-heading-m">504 (Gateway Timeout)</h3>
+            <h3 class="govuk-heading-s">504 (Gateway Timeout)</h3>
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -443,7 +443,7 @@
     </section>
 
     <section id="fraud-prevention">
-        <h2 class="govuk-heading-l">Send fraud prevention data</h2>
+        <h2 class="govuk-heading-m">Send fraud prevention data</h2>
         <p class="govuk-body">You must help us protect our users’ confidential data by sending us particular types of user audit data which we will record.
             Check <a class="govuk-link" href="/guides/fraud-prevention">what you need to send</a>.
         </p>
@@ -454,13 +454,13 @@
     </section>
 
     <section id="http-redirection">
-        <h2 class="govuk-heading-l">HTTP redirection</h2>
+        <h2 class="govuk-heading-m">HTTP redirection</h2>
         <p class="govuk-body">Our API Platform uses HTTP redirection if endpoints move permanently or temporarily.<p class="govuk-body">
         <p class="govuk-body">Redirection responses have a <strong class="bold-small">Location</strong> header with the endpoint's new URI.</p>
     </section>
 
     <section id="ip-allow-list">
-        <h2 class="govuk-heading-l" name="ip-allow-list">IP allow list</h2>
+        <h2 class="govuk-heading-m" name="ip-allow-list">IP allow list</h2>
 
         <p class="govuk-body">The IP allow list is a security feature that lets you control which IP addresses are allowed to make API requests to HMRC.</p>
         <div class="panel panel-border-wide">
@@ -469,7 +469,7 @@
         <p class="govuk-body">If you have dynamic IP addresses, consider switching to static IP addresses to use the IP allow list.</p>
         <p class="govuk-body">The IP allow list limits access to HMRC services to approved IP addresses associated with your application.</p>
 
-        <h3 class="govuk-heading-m">Allowed IP addresses</h3>
+        <h3 class="govuk-heading-s">Allowed IP addresses</h3>
         <p class="govuk-body">We allow IP address ranges represented in CIDR notation, made up of an IP address and a netmask:&nbsp;</p>
         <p class="govuk-body"><code class="code--slim">&lt;IP Address&gt;/&lt;netmask&gt;</code></p>
         <p class="govuk-body">Which looks like:</p>
@@ -482,7 +482,7 @@
         <p class="govuk-body">Use /32 if you are unsure about CIDR notation but know the individual IP addresses your traffic comes from.</p>
         <p class="govuk-body">The largest netmask we allow is /24.</p>
 
-        <h3 class="govuk-heading-m">Adding IP addresses to the allow list</h3>
+        <h3 class="govuk-heading-s">Adding IP addresses to the allow list</h3>
         <p class="govuk-body">You will need a sandbox or production application to use the IP allow list.</p>
         <p class="govuk-body">When you set up a sandbox or production application, decide which IP addresses are allowed to make API requests to HMRC and add to the IP allow list.</p>
         <p class="govuk-body">It is important that you check the IP addresses you want to use are correct before making the IP allow list active.</p>
@@ -490,7 +490,7 @@
     </section>
 
     <section id="rate-limiting">
-        <h2 class="govuk-heading-l">Rate limiting</h2>
+        <h2 class="govuk-heading-m">Rate limiting</h2>
 
         <p class="govuk-body">We limit the number of requests each application can make. This protects our service against excessive use and Denial-of-Service attacks, and also encourages you to use our APIs efficiently.</p>
         <p class="govuk-body">We set limits based on anticipated loads and peaks. Our standard limit is 3 requests per second per application.</p>
@@ -504,7 +504,7 @@
     </section>
 
     <section id="redirect-uris">
-        <h2 class="govuk-heading-l">Redirect URIs</h2>
+        <h2 class="govuk-heading-m">Redirect URIs</h2>
         <p class="govuk-body">We use redirect URIs to send the user back to your application after successful (or unsuccessful) authorisation,
             prior to your application accessing
             <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">user-restricted endpoints</a>.</p>
@@ -514,7 +514,7 @@
             the redirect URI you use for authorisation (in your call to <code class="code--slim">/oauth/authorize</code>) must match one of those you specified when you created your application.</p>
         <p class="govuk-body">Also, you must use the same redirect URI when exchanging your authorisation code for an access token (in your call to <code class="code--slim">/oauth/token</code>) that you used for authorisation (in your call to <code class="code--slim">/oauth/authorize</code>).</p>
         <p class="govuk-body">You can specify a maximum of five redirect URIs.</p>
-        <h3 class="govuk-heading-m">Examples</h3>
+        <h3 class="govuk-heading-s">Examples</h3>
         <p class="govuk-body">Examples of valid (and invalid) redirect URIs are:</p>
         <table class="govuk-table">
             <caption class="visually-hidden">Redirect Uris</caption>
@@ -583,7 +583,7 @@
     </section>
 
     <section id="scopes">
-        <h2 class="govuk-heading-l">Scopes</h2>
+        <h2 class="govuk-heading-m">Scopes</h2>
 
         <p class="govuk-body">When your application needs to access API endpoints on behalf of a user, the Developer Hub uses the <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url#user-restricted">OAuth 2.0</a> framework to grant and manage such an authority.</p>
 
@@ -599,7 +599,7 @@
     </section>
 
     <section id ="tls-standards">
-        <h2 class="govuk-heading-l">TLS standards</h2>
+        <h2 class="govuk-heading-m">TLS standards</h2>
 
         <p class="govuk-body">HMRC APIs are only accessible over Transport Layer Security (TLS). For example, URLs that begin with https://.</p>
 
@@ -607,7 +607,7 @@
     </section>
 
     <section id="versioning">
-        <h2 class="govuk-heading-l">Versioning</h2>
+        <h2 class="govuk-heading-m">Versioning</h2>
 
         <p class="govuk-body">Request the version of the API you want to use by including an <code class="code--slim">Accept</code> header with a media type of:</p>
 

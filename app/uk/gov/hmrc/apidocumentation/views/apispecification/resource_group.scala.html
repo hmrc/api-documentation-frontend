@@ -23,60 +23,56 @@
 
 @defining(resourceGroup.name.getOrElse("")) { titleSection =>
 
-    @if(resourceGroup.name.isDefined) {
-        <div id="@Slugify(resourceGroup.name.get)">
-            <h3 class="govuk-heading-m">@resourceGroup.name.get</h3>
-            @if(resourceGroup.description.isDefined) {
-                <div class="markdown-text-styles">
-                    @Markdown(resourceGroup.description.get)
-                </div>
-            }
-            <h4 class="govuk-heading-s">@titleSection resources</h4>
+  @if(resourceGroup.name.isDefined) {
+    <div id="@Slugify(resourceGroup.name.get)">
+      <h3 class="govuk-heading-s">@resourceGroup.name.get</h3>
+      @if(resourceGroup.description.isDefined) {
+        <div class="markdown-text-styles">
+          @Markdown(resourceGroup.description.get)
         </div>
-    }
-
-    <div class="endpoint_group">
-        @for(res <- resourceGroup.resources) {
-            @if(res.methods.nonEmpty) {
-                @for((method, index) <- res.methods.zipWithIndex) {
-                    @if(!method.method.equalsIgnoreCase("OPTIONS")) {
-                        @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
-                            @if(index == 0 || index == 1) {
-                                <strong id="@method.method.toUpperCase" class="govuk-tag">
-                                    @method.method.toUpperCase
-                                </strong>
-                                <br />
-                                <br />
-                                <div class="method-container">
-                                    @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
-                                        <code id="@{head.mkString("/")}/@tail" class="code--slim">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
-                                    }
-                                </div>
-                            }
-                            <br />
-                            <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
-                                <div class="govuk-accordion__section">
-                                    <div class="govuk-accordion__section-header">
-                                        <h3 class="govuk-accordion__section-heading">
-                                            <span class="govuk-accordion__section-button" id="@{method.displayName}">
-                                                @{method.displayName}
-                                            </span>
-                                        </h3>
-                                    </div>
-                                    @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
-                                        <div id="method-content" class="govuk-accordion__section-content" aria-labelledby="method-display-name">
-                                            <div class="markdown-text-styles">
-                                                @Markdown(method.description)
-                                            </div>
-                                            @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    }
-                }
-            }
-        }
+      }
+      <h4 class="govuk-heading-s">@titleSection resources</h4>
     </div>
+  }
+
+  <div class="endpoint_group">
+    @for(res <- resourceGroup.resources) {
+      @if(res.methods.nonEmpty) {
+        @for((method, index) <- res.methods.zipWithIndex) {
+          @if(!method.method.equalsIgnoreCase("OPTIONS")) {
+            @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
+              @if(index == 0 || index == 1) {
+                <div class="method-container">
+                  @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
+                    <code id="@{head.mkString("/")}/@tail" class="code--header">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
+                  }
+                </div>
+              }
+              <br />
+              <details class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary detail-summary-box">
+                  <span class="govuk-details__summary-text">
+                    @{method.displayName}
+                  </span>
+                  <div class="float-right">
+                    <strong id="@method.method.toUpperCase" class="govuk-tag">
+                      @method.method.toUpperCase
+                    </strong>
+                  </div>
+                </summary>
+                <div class="govuk-details__text custom-detail-box">
+                  @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
+                    <div id="method-content" class="markdown-text-styles">
+                      @Markdown(method.description)
+                    </div>
+                    @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
+                  }
+                </div>
+              </details>
+            }
+          }
+        }
+      }
+    }
+  </div>
 }
