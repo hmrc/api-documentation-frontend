@@ -21,6 +21,15 @@
 
 @(resourceGroup: ResourceGroup, viewModel: ViewModel)
 
+@getHttpPillClass(method: String) = @{
+    method match{
+        case "GET" => "govuk-tag govuk-tag--blue"
+        case "PUT" => "govuk-tag govuk-tag--purple"
+        case "POST" => "govuk-tag govuk-tag--green"
+        case "DELETE" => "govuk-tag govuk-tag--red"
+    }
+}
+
 @defining(resourceGroup.name.getOrElse("")) { titleSection =>
 
   @if(resourceGroup.name.isDefined) {
@@ -55,7 +64,7 @@
                     @{method.displayName}
                   </span>
                   <div class="float-right">
-                    <strong id="@method.method.toUpperCase" class="govuk-tag">
+                    <strong id="@method.method.toUpperCase" class="@getHttpPillClass(method.method.toUpperCase)">
                       @method.method.toUpperCase
                     </strong>
                   </div>
