@@ -42,8 +42,6 @@ lazy val microservice = (project in file("."))
   )
   .settings(
     resolvers ++= Seq(
-      Resolver.bintrayRepo("hmrc", "releases"),
-      Resolver.jcenterRepo,
       Resolver.sonatypeRepo("releases")
     ),
     resolvers += "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/"
