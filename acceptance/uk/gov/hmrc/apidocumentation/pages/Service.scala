@@ -24,6 +24,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.scalatestplus.selenium.WebBrowser
+import uk.gov.hmrc.apidocumentation.pages.APIDocumentationPage.waitForPageToStopMoving
 
 object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
@@ -173,10 +174,15 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
 
   override def isCurrentPage: Boolean = find(className("page-header")).fold(false)(_.text == "Developer Forum API")
 
-  private def locationFieldOptionalCss = "div.parameter-optional"
+  private def locationFieldOptionalId = "parameter-optional"
 
-  def locationFieldOptional = find(cssSelector(locationFieldOptionalCss)).get
+  def locationFieldOptional = find(cssSelector(locationFieldOptionalId)).get
 
+
+  def selectCreateUser() {
+    click on id("details-summary-heading")
+    waitForPageToStopMoving()
+  }
 
   def checkVersionSortOrder(): Unit = {
     val versions =
@@ -209,7 +215,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
   }
 
   def checkLocationFieldIsOptional(): Unit = {
-    waitForElement(By.cssSelector(locationFieldOptionalCss)).getText shouldBe "optional"
+    waitForElement(By.id(locationFieldOptionalId)).getText should include ("optional")
   }
 
   def checkAPIVersionInRequestHeader(): Unit = {
