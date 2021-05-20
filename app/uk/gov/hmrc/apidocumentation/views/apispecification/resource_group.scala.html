@@ -21,70 +21,67 @@
 
 @(resourceGroup: ResourceGroup, viewModel: ViewModel)
 
+@getHttpPillClass(method: String) = @{
+    method match{
+        case "GET" => "govuk-tag govuk-tag--blue"
+        case "PUT" => "govuk-tag govuk-tag--purple"
+        case "POST" => "govuk-tag govuk-tag--green"
+        case "DELETE" => "govuk-tag govuk-tag--red"
+    }
+}
+
 @defining(resourceGroup.name.getOrElse("")) { titleSection =>
 
-    @if(resourceGroup.name.isDefined) {
-        <div id="@Slugify(resourceGroup.name.get)">
-            <h3 class="heading-medium">@resourceGroup.name.get</h3>
-            @if(resourceGroup.description.isDefined) {
-                <p>@Markdown(resourceGroup.description.get)</p>
-            }
-            <h4 class="heading-small">@titleSection resources</h4>
+  @if(resourceGroup.name.isDefined) {
+    <div id="@Slugify(resourceGroup.name.get)">
+      <h3 class="govuk-heading-s">@resourceGroup.name.get</h3>
+      @if(resourceGroup.description.isDefined) {
+        <div class="markdown-text-styles">
+          @Markdown(resourceGroup.description.get)
         </div>
-    }
-
-    <div class="endpoint_group">
-        @for(res <- resourceGroup.resources) {
-            @if(res.methods.nonEmpty) {
-                <div class="border__top-bottom border__top-bottom--open border--light-grey">
-                @for((method, index) <- res.methods.zipWithIndex) {
-                    @if(!method.method.equalsIgnoreCase("OPTIONS")) {
-                        @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
-                            <div
-                            id="@methodSlug"
-                            data-accordion
-                            data-accordion-animate
-                            data-accordion-set-hash
-                            aria-expanded="false">
-                                @if(index == 0) {
-                                    <div class="api-accordion__row persist-method">
-                                        @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
-                                            <code class="code--slim">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
-                                        }
-                                    </div>
-                                }
-                                <div class="persist-area">
-                                    <div class="accordion__row api-accordion__row persist-header">
-                                        <div>
-                                            <a class="accordion__button no--underline" href="#@methodSlug" data-accordion-button role="button">
-                                                <i class="arrow arrow--right" data-accordion-arrow></i>
-                                                <span class="font-xsmall underline">@{method.displayName}</span>
-                                            </a>
-                                        </div>
-                                        <div class="accordion__row__right align--middle table__col--1-4">
-                                            <span class="http-verb http-verb--@method.method.toLowerCase float--right">
-                                                @method.method.toUpperCase
-                                            </span>
-                                        </div>
-                                    </div>
-                                    @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
-                                        <div id="@contentID" class="accordion__body indent" data-accordion-reveal data-accordion-body aria-hidden="true">
-                                            @Markdown(method.description)
-                                            @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
-                                            <div class="close-accordion">
-                                                <a href="#@methodSlug" data-accordion-button role="button">
-                                                    Close section
-                                                </a>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    }
-                }
-                </div>
-            }
-        }
+      }
+      <h4 class="govuk-heading-s">@titleSection resources</h4>
     </div>
+  }
+
+  <div class="endpoint_group">
+    @for(res <- resourceGroup.resources) {
+      @if(res.methods.nonEmpty) {
+        @for((method, index) <- res.methods.zipWithIndex) {
+          @if(!method.method.equalsIgnoreCase("OPTIONS")) {
+            @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
+              @if(index == 0 || index == 1) {
+                <div class="method-container">
+                  @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
+                    <code id="@{head.mkString("/")}/@tail" class="code--header">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
+                  }
+                </div>
+              }
+              <br />
+              <details class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary detail-summary-box">
+                  <span class="govuk-details__summary-text">
+                    @{method.displayName}
+                  </span>
+                  <div class="float-right">
+                    <strong id="@method.method.toUpperCase" class="@getHttpPillClass(method.method.toUpperCase)">
+                      @method.method.toUpperCase
+                    </strong>
+                  </div>
+                </summary>
+                <div class="govuk-details__text custom-detail-box">
+                  @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
+                    <div id="method-content" class="markdown-text-styles">
+                      @Markdown(method.description)
+                    </div>
+                    @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
+                  }
+                </div>
+              </details>
+            }
+          }
+        }
+      }
+    }
+  </div>
 }

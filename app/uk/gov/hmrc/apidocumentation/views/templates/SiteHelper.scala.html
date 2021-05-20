@@ -19,8 +19,10 @@
 
 @this(hmrcReportTechnicalIssue: HmrcReportTechnicalIssue)
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit messages: Messages)
 
 @hmrcReportTechnicalIssue(ReportTechnicalIssue(
-   serviceCode = "api-documentation-frontend"
+   serviceCode = "api-documentation-frontend",
+   language = Some(messages.lang.code),
+   classList = None
 ))

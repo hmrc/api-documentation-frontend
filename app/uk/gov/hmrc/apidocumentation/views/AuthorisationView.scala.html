@@ -25,29 +25,29 @@
 
     @apiMain(pageAttributes) {
 
-        <h1 class="heading-xlarge">Authorisation</h1>
+        <h1 class="govuk-heading-l">Authorisation</h1>
 
         <nav role="navigation" aria-labelledby="onThisPage">
             <h2 id="onThisPage" class="visually-hidden">On this page</h2>
-            <ul class="list">
+            <ul class="govuk-list">
                 <li>Introduction</li>
-                <li><a href="@controllers.routes.AuthorisationController.authorisationCredentialsPage().url">Credentials</a></li>
-                <li><a href="@controllers.routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
-                <li><a href="@controllers.routes.AuthorisationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
-                <li><a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
-                <li><a href="@controllers.routes.AuthorisationController.authorisation2SVPage().url">2-step verification</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationCredentialsPage().url">Credentials</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url">Open access endpoints</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted endpoints</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">User-restricted endpoints</a></li>
+                <li><a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisation2SVPage().url">2-step verification</a></li>
             </ul>
         </nav>
 
-        <hr aria-hidden="true">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
         <section id="introduction">
 
-            <h2 class="heading-large">Introduction</h2>
+            <h2 class="govuk-heading-m">Introduction</h2>
 
-            <p>Our APIs have 3 types of endpoint. Each endpoint has its own:</p>
+            <p class="govuk-body">Our APIs have 3 types of endpoint. Each endpoint has its own:</p>
 
-            <ul class="list list-bullet">
+            <ul class="govuk-list govuk-list--bullet">
                 <li>access level</li>
                 <li>authorisation token</li>
                 <li>authorisation procedure</li>
@@ -55,36 +55,36 @@
 
             <br>
 
-            <p>These are dependent on the data that's served.</p>
+            <p class="govuk-body">These are dependent on the data that's served.</p>
 
-            <table>
+            <table class="govuk-table">
                 <caption class="visually-hidden">Endpoint types and their required tokens</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Endpoint access level</th>
-                        <th scope="col">Required authorisation token</th>
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Endpoint access level</th>
+                        <th scope="col" class="govuk-table__header">Required authorisation token</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td scope="row"><a href="@controllers.routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url">Open access</a></td>
-                        <td>No token</td>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell"><a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url">Open access</a></td>
+                        <td class="govuk-table__cell">No token</td>
                     </tr>
-                    <tr>
-                        <td scope="row"><a href="@controllers.routes.AuthorisationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted</a></td>
-                        <td>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell"><a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationAppRestrictedEndpointsPage().url">Application-restricted</a></td>
+                        <td class="govuk-table__cell">
                             OAuth 2.0 <code class="code--slim">access_token</code><br>
-                            Generated using <a href="https://oauth.net/2/grant-types/client-credentials/">OAuth 2.0 Client Credentials Grant</a>
+                            Generated using <a class="govuk-link" href="https://oauth.net/2/grant-types/client-credentials/">OAuth 2.0 Client Credentials Grant</a>
                             <br>
                             <br>
                             Using <code class="code--slim">server_token</code> is now deprecated.
                         </td>
                     </tr>
-                    <tr>
-                        <td scope="row"><a href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">User-restricted</a></td>
-                        <td>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell"><a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">User-restricted</a></td>
+                        <td class="govuk-table__cell">
                             OAuth 2.0 <code class="code--slim">access_token</code><br>
-                            Generated using <a href="https://oauth.net/2/grant-types/authorization-code/">OAuth 2.0 Authorization Code Grant</a>
+                            Generated using <a class="govuk-link" href="https://oauth.net/2/grant-types/authorization-code/">OAuth 2.0 Authorization Code Grant</a>
                         </td>
                     </tr>
                 </tbody>

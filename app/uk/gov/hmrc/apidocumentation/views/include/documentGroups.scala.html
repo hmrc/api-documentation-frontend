@@ -20,17 +20,25 @@
 
 @(documentsByCategory: Map[APICategory, Seq[Documentation]])
 
-<table class="api-list">
+<table class="govuk-table">
+    <caption class="visually-hidden">Services table</caption>
+    <thead class="visually-hidden">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Display name</th>
+        <th scope="col" class="govuk-table__header">Document name</th>
+        <th scope="col" class="govuk-table__header">Service type</th>
+      </tr>
+    </thead>
     @for((category, documents) <- documentsByCategory) {
-        <tbody>
+        <tbody class="govuk-table__body">
             @for((document, index) <- documents.sortBy(_.label).zipWithIndex) {
-                <tr>
-                    @if(index == 0) { <td class="api-group">@category.displayName</td> } else { <td></td> }
-                    <td>
-                        <a class="accordion__button link--no-underline" href="@document.documentationUrl">@document.name</a>
+                <tr class="govuk-table__row">
+                    @if(index == 0) { <td class="govuk-table__cell api-group">@category.displayName</td> } else { <td class="govuk-table__cell"></td> }
+                    <td class="govuk-table__cell">
+                        <a id="@document.name" class="govuk-link" href="@document.documentationUrl">@document.name</a>
                     </td>
-                    <td>
-                        <strong class="service-tag service-tag--@document.label.modifier">@document.label.displayName</strong>
+                    <td class="govuk-table__cell">
+                        <strong class="govuk-tag govuk-tag--@document.label.modifier">@document.label.displayName</strong>
                     </td>
                 </tr>
             }
