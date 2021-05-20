@@ -134,6 +134,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       CommonPage.selectVersion("v1.5 (Beta)")
 
       Then("location field is optional")
+      ApiDocumentationTestServicePage.selectCreateUser()
       ApiDocumentationTestServicePage.checkLocationFieldIsOptional()
     }
 
