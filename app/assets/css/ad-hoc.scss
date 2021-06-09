@@ -146,6 +146,9 @@ pre, code {
 @media(min-width: 769px) {
   .side-nav {
     border-right: 1px solid #bfc1c3;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 40px;
   }
 }
 
