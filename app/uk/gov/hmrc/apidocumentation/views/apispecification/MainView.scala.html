@@ -94,7 +94,7 @@
         }
 
         @for(doc <- viewModel.documentationForVersion(maybeVersion)) {
-            <div class="section">
+            <section id="@{doc.title}" class="section">
                 <h2 id="@Slugify(doc.title)" class="govuk-heading-m">
                     @{doc.title}
                 </h2>
@@ -102,7 +102,7 @@
                 <div class="markdown-text-styles">
                     @Markdown(doc.content)
                 </div>
-            </div>
+            </section>
         }
 
         <p class="govuk-body govuk-!-font-weight-bold">
@@ -113,18 +113,18 @@
 
         @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.flatMap(_.visibility)))) { case (isPreview, visibility) =>
             @if(isPreview || visibility == DocsVisibility.VISIBLE) {
-                <div class="section">
-                    <h2 id="endpoints" class="govuk-heading-m">
+                <section id="endpoints" class="section">
+                    <h2 id="endpoints-title" class="govuk-heading-m">
                         Endpoints
                     </h2>
 
                     @for(resourceGroup <- viewModel.resourceGroups) {
                         @resource_group(resourceGroup, viewModel)
                     }
-                </div>
+                </section>
             } else {
                 @if(visibility == DocsVisibility.OVERVIEW_ONLY) {
-                    <div class="section">
+                    <section class="section">
                         <h2 id="read-more" class="govuk-heading-m">
                             Read more
                         </h2>
@@ -136,7 +136,7 @@
                                 If you have already joined, <a href="/developer/login">sign in</a>.
                             </p>
                         }
-                    </div>
+                    </section>
                 }
             }
         }

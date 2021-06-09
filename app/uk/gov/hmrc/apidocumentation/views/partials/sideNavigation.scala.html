@@ -21,12 +21,12 @@
 <nav class="side-nav">
   <ul class="side-nav__component">
     @for(link <- sidebarLinks){
-      <li class="side-nav__list@if(request.path.contains(link.href)){ side-nav__list--selected}">
+      <li id="@link.href" class="side-nav__list@if(request.path.contains(link.href)){ side-nav__list--selected}">
         <a href="@link.href" class="side-nav__link">@link.label</a>
         @if(link.subLinks.nonEmpty && (request.path.startsWith(link.href) || link.showSubLinks)) {
           <ul class="fixed-navigation__sub-list">
             @for(subLink <- link.subLinks) {
-              <li class="side-nav__list@if(request.path.contains(subLink.href)){ side-nav__list--selected}">
+              <li id="@subLink.href" class="side-nav__list@if(request.path.contains(subLink.href)){ side-nav__list--selected}">
                 <a href="@subLink.href" class="side-nav__link">@subLink.label</a>
               </li>
             }
