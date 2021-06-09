@@ -55,7 +55,7 @@
     }
 
     @if(currentVersion.status == APIStatus.DEPRECATED) {
-        <div class="section">
+        <section class="section">
             <div class="notice">
                 <i class="icon icon-important">
                     <span class="visually-hidden">Alert</span>
@@ -64,7 +64,7 @@
                     @{viewModel.deprecationMessage.getOrElse("This version is deprecated - it’s going to be removed.")}.
                 </strong>
             </div>
-        </div>
+        </section>
     }
     @ourMainView(viewModel, Some(currentVersion), Some(api), loggedIn)
 }
