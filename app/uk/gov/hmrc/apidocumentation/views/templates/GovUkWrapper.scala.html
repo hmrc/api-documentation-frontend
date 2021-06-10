@@ -79,10 +79,10 @@
     </noscript>
     <div class="govuk-width-container">
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-quarter">
+            <div id="navContent" class="govuk-grid-column-one-quarter">
                 @leftNav.getOrElse(HtmlFormat.empty)
             </div>
-            <div class="govuk-grid-column-two-thirds">
+            <div id="mainContent" class="govuk-grid-column-two-thirds">
                 <div class="govuk-side-nav-content">
                     @contentBlock
                 </div>

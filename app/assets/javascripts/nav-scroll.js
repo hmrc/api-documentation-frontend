@@ -1,6 +1,12 @@
 (function () {
+  var contentBox = document.getElementById("mainContent").offsetHeight;
   var section = document.querySelectorAll(".section");
   var currentSection = {};
+  var screenHeight = window.screen.height;
+
+  if (screenHeight >= 769) {
+    document.getElementById("navContent").style.height = contentBox + "px";
+  }
 
   // Gets the parent of the current link and give's active class
   function hasSomeParentTheClass(element, classname) {
