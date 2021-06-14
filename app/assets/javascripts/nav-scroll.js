@@ -19,7 +19,9 @@
     }
   
     if (screenHeight >= 769) {
-      document.getElementById("navContent").style.height = contentBox + "px";
+      if (contentBox > 990) {
+        document.getElementById("navContent").style.height = contentBox + "px";
+      }
     }
   
     // Gets the parent of the current link and give's active class
