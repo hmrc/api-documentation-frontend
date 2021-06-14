@@ -95,7 +95,7 @@
 
         @for(doc <- viewModel.documentationForVersion(maybeVersion)) {
             <section id="@Slugify(doc.title)" class="section">
-                <h2 id="@Slugify(doc.title)" class="govuk-heading-m">
+                <h2 id="@Slugify(doc.title)-title" class="govuk-heading-m">
                     @{doc.title}
                 </h2>
 
