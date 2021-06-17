@@ -620,7 +620,7 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
         <p class="govuk-body">Unless revoked earlier by the user, or tampered with, the authorisation granted to your application expires after <strong class="bold-small">18 months</strong>, and you can no longer refresh the user's <code class="code--slim">access_token</code>.</p>
 
-        <p class="govuk-body">If the user's <code class="code--slim">refresh_token</code> has expired, calls from your application to our token endpoint will return a response with an HTTP status code of 400 (Bad Request) and an error code of <code class="code--slim">invalid_request</code>.</p>
+        <p class="govuk-body">If the user's <code class="code--slim">refresh_token</code> has expired, calls from your application to our token endpoint will return a response with an HTTP status code of 400 (Bad Request) and an error code of <code class="code--slim">invalid_grant</code>.</p>
 
         <p class="govuk-body">When this happens, your application must send the user back through the full process for <a class="govuk-link" href="#get-access-token">Getting an OAuth 2.0 access token</a>.</p>
 
