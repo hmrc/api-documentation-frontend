@@ -21,7 +21,7 @@
 
 @(res: Resource, meth: Method, viewModel: ViewModel, contentID: String, authorisation: (String, Option[String]))
 
-<section id="authorisation_@contentID" class="section">
+<div id="authorisation_@contentID" class="section">
     <h4 class="govuk-heading-s">Authorisation</h4>
     @{
         authorisation match {
@@ -54,11 +54,11 @@
             }
         }
     }
-</section>
+</div>
 
 @defining(Parameters.uriParams(Some(res), viewModel)) { params =>
     @if(params.nonEmpty) {
-        <section id="request-parameters_@contentID" class="section">
+        <div id="request-parameters_@contentID" class="section">
             <h4 class="govuk-heading-s">Path parameters</h4>
             <table class="govuk-table">
                 <caption class="visually-hidden">
@@ -74,13 +74,13 @@
                     @method_params(params)
                 </tbody>
             </table>
-        </section>
+        </div>
     }
 }
 
 @defining(Parameters.queryParams(Some(meth), viewModel)) { params =>
     @if(params.nonEmpty) {
-        <section id="query-parameters_@contentID" class="section">
+        <div id="query-parameters_@contentID" class="section">
             <h4 class="govuk-heading-s first">Query parameters</h4>
             <table class="govuk-table">
                 <caption class="visually-hidden">
@@ -96,7 +96,7 @@
                     @method_params(params)
                 </tbody>
             </table>
-        </section>
+        </div>
     }
 }
 
@@ -105,7 +105,7 @@
 }
 
 @for(body <- meth.body) {
-    <section id="sample-request_@contentID" class="section">
+    <div id="sample-request_@contentID" class="section">
         <h4 class="govuk-heading-s">Request</h4>
         @for(example <- BodyExamples(body)) {
             <p class="govuk-body">
@@ -114,13 +114,13 @@
                 <pre class="code--block">@example.value</pre>
             </p>
         }
-    </section>
+    </div>
 }
 
 @fields(RequestFields2(meth), "Request table", viewModel.isFieldOptionalityKnown)
 
 @for(resp <- Responses.success(meth)) {
-    <section id="sample-response_@contentID" class="section">
+    <div id="sample-response_@contentID" class="section">
         @if(resp.headers.nonEmpty) {
             @headers(resp.headers, viewModel.version, "Response headers", "", ("none", None))
         }
@@ -136,13 +136,13 @@
                 </p>
             }
         }
-    </section>
+    </div>
 }
 @fields(ResponseFields2(meth), "Response table", viewModel.isFieldOptionalityKnown)
 
 @defining(ErrorScenarios(meth)) { errorScenarios =>
     @if(errorScenarios.nonEmpty) {
-        <section id="error-responses_@contentID" class="section">
+        <div id="error-responses_@contentID" class="section">
             <h4 class="govuk-heading-s">Error scenarios</h4>
             <table class="govuk-table">
                 <caption class="visually-hidden">
@@ -178,15 +178,15 @@
                 </tbody>
             </table>
             <p class="govuk-body">For error scenarios that are common across all APIs, and for error formats, see our <a class="govuk-link" href="/api-documentation/docs/reference-guide#errors">reference guide</a>.</p>
-        </section>
+        </div>
     }
 }
 
 @defining(meth.sandboxData) { sandboxData =>
     @if(sandboxData.isDefined) {
-        <section id="sandbox-data_@contentID" class="section">
+        <div id="sandbox-data_@contentID" class="section">
             <h4 class="govuk-heading-s">Test data</h4>
             <div class="markdown-text-styles">@Markdown(sandboxData.get)</div>
-        </section>
+        </div>
     }
 }
