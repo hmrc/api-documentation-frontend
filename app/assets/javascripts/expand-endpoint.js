@@ -5,13 +5,20 @@
     var lastPart = url.split("#").pop();
     var endpoint = document.getElementById(lastPart + "-details");
     if (endpoint != null) {
-      var endpoint = document.getElementById(lastPart + "-details");
-      var att = document.createAttribute("open");
-      att.value = "";
-      endpoint.setAttributeNode(att);
+      if (endpoint.hasAttribute("open")){
+        // NEEDS WORK
+        var endpoint = document.getElementById(lastPart + "-details");
+        endpoint.removeAttribute("open");
+      } else {
+        var endpoint = document.getElementById(lastPart + "-details");
+        var att = document.createAttribute("open");
+        att.value = "";
+        endpoint.setAttributeNode(att);
+      }
     }
   }
 
+  // Function to reset the height of the nav when expanding/closing endpoint
   function getHeight() {
     setTimeout(
       function() {
@@ -20,20 +27,29 @@
       }, 100);
   }
 
+  // Action to be taken when details box is clicked
   var item = document.getElementsByClassName("govuk-details");
-
   function clickHandler(){
-    console.log("Clicked");
     getHeight()
   }
-
   for (var i = 0; i < item.length; i++) {
     item[i].addEventListener('click', clickHandler, false);
+  }
+
+  // Action to be taken when details link is clicked
+  var links = document.getElementsByClassName("api-links");
+  function linksHandler(){
+    expandEnpoint()
+    console.log("Clicked");
+  }
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', linksHandler, false);
   }
 
   window.addEventListener('popstate', function () {
     expandEnpoint()
   });
+
   window.addEventListener('load', function () {
     expandEnpoint()
   });
