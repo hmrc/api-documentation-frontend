@@ -78,6 +78,9 @@
                     </div>
                     @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
                   }
+                  <br />
+                  <a id="@{method.displayName}-back-btn" href="#@{method.displayName}" class="govuk-link govuk-link--no-visited-state float-right api-back-btn">Close Section</a>
+                  <br />
                 </div>
               </details>
             }

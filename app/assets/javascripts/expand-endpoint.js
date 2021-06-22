@@ -5,16 +5,10 @@
     var lastPart = url.split("#").pop();
     var endpoint = document.getElementById(lastPart + "-details");
     if (endpoint != null) {
-      if (endpoint.hasAttribute("open")){
-        // NEEDS WORK
-        var endpoint = document.getElementById(lastPart + "-details");
-        endpoint.removeAttribute("open");
-      } else {
-        var endpoint = document.getElementById(lastPart + "-details");
-        var att = document.createAttribute("open");
-        att.value = "";
-        endpoint.setAttributeNode(att);
-      }
+      var endpoint = document.getElementById(lastPart + "-details");
+      var att = document.createAttribute("open");
+      att.value = "";
+      endpoint.setAttributeNode(att);
     }
   }
 
@@ -38,17 +32,31 @@
 
   // Action to be taken when details link is clicked
   var links = document.getElementsByClassName("api-links");
-  function linksHandler(){
-    expandEnpoint()
-    console.log("Clicked");
-  }
   for (var i = 0; i < links.length; i++) {
-    links[i].addEventListener('click', linksHandler, false);
+    links[i].addEventListener("click", function (e) {
+      var clickedEndpoint = e.target.id
+      var parentEndpoint = document.getElementById(clickedEndpoint + "-details");
+      if (parentEndpoint.hasAttribute("open")) {
+        var parentEndpoint = document.getElementById(clickedEndpoint + "-details");
+        parentEndpoint.removeAttribute("open");
+      } else {
+        var parentEndpoint = document.getElementById(clickedEndpoint + "-details");
+        var att = document.createAttribute("open");
+        att.value = "";
+        parentEndpoint.setAttributeNode(att);
+      }
+    });
   }
 
-  window.addEventListener('popstate', function () {
-    expandEnpoint()
-  });
+    // Action to be taken when details link is clicked
+    var backBtns = document.getElementsByClassName("api-back-btn");
+    for (var i = 0; i < backBtns.length; i++) {
+      backBtns[i].addEventListener("click", function (e) {
+        var clickedBackBnt = e.target.id.split('-')[0]
+        var backBntParent = document.getElementById(clickedBackBnt + "-details");
+        backBntParent.removeAttribute("open");
+      });
+    }
 
   window.addEventListener('load', function () {
     expandEnpoint()
