@@ -48,15 +48,24 @@
     });
   }
 
-    // Action to be taken when details link is clicked
-    var backBtns = document.getElementsByClassName("api-back-btn");
-    for (var i = 0; i < backBtns.length; i++) {
-      backBtns[i].addEventListener("click", function (e) {
-        var clickedBackBnt = e.target.id.split('-')[0]
-        var backBntParent = document.getElementById(clickedBackBnt + "-details");
-        backBntParent.removeAttribute("open");
-      });
-    }
+  // Action to be taken when details link is clicked
+  var backBtns = document.getElementsByClassName("api-back-btn");
+  for (var i = 0; i < backBtns.length; i++) {
+    backBtns[i].addEventListener("click", function (e) {
+      var clickedBackBnt = e.target.id.split('-')[0]
+      var backBntParent = document.getElementById(clickedBackBnt + "-details");
+      backBntParent.removeAttribute("open");
+    });
+  }
+
+  // Action to be taken when details summary is clicked
+  var summaries = document.getElementsByClassName("detail-summary-box");
+  for (var i = 0; i < summaries.length; i++) {
+    summaries[i].addEventListener("click", function (e) {
+      var clickedSummary = e.target.id.split('-')[0]
+      location.href = "#" + clickedSummary;
+    });
+  }
 
   window.addEventListener('load', function () {
     expandEnpoint()
