@@ -20,9 +20,9 @@
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 @import uk.gov.hmrc.apidocumentation.config._
 
-@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
+@this(apiMain: apiMain)
 
-@(pageAttributes: PageAttributes, api: XmlApiDocumentation)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, api: XmlApiDocumentation)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
   <h1 class="govuk-heading-l">@api.name XML API</h1>

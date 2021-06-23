@@ -22,9 +22,9 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, ourMainView: apispecification.MainView, applicationConfig: ApplicationConfig)
+@this(apiMain: apiMain, ourMainView: apispecification.MainView)
 
-@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, viewModel: ViewModel, loggedIn: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, viewModel: ViewModel, loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @topContent = {
     <div class="form-group">

@@ -17,9 +17,9 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(main: main, applicationConfig: ApplicationConfig)
+@this(main: main)
 
-@()(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
+@()(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
 @main(title = Some("Privacy policy")) {
    <h1 class="govuk-heading-l">Privacy policy</h1>

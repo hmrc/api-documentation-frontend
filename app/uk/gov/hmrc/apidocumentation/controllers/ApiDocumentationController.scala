@@ -57,9 +57,8 @@ class ApiDocumentationController @Inject()(
                                             previewDocumentationView: PreviewDocumentationView2,
                                             serviceDocumentationView: ServiceDocumentationView2,
                                             xmlDocumentationView: XmlDocumentationView,
-                                            appConfig: ApplicationConfig
                                           )
-                                         (implicit val ec: ExecutionContext)
+                                         (implicit val ec: ExecutionContext, appConfig: ApplicationConfig)
   extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"

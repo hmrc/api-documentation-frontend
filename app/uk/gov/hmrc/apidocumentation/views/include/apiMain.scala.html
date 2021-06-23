@@ -20,9 +20,9 @@
 @import uk.gov.hmrc.apidocumentation.views.html.templates._
 @import play.twirl.api.HtmlFormat
 
-@this(govUkWrapper: GovUkWrapper, applicationConfig: ApplicationConfig)
+@this(govUkWrapper: GovUkWrapper)
 
-@(pageAttributes: PageAttributes, additionalTopContent: Html = HtmlFormat.empty)(mainContent: Html)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, additionalTopContent: Html = HtmlFormat.empty)(mainContent: Html)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @govUkWrapper(pageTitle = Some(pageAttributes.title),
     leftNav = Some(partials.sideNavigation(request, pageAttributes.sidebarLinks)),

@@ -18,9 +18,9 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(main: main, applicationConfig: ApplicationConfig)
+@this(main: main)
 
-@()(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
+@()(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
 @metaTitle = {
     <meta name="description" content="@Messages("help.cookies.metatitle")">

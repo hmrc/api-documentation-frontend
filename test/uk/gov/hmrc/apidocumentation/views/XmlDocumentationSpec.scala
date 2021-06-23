@@ -42,7 +42,7 @@ class XmlDocumentationSpec extends CommonViewSpec {
     val description = "An XML API for testing with embedded <b>HTML</b>"
     val name = "Test Online Service"
 
-    val appConfig = mock[ApplicationConfig]
+    implicit val appConfig = mock[ApplicationConfig]
     val messages: Messages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
 
     val pageAttributes: PageAttributes = mock[PageAttributes]
@@ -56,7 +56,7 @@ class XmlDocumentationSpec extends CommonViewSpec {
     val apiMain = app.injector.instanceOf[apiMain]
 
     val apiDefinition = XmlApiDocumentation(name, context, description)
-    val xmlDocView = new XmlDocumentationView(apiMain, appConfig)(pageAttributes, apiDefinition)
+    val xmlDocView = new XmlDocumentationView(apiMain)(pageAttributes, apiDefinition)
 
     val page = Page(xmlDocView)
   }

@@ -18,6 +18,7 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Breadcrumbs, Crumb}
 import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.views.html._
@@ -36,7 +37,7 @@ class AuthorisationController @Inject()(
                                         authorisationUserRestrictedEndpointsView: AuthorisationUserRestrictedEndpointsView,
                                         credentialsView: CredentialsView
                                         )
-                                       (implicit val ec: ExecutionContext)
+                                       (implicit ec: ExecutionContext, applicationConfig: ApplicationConfig)
   extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
 
   private lazy val authCrumb = Crumb("Authorisation", routes.AuthorisationController.authorisationPage().url)
