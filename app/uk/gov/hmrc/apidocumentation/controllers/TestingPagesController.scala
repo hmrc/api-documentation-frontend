@@ -18,6 +18,7 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.services.NavigationService
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -31,7 +32,7 @@ class TestingPagesController @Inject()(
                                         testingView: TestingView,
                                         testUsersDataStatefulBehaviourView: TestUsersDataStatefulBehaviourView
                                       )
-                                      (implicit ec: ExecutionContext) extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
+                                      (implicit ec: ExecutionContext, applicationConfig: ApplicationConfig) extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
   def testingPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       Future.successful(Ok(testingView(pageAttributes("Testing in the sandbox", routes.TestingPagesController.testingPage().url, navLinks))))

@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet
 @import uk.gov.hmrc.apidocumentation.views.html.include
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.views.html.partials
@@ -27,11 +28,11 @@
 
 @this(
       govukTemplate: GovukTemplate,
-      applicationConfig: ApplicationConfig,
       footerLinks: FooterLinks,
       siteFooter: SiteFooter,
       siteHeader: SiteHeader,
-      siteHelper: SiteHelper)
+      siteHelper: SiteHelper,
+      hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet)
 
 @(title: Option[String] = None,
     navTitle: Option[String] = None,
@@ -43,11 +44,12 @@
     breadcrumbs: Option[Breadcrumbs] = None,
     additionalTopContent: Option[Html] = None,
     fullWidthContent: Boolean = false,
-    bodyEndBlock: Option[Html] = None,
-  )(mainContent: Html = HtmlFormat.empty)(implicit messages: Messages, request: play.api.mvc.Request[Any])
+    bodyEndBlock: Option[Html] = None
+  )(mainContent: Html = HtmlFormat.empty)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any])
 
 @head = {
     <link href='@routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />
+    @hmrcTrackingConsentSnippet()
 }
 
 @scripts = {

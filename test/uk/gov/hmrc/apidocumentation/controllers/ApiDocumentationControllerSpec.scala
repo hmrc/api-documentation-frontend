@@ -67,8 +67,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       apisFilteredView,
       previewDocumentationView,
       serviceDocumentationView,
-      xmlDocumentationView,
-      appConfig
+      xmlDocumentationView
     )
   }
 

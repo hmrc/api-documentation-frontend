@@ -20,9 +20,9 @@
 @import uk.gov.hmrc.urls.Link
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, applicationConfig: ApplicationConfig)
+@this(apiMain: apiMain)
 
-@(pageAttributes: PageAttributes)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes){
 

@@ -21,9 +21,9 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, ourMainView: apispecification.MainView, applicationConfig: ApplicationConfig)
+@this(apiMain: apiMain, ourMainView: apispecification.MainView)
 
-@(pageAttributes: PageAttributes, url: Option[String], result: Try[Option[ViewModel]])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, url: Option[String], result: Try[Option[ViewModel]])(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
 

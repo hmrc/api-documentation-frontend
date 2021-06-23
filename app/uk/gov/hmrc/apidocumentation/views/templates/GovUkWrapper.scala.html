@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
@@ -29,7 +30,7 @@
     siteFooter: SiteFooter,
     siteHeader: SiteHeader,
     siteHelper: SiteHelper,
-    applicationConfig: ApplicationConfig
+    hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet
 )
 
 @(
@@ -41,9 +42,10 @@
     breadcrumbs: Option[Breadcrumbs] = None,
     navLinks: Seq[NavLink] = Seq.empty,
     leftNav: Option[Html] = None
-)(contentBlock: Html)(implicit messages: Messages, request: play.api.mvc.Request[Any])
+)(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any])
 
 @head = {
+    @hmrcTrackingConsentSnippet()
     <link href='@controllers.routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />
 }
 
