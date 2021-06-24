@@ -19,9 +19,9 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.html.templates.LayoutHomePage
 
-@this(layoutHomePage: LayoutHomePage, applicationConfig: ApplicationConfig)
+@this(layoutHomePage: LayoutHomePage)
 
-@(pageTitle: String, navLinks: Seq[NavLink])(implicit messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
+@(pageTitle: String, navLinks: Seq[NavLink])(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
 @layoutHomePage(
     headerNavLinks = Some(partials.headerNavLinks(navLinks)),
