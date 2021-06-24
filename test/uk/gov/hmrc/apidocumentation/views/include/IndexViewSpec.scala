@@ -32,14 +32,14 @@ class IndexViewSpec extends CommonViewSpec {
   val pageTitle = "pageTitle"
   val navLinks = Seq[NavLink]()
   val mockRequest = mock[Request[Any]]
-  val mockApplicationConfig = mock[ApplicationConfig]
   val mockMessages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
+  implicit val mockApplicationConfig = mock[ApplicationConfig]
 
   val main = app.injector.instanceOf[LayoutHomePage]
 
   "htmlView" must {
     "render with no indexing meta tags" in new TestCase {
-      val renderedHtml = new IndexView(main, mockApplicationConfig)(pageTitle, navLinks)
+      val renderedHtml = new IndexView(main)(pageTitle, navLinks)
       renderedHtml.body shouldNot include("<meta name=\"robots\" content=\"noindex\">")
       renderedHtml.body shouldNot include("<meta name=\"googlebot\" content=\"noindex\">")
     }
