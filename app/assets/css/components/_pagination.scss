@@ -2,7 +2,7 @@
   $gutter: 3rem;
   $gutter-half: $gutter / 2;
   $line-height: 1.25;
-  $link-colour: #005ea5;
+  $link-colour: #1d70b8;
   $canvas-colour: #f8f8f8;
 
   display: block;
@@ -11,6 +11,11 @@
   &--list {
     padding: 0;
     margin: 0;
+  }
+
+  &-container {
+    display: flex;
+    align-items: center;
   }
 
   &__item {
@@ -41,8 +46,9 @@
     &-text {
       font-family: "GDS Transport",Arial,sans-serif;
       font-weight: bold;
-      font-size: 2rem;
+      font-size: 24px;
       margin-left: $gutter / 3;
+      color: $link-colour;
     }
 
     &-icon {
@@ -58,7 +64,7 @@
       font-family: "GDS Transport",Arial,sans-serif;
       display: inline-block;
       margin-top: 0.1em;
-      margin-left: 2.3em;
+      margin-left: $gutter / 3;
     }
   }
 }
