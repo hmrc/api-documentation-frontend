@@ -158,19 +158,19 @@
                 <tbody class="govuk-table__body">
                 @for(errorScenario <- errorScenarios) {
                     <tr class="govuk-table__row">
-                        <td data-heading="Error Scenario" class="govuk-table__cell">
+                        <td data-heading="Error Scenario" class="govuk-table__cell govuk-!-font-size-16">
                             <div class="table__cell-contents--responsive">
-                                <p class="govuk-body">@errorScenario("scenario")</p>
+                                <p class="govuk-body-s">@errorScenario("scenario")</p>
                             </div>
                         </td>
-                        <td data-heading="HTTP Status" class="govuk-table__cell">
+                        <td data-heading="HTTP Status" class="govuk-table__cell govuk-!-font-size-16">
                             <div class="table__cell-contents--responsive">
-                                <p class="govuk-body">@HttpStatus(errorScenario("httpStatus"))</p>
+                                <p class="govuk-body-s">@HttpStatus(errorScenario("httpStatus"))</p>
                             </div>
                         </td>
-                        <td data-heading="Code" class="govuk-table__cell">
+                        <td data-heading="Code" class="govuk-table__cell govuk-!-font-size-16">
                             <div class="table__cell-contents--responsive">
-                                <p class="govuk-body">@errorScenario("code")</p>
+                                <p class="govuk-body-s">@errorScenario("code")</p>
                             </div>
                         </td>
                     </tr>
