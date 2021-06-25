@@ -49,6 +49,7 @@ lazy val microservice = (project in file("."))
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
   .settings(publishingSettings: _*)
+  .settings(ScoverageSettings(): _*)
   .settings(defaultSettings(): _*)
   .settings(
     targetJvm := "jvm-1.8",
@@ -100,26 +101,3 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
   publishAllArtefacts
 
 lazy val appName = "api-documentation-frontend"
-
-val ScoverageExclusionPatterns = List(
-  "<empty>",
-  "definition.*",
-  "sandbox.*",
-  "live.*",
-  "prod.*",
-  "testOnlyDoNotUseInAppConf.*",
-  "uk.gov.hmrc.config.*",
-  "app.Routes",
-  "app.RoutesPrefix",
-  "controllers.javascript",
-  "com.kenshoo.play.metrics.javascript",
-  "com.kenshoo.play.metrics",
-  ".*Reverse.*",
-  "uk.gov.hmrc.controllers.Reverse*",
-)
-
-// Coverage configuration
-// TODO ebridge - Fix and set back to 85
-coverageMinimum := 80
-coverageFailOnMinimum := true
-coverageExcludedPackages := ScoverageExclusionPatterns.mkString("",";","")
