@@ -12,14 +12,13 @@ object ScoverageSettings {
       "live.*",
       "prod.*",
       "testOnlyDoNotUseInAppConf.*",
-      "uk.gov.hmrc.config.*",
+      "uk\\.gov\\.hmrc\\.config.*",
       "app.Routes",
       "app.RoutesPrefix",
       "controllers.javascript",
-      "com.kenshoo.play.metrics.javascript",
-      "com.kenshoo.play.metrics",
+      "com\\.kenshoo\\.play\\.metrics.*",
       ".*Reverse.*",
-      "uk.gov.hmrc.controllers.Reverse*",
+      "uk\\.gov\\.hmrc\\.controllers\\.Reverse.*",
     ).mkString(";")
   )
 }
