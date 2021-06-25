@@ -16,35 +16,33 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.services
 
-import org.mockito.Matchers._
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.{failed, successful}
+import org.mockito.ArgumentMatchersSugar
+import org.mockito.MockitoSugar
 
-trait ApiDefinitionServiceMock extends MockitoSugar {
+trait ApiDefinitionServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   val apiDefinitionService = mock[ApiDefinitionService]
 
   def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(successful(Some(apiDefinition)))
+    when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(successful(Some(apiDefinition)))
   }
 
   def theDefinitionServiceWillReturnNoApiDefinition() = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(successful(None))
+    when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(successful(None))
   }
 
   def theDefinitionServiceWillFail(exception: Throwable) = {
-    when(apiDefinitionService.fetchExtendedDefinition(any(), any())(any[HeaderCarrier])).thenReturn(failed(exception))
+    when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(failed(exception))
 
-    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
+    when(apiDefinitionService.fetchAllDefinitions(*)(*))
       .thenReturn(failed(exception))
   }
 
   def theDefinitionServiceWillReturnApiDefinitions(apis: Seq[APIDefinition]) = {
-    when(apiDefinitionService.fetchAllDefinitions(any())(any[HeaderCarrier]))
+    when(apiDefinitionService.fetchAllDefinitions(*)(*))
       .thenReturn(successful(apis))
   }
 }

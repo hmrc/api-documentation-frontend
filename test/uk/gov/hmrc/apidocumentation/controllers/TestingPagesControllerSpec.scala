@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import play.api.test.Helpers._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
 import uk.gov.hmrc.apidocumentation.controllers.utils.PageRenderVerification
@@ -40,9 +41,9 @@ class TestingPagesControllerSpec extends CommonControllerBaseSpec with PageRende
     "redirect to the test users test data and stateful behaviour page" in new Setup {
       import play.api.http.Status.MOVED_PERMANENTLY
 
-      val result = await(testingPages.testingStatefulBehaviourPage()(request))
+      val result = testingPages.testingStatefulBehaviourPage()(request)
       status(result) shouldBe MOVED_PERMANENTLY
-      result.header.headers.get("Location") shouldBe Some("/api-documentation/docs/testing/test-users-test-data-stateful-behaviour")
+      headers(result).get("Location") shouldBe Some("/api-documentation/docs/testing/test-users-test-data-stateful-behaviour")
     }
 
     "display the test users stateful behaviour page" in new Setup {

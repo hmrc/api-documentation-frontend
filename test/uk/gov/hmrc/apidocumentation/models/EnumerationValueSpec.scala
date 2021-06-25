@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json._
+import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
 
-class EnumerationValueSpec extends WordSpec with Matchers {
+class EnumerationValueSpec extends HmrcSpec {
 
   trait Setup {
     def read(json: JsValue): JsResult[EnumerationValue] =

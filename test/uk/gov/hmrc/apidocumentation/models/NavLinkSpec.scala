@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
 
-class NavLinkSpec extends UnitSpec {
+class NavLinkSpec extends HmrcSpec {
 
   "NavigationHelper" should {
 

@@ -19,18 +19,14 @@ package uk.gov.hmrc.apidocumentation.connectors
 import java.util.UUID
 
 import akka.actor.ActorSystem
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.{ConfigLoader, Configuration, Mode}
 import play.api.libs.ws.{WSClient, WSRequest}
 import uk.gov.hmrc.http.logging.Authorization
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.config.RunMode
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
-class ProxiedHttpClientSpec extends UnitSpec with ScalaFutures with MockitoSugar {
+class ProxiedHttpClientSpec extends AsyncHmrcSpec {
 
   private val actorSystem = ActorSystem("test-actor-system")
 

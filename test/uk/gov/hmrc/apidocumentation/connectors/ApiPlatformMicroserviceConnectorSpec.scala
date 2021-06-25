@@ -18,7 +18,6 @@ package uk.gov.hmrc.apidocumentation.connectors
 
 import java.util.UUID
 
-import org.mockito.Mockito.when
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.utils.ApiPlatformMicroserviceHttpMockingHelper

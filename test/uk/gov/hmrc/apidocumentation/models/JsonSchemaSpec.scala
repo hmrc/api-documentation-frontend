@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json.Json
+import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
+
 
 import scala.collection.immutable.ListMap
 
-class JsonSchemaSpec extends WordSpec with Matchers {
+class JsonSchemaSpec extends HmrcSpec {
 
   def parseSchema(schema: String) = { Json.parse(schema).as[JsonSchema] }
 

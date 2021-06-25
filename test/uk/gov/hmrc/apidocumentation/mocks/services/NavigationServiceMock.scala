@@ -16,21 +16,19 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.services
 
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.successful
+import org.mockito.ArgumentMatchersSugar
+import org.mockito.MockitoSugar
 
-trait NavigationServiceMock extends MockitoSugar {
+trait NavigationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   import NavigationServiceMock._
   import uk.gov.hmrc.apidocumentation.services.NavigationService
   val navigationService = mock[NavigationService]
-  when(navigationService.headerNavigation()(any[HeaderCarrier])).thenReturn(successful(Seq(navLink)))
+  when(navigationService.headerNavigation()(*)).thenReturn(successful(Seq(navLink)))
   when(navigationService.sidebarNavigation()).thenReturn(Seq(sidebarLink))
-  when(navigationService.apiSidebarNavigation2(any(), any(), any())).thenReturn(Seq(sidebarLink))
+  when(navigationService.apiSidebarNavigation2(*, *, *)).thenReturn(Seq(sidebarLink))
 }
 
 object NavigationServiceMock {

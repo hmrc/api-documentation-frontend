@@ -16,10 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
+import play.api.test.Helpers._
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.http.Status._
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.Application
@@ -28,18 +26,11 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 import scala.concurrent.Future
 
-class CommonControllerBaseSpec
-  extends UnitSpec
-    with ScalaFutures
-    with MockitoSugar
-    with ApiDefinitionTestDataHelper
-    with GuiceOneAppPerSuite
-    {
-
+class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataHelper with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()
       .configure(("metrics.jvm", false))
@@ -125,21 +116,19 @@ class CommonControllerBaseSpec
 
   def aServiceGuide(name: String) = ServiceGuide(name, "context")
 
-  def verifyRedirectToLoginPage(actualPageFuture: Future[Result], service: String, version: String) {
-    val actualPage = await(actualPageFuture)
+  def verifyRedirectToLoginPage(actualPage: Future[Result], service: String, version: String) {
     status(actualPage) shouldBe 303
 
-    actualPage.header.headers.get("Location") shouldBe Some("/developer/login")
-    actualPage.session.get("access_uri") shouldBe Some(s"/api-documentation/docs/api/service/$service/$version")
+    headers(actualPage).get("Location") shouldBe Some("/developer/login")
+    session(actualPage).get("access_uri") shouldBe Some(s"/api-documentation/docs/api/service/$service/$version")
   }
 
   def pageTitle(pagePurpose: String) = s"$pagePurpose - HMRC Developer Hub - GOV.UK"
 
-  def isPresentAndCorrect(includesText: String, title: String)(fResult: Future[Result]): Unit = {
-    val result = await(fResult)
+  def isPresentAndCorrect(includesText: String, title: String)(result: Future[Result]): Unit = {
     status(result) shouldBe OK
-    bodyOf(result) should include(includesText)
-    bodyOf(result) should include(pageTitle(title))
+    contentAsString(result) should include(includesText)
+    contentAsString(result) should include(pageTitle(title))
   }
 }
 

@@ -16,14 +16,12 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
-trait ConnectorSpec extends UnitSpec with ScalaFutures with MockitoSugar {
+trait ConnectorSpec extends AsyncHmrcSpec {
 
   def extendedApiDefinition(name: String) = {
     Json.parse(s"""{

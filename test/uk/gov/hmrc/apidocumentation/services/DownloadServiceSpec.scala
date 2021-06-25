@@ -16,17 +16,14 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Results
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 import scala.concurrent.Future
 
-class DownloadServiceSpec extends UnitSpec with MockitoSugar with ScalaFutures {
+class DownloadServiceSpec extends AsyncHmrcSpec {
 
   val serviceName = "calendar"
   val resource = "some/resource"

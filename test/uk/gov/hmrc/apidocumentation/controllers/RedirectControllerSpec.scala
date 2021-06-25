@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import play.api.mvc._
-
+import play.api.test.Helpers._
 import scala.concurrent.Future
 
 class RedirectControllerSpec extends CommonControllerBaseSpec {
@@ -26,11 +26,10 @@ class RedirectControllerSpec extends CommonControllerBaseSpec {
 
     val underTest = new RedirectController(mcc)
 
-    def verifyPageRedirected(actualPageFuture: Future[Result],
+    def verifyPageRedirected(actualPage: Future[Result],
                              expectedUrl: String) {
-      val actualPage = await(actualPageFuture)
       status(actualPage) shouldBe 301
-      actualPage.header.headers.get("Location") shouldBe Some(expectedUrl)
+      headers(actualPage).get("Location") shouldBe Some(expectedUrl)
     }
   }
 

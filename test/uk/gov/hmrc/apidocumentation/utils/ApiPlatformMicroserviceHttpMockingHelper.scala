@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.apidocumentation.utils
 
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito.when
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{Params, definitionUrl, definitionsUrl, noParams, queryParams}
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.Future
 import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
+import org.mockito.MockitoSugar
+import org.mockito.ArgumentMatchersSugar
 
-trait ApiPlatformMicroserviceHttpMockingHelper {
+trait ApiPlatformMicroserviceHttpMockingHelper extends MockitoSugar with ArgumentMatchersSugar {
   val mockHttpClient: HttpClient
   val apiPlatformMicroserviceBaseUrl: String
 
@@ -37,7 +37,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
         eqTo(url),
         eqTo(userId.map(e => queryParams(Some(e))).getOrElse(noParams))
       )
-        (any(), any(), any())
+        (*, *, *)
     )
       .thenReturn(Future.successful(definitions.toSeq))
   }
@@ -49,7 +49,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
         eqTo(url),
         any[Params]
       )
-        (any(), any(), any())
+        (*, *, *)
     )
       .thenReturn(Future.failed(exception))
   }
@@ -61,7 +61,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
         eqTo(url),
         eqTo(queryParams(Some(userId)))
       )
-        (any(), any(), any())
+        (*, *, *)
     )
       .thenReturn(Future.successful(Some(definition)))
   }
@@ -73,7 +73,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
         eqTo(url),
         eqTo(noParams)
       )
-        (any(), any(), any())
+        (*, *, *)
     )
       .thenReturn(Future.successful(Some(definition)))
   }
@@ -85,7 +85,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
         eqTo(url),
         eqTo(noParams)
       )
-        (any(), any(), any())
+        (*, *, *)
     )
       .thenReturn(Future.successful(None))
   }
@@ -97,7 +97,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper {
         eqTo(url),
         eqTo(noParams)
       )
-        (any(), any(), any())
+        (*, *, *)
     )
       .thenReturn(Future.failed(exception))
   }

@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import org.mockito.Matchers.{any, eq => meq}
-import org.mockito.Mockito.when
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, SessionInvalid}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -51,7 +49,7 @@ class UserSessionConnectorSpec extends ConnectorSpec {
     "return the session when found" in new Setup {
       val session = Session(sessionId, LoggedInState.LOGGED_IN, Developer("developer@example.com", "Firstname", "Lastname", UserId.random))
 
-      when(mockHttpClient.GET[Option[Session]](meq(s"$thirdPartyDeveloperUrl/session/$sessionId"))(any(), any(), any()))
+      when(mockHttpClient.GET[Option[Session]](eqTo(s"$thirdPartyDeveloperUrl/session/$sessionId"))(*, *, *))
         .thenReturn(Future.successful(Some(session)))
 
       val result = await(connector.fetchSession(sessionId))
@@ -60,7 +58,7 @@ class UserSessionConnectorSpec extends ConnectorSpec {
     }
 
     "throw SessionInvalid when not found" in new Setup {
-      when(mockHttpClient.GET[Option[Session]](meq(s"$thirdPartyDeveloperUrl/session/$sessionId"))(any(), any(), any()))
+      when(mockHttpClient.GET[Option[Session]](eqTo(s"$thirdPartyDeveloperUrl/session/$sessionId"))(*, *, *))
         .thenReturn(Future.successful(None))
 
       intercept[SessionInvalid] {

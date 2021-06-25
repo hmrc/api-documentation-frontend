@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import org.mockito.Mockito.when
 import play.api.http.Status._
-import play.api.mvc.Results
+import play.api.mvc.Results._
 import play.api.routing.sird._
 import play.api.test.WsTestClient
 import play.core.server.Server
@@ -42,7 +41,6 @@ class DownloadConnectorSpec extends ConnectorSpec {
   "downloadResource" should {
     "return resource when found" in new Setup {
       Server.withRouterFromComponents() { components =>
-        import Results._
         import components.{defaultActionBuilder => Action}
         {
           case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resource") => Action {
@@ -60,7 +58,6 @@ class DownloadConnectorSpec extends ConnectorSpec {
 
     "throw NotFoundException when not found" in new Setup {
       Server.withRouterFromComponents() { components =>
-        import Results._
         import components.{defaultActionBuilder => Action}
         {
           case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resourceNotThere") => Action {
@@ -80,7 +77,6 @@ class DownloadConnectorSpec extends ConnectorSpec {
 
     "throw InternalServerException for any other response" in new Setup {
       Server.withRouterFromComponents() { components =>
-        import Results._
         import components.{defaultActionBuilder => Action}
         {
           case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resourceInvalid") => Action {
