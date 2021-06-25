@@ -16,26 +16,28 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
+import com.github.tomakehurst.wiremock.client.WireMock._
 import play.twirl.api.Html
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.http.metrics.{API, NoopApiMetrics}
 import uk.gov.hmrc.play.partials.HtmlPartial
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import play.api.test.Helpers._
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import play.api.Configuration
+import uk.gov.hmrc.play.http.metrics.API
 
 class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   val developerFrontendUrl = "http://developer-frontend.example.com"
 
-  trait Setup {
-    val mockHttpClient = mock[HttpClient]
-    val mockAppConfig = mock[ApplicationConfig]
-    val connector = new DeveloperFrontendConnector(mockHttpClient, mockAppConfig, new NoopApiMetrics)
+  val stubConfig = Configuration(
+    "Test.microservice.services.developer-frontend.host" -> stubHost,
+    "Test.microservice.services.developer-frontend.port" -> stubPort
+  )
 
-    when(mockAppConfig.developerFrontendBaseUrl).thenReturn(developerFrontendUrl)
+  trait Setup {
+    val config = app.injector.instanceOf[ApplicationConfig]
+    val connector = app.injector.instanceOf[DeveloperFrontendConnector]
   }
 
   "api" should {
@@ -49,8 +51,16 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
     "return fetched nav links and pass headers by" in new Setup {
       implicit val hc = HeaderCarrier(extraHeaders = Seq("possibleAuthHeader" -> "possibleAuthHeaderVal"))
 
-      when(mockHttpClient.GET[Seq[NavLink]](eqTo(s"$developerFrontendUrl/developer/user-navlinks"))(*, *, *))
-        .thenReturn(Future.successful(Seq(NavLink("Some random link", "/developer/345435345342523534253245"))))
+      stubFor(
+        get(
+          urlPathEqualTo("/developer/user-navlinks")
+        )
+        .willReturn(
+          aResponse()
+          .withStatus(OK)
+          .withJsonBody(Seq(NavLink("Some random link", "/developer/345435345342523534253245")))
+        )
+      )
 
       val result = await(connector.fetchNavLinks())
       result shouldBe List(NavLink("Some random link", "/developer/345435345342523534253245", false))
@@ -62,8 +72,16 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
       implicit val hc = HeaderCarrier()
       val response = HtmlPartial.Success(None, Html("<p>some terms of use</p>"))
 
-      when(mockHttpClient.GET[HtmlPartial](eqTo(s"$developerFrontendUrl/developer/partials/terms-of-use"))(*, *, *))
-        .thenReturn(Future.successful(response))
+      stubFor(
+        get(
+          urlPathEqualTo("/developer/partials/terms-of-use")
+        )
+        .willReturn(
+          aResponse()
+          .withStatus(OK)
+          .withBody(response.content.toString)
+        )
+      )
 
       val result = await(connector.fetchTermsOfUsePartial())
       result shouldBe response

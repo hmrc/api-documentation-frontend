@@ -16,27 +16,28 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, SessionInvalid}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.http.metrics.{API, NoopApiMetrics}
+import uk.gov.hmrc.play.http.metrics.API
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import uk.gov.hmrc.apidocumentation.models.UserId
+import play.api.Configuration
+import com.github.tomakehurst.wiremock.client.WireMock._
+import play.api.test.Helpers._
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 
 class UserSessionConnectorSpec extends ConnectorSpec {
   val thirdPartyDeveloperUrl = "https://third-party-developer.example.com"
   val sessionId = "A_SESSION_ID"
 
+  val stubConfig = Configuration(
+    "Test.metrics.jvm" -> false,
+    "Test.microservice.services.third-party-developer.host" -> stubHost,
+    "Test.microservice.services.third-party-developer.port" -> stubPort
+  )
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val mockHttpClient = mock[HttpClient]
-    val mockAppConfig = mock[ApplicationConfig]
-    val connector = new UserSessionConnector(mockHttpClient, mockAppConfig, new NoopApiMetrics)
-
-    when(mockAppConfig.thirdPartyDeveloperUrl).thenReturn(thirdPartyDeveloperUrl)
+    val connector = app.injector.instanceOf[UserSessionConnector]
   }
 
   "api" should {
@@ -49,8 +50,16 @@ class UserSessionConnectorSpec extends ConnectorSpec {
     "return the session when found" in new Setup {
       val session = Session(sessionId, LoggedInState.LOGGED_IN, Developer("developer@example.com", "Firstname", "Lastname", UserId.random))
 
-      when(mockHttpClient.GET[Option[Session]](eqTo(s"$thirdPartyDeveloperUrl/session/$sessionId"))(*, *, *))
-        .thenReturn(Future.successful(Some(session)))
+      stubFor(
+        get(
+          urlPathEqualTo(s"/session/$sessionId")
+        )
+        .willReturn(
+          aResponse()
+          .withStatus(OK)
+          .withJsonBody(session)
+        )
+      )
 
       val result = await(connector.fetchSession(sessionId))
 
@@ -58,9 +67,15 @@ class UserSessionConnectorSpec extends ConnectorSpec {
     }
 
     "throw SessionInvalid when not found" in new Setup {
-      when(mockHttpClient.GET[Option[Session]](eqTo(s"$thirdPartyDeveloperUrl/session/$sessionId"))(*, *, *))
-        .thenReturn(Future.successful(None))
-
+      stubFor(
+        get(
+          urlPathEqualTo(s"/session/$sessionId")
+        )
+        .willReturn(
+          aResponse()
+          .withStatus(NOT_FOUND)
+        )
+      )
       intercept[SessionInvalid] {
         await(connector.fetchSession(sessionId))
       }

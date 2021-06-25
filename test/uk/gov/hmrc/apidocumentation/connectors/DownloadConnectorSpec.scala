@@ -25,14 +25,19 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException, NotFoundException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.Configuration
 
 class DownloadConnectorSpec extends ConnectorSpec {
   val apiDocumentationUrl = "https://api-documentation.example.com"
 
   val serviceName = "hello-world"
   val version = "1.0"
+  val stubConfig = Configuration(
+    "Test.metrics.jvm" -> false
+  )
 
   trait Setup {
+
     implicit val hc = HeaderCarrier()
     val mockAppConfig = mock[ApplicationConfig]
     when(mockAppConfig.apiPlatformMicroserviceBaseUrl).thenReturn("")

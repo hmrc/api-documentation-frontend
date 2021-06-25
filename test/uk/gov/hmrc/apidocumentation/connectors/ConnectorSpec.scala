@@ -16,12 +16,22 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
+import play.api.{Application, Configuration}
 import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
+import uk.gov.hmrc.apidocumentation.common.utils._
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.inject.guice.GuiceApplicationBuilder
 
-trait ConnectorSpec extends AsyncHmrcSpec {
+trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarExtensions with GuiceOneAppPerSuite {
+
+  def stubConfig: Configuration
+
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(stubConfig)
+      .build()
 
   def extendedApiDefinition(name: String) = {
     Json.parse(s"""{

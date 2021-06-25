@@ -18,13 +18,12 @@ package uk.gov.hmrc.apidocumentation.connectors
 
 import java.util.UUID
 
-import play.api.http.Status.INTERNAL_SERVER_ERROR
+import play.api.Configuration
+import play.api.http.Status.{INTERNAL_SERVER_ERROR}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.utils.ApiPlatformMicroserviceHttpMockingHelper
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
 import uk.gov.hmrc.apidocumentation.models.UserId
@@ -37,26 +36,28 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
   val bearer = "TestBearerToken"
   val apiKeyTest = UUID.randomUUID().toString
 
+  val serviceName = "someService"
+  val userId = UuidIdentifier(UserId.random)
+
+  val apiName1 = "Calendar"
+  val apiName2 = "HelloWorld"
+
+  val stubConfig = Configuration(
+    "Test.metrics.jvm" -> false,
+    "Test.microservice.services.api-platform-microservice.host" -> stubHost,
+    "Test.microservice.services.api-platform-microservice.port" -> stubPort
+  )
+
   trait LocalSetup extends ApiPlatformMicroserviceHttpMockingHelper {
-    val mockConfig = mock[ApplicationConfig]
-    override val mockHttpClient: HttpClient = mock[HttpClient]
+    val config = app.injector.instanceOf[ApplicationConfig]
+    val apiPlatformMicroserviceBaseUrl = config.apiPlatformMicroserviceBaseUrl
 
-    override val apiPlatformMicroserviceBaseUrl = "/mockUrl"
-    when(mockConfig.apiPlatformMicroserviceBaseUrl).thenReturn(apiPlatformMicroserviceBaseUrl)
-
-    val serviceName = "someService"
-    val userId = UuidIdentifier(UserId.random)
-
-    val apiName1 = "Calendar"
-    val apiName2 = "HelloWorld"
-
-    val underTest = new ApiPlatformMicroserviceConnector(mockHttpClient, mockConfig)
-
+    val underTest = app.injector.instanceOf[ApiPlatformMicroserviceConnector]
   }
 
   "fetchApiDefinitionsByCollaborator" should {
     "call the underlying http client with the user id argument" in new LocalSetup {
-      whenGetAllDefinitionsByUserId(Some(userId))(apiDefinition(apiName1), apiDefinition(apiName2))
+      whenGetAllDefinitionsByUserId(userId)(apiDefinition(apiName1), apiDefinition(apiName2))
 
       val result = await(underTest.fetchApiDefinitionsByCollaborator(Some(userId)))
 
@@ -65,7 +66,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
     }
 
     "call the underlying http client without a user id argument" in new LocalSetup {
-      whenGetAllDefinitionsByUserId(None)(apiDefinition(apiName1), apiDefinition(apiName2))
+      whenGetAllDefinitionsByUserId(apiDefinition(apiName1), apiDefinition(apiName2))
 
       val result = await(underTest.fetchApiDefinitionsByCollaborator(None))
 
@@ -74,7 +75,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
     }
     
     "throw an exception correctly" in new LocalSetup {
-      whenGetAllDefinitionsFails(UpstreamException)
+      whenGetAllDefinitionsFails(400)
 
       intercept[UpstreamException.type] {
         await(underTest.fetchApiDefinitionsByCollaborator(None))
@@ -103,7 +104,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
     }
 
     "throw an exception correctly" in new LocalSetup {
-      whenGetDefinitionFails(serviceName)(UpstreamException)
+      whenGetDefinitionFails(serviceName)(400)
 
       intercept[UpstreamException.type] {
         await(underTest.fetchApiDefinition(serviceName, None))

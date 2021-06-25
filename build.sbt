@@ -63,6 +63,7 @@ lazy val microservice = (project in file("."))
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
 
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
+  .settings(inConfig(TemplateTest)(BloopDefaults.configSettings))
   .settings(
     Test / testOptions := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     Test / unmanagedSourceDirectories += baseDirectory.value / "test",
