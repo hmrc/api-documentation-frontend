@@ -27,11 +27,10 @@ object AppDependencies {
   lazy val test = Seq(
     "io.cucumber"                           %% "cucumber-scala"           % "5.7.0",
     "io.cucumber"                           %  "cucumber-junit"           % "5.7.0",
-    // "uk.gov.hmrc"                           %% "hmrctest"                 % "3.10.0-play-26",
     "org.pegdown"                           %  "pegdown"                  % "1.6.0",
     "com.typesafe.play"                     %% "play-test"                % PlayVersion.current,
     "org.scalatestplus.play"                %% "scalatestplus-play"       % "3.1.3",
-    "org.mockito"                           %% "mockito-scala-scalatest"  % "1.14.8",
+    "org.mockito"                           %% "mockito-scala-scalatest"  % "1.7.1",
     "org.seleniumhq.selenium"               %  "selenium-java"            % "3.141.59",
     "org.seleniumhq.selenium"               %  "selenium-firefox-driver"  % "3.141.59",
     "org.seleniumhq.selenium"               %  "selenium-chrome-driver"   % "3.141.59",
