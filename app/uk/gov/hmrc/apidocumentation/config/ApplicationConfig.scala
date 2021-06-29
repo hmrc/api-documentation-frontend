@@ -38,18 +38,15 @@ trait ApplicationConfig {
   def apiPlatformMicroserviceBaseUrl: String
   def ramlPreviewMicroserviceBaseUrl: String
 
-  // def securedCookie: Boolean
+  def securedCookie: Boolean
   def ramlPreviewEnabled: Boolean
 
   def showProductionAvailability: Boolean
   def showSandboxAvailability: Boolean
 
-  // def productionApiHost: String
   def productionWwwHost: String
   def productionApiBaseUrl: String
 
-  // def sandboxApiHost: String
-  // def sandboxWwwHost: String
   def sandboxApiBaseUrl: String
   def sandboxWwwBaseUrl: String
 
@@ -61,18 +58,13 @@ trait ApplicationConfig {
   def subordinateBaseUrl: String
 
   def title: String
-  // def isStubMode: Boolean
   def xmlApiBaseUrl: String
-
-  // def apidocumentationBaseUrl: String
 }
 
 @Singleton
 class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
     extends ServicesConfig(config, runMode)
     with ApplicationConfig {
-
-  // val env = runMode.env
 
   def getConfigDefaulted[A](key: String, default: A)(implicit loader: ConfigLoader[A]) = config.getOptional[A](key)(loader).getOrElse(default)
 
@@ -100,32 +92,26 @@ class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
   lazy val apiPlatformMicroserviceBaseUrl = baseUrl("api-platform-microservice")
   lazy val ramlPreviewMicroserviceBaseUrl = baseUrl("raml-preview-microservice")
   
-  // val securedCookie = getConfigDefaulted(s"$env.cookie.secure", true)
-  val ramlPreviewEnabled = getConfigDefaulted("features.ramlPreview", false)
+  val securedCookie = getBoolean("cookie.secure")
+  val ramlPreviewEnabled = getBoolean("features.ramlPreview")
 
-  val showProductionAvailability = getConfigDefaulted("features.showProductionAvailability", false)
-  val showSandboxAvailability = getConfigDefaulted("features.showSandboxAvailability", false)
-  // val productionApiHost = getString("platform.production.api.host")
+  val showProductionAvailability = getBoolean("features.showProductionAvailability")
+  val showSandboxAvailability = getBoolean("features.showSandboxAvailability")
   val productionWwwHost = getString("platform.production.www.host")
   val productionApiBaseUrl = platformBaseUrl("platform.production.api")
 
-  // val sandboxApiHost = getString("platform.sandbox.api.host")
-  // val sandboxWwwHost = getString("platform.sandbox.www.host")
   val sandboxApiBaseUrl = platformBaseUrl("platform.sandbox.api")
   val sandboxWwwBaseUrl = platformBaseUrl("platform.sandbox.www")
 
-  val documentationRenderVersion = getConfigDefaulted("features.documentationRenderVersion", "raml")
+  val documentationRenderVersion = getString("features.documentationRenderVersion")
 
-  val nameOfPrincipalEnvironment = getConfigDefaulted("features.nameOfPrincipalEnvironment", "Production")
-  val nameOfSubordinateEnvironment = getConfigDefaulted("features.nameOfSubordinateEnvironment", "Sandbox")
-  val principalBaseUrl = getConfigDefaulted("features.principalBaseUrl", "https://api.service.hmrc.gov.uk")
-  val subordinateBaseUrl = getConfigDefaulted("features.subordinateBaseUrl", "https://test-api.service.hmrc.gov.uk")
-
-  // val apidocumentationBaseUrl = getString("apidocumentation.base.url")
+  val nameOfPrincipalEnvironment = getString("features.nameOfPrincipalEnvironment")
+  val nameOfSubordinateEnvironment = getString("features.nameOfSubordinateEnvironment")
+  val principalBaseUrl = getString("features.principalBaseUrl")
+  val subordinateBaseUrl = getString("features.subordinateBaseUrl")
 
   val title = "HMRC Developer Hub"
-  // val isStubMode = env == "Stub"
-  val xmlApiBaseUrl = getConfigDefaulted("xml-api.base-url", "https://www.gov.uk")
+  val xmlApiBaseUrl = getString("xml-api.base-url")
 
   private def platformBaseUrl(key: String) = {
     (getConfigDefaulted(s"$key.protocol", ""), getConfigDefaulted(s"$key.host", "")) match {
