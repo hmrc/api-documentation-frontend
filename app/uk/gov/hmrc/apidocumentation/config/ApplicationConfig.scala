@@ -22,9 +22,6 @@ import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 @ImplementedBy(classOf[ApplicationConfigImpl])
 trait ApplicationConfig {
-  // def analyticsToken: Option[String]
-  // def analyticsHost: String
-
   def developerFrontendUrl: String
 
   def developerFrontendBaseUrl: String
@@ -61,9 +58,6 @@ class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
     with ApplicationConfig {
 
   def getConfigDefaulted[A](key: String, default: A)(implicit loader: ConfigLoader[A]) = config.getOptional[A](key)(loader).getOrElse(default)
-
-  // val analyticsToken = config.getOptional[String](s"$env.google-analytics.token").filterNot(_ == "")
-  // val analyticsHost = getConfigDefaulted(s"$env.google-analytics.host", "auto")
 
   val developerFrontendUrl = getString("developer-frontend-url")
 
