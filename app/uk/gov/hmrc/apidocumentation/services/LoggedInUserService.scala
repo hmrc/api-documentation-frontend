@@ -24,7 +24,7 @@ import play.api.mvc.{ControllerComponents, Request, RequestHeader}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -91,5 +91,5 @@ trait CookieEncoding {
 trait HeaderCarrierConversion extends uk.gov.hmrc.play.bootstrap.controller.BackendBaseController {
 
   override implicit def hc(implicit rh: RequestHeader): HeaderCarrier =
-    HeaderCarrierConverter.fromHeadersAndSessionAndRequest(rh.headers, Some(rh.session), Some(rh))
+    HeaderCarrierConverter.fromRequestAndSession(rh, rh.session)
 }
