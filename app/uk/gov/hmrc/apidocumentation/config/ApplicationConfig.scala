@@ -22,16 +22,10 @@ import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 @ImplementedBy(classOf[ApplicationConfigImpl])
 trait ApplicationConfig {
-  // def contactFormServiceIdentifier: String
-  // def contactPath: String
-
   // def analyticsToken: Option[String]
   // def analyticsHost: String
 
   def developerFrontendUrl: String
-
-  // def reportAProblemPartialUrl: String
-  // def reportAProblemNonJSUrl: String
 
   def developerFrontendBaseUrl: String
   def thirdPartyDeveloperUrl: String
@@ -68,16 +62,10 @@ class ApplicationConfigImpl @Inject()(config: Configuration, runMode: RunMode)
 
   def getConfigDefaulted[A](key: String, default: A)(implicit loader: ConfigLoader[A]) = config.getOptional[A](key)(loader).getOrElse(default)
 
-  // val contactFormServiceIdentifier = "API"
-  // val contactPath = getConfigDefaulted(s"$env.contactPath", "")
-
   // val analyticsToken = config.getOptional[String](s"$env.google-analytics.token").filterNot(_ == "")
   // val analyticsHost = getConfigDefaulted(s"$env.google-analytics.host", "auto")
 
   val developerFrontendUrl = getString("developer-frontend-url")
-
-  // val reportAProblemPartialUrl = s"$contactPath/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  // val reportAProblemNonJSUrl = s"$contactPath/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   val developerFrontendBaseUrl = baseUrl("developer-frontend")
   val thirdPartyDeveloperUrl = baseUrl("third-party-developer")
