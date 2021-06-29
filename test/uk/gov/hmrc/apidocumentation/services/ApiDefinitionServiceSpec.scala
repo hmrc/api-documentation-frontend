@@ -16,22 +16,20 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.apidocumentation.mocks.connectors.ApiPlatformMicroserviceConnectorMockingHelper
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.NoopApiMetrics
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.apidocumentation.models.UserId
 import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
 
-class ApiDefinitionServiceSpec extends UnitSpec
-  with MockitoSugar
-  with ScalaFutures
+class ApiDefinitionServiceSpec extends AsyncHmrcSpec
+ 
+ 
   with ApiDefinitionTestDataHelper {
 
   trait LocalSetup extends ApiPlatformMicroserviceConnectorMockingHelper{

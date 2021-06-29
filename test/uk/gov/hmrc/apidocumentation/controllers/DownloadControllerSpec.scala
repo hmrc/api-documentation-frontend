@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import org.mockito.Matchers.any
-import org.mockito.Mockito._
 import play.api.http.Status._
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler

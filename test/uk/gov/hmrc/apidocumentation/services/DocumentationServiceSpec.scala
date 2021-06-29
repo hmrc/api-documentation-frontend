@@ -16,10 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import org.mockito.Matchers.any
-import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.Application
@@ -28,9 +24,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.TestEndpoint
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
-
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future.successful
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import akka.http.scaladsl.model.headers.LinkParams.title
@@ -39,11 +33,11 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
 import uk.gov.hmrc.apidocumentation.models.apispecification.Method
 import uk.gov.hmrc.apidocumentation.models.APIDefinition
 
-class DocumentationServiceSpec extends UnitSpec
-  with GuiceOneAppPerTest
-  with MockitoSugar
-  with ScalaFutures
-  with ApiDefinitionTestDataHelper {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
+
+class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest with ApiDefinitionTestDataHelper {
 
   val contentType = "application/xml"
   val rawXml = "<date>2001-01-01</date>"
@@ -107,7 +101,7 @@ class DocumentationServiceSpec extends UnitSpec
 
     "create a simple testers URL output file with just endpoint information" in new Setup {
       val specification = defaultApiSpecification
-      when(apm.fetchApiSpecification(any(),any())(any())).thenReturn(specification)
+      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(specification))
       await(underTest.buildTestEndpoints("minimal", "1.0")) shouldBe Seq.empty
     }
 
@@ -128,7 +122,7 @@ class DocumentationServiceSpec extends UnitSpec
           )
         )
       )
-      when(apm.fetchApiSpecification(any(),any())(any())).thenReturn(specification)
+      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(specification))
 
       val expected = Seq(TestEndpoint("{service-url}/hello/world", "GET"))
       await(underTest.buildTestEndpoints("single-endpoint", "1.0")) shouldBe expected
@@ -159,7 +153,7 @@ class DocumentationServiceSpec extends UnitSpec
           )
         )
       )
-      when(apm.fetchApiSpecification(any(),any())(any())).thenReturn(specification)
+      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(specification))
 
       val expected = Seq(
         TestEndpoint("{service-url}/hello/there", "GET", "OPTIONS", "PUT"),

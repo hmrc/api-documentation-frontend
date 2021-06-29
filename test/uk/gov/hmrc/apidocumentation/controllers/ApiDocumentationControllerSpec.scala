@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import play.api.test.Helpers._
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SEE_OTHER}
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.apidocumentation.models._
@@ -25,9 +24,9 @@ import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.controllers.utils._
-import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.apidocumentation.mocks.config._
+import scala.concurrent.Future.successful
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
@@ -35,7 +34,7 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, D
 import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
 import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
 
-class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification with ApiDefinitionTestDataHelper {
+class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
   trait Setup
       extends ApiDocumentationServiceMock
       with AppConfigMock
@@ -120,9 +119,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "redirect to the documentation page for the specified version" in new Setup {
           theUserIsLoggedIn()
           theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
-          val result = await(underTest.redirectToApiDocumentation(serviceName, Some(version), Option(true))(request))
+          val result = underTest.redirectToApiDocumentation(serviceName, Some(version), Option(true))(request)
           status(result) shouldBe SEE_OTHER
-          result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}?cacheBuster=true")
+          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}?cacheBuster=true")
         }
       }
 
@@ -132,9 +131,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "redirect to the documentation page" in new Setup {
           theUserIsLoggedIn()
           theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
-          val result = await(underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request))
+          val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
           status(result) shouldBe SEE_OTHER
-          result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
         }
 
         "redirect to the documentation page for api in private trial for user without authorisation" in new Setup {
@@ -143,9 +142,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
           theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
 
-          val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
+          val result = underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request)
           status(result) shouldBe SEE_OTHER
-          result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
         }
 
         "redirect to the documentation page for api in private trial for user with authorisation" in new Setup {
@@ -154,9 +153,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
           theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
 
-          val result = await(underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request))
+          val result = underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request)
           status(result) shouldBe SEE_OTHER
-          result.header.headers.get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
         }
 
         "redirect to the documentation page for the latest accessible version" in new Setup {
@@ -185,9 +184,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
             )
 
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
-          val result = await(underTest.redirectToApiDocumentation("hello-world", version, Option(true))(request))
+          val result = underTest.redirectToApiDocumentation("hello-world", version, Option(true))(request)
           status(result) shouldBe SEE_OTHER
-          result.header.headers.get("location") shouldBe Some("/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+          headers(result).get("location") shouldBe Some("/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
         }
 
         "display the not found page when invalid service specified" in new Setup {
@@ -461,7 +460,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
       "render 500 page when service throws exception" in new Setup with RamlPreviewEnabled {
         val url = "http://host:port/some.path.to.a.raml.document"
-        when(ramlPreviewConnector.fetchPreviewApiSpecification(any())(any())).thenReturn(failed(RamlParseException("Expected unit test failure")))
+        when(ramlPreviewConnector.fetchPreviewApiSpecification(*)(*)).thenReturn(failed(RamlParseException("Expected unit test failure")))
         val result = underTest.previewApiDocumentation(Some(url))(request)
         verifyErrorPageRendered(expectedStatus = INTERNAL_SERVER_ERROR, expectedError = "Expected unit test failure")(result)
       }
@@ -469,16 +468,10 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
   }
 
   "bustCache" should {
-    "override value of the query parameter if in stub mode" in new Setup {
-      underTest.bustCache(stubMode = false, Some(true)) shouldBe true
-      underTest.bustCache(stubMode = false, Some(false)) shouldBe false
-      underTest.bustCache(stubMode = true, Some(true)) shouldBe true
-      underTest.bustCache(stubMode = true, Some(false)) shouldBe true
-    }
-
-    "return true if no query parameter was provided and the app is running in Stub mode" in new Setup {
-      underTest.bustCache(stubMode = false, None) shouldBe false
-      underTest.bustCache(stubMode = true, None) shouldBe true
+    "honour the passed in parameter" in new Setup {
+      underTest.bustCache(Some(true)) shouldBe true
+      underTest.bustCache(Some(false)) shouldBe false
+      underTest.bustCache(None) shouldBe false
     }
   }
 
@@ -491,11 +484,10 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         TestEndpoint("{service-url}/employers-paye/ddd")
       )
 
-      when(documentationService.buildTestEndpoints(any(), any())(any())).thenReturn(endpoints)
+      when(documentationService.buildTestEndpoints(*, *)(*)).thenReturn(successful(endpoints))
       val result = underTest.fetchTestEndpointJson("employers-paye", "1.0")(request)
-      val actualPage = await(result)
-      actualPage.header.status shouldBe OK
-      bodyOf(actualPage) should include regex s"aaa.*ddd.*www.*zzz"
+      status(result) shouldBe OK
+      contentAsString(result) should include regex s"aaa.*ddd.*www.*zzz"
     }
   }
 

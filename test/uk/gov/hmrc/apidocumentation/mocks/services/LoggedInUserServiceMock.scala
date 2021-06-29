@@ -16,17 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.services
 
-import org.mockito.Matchers._
-import org.mockito.Mockito._
-import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc._
+import org.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
 import uk.gov.hmrc.apidocumentation.models.Developer
 
 import scala.concurrent.Future.successful
 import uk.gov.hmrc.apidocumentation.models.UserId
+import org.mockito.ArgumentMatchersSugar
 
-trait LoggedInUserServiceMock extends MockitoSugar {
+trait LoggedInUserServiceMock extends MockitoSugar with ArgumentMatchersSugar{
   val loggedInEmail = "mr.abcd@example.com"
   val noUserLoggedIn = None
   val userLoggedIn = Some(Developer(loggedInEmail, "Anony", "Mouse", UserId.random))
@@ -34,10 +32,10 @@ trait LoggedInUserServiceMock extends MockitoSugar {
   lazy val loggedInUserService: LoggedInUserService = mock[LoggedInUserService]
 
   def theUserIsLoggedIn() = {
-    when(loggedInUserService.fetchLoggedInUser()(any[Request[AnyContent]])).thenReturn(successful(userLoggedIn))
+    when(loggedInUserService.fetchLoggedInUser()(*)).thenReturn(successful(userLoggedIn))
   }
 
   def theUserIsNotLoggedIn() = {
-    when(loggedInUserService.fetchLoggedInUser()(any[Request[AnyContent]])).thenReturn(successful(noUserLoggedIn))
+    when(loggedInUserService.fetchLoggedInUser()(*)).thenReturn(successful(noUserLoggedIn))
   }
 }

@@ -22,9 +22,9 @@ import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.APIDefinition
 import uk.gov.hmrc.apidocumentation.views
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
-class APIFilterSpec extends UnitSpec {
+class APIFilterSpec extends AsyncHmrcSpec {
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
     lazy val dropdown = dom.getElementById("service-filter")

@@ -18,15 +18,14 @@ package uk.gov.hmrc.apidocumentation.views
 
 import java.util.Locale
 
-import org.scalatest.{Matchers, OptionValues, WordSpec}
-import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.OptionValues
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import org.scalatestplus.play.WsScalaTestClient
 import play.api.i18n._
 import play.api.mvc.{AnyContent, Request}
-import org.mockito.Mockito.when
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec 
 
-trait CommonViewSpec extends WordSpec with Matchers with OptionValues with WsScalaTestClient with MockitoSugar with GuiceOneAppPerSuite {
+trait CommonViewSpec extends AsyncHmrcSpec with OptionValues with WsScalaTestClient with GuiceOneAppPerSuite {
   implicit val messagesProvider: MessagesProvider = MessagesImpl(Lang(Locale.ENGLISH), new DefaultMessagesApi())
   implicit val request = mock[Request[AnyContent]]
 

@@ -16,19 +16,18 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.services
 
-import org.mockito.Matchers._
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
 
 import scala.concurrent.Future.successful
+import org.mockito.ArgumentMatchersSugar
+import org.mockito.MockitoSugar
 
-trait ApiDocumentationServiceMock extends MockitoSugar {
+trait ApiDocumentationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   val documentationService = mock[DocumentationService]
 
   def theDocumentationServiceWillFetchApiSpecification(apiSpecification: ApiSpecification) = {
-    when(documentationService.fetchApiSpecification(any(), any(), any())(any())).thenReturn(successful(apiSpecification))
+    when(documentationService.fetchApiSpecification(*, *, *)(*)).thenReturn(successful(apiSpecification))
   }
 
 }

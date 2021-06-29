@@ -16,20 +16,16 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import org.mockito.Matchers.{any, eq => meq}
-import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import uk.gov.hmrc.apidocumentation.models.UserId
 
-class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoSugar with ScalaFutures {
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
+
+class SessionServiceSpec extends AsyncHmrcSpec {
 
   private val userSessionConnectorMock = mock[UserSessionConnector]
 
@@ -41,10 +37,10 @@ class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoS
     "Return session if the session is logged in" in {
       val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
 
-      when(userSessionConnectorMock.fetchSession(any())(any[HeaderCarrier]))
+      when(userSessionConnectorMock.fetchSession(*)(*))
         .thenReturn(Future.successful(session))
 
-      val result = await(sessionService.fetch(meq("sessionId"))(any[HeaderCarrier]))
+      val result = await(sessionService.fetch(eqTo("sessionId"))(*))
 
       result shouldBe Some(session)
     }
@@ -52,10 +48,10 @@ class SessionServiceSpec extends UnitSpec with WithFakeApplication with MockitoS
     "Return None when the session is part logged in" in {
       val session = Session("sessionId", LoggedInState.PART_LOGGED_IN_ENABLING_MFA, developer)
 
-      when(userSessionConnectorMock.fetchSession(any())(any[HeaderCarrier]))
+      when(userSessionConnectorMock.fetchSession(*)(*))
         .thenReturn(Future.successful(session))
 
-      val result = await(sessionService.fetch(meq("sessionId"))(any[HeaderCarrier]))
+      val result = await(sessionService.fetch(eqTo("sessionId"))(*))
 
       result shouldBe None
     }

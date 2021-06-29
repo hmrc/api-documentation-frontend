@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.config
 
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import org.mockito.MockitoSugar
 
 trait AppConfigMock extends MockitoSugar {
   implicit val appConfig = mock[ApplicationConfig]

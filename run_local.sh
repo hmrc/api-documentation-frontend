@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sbt "run -Drun.mode=Dev -Dhttp.port=9680 $*"
+sbt "run -Dhttp.port=9680 $*"

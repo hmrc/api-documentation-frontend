@@ -38,7 +38,14 @@ trait BaseSpec extends FeatureSpec with BeforeAndAfterEach with BeforeAndAfterAl
 
   override def fakeApplication(): Application = {
     GuiceApplicationBuilder()
-      .configure("run.mode" -> "Test")
+      .configure(
+        "microservice.services.developer-frontend.host" -> stubHost,
+        "microservice.services.developer-frontend.port" -> stubPort,
+        "microservice.services.api-platform-microservice.host" -> stubHost,
+        "microservice.services.api-platform-microservice.port" -> stubPort,
+        "microservice.services.third-party-developer.host" -> stubHost,
+        "microservice.services.third-party-developer.port" -> stubPort
+      )
       .in(Mode.Prod)
       .build()
   }

@@ -16,54 +16,57 @@
 
 package uk.gov.hmrc.apidocumentation.controllers.utils
 
-import play.api.http.Status._
+import play.api.test.Helpers._
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.controllers.{routes, CommonControllerBaseSpec}
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
 
 import scala.concurrent.Future
+import play.api.test.NoMaterializer
 
 trait PageRenderVerification {
   self: CommonControllerBaseSpec =>
 
   import NavigationServiceMock.sidebarLink
 
+  private implicit val materializer = NoMaterializer
+  
   lazy val homeBreadcrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
   lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
 
-  def titleOf(result: Result) = {
+  def titleOf(result: Future[Result]) = {
     val titleRegEx = """<title[^>]*>(.*)</title>""".r
-    val title = titleRegEx.findFirstMatchIn(bodyOf(result)).map(_.group(1))
+    val title = titleRegEx.findFirstMatchIn(contentAsString(result)).map(_.group(1))
     title.isDefined shouldBe true
     title.get
   }
 
-  def subNavIsRendered(result: Result) = {
-    bodyOf(result).contains("<ul class=\"side-nav side-nav--child\">")
+  def subNavIsRendered(result: Future[Result]) = {
+    contentAsString(result).contains("<ul class=\"side-nav side-nav--child\">")
   }
 
-  def sideNavLinkIsRendered(result: Result, sidebarLink: SidebarLink) = {
-    bodyOf(result).contains(s"""<a href="${sidebarLink.href}" class="side-nav__link">${sidebarLink.label}</a>""")
+  def sideNavLinkIsRendered(result: Future[Result], sidebarLink: SidebarLink) = {
+    contentAsString(result).contains(s"""<a href="${sidebarLink.href}" class="side-nav__link">${sidebarLink.label}</a>""")
   }
 
-  def userNavLinkIsRendered(result: Result, navLink: NavLink) = {
-    bodyOf(result).contains(navLink.href) && bodyOf(result).contains(navLink.label)
+  def userNavLinkIsRendered(result: Future[Result], navLink: NavLink) = {
+    contentAsString(result).contains(navLink.href) && contentAsString(result).contains(navLink.label)
   }
 
-  def versionOptionIsRendered(result: Result, service: String, version: String, displayedStatus: String) = {
-    bodyOf(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
+  def versionOptionIsRendered(result: Future[Result], service: String, version: String, displayedStatus: String) = {
+    contentAsString(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
   }
 
-  def verifyBreadcrumbRendered(actualPage: Result, crumb: Crumb) {
-    bodyOf(actualPage) should include(s"""
+  def verifyBreadcrumbRendered(actualPage: Future[Result], crumb: Crumb) {
+    contentAsString(actualPage) should include(s"""
                                          |                    <li class="govuk-breadcrumbs__list-item">
                                          |                        <a class="govuk-breadcrumbs__link" href="${crumb.url}">${crumb.name}</a>
                                          |                    </li>""".stripMargin)
   }
 
-  def verifyBreadcrumbEndpointRendered(actualPage: Result, crumbText: String) = {
-    bodyOf(actualPage) should include(s"""
+  def verifyBreadcrumbEndpointRendered(actualPage: Future[Result], crumbText: String) = {
+    contentAsString(actualPage) should include(s"""
                                          |            <li class="govuk-breadcrumbs__list-item">
                                          |                ${crumbText}
                                          |            </li>""".stripMargin)
@@ -75,36 +78,33 @@ trait PageRenderVerification {
                           subNavRendered: Boolean = false,
                           bodyContains: Seq[String] = Seq.empty
                           )(
-                            actualPageFuture: Future[Result]
+                            actualPage: Future[Result]
                           ): Unit = {
-    val actualPage = await(actualPageFuture)
     status(actualPage) shouldBe 200
     titleOf(actualPage) shouldBe expectedTitle
 
     sideNavLinkIsRendered(actualPage, sidebarLink) shouldBe sideNavLinkRendered
     subNavIsRendered(actualPage) shouldBe subNavRendered
     breadcrumbs.foreach(verifyBreadcrumbRendered(actualPage, _))
-    bodyContains.foreach { snippet => bodyOf(actualPage) should include(snippet) }
+    bodyContains.foreach { snippet => contentAsString(actualPage) should include(snippet) }
   }
 
-  def verifyNotFoundPageRendered(actualPageFuture: Future[Result]) {
-    val actualPage = await(actualPageFuture)
+  def verifyNotFoundPageRendered(actualPage: Future[Result]) {
     status(actualPage) shouldBe NOT_FOUND
   }
 
 
-  def verifyErrorPageRendered(expectedStatus: Int, expectedError: String)(actualPageFuture: Future[Result]) {
-    val actualPage = await(actualPageFuture)
+  def verifyErrorPageRendered(expectedStatus: Int, expectedError: String)(actualPage: Future[Result]) {
     status(actualPage) shouldBe expectedStatus
-    bodyOf(actualPage) should include(expectedError)
+    contentAsString(actualPage) should include(expectedError)
   }
 
-  def verifyApiDocumentationPageRendered(actualPage: Result, version: String, apiStatus: String) = {
+  def verifyApiDocumentationPageRendered(actualPage: Future[Result], version: String, apiStatus: String) = {
     verifyPageRendered(pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))(actualPage)
     verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
   }
 
-  def verifyLinkToStableDocumentationRendered(actualPage: Result, service: String, version: String) = {
-    bodyOf(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
+  def verifyLinkToStableDocumentationRendered(actualPage: Future[Result], service: String, version: String) = {
+    contentAsString(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
   }
 }

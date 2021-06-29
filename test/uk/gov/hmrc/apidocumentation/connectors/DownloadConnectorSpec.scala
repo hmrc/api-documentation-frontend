@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import org.mockito.Mockito.when
 import play.api.http.Status._
-import play.api.mvc.Results
+import play.api.mvc.Results._
 import play.api.routing.sird._
 import play.api.test.WsTestClient
 import play.core.server.Server
@@ -26,14 +25,19 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException, NotFoundException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.Configuration
 
 class DownloadConnectorSpec extends ConnectorSpec {
   val apiDocumentationUrl = "https://api-documentation.example.com"
 
   val serviceName = "hello-world"
   val version = "1.0"
+  val stubConfig = Configuration(
+    "Test.metrics.jvm" -> false
+  )
 
   trait Setup {
+
     implicit val hc = HeaderCarrier()
     val mockAppConfig = mock[ApplicationConfig]
     when(mockAppConfig.apiPlatformMicroserviceBaseUrl).thenReturn("")
@@ -42,7 +46,6 @@ class DownloadConnectorSpec extends ConnectorSpec {
   "downloadResource" should {
     "return resource when found" in new Setup {
       Server.withRouterFromComponents() { components =>
-        import Results._
         import components.{defaultActionBuilder => Action}
         {
           case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resource") => Action {
@@ -60,7 +63,6 @@ class DownloadConnectorSpec extends ConnectorSpec {
 
     "throw NotFoundException when not found" in new Setup {
       Server.withRouterFromComponents() { components =>
-        import Results._
         import components.{defaultActionBuilder => Action}
         {
           case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resourceNotThere") => Action {
@@ -80,7 +82,6 @@ class DownloadConnectorSpec extends ConnectorSpec {
 
     "throw InternalServerException for any other response" in new Setup {
       Server.withRouterFromComponents() { components =>
-        import Results._
         import components.{defaultActionBuilder => Action}
         {
           case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resourceInvalid") => Action {

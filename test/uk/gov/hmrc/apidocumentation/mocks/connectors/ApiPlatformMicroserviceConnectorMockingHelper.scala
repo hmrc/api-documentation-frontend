@@ -16,24 +16,24 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.connectors
 
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito.when
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
+import org.mockito.MockitoSugar
+import org.mockito.ArgumentMatchersSugar
 
-trait ApiPlatformMicroserviceConnectorMockingHelper {
+trait ApiPlatformMicroserviceConnectorMockingHelper extends MockitoSugar with ArgumentMatchersSugar {
 
   def whenFetchAllDefinitions[T <: ApiPlatformMicroserviceConnector](base: T)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinitionsByCollaborator(any[None.type]())(eqTo(hc)))
+    when(base.fetchApiDefinitionsByCollaborator(*)(eqTo(hc)))
       .thenReturn(Future.successful(apis.toSeq))
   }
 
   def whenFetchAllDefinitionsWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)(userId: UuidIdentifier)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinitionsByCollaborator(any[Some[UuidIdentifier]]())(eqTo(hc)))
+    when(base.fetchApiDefinitionsByCollaborator(*)(eqTo(hc)))
       .thenReturn(Future.successful(apis.toSeq))
   }
 
@@ -48,14 +48,14 @@ trait ApiPlatformMicroserviceConnectorMockingHelper {
                                                                        (serviceName: String, userId: UuidIdentifier)
                                                                        (api: ExtendedAPIDefinition)
                                                                        (implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinition(eqTo(serviceName), any[Some[UuidIdentifier]]())(eqTo(hc)))
+    when(base.fetchApiDefinition(eqTo(serviceName), *)(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
   def whenFetchExtendedDefinitionFails[T <: ApiPlatformMicroserviceConnector](base: T)
                                                                    (exception: Throwable)
                                                                    (implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinition(any[String],any[None.type]())(eqTo(hc)))
+    when(base.fetchApiDefinition(*,*)(eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 }

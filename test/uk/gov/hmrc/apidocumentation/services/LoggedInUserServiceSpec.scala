@@ -16,22 +16,17 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.crypto.CookieSigner
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import uk.gov.hmrc.apidocumentation.models.UserId
 
-class LoggedInUserServiceSpec extends UnitSpec with ScalaFutures with MockitoSugar {
+class LoggedInUserServiceSpec extends AsyncHmrcSpec {
 
   import LoggedInUserService.cookieName
 
@@ -75,7 +70,7 @@ class LoggedInUserServiceSpec extends UnitSpec with ScalaFutures with MockitoSug
       val fakeId = "123"
       val decodeSessionResult = Some(fakeId)
 
-      when(mockSessionService.fetch(eqTo(fakeId))(any[HeaderCarrier]))
+      when(mockSessionService.fetch(eqTo(fakeId))(*))
         .thenReturn(Future.successful(None))
 
       val loggedInUserService =
@@ -95,7 +90,7 @@ class LoggedInUserServiceSpec extends UnitSpec with ScalaFutures with MockitoSug
       val fakeId = "123"
       val decodeSessionResult = Some(fakeId)
 
-      when(mockSessionService.fetch(eqTo(fakeId))(any[HeaderCarrier]))
+      when(mockSessionService.fetch(eqTo(fakeId))(*))
         .thenReturn(Future.successful(Some(session)))
 
       val loggedInUserService =

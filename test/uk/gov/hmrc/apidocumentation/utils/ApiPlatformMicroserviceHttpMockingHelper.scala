@@ -16,89 +16,115 @@
 
 package uk.gov.hmrc.apidocumentation.utils
 
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito.when
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{Params, definitionUrl, definitionsUrl, noParams, queryParams}
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl}
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import com.github.tomakehurst.wiremock.client.WireMock._
 
-import scala.concurrent.Future
 import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
+import uk.gov.hmrc.apidocumentation.common.utils._
 
-trait ApiPlatformMicroserviceHttpMockingHelper {
-  val mockHttpClient: HttpClient
-  val apiPlatformMicroserviceBaseUrl: String
+import play.api.test.Helpers._
 
+trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
 
-  def whenGetAllDefinitionsByUserId(userId: Option[UuidIdentifier])(definitions: APIDefinition*): Unit = {
-    val url = definitionsUrl(apiPlatformMicroserviceBaseUrl)
-    when(
-      mockHttpClient.GET[Seq[APIDefinition]](
-        eqTo(url),
-        eqTo(userId.map(e => queryParams(Some(e))).getOrElse(noParams))
+  def apiPlatformMicroserviceBaseUrl: String
+
+  import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+
+  def whenGetAllDefinitionsByUserId(userId: UuidIdentifier)(definitions: APIDefinition*): Unit = {
+    val url = definitionsUrl("")
+    stubFor(
+      get(
+        urlPathEqualTo(url)
       )
-        (any(), any(), any())
+      .withQueryParam("developerId", equalTo(userId.asText))
+      .willReturn(
+        aResponse()
+        .withStatus(OK)
+        .withJsonBody(definitions.toSeq)
+      )
     )
-      .thenReturn(Future.successful(definitions.toSeq))
   }
 
-  def whenGetAllDefinitionsFails(exception: Throwable): Unit = {
-    val url = definitionsUrl(apiPlatformMicroserviceBaseUrl)
-    when(
-      mockHttpClient.GET[Seq[APIDefinition]](
-        eqTo(url),
-        any[Params]
+  def whenGetAllDefinitionsByUserId(definitions: APIDefinition*): Unit = {
+    val url = definitionsUrl("")
+    stubFor(
+      get(
+        urlEqualTo(url)
       )
-        (any(), any(), any())
+      .willReturn(
+        aResponse()
+        .withStatus(OK)
+        .withJsonBody(definitions.toSeq)
+      )
     )
-      .thenReturn(Future.failed(exception))
+  }
+
+  def whenGetAllDefinitionsFails(status: Int): Unit = {
+    val url = definitionsUrl(apiPlatformMicroserviceBaseUrl)
+    stubFor(
+      get(
+        urlEqualTo(url)
+      )
+      .willReturn(
+        aResponse()
+        .withStatus(status)
+      )
+    )
   }
 
   def whenGetDefinitionByEmail(serviceName: String, userId: UuidIdentifier)(definition: ExtendedAPIDefinition): Unit = {
-    val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
-    when(
-      mockHttpClient.GET[Option[ExtendedAPIDefinition]](
-        eqTo(url),
-        eqTo(queryParams(Some(userId)))
+    val url = definitionUrl("",serviceName)
+    stubFor(
+      get(
+        urlPathEqualTo(url)
       )
-        (any(), any(), any())
+      .withQueryParam("developerId", equalTo(userId.asText))
+      .willReturn(
+        aResponse()
+        .withStatus(OK)
+        .withJsonBody(definition)
+      )
     )
-      .thenReturn(Future.successful(Some(definition)))
   }
 
   def whenGetDefinition(serviceName: String)(definition: ExtendedAPIDefinition): Unit = {
-    val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
-    when(
-      mockHttpClient.GET[Option[ExtendedAPIDefinition]](
-        eqTo(url),
-        eqTo(noParams)
+    val url = definitionUrl("",serviceName)
+    stubFor(
+      get(
+        urlEqualTo(url)
       )
-        (any(), any(), any())
+      .willReturn(
+        aResponse()
+        .withStatus(OK)
+        .withJsonBody(definition)
+      )
     )
-      .thenReturn(Future.successful(Some(definition)))
   }
 
-    def whenGetDefinitionFindsNothing(serviceName: String): Unit = {
-    val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
-    when(
-      mockHttpClient.GET[Option[ExtendedAPIDefinition]](
-        eqTo(url),
-        eqTo(noParams)
+  def whenGetDefinitionFindsNothing(serviceName: String): Unit = {
+    val url = definitionUrl("", serviceName)
+    stubFor(
+      get(
+        urlEqualTo(url)
       )
-        (any(), any(), any())
-    )
-      .thenReturn(Future.successful(None))
+      .willReturn(
+        aResponse()
+        .withStatus(NOT_FOUND)
+      )
+    )    
   }
 
-  def whenGetDefinitionFails(serviceName: String)(exception: Throwable): Unit = {
-    val url = definitionUrl(apiPlatformMicroserviceBaseUrl, serviceName)
-    when(
-      mockHttpClient.GET[Option[ExtendedAPIDefinition]](
-        eqTo(url),
-        eqTo(noParams)
+  def whenGetDefinitionFails(serviceName: String)(status: Int): Unit = {
+    val url = definitionUrl("", serviceName)
+    stubFor(
+      get(
+        urlEqualTo(url)
       )
-        (any(), any(), any())
+      .willReturn(
+        aResponse()
+        .withStatus(status)
+      )
     )
-      .thenReturn(Future.failed(exception))
   }
 }

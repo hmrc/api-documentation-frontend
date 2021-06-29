@@ -19,7 +19,7 @@ import bloop.integrations.sbt.BloopDefaults
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = (project in file("."))
-  .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
+  .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin) ++ plugins: _*)
   .settings(
     name := appName
   )
@@ -49,6 +49,7 @@ lazy val microservice = (project in file("."))
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
   .settings(publishingSettings: _*)
+  .settings(ScoverageSettings(): _*)
   .settings(defaultSettings(): _*)
   .settings(
     targetJvm := "jvm-1.8",
@@ -62,9 +63,11 @@ lazy val microservice = (project in file("."))
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
 
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
+  .settings(inConfig(TemplateTest)(BloopDefaults.configSettings))
   .settings(
     Test / testOptions := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     Test / unmanagedSourceDirectories += baseDirectory.value / "test",
+    Test / unmanagedSourceDirectories += baseDirectory.value / "testcommon",
     Test / fork := false,
     Test / parallelExecution := false
   )
@@ -75,6 +78,7 @@ lazy val microservice = (project in file("."))
   .settings(
     testOptions in AcceptanceTest := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "acceptance",
+    AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "testcommon",
     AcceptanceTest / unmanagedResourceDirectories := Seq((baseDirectory in AcceptanceTest).value / "test", (baseDirectory in AcceptanceTest).value / "target/web/public/test"),
     AcceptanceTest / fork := false,
     AcceptanceTest / parallelExecution := false,
@@ -98,26 +102,3 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
   publishAllArtefacts
 
 lazy val appName = "api-documentation-frontend"
-
-val ScoverageExclusionPatterns = List(
-  "<empty>",
-  "definition.*",
-  "sandbox.*",
-  "live.*",
-  "prod.*",
-  "testOnlyDoNotUseInAppConf.*",
-  "uk.gov.hmrc.config.*",
-  "app.Routes",
-  "app.RoutesPrefix",
-  "controllers.javascript",
-  "com.kenshoo.play.metrics.javascript",
-  "com.kenshoo.play.metrics",
-  ".*Reverse.*",
-  "uk.gov.hmrc.controllers.Reverse*",
-)
-
-// Coverage configuration
-// TODO ebridge - Fix and set back to 85
-coverageMinimum := 80
-coverageFailOnMinimum := true
-coverageExcludedPackages := ScoverageExclusionPatterns.mkString("",";","")

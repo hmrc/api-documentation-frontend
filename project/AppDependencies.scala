@@ -11,7 +11,7 @@ object AppDependencies {
   lazy val compile = Seq(
     ws,
     ehcache,
-    "uk.gov.hmrc"                           %% "bootstrap-play-26"        % "2.2.0",
+    "uk.gov.hmrc"                           %% "bootstrap-play-26"        % "4.0.0",
     "uk.gov.hmrc"                           %% "url-builder"              % "3.4.0-play-26",
     "uk.gov.hmrc"                           %% "http-metrics"             % "1.11.0",
     "uk.gov.hmrc"                           %% "govuk-template"           % "5.61.0-play-26",
@@ -27,15 +27,14 @@ object AppDependencies {
   lazy val test = Seq(
     "io.cucumber"                           %% "cucumber-scala"           % "5.7.0",
     "io.cucumber"                           %  "cucumber-junit"           % "5.7.0",
-    "uk.gov.hmrc"                           %% "hmrctest"                 % "3.10.0-play-26",
     "org.pegdown"                           %  "pegdown"                  % "1.6.0",
     "com.typesafe.play"                     %% "play-test"                % PlayVersion.current,
     "org.scalatestplus.play"                %% "scalatestplus-play"       % "3.1.3",
-    "org.mockito"                           %  "mockito-core"             % "1.10.19",
+    "org.mockito"                           %% "mockito-scala-scalatest"  % "1.7.1",
     "org.seleniumhq.selenium"               %  "selenium-java"            % "3.141.59",
     "org.seleniumhq.selenium"               %  "selenium-firefox-driver"  % "3.141.59",
     "org.seleniumhq.selenium"               %  "selenium-chrome-driver"   % "3.141.59",
-    "com.github.tomakehurst"                %  "wiremock"                 % "1.58",
+    "com.github.tomakehurst"                %  "wiremock-jre8-standalone" % "2.27.1",
     "org.jsoup"                             %  "jsoup"                    % "1.12.1"
   ).map(_.withConfigurations(Some(testScopes)))
 }
