@@ -468,16 +468,10 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
   }
 
   "bustCache" should {
-    "override value of the query parameter if in stub mode" in new Setup {
-      underTest.bustCache(stubMode = false, Some(true)) shouldBe true
-      underTest.bustCache(stubMode = false, Some(false)) shouldBe false
-      underTest.bustCache(stubMode = true, Some(true)) shouldBe true
-      underTest.bustCache(stubMode = true, Some(false)) shouldBe true
-    }
-
-    "return true if no query parameter was provided and the app is running in Stub mode" in new Setup {
-      underTest.bustCache(stubMode = false, None) shouldBe false
-      underTest.bustCache(stubMode = true, None) shouldBe true
+    "honour the passed in parameter" in new Setup {
+      underTest.bustCache(Some(true)) shouldBe true
+      underTest.bustCache(Some(false)) shouldBe false
+      underTest.bustCache(None) shouldBe false
     }
   }
 

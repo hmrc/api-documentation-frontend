@@ -43,9 +43,9 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
   val apiName2 = "HelloWorld"
 
   val stubConfig = Configuration(
-    "Test.metrics.jvm" -> false,
-    "Test.microservice.services.api-platform-microservice.host" -> stubHost,
-    "Test.microservice.services.api-platform-microservice.port" -> stubPort
+    "metrics.jvm" -> false,
+    "microservice.services.api-platform-microservice.host" -> stubHost,
+    "microservice.services.api-platform-microservice.port" -> stubPort
   )
 
   trait LocalSetup extends ApiPlatformMicroserviceHttpMockingHelper {

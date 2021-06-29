@@ -11,7 +11,7 @@ object AppDependencies {
   lazy val compile = Seq(
     ws,
     ehcache,
-    "uk.gov.hmrc"                           %% "bootstrap-play-26"        % "2.2.0",
+    "uk.gov.hmrc"                           %% "bootstrap-play-26"        % "4.0.0",
     "uk.gov.hmrc"                           %% "url-builder"              % "3.4.0-play-26",
     "uk.gov.hmrc"                           %% "http-metrics"             % "1.11.0",
     "uk.gov.hmrc"                           %% "govuk-template"           % "5.61.0-play-26",

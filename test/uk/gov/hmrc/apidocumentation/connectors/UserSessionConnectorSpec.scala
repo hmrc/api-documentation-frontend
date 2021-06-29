@@ -31,9 +31,9 @@ class UserSessionConnectorSpec extends ConnectorSpec {
   val sessionId = "A_SESSION_ID"
 
   val stubConfig = Configuration(
-    "Test.metrics.jvm" -> false,
-    "Test.microservice.services.third-party-developer.host" -> stubHost,
-    "Test.microservice.services.third-party-developer.port" -> stubPort
+    "metrics.jvm" -> false,
+    "microservice.services.third-party-developer.host" -> stubHost,
+    "microservice.services.third-party-developer.port" -> stubPort
   )
   trait Setup {
     implicit val hc = HeaderCarrier()

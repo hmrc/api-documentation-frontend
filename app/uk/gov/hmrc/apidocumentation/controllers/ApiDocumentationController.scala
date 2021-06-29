@@ -131,7 +131,7 @@ class ApiDocumentationController @Inject()(
         (for {
           userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
           api <- apiDefinitionService.fetchExtendedDefinition(service, userId)
-          cacheBust = bustCache(appConfig.isStubMode, cacheBuster)
+          cacheBust = bustCache(cacheBuster)
           apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, userId)
         } yield apiDocumentation) recover {
           case e: NotFoundException =>
@@ -143,7 +143,7 @@ class ApiDocumentationController @Inject()(
         }
     }
 
-  def bustCache(stubMode: Boolean, cacheBuster: Option[Boolean]): Boolean = stubMode || cacheBuster.getOrElse(false)
+  def bustCache(cacheBuster: Option[Boolean]): Boolean = cacheBuster.getOrElse(false)
 
   private def doRenderApiDocumentation(service: String, version: String, cacheBuster: Boolean, apiOption: Option[ExtendedAPIDefinition],
                                        navLinks: Seq[NavLink], developerId: Option[DeveloperIdentifier])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider): Future[Result] = {

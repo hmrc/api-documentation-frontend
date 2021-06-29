@@ -19,11 +19,10 @@ package uk.gov.hmrc.apidocumentation.connectors
 import java.util.UUID
 
 import akka.actor.ActorSystem
-import play.api.{ConfigLoader, Configuration, Mode}
+import play.api.{ConfigLoader, Configuration}
 import play.api.libs.ws.{WSClient, WSRequest}
-import uk.gov.hmrc.http.logging.Authorization
+import uk.gov.hmrc.http.Authorization
 import uk.gov.hmrc.play.audit.http.HttpAuditing
-import uk.gov.hmrc.play.bootstrap.config.RunMode
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 class ProxiedHttpClientSpec extends AsyncHmrcSpec {
@@ -37,15 +36,13 @@ class ProxiedHttpClientSpec extends AsyncHmrcSpec {
     val mockConfig: Configuration = mock[Configuration]
     val mockHttpAuditing: HttpAuditing = mock[HttpAuditing]
     val mockWsClient: WSClient = mock[WSClient]
-    val mockRunMode: RunMode = mock[RunMode]
 
-    when(mockRunMode.env).thenReturn(Mode.Test.toString)
     when(mockConfig.get[String](any[String])(any[ConfigLoader[String]])).thenReturn("")
     when(mockConfig.get[Int](any[String])(any[ConfigLoader[Int]])).thenReturn(0)
-    when(mockConfig.get[Boolean]("Test.proxy.proxyRequiredForThisEnvironment")).thenReturn(true)
+    when(mockConfig.get[Boolean]("proxy.proxyRequiredForThisEnvironment")).thenReturn(true)
     when(mockWsClient.url(url)).thenReturn(mock[WSRequest])
 
-    val underTest = new ProxiedHttpClient(mockConfig, mockHttpAuditing, mockWsClient, actorSystem, mockRunMode)
+    val underTest = new ProxiedHttpClient(mockConfig, mockHttpAuditing, mockWsClient, actorSystem)
   }
 
   "withHeaders" should {
@@ -55,7 +52,7 @@ class ProxiedHttpClientSpec extends AsyncHmrcSpec {
       private val result = underTest.withHeaders(bearerToken, apiKey)
 
       result.authorization shouldBe Some(Authorization(s"Bearer $bearerToken"))
-      result.apiKeyHeader shouldBe Some("x-api-key" -> apiKey)
+      result.apiKeyHeader shouldBe Some(apiKey)
     }
 
     "when apiKey is empty String, apiKey header is None" in new Setup {

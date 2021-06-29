@@ -31,8 +31,8 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   val developerFrontendUrl = "http://developer-frontend.example.com"
 
   val stubConfig = Configuration(
-    "Test.microservice.services.developer-frontend.host" -> stubHost,
-    "Test.microservice.services.developer-frontend.port" -> stubPort
+    "microservice.services.developer-frontend.host" -> stubHost,
+    "microservice.services.developer-frontend.port" -> stubPort
   )
 
   trait Setup {
