@@ -19,7 +19,7 @@
 
 @(headers: List[TypeDeclaration], version: String, caption: String, required: String, authorisation: (String, Option[String]))
 
-<section id="request-headers" class="section">
+<div id="request-headers" class="section">
     <h4 class="govuk-heading-s">@caption</h4>
     <table class="govuk-table">
         <caption class="visually-hidden">
@@ -34,7 +34,7 @@
         <tbody class="govuk-table__body">
             @for(header <- headers) {
                 <tr class="govuk-table__row">
-                    <td data-heading="Name" class="govuk-table__cell">
+                    <td data-heading="Name" class="govuk-table__cell govuk-!-font-size-16">
                         <div class="table__cell-contents--responsive">
                             @{header.displayName}
                             @if(header.required) {
@@ -44,7 +44,7 @@
                             }
                         </div>
                     </td>
-                    <td data-heading="Description" class="govuk-table__cell">
+                    <td data-heading="Description" class="govuk-table__cell govuk-!-font-size-16">
                         <div class="table__cell-contents--responsive">
                             <div class="markdown-text-styles">
                                 @Markdown(header.description)
@@ -58,11 +58,11 @@
                 authorisation match {
                     case ("user", Some(scope)) => {
                         <tr class="govuk-table__row">
-                            <td data-heading="Name" class="govuk-table__cell">
+                            <td data-heading="Name" class="govuk-table__cell govuk-!-font-size-16">
                                 Authorization
                                 <div class="parameter-required">required</div>
                             </td>
-                            <td class="govuk-table__cell"> An
+                            <td class="govuk-table__cell govuk-!-font-size-16"> An
                                 <a class="govuk-link" href="/api-documentation/docs/authorisation/user-restricted-endpoints">OAuth 2.0 Bearer Token</a>
                                 with the <code class="code--slim">{scope}</code> scope.
                                 <br/>
@@ -73,11 +73,11 @@
                     }
                     case ("application", Some(scope)) => {
                         <tr class="govuk-table__row">
-                            <td data-heading="Name" class="govuk-table__cell">
+                            <td data-heading="Name" class="govuk-table__cell govuk-!-font-size-16">
                                 Authorization
                                 <div class="parameter-required">required</div>
                             </td>
-                            <td class="govuk-table__cell">
+                            <td class="govuk-table__cell govuk-!-font-size-16">
                                 An <a class="govuk-link" href="/api-documentation/docs/authorisation/application-restricted-endpoints">OAuth 2.0 Bearer Token</a>
                                 with the <code class="code--slim">{scope}</code> scope.
                                 <br/>
@@ -88,11 +88,11 @@
                     }
                     case ("application", _) => {
                         <tr class="govuk-table__row">
-                            <td data-heading="Name" class="govuk-table__cell">
+                            <td data-heading="Name" class="govuk-table__cell govuk-!-font-size-16">
                                 Authorization
                                 <div class="parameter-required">required</div>
                             </td>
-                            <td class="govuk-table__cell">
+                            <td class="govuk-table__cell govuk-!-font-size-16">
                                 An <a class="govuk-link" href="/api-documentation/docs/authorisation/application-restricted-endpoints">OAuth 2.0 Bearer Token</a>.
                                 <br/>
                                 <br/>
@@ -107,4 +107,4 @@
         </tbody>
     </table>
     <p class="govuk-body">See also <a class="govuk-link" href="/guides/fraud-prevention">fraud prevention</a>.</p>
-</section>
+</div>

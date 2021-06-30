@@ -25,7 +25,7 @@
         </caption>
         <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">Name</th>
+                <th scope="col" class="govuk-table__header table__col--1-2">Name</th>
                 <th scope="col" class="govuk-table__header">Description</th>
             </tr>
         </thead>
@@ -34,7 +34,7 @@
                 <tr class="govuk-table__row
                 @if(field.depth == 0 || field.`type` == "object") {table__row--parent}
                 @if(field.depth > 0) {table__row--nested-@{field.depth}}">
-                    <td data-heading="Name" class="govuk-table__cell">
+                    <td data-heading="Name" class="govuk-table__cell govuk-!-font-size-16 table__col--1-2">
                         <div class="table__cell-contents--responsive">
                             <div class="parameter-name">@{field.name}</div>
                             <div class="parameter-type">@if(field.isArray) {array} else {@{field.`type`}}</div>
@@ -47,24 +47,24 @@
                             }
                         </div>
                     </td>
-                    <td data-heading="Description" class="govuk-table__cell">
+                    <td data-heading="Description" class="govuk-table__cell govuk-!-font-size-16">
                         <div class="table__cell-contents--responsive">
                             @if(field.description.isDefined) {
-                                <p class="govuk-body">@{field.description}</p>
+                                <p class="govuk-body-s">@{field.description}</p>
                             }
                             @field.typeId match {
-                                case "full-date" => { <p class="govuk-body">Date in the format <code class="code--slim">YYYY-MM-DD</code></p> }
-                                case "tax-year" => { <p class="govuk-body">Tax year in the format <code class="code--slim">YYYY-YY</code></p> }
+                                case "full-date" => { <p class="govuk-body-s">Date in the format <code class="code--slim">YYYY-MM-DD</code></p> }
+                                case "tax-year" => { <p class="govuk-body-s">Tax year in the format <code class="code--slim">YYYY-YY</code></p> }
                                 case _ => {
                                     @if(field.pattern.isDefined) {
-                                        <p class="govuk-body">
+                                        <p class="govuk-body-s">
                                             Must conform to the regular expression <code class="code--slim">@{field.pattern}</code>
                                         </p>
                                     }
                                 }
                             }
                             @if(field.enumValues.nonEmpty) {
-                                <p class="govuk-body">Limited to the following possible values:</p>
+                                <p class="govuk-body-s">Limited to the following possible values:</p>
                                 <div>
                                     @for(enumValue <- field.enumValues) {
                                         <div class="margin-top">
@@ -75,7 +75,7 @@
                                 </div>
                             } else {
                                 @if(field.example.isDefined) {
-                                    <p class="govuk-body">
+                                    <p class="govuk-body-s">
                                         For example: <code class="code--slim">@{field.example}</code>
                                     </p>
                                 }

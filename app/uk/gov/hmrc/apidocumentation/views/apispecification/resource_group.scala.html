@@ -59,24 +59,29 @@
                 </div>
               }
               <br />
-              <details class="govuk-details" data-module="govuk-details">
-                <summary id="details-summary-heading" class="govuk-details__summary detail-summary-box">
-                  <span class="govuk-details__summary-text" id="@{method.displayName}">
-                    @{method.displayName}
-                  </span>
+              <details id="@{method.displayName}-details"class="govuk-details" data-module="govuk-details">
+                <summary id="@{method.displayName}-summary" class="govuk-details__summary detail-summary-box">
+                  <a class="govuk-link govuk-link--no-visited-state api-links" href="#@{method.displayName}">
+                    <span class="govuk-details__summary-text" id="@{method.displayName}">
+                      @{method.displayName}
+                    </span>
+                  </a>
                   <div class="float-right">
                     <strong id="@method.method.toUpperCase" class="@getHttpPillClass(method.method.toUpperCase)">
                       @method.method.toUpperCase
                     </strong>
                   </div>
                 </summary>
-                <div class="govuk-details__text custom-detail-box">
+                <div id="@{method.displayName}" class="govuk-details__text custom-detail-box">
                   @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
                     <div id="method-content" class="markdown-text-styles">
                       @Markdown(method.description)
                     </div>
                     @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
                   }
+                  <br />
+                  <a id="@{method.displayName}-back-btn" href="#@{method.displayName}" class="govuk-link govuk-link--no-visited-state float-right api-back-btn">Close Section</a>
+                  <br />
                 </div>
               </details>
             }
@@ -85,4 +90,5 @@
       }
     }
   </div>
+  <script src='@routes.Assets.versioned("javascripts/expand-endpoint.js")' type="text/javascript"></script> 
 }

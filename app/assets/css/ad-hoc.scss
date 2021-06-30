@@ -437,7 +437,7 @@ pre, code {
       font-weight: 400;
     }
     table {
-      font-size: 19px;
+      font-size: 16px;
       font-size: 1.1875rem;
       line-height: 1.31579;
     }
@@ -540,4 +540,8 @@ pre, code {
   display: inline-block;
   background-color: #F7F7F7;
   line-height: 1.1em;
+}
+
+.table__cell-contents--responsive .markdown-text-styles p {
+  font-size: 16px;
 }

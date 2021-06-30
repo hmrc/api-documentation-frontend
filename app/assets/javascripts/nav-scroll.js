@@ -1,23 +1,19 @@
 (function () {
   window.addEventListener('load', function () {
     var contentBox = document.getElementById("mainContent").offsetHeight;
-    var section = document.querySelectorAll(".section");
+    var section = document.querySelectorAll("section");
     var currentSection = {};
     var screenHeight = window.screen.height;
     var onScreenSections = {};
 
+    // Extracts all onscreen sections
     Array.prototype.forEach.call(section, function(e) {
       if(e.offsetTop > 0 ) {
         onScreenSections[e.id] = e.offsetTop;
       }
     });
 
-    var lastItem = null;
-
-    for (i in onScreenSections) {
-      lastItem = i;
-    }
-  
+    // Resets nav height for sticky nav
     if (screenHeight >= 769) {
       if (contentBox > 990) {
         document.getElementById("navContent").style.height = contentBox + "px";
@@ -35,6 +31,11 @@
     function getPosition() {
       // Gets users position on the screen
       var scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+      var lastItem = null;
+
+      for (i in onScreenSections) {
+        lastItem = i;
+      }
   
       // Finds which seaction the users in
       Array.prototype.forEach.call(section, function(e) {
