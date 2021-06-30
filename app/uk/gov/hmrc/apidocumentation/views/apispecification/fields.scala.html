@@ -34,7 +34,7 @@
                 <tr class="govuk-table__row
                 @if(field.depth == 0 || field.`type` == "object") {table__row--parent}
                 @if(field.depth > 0) {table__row--nested-@{field.depth}}">
-                    <td data-heading="Name" class="govuk-table__cell govuk-!-font-size-16table__col--1-2">
+                    <td data-heading="Name" class="govuk-table__cell govuk-!-font-size-16 table__col--1-2">
                         <div class="table__cell-contents--responsive">
                             <div class="parameter-name">@{field.name}</div>
                             <div class="parameter-type">@if(field.isArray) {array} else {@{field.`type`}}</div>
