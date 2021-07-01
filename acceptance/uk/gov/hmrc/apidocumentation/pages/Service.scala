@@ -180,7 +180,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
 
 
   def selectCreateUser() {
-    click on id("details-summary-heading")
+    click on className("govuk-details__summary")
     waitForPageToStopMoving()
   }
 
