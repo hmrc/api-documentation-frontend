@@ -29,7 +29,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
   feature("Navigation across documentation") {
 
-    scenario("User is navigated to the top when Back to top link is clicked") {
+    ignore("User is navigated to the top when Back to top link is clicked") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
