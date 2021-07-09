@@ -55,16 +55,13 @@
     }
 
     @if(currentVersion.status == APIStatus.DEPRECATED) {
-        <section class="section">
-            <div class="notice">
-                <i class="icon icon-important">
-                    <span class="visually-hidden">Alert</span>
-                </i>
-                <strong class="bold-small">
-                    @{viewModel.deprecationMessage.getOrElse("This version is deprecated - it’s going to be removed.")}.
-                </strong>
-            </div>
-        </section>
+        <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+                <span class="govuk-warning-text__assistive">Warning</span>
+                @{viewModel.deprecationMessage.getOrElse("This version is deprecated - it’s going to be removed.")}.
+            </strong>
+        </div>
     }
     @ourMainView(viewModel, Some(currentVersion), Some(api), loggedIn)
 }
