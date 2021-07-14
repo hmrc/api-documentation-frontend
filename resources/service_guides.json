@@ -30,5 +30,9 @@
   {
     "name": "Customs Declarations end-to-end service guide",
     "context": "/guides/customs-declarations-end-to-end-service-guide"
+  },
+  {
+    "name": "Interest Restriction Return (IRR) service guide",
+    "context": "/guides/irr-api-end-to-end-service-guide/"
   }
 ]
