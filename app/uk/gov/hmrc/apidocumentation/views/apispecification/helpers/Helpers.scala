@@ -39,6 +39,17 @@ object Responses {
 
   def error(method: Method) = method.responses.filter(isErrorResponse)
 
+  def hasResponseExample(response: Response) = {
+    response.body.exists { responseBody =>
+      responseBody.example.exists { example =>
+        example
+          .value
+          .filter(_.trim.nonEmpty)
+          .isDefined
+      }
+    }
+  }
+
   private def isSuccessResponse(response: Response) = {
     response.code.startsWith("2") || response.code.startsWith("3")
   }
