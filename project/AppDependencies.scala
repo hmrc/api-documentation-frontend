@@ -16,7 +16,6 @@ object AppDependencies {
     "uk.gov.hmrc"                           %% "http-metrics"             % "1.11.0",
     "uk.gov.hmrc"                           %% "govuk-template"           % "5.61.0-play-26",
     "uk.gov.hmrc"                           %% "play-partials"            % "6.11.0-play-26",
-    "uk.gov.hmrc"                           %% "play-frontend-govuk"      % "0.49.0-play-26",
     "uk.gov.hmrc"                           %% "play-frontend-hmrc"       % "1.9.0-play-26",
     "io.dropwizard.metrics"                 %  "metrics-graphite"         % "3.2.0",
     "org.typelevel"                         %% "cats-core"                % "2.0.0",
