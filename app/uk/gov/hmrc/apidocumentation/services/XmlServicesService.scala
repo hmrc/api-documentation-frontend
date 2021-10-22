@@ -14,29 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.connectors
+package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
+import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.metrics._
-import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
 
 @Singleton
-class XmlServicesConnector @Inject()(http: HttpClient, appConfig: XmlServicesConnector.Config, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
+class XmlServicesService @Inject()(val xmlServicesConnector: XmlServicesConnector, val apiMetrics: ApiMetrics)
+                                    (implicit ec: ExecutionContext) extends RecordMetrics {
+  val api: API = API("api-platform-xml-services")
 
-  val api = API("api-platform-xml-services")
-  private lazy val serviceBaseUrl: String = appConfig.serviceBaseUrl
-
-  def fetchAllXmlApis()(implicit hc: HeaderCarrier): Future[Seq[XmlApiDocumentation]] = record {
-    http.GET[Seq[XmlApiDocumentation]](s"$serviceBaseUrl/api-platform-xml-services/xml/apis")
-  }
+  def fetchAllXmlApis()(implicit hc: HeaderCarrier): Future[Seq[XmlApiDocumentation]] =
+    record {
+        xmlServicesConnector.fetchAllXmlApis()
+    }
 }
-
-object XmlServicesConnector {
-  case class Config(serviceBaseUrl: String)
-}
-
