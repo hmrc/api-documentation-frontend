@@ -18,31 +18,44 @@ package uk.gov.hmrc.apidocumentation.connectors
 
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.API
-
 import play.api.Configuration
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.test.Helpers._
+import play.utils.UriEncoding
 import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
 class XmlServicesConnectorSpec extends ConnectorSpec {
-  val thirdPartyDeveloperUrl = "https://api-platform-xml-services.example.com"
   val sessionId = "A_SESSION_ID"
 
-  val stubConfig = Configuration(
+  val stubConfig: Configuration = Configuration(
     "metrics.jvm" -> false,
     "microservice.services.api-platform-xml-services.host" -> stubHost,
     "microservice.services.api-platform-xml-services.port" -> stubPort
   )
 
   trait Setup {
-    implicit val hc = HeaderCarrier()
-    val connector = app.injector.instanceOf[XmlServicesConnector]
-    val UpstreamException = UpstreamErrorResponse(
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    val connector: XmlServicesConnector = app.injector.instanceOf[XmlServicesConnector]
+    val UpstreamException: UpstreamErrorResponse = UpstreamErrorResponse(
       "Internal server error",
       INTERNAL_SERVER_ERROR,
       INTERNAL_SERVER_ERROR
     )
+
+    val getAllXmlApisUrl = "/api-platform-xml-services/xml/apis"
+    def getXmlApiUrl(name: String) = s"/api-platform-xml-services/xml/api/${UriEncoding.encodePathSegment(name, "UTF-8")}"
+
+    val xmlApi1: XmlApiDocumentation = XmlApiDocumentation(
+      name = "xml api 1",
+      context = "xml api context",
+      description = "xml api description",
+      categories = None
+    )
+
+    val xmlApi2: XmlApiDocumentation = xmlApi1.copy(name = "xml api 2")
+    val xmlApis = Seq(xmlApi1, xmlApi2)
+
   }
 
   "api" should {
@@ -53,44 +66,48 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
 
   "fetchAllXmlApis" should {
     "return all Xml Apis" in new Setup {
-      val xmlApi1 = XmlApiDocumentation(
-        name = "xml api 1",
-        context = "xml api context",
-        description = "xml api description",
-        categories = None
-      )
-      val xmlApi2 = xmlApi1.copy(name = "xml api 2")
-      val xmlApis = Seq(xmlApi1, xmlApi2)
 
-      stubFor(
-        get(
-          urlPathEqualTo(s"/xml/apis")
-        )
-          .willReturn(
-            aResponse()
+      stubFor(get(urlPathEqualTo(getAllXmlApisUrl))
+          .willReturn(aResponse()
               .withStatus(OK)
-              .withJsonBody(xmlApis)
-          )
-      )
+              .withJsonBody(xmlApis)))
 
-      val result = await(connector.fetchAllXmlApis)
+      val result: Seq[XmlApiDocumentation] = await(connector.fetchAllXmlApis)
 
       result shouldBe xmlApis
     }
 
     "throw an exception correctly" in new Setup {
-      stubFor(
-        get(
-          urlPathEqualTo(s"/xml/apis")
-        )
-          .willReturn(
-            aResponse()
-              .withStatus(400)
-          )
-      )
+      stubFor(get(urlPathEqualTo(getAllXmlApisUrl))
+          .willReturn(aResponse()
+              .withStatus(BAD_REQUEST)))
 
       intercept[UpstreamException.type] {
         await(connector.fetchAllXmlApis)
+      }
+    }
+  }
+
+  "fetchXmlApi" should {
+    "return an Xml Api" in new Setup {
+
+      stubFor(get(urlPathEqualTo(getXmlApiUrl(xmlApi1.name)))
+        .willReturn(aResponse()
+          .withStatus(OK)
+          .withJsonBody(xmlApi1)))
+
+      val result: Option[XmlApiDocumentation] = await(connector.fetchXmlApi(xmlApi1.name))
+
+      result shouldBe Some(xmlApi1)
+    }
+
+    "throw an exception correctly" in new Setup {
+      stubFor(get(urlPathEqualTo(getXmlApiUrl(xmlApi1.name)))
+        .willReturn(aResponse()
+          .withStatus(BAD_REQUEST)))
+
+      intercept[UpstreamException.type] {
+        await(connector.fetchXmlApi(xmlApi1.name))
       }
     }
   }

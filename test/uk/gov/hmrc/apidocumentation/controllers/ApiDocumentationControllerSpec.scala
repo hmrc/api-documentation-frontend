@@ -26,8 +26,8 @@ import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.controllers.utils._
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.apidocumentation.mocks.config._
-import scala.concurrent.Future.successful
 
+import scala.concurrent.Future.successful
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.failed
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem, ResourceGroup, TypeDeclaration}
@@ -40,7 +40,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       with AppConfigMock
       with ApiDefinitionServiceMock
     with LoggedInUserServiceMock
-      with NavigationServiceMock {
+      with NavigationServiceMock
+      with XmlServicesServiceMock {
 
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
@@ -66,7 +67,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       apisFilteredView,
       previewDocumentationView,
       serviceDocumentationView,
-      xmlDocumentationView
+      xmlDocumentationView,
+      xmlServicesService
     )
   }
 
@@ -88,6 +90,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       "render the API List" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+        fetchAllXmlApisReturnsApis
 
         val result = underTest.apiIndexPage(None, None, None)(request)
         verifyPageRendered(pageTitle("API Documentation"), bodyContains = Seq("API documentation"))(result)
@@ -96,6 +99,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       "render the filtered API list" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+        fetchAllXmlApisReturnsVatApi
 
         val result = underTest.apiIndexPage(None, None, Some("vat"))(request)
 
@@ -105,6 +109,16 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       "display the error page when the documentationService throws an exception" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillFail(new Exception("Expected unit test failure"))
+
+        val result = underTest.apiIndexPage(None, None, None)(request)
+
+        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, we’re experiencing technical difficulties")(result)
+      }
+
+      "display the error page when the xmlServicesService throws an exception" in new Setup {
+        theUserIsLoggedIn()
+        theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+        fetchAllXmlApisFails(new Exception("Expected unit test failure"))
 
         val result = underTest.apiIndexPage(None, None, None)(request)
 
@@ -495,8 +509,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
     "render the XML API landing page when the XML API definition exists" in new Setup {
       theUserIsLoggedIn()
+      fetchXmlApiReturnsApi()
 
-      val existingXmlApiName = "Charities Online"
+      val existingXmlApiName = xmlApi1.name
       val result = underTest.renderXmlApiDocumentation(existingXmlApiName)(request)
 
       verifyPageRendered(pageTitle(existingXmlApiName), bodyContains = Seq(existingXmlApiName))(result)
@@ -504,6 +519,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
     "return 404 not found when the XML API definition does not exist" in new Setup {
       theUserIsLoggedIn()
+      fetchXmlApiReturnsNone()
 
       val nonExistingXmlApiName = "Fake XML API name"
       val result = underTest.renderXmlApiDocumentation(nonExistingXmlApiName)(request)
