@@ -26,7 +26,6 @@ import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
 class XmlServicesConnectorSpec extends ConnectorSpec {
-  val sessionId = "A_SESSION_ID"
 
   val stubConfig: Configuration = Configuration(
     "metrics.jvm" -> false,

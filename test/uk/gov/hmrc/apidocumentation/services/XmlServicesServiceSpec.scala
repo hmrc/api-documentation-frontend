@@ -18,8 +18,7 @@ package uk.gov.hmrc.apidocumentation.services
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
-import uk.gov.hmrc.apidocumentation.mocks.connectors.ApiPlatformMicroserviceConnectorMockingHelper
-import uk.gov.hmrc.apidocumentation.models.{UserId, UuidIdentifier, XmlApiDocumentation}
+import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.NoopApiMetrics
 
