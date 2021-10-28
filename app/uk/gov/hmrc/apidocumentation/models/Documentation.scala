@@ -75,8 +75,6 @@ case class XmlApiDocumentation(name: String, context: String, description: Strin
 object XmlApiDocumentation {
   implicit val format = Json.format[XmlApiDocumentation]
 
-  def xmlApiDefinitions: Seq[XmlApiDocumentation] =
-    Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/xml_apis.json")).mkString).as[Seq[XmlApiDocumentation]]
 }
 
 case class ServiceGuide(name: String, context: String, categories: Option[Seq[APICategory]] = None)

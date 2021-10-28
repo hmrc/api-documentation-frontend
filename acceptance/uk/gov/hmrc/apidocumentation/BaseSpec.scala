@@ -44,7 +44,9 @@ trait BaseSpec extends FeatureSpec with BeforeAndAfterEach with BeforeAndAfterAl
         "microservice.services.api-platform-microservice.host" -> stubHost,
         "microservice.services.api-platform-microservice.port" -> stubPort,
         "microservice.services.third-party-developer.host" -> stubHost,
-        "microservice.services.third-party-developer.port" -> stubPort
+        "microservice.services.third-party-developer.port" -> stubPort,
+        "microservice.services.api-platform-xml-services.host" -> stubHost,
+        "microservice.services.api-platform-xml-services.port" -> stubPort
       )
       .in(Mode.Prod)
       .build()
