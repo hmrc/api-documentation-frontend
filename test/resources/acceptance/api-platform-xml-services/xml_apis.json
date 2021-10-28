@@ -2,91 +2,109 @@
   {
     "name": "Agent Authorisation Online",
     "context": "/government/collections/agent-authorisation-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Agent Authorisation Online service. This API is not part of the Making Tax Digital initiative."
+    "description": "Technical specifications for software developers working with the Agent Authorisation Online service. This API is not part of the Making Tax Digital initiative.",
+    "categories": ["AGENTS"]
   },
   {
     "name": "Alcohol and Tobacco Warehouse Declaration Online",
     "context": "/government/collections/alcohol-and-tobacco-warehouse-declaration-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Alcohol and Tobacco Warehousing Declaration Online service."
+    "description": "Technical specifications for software developers working with the Alcohol and Tobacco Warehousing Declaration Online service.",
+    "categories": ["CUSTOMS"]
   },
   {
     "name": "Automatic Exchange of Information",
     "context": "/government/publications/foreign-account-tax-compliance-act-schema-and-supporting-documents",
-    "description": "Find the schema and supporting documents for software developers who use Automatic Exchange of Information (AEOI)."
+    "description": "Find the schema and supporting documents for software developers who use Automatic Exchange of Information (AEOI).",
+    "categories": ["OTHER"]
   },
   {
     "name": "Charities Online",
     "context": "/government/collections/charities-online-support-for-software-developers",
-    "description": "Charities repayment claims technical specifications for software developers working with the Charities Online service."
+    "description": "Charities repayment claims technical specifications for software developers working with the Charities Online service.",
+    "categories": ["CHARITIES"]
   },
   {
     "name": "Construction Industry Scheme Online",
     "context": "/government/collections/construction-industry-scheme-online-support-for-software-developers",
-    "description": "<p class='govuk-body'>The <a class='govuk-link' href=\"../service/cis-deductions-api/1.0\">Construction Industry Scheme (CIS) deductions</a> REST API is listed under Income Tax (Making Tax Digital) on our <a class='govuk-link' href=\"../service/cis-deductions-api/1.0\">API documentation</a> page.</p>\n<p class='govuk-body'>Technical specifications for software developers working with the Construction Industry Scheme Online service.</p>"
+    "description": "<p class='govuk-body'>The <a class='govuk-link' href=\"../service/cis-deductions-api/1.0\">Construction Industry Scheme (CIS) deductions</a> REST API is listed under Income Tax (Making Tax Digital) on our <a class='govuk-link' href=\"../service/cis-deductions-api/1.0\">API documentation</a> page.</p>\n<p class='govuk-body'>Technical specifications for software developers working with the Construction Industry Scheme Online service.</p>",
+    "categories": ["CONSTRUCTION_INDUSTRY_SCHEME"]
   },
   {
     "name": "Corporation Tax Online",
     "context": "/government/collections/corporation-tax-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Corporation Tax online service. This API is not part of the Making Tax Digital initiative."
+    "description": "Technical specifications for software developers working with the Corporation Tax online service. This API is not part of the Making Tax Digital initiative.",
+    "categories": ["CORPORATION_TAX"]
   },
   {
     "name": "Employment intermediaries",
     "context": "/government/publications/employment-intermediaries-support-for-software-developers",
-    "description": "Employment intermediaries, data requirements for software developers."
+    "description": "Employment intermediaries, data requirements for software developers.",
+    "categories": ["PAYE"]
   },
   {
     "name": "Excise Movement Control System",
     "context": "/government/collections/excise-movement-control-system-fs31-support-for-software-developers",
-    "description": "Technical specifications for the Excise Movement Control System (EMCS)."
+    "description": "Technical specifications for the Excise Movement Control System (EMCS).",
+    "categories": ["CUSTOMS"]
   },
   {
     "name": "Exchange rates from HMRC",
     "context": "/government/collections/exchange-rates-for-customs-and-vat",
-    "description": "Check the foreign exchange monthly rates, yearly averages, spot rates and weekly amendments to rates (from HMRC in CSV and XML format)."
+    "description": "Check the foreign exchange monthly rates, yearly averages, spot rates and weekly amendments to rates (from HMRC in CSV and XML format).",
+    "categories": ["CUSTOMS"]
   },
   {
     "name": "Import Control System",
     "context": "/government/collections/import-control-system-support-for-software-developers",
-    "description": "Technical specifications for Import Control System software developers."
+    "description": "Technical specifications for Import Control System software developers.",
+    "categories": ["CUSTOMS"]
   },
   {
     "name": "National Export System",
     "context": "/government/collections/national-export-system-xml-channel-support-for-software-developers",
-    "description": "Technical specifications for National Export System (NES) XML channel software developers."
+    "description": "Technical specifications for National Export System (NES) XML channel software developers.",
+    "categories": ["CUSTOMS"]
   },
   {
     "name": "New Computerised Transit System",
     "context": "/government/collections/new-computerised-transit-system-support-for-software-developers",
-    "description": "Technical specifications for New Computerised Transit System (NCTS) software developers."
+    "description": "Technical specifications for New Computerised Transit System (NCTS) software developers.",
+    "categories": ["CUSTOMS"]
   },
   {
     "name": "PAYE Online",
     "context": "/government/collections/paye-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the PAYE online service."
+    "description": "Technical specifications for software developers working with the PAYE online service.",
+    "categories": ["PAYE"]
   },
   {
     "name": "Pension Schemes Online",
     "context": "/government/collections/pension-schemes-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Pension Schemes Online service."
+    "description": "Technical specifications for software developers working with the Pension Schemes Online service.",
+    "categories": ["PENSIONS"]
   },
   {
     "name": "Real Time Information online",
     "context": "/government/collections/real-time-information-online-internet-submissions-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Real Time Information online service."
+    "description": "Technical specifications for software developers working with the Real Time Information online service.",
+    "categories": ["PAYE"]
   },
   {
     "name": "Self Assessment Online",
     "context": "/government/collections/self-assessment-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Self Assessment Online service. This API is not part of the Making Tax Digital initiative."
+    "description": "Technical specifications for software developers working with the Self Assessment Online service. This API is not part of the Making Tax Digital initiative.",
+    "categories": ["SELF_ASSESSMENT"]
   },
   {
     "name": "Stamp Taxes Online",
     "context": "/government/collections/stamp-taxes-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the Stamp Taxes Online service."
+    "description": "Technical specifications for software developers working with the Stamp Taxes Online service.",
+    "categories": ["STAMP_DUTY"]
   },
   {
     "name": "VAT and EC Sales List Online",
     "context": "/government/collections/vat-and-ec-sales-list-online-support-for-software-developers",
-    "description": "Technical specifications for software developers working with the VAT and EC Sales List Online service. This API is not part of the Making Tax Digital initiative."
+    "description": "Technical specifications for software developers working with the VAT and EC Sales List Online service. This API is not part of the Making Tax Digital initiative.",
+    "categories": ["CUSTOMS", "VAT"]
   }
 ]

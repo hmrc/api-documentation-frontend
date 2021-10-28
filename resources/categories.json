@@ -57,26 +57,6 @@
   "Marriage Allowance Test Support": ["MARRIAGE_ALLOWANCE","PAYE", "SELF_ASSESSMENT"],
   "National Insurance Test Support": ["NATIONAL_INSURANCE","SELF_ASSESSMENT"],
 
-  "Agent Authorisation Online": ["AGENTS"],
-  "Alcohol and Tobacco Warehouse Declaration Online": ["CUSTOMS"],
-  "Automatic Exchange of Information": ["OTHER"],
-  "Charities Online": ["CHARITIES"],
-  "Construction Industry Scheme Online": ["CONSTRUCTION_INDUSTRY_SCHEME"],
-  "Corporation Tax Online": ["CORPORATION_TAX"],
-  "Interest Restriction Return (IRR) service guide": ["CORPORATION_TAX"],
-  "Employment intermediaries": ["PAYE"],
-  "Excise Movement Control System": ["CUSTOMS"],
-  "Exchange rates from HMRC": ["CUSTOMS"],
-  "Import Control System": ["CUSTOMS"],
-  "National Export System": ["CUSTOMS"],
-  "New Computerised Transit System": ["CUSTOMS"],
-  "PAYE Online": ["PAYE"],
-  "Pension Schemes Online": ["PENSIONS"],
-  "Real Time Information online": ["PAYE"],
-  "Self Assessment Online": ["SELF_ASSESSMENT"],
-  "Stamp Taxes Online": ["STAMP_DUTY"],
-  "VAT and EC Sales List Online": ["CUSTOMS", "VAT"],
-
   "VAT (MTD) end-to-end service guide": ["VAT_MTD"],
   "Income Tax (MTD) end-to-end service guide": ["INCOME_TAX_MTD"],
   "MTD ITSA Vendors Roadmap": ["INCOME_TAX_MTD"],
@@ -85,5 +65,6 @@
   "Common Transit Convention Traders service guide": ["CUSTOMS"],
   "Common Transit Convention Traders testing guide": ["CUSTOMS"],
   "Goods Vehicle Movements service guide": ["CUSTOMS"],
-  "Customs Declarations end-to-end service guide": ["CUSTOMS"]
+  "Customs Declarations end-to-end service guide": ["CUSTOMS"],
+  "Interest Restriction Return (IRR) service guide": ["CORPORATION_TAX"]
 }
