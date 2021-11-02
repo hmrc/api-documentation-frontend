@@ -263,9 +263,9 @@ class ApiDocumentationController @Inject()(
         apidocumentation.models.PageAttributes(apiDefinition.name, breadcrumbs, navLinks, navigationService.sidebarNavigation())
       }
 
-      xmlServicesService.fetchXmlApi(name) flatMap {
-        case Some(xmlApiDefinition) => Future.successful(Ok(xmlDocumentationView(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
-        case _ => Future.successful(NotFound(errorHandler.notFoundTemplate))
+      xmlServicesService.fetchXmlApi(name) map {
+        case Some(xmlApiDefinition) => Ok(xmlDocumentationView(makePageAttributes(xmlApiDefinition), xmlApiDefinition))
+        case _ => NotFound(errorHandler.notFoundTemplate)
       }
   }
 
