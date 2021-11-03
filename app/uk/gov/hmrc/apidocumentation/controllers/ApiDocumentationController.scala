@@ -56,7 +56,8 @@ class ApiDocumentationController @Inject()(
                                             apisFilteredView: ApisFilteredView,
                                             previewDocumentationView: PreviewDocumentationView2,
                                             serviceDocumentationView: ServiceDocumentationView2,
-                                            xmlDocumentationView: XmlDocumentationView
+                                            xmlDocumentationView: XmlDocumentationView,
+                                            xmlServicesService: XmlServicesService
                                           )
                                          (implicit val ec: ExecutionContext, appConfig: ApplicationConfig)
   extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
@@ -81,8 +82,9 @@ class ApiDocumentationController @Inject()(
           (for {
             userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
             apis <- apiDefinitionService.fetchAllDefinitions(userId)
+            xmlApis <- xmlServicesService.fetchAllXmlApis
           } yield {
-            val apisByCategory = Documentation.groupedByCategory(apis, XmlApiDocumentation.xmlApiDefinitions, ServiceGuide.serviceGuides, RoadMap.roadMaps)
+            val apisByCategory = Documentation.groupedByCategory(apis, xmlApis, ServiceGuide.serviceGuides, RoadMap.roadMaps)
 
             filter match {
               case Some(f) => Ok(apisFilteredView(pageAttributes("Filtered API Documentation"), apisByCategory, APICategory.fromFilter(f)))
@@ -261,9 +263,9 @@ class ApiDocumentationController @Inject()(
         apidocumentation.models.PageAttributes(apiDefinition.name, breadcrumbs, navLinks, navigationService.sidebarNavigation())
       }
 
-      XmlApiDocumentation.xmlApiDefinitions.find(_.name == name) match {
-        case Some(xmlApiDefinition) => Future.successful(Ok(xmlDocumentationView(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
-        case _ => Future.successful(NotFound(errorHandler.notFoundTemplate))
+      xmlServicesService.fetchXmlApi(name) map {
+        case Some(xmlApiDefinition) => Ok(xmlDocumentationView(makePageAttributes(xmlApiDefinition), xmlApiDefinition))
+        case _ => NotFound(errorHandler.notFoundTemplate)
       }
   }
 

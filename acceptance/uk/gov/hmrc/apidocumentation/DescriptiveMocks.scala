@@ -24,6 +24,7 @@ trait DescriptiveMocks extends Stubs {
     condition("All the API services are deployed")
     developerIsSignedIn()
     fetchAll()
+    fetchAllXmlApis()
   }
 
   def helloWorldIsDeployed(serviceName: String, version: String) {

@@ -22,7 +22,21 @@ import scala.io.Source
 import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
-trait Stubs extends ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice
+trait Stubs extends ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice with XmlServices
+
+trait XmlServices {
+  def fetchAllXmlApis(): Unit = {
+    val allXmlApisJson = Source.fromURL(getClass.getResource("/acceptance/api-platform-xml-services/xml_apis.json")).mkString
+
+    stubFor(
+      get(urlPathEqualTo("/api-platform-xml-services/xml/apis"))
+        .willReturn(aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "application/json")
+          .withBody(allXmlApisJson))
+    )
+  }
+}
 
 trait ApiPlatformMicroservice{
   def fetchAll() {
