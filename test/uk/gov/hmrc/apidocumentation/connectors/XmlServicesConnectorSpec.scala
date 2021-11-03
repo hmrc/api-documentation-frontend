@@ -79,7 +79,7 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
     "throw an exception correctly" in new Setup {
       stubFor(get(urlPathEqualTo(getAllXmlApisUrl))
           .willReturn(aResponse()
-              .withStatus(BAD_REQUEST)))
+              .withStatus(NOT_FOUND)))
 
       intercept[UpstreamException.type] {
         await(connector.fetchAllXmlApis)
