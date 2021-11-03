@@ -79,7 +79,7 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
     "throw an exception correctly" in new Setup {
       stubFor(get(urlPathEqualTo(getAllXmlApisUrl))
           .willReturn(aResponse()
-              .withStatus(NOT_FOUND)))
+              .withStatus(BAD_REQUEST)))
 
       intercept[UpstreamException.type] {
         await(connector.fetchAllXmlApis)
@@ -103,11 +103,11 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
     "throw an exception correctly" in new Setup {
       stubFor(get(urlPathEqualTo(getXmlApiUrl(xmlApi1.name)))
         .willReturn(aResponse()
-          .withStatus(BAD_REQUEST)))
+          .withStatus(NOT_FOUND)))
 
-      intercept[UpstreamException.type] {
-        await(connector.fetchXmlApi(xmlApi1.name))
-      }
+
+        val result = await(connector.fetchXmlApi(xmlApi1.name))
+             result shouldBe None
     }
   }
 }
