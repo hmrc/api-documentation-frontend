@@ -22,7 +22,7 @@
 @(res: Resource, meth: Method, viewModel: ViewModel, contentID: String, authorisation: (String, Option[String]))
 
 <div id="authorisation_@contentID" class="section">
-    <h3 class="govuk-heading-m">Authorisation</h3>
+    <h4 class="govuk-heading-s">Authorisation</h4>
     @{
         authorisation match {
             case ("user", Some(scope)) => {
@@ -59,7 +59,7 @@
 @defining(Parameters.uriParams(Some(res), viewModel)) { params =>
     @if(params.nonEmpty) {
         <div id="request-parameters_@contentID" class="section">
-            <h3 class="govuk-heading-m">Path parameters</h3>
+            <h4 class="govuk-heading-s">Path parameters</h4>
             <table class="govuk-table">
                 <caption class="visually-hidden">
                     Path parameters table
@@ -81,7 +81,7 @@
 @defining(Parameters.queryParams(Some(meth), viewModel)) { params =>
     @if(params.nonEmpty) {
         <div id="query-parameters_@contentID" class="section">
-            <h3 class="govuk-heading-m first">Query parameters</h3>
+            <h4 class="govuk-heading-s first">Query parameters</h4>
             <table class="govuk-table">
                 <caption class="visually-hidden">
                     Query parameters table
@@ -100,15 +100,13 @@
     }
 }
 
+@if(meth.headers.nonEmpty || authorisation._1 != "none") {
+    @headers(meth.headers, viewModel.version, "Request headers", "required", authorisation)
+}
+
 @for(body <- meth.body) {
     <div id="sample-request_@contentID" class="section">
-        <h3 class="govuk-heading-m">Request</h3>
-
-        @if(meth.headers.nonEmpty || authorisation._1 != "none") {
-            @headers(meth.headers, viewModel.version, "Request headers", "required", authorisation)
-        }
-
-        <h4 class="govuk-heading-s">Examples</h4>
+        <h4 class="govuk-heading-s">Request</h4>
         @for(example <- BodyExamples(body)) {
             <p class="govuk-body">
                 @if(example.description.isDefined){<strong>Scenario: @example.description</strong>}
@@ -125,10 +123,10 @@
     @defining(Responses.error(meth).filter(Responses.hasResponseExample)) { errors =>
             <div id="sample-response_@contentID" class="section">
 
-                <h3 class="govuk-heading-m">Responses</h3>
+                <h4 class="govuk-heading-s">Responses</h4>
 
                 @for(resp <- (successes ++ errors)) {
-                    <h4 class="govuk-heading-s">HTTP status @HttpStatus(resp.code)</h4>
+                    <h5 class="govuk-body-s govuk-!-font-weight-bold">HTTP status @HttpStatus(resp.code)</h5>
 
                     @if(resp.headers.nonEmpty) {
                         @headers(resp.headers, viewModel.version, "Response headers", "", ("none", None))
@@ -154,7 +152,7 @@
 @defining(ErrorScenarios(meth)) { errorScenarios =>
     @if(errorScenarios.nonEmpty) {
         <div id="error-responses_@contentID" class="section">
-            <h3 class="govuk-heading-m">Error scenarios</h3>
+            <h4 class="govuk-heading-s">Error scenarios</h4>
             <table class="govuk-table">
                 <caption class="visually-hidden">
                     <div class="visually-hidden">Error scenarios table</div>
@@ -196,7 +194,7 @@
 @defining(meth.sandboxData) { sandboxData =>
     @if(sandboxData.isDefined) {
         <div id="sandbox-data_@contentID" class="section">
-            <h3 class="govuk-heading-m">Test data</h3>
+            <h4 class="govuk-heading-s">Test data</h4>
             <div class="markdown-text-styles">@Markdown(sandboxData.get)</div>
         </div>
     }

@@ -115,25 +115,10 @@ object RequestResponseField2 {
     }
   }
 
-  def responseFields(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = {
-    val responseBodies = for {
-      response <- Responses.success(method)
-      body <- response.body
-    } yield {
-      body
-    }
-
-    extractFields(responseBodies)
-  }
-
   def requestFields(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = {
     extractFields(method.body)
   }
 
-}
-
-object ResponseFields2 {
-  def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = RequestResponseField2.responseFields(method)
 }
 
 object RequestFields2 {
