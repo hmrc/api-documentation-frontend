@@ -125,17 +125,16 @@
     @defining(Responses.error(meth).filter(Responses.hasResponseExample)) { errors =>
             <div id="sample-response_@contentID" class="section">
 
-                @for(resp <- (successes ++ errors)) {
-                    <h3 class="govuk-heading-m">Response status @HttpStatus(resp.code)</h3>
+                <h3 class="govuk-heading-m">Responses</h3>
 
-                    <!-- <p class="govuk-body">HTTP status: <code class="code--slim">@HttpStatus(resp.code)</code></p> -->
+                @for(resp <- (successes ++ errors)) {
+                    <h4 class="govuk-heading-s">HTTP status @HttpStatus(resp.code)</h4>
 
                     @if(resp.headers.nonEmpty) {
                         @headers(resp.headers, viewModel.version, "Response headers", "", ("none", None))
                     }
 
                     @for(body <- resp.body) {
-                        <h4 class="govuk-heading-s">Examples</h4>
                         @for(example <- BodyExamples(body)) {
                             <p class="govuk-body">
                                 @if(example.description.isDefined){@example.description}
