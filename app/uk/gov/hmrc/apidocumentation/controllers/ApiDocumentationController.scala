@@ -18,7 +18,6 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
 import org.joda.time.{DateTime, DateTimeZone}
-import play.api.Logger
 import play.api.i18n.MessagesProvider
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -38,6 +37,8 @@ import scala.util.{Failure, Success, Try}
 import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
 import scala.util.control.NonFatal
 import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
+
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 object ApiDocumentationController {
     case class RamlParseException(msg: String) extends RuntimeException(msg)
@@ -60,7 +61,7 @@ class ApiDocumentationController @Inject()(
                                             xmlServicesService: XmlServicesService
                                           )
                                          (implicit val ec: ExecutionContext, appConfig: ApplicationConfig)
-  extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
+  extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb with ApplicationLogger {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
   private lazy val apiDocCrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
@@ -93,7 +94,7 @@ class ApiDocumentationController @Inject()(
 
           }) recover {
             case e: Throwable =>
-              Logger.error("Could not load API Documentation service", e)
+              logger.error("Could not load API Documentation service", e)
               InternalServerError(errorHandler.internalServerErrorTemplate)
           }
       }
@@ -122,7 +123,7 @@ class ApiDocumentationController @Inject()(
     }) recover {
       case _: NotFoundException => NotFound(errorHandler.notFoundTemplate)
       case e: Throwable =>
-        Logger.error("Could not load API Documentation service", e)
+        logger.error("Could not load API Documentation service", e)
         InternalServerError(errorHandler.internalServerErrorTemplate)
     }
   }
@@ -137,10 +138,10 @@ class ApiDocumentationController @Inject()(
           apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, userId)
         } yield apiDocumentation) recover {
           case e: NotFoundException =>
-            Logger.info(s"Upstream request not found: ${e.getMessage}")
+            logger.info(s"Upstream request not found: ${e.getMessage}")
             NotFound(errorHandler.notFoundTemplate)
           case e: Throwable =>
-            Logger.error("Could not load API Documentation service", e)
+            logger.error("Could not load API Documentation service", e)
             InternalServerError(errorHandler.internalServerErrorTemplate)
         }
     }
@@ -170,7 +171,7 @@ class ApiDocumentationController @Inject()(
     def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
 
     def redirectToLoginPage = {
-      Logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url}")
+      logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url}")
       Future.successful(Redirect("/developer/login").withSession(
         "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url,
         "ts" -> DateTime.now(DateTimeZone.UTC).getMillis.toString)
@@ -224,7 +225,7 @@ class ApiDocumentationController @Inject()(
             }
             .recover {
               case NonFatal(e) =>
-                Logger.error("Could not load API Documentation service", e)
+                logger.error("Could not load API Documentation service", e)
                 InternalServerError(page(Failure(e)))
             }
         }
@@ -239,10 +240,10 @@ class ApiDocumentationController @Inject()(
         Ok(Json.toJson(endpoints.sortWith((x, y) => x.url < y.url)))
       } recover {
         case e: NotFoundException =>
-          Logger.info(s"RAML document not found: ${e.getMessage}")
+          logger.info(s"RAML document not found: ${e.getMessage}")
           NotFound(Json.toJson(s"RAML Doc not found: ${e.getMessage}"))
         case e: Throwable =>
-          Logger.error("Could not build Endpoint Json for API Documentation service", e)
+          logger.error("Could not build Endpoint Json for API Documentation service", e)
           InternalServerError(Json.toJson(s"Could not build Endpoint Json for API Documentation service: ${e.getMessage}"))
       }
     } else {

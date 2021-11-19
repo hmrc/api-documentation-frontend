@@ -25,18 +25,18 @@ import scala.concurrent.duration._
 import scala.util.Try
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.http.HeaderCarrier
-import play.api.Logger
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.models.TestEndpoint
 import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
 import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
 class DocumentationService @Inject()( appConfig: ApplicationConfig,
                                       cache: CacheApi,
                                       apm: ApiPlatformMicroserviceConnector
                                       )
-                                      (implicit ec: ExecutionContext) {
+                                      (implicit ec: ExecutionContext) extends ApplicationLogger {
   val defaultExpiration = 1.hour
 
   def fetchApiSpecification(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
@@ -47,7 +47,7 @@ class DocumentationService @Inject()( appConfig: ApplicationConfig,
     Future {
       blocking {
         cache.getOrElse[Try[ApiSpecification]](key, defaultExpiration) {
-          Logger.info(s"****** Specification Cache miss for $key")
+          logger.info(s"****** Specification Cache miss for $key")
           Try {
             Await.result(apm.fetchApiSpecification(serviceName,version)(hc), 30.seconds)
           }

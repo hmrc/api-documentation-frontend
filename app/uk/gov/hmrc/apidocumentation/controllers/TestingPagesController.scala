@@ -24,6 +24,7 @@ import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
 class TestingPagesController @Inject()(
@@ -32,7 +33,7 @@ class TestingPagesController @Inject()(
                                         testingView: TestingView,
                                         testUsersDataStatefulBehaviourView: TestUsersDataStatefulBehaviourView
                                       )
-                                      (implicit ec: ExecutionContext, applicationConfig: ApplicationConfig) extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
+                                      (implicit ec: ExecutionContext, applicationConfig: ApplicationConfig) extends FrontendController(mcc) with HeaderNavigation with ApplicationLogger with PageAttributesHelper with HomeCrumb {
   def testingPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       Future.successful(Ok(testingView(pageAttributes("Testing in the sandbox", routes.TestingPagesController.testingPage().url, navLinks))))

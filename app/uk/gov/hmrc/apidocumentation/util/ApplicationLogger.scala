@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.config
+package uk.gov.hmrc.apidocumentation.util
 
-import play.api.{Configuration, Environment}
-import play.api.inject.Module
-import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
+import play.api.Logger
 
-class ConfigurationModule extends Module {
-
-  override def bindings(environment: Environment, configuration: Configuration) = {
-
-    Seq(
-      bind[XmlServicesConnector.Config].toProvider[XmlServicesConnectorConfigProvider]
-    )
-  }
+trait ApplicationLogger {
+  val logger = Logger("application")
 }

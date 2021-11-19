@@ -23,7 +23,7 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
 
 import scala.concurrent.Future
-import play.api.test.NoMaterializer
+import akka.stream.testkit.NoMaterializer
 
 trait PageRenderVerification {
   self: CommonControllerBaseSpec =>

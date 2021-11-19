@@ -28,7 +28,7 @@ import play.api.{Application, Mode}
 trait BaseSpec extends FeatureSpec with BeforeAndAfterEach with BeforeAndAfterAll with Matchers with NavigationSugar
   with GuiceOneServerPerSuite with GuiceFakeApplicationFactory {
 
-  override lazy val port = Env.port
+  // override lazy val port = Env.port
   val stubPort = 11111
   val stubHost = "localhost"
 

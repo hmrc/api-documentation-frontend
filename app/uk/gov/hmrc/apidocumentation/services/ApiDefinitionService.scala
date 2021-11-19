@@ -20,9 +20,9 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.common._
 
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.play.http.metrics.common._
 
 trait BaseApiDefinitionService {
   def fetchExtendedDefinition(serviceName: String, developerId: Option[DeveloperIdentifier])

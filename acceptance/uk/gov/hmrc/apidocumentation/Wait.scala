@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import java.util.concurrent.TimeUnit
-
 import org.openqa.selenium.support.ui.{ExpectedConditions, FluentWait}
 import org.openqa.selenium._
 import org.scalatest.concurrent.Eventually
@@ -33,8 +31,8 @@ trait Wait extends Eventually {
 
   def waitForElement(by: By, timeout: Int = 5): WebElement = {
     val wait = new FluentWait[WebDriver](Env.driver)
-      .withTimeout(timeout, TimeUnit.SECONDS)
-      .pollingEvery(fluentWaitPollingMilliseconds, TimeUnit.MILLISECONDS)
+      .withTimeout(java.time.Duration.ofSeconds(timeout))
+      .pollingEvery(java.time.Duration.ofMillis(fluentWaitPollingMilliseconds))
       .ignoring(classOf[NoSuchElementException], classOf[StaleElementReferenceException])
     wait.until(ExpectedConditions.visibilityOfElementLocated(by))
   }

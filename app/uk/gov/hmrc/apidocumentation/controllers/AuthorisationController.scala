@@ -26,6 +26,8 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+
 @Singleton
 class AuthorisationController @Inject()(   
                                         mcc: MessagesControllerComponents,
@@ -38,7 +40,8 @@ class AuthorisationController @Inject()(
                                         credentialsView: CredentialsView
                                         )
                                        (implicit ec: ExecutionContext, applicationConfig: ApplicationConfig)
-  extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb {
+  extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb 
+    with ApplicationLogger {
 
   private lazy val authCrumb = Crumb("Authorisation", routes.AuthorisationController.authorisationPage().url)
 

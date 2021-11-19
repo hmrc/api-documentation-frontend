@@ -22,8 +22,10 @@ import uk.gov.hmrc.apidocumentation.SessionRedirectFilter
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 import scala.concurrent.{ExecutionContext, Future}
-import play.api.test.NoMaterializer
 import akka.stream.Materializer
+import play.api.routing.Router
+import play.api.routing.HandlerDef
+import akka.stream.testkit.NoMaterializer
 
 class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
   trait Setup {
@@ -42,11 +44,21 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
     "save the current uri in the session when the path is for a documentation page" in new Setup {
       val controller = "uk.gov.hmrc.apidocumentation.controllers.DocumentationController"
       val path = s"$rootPath/docs/api"
+
+      val handlerDef = HandlerDef(
+        classLoader = ClassLoader.getSystemClassLoader(),
+        routerPackage = "",
+        controller = controller,
+        method = "",
+        parameterTypes = Seq.empty,
+        verb = "",
+        path = path
+      )
+
       implicit val requestHeader = FakeRequest("GET", path)
         .withSession(defaultSession: _*)
-        .withTag("ROUTE_CONTROLLER", controller)
-        .withTag("ROUTE_PATTERN", path)
-
+        .addAttr(Router.Attrs.HandlerDef, handlerDef)
+        
       await(filter.apply(nextFilter)(requestHeader))
 
       verify(mockResult).withSession(eqTo(Session(defaultSession.toMap + ("access_uri" -> path))))
@@ -55,10 +67,20 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
     "remove the current uri in the session when the path is for the index page" in new Setup {
       val controller = "uk.gov.hmrc.apidocumentation.controllers.DocumentationController"
       val path = rootPath
+      
+      val handlerDef = HandlerDef(
+        classLoader = ClassLoader.getSystemClassLoader(),
+        routerPackage = "",
+        controller = controller,
+        method = "",
+        parameterTypes = Seq.empty,
+        verb = "",
+        path = path
+      )
+      
       implicit val requestHeader = FakeRequest("GET", path)
         .withSession(defaultSession ++ Seq("access_uri" -> path): _*)
-        .withTag("ROUTE_CONTROLLER", controller)
-        .withTag("ROUTE_PATTERN", path)
+        .addAttr(Router.Attrs.HandlerDef, handlerDef)
 
       await(filter.apply(nextFilter)(requestHeader))
 
@@ -68,10 +90,19 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
     "not add the current uri to the session when the path is not for a documentation page" in new Setup {
       val controller = "controllers.AssetsController"
       val path = s"$rootPath/assets/main.js"
+      val handlerDef = HandlerDef(
+        classLoader = ClassLoader.getSystemClassLoader(),
+        routerPackage = "",
+        controller = controller,
+        method = "",
+        parameterTypes = Seq.empty,
+        verb = "",
+        path = path
+      )
+
       implicit val requestHeader = FakeRequest("GET", path)
         .withSession(defaultSession: _*)
-        .withTag("ROUTE_CONTROLLER", controller)
-        .withTag("ROUTE_PATTERN", path)
+        .addAttr(Router.Attrs.HandlerDef, handlerDef)
 
       await(filter.apply(nextFilter)(requestHeader))
 

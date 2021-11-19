@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import play.api.libs.crypto.CookieSigner
-import play.api.test.{FakeRequest, Helpers}
+import play.api.test.FakeRequest
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec

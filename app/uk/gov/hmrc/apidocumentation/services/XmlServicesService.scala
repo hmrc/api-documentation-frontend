@@ -20,9 +20,9 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.common._
 
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.play.http.metrics.common._
 
 @Singleton
 class XmlServicesService @Inject()(val xmlServicesConnector: XmlServicesConnector, val apiMetrics: ApiMetrics)

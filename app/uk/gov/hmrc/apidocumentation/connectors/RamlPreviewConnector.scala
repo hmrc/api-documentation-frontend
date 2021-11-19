@@ -21,11 +21,11 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-import uk.gov.hmrc.play.http.metrics.common._
 import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HeaderCarrier
 import java.net.URLEncoder
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.play.http.metrics.common._
 
 @Singleton
 class RamlPreviewConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {

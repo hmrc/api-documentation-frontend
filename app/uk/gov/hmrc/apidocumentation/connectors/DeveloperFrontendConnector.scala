@@ -22,9 +22,9 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.play.http.metrics.common._
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.connectionExceptionsAsHtmlPartialFailure
+import uk.gov.hmrc.play.http.metrics.common._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +35,7 @@ class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: Applicat
   private lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = record {
-    import uk.gov.hmrc.http.HttpReads.Implicits._
+    import _root_.uk.gov.hmrc.http.HttpReads.Implicits._
     http.GET[Seq[NavLink]](s"$serviceBaseUrl/developer/user-navlinks")
   }
 
@@ -43,4 +43,3 @@ class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: Applicat
     http.GET[HtmlPartial](s"$serviceBaseUrl/developer/partials/terms-of-use") recover connectionExceptionsAsHtmlPartialFailure
   }
 }
-

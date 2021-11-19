@@ -32,7 +32,7 @@ class ApiDefinitionServiceSpec extends AsyncHmrcSpec
  
   with ApiDefinitionTestDataHelper {
 
-  trait LocalSetup extends ApiPlatformMicroserviceConnectorMockingHelper{
+  trait LocalSetup extends ApiPlatformMicroserviceConnectorMockingHelper {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val loggedInUserEmail = "3rdparty@example.com"
     val loggedInUserId = UuidIdentifier(UserId.random)
