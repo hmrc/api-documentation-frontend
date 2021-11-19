@@ -23,7 +23,7 @@ import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import uk.gov.hmrc.apidocumentation.models.DeveloperIdentifier

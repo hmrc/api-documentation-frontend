@@ -36,8 +36,6 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
     val mockSessionService = mock[SessionService]
     val mockCookieSigner = mock[CookieSigner]
 
-    val mcc = Helpers.stubControllerComponents()
-
     val developer = Developer("email","John", "Smith", UserId.random)
     val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
 
@@ -47,7 +45,7 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
 
     "Be None when no cookie" in {
       implicit val request = fakeRequestWithoutCookie
-      val loggedInUserService = new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc)
+      val loggedInUserService = new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner)
 
       val result: Option[Developer] = await(loggedInUserService.fetchLoggedInUser())
 
@@ -57,7 +55,7 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
     "Be None when cookie is present but there is no valid signed cookie token" in {
       implicit val request = fakeRequestWithoutCookie
 
-      val loggedInUserService = new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc)
+      val loggedInUserService = new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner)
 
       val result: Option[Developer] = await(loggedInUserService.fetchLoggedInUser())
 
@@ -74,7 +72,7 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
         .thenReturn(Future.successful(None))
 
       val loggedInUserService =
-        new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc) {
+        new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner) {
           override def decodeCookie(token: String) : Option[String] = decodeSessionResult
         }
 
@@ -94,7 +92,7 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
         .thenReturn(Future.successful(Some(session)))
 
       val loggedInUserService =
-        new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner, mcc) {
+        new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner) {
           override def decodeCookie(token: String) : Option[String] = decodeSessionResult
         }
 

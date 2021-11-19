@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics._
+import uk.gov.hmrc.play.http.metrics.common._
 
 import scala.concurrent.{ExecutionContext, Future}
 

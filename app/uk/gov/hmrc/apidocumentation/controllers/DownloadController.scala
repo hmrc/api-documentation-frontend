@@ -24,7 +24,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, DeveloperIdentifier, ExtendedAPIDefinition, UuidIdentifier, VersionVisibility}
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService, LoggedInUserService}
 import uk.gov.hmrc.http.NotFoundException
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 

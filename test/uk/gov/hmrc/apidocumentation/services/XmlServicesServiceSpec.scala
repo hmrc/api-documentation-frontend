@@ -20,7 +20,7 @@ import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
 import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.NoopApiMetrics
+import uk.gov.hmrc.play.http.metrics.common.NoopApiMetrics
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -18,15 +18,11 @@ package uk.gov.hmrc.apidocumentation
 
 import akka.stream.Materializer
 import javax.inject.{Inject, Singleton}
-import play.api.http.DefaultHttpFilters
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.controllers._
-import uk.gov.hmrc.play.bootstrap.filters.FrontendFilters
 
 import scala.concurrent.{ExecutionContext, Future}
-
-class Filters @Inject()(defaultFilters: FrontendFilters, sessionRedirectFilter: SessionRedirectFilter)
-    extends DefaultHttpFilters(defaultFilters.filters :+ sessionRedirectFilter: _*)
+import play.api.routing.Router
 
 @Singleton
 class SessionRedirectFilter @Inject()(implicit override val mat: Materializer,
@@ -45,8 +41,10 @@ class SessionRedirectFilter @Inject()(implicit override val mat: Materializer,
   override def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     nextFilter(requestHeader).map { result =>
       val root = "/api-documentation"
-      val routePattern = requestHeader.tags.getOrElse("ROUTE_PATTERN", root)
-      val controllerName = requestHeader.tags.getOrElse("ROUTE_CONTROLLER", "")
+      
+      val handlerDef = requestHeader.attrs.get(Router.Attrs.HandlerDef)
+      val routePattern = handlerDef.map(_.path).getOrElse(root)
+      val controllerName = handlerDef.map(_.controller).getOrElse("")
 
       if (rewriteControllers.contains(controllerName)) {
         val newSession = if (routePattern == root) {

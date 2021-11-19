@@ -20,7 +20,7 @@ import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.apidocumentation.mocks.connectors.ApiPlatformMicroserviceConnectorMockingHelper
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
-import uk.gov.hmrc.play.http.metrics.NoopApiMetrics
+import uk.gov.hmrc.play.http.metrics.common.NoopApiMetrics
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global

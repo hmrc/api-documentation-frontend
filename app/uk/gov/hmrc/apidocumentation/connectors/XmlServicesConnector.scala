@@ -18,8 +18,8 @@ package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.http.metrics._
+import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.play.http.metrics.common._
 import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}

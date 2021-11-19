@@ -25,6 +25,7 @@ import uk.gov.hmrc.http.Authorization
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.http.ws.{WSProxy, WSProxyConfiguration}
+import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
 class ProxiedHttpClient @Inject()(config: Configuration,
@@ -45,7 +46,7 @@ class ProxiedHttpClient @Inject()(config: Configuration,
 
   override def wsProxyServer: Option[WSProxyServer] = WSProxyConfiguration("proxy", config)
 
-  override def buildRequest[A](url: String, headers: Seq[(String, String)]): PlayWSRequest = {
+  override def buildRequest[A](url: String, headers: Seq[(String, String)])(implicit hc: HeaderCarrier): PlayWSRequest = {
     val extraHeaders: Seq[(String,String)] = headers ++ 
       authorization.map(v => (HeaderNames.AUTHORIZATION -> v.value)).toSeq ++
       apiKeyHeader.map(v => ProxiedHttpClient.API_KEY_HEADER_NAME -> v).toSeq ++
