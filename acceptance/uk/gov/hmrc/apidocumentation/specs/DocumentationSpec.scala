@@ -23,9 +23,9 @@ import uk.gov.hmrc.apidocumentation.TableDrivenPropertyMocks
 
 class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPropertyChecks with TableDrivenPropertyMocks {
 
-  feature("API Documentation") {
+  Feature("API Documentation") {
 
-    scenario("Show endpoint page for the default version of a selected API") {
+    Scenario("Show endpoint page for the default version of a selected API") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -40,7 +40,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       HelloWorldPage.assertAPIEndpoints()
     }
 
-    scenario("OPTIONS endpoints are not displayed for the selected API") {
+    Scenario("OPTIONS endpoints are not displayed for the selected API") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -55,7 +55,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       HelloWorldPage.assertOptionsEndpointsNotPresent()
     }
 
-    scenario("Breadcrumb for the API endpoint") {
+    Scenario("Breadcrumb for the API endpoint") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -73,7 +73,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       }
     }
 
-    scenario("Ensure end point details are displayed when endpoint HTTP verb button is selected") {
+    Scenario("Ensure end point details are displayed when endpoint HTTP verb button is selected") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -89,7 +89,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       HelloWorldPage.assertEndpointsDetails()
     }
 
-    scenario("Ensure the same version that is displayed on the API index page is also displayed by default when API Documentation Test Service is selected") {
+    Scenario("Ensure the same version that is displayed on the API index page is also displayed by default when API Documentation Test Service is selected") {
       Given apiServicesIsDeployed()
       Given apiDocumentationTestServiceVersionsIsDeployed()
 
@@ -104,7 +104,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       ApiDocumentationTestServicePage.checkDefaultVersion("v1.1 (Stable)")
     }
 
-    scenario("Ensure all API versions are sorted correctly and can be viewed by the user") {
+    Scenario("Ensure all API versions are sorted correctly and can be viewed by the user") {
       Given apiServicesIsDeployed()
       Given apiDocumentationTestServiceVersionsIsDeployed()
 
@@ -119,7 +119,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       ApiDocumentationTestServicePage.checkVersionSortOrder()
     }
 
-    scenario("Optional header displays as 'optional' in API docs") {
+    Scenario("Optional header displays as 'optional' in API docs") {
       Given apiServicesIsDeployed()
       Given apiDocumentationTestServiceVersionsIsDeployed()
 
@@ -138,7 +138,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       ApiDocumentationTestServicePage.checkLocationFieldIsOptional()
     }
 
-    scenario("Ensure user can access the Hello World API Summary Details page and view all endpoints for a Beta version") {
+    Scenario("Ensure user can access the Hello World API Summary Details page and view all endpoints for a Beta version") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -156,7 +156,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       HelloWorldPage.assertEndpointsDetails()
     }
 
-    scenario("Update API Version in the request header") {
+    Scenario("Update API Version in the request header") {
       Given apiServicesIsDeployed()
       Given apiDocumentationTestServiceVersionsIsDeployed()
 

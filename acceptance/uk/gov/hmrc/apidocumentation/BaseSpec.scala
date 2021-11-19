@@ -20,18 +20,27 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import org.openqa.selenium.WebDriver
-import org.scalatest._
-import org.scalatestplus.play.guice.{GuiceFakeApplicationFactory, GuiceOneServerPerSuite}
+
+import org.scalatestplus.play.guice.{GuiceFakeApplicationFactory, GuiceOneServerPerTest}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.{Application, Mode}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.TestData
+import play.api.test.RunningServer
+import uk.gov.hmrc.apidocumentation.common.MyTestServerFactory
 
-trait BaseSpec extends FeatureSpec with BeforeAndAfterEach with BeforeAndAfterAll with Matchers with NavigationSugar
-  with GuiceOneServerPerSuite with GuiceFakeApplicationFactory {
+trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterEach with BeforeAndAfterAll with Matchers with NavigationSugar
+  with GuiceOneServerPerTest with GuiceFakeApplicationFactory {
 
   // override lazy val port = Env.port
   val stubPort = 11111
   val stubHost = "localhost"
 
+  override protected def newServerForTest(app: Application, testData: TestData): RunningServer = MyTestServerFactory.start(app)
+  
   implicit val webDriver: WebDriver = Env.driver
 
   var wireMockServer = new WireMockServer(wireMockConfig().port(stubPort))

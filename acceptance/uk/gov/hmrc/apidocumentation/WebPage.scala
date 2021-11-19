@@ -16,10 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import java.util.concurrent.TimeUnit
-
 import org.openqa.selenium._
-import org.openqa.selenium.support.ui._
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.selenium.{Page, WebBrowser}
 import org.scalatest.matchers.should.Matchers

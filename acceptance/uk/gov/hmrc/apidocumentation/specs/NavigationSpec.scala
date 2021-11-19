@@ -27,7 +27,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
     executeScript("return window.pageYOffset;").toString.toInt
   }
 
-  feature("Navigation across documentation") {
+  Feature("Navigation across documentation") {
 
     ignore("User is navigated to the top when Back to top link is clicked") {
       Given("I have navigated to the API documentation page")
@@ -63,7 +63,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       }
     }
 
-    scenario("Left menu options are displayed when selected an API") {
+    Scenario("Left menu options are displayed when selected an API") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -79,7 +79,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       HelloWorldPage.assertLeftMenuIsDisplayed()
     }
 
-    scenario("User is navigated to the appropriate sections when user clicks on the sections on the left side") {
+    Scenario("User is navigated to the appropriate sections when user clicks on the sections on the left side") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)
@@ -95,7 +95,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       HelloWorldPage.waitUntilLinksGetToTheTopOfThePage()
     }
 
-    scenario("Dev Hub Name") {
+    Scenario("Dev Hub Name") {
       val expectedApplicationName = "HMRC Developer Hub"
       Given("I have navigated to the Home page")
       Given apiServicesIsDeployed()
@@ -121,7 +121,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       HelloWorldPage.applicationName shouldBe expectedApplicationName
     }
 
-    scenario("Ensure back to the top link only exists after Errors section") {
+    Scenario("Ensure back to the top link only exists after Errors section") {
       Given("I have navigated to the API documentation page")
       Given apiServicesIsDeployed()
       goOn(APIDocumentationPage)

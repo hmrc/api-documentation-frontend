@@ -20,7 +20,7 @@ import java.net.URL
 
 import org.openqa.selenium._
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
-import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxProfile}
+import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxOptions}
 import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
 
 import scala.util.{Properties, Try}
