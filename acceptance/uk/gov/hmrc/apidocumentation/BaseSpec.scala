@@ -35,7 +35,6 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterEach with BeforeAndAfterAll with Matchers with NavigationSugar
   with GuiceOneServerPerSuite {
 
-  // override lazy val port = Env.port
   val stubPort = 11111
   val stubHost = "localhost"
 
