@@ -28,6 +28,18 @@ import play.api.routing.HandlerDef
 import akka.stream.testkit.NoMaterializer
 
 class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
+
+  def makeHandlerDef(controller: String, path: String): HandlerDef =
+    HandlerDef(
+      classLoader = ClassLoader.getSystemClassLoader(),
+      routerPackage = "",
+      controller = controller,
+      method = "",
+      parameterTypes = Seq.empty,
+      verb = "",
+      path = path
+    )
+
   trait Setup {
     implicit val mat: Materializer = NoMaterializer
 
@@ -45,15 +57,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
       val controller = "uk.gov.hmrc.apidocumentation.controllers.DocumentationController"
       val path = s"$rootPath/docs/api"
 
-      val handlerDef = HandlerDef(
-        classLoader = ClassLoader.getSystemClassLoader(),
-        routerPackage = "",
-        controller = controller,
-        method = "",
-        parameterTypes = Seq.empty,
-        verb = "",
-        path = path
-      )
+      val handlerDef = makeHandlerDef(controller, path)
 
       implicit val requestHeader = FakeRequest("GET", path)
         .withSession(defaultSession: _*)
@@ -68,15 +72,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
       val controller = "uk.gov.hmrc.apidocumentation.controllers.DocumentationController"
       val path = rootPath
       
-      val handlerDef = HandlerDef(
-        classLoader = ClassLoader.getSystemClassLoader(),
-        routerPackage = "",
-        controller = controller,
-        method = "",
-        parameterTypes = Seq.empty,
-        verb = "",
-        path = path
-      )
+      val handlerDef = makeHandlerDef(controller, path)
       
       implicit val requestHeader = FakeRequest("GET", path)
         .withSession(defaultSession ++ Seq("access_uri" -> path): _*)
@@ -90,15 +86,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
     "not add the current uri to the session when the path is not for a documentation page" in new Setup {
       val controller = "controllers.AssetsController"
       val path = s"$rootPath/assets/main.js"
-      val handlerDef = HandlerDef(
-        classLoader = ClassLoader.getSystemClassLoader(),
-        routerPackage = "",
-        controller = controller,
-        method = "",
-        parameterTypes = Seq.empty,
-        verb = "",
-        path = path
-      )
+      val handlerDef = makeHandlerDef(controller, path)
 
       implicit val requestHeader = FakeRequest("GET", path)
         .withSession(defaultSession: _*)
