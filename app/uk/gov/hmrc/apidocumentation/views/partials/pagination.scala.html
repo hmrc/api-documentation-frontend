@@ -20,7 +20,7 @@
 
 <nav class="gem-c-pagination" role="navigation" aria-label="Pagination">
   <ul class="gem-c-pagination--list">
-    @previous.map { case Pagination(text, href) =>
+    @previous.map { case Pagination(text, href) => {
       <li class="gem-c-pagination__item gem-c-pagination__item--previous">
         <a class="gem-c-pagination__link" title="Navigate to previous part" rel="previous" href="@href">
           <div class="gem-c-pagination-container">
@@ -35,8 +35,8 @@
           </div>
         </a>
       </li>
-    }
-    @next.map { case Pagination(text, href) =>
+    }}
+    @next.map { case Pagination(text, href) => {
       <li class="gem-c-pagination__item gem-c-pagination__item--next">
         <a class="gem-c-pagination__link" title="Navigate to next part" rel="next" href="@href">
           <div class="gem-c-pagination-container">
@@ -51,6 +51,6 @@
           </div>
         </a>
       </li>
-    }
+    }}
   </ul>
 </nav>

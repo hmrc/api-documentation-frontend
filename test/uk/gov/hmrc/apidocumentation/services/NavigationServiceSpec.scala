@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
-import play.api.cache.CacheApi
+import play.api.cache.AsyncCacheApi
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.models._
@@ -36,7 +36,7 @@ class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
     when(config.title).thenReturn("Unit Test Title")
     val underTest = new NavigationService(connector, config)
 
-    val cache = app.injector.instanceOf[CacheApi]
+    val cache = app.injector.instanceOf[AsyncCacheApi]
     val docSvc = app.injector.instanceOf[DocumentationService]
   }
 
