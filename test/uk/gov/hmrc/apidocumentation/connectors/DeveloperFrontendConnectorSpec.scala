@@ -25,7 +25,7 @@ import uk.gov.hmrc.play.partials.HtmlPartial
 import play.api.test.Helpers._
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import play.api.Configuration
-import uk.gov.hmrc.play.http.metrics.API
+import uk.gov.hmrc.play.http.metrics.common.API
 
 class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   val developerFrontendUrl = "http://developer-frontend.example.com"

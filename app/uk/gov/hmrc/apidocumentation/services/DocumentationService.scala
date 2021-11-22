@@ -20,40 +20,35 @@ import javax.inject.{Inject, Singleton}
 import play.api.cache._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
-import scala.concurrent.{ExecutionContext, Future, _}
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
-import scala.util.Try
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.http.HeaderCarrier
-import play.api.Logger
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.models.TestEndpoint
 import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
 import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+import scala.concurrent.Future
 
 @Singleton
 class DocumentationService @Inject()( appConfig: ApplicationConfig,
-                                      cache: CacheApi,
+                                      cache: AsyncCacheApi,
                                       apm: ApiPlatformMicroserviceConnector
                                       )
-                                      (implicit ec: ExecutionContext) {
+                                      (implicit ec: ExecutionContext) extends ApplicationLogger {
   val defaultExpiration = 1.hour
 
   def fetchApiSpecification(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
     val key = serviceName+":"+version
     if (cacheBuster) cache.remove(key)
 
-    // TODO - This microservice call is not blocking any threads in this microservice.  Remove the future blocking
-    Future {
-      blocking {
-        cache.getOrElse[Try[ApiSpecification]](key, defaultExpiration) {
-          Logger.info(s"****** Specification Cache miss for $key")
-          Try {
-            Await.result(apm.fetchApiSpecification(serviceName,version)(hc), 30.seconds)
-          }
-        }
-      }.fold(e => { cache.remove(key); throw e }, identity )
+    val spec = cache.getOrElseUpdate(key, defaultExpiration) {
+      logger.info(s"****** Specification Cache miss for $key")
+      apm.fetchApiSpecification(serviceName,version)(hc)
     }
+    spec.onComplete(t => t.fold(e => { cache.remove(key); throw e }, identity ))
+    spec
   }
 
   def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier): Future[Seq[TestEndpoint]] = {

@@ -33,7 +33,7 @@ class DownloadConnectorSpec extends ConnectorSpec {
   val serviceName = "hello-world"
   val version = "1.0"
   val stubConfig = Configuration(
-    "Test.metrics.jvm" -> false
+    "metrics.jvm" -> false
   )
 
   trait Setup {

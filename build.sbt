@@ -8,7 +8,6 @@ import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.PublishingSettings._
 import uk.gov.hmrc.{SbtAutoBuildPlugin, _}
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
@@ -59,7 +58,6 @@ lazy val microservice = (project in file("."))
     majorVersion := 0,
     scalacOptions += "-Ypartial-unification"
   )
-  .settings(playPublishingSettings: _*)
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
 
   .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
@@ -92,13 +90,5 @@ lazy val microservice = (project in file("."))
 lazy val allPhases = "tt->test;test->test;test->compile;compile->compile"
 lazy val AcceptanceTest = config("acceptance") extend Test
 lazy val TemplateTest = config("tt") extend Test
-
-lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
-  credentials += SbtCredentials,
-
-  publishArtifact in(Compile, packageDoc) := false,
-  publishArtifact in(Compile, packageSrc) := false
-) ++
-  publishAllArtefacts
 
 lazy val appName = "api-documentation-frontend"

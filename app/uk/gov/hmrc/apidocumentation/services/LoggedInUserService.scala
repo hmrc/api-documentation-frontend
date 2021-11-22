@@ -20,25 +20,21 @@ import java.security.MessageDigest
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.crypto.CookieSigner
-import play.api.mvc.{ControllerComponents, Request, RequestHeader}
+import play.api.mvc.Request
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
 
 @Singleton
 class LoggedInUserService @Inject()(config: ApplicationConfig,
                                     sessionService: SessionService,
-                                    val cookieSigner : CookieSigner,
-                                    cc: ControllerComponents)
+                                    val cookieSigner : CookieSigner)
                                    (implicit ec: ExecutionContext)
-                                    extends BackendController(cc)
-                                    with CookieEncoding
-                                    with HeaderCarrierConversion {
+                                   extends CookieEncoding
+                                   with FrontendHeaderCarrierProvider {
 
   import LoggedInUserService._
 
@@ -47,13 +43,13 @@ class LoggedInUserService @Inject()(config: ApplicationConfig,
       .map(_.map(_.developer))
   }
 
-    private def loadSession[A](implicit request: Request[A]): Future[Option[Session]] = {
-      (for {
-        cookie <- request.cookies.get(cookieName)
-        sessionId <- decodeCookie(cookie.value)
-      } yield fetchDeveloperSession(sessionId))
-        .getOrElse(Future.successful(None))
-    }
+  private def loadSession[A](implicit request: Request[A]): Future[Option[Session]] = {
+    (for {
+      cookie <- request.cookies.get(cookieName)
+      sessionId <- decodeCookie(cookie.value)
+    } yield fetchDeveloperSession(sessionId))
+      .getOrElse(Future.successful(None))
+  }
 
   private def fetchDeveloperSession[A](sessionId: String)(implicit hc: HeaderCarrier): Future[Option[Session]] = {
     sessionService
@@ -86,10 +82,4 @@ trait CookieEncoding {
       }
     }).toOption.flatten
   }
-}
-
-trait HeaderCarrierConversion extends uk.gov.hmrc.play.bootstrap.controller.BackendBaseController {
-
-  override implicit def hc(implicit rh: RequestHeader): HeaderCarrier =
-    HeaderCarrierConverter.fromRequestAndSession(rh, rh.session)
 }

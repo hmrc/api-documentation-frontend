@@ -17,13 +17,12 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import uk.gov.hmrc.apidocumentation.models.DeveloperIdentifier
@@ -31,9 +30,11 @@ import uk.gov.hmrc.apidocumentation.models.DeveloperIdentifier
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+
 @Singleton
 class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appConfig: ApplicationConfig)
-                                      (implicit val ec: ExecutionContext) {
+                                      (implicit val ec: ExecutionContext) extends ApplicationLogger {
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
@@ -44,23 +45,23 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
   }
 
   def fetchApiDefinitionsByCollaborator(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
-    Logger.info(s"${getClass.getSimpleName} - fetchApiDefinitionsByCollaborator")
+    logger.info(s"${getClass.getSimpleName} - fetchApiDefinitionsByCollaborator")
     val r = http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(developerId))
 
-    r.map(defns => defns.foreach(defn => Logger.info(s"Found ${defn.name}")))
+    r.map(defns => defns.foreach(defn => logger.info(s"Found ${defn.name}")))
 
     r.map(e => e.sortBy(_.name))
   }
 
   def fetchApiDefinition(serviceName: String, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
-    Logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
+    logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
     
     val r = http.GET[Option[ExtendedAPIDefinition]](definitionUrl(serviceBaseUrl, serviceName), queryParams(developerId))
 
-    r.map(_.map(defn => Logger.info(s"Found ${defn.name}")))
+    r.map(_.map(defn => logger.info(s"Found ${defn.name}")))
     
     r.recover {
-      case e => Logger.error(s"Failed $e"); throw e
+      case e => logger.error(s"Failed $e"); throw e
     }
   }
 }

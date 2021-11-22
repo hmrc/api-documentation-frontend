@@ -26,5 +26,4 @@ class XmlServicesConnectorConfigProvider @Inject() (config: ServicesConfig) exte
     XmlServicesConnector.Config(
       serviceBaseUrl = config.baseUrl("api-platform-xml-services")
     )
-
 }

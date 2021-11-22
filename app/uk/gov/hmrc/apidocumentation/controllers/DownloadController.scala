@@ -17,16 +17,17 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, DeveloperIdentifier, ExtendedAPIDefinition, UuidIdentifier, VersionVisibility}
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService, LoggedInUserService}
 import uk.gov.hmrc.http.NotFoundException
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
+
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
 class DownloadController @Inject()(documentationService: DocumentationService,
@@ -37,7 +38,7 @@ class DownloadController @Inject()(documentationService: DocumentationService,
                                    val appConfig: ApplicationConfig,
                                    cc: MessagesControllerComponents)
                                   (implicit val ec: ExecutionContext)
-  extends FrontendController(cc) {
+  extends FrontendController(cc) with ApplicationLogger {
 
   def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
 
@@ -50,10 +51,10 @@ class DownloadController @Inject()(documentationService: DocumentationService,
       result
     }) recover {
       case e: NotFoundException =>
-        Logger.info(s"Resource not found: ${e.getMessage}")
+        logger.info(s"Resource not found: ${e.getMessage}")
         NotFound(errorHandler.notFoundTemplate)
       case e: Throwable =>
-        Logger.error("Could not load resource", e)
+        logger.error("Could not load resource", e)
         InternalServerError(errorHandler.internalServerErrorTemplate)
     }
   }

@@ -19,7 +19,6 @@ package uk.gov.hmrc.apidocumentation.services
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.Application
-import play.api.cache.CacheApi
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.TestEndpoint
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
@@ -36,6 +35,7 @@ import uk.gov.hmrc.apidocumentation.models.APIDefinition
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
+import play.api.cache.AsyncCacheApi
 
 class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest with ApiDefinitionTestDataHelper {
 
@@ -53,7 +53,7 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
 
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val cache = app.injector.instanceOf[CacheApi]
+    val cache = app.injector.instanceOf[AsyncCacheApi]
     val appConfig = mock[ApplicationConfig]
     val apm = mock[ApiPlatformMicroserviceConnector]
     when(appConfig.apiPlatformMicroserviceBaseUrl).thenReturn(serviceUrl)

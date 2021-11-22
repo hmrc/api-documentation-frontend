@@ -17,16 +17,17 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.views.html._
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
+
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
 class DocumentationController @Inject()(
@@ -47,7 +48,8 @@ class DocumentationController @Inject()(
     extends FrontendController(mcc)
     with HeaderNavigation
     with PageAttributesHelper
-    with HomeCrumb {
+    with HomeCrumb
+    with ApplicationLogger {
 
   private lazy val usingTheHubCrumb = Crumb(
     "Using the Developer Hub",
@@ -206,7 +208,7 @@ trait PageAttributesHelper {
 }
 
 trait HeaderNavigation {
-  self: FrontendController =>
+  self: FrontendController with ApplicationLogger =>
 
   def navigationService: NavigationService
 
@@ -222,7 +224,7 @@ trait HeaderNavigation {
         f(request)(navLinks)
       } recoverWith {
         case ex =>
-          Logger.error(
+          logger.error(
             "User navigation links can not be rendered due to service call failure",
             ex
           )

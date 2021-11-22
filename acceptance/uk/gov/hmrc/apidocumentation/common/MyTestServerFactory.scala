@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package uk.gov.hmrc.apidocumentation.common
 
-package uk.gov.hmrc.apidocumentation.config
+import play.api.Mode
+import play.api.Application
+import play.api.test.DefaultTestServerFactory
+import play.core.server.ServerConfig
 
-import play.api.{Configuration, Environment}
-import play.api.inject.Module
-import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
+object MyTestServerFactory extends MyTestServer
 
-class ConfigurationModule extends Module {
-
-  override def bindings(environment: Environment, configuration: Configuration) = {
-
-    Seq(
-      bind[XmlServicesConnector.Config].toProvider[XmlServicesConnectorConfigProvider]
-    )
+class MyTestServer extends DefaultTestServerFactory {
+  override protected def serverConfig(app: Application): ServerConfig = {
+    val sc = ServerConfig(port = Some(6001), sslPort = Some(6002), mode = Mode.Test, rootDir = app.path)
+    sc.copy(configuration = sc.configuration withFallback overrideServerConfiguration(app))
   }
 }

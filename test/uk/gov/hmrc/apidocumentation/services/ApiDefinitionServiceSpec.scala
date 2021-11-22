@@ -20,7 +20,7 @@ import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.apidocumentation.mocks.connectors.ApiPlatformMicroserviceConnectorMockingHelper
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
-import uk.gov.hmrc.play.http.metrics.NoopApiMetrics
+import uk.gov.hmrc.play.http.metrics.common.NoopApiMetrics
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,7 +32,7 @@ class ApiDefinitionServiceSpec extends AsyncHmrcSpec
  
   with ApiDefinitionTestDataHelper {
 
-  trait LocalSetup extends ApiPlatformMicroserviceConnectorMockingHelper{
+  trait LocalSetup extends ApiPlatformMicroserviceConnectorMockingHelper {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val loggedInUserEmail = "3rdparty@example.com"
     val loggedInUserId = UuidIdentifier(UserId.random)

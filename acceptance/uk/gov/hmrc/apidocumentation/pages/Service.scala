@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation.pages
 
 import uk.gov.hmrc.apidocumentation.{Env, WebPage}
-import org.openqa.selenium.{By, WebElement}
+import org.openqa.selenium.By
 import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.Select
 import org.scalatest.prop.TableDrivenPropertyChecks

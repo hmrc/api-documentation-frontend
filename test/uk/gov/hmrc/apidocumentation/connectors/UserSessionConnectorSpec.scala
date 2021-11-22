@@ -18,7 +18,7 @@ package uk.gov.hmrc.apidocumentation.connectors
 
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, SessionInvalid}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.API
+import uk.gov.hmrc.play.http.metrics.common.API
 
 import uk.gov.hmrc.apidocumentation.models.UserId
 import play.api.Configuration
