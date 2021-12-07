@@ -36,8 +36,8 @@ class XmlServicesConnector @Inject()(http: HttpClient, appConfig: XmlServicesCon
     http.GET[Seq[XmlApiDocumentation]](s"$serviceBaseUrl/api-platform-xml-services/xml/apis")
   }
 
-  def fetchXmlApi(name: String)(implicit hc: HeaderCarrier): Future[Option[XmlApiDocumentation]] = record {
-    http.GET[Option[XmlApiDocumentation]](s"$serviceBaseUrl/api-platform-xml-services/xml/api/$name")
+  def fetchXmlApiByServiceName(name: String)(implicit hc: HeaderCarrier): Future[Option[XmlApiDocumentation]] = record {
+    http.GET[Option[XmlApiDocumentation]](s"$serviceBaseUrl/api-platform-xml-services/xml/api", queryParams = Seq(("serviceName",  name)))
   }
 }
 

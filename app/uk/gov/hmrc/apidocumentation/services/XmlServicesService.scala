@@ -36,6 +36,6 @@ class XmlServicesService @Inject()(val xmlServicesConnector: XmlServicesConnecto
 
   def fetchXmlApi(name: String)(implicit hc: HeaderCarrier): Future[Option[XmlApiDocumentation]] =
     record {
-      xmlServicesConnector.fetchXmlApi(name)
+      xmlServicesConnector.fetchXmlApiByServiceName(name)
     }
 }

@@ -48,7 +48,7 @@ class XmlServicesServiceSpec extends AsyncHmrcSpec {
   "fetchXmlApi" should {
 
     "fetch an API" in new LocalSetup {
-      when(xmlServicesConnector.fetchXmlApi(*)(*)).thenReturn(Future.successful(None))
+      when(xmlServicesConnector.fetchXmlApiByServiceName(*)(*)).thenReturn(Future.successful(None))
       val result: Option[XmlApiDocumentation] = await(underTest.fetchXmlApi(eqTo("Invalid"))(*))
 
       result shouldBe None

@@ -43,7 +43,7 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
     )
 
     val getAllXmlApisUrl = "/api-platform-xml-services/xml/apis"
-    def getXmlApiUrl(name: String) = s"/api-platform-xml-services/xml/api/${UriEncoding.encodePathSegment(name, "UTF-8")}"
+    val getXmlApiUrl = "/api-platform-xml-services/xml/api"
 
     val xmlApi1: XmlApiDocumentation = XmlApiDocumentation(
       name = "xml api 1",
@@ -87,26 +87,28 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
     }
   }
 
-  "fetchXmlApi" should {
+  "fetchXmlApiByServiceName" should {
     "return an Xml Api" in new Setup {
 
-      stubFor(get(urlPathEqualTo(getXmlApiUrl(xmlApi1.name)))
+      stubFor(get(urlPathEqualTo(getXmlApiUrl))
+        .withQueryParam("serviceName", equalTo(xmlApi1.name))
         .willReturn(aResponse()
           .withStatus(OK)
           .withJsonBody(xmlApi1)))
 
-      val result: Option[XmlApiDocumentation] = await(connector.fetchXmlApi(xmlApi1.name))
+      val result: Option[XmlApiDocumentation] = await(connector.fetchXmlApiByServiceName(xmlApi1.name))
 
       result shouldBe Some(xmlApi1)
     }
 
     "throw an exception correctly" in new Setup {
-      stubFor(get(urlPathEqualTo(getXmlApiUrl(xmlApi1.name)))
+      stubFor(get(urlPathEqualTo(getXmlApiUrl))
+        .withQueryParam("serviceName", equalTo(xmlApi1.name))
         .willReturn(aResponse()
           .withStatus(NOT_FOUND)))
 
 
-        val result = await(connector.fetchXmlApi(xmlApi1.name))
+        val result = await(connector.fetchXmlApiByServiceName(xmlApi1.name))
              result shouldBe None
     }
   }
