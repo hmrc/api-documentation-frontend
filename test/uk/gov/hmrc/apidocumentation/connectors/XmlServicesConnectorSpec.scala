@@ -43,6 +43,8 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
     )
 
     val getAllXmlApisUrl = "/api-platform-xml-services/xml/apis"
+    def getXmlApiUrl(name: String) = s"/api-platform-xml-services/xml/api/${UriEncoding.encodePathSegment(name, "UTF-8")}"
+
     val getXmlApiUrl = "/api-platform-xml-services/xml/api"
 
     val xmlApi1: XmlApiDocumentation = XmlApiDocumentation(
@@ -86,6 +88,36 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
       }
     }
   }
+  "fetchXmlApi" should {
+    "return an Xml Api" in new Setup {
+
+      stubFor(get(urlPathEqualTo(getXmlApiUrl(xmlApi1.name)))
+        .willReturn(aResponse()
+          .withStatus(OK)
+          .withJsonBody(xmlApi1)))
+
+      await(connector.fetchXmlApi(xmlApi1.name)) match {
+        case Right(x) =>  x shouldBe Some(xmlApi1)
+        case _ => fail()
+      }
+
+
+    }
+
+    "throw an exception correctly" in new Setup {
+      stubFor(get(urlPathEqualTo(getXmlApiUrl(xmlApi1.name)))
+        .willReturn(aResponse()
+          .withStatus(NOT_FOUND)))
+
+
+     await(connector.fetchXmlApi(xmlApi1.name)) match {
+       case Left(e: Throwable) =>      e shouldBe UpstreamException
+       case x => println(x)
+     }
+
+    }
+  }
+
 
   "fetchXmlApiByServiceName" should {
     "return an Xml Api" in new Setup {
