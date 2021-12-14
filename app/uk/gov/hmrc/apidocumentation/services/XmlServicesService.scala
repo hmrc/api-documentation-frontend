@@ -24,6 +24,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.play.http.metrics.common._
 
+import scala.concurrent.Future.successful
+
 @Singleton
 class XmlServicesService @Inject()(val xmlServicesConnector: XmlServicesConnector, val apiMetrics: ApiMetrics)
                                     (implicit ec: ExecutionContext) extends RecordMetrics {
@@ -36,6 +38,11 @@ class XmlServicesService @Inject()(val xmlServicesConnector: XmlServicesConnecto
 
   def fetchXmlApi(name: String)(implicit hc: HeaderCarrier): Future[Option[XmlApiDocumentation]] =
     record {
-      xmlServicesConnector.fetchXmlApi(name)
+      xmlServicesConnector.fetchXmlApi(name) flatMap  {
+        case Right(x) => successful(x)
+        case Left(_) => xmlServicesConnector.fetchXmlApiByServiceName(name)
+      }
     }
+
+
 }
