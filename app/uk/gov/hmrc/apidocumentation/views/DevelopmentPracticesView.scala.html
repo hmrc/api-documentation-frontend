@@ -25,11 +25,12 @@
 
 @apiMain(pageAttributes){
 
-<h1 class="govuk-heading-l">Development practices</h1>
+<h1 id="top" class="govuk-heading-l">Development practices</h1>
 
   <nav role="navigation" aria-labelledby="onThisPage">
     <h2 id="onThisPage" class="visually-hidden">On this page</h2>
     <ul class="govuk-list">
+      <li><a class="govuk-link" href="#why-you-only-need-one-dev-hub-app">Why you only need 1 HMRC Developer Hub application</a></li>
       <li><a class="govuk-link" href="#how-to-avoid-your-application-failing-without-warning">How to avoid your application failing without warning</a></li>
       <li><a class="govuk-link" href="#hmrc-changes-that-will-affect-your-application">HMRC changes that will affect your application</a></li>
     </ul>
@@ -41,6 +42,17 @@
   </p>
 
   <p class="govuk-body">Follow the development practices to make sure your application is not affected by the changes we make.</p>
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
+
+  <section id="why-you-only-need-one-dev-hub-app">
+    <h2 class="govuk-heading-m">Why you only need 1 HMRC Developer Hub application</h2>
+    <p class="govuk-body">HMRC Developer Hub is for software developers who write software that integrates with HMRC APIs.</p>
+    <p class="govuk-body">If you are developing software that uses HMRC APIs, you only need 1 Developer Hub production application.</p>
+    <p class="govuk-body">You don’t need to create applications for each of your customers.</p>
+    <p class="govuk-body">Your customers’ traffic is isolated through Oauth tokens and does not need isolating through multiple application registrations.</p>
+    <a class="govuk-link" href="#top">Back to top</a>
+  </section>
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
@@ -99,6 +111,8 @@
 
     <p class="govuk-body">The HMRC API Platform does not support <a class="govuk-link" href="https://fetch.spec.whatwg.org/#http-cors-protocol">cross-origin resource sharing (CORS).</a>
       It is not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
+
+    <a class="font-size-16 bold" href="#top">Back to top</a>
   </section>
 
   <section id="hmrc-changes-that-will-affect-your-application">
@@ -125,5 +139,7 @@
     <p class="govuk-body">If you have an automated test pack, we recommend you run your tests weekly against sandbox.</p>
 
     <p class="govuk-body">See the <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage()">reference guide</a> for actions you need to take to make sure your application integrates with HMRC.</p>
+  
+    <a class="font-size-16 bold" href="#top">Back to top</a>
   </section>
 }
