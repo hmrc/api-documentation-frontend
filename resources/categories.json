@@ -66,5 +66,7 @@
   "Common Transit Convention Traders testing guide": ["CUSTOMS"],
   "Goods Vehicle Movements service guide": ["CUSTOMS"],
   "Customs Declarations end-to-end service guide": ["CUSTOMS"],
-  "Interest Restriction Return (IRR) service guide": ["CORPORATION_TAX"]
+  "Interest Restriction Return (IRR) service guide": ["CORPORATION_TAX"],
+  "CTC Guarantee Balance service guide": ["CUSTOMS"],
+  "CTC Guarantee Balance testing guide": ["CUSTOMS"]
 }
