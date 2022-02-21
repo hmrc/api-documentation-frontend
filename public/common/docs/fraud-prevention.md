@@ -4,7 +4,7 @@ HMRC monitors transactions to help protect your customers' confidential data fro
   <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
   <strong class="govuk-warning-text__text">
     <span class="govuk-warning-text__assistive">Warning</span>
-    You are required by law to submit header data for this API.
+    You are required by law to submit header data for this API. This includes all associated APIs and endpoints.
   </strong>
 </div>
 
