@@ -40,6 +40,9 @@ class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: Applicat
   }
 
   def fetchTermsOfUsePartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = record {
-    http.GET[HtmlPartial](s"$serviceBaseUrl/developer/partials/terms-of-use") recover connectionExceptionsAsHtmlPartialFailure
+    // Copy 'useNewUpliftJourney' header from incoming request to ensure TPDFE does not display the new Terms of Use page before the new ToU journey has been enabled
+    val useNewUpliftJourneyHeader = hc.headers(Seq("useNewUpliftJourney"))
+
+    http.GET[HtmlPartial](s"$serviceBaseUrl/developer/partials/terms-of-use", headers = useNewUpliftJourneyHeader) recover connectionExceptionsAsHtmlPartialFailure
   }
 }
