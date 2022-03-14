@@ -3,6 +3,8 @@
 GET         /                                                       uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
 GET         /docs/index                                             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
 GET         /docs/terms-of-use                                      uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUsePage()
+GET         /docs/terms-of-use/what-you-can-expect-from-us          uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUseWhatYouCanExpectPage()
+GET         /docs/terms-of-use/not-meeting-terms-of-use             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUseNotMeetingPage()
 GET         /docs/tutorials                                         uk.gov.hmrc.apidocumentation.controllers.DocumentationController.tutorialsPage()
 GET         /docs/using-the-hub                                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.usingTheHubPage()
 GET         /docs/using-the-hub/name-guidelines                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.nameGuidelinesPage()
