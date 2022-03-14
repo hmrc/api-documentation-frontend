@@ -26,7 +26,6 @@ import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
-
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
@@ -43,6 +42,8 @@ class DocumentationController @Inject()(
   namingGuidelinesView: NamingGuidelinesView,
   referenceView: ReferenceView,
   termsOfUseView: TermsOfUseView,
+  termsOfUseWhatYouCanExpectView: TermsOfUseWhatYouCanExpectView,
+  termsOfUseNotMeetingView: TermsOfUseNotMeetingView,
   usingTheHubView: UsingTheHubView
 )(implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
     extends FrontendController(mcc)
@@ -90,6 +91,28 @@ class DocumentationController @Inject()(
           )
         )
       }
+  }
+
+  def termsOfUseWhatYouCanExpectPage(): Action[AnyContent] = headerNavigation {
+    implicit request => navLinks =>
+      Future.successful(
+        Ok(
+          termsOfUseWhatYouCanExpectView(
+            pageAttributes("What you can expect from us", routes.DocumentationController.termsOfUseWhatYouCanExpectPage().url, navLinks)
+          )
+        )
+      )
+  }
+
+  def termsOfUseNotMeetingPage(): Action[AnyContent] = headerNavigation {
+    implicit request => navLinks =>
+      Future.successful(
+        Ok(
+          termsOfUseNotMeetingView(
+            pageAttributes("Not meeting the terms of use", routes.DocumentationController.termsOfUseNotMeetingPage().url, navLinks)
+          )
+        )
+      )
   }
 
   def usingTheHubPage(): Action[AnyContent] = headerNavigation {

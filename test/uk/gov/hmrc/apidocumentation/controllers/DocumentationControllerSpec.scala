@@ -20,12 +20,12 @@ import play.api.http.Status.MOVED_PERMANENTLY
 import play.api.mvc._
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import uk.gov.hmrc.apidocumentation.{controllers, ErrorHandler}
+import uk.gov.hmrc.apidocumentation.{ErrorHandler, controllers}
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers.utils._
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.PartialsService
-import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.{TermsOfUseNotMeetingView, TermsOfUseWhatYouCanExpectView, _}
 import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.mocks.config._
 import uk.gov.hmrc.play.partials.HtmlPartial
@@ -64,6 +64,8 @@ class DocumentationControllerSpec
     private lazy val referenceView = app.injector.instanceOf[ReferenceView]
     private lazy val termsOfUseView = app.injector.instanceOf[TermsOfUseView]
     private lazy val usingTheHubView = app.injector.instanceOf[UsingTheHubView]
+    private lazy val termsOfUseWhatYouCanExpectView = app.injector.instanceOf[TermsOfUseWhatYouCanExpectView]
+    private lazy val termsOfUseNotMeetingView = app.injector.instanceOf[TermsOfUseNotMeetingView]
 
     lazy val usingTheHubBreadcrumb = Crumb(
       "Using the Developer Hub",
@@ -85,6 +87,8 @@ class DocumentationControllerSpec
       namingGuidelinesView,
       referenceView,
       termsOfUseView,
+      termsOfUseWhatYouCanExpectView,
+      termsOfUseNotMeetingView,
       usingTheHubView
     )
 
@@ -119,6 +123,18 @@ class DocumentationControllerSpec
           "https://api.service.hmrc.gov.uk"
         )
       )(underTest.referenceGuidePage()(request))
+    }
+
+    "display the What you can expect from us page" in new Setup {
+      verifyPageRendered(pageTitle("What you can expect from us"))(
+        underTest.termsOfUseWhatYouCanExpectPage()(request)
+      )
+    }
+
+    "display the Not Meeting the Terms of Use page" in new Setup {
+      verifyPageRendered(pageTitle("Not meeting the terms of use"))(
+        underTest.termsOfUseNotMeetingPage()(request)
+      )
     }
 
     "display the using the hub page" in new Setup {
