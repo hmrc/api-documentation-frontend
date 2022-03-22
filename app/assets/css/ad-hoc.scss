@@ -27,8 +27,6 @@
   }
 }
 
-
-
 // APIS-1066 - Override javascript added class hiding top mobile menu toggle
 .js .js-header-toggle.menu.js-hidden {
   display: block !important;
@@ -135,6 +133,15 @@ pre, code {
 
 .side-nav__link:visited {
   color: #1d70b8;
+}
+
+#termsOfUse {
+  ul.terms-of-use-nav-links {
+    list-style-type: none;
+  }
+  .govuk-grid-column-full, .govuk-grid-column-one-half, .terms-of-use-nav-links {
+    padding: 0;
+  }
 }
 
 // Remove sub navigation right border on a mobile phone

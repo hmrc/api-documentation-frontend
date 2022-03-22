@@ -1,0 +1,52 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.partials.HtmlPartial
+@import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain)
+
+@(pageAttributes: PageAttributes)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+
+@apiMain(pageAttributes) {
+<div class="govuk-grid-column-full">
+  <span class="govuk-caption-l">Terms of use</span>
+  <h1 class="govuk-heading-l">If your software doesn’t meet our terms of use</h1>
+
+  <ol class="govuk-list govuk-list--number">
+    <li>We will contact you if your software does not meet our terms of use.</li>
+    <li>We will work with you so that your software meets our terms of use.</li>
+    <li>You will have the opportunity to make changes.</li>
+    <li>We will contact the responsible individual for your application if you do not make changes so that your software meets our terms of use.</li>
+    <li>If your software fails to meet our terms of use, we will remove access to APIs your software uses temporarily or permanently.</li>
+  </ol>
+
+  <div class="govuk-inset-text">
+    We might immediately remove your access to APIs your software uses depending on the problem.
+  </div>
+
+  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+  <ul class="govuk-list">
+    <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.termsOfUseWhatYouCanExpectPage">What you can expect from us</a></li>
+    <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.termsOfUsePage">Terms of use main page</a></li>
+  </ul>
+
+</div>
+}

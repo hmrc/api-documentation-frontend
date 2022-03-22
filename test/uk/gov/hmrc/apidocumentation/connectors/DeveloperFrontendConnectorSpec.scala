@@ -55,11 +55,11 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
         get(
           urlPathEqualTo("/developer/user-navlinks")
         )
-        .willReturn(
-          aResponse()
-          .withStatus(OK)
-          .withJsonBody(Seq(NavLink("Some random link", "/developer/345435345342523534253245")))
-        )
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withJsonBody(Seq(NavLink("Some random link", "/developer/345435345342523534253245")))
+          )
       )
 
       val result = await(connector.fetchNavLinks())
@@ -73,17 +73,33 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
       val response = HtmlPartial.Success(None, Html("<p>some terms of use</p>"))
 
       stubFor(
-        get(
-          urlPathEqualTo("/developer/partials/terms-of-use")
-        )
-        .willReturn(
-          aResponse()
-          .withStatus(OK)
-          .withBody(response.content.toString)
-        )
+        get(urlPathEqualTo("/developer/partials/terms-of-use"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(response.content.toString)
+          )
       )
 
       val result = await(connector.fetchTermsOfUsePartial())
+      result shouldBe response
+    }
+
+    "pass the useNewUpliftJourney header on to TPDFE if it is present" in new Setup {
+      implicit val hc = HeaderCarrier()
+      val response = HtmlPartial.Success(None, Html("<p>some terms of use</p>"))
+
+      stubFor(
+        get(urlPathEqualTo("/developer/partials/terms-of-use"))
+          .withHeader("useNewUpliftJourney", equalTo("true"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(response.content.toString)
+          )
+      )
+
+      val result = await(connector.fetchTermsOfUsePartial()(HeaderCarrier(extraHeaders = Seq(("useNewUpliftJourney" -> "true")))))
       result shouldBe response
     }
   }
