@@ -18,7 +18,8 @@ object AppDependencies {
     "org.typelevel"                         %% "cats-core"                    % "2.6.1",
     "org.commonjava.googlecode.markdown4j"  %  "markdown4j"                   % "2.2-cj-1.1",
     "com.typesafe.play"                     %% "play-json"                    % "2.9.2",
-    "com.typesafe.play"                     %% "play-json-joda"               % "2.9.2"
+    "com.typesafe.play"                     %% "play-json-joda"               % "2.9.2",
+    "uk.gov.hmrc.objectstore"     %%  "object-store-client-play-28" % "0.39.0"
   )
 
   lazy val test = Seq(

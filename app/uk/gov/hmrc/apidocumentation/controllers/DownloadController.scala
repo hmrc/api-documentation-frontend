@@ -42,20 +42,25 @@ class DownloadController @Inject()(documentationService: DocumentationService,
 
   def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
 
-    (for {
-      userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
-      api <- apiDefinitionService.fetchExtendedDefinition(service, userId)
-      validResource = validateResource(resource)
-      result <- fetchResourceForApi(api, version, validResource)
-    } yield {
-      result
-    }) recover {
-      case e: NotFoundException =>
-        logger.info(s"Resource not found: ${e.getMessage}")
-        NotFound(errorHandler.notFoundTemplate)
-      case e: Throwable =>
-        logger.error("Could not load resource", e)
-        InternalServerError(errorHandler.internalServerErrorTemplate)
+    if (service == "gatekeeperemail") {
+      downloadService.fetchResource(service, version, resource)
+    }
+    else {
+      (for {
+        userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+        api <- apiDefinitionService.fetchExtendedDefinition(service, userId)
+        validResource = validateResource(resource)
+        result <- fetchResourceForApi(api, version, validResource)
+      } yield {
+        result
+      }) recover {
+        case e: NotFoundException =>
+          logger.info(s"Resource not found: ${e.getMessage}")
+          NotFound(errorHandler.notFoundTemplate)
+        case e: Throwable =>
+          logger.error("Could not load resource", e)
+          InternalServerError(errorHandler.internalServerErrorTemplate)
+      }
     }
   }
 
