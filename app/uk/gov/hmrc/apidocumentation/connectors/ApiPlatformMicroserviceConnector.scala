@@ -40,7 +40,7 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
 
   def fetchApiSpecification(serviceName: String, version: String)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
-    val url = s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)"
+    val url = s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/specification"
     http.GET[ApiSpecification](url)
   }
 
