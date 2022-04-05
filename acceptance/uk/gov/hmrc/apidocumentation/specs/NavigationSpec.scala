@@ -15,8 +15,8 @@
  */
 
 package uk.gov.hmrc.apidocumentation.specs
-
 import uk.gov.hmrc.apidocumentation.BaseSpec
+
 import uk.gov.hmrc.apidocumentation.pages._
 import org.scalatest.prop.TableDrivenPropertyChecks
 import uk.gov.hmrc.apidocumentation.TableDrivenPropertyMocks
