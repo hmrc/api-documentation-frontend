@@ -53,12 +53,6 @@ class XmlServicesServiceSpec extends AsyncHmrcSpec {
       result shouldBe None
     }
 
-    "fetch an API should return api from from endpoint if deprecated endpoint is missing" in new LocalSetup {
-      when(xmlServicesConnector.fetchXmlApiByServiceName(*)(*)).thenReturn(Future.successful(None))
-      val result: Option[XmlApiDocumentation] = await(underTest.fetchXmlApi(eqTo("Invalid"))(*))
-
-      result shouldBe None
-    }
   }
 
 }
