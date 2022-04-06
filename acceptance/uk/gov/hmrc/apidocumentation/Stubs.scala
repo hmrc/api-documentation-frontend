@@ -67,8 +67,8 @@ trait ApiPlatformMicroservice{
     val file = Source.fromURL(url).mkString
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
     Json.fromJson[ApiSpecification](Json.parse(file))
-    
-    stubFor(get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/$version/documentation/packed(application.raml)"))
+
+    stubFor(get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/$version/specification"))
       .willReturn(
         aResponse()
         .withStatus(200)

@@ -72,17 +72,4 @@ class DocumentationService @Inject()( appConfig: ApplicationConfig,
 
     specification.resourceGroups.flatMap(buildResourceGrp)
   }
-
-  // private def buildResources(resources: Seq[Resource]): Seq[TestEndpoint] = {
-  //   resources.flatMap { res =>
-  //     val nested = buildResources(res.resources().asScala)
-  //     res.methods.asScala.headOption match {
-  //       case Some(_) =>
-  //         val methods = res.methods.asScala.map(_.method.toUpperCase).sorted
-  //         val endpoint = TestEndpoint(s"{service-url}${res.resourcePath}", methods:_*)
-  //         endpoint +: nested
-  //       case _ => nested
-  //     }
-  //   }
-  // }
 }
