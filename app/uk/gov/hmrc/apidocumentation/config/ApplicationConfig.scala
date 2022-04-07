@@ -50,6 +50,7 @@ trait ApplicationConfig {
 
   def title: String
   def xmlApiBaseUrl: String
+  def feedbackSurveyUrl: String
 }
 
 @Singleton
@@ -95,6 +96,8 @@ class ApplicationConfigImpl @Inject()(config: Configuration)
   val title = "HMRC Developer Hub"
   val xmlApiBaseUrl = getString("xml-api.base-url")
 
+  val feedbackSurveyUrl: String = getString("feedbackBanner.generic.surveyUrl")
+
   private def platformBaseUrl(key: String) = {
     (getConfigDefaulted(s"$key.protocol", ""), getConfigDefaulted(s"$key.host", "")) match {
       case (p, h) if !p.isEmpty && !h.isEmpty => s"$p://$h"
@@ -102,4 +105,5 @@ class ApplicationConfigImpl @Inject()(config: Configuration)
       case _ => ""
     }
   }
+
 }

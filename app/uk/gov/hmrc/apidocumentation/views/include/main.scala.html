@@ -22,7 +22,8 @@
 @import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.views.html.templates._
-@import views.templates.FooterLinks
+@import uk.gov.hmrc.apidocumentation.views.html.partials.breadcrumbs
+@import uk.gov.hmrc.apidocumentation.views.templates.FooterLinks
 
 @import play.twirl.api.HtmlFormat
 
@@ -33,7 +34,6 @@
       siteHeader: SiteHeader,
       siteHelper: SiteHelper,
       hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet)
-
 @(title: Option[String] = None,
     navTitle: Option[String] = None,
     navTitleLink: Option[play.api.mvc.Call] = None,
