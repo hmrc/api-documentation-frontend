@@ -22,16 +22,13 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Breadcrumbs, Crumb, PageAttributes}
 import uk.gov.hmrc.apidocumentation.views.CommonViewSpec
 import uk.gov.hmrc.apidocumentation.views.html.UsingTheHubView
-import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
 
 import scala.jdk.CollectionConverters.asScalaBufferConverter
 
 class apiMainSpec extends CommonViewSpec {
 
   trait Setup {
-    val apiMain = app.injector.instanceOf[apiMain]
     val usingTheHubView = app.injector.instanceOf[UsingTheHubView]
-
     implicit val mockApplicationConfig = mock[ApplicationConfig]
 
     def elementExistsById(doc: Document, id: String): Boolean = doc.select(s"#$id").asScala.nonEmpty
