@@ -1,0 +1,48 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this()
+
+@(serviceName: String, version: String)
+
+<div id="redoc"></div>
+
+<script src='@controllers.routes.Assets.versioned("javascripts/redoc/redoc.standalone.js")' charset="UTF-8"> </script>
+
+@*
+To fix this issue:
+https://github.com/Redocly/redoc/issues/1108#issuecomment-585990742
+*@
+<script>
+  var options = {
+    hideHostname: true,
+    theme: {
+      spacing: {
+        sectionVertical: '35px',
+      },
+      typography: {
+        headings: {
+          lineHeight: "1.2em"
+        }
+      }
+    }
+  };
+
+  var oasUrl = "@uk.gov.hmrc.apidocumentation.controllers.routes.OpenApiDocumentationController.fetchOas(serviceName, version, None)"
+
+  Redoc.init(oasUrl, options, document.getElementById("redoc"));
+
+</script>

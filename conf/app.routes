@@ -25,6 +25,10 @@ GET         /docs/api/service/:service                              uk.gov.hmrc.
 
 GET         /docs/api/service/:service/:version                     uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
 
+# Open API related endpoints
+GET         /docs/api/service/:service/:version/oas/page            uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
+GET         /docs/api/service/:service/:version/oas/file            uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOas(service: String, version: String, cacheBuster: Option[Boolean])
+
 GET         /docs/preview                                           uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.previewApiDocumentation(url: Option[String])
 GET         /docs/api/testdata/:service/:version                    uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.fetchTestEndpointJson(service: String, version: String)
 GET         /docs/api/xml/:name                                     uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderXmlApiDocumentation(name: String)
