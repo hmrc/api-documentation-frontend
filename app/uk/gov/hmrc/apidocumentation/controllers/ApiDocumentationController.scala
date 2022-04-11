@@ -45,22 +45,21 @@ object ApiDocumentationController {
 }
 @Singleton
 class ApiDocumentationController @Inject()(
-                                            documentationService: DocumentationService,
-                                            ramlPreviewConnector: RamlPreviewConnector,
-                                            apiDefinitionService: ApiDefinitionService,
-                                            val navigationService: NavigationService,
-                                            loggedInUserService: LoggedInUserService,
-                                            errorHandler: ErrorHandler,
-                                            mcc: MessagesControllerComponents,
-                                            apiIndexView: ApiIndexView,
-                                            retiredVersionJumpView: RetiredVersionJumpView,
-                                            apisFilteredView: ApisFilteredView,
-                                            previewDocumentationView: PreviewDocumentationView2,
-                                            serviceDocumentationView: ServiceDocumentationView2,
-                                            xmlDocumentationView: XmlDocumentationView,
-                                            xmlServicesService: XmlServicesService
-                                          )
-                                         (implicit val ec: ExecutionContext, appConfig: ApplicationConfig)
+  documentationService: DocumentationService,
+  ramlPreviewConnector: RamlPreviewConnector,
+  apiDefinitionService: ApiDefinitionService,
+  val navigationService: NavigationService,
+  loggedInUserService: LoggedInUserService,
+  errorHandler: ErrorHandler,
+  mcc: MessagesControllerComponents,
+  apiIndexView: ApiIndexView,
+  retiredVersionJumpView: RetiredVersionJumpView,
+  apisFilteredView: ApisFilteredView,
+  previewDocumentationView: PreviewDocumentationView2,
+  serviceDocumentationView: ServiceDocumentationView2,
+  xmlDocumentationView: XmlDocumentationView,
+  xmlServicesService: XmlServicesService
+)(implicit val ec: ExecutionContext, appConfig: ApplicationConfig)
   extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb with ApplicationLogger {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
