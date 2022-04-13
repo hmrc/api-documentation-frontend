@@ -21,20 +21,19 @@ import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.views.html._
 import scala.concurrent.ExecutionContext
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import scala.concurrent.Future.successful
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 
 @Singleton
 class OpenApiDocumentationController @Inject()(
-  openApiView: OpenApiView,
+  openApiViewRedoc: OpenApiViewRedoc,
   downloadConnector:DownloadConnector,
   mcc: MessagesControllerComponents
-)(implicit val ec: ExecutionContext, appConfig: ApplicationConfig)
+)(implicit val ec: ExecutionContext)
     extends FrontendController(mcc) {
 
-  def renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
-    successful(Ok(openApiView(service, version)))
+  def renderApiDocumentationUsingRedoc(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
+    successful(Ok(openApiViewRedoc(service, version)))
   }
 
   def fetchOas(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
