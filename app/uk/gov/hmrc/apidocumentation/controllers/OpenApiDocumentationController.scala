@@ -28,6 +28,7 @@ import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 class OpenApiDocumentationController @Inject()(
   openApiViewRedoc: OpenApiViewRedoc,
   openApiViewRapidoc: OpenApiViewRapiDoc,
+  openApiViewSwagger: OpenApiViewSwagger,
   downloadConnector:DownloadConnector,
   mcc: MessagesControllerComponents
 )(implicit val ec: ExecutionContext)
@@ -39,6 +40,10 @@ class OpenApiDocumentationController @Inject()(
 
   def renderApiDocumentationUsingRapidoc(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
     successful(Ok(openApiViewRapidoc(service, version)))
+  }
+
+  def renderApiDocumentationUsingSwagger(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
+    successful(Ok(openApiViewSwagger(service, version)))
   }
 
   def fetchOas(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
