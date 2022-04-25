@@ -68,5 +68,6 @@
   "Customs Declarations end-to-end service guide": ["CUSTOMS"],
   "Interest Restriction Return (IRR) service guide": ["CORPORATION_TAX"],
   "CTC Guarantee Balance service guide": ["CUSTOMS"],
-  "CTC Guarantee Balance testing guide": ["CUSTOMS"]
+  "CTC Guarantee Balance testing guide": ["CUSTOMS"],
+  "CTC Traders Phase 5 Technical Interface Specification": ["CUSTOMS"]
 }

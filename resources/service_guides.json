@@ -42,5 +42,9 @@
   {
     "name": "CTC Guarantee Balance testing guide",
     "context": "/guides/ctc-guarantee-balance-testing-guide/"
+  },
+  {
+    "name": "CTC Traders Phase 5 Technical Interface Specification",
+    "context": "/guides/ctc-traders-phase5-tis/"
   }
 ]
