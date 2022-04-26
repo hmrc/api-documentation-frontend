@@ -20,6 +20,10 @@
     "context": "/guides/common-transit-convention-traders-service-guide/"
   },
   {
+    "name": "CTC Traders phase 4 service guide",
+    "context": "/guides/ctc-traders-phase4-service-guide/"
+  },
+  {
     "name": "Common Transit Convention Traders testing guide",
     "context": "/guides/common-transit-convention-traders-testing-guide/"
   },
