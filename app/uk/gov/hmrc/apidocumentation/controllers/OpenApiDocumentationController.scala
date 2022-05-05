@@ -34,19 +34,19 @@ class OpenApiDocumentationController @Inject()(
 )(implicit val ec: ExecutionContext)
     extends FrontendController(mcc) {
 
-  def renderApiDocumentationUsingRedoc(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
+  def renderApiDocumentationUsingRedoc(service: String, version: String) = Action.async { _ =>
     successful(Ok(openApiViewRedoc(service, version)))
   }
 
-  def renderApiDocumentationUsingRapidoc(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
+  def renderApiDocumentationUsingRapidoc(service: String, version: String) = Action.async { _ =>
     successful(Ok(openApiViewRapidoc(service, version)))
   }
 
-  def renderApiDocumentationUsingSwagger(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
+  def renderApiDocumentationUsingSwagger(service: String, version: String) = Action.async { _ =>
     successful(Ok(openApiViewSwagger(service, version)))
   }
 
-  def fetchOas(service: String, version: String, cacheBuster: Option[Boolean]) = Action.async { _ =>
+  def fetchOas(service: String, version: String) = Action.async { _ =>
     downloadConnector.fetch(service, version, "application.yaml")
   }
 }

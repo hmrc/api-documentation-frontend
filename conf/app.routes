@@ -26,10 +26,10 @@ GET         /docs/api/service/:service                              uk.gov.hmrc.
 GET         /docs/api/service/:service/:version                     uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
 
 # Open API related endpoints
-GET         /docs/api/service/:service/:version/oas/page/redoc      uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(service: String, version: String, cacheBuster: Option[Boolean])
-GET         /docs/api/service/:service/:version/oas/page/rapidoc    uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRapidoc(service: String, version: String, cacheBuster: Option[Boolean])
-GET         /docs/api/service/:service/:version/oas/page/swagger    uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingSwagger(service: String, version: String, cacheBuster: Option[Boolean])
-GET         /docs/api/service/:service/:version/oas/file            uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOas(service: String, version: String, cacheBuster: Option[Boolean])
+GET         /docs/api/service/:service/:version/oas/page/redoc      uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(service: String, version: String)
+GET         /docs/api/service/:service/:version/oas/page/rapidoc    uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRapidoc(service: String, version: String)
+GET         /docs/api/service/:service/:version/oas/page/swagger    uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingSwagger(service: String, version: String)
+GET         /docs/api/service/:service/:version/oas/file            uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOas(service: String, version: String)
 
 GET         /docs/preview                                           uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.previewApiDocumentation(url: Option[String])
 GET         /docs/api/testdata/:service/:version                    uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.fetchTestEndpointJson(service: String, version: String)

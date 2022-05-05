@@ -31,6 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+import scala.util.control.NonFatal
 
 @Singleton
 class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appConfig: ApplicationConfig)
@@ -38,10 +39,15 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
-  def fetchApiSpecification(serviceName: String, version: String)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
+  def fetchApiSpecification(serviceName: String, version: String)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
     val url = s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/specification"
     http.GET[ApiSpecification](url)
+    .map(Some(_))
+    .recover {
+      // Until APM returns an option
+      case NonFatal(e) if(e.getMessage.contains("Raml does not exist at")) => None
+    }
   }
 
   def fetchApiDefinitionsByCollaborator(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
