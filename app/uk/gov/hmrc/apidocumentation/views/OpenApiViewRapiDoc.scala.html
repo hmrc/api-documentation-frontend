@@ -18,6 +18,16 @@
 
 @(serviceName: String, version: String)
 
-<script src='@controllers.routes.Assets.versioned("javascripts/rapidoc/rapidoc-min.js")' charset="UTF-8"> </script>
+<!doctype html>
+  <html lang="en">
 
-<rapi-doc spec-url = "@uk.gov.hmrc.apidocumentation.controllers.routes.OpenApiDocumentationController.fetchOas(serviceName, version, None)"> </rapi-doc>
+  <head>
+    <title>RapiDoc Example</title>
+    <script src='@controllers.routes.Assets.versioned("javascripts/rapidoc/rapidoc-min.js")' charset="UTF-8"> </script>
+  </head>
+
+  <body>
+    <rapi-doc spec-url = "@uk.gov.hmrc.apidocumentation.controllers.routes.OpenApiDocumentationController.fetchOas(serviceName, version, None)"> </rapi-doc>
+  </body>
+
+</html>
