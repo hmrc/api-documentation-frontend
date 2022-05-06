@@ -31,6 +31,7 @@ import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
@@ -185,11 +186,17 @@ class ApiDocumentationController @Inject()(
     }
 
     def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) = {
-      documentationService.fetchApiSpecification(service, version, cacheBuster).map { apiSpecification =>
+      def renderRamlSpec(apiSpecification: ApiSpecification) = {
         val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation2(service, selectedVersion, apiSpecification))
         val viewModel = ViewModel(apiSpecification)
         Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, developerId.isDefined)).withHeaders(cacheControlHeaders)
       }
+      
+      def renderOas() = {
+        Redirect(routes.OpenApiDocumentationController.renderApiDocumentationUsingRapidoc(api.serviceName, selectedVersion.version))
+      }
+      
+      documentationService.fetchApiSpecification(service, version, cacheBuster).map(_.fold(renderOas)(renderRamlSpec))
     }
 
     findVersion(apiOption) match {

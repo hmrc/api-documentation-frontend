@@ -101,7 +101,7 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
 
     "create a simple testers URL output file with just endpoint information" in new Setup {
       val specification = defaultApiSpecification
-      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(specification))
+      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(Some(specification)))
       await(underTest.buildTestEndpoints("minimal", "1.0")) shouldBe Seq.empty
     }
 
@@ -122,7 +122,7 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
           )
         )
       )
-      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(specification))
+      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(Some(specification)))
 
       val expected = Seq(TestEndpoint("{service-url}/hello/world", "GET"))
       await(underTest.buildTestEndpoints("single-endpoint", "1.0")) shouldBe expected
@@ -153,7 +153,7 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
           )
         )
       )
-      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(specification))
+      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(Some(specification)))
 
       val expected = Seq(
         TestEndpoint("{service-url}/hello/there", "GET", "OPTIONS", "PUT"),

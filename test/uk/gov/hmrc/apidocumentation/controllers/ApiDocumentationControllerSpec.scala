@@ -491,7 +491,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
   "fetchTestEndpointJson" should {
     "sort the results by URL" in new Setup with RamlPreviewEnabled {
-      val endpoints = Seq(
+      val endpoints = List(
         TestEndpoint("{service-url}/employers-paye/www"),
         TestEndpoint("{service-url}/employers-paye/aaa"),
         TestEndpoint("{service-url}/employers-paye/zzz"),

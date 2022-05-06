@@ -39,7 +39,11 @@ class DocumentationService @Inject()( appConfig: ApplicationConfig,
                                       (implicit ec: ExecutionContext) extends ApplicationLogger {
   val defaultExpiration = 1.hour
 
-  def fetchApiSpecification(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
+  def fetchApiSpecification(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
+    def removeEntry(key: String): Unit = {
+      cache.remove(key)
+    }
+    
     val key = serviceName+":"+version
     if (cacheBuster) cache.remove(key)
 
@@ -47,12 +51,13 @@ class DocumentationService @Inject()( appConfig: ApplicationConfig,
       logger.info(s"****** Specification Cache miss for $key")
       apm.fetchApiSpecification(serviceName,version)(hc)
     }
-    spec.onComplete(t => t.fold(e => { cache.remove(key); throw e }, identity ))
+    // Remove entry on error or None
+    spec.onComplete(t => t.fold(e => removeEntry(key), o => o.fold(removeEntry(key))(identity)))
     spec
   }
 
-  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier): Future[Seq[TestEndpoint]] = {
-    fetchApiSpecification(service, version, cacheBuster = true).map(buildResources)
+  def buildTestEndpoints(service: String, version: String)(implicit hc: HeaderCarrier): Future[List[TestEndpoint]] = {
+    fetchApiSpecification(service, version, cacheBuster = true).map(_.fold(List.empty[TestEndpoint])(buildResources))
   }
 
   private def buildResources(specification: ApiSpecification): List[TestEndpoint] = {
