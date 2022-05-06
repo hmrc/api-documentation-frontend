@@ -210,6 +210,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
           verifyNotFoundPageRendered(result)
         }
+
       }
     }
 
@@ -412,6 +413,17 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
           verifyNotFoundPageRendered(result)
+        }
+
+        "display the OAS when no RAML is found" in new Setup {
+          theUserIsLoggedIn()
+
+          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
+          theDocumentationServiceWillFetchNoSpecification()
+
+          val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
+
+          status(result) shouldBe SEE_OTHER
         }
       }
 

@@ -29,5 +29,9 @@ trait ApiDocumentationServiceMock extends MockitoSugar with ArgumentMatchersSuga
   def theDocumentationServiceWillFetchApiSpecification(apiSpecification: ApiSpecification) = {
     when(documentationService.fetchApiSpecification(*, *, *)(*)).thenReturn(successful(Some(apiSpecification)))
   }
+  
+  def theDocumentationServiceWillFetchNoSpecification() = {
+    when(documentationService.fetchApiSpecification(*, *, *)(*)).thenReturn(successful(None))
+  }
 
 }
