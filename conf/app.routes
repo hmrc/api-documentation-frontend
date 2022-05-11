@@ -1,56 +1,57 @@
 # microservice specific routes
 
-GET         /                                                       uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
-GET         /docs/index                                             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
-GET         /docs/terms-of-use                                      uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUsePage()
-GET         /docs/terms-of-use/what-you-can-expect-from-us          uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUseWhatYouCanExpectPage()
-GET         /docs/terms-of-use/not-meeting-terms-of-use             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUseNotMeetingPage()
-GET         /docs/tutorials                                         uk.gov.hmrc.apidocumentation.controllers.DocumentationController.tutorialsPage()
-GET         /docs/using-the-hub                                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.usingTheHubPage()
-GET         /docs/using-the-hub/name-guidelines                     uk.gov.hmrc.apidocumentation.controllers.DocumentationController.nameGuidelinesPage()
-GET         /docs/reference-guide                                   uk.gov.hmrc.apidocumentation.controllers.DocumentationController.referenceGuidePage()
-GET         /docs/mtd                                               uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIntroductionPage()
-GET         /docs/development-practices                             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.developmentPracticesPage()
+GET         /                                                           uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
+GET         /docs/index                                                 uk.gov.hmrc.apidocumentation.controllers.DocumentationController.indexPage()
+GET         /docs/terms-of-use                                          uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUsePage()
+GET         /docs/terms-of-use/what-you-can-expect-from-us              uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUseWhatYouCanExpectPage()
+GET         /docs/terms-of-use/not-meeting-terms-of-use                 uk.gov.hmrc.apidocumentation.controllers.DocumentationController.termsOfUseNotMeetingPage()
+GET         /docs/tutorials                                             uk.gov.hmrc.apidocumentation.controllers.DocumentationController.tutorialsPage()
+GET         /docs/using-the-hub                                         uk.gov.hmrc.apidocumentation.controllers.DocumentationController.usingTheHubPage()
+GET         /docs/using-the-hub/name-guidelines                         uk.gov.hmrc.apidocumentation.controllers.DocumentationController.nameGuidelinesPage()
+GET         /docs/reference-guide                                       uk.gov.hmrc.apidocumentation.controllers.DocumentationController.referenceGuidePage()
+GET         /docs/mtd                                                   uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIntroductionPage()
+GET         /docs/development-practices                                 uk.gov.hmrc.apidocumentation.controllers.DocumentationController.developmentPracticesPage()
 
-GET         /docs/authorisation                                     uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationPage()
-GET         /docs/authorisation/credentials                         uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationCredentialsPage()
-GET         /docs/authorisation/open-access-endpoints               uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationOpenAccessEndpointsPage()
-GET         /docs/authorisation/application-restricted-endpoints    uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationAppRestrictedEndpointsPage()
-GET         /docs/authorisation/user-restricted-endpoints           uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationUserRestrictedEndpointsPage()
-GET         /docs/authorisation/two-step-verification               uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisation2SVPage()
+GET         /docs/authorisation                                         uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationPage()
+GET         /docs/authorisation/credentials                             uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationCredentialsPage()
+GET         /docs/authorisation/open-access-endpoints                   uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationOpenAccessEndpointsPage()
+GET         /docs/authorisation/application-restricted-endpoints        uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationAppRestrictedEndpointsPage()
+GET         /docs/authorisation/user-restricted-endpoints               uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationUserRestrictedEndpointsPage()
+GET         /docs/authorisation/two-step-verification                   uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisation2SVPage()
 
 
-GET         /docs/api                                               uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.apiIndexPage(service: Option[String], version: Option[String], filter: Option[String])
-GET         /docs/api/service/:service                              uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.redirectToApiDocumentation(service: String, version: Option[String], cacheBuster: Option[Boolean])
+GET         /docs/api                                                   uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.apiIndexPage(service: Option[String], version: Option[String], filter: Option[String])
+GET         /docs/api/service/:service                                  uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.redirectToApiDocumentation(service: String, version: Option[String], cacheBuster: Option[Boolean])
 
-GET         /docs/api/service/:service/:version                     uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
+GET         /docs/api/service/:service/:version                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
 
-# Open API related endpoints
-GET         /docs/api/service/:service/:version/oas/page/redoc      uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(service: String, version: String)
-GET         /docs/api/service/:service/:version/oas/page/rapidoc    uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRapidoc(service: String, version: String)
-GET         /docs/api/service/:service/:version/oas/page/swagger    uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingSwagger(service: String, version: String)
-GET         /docs/api/service/:service/:version/oas/file            uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOas(service: String, version: String)
+# Open API related endpoints    
+GET         /docs/api/service/:service/:version/oas/page/redoc          uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(service: String, version: String)
+GET         /docs/api/service/:service/:version/oas/page/rapidoc        uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRapidoc(service: String, version: String)
+GET         /docs/api/service/:service/:version/oas/page/rapidoc-read   uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRapidocRead(service: String, version: String)
+GET         /docs/api/service/:service/:version/oas/page/swagger        uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingSwagger(service: String, version: String)
+GET         /docs/api/service/:service/:version/oas/file                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOas(service: String, version: String)
 
-GET         /docs/preview                                           uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.previewApiDocumentation(url: Option[String])
-GET         /docs/api/testdata/:service/:version                    uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.fetchTestEndpointJson(service: String, version: String)
-GET         /docs/api/xml/:name                                     uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderXmlApiDocumentation(name: String)
+GET         /docs/preview                                               uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.previewApiDocumentation(url: Option[String])
+GET         /docs/api/testdata/:service/:version                        uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.fetchTestEndpointJson(service: String, version: String)
+GET         /docs/api/xml/:name                                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderXmlApiDocumentation(name: String)
 
-GET         /docs/apiIndex                                          uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToDocumentationIndexPage()
-GET         /docs/api/:service/:version/:endpoint                   uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToApiDocumentationPage(service: String, version: String, endpoint: String)
-GET         /docs/fraud-prevention                                  uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToFraudPreventionGuide()
+GET         /docs/apiIndex                                              uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToDocumentationIndexPage()
+GET         /docs/api/:service/:version/:endpoint                       uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToApiDocumentationPage(service: String, version: String, endpoint: String)
+GET         /docs/fraud-prevention                                      uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToFraudPreventionGuide()
 
-GET         /docs/api/mtd-income-tax-service-guide                  uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIncomeTaxServiceGuidePage()
+GET         /docs/api/mtd-income-tax-service-guide                      uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIncomeTaxServiceGuidePage()
 
-GET         /docs/help/cookies                                      uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.cookiesPage()
-GET         /docs/help/privacy                                      uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.privacyPolicyPage()
-GET         /docs/help/terms-and-conditions                         uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.termsAndConditionsPage()
+GET         /docs/help/cookies                                          uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.cookiesPage()
+GET         /docs/help/privacy                                          uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.privacyPolicyPage()
+GET         /docs/help/terms-and-conditions                             uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.termsAndConditionsPage()
 
-GET         /docs/testing                                           uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testingPage()
-GET         /docs/testing/stateful-behaviour                        uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testingStatefulBehaviourPage()
-GET         /docs/testing/test-users-test-data-stateful-behaviour   uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testUsersDataStatefulBehaviourPage()
+GET         /docs/testing                                               uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testingPage()
+GET         /docs/testing/stateful-behaviour                            uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testingStatefulBehaviourPage()
+GET         /docs/testing/test-users-test-data-stateful-behaviour       uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testUsersDataStatefulBehaviourPage()
 
-GET         /docs/api/download/:service/:version/*resource          uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: String, version: String, resource: String)
+GET         /docs/api/download/:service/:version/*resource              uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: String, version: String, resource: String)
 
-GET         /assets/*file                                           @controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                                               @controllers.Assets.versioned(path="/public", file: Asset)
 
-->          /hmrc-frontend               hmrcfrontend.Routes
+->          /hmrc-frontend                                              hmrcfrontend.Routes
