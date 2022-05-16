@@ -65,13 +65,6 @@ trait PageRenderVerification {
                                          |                    </li>""".stripMargin)
   }
 
-  def verifyBreadcrumbEndpointRendered(actualPage: Future[Result], crumbText: String) = {
-    contentAsString(actualPage) should include(s"""
-                                         |            <li class="govuk-breadcrumbs__list-item">
-                                         |                ${crumbText}
-                                         |            </li>""".stripMargin)
-  }
-
   def verifyPageRendered(expectedTitle: String,
                           breadcrumbs: List[Crumb] = List(homeBreadcrumb),
                           sideNavLinkRendered: Boolean = true,
@@ -101,7 +94,6 @@ trait PageRenderVerification {
 
   def verifyApiDocumentationPageRendered(actualPage: Future[Result], version: String, apiStatus: String) = {
     verifyPageRendered(pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))(actualPage)
-    verifyBreadcrumbEndpointRendered(actualPage, s"Hello World API v$version ($apiStatus)")
   }
 
   def verifyLinkToStableDocumentationRendered(actualPage: Future[Result], service: String, version: String) = {
