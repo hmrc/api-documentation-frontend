@@ -66,8 +66,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
 
-      Then("the breadcrumb is Home>API Documentation>Hello World API v1.0 (Stable)")
-      val breadcrumb = "Home>API Documentation>Hello World API v1.0 (Stable)"
+      Then("the breadcrumb is Home>API Documentation")
+      val breadcrumb = "Home>API Documentation"
       withClue(s"Breadcrumb $breadcrumb has not been found") {
         HelloWorldPage.breadCrumbText.replaceAll("\\s", "") shouldBe breadcrumb.replaceAll("\\s", "").replaceAll(">", "")
       }
