@@ -35,6 +35,7 @@ import uk.gov.hmrc.apidocumentation.ErrorHandler
 class OpenApiDocumentationController @Inject()(
   openApiViewRedoc: OpenApiViewRedoc,
   openApiViewRapidoc: OpenApiViewRapiDoc,
+  openApiPreviewRedoc: OpenApiPreviewRedoc,
   openApiPreviewRapidoc: OpenApiPreviewRapiDoc,
   openApiViewRapidocRead: OpenApiViewRapiDocRead,
   openApiViewSwagger: OpenApiViewSwagger,
@@ -94,7 +95,7 @@ class OpenApiDocumentationController @Inject()(
 
         url match {
           case None           => successful(Ok(openApiPreviewView(pageAttributes)))
-          case Some(location) => successful(Ok(openApiPreviewRapidoc(location)))
+          case Some(location) => successful(Ok(openApiPreviewRedoc(location)))
         }
       } else {
         successful(NotFound(errorHandler.notFoundTemplate))
