@@ -72,8 +72,8 @@ class NavigationService @Inject()(
       href = apiDocumentationUrl
     )
   ) ++
-  possiblePreviewRamlLink() ++
-  openApiPreviewRamlLink() ++
+  ramlPreviewLink() ++
+  openApiPreviewLink() ++
   Seq(
     SidebarLink(
       label = "Reference guide",
@@ -140,7 +140,7 @@ class NavigationService @Inject()(
     sections :+ resources
   }
 
-  private def possiblePreviewRamlLink() =
+  private def ramlPreviewLink() =
     if (appConfig.ramlPreviewEnabled) {
       Seq(SidebarLink(
         "Preview RAML",
@@ -150,7 +150,7 @@ class NavigationService @Inject()(
       Seq.empty
     }
 
-  private def openApiPreviewRamlLink() =
+  private def openApiPreviewLink() =
     if (appConfig.openApiPreviewEnabled) {
       Seq(
         SidebarLink(

@@ -23,9 +23,9 @@ import play.twirl.api.Html
   * to aid extensibility.
   */
 case class PageAttributes(
-                           title: String,
-                           breadcrumbs: Breadcrumbs,
-                           headerLinks: Seq[NavLink] = Seq.empty,
-                           sidebarLinks: Seq[SidebarLink] = Seq.empty,
-                           contentHeader: Option[Html] = None
-                         )
+  title: String,
+  breadcrumbs: Breadcrumbs,
+  headerLinks: Seq[NavLink] = Seq.empty,
+  sidebarLinks: Seq[SidebarLink] = Seq.empty,
+  contentHeader: Option[Html] = None
+)
