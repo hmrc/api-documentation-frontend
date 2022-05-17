@@ -73,6 +73,7 @@ class NavigationService @Inject()(
     )
   ) ++
   possiblePreviewRamlLink() ++
+  openApiPreviewRamlLink() ++
   Seq(
     SidebarLink(
       label = "Reference guide",
@@ -145,6 +146,18 @@ class NavigationService @Inject()(
         "Preview RAML",
         routes.ApiDocumentationController.previewApiDocumentation(None).url
       ))
+    } else {
+      Seq.empty
+    }
+
+  private def openApiPreviewRamlLink() =
+    if (appConfig.openApiPreviewEnabled) {
+      Seq(
+        SidebarLink(
+          "Preview OpenAPI",
+          routes.OpenApiDocumentationController.previewApiDocumentationPage.url
+        )
+      )
     } else {
       Seq.empty
     }

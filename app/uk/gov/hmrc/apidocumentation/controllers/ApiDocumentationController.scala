@@ -44,6 +44,7 @@ import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 object ApiDocumentationController {
     case class RamlParseException(msg: String) extends RuntimeException(msg)
 }
+
 @Singleton
 class ApiDocumentationController @Inject()(
   documentationService: DocumentationService,

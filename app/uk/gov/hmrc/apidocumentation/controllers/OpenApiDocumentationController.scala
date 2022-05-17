@@ -21,19 +21,30 @@ import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.views.html._
 import scala.concurrent.ExecutionContext
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import scala.concurrent.Future.successful
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+import uk.gov.hmrc.apidocumentation.services.NavigationService
+import uk.gov.hmrc.apidocumentation.models.PageAttributes
+import uk.gov.hmrc.apidocumentation.models.Breadcrumbs
+import uk.gov.hmrc.apidocumentation.models.Crumb
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import scala.concurrent.Future.successful
+import uk.gov.hmrc.apidocumentation.ErrorHandler
 
 @Singleton
 class OpenApiDocumentationController @Inject()(
   openApiViewRedoc: OpenApiViewRedoc,
   openApiViewRapidoc: OpenApiViewRapiDoc,
+  openApiPreviewRapidoc: OpenApiPreviewRapiDoc,
   openApiViewRapidocRead: OpenApiViewRapiDocRead,
   openApiViewSwagger: OpenApiViewSwagger,
+  openApiPreviewView: OpenApiPreviewView,
   downloadConnector:DownloadConnector,
-  mcc: MessagesControllerComponents
-)(implicit val ec: ExecutionContext)
-    extends FrontendController(mcc) {
+  mcc: MessagesControllerComponents,
+  errorHandler: ErrorHandler,
+  val navigationService: NavigationService
+)(implicit val ec: ExecutionContext, appConfig: ApplicationConfig)
+    extends FrontendController(mcc) with HeaderNavigation with HomeCrumb with ApplicationLogger {
 
   def renderApiDocumentationUsingRedoc(service: String, version: String) = Action.async { _ =>
     successful(Ok(openApiViewRedoc(service, version)))
@@ -53,5 +64,40 @@ class OpenApiDocumentationController @Inject()(
 
   def fetchOas(service: String, version: String) = Action.async { _ =>
     downloadConnector.fetch(service, version, "application.yaml")
+  }
+  
+  def previewApiDocumentationPage(): Action[AnyContent] = headerNavigation { implicit request =>
+    navLinks =>
+      if (appConfig.openApiPreviewEnabled) {
+        val pageAttributes = PageAttributes(title = "OpenAPI Documentation Preview",
+          breadcrumbs = Breadcrumbs(
+            Crumb("Preview OpenAPI", routes.OpenApiDocumentationController.previewApiDocumentationPage.url),
+            homeCrumb),
+          headerLinks = navLinks,
+          sidebarLinks = navigationService.sidebarNavigation())
+
+        successful(Ok(openApiPreviewView(pageAttributes)))
+      } else {
+        successful(NotFound(errorHandler.notFoundTemplate))
+      }
+  }
+
+  def previewApiDocumentationAction(url: Option[String]) = headerNavigation { implicit request =>
+    navLinks =>
+      if (appConfig.openApiPreviewEnabled) {
+        val pageAttributes = PageAttributes(title = "OpenAPI Documentation Preview",
+          breadcrumbs = Breadcrumbs(
+            Crumb("Preview OpenAPI", routes.OpenApiDocumentationController.previewApiDocumentationPage.url),
+            homeCrumb),
+          headerLinks = navLinks,
+          sidebarLinks = navigationService.sidebarNavigation())
+
+        url match {
+          case None           => successful(Ok(openApiPreviewView(pageAttributes)))
+          case Some(location) => successful(Ok(openApiPreviewRapidoc(location)))
+        }
+      } else {
+        successful(NotFound(errorHandler.notFoundTemplate))
+      }
   }
 }
