@@ -31,6 +31,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
+import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
 
 @Singleton
 class NavigationService @Inject()(
@@ -139,6 +140,11 @@ class NavigationService @Inject()(
 
     sections :+ resources
   }
+
+    def openApiSidebarNavigation(service: String, version: ExtendedAPIVersion, markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
+      markdownBlocks
+      .map(mb => SidebarLink(label = mb.title, href = s"#${Slugify(mb.title)}"))
+    }
 
   private def ramlPreviewLink() =
     if (appConfig.ramlPreviewEnabled) {

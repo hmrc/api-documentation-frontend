@@ -26,6 +26,8 @@ GET         /docs/api/service/:service                                  uk.gov.h
 GET         /docs/api/service/:service/:version                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
 
 # Open API related endpoints    
+GET         /docs/api/parent/service/:service                           uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderParentPage(service: String)
+
 GET         /docs/api/service/:service/:version/oas/page/redoc          uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(service: String, version: String)
 GET         /docs/api/service/:service/:version/oas/page/rapidoc        uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRapidoc(service: String, version: String)
 GET         /docs/api/service/:service/:version/oas/page/rapidoc-read   uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRapidocRead(service: String, version: String)
