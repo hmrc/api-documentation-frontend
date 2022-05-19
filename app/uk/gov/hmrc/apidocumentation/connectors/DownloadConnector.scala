@@ -23,7 +23,7 @@ import play.api.libs.ws._
 import play.api.mvc._
 import play.api.mvc.Results._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.http.{InternalServerException, NotFoundException}
+import uk.gov.hmrc.http.InternalServerException
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
@@ -39,7 +39,7 @@ class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig)(im
     buildRequest(s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/$resource").withMethod("GET").stream()
   }
 
-  def fetch(serviceName: String, version: String, resource: String): Future[Result] = {
+  def fetch(serviceName: String, version: String, resource: String): Future[Option[Result]] = {
     makeRequest(serviceName, version, resource).map { response =>
       if(response.status == OK) {
         val contentType = response.headers.get("Content-Type").flatMap(_.headOption)
@@ -47,13 +47,13 @@ class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig)(im
 
         response.headers.get("Content-Length") match {
           case Some(Seq(length)) =>
-            Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, Some(length.toLong), Some(contentType)))
+            Some(Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, Some(length.toLong), Some(contentType))))
           case _ =>
-            Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, None, Some(contentType)))
+            Some(Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, None, Some(contentType))))
         }
       }
       else if(response.status == NOT_FOUND) {
-        throw new NotFoundException(s"$resource not found for $serviceName $version")
+        None
       }
       else {
         throw new InternalServerException(s"Error (status ${response.status}) downloading $resource for $serviceName $version")

@@ -31,7 +31,7 @@
     @for(api <- maybeApi) {
         @for(version <- maybeVersion) {
             @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
-            <form id="version-select" method="get" action="@controllers.routes.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(api.serviceName, version.version).url">
+            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
                 <label class="visually-hidden" for="version">
                     Select version and status
                 </label>
@@ -107,8 +107,15 @@
         }
 
         @defining(VersionDocsVisible(maybeVersion.flatMap(_.visibility))) { case visibility =>
-            @if(visibility == DocsVisibility.OVERVIEW_ONLY) {
-                <section id="read-more" class="section">
+            @if(visibility == DocsVisibility.VISIBLE) {
+                <section id="view-oas" class="section">
+                  <p class="govuk-body">To see the complete OpenAPI specification for this API
+                    <a class="govuk-link" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(api.get.serviceName, version.version).url">click me</a>.
+                  </p>
+                </section>
+            } else {
+                @if(visibility == DocsVisibility.OVERVIEW_ONLY) {
+                  <section id="read-more" class="section">
                     <h2 id="read-more-title" class="govuk-heading-m">
                         Read more
                     </h2>
@@ -120,7 +127,8 @@
                             If you have already joined, <a class="govuk-link" href="/developer/login">sign in</a>.
                         </p>
                     }
-                </section>
+                  </section>
+                }
             }
         }
     </div>

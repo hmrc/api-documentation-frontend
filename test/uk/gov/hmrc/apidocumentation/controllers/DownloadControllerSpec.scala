@@ -21,11 +21,11 @@ import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.models.APIAccessType
-import uk.gov.hmrc.apidocumentation.services.DownloadService
 import uk.gov.hmrc.apidocumentation.mocks.config._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 
 class DownloadControllerSpec extends CommonControllerBaseSpec {
 
@@ -35,17 +35,17 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
       with ApiDefinitionServiceMock
       with LoggedInUserServiceMock {
 
-    val downloadService = mock[DownloadService]
+    val downloadConnector = mock[DownloadConnector]
 
     val errorHandler = app.injector.instanceOf[ErrorHandler]
 
     val version = "2.0"
     val resourceName = "some/resource"
 
-    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadService, loggedInUserService, errorHandler, appConfig, mcc)
+    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadConnector, loggedInUserService, errorHandler, appConfig, mcc)
 
-    def theDownloadServiceWillReturnTheResult(result: Results.Status) = {
-      when(downloadService.fetchResource(any[String], any[String], any[String])).thenReturn(Future.successful(result))
+    def theDownloadConnectorWillReturnTheResult(result: Results.Status) = {
+      when(downloadConnector.fetch(any[String], any[String], any[String])).thenReturn(Future.successful(Some(result)))
     }
 
     theUserIsNotLoggedIn()
@@ -54,14 +54,14 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
   "DownloadController" should {
     "download the resource when found" in new Setup {
       theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, version))
-      theDownloadServiceWillReturnTheResult(Results.Ok)
+      theDownloadConnectorWillReturnTheResult(Results.Ok)
 
       await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe OK
     }
 
     "return 404 code when the resource not found" in new Setup {
       theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, version))
-      theDownloadServiceWillReturnTheResult(Results.NotFound)
+      theDownloadConnectorWillReturnTheResult(Results.NotFound)
 
       await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe NOT_FOUND
     }

@@ -18,11 +18,12 @@ package uk.gov.hmrc.apidocumentation.connectors
 
 import play.api.http.Status._
 import play.api.mvc.Results._
+import play.api.test.Helpers.status
 import play.api.routing.sird._
 import play.api.test.WsTestClient
 import play.core.server.Server
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Configuration
@@ -55,13 +56,14 @@ class DownloadConnectorSpec extends ConnectorSpec {
       } { implicit port =>
         WsTestClient.withClient { client =>
           val connector = new DownloadConnector(client, mockAppConfig)
-          val result = await(connector.fetch(serviceName, version, "some/resource"))
-          result.header.status shouldBe OK
+          val result = connector.fetch(serviceName, version, "some/resource")
+
+          status(result.map(_.value)) shouldBe OK
         }
       }
     }
 
-    "throw NotFoundException when not found" in new Setup {
+    "return None when not found" in new Setup {
       Server.withRouterFromComponents() { components =>
         import components.{defaultActionBuilder => Action}
         {
@@ -73,9 +75,9 @@ class DownloadConnectorSpec extends ConnectorSpec {
         WsTestClient.withClient { client =>
           val connector = new DownloadConnector(client, mockAppConfig)
 
-          intercept[NotFoundException] {
-            await(connector.fetch(serviceName, version, "some/resourceNotThere"))
-          }
+          val result = await(connector.fetch(serviceName, version, "some/resourceNotThere"))
+
+          result shouldBe None
         }
       }
     }

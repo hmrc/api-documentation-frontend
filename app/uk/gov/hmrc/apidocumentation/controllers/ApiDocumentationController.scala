@@ -200,14 +200,16 @@ class ApiDocumentationController @Inject()(
       }
       
       def withDefault(service: String)(file: String, label: String, defaultContent: String): Future[DocumentationItem] = {
-        downloadConnector.fetch(service, "1.0", file)
-        .flatMap(_.body.consumeData)
-        .map(bs => bs.utf8String)
-        .map(text => DocumentationItem(label, text))
-        .recover {
-          case _ : NotFoundException =>
-            DocumentationItem(label, defaultContent)
+        val notFound = successful(DocumentationItem(label, defaultContent))
+
+        val found: (Result) => Future[DocumentationItem] = (result) => {
+          result.body.consumeData
+          .map(bs => bs.utf8String)
+          .map(text => DocumentationItem(label, text))
         }
+        
+        downloadConnector.fetch(service, "1.0", file)
+        .flatMap(_.fold(notFound)(found))
       }
    
       def renderOas(): Future[Result] = {

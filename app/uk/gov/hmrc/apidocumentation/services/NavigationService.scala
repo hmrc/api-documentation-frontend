@@ -141,10 +141,10 @@ class NavigationService @Inject()(
     sections :+ resources
   }
 
-    def openApiSidebarNavigation(service: String, version: ExtendedAPIVersion, markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
-      markdownBlocks
-      .map(mb => SidebarLink(label = mb.title, href = s"#${Slugify(mb.title)}"))
-    }
+  def openApiSidebarNavigation(service: String, version: ExtendedAPIVersion, markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
+    markdownBlocks
+    .map(mb => SidebarLink(label = mb.title, href = s"#${Slugify(mb.title)}"))
+  }
 
   private def ramlPreviewLink() =
     if (appConfig.ramlPreviewEnabled) {

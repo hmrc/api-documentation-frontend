@@ -68,8 +68,9 @@ class OpenApiDocumentationController @Inject()(
     successful(Ok(openApiViewSwagger(service, version)))
   }
 
-  def fetchOas(service: String, version: String) = Action.async { _ =>
+  def fetchOas(service: String, version: String) = Action.async { implicit request =>
     downloadConnector.fetch(service, version, "application.yaml")
+    .map(_.getOrElse(NotFound(errorHandler.notFoundTemplate)))
   }
   
   def previewApiDocumentationPage(): Action[AnyContent] = headerNavigation { implicit request =>
