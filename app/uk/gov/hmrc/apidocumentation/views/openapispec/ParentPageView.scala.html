@@ -109,8 +109,12 @@
         @defining(VersionDocsVisible(maybeVersion.flatMap(_.visibility))) { case visibility =>
             @if(visibility == DocsVisibility.VISIBLE) {
                 <section id="view-oas" class="section">
+                  <h2 id="endpoints-title" class="govuk-heading-m">
+                      Endpoints
+                  </h2>
+
                   <p class="govuk-body">To see the complete OpenAPI specification for this API
-                    <a class="govuk-link" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(api.get.serviceName, version.version).url">click me</a>.
+                    <a class="govuk-link" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(maybeApi.get.serviceName, maybeVersion.get.version).url">click here</a>.
                   </p>
                 </section>
             } else {

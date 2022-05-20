@@ -208,16 +208,19 @@ class ApiDocumentationController @Inject()(
           .map(text => DocumentationItem(label, text))
         }
         
-        downloadConnector.fetch(service, "1.0", file)
+        downloadConnector.fetch(service, "common", file)
         .flatMap(_.fold(notFound)(found))
       }
    
       def renderOas(): Future[Result] = {
         val withDefaultForService = withDefault(service) _
+
         for {
-          overview <- withDefaultForService("overview.md", "Overview", "Blah blah")
-          errors <- withDefaultForService("errors.md", "Errors", "Blah blah")
-          markdownBlocks = List(overview, errors)
+          overview <- withDefaultForService("overview.md", "Overview", "This section is missing content")
+          errors <- withDefaultForService("errors.md", "Errors", "This section is missing content")
+          testing <- withDefaultForService("testing.md", "Testing", "This section is missing content")
+          fraudPrevention <- withDefaultForService("fraud-prevention.md", "Fraud Prevention", "This section is missing content")
+          markdownBlocks = List(overview, errors, testing, fraudPrevention)
           attrs = makePageAttributes(api, selectedVersion, navigationService.openApiSidebarNavigation(service, selectedVersion, markdownBlocks))
 
           
