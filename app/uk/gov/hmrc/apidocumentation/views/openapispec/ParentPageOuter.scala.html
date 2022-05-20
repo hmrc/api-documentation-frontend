@@ -36,7 +36,7 @@
                 onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
             @for(v <- api.sortedActiveVersions;
                 if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
-                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url">v@v.version (@v.displayedStatus)</option>
+                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url" aria-label="Select to view documentation for v@v.version (@v.displayedStatus)">v@v.version (@v.displayedStatus)</option>
             }
         </select>
     </div>

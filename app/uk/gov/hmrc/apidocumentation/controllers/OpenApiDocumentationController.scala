@@ -52,6 +52,16 @@ class OpenApiDocumentationController @Inject()(
 )(implicit val ec: ExecutionContext, appConfig: ApplicationConfig)
     extends FrontendController(mcc) with HeaderNavigation with HomeCrumb with ApplicationLogger {
 
+  private val buildPageAttributes = (navLinks: Seq[NavLink]) => PageAttributes(
+    title = "OpenAPI Documentation Preview",
+    breadcrumbs = Breadcrumbs(
+      Crumb("Preview OpenAPI", routes.OpenApiDocumentationController.previewApiDocumentationPage.url),
+      homeCrumb
+    ),
+    headerLinks = navLinks,
+    sidebarLinks = navigationService.sidebarNavigation()
+  )
+
   def renderApiDocumentationUsingRedoc(service: String, version: String) = Action.async { _ =>
     successful(Ok(openApiViewRedoc(service, version)))
   }
@@ -76,12 +86,7 @@ class OpenApiDocumentationController @Inject()(
   def previewApiDocumentationPage(): Action[AnyContent] = headerNavigation { implicit request =>
     navLinks =>
       if (appConfig.openApiPreviewEnabled) {
-        val pageAttributes = PageAttributes(title = "OpenAPI Documentation Preview",
-          breadcrumbs = Breadcrumbs(
-            Crumb("Preview OpenAPI", routes.OpenApiDocumentationController.previewApiDocumentationPage.url),
-            homeCrumb),
-          headerLinks = navLinks,
-          sidebarLinks = navigationService.sidebarNavigation())
+        val pageAttributes = buildPageAttributes(navLinks)
 
         successful(Ok(openApiPreviewView(pageAttributes)))
       } else {
@@ -92,12 +97,7 @@ class OpenApiDocumentationController @Inject()(
   def previewApiDocumentationAction(url: Option[String]) = headerNavigation { implicit request =>
     navLinks =>
       if (appConfig.openApiPreviewEnabled) {
-        val pageAttributes = PageAttributes(title = "OpenAPI Documentation Preview",
-          breadcrumbs = Breadcrumbs(
-            Crumb("Preview OpenAPI", routes.OpenApiDocumentationController.previewApiDocumentationPage.url),
-            homeCrumb),
-          headerLinks = navLinks,
-          sidebarLinks = navigationService.sidebarNavigation())
+        val pageAttributes = buildPageAttributes(navLinks)
 
         url match {
           case None           => successful(Ok(openApiPreviewView(pageAttributes)))
