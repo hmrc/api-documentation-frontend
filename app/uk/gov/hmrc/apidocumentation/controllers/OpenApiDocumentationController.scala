@@ -18,22 +18,49 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
-import uk.gov.hmrc.apidocumentation.views.html._
 import scala.concurrent.ExecutionContext
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.Future.successful
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+import uk.gov.hmrc.apidocumentation.services.NavigationService
+import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.ErrorHandler
+import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
+import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
+import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 
 @Singleton
 class OpenApiDocumentationController @Inject()(
   openApiViewRedoc: OpenApiViewRedoc,
   openApiViewRapidoc: OpenApiViewRapiDoc,
+  openApiPreviewRedoc: OpenApiPreviewRedoc,
+  openApiPreviewRapidoc: OpenApiPreviewRapiDoc,
   openApiViewRapidocRead: OpenApiViewRapiDocRead,
   openApiViewSwagger: OpenApiViewSwagger,
+  openApiPreviewView: OpenApiPreviewView,
+  parentPage: ParentPageOuter,
+  retiredVersionJumpView: RetiredVersionJumpView,
   downloadConnector:DownloadConnector,
-  mcc: MessagesControllerComponents
-)(implicit val ec: ExecutionContext)
-    extends FrontendController(mcc) {
+  mcc: MessagesControllerComponents,
+  apiDefinitionService: ApiDefinitionService,
+  loggedInUserService: LoggedInUserService,
+  errorHandler: ErrorHandler,
+  val navigationService: NavigationService
+)(implicit val ec: ExecutionContext, appConfig: ApplicationConfig)
+    extends FrontendController(mcc) with HeaderNavigation with HomeCrumb with ApplicationLogger {
+
+  private val buildPageAttributes = (navLinks: Seq[NavLink]) => PageAttributes(
+    title = "OpenAPI Documentation Preview",
+    breadcrumbs = Breadcrumbs(
+      Crumb("Preview OpenAPI", routes.OpenApiDocumentationController.previewApiDocumentationPage.url),
+      homeCrumb
+    ),
+    headerLinks = navLinks,
+    sidebarLinks = navigationService.sidebarNavigation()
+  )
 
   def renderApiDocumentationUsingRedoc(service: String, version: String) = Action.async { _ =>
     successful(Ok(openApiViewRedoc(service, version)))
@@ -51,7 +78,33 @@ class OpenApiDocumentationController @Inject()(
     successful(Ok(openApiViewSwagger(service, version)))
   }
 
-  def fetchOas(service: String, version: String) = Action.async { _ =>
+  def fetchOas(service: String, version: String) = Action.async { implicit request =>
     downloadConnector.fetch(service, version, "application.yaml")
+    .map(_.getOrElse(NotFound(errorHandler.notFoundTemplate)))
+  }
+  
+  def previewApiDocumentationPage(): Action[AnyContent] = headerNavigation { implicit request =>
+    navLinks =>
+      if (appConfig.openApiPreviewEnabled) {
+        val pageAttributes = buildPageAttributes(navLinks)
+
+        successful(Ok(openApiPreviewView(pageAttributes)))
+      } else {
+        successful(NotFound(errorHandler.notFoundTemplate))
+      }
+  }
+
+  def previewApiDocumentationAction(url: Option[String]) = headerNavigation { implicit request =>
+    navLinks =>
+      if (appConfig.openApiPreviewEnabled) {
+        val pageAttributes = buildPageAttributes(navLinks)
+
+        url match {
+          case None           => successful(Ok(openApiPreviewView(pageAttributes)))
+          case Some(location) => successful(Ok(openApiPreviewRedoc(location)))
+        }
+      } else {
+        successful(NotFound(errorHandler.notFoundTemplate))
+      }
   }
 }

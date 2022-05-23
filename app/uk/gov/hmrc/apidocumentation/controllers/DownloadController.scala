@@ -21,18 +21,19 @@ import play.api.mvc._
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{APIAccessType, Developer, DeveloperIdentifier, ExtendedAPIDefinition, UuidIdentifier, VersionVisibility}
-import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, DownloadService, LoggedInUserService}
+import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, LoggedInUserService}
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 
 @Singleton
 class DownloadController @Inject()(documentationService: DocumentationService,
                                    apiDefinitionService: ApiDefinitionService,
-                                   downloadService: DownloadService,
+                                   downloadConnector: DownloadConnector,
                                    loggedInUserService: LoggedInUserService,
                                    errorHandler: ErrorHandler,
                                    val appConfig: ApplicationConfig,
@@ -69,7 +70,7 @@ class DownloadController @Inject()(documentationService: DocumentationService,
       } yield (api, apiVersion, visibility)
 
     def renderNotFoundPage =
-      Future.successful(NotFound(errorHandler.notFoundTemplate))
+      NotFound(errorHandler.notFoundTemplate)
 
     def redirectToLoginPage(service: String) =
       Future.successful(Redirect("/developer/login").withSession(
@@ -80,10 +81,11 @@ class DownloadController @Inject()(documentationService: DocumentationService,
         redirectToLoginPage(api.serviceName)
 
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
-        downloadService.fetchResource(api.serviceName, selectedVersion.version, validResource)
+        downloadConnector.fetch(api.serviceName, selectedVersion.version, validResource)
+        .map(_.getOrElse(renderNotFoundPage))
 
       case _ =>
-        renderNotFoundPage
+        Future.successful(renderNotFoundPage)
     }
   }
 

@@ -31,6 +31,7 @@ trait ApplicationConfig {
 
   def securedCookie: Boolean
   def ramlPreviewEnabled: Boolean
+  def openApiPreviewEnabled: Boolean
 
   def showProductionAvailability: Boolean
   def showSandboxAvailability: Boolean
@@ -77,6 +78,7 @@ class ApplicationConfigImpl @Inject()(config: Configuration)
   
   val securedCookie = getBoolean("cookie.secure")
   val ramlPreviewEnabled = getBoolean("features.ramlPreview")
+  val openApiPreviewEnabled = getBoolean("features.openApiPreview")
 
   val showProductionAvailability = getBoolean("features.showProductionAvailability")
   val showSandboxAvailability = getBoolean("features.showSandboxAvailability")

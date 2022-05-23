@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,37 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.apidocumentation.services
+@this()
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.Result
-import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
+@(uri: String)
 
-import scala.concurrent._
+<div id="redoc"></div>
 
-@Singleton
-class DownloadService @Inject()(downloadConnector: DownloadConnector) {
-  def fetchResource(serviceName: String, version: String, resource: String): Future[Result] = {
-    downloadConnector.fetch(serviceName, version, resource)
-  }
+<script src='@controllers.routes.Assets.versioned("javascripts/redoc/redoc.standalone.js")' charset="UTF-8"> </script>
 
-}
+@*
+To fix this issue:
+https://github.com/Redocly/redoc/issues/1108#issuecomment-585990742
+*@
+<script>
+  var options = {
+    hideHostname: true,
+    theme: {
+      spacing: {
+        sectionVertical: '35px',
+      },
+      typography: {
+        headings: {
+          lineHeight: "1.2em"
+        }
+      }
+    }
+  };
+
+  var oasUrl = "@uri"
+
+  Redoc.init(oasUrl, options, document.getElementById("redoc"));
+
+</script>

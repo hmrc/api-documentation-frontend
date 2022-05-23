@@ -25,9 +25,12 @@ import org.mockito.MockitoSugar
 trait NavigationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   import NavigationServiceMock._
   import uk.gov.hmrc.apidocumentation.services.NavigationService
+
   val navigationService = mock[NavigationService]
+
   when(navigationService.headerNavigation()(*)).thenReturn(successful(Seq(navLink)))
   when(navigationService.sidebarNavigation()).thenReturn(Seq(sidebarLink))
+  when(navigationService.openApiSidebarNavigation(*, *, *)).thenReturn(Seq(sidebarLink))
   when(navigationService.apiSidebarNavigation2(*, *, *)).thenReturn(Seq(sidebarLink))
 }
 

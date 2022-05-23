@@ -33,6 +33,9 @@ import scala.concurrent.Future.failed
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem, ResourceGroup, TypeDeclaration}
 import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
 import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
+import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
+import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
+import akka.stream.Materializer
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
   trait Setup
@@ -43,6 +46,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       with NavigationServiceMock
       with XmlServicesServiceMock {
 
+    
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
@@ -53,6 +57,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     private lazy val previewDocumentationView = app.injector.instanceOf[PreviewDocumentationView2]
     private lazy val xmlDocumentationView = app.injector.instanceOf[XmlDocumentationView]
     private lazy val serviceDocumentationView = app.injector.instanceOf[ServiceDocumentationView2]
+    private lazy val parentPage = app.injector.instanceOf[ParentPageOuter]
+    val downloadConnector = mock[DownloadConnector]
+    private implicit val materializer = app.injector.instanceOf[Materializer]
 
     val underTest = new ApiDocumentationController(
       documentationService,
@@ -68,7 +75,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       previewDocumentationView,
       serviceDocumentationView,
       xmlDocumentationView,
-      xmlServicesService
+      parentPage,
+      xmlServicesService,
+      downloadConnector
     )
   }
 
@@ -420,10 +429,12 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "1.0"))
           theDocumentationServiceWillFetchNoSpecification()
+          when(downloadConnector.fetch(*,*,*)).thenReturn(successful(None))
 
           val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
 
-          status(result) shouldBe SEE_OTHER
+          status(result) shouldBe OK
+          contentAsString(result) should not contain ("Endpoints")
         }
       }
 
