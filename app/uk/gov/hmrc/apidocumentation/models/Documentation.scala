@@ -126,14 +126,15 @@ object APIAccess {
 }
 
 case class APIDefinition(
-                          serviceName: String,
-                          name: String,
-                          description: String,
-                          context: String,
-                          requiresTrust: Option[Boolean],
-                          isTestSupport: Option[Boolean],
-                          versions: Seq[APIVersion],
-                          categories: Option[Seq[APICategory]] = None) extends Documentation {
+  serviceName: String,
+  name: String,
+  description: String,
+  context: String,
+  requiresTrust: Option[Boolean],
+  isTestSupport: Option[Boolean],
+  versions: Seq[APIVersion],
+  categories: Option[Seq[APICategory]] = None
+) extends Documentation {
 
   require(versions.nonEmpty, s"API versions must not be empty! serviceName=$serviceName")
 
@@ -179,11 +180,11 @@ object APIDefinition {
 }
 
 case class APIVersion(
-                       version: String,
-                       access: Option[APIAccess],
-                       status: APIStatus,
-                       endpoints: Seq[Endpoint]) {
-
+  version: String,
+  access: Option[APIAccess],
+  status: APIStatus,
+  endpoints: Seq[Endpoint]
+) {
   val accessType = access.fold(APIAccessType.PUBLIC)(_.`type`)
 
   val displayedStatus = {
@@ -195,13 +196,15 @@ case class APIVersion(
   }
 }
 
-case class ExtendedAPIDefinition(serviceName: String,
-                                 name: String,
-                                 description: String,
-                                 context: String,
-                                 requiresTrust: Boolean,
-                                 isTestSupport: Boolean,
-                                 versions: Seq[ExtendedAPIVersion]) {
+case class ExtendedAPIDefinition(
+  serviceName: String,
+  name: String,
+  description: String,
+  context: String,
+  requiresTrust: Boolean,
+  isTestSupport: Boolean,
+  versions: Seq[ExtendedAPIVersion]
+) {
 
   def userAccessibleApiDefinition = {
     def isAccessible(availability: Option[APIAvailability]) =
@@ -281,10 +284,11 @@ case class APIAvailability(endpointsEnabled: Boolean, access: APIAccess, loggedI
 case class VersionVisibility(privacy: APIAccessType.APIAccessType, loggedIn: Boolean, authorised: Boolean, isTrial: Option[Boolean] = None)
 
 case class Endpoint(
-                     endpointName: String,
-                     uriPattern: String,
-                     method: HttpMethod,
-                     queryParameters: Option[Seq[Parameter]] = None) {
+  endpointName: String,
+  uriPattern: String,
+  method: HttpMethod,
+  queryParameters: Option[Seq[Parameter]] = None
+) {
 
   def decoratedUriPattern = {
     queryParameters.getOrElse(Seq()).isEmpty match {
