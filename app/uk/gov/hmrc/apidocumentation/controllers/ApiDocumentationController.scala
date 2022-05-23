@@ -37,12 +37,15 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
+import uk.gov.hmrc.apidocumentation.models.APICategory.{categoryMap, APICategory}
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 
 import akka.stream.Materializer
+import controllers.Assets
 
 
 object ApiDocumentationController {
@@ -66,7 +69,8 @@ class ApiDocumentationController @Inject()(
   xmlDocumentationView: XmlDocumentationView,
   parentPage: ParentPageOuter,
   xmlServicesService: XmlServicesService,
-  downloadConnector: DownloadConnector
+  downloadConnector: DownloadConnector,
+  assets: Assets
 )(implicit val ec: ExecutionContext, appConfig: ApplicationConfig, mat: Materializer)
   extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb with ApplicationLogger {
 
@@ -199,35 +203,40 @@ class ApiDocumentationController @Inject()(
         successful(Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, developerId.isDefined)).withHeaders(cacheControlHeaders))
       }
       
-      def withDefault(service: String)(file: String, label: String, defaultContent: String): Future[DocumentationItem] = {
-        val notFound = successful(DocumentationItem(label, defaultContent))
-
-        val found: (Result) => Future[DocumentationItem] = (result) => {
+      def withDefault(service: String)(file: String, label: String): Future[DocumentationItem] = {
+        def resultToDocumentationItem(result: Result): Future[DocumentationItem] = {
           result.body.consumeData
           .map(bs => bs.utf8String)
           .map(text => DocumentationItem(label, text))
         }
+
+        val findLocally: Future[DocumentationItem] = {
+          assets.at("/public/common/docs", file, false)(request).flatMap(resultToDocumentationItem)
+        }
         
         downloadConnector.fetch(service, "common", file)
-        .flatMap(_.fold(notFound)(found))
+        .flatMap(_.fold(findLocally)(resultToDocumentationItem))
       }
    
-      def renderOas(): Future[Result] = {
+      def renderOas(categories: Seq[APICategory]): Future[Result] = {
         val withDefaultForService = withDefault(service) _
+        
+        val requiredFraudPrevention = categories.contains(APICategory.VAT_MTD) || categories.contains(APICategory.INCOME_TAX_MTD)
 
         for {
-          overview <- withDefaultForService("overview.md", "Overview", "This section is missing content")
-          errors <- withDefaultForService("errors.md", "Errors", "This section is missing content")
-          testing <- withDefaultForService("testing.md", "Testing", "This section is missing content")
-          fraudPrevention <- withDefaultForService("fraud-prevention.md", "Fraud Prevention", "This section is missing content")
-          markdownBlocks = List(overview, errors, testing, fraudPrevention)
+          overview <- withDefaultForService("overview.md", "Overview")
+          errors <- withDefaultForService("errors.md", "Errors")
+          testing <- withDefaultForService("testing.md", "Testing")
+          fraudPrevention <- withDefaultForService("fraud-prevention.md", "Fraud Prevention")
+          versioning <- withDefaultForService("versioning.md", "Versioning")
+          markdownBlocks = List(overview, errors, testing) ++ (if(requiredFraudPrevention) List(fraudPrevention) else List()) ++ List(versioning)
           attrs = makePageAttributes(api, selectedVersion, navigationService.openApiSidebarNavigation(service, selectedVersion, markdownBlocks))
-
           
         } yield Ok(parentPage(attrs, markdownBlocks, api.name, api, selectedVersion, developerId.isDefined)).withHeaders(cacheControlHeaders)
       }
       
-      documentationService.fetchApiSpecification(service, version, cacheBuster).flatMap(_.fold(renderOas)(renderRamlSpec))
+      val categories = categoryMap.getOrElse(api.name, Seq.empty)
+      documentationService.fetchApiSpecification(service, version, cacheBuster).flatMap(_.fold(renderOas(categories))(renderRamlSpec))
     }
 
     findVersion(apiOption) match {

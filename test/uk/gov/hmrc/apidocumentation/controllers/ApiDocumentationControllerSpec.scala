@@ -36,6 +36,7 @@ import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlP
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import akka.stream.Materializer
+import controllers.Assets
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
   trait Setup
@@ -46,7 +47,6 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       with NavigationServiceMock
       with XmlServicesServiceMock {
 
-    
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
@@ -58,6 +58,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     private lazy val xmlDocumentationView = app.injector.instanceOf[XmlDocumentationView]
     private lazy val serviceDocumentationView = app.injector.instanceOf[ServiceDocumentationView2]
     private lazy val parentPage = app.injector.instanceOf[ParentPageOuter]
+    private lazy val assets = app.injector.instanceOf[Assets]
     val downloadConnector = mock[DownloadConnector]
     private implicit val materializer = app.injector.instanceOf[Materializer]
 
@@ -77,7 +78,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       xmlDocumentationView,
       parentPage,
       xmlServicesService,
-      downloadConnector
+      downloadConnector,
+      assets
     )
   }
 
