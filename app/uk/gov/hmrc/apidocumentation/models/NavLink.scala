@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-case class NavLink(label: String, href: String, truncate: Boolean = false, openInNewWindow: Boolean = false)
+case class NavLink(label: String, href: String, truncate: Boolean = false, openInNewWindow: Boolean = false, isSensitive: Boolean = false)
 
 case class SidebarLink(label: String, href: String, subLinks: Seq[SidebarLink] = Seq.empty, showSubLinks: Boolean = false)
 

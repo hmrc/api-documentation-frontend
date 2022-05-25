@@ -86,7 +86,6 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
     }
 
     "pass the useNewUpliftJourney header on to TPDFE if it is present" in new Setup {
-      implicit val hc = HeaderCarrier()
       val response = HtmlPartial.Success(None, Html("<p>some terms of use</p>"))
 
       stubFor(
