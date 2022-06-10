@@ -38,7 +38,6 @@ class OpenApiDocumentationController @Inject()(
   openApiViewRapidoc: OpenApiViewRapiDoc,
   openApiPreviewRedoc: OpenApiPreviewRedoc,
   openApiPreviewRapidoc: OpenApiPreviewRapiDoc,
-  openApiViewRapidocRead: OpenApiViewRapiDocRead,
   openApiViewSwagger: OpenApiViewSwagger,
   openApiPreviewView: OpenApiPreviewView,
   parentPage: ParentPageOuter,
@@ -68,10 +67,6 @@ class OpenApiDocumentationController @Inject()(
 
   def renderApiDocumentationUsingRapidoc(service: String, version: String) = Action.async { _ =>
     successful(Ok(openApiViewRapidoc(service, version)))
-  }
-
-  def renderApiDocumentationUsingRapidocRead(service: String, version: String) = Action.async { _ =>
-    successful(Ok(openApiViewRapidocRead(service, version)))
   }
 
   def renderApiDocumentationUsingSwagger(service: String, version: String) = Action.async { _ =>
