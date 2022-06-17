@@ -15,7 +15,7 @@ object AppDependencies {
     "uk.gov.hmrc"                           %% "play-ui"                      % "9.9.0-play-28",
     "uk.gov.hmrc"                           %% "govuk-template"               % "5.77.0-play-28",
     "uk.gov.hmrc"                           %% "play-partials"                % "8.3.0-play-28",
-    "uk.gov.hmrc"                           %% "play-frontend-hmrc"           % "3.20.0-play-28",
+    "uk.gov.hmrc"                           %% "play-frontend-hmrc"           % "2.0.0-play-28",
     "org.typelevel"                         %% "cats-core"                    % "2.6.1",
     "org.commonjava.googlecode.markdown4j"  %  "markdown4j"                   % "2.2-cj-1.1",
     "com.typesafe.play"                     %% "play-json"                    % "2.9.2",
