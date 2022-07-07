@@ -61,6 +61,10 @@ class OpenApiDocumentationController @Inject()(
     sidebarLinks = navigationService.sidebarNavigation()
   )
 
+  def renderApiDocumentation(service: String, version: String) = Action.async { _ =>
+    successful(Ok(openApiViewRedoc(service, version)))
+  }
+
   def renderApiDocumentationUsingRedoc(service: String, version: String) = Action.async { _ =>
     successful(Ok(openApiViewRedoc(service, version)))
   }
