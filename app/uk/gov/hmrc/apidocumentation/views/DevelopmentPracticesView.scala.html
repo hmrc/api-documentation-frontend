@@ -25,125 +25,132 @@
 
 @apiMain(pageAttributes){
 
-<h1 id="top" class="govuk-heading-l">Development practices</h1>
-
-  <nav role="navigation" aria-labelledby="onThisPage">
-    <h2 id="onThisPage" class="visually-hidden">On this page</h2>
-    <ul class="govuk-list">
-      <li><a class="govuk-link" href="#why-you-only-need-one-dev-hub-app">Why you only need 1 HMRC Developer Hub application</a></li>
-      <li><a class="govuk-link" href="#how-to-avoid-your-application-failing-without-warning">How to avoid your application failing without warning</a></li>
-      <li><a class="govuk-link" href="#hmrc-changes-that-will-affect-your-application">HMRC changes that will affect your application</a></li>
-    </ul>
-  </nav>
+    <h1 class="govuk-heading-l">Development practices</h1>
+    <nav>
+      <ul class="govuk-list govuk-!-margin-bottom-7">
+        <li><a class="govuk-link govuk-link--no-visited-state" href="#why-you-only-need-one-dev-hub-app">Why you only need 1 HMRC Developer Hub application</a></li>
+        <li><a class="govuk-link govuk-link--no-visited-state" href="#how-to-avoid-your-application-failing-without-warning">How to avoid your application failing without warning</a></li>
+        <li><a class="govuk-link govuk-link--no-visited-state" href="#hmrc-changes-that-will-affect-your-application">HMRC changes that will affect your application</a></li>
+      </ul>
+    </nav>
   <br>
 
-  <p class="govuk-body">The HMRC API Platform uses DevOps practices, iterative development, continuous integration, continuous testing and continuous delivery to make
-    hundreds of small changes to the production environment each year.
-  </p>
-
-  <p class="govuk-body">Follow the development practices to make sure your application is not affected by the changes we make.</p>
-
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
-
-  <section id="why-you-only-need-one-dev-hub-app">
-    <h2 class="govuk-heading-m">Why you only need 1 HMRC Developer Hub application</h2>
-    <p class="govuk-body">HMRC Developer Hub is for software developers who write software that integrates with HMRC APIs.</p>
-    <p class="govuk-body">If you are developing software that uses HMRC APIs, you only need 1 Developer Hub production application.</p>
-    <p class="govuk-body">You don’t need to create applications for each of your customers.</p>
-    <p class="govuk-body">Your customers’ traffic is isolated through Oauth tokens and does not need isolating through multiple application registrations.</p>
-    <a class="govuk-link" href="#top">Back to top</a>
-  </section>
-
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
-
-  <section id="how-to-avoid-your-application-failing-without-warning">
-    <h2 class="govuk-heading-m">How to avoid your application failing without warning</h2>
-    <p class="govuk-body">You should avoid unintentionally tightly coupling your application to HMRC.</p>
-
-    <p class="govuk-body">Tight coupling means a set of systems are dependent on one another. Making a change in a tightly coupled setup requires changes to both systems.</p>
-
-    <p class="govuk-body">Loose coupling reduces dependencies and ensures non-breaking changes have no impact on your application.</p>
-
-    <h3 class="govuk-heading-s">HTTPS certificates can change</h3>
-
-    <p class="govuk-body">The HMRC API Platform’s HTTPS certificates can change. This includes the leaf certificate, intermediary certificates and the root certificate.</p>
-
-    <div class="govuk-warning-text warning-icon-fix">
-      <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-        If you import any HMRC specific certificates into your keystore or load balancer, then your application may fail to connect when certificate changes occur.
-      </strong>
-    </div>
-
-    <p class="govuk-body">Use a global root CA keystore and do not pin HMRC specific certificates</p>
-
-    <h3 class="govuk-heading-s">IP addresses can change</h3>
-
-    <p class="govuk-body">You might need to configure your network so your software can access our API Platform and token generation.
-      If your software is installed on end user devices, they might also need to configure their own network.</p>
-
-    <p class="govuk-body">We have fixed domain names, but cannot provide static IP addresses, so you need to configure your network access in your proxy, not your firewall.</p>
-
-    <p class="govuk-body">Configure your proxy to allow full access to the following domains, including HTTP <code class="code--slim">GET</code>,
-      <code class="code--slim">POST</code>, <code class="code--slim">PUT</code> and <code class="code--slim">DELETE</code>.
+    <p class="govuk-body">The HMRC API Platform uses DevOps practices, iterative development, continuous integration, continuous testing and continuous delivery to make
+        hundreds of small changes to the production environment each year.
     </p>
 
-    <p class="govuk-body">For testing in sandbox:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li><code class="code--slim">test-api.service.hmrc.gov.uk</code></li>
-      <li><code class="code--slim">test-www.tax.service.gov.uk</code></li>
-    </ul>
+    <p class="govuk-body">Follow the development practices to make sure your application is not affected by the changes we make.</p>
 
-    <p class="govuk-body">For production use:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li><code class="code--slim">api.service.hmrc.gov.uk</code></li>
-      <li><code class="code--slim">www.tax.service.gov.uk</code></li>
-    </ul>
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" aria-hidden="true">
 
-    <h3 class="govuk-heading-s">Oauth flow can change</h3>
+    <section id="why-you-only-need-one-dev-hub-app">
+      <h2 class="govuk-heading-m">Why you only need 1 HMRC Developer Hub application</h2>
+      <p class="govuk-body">HMRC Developer Hub is for software developers who write software that integrates with HMRC APIs.</p>
+      <p class="govuk-body">If you are developing software that uses HMRC APIs, you only need 1 Developer Hub production application.</p>
+      <p class="govuk-body">
+        <a class="govuk-link" href="@controllers.routes.DocumentationController.nameGuidelinesPage()">The name of your production application should be the same as your organisation</a>.
+      </p>
+      <p class="govuk-body">You don’t need to create applications for each of your customers.</p>
+      <p class="govuk-body">Your customers’ traffic is isolated through OAuth tokens and does not need isolating through multiple application registrations.</p>
+      <p class="govuk-body-s">
+        <a class="govuk-link" href="#top">Back to top</a>
+      </p>
+    </section>
 
-    <p class="govuk-body">We do not support software that automatically drives the web interfaces of the OAuth grant flow.</p>
+    <hr class="govuk-section-break govuk-section-break--xl govuk-!-margin-top-7 govuk-section-break--visible" aria-hidden="true">
 
-    <p class="govuk-body">We regularly make changes to the OAuth grant flow and any changes could break automated logins. We will not advise you of any OAuth changes in advance.</p>
+    <section id="how-to-avoid-your-application-failing-without-warning">
+      <h2 class="govuk-heading-m">How to avoid your application failing without warning</h2>
+      <p class="govuk-body">You should avoid unintentionally tightly coupling your application to HMRC.</p>
 
-    <h3 class="govuk-heading-s">Cross-origin resource sharing (CORS)</h3>
+      <p class="govuk-body">Tight coupling means a set of systems are dependent on one another. Making a change in a tightly coupled setup requires changes to both systems.</p>
 
-    <p class="govuk-body">The HMRC API Platform does not support <a class="govuk-link" href="https://fetch.spec.whatwg.org/#http-cors-protocol">cross-origin resource sharing (CORS).</a>
-      It is not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
+      <p class="govuk-body">Loose coupling reduces dependencies and ensures non-breaking changes have no impact on your application.</p>
 
-    <p class="govuk-body">
-      <a class="govuk-link" href="#top">Back to top</a>
-    </p>
-  </section>
+      <h3 class="govuk-heading-s">HTTPS certificates can change</h3>
 
-  <section id="hmrc-changes-that-will-affect-your-application">
-    <h2 class="govuk-heading-m">HMRC changes that will affect your application</h2>
+      <p class="govuk-body">The HMRC API Platform’s HTTPS certificates can change. This includes the leaf certificate, intermediary certificates and the root certificate.</p>
 
-    <p class="govuk-body">A breaking change is a change to the HMRC API platform that requires you to make changes to your software, so it continues to work.</p>
+      <div class="govuk-warning-text warning-icon-fix">
+        <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          If you import any HMRC specific certificates into your keystore or load balancer, then your application may fail to connect when certificate changes occur.
+        </strong>
+      </div>
 
-    <p class="govuk-body">We try to avoid breaking changes, but sometimes they need to be made.</p>
+      <p class="govuk-body">Use a global root CA keystore and do not pin HMRC specific certificates</p>
 
-    <p class="govuk-body">Breaking changes can be:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>API specific (for example retiring a stable version of an API)</li>
-      <li>platform wide (for example retiring support for insecure TLS versions and cipher suites)</li>
-    </ul>
+      <h3 class="govuk-heading-s">IP addresses can change</h3>
 
-    <div class="panel panel-border-wide">
-      <p class="govuk-body">You will receive 6 months notice before breaking changes are made in production.</p>
-    </div>
+      <p class="govuk-body">You might need to configure your network so your software can access our API Platform and token generation.
+          If your software is installed on end user devices, they might also need to configure their own network.</p>
 
-    <p class="govuk-body">Where possible breaking changes will be published to the sandbox environment first before production.</p>
+      <p class="govuk-body">We have fixed domain names, but cannot provide static IP addresses, so you need to configure your network access in your proxy, not your firewall.</p>
 
-    <p class="govuk-body">You will have time to test any changes in the sandbox environment before changes are made in production.</p>
+      <p class="govuk-body">Configure your proxy to allow full access to the following domains, including HTTP <code class="code--slim">GET</code>,
+        <code class="code--slim">POST</code>, <code class="code--slim">PUT</code> and <code class="code--slim">DELETE</code>.
+      </p>
 
-    <p class="govuk-body">If you have an automated test pack, we recommend you run your tests weekly against sandbox.</p>
+      <p class="govuk-body">For testing in sandbox:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li><code class="code--slim">test-api.service.hmrc.gov.uk</code></li>
+        <li><code class="code--slim">test-www.tax.service.gov.uk</code></li>
+      </ul>
 
-    <p class="govuk-body">See the <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage()">reference guide</a> for actions you need to take to make sure your application integrates with HMRC.</p>
-  
-    <p class="govuk-body">
-      <a class="govuk-link" href="#top">Back to top</a>
-    </p>
-  </section>
+      <p class="govuk-body">For production use:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li><code class="code--slim">api.service.hmrc.gov.uk</code></li>
+        <li><code class="code--slim">www.tax.service.gov.uk</code></li>
+      </ul>
+
+      <h3 class="govuk-heading-s">OAuth flow can change</h3>
+
+      <p class="govuk-body">We do not support software that automatically drives the web interfaces of the OAuth grant flow.</p>
+
+      <p class="govuk-body">We regularly make changes to the OAuth grant flow and any changes could break automated logins. We will not advise you of any OAuth changes in advance.</p>
+
+      <h3 class="govuk-heading-s">Cross-origin resource sharing (CORS)</h3>
+
+      <p class="govuk-body">The HMRC API Platform does not support <a class="govuk-link" href="https://fetch.spec.whatwg.org/#http-cors-protocol">cross-origin resource sharing (CORS).</a>
+          It is not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
+
+      <p class="govuk-body-s">
+        <a class="govuk-link" href="#top">Back to top</a>
+      </p>
+    </section>
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-!-margin-top-7 govuk-section-break--visible" aria-hidden="true">
+
+    <section id="hmrc-changes-that-will-affect-your-application">
+      <h2 class="govuk-heading-m">HMRC changes that will affect your application</h2>
+
+      <p class="govuk-body">A breaking change is a change to the HMRC API platform that requires you to make changes to your software, so it continues to work.</p>
+
+      <p class="govuk-body">We try to avoid breaking changes, but sometimes they need to be made.</p>
+
+      <p class="govuk-body">Breaking changes can be:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>API specific (for example retiring a stable version of an API)</li>
+        <li>platform wide (for example retiring support for insecure TLS versions and cipher suites)</li>
+      </ul>
+
+      <div class="panel panel-border-wide">
+        <p class="govuk-body">You will receive 6 months notice before breaking changes are made in production.</p>
+      </div>
+
+      <p class="govuk-body">Where possible breaking changes will be published to the sandbox environment first before production.</p>
+
+      <p class="govuk-body">You will have time to test any changes in the sandbox environment before changes are made in production.</p>
+
+      <p class="govuk-body">If you have an automated test pack, we recommend you run your tests weekly against sandbox.</p>
+
+      <p class="govuk-body">See the <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage()">reference guide</a> for actions you need to take to make sure your application integrates with HMRC.</p>
+
+      <p class="govuk-body-s govuk-!-margin-top-6">
+        <a class="govuk-link" href="#top">Back to top</a>
+      </p>
+    </section>
+
+
 }
