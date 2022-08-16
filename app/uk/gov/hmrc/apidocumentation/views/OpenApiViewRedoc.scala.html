@@ -21,6 +21,7 @@
 <div id="redoc"></div>
 
 <script src='@controllers.routes.Assets.versioned("javascripts/redoc/redoc.standalone.js")' charset="UTF-8"> </script>
+<script src='@controllers.routes.Assets.versioned("javascripts/redoc/redoc-fixes.js")' charset="UTF-8"> </script>
 
 @*
 To fix this issue:
@@ -42,6 +43,6 @@ https://github.com/Redocly/redoc/issues/1108#issuecomment-585990742
 
   var oasUrl = "@uk.gov.hmrc.apidocumentation.controllers.routes.OpenApiDocumentationController.fetchOas(serviceName, version)"
 
-  Redoc.init(oasUrl, options, document.getElementById("redoc"));
+  Redoc.init(oasUrl, options, document.getElementById("redoc"), applyRedocFixes);
 
 </script>
