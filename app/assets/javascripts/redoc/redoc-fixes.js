@@ -16,5 +16,14 @@ function applyRedocFixes() {
         });
     }
 
+    function retainFocusAfterClickingCopyButtons() {
+        [...document.querySelectorAll('div[role=tabpanel] button')].filter(btn => btn.innerText === 'Copy').forEach(copyBtn => {
+            copyBtn.addEventListener('click', () => {
+                setTimeout(() => copyBtn.focus(), 0);
+            });
+        })
+    }
+
     makeLeftMenuLinksAccessibleViaKeyboard();
+    retainFocusAfterClickingCopyButtons();
 }
