@@ -24,6 +24,23 @@ function applyRedocFixes() {
         })
     }
 
+    function removeMenuItemRoleFromLeftHandMenu() {
+        document.querySelectorAll('ul[role=navigation] label[role=menuitem]').forEach(label => {
+            label.removeAttribute('role');
+        });
+    }
+
+    function addAriaExpandedAttributeToResponsesButtons() {
+        [...document.querySelectorAll('h3')].filter(h3 => h3.innerText === 'Responses').forEach(h3 => {
+           const buttonContainer = h3.nextElementSibling;
+           [...buttonContainer.querySelectorAll('button:not([disabled])')].forEach(activeButton => {
+               activeButton.setAttribute('aria-expanded', 'false');
+           })
+        });
+    }
+
     makeLeftMenuLinksAccessibleViaKeyboard();
     retainFocusAfterClickingCopyButtons();
+    removeMenuItemRoleFromLeftHandMenu();
+    addAriaExpandedAttributeToResponsesButtons();
 }
