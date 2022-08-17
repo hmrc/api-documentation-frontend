@@ -16,5 +16,12 @@ function applyRedocFixes() {
         });
     }
 
+    function removeMenuItemRoleFromLeftHandMenu() {
+        document.querySelectorAll('ul[role=navigation] label[role=menuitem]').forEach(label => {
+            label.removeAttribute('role');
+        });
+    }
+
     makeLeftMenuLinksAccessibleViaKeyboard();
+    removeMenuItemRoleFromLeftHandMenu();
 }
