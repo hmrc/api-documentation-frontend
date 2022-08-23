@@ -1,6 +1,6 @@
 function applyRedocFixes() {
     function makeLeftMenuLinksAccessibleViaKeyboard() {
-        document.querySelectorAll('ul[role=navigation] li').forEach(li => {
+        document.querySelectorAll('ul[role=menu] li').forEach(li => {
             if (!li.hasAttribute('tabindex')) {
                 li.setAttribute('tabindex', 0);
                 const navLocation = li.getAttribute('data-item-id');
@@ -25,7 +25,7 @@ function applyRedocFixes() {
     }
 
     function removeMenuItemRoleFromLeftHandMenu() {
-        document.querySelectorAll('ul[role=navigation] label[role=menuitem]').forEach(label => {
+        document.querySelectorAll('ul[role=menu] label[role=menuitem]').forEach(label => {
             label.removeAttribute('role');
         });
     }
