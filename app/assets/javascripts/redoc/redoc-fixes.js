@@ -30,13 +30,15 @@ function applyRedocFixes() {
         });
     }
 
-    function addAriaExpandedAttributeToResponsesButtons() {
+    function forEachActiveResponseCodeButton(fn) {
         [...document.querySelectorAll('h3')].filter(h3 => h3.innerText === 'Responses').forEach(h3 => {
-           const buttonContainer = h3.nextElementSibling;
-           [...buttonContainer.querySelectorAll('button:not([disabled])')].forEach(activeButton => {
-               activeButton.setAttribute('aria-expanded', 'false');
-           })
+            const buttonContainer = h3.nextElementSibling;
+            [...buttonContainer.querySelectorAll('button:not([disabled])')].forEach(fn);
         });
+    }
+
+    function addAriaExpandedAttributeToResponsesButtons() {
+        forEachActiveResponseCodeButton(activeButton => activeButton.setAttribute('aria-expanded', 'false'));
     }
 
     function makeMenuButtonAccessibleViaKeyboard() {
@@ -52,9 +54,15 @@ function applyRedocFixes() {
         }, true);
     }
 
+    function addClassesForWindowsHighContrastMode() {
+        // see forced-colors media query in redoc-fixes.scss
+        forEachActiveResponseCodeButton(activeButton => activeButton.classList.add('responseCodeButton'));
+    }
+
     makeLeftMenuLinksAccessibleViaKeyboard();
     retainFocusAfterClickingCopyButtons();
     removeMenuItemRoleFromLeftHandMenu();
     addAriaExpandedAttributeToResponsesButtons();
     makeMenuButtonAccessibleViaKeyboard();
+    addClassesForWindowsHighContrastMode();
 }

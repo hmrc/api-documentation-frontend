@@ -10,6 +10,16 @@ li.tab-error {
   background-color: white ! important;
 }
 
+/* Highlight button that is used to display menu on mobile devices, when it has focus */
 .menuButton:focus {
   border: 1px solid rgb(0, 101, 251);
+}
+
+@media (forced-colors: active) {
+  /* Styles here apply to Windows High Contrast Mode */
+  div.menu-content label.active,
+  button.responseCodeButton,
+  div.react-tabs__tab-panel button:not(.collapser):focus {
+    border: 1px solid;
+  }
 }
