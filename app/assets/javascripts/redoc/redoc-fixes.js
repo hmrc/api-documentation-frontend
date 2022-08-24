@@ -39,8 +39,22 @@ function applyRedocFixes() {
         });
     }
 
+    function makeMenuButtonAccessibleViaKeyboard() {
+        const menuButton = document.querySelector('.menu-content').nextSibling;
+        menuButton.classList.add('menuButton');
+        if (!menuButton.hasAttribute('tabindex')) {
+            menuButton.setAttribute('tabindex', 1);
+        }
+        menuButton.addEventListener('keydown', e => {
+            if (e.code === 'Enter') {
+                menuButton.click();
+            }
+        }, true);
+    }
+
     makeLeftMenuLinksAccessibleViaKeyboard();
     retainFocusAfterClickingCopyButtons();
     removeMenuItemRoleFromLeftHandMenu();
     addAriaExpandedAttributeToResponsesButtons();
+    makeMenuButtonAccessibleViaKeyboard();
 }

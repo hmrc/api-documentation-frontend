@@ -9,3 +9,7 @@ li.tab-error {
   color: rgb(200, 0, 0) ! important;
   background-color: white ! important;
 }
+
+.menuButton:focus {
+  border: 1px solid rgb(0, 101, 251);
+}
