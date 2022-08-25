@@ -21,8 +21,7 @@ function applyRedocFixes() {
             copyBtn.addEventListener('click', () => {
                 setTimeout(() => copyBtn.focus(), 0);
             });
-        })
-        throw Error('boo')
+        });
     }
 
     function removeMenuItemRoleFromLeftHandMenu() {
