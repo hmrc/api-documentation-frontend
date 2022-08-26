@@ -21,6 +21,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.By
 import org.scalatestplus.selenium.WebBrowser
+import java.time.Duration
 
 object APIDocumentationPage extends WebPage {
 
@@ -43,7 +44,7 @@ object APIDocumentationPage extends WebPage {
   def applicationName = WebBrowser.id("HMRC-Developer-Hub").element.text
 
   def waitForPageToStopMoving() = {
-    new WebDriverWait(webDriver, 5).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
+    new WebDriverWait(webDriver, Duration.ofSeconds(5)).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
   }
 
 }

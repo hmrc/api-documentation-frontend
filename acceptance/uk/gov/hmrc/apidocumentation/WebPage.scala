@@ -47,7 +47,7 @@ trait WebPage extends Page with WebBrowser with Matchers with Eventually with Wa
     }
   }
 
-  def clickOnLink(expectedLink:String)(implicit webDriver: WebDriver): Unit = {
+  def clickOnLink(expectedLink:String): Unit = {
     click on waitForElement(By.linkText(expectedLink))
   }
 }

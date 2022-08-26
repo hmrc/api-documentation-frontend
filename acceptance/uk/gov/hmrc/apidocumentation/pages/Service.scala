@@ -25,6 +25,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.scalatestplus.selenium.WebBrowser
 import uk.gov.hmrc.apidocumentation.pages.APIDocumentationPage.waitForPageToStopMoving
+import java.time.Duration
 
 object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
@@ -59,7 +60,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
         ("#_say-hello-application", "Say hello application")
       )
     forAll(ids) { (ID: String, id: String) =>
-      val act = new Actions(webDriver)
+      // val act = new Actions(webDriver)
       clickOn(id)
       find("method-content").get.isDisplayed
     }
@@ -107,8 +108,8 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
       )
 
     forAll(menuLink) { (menuLink: String) =>
-      val backgroundColorBeforeClick = linkText(menuLink).webElement.getCssValue("background-color")
-      val colorBeforeClick = linkText(menuLink).webElement.getCssValue("color")
+      // val backgroundColorBeforeClick = linkText(menuLink).webElement.getCssValue("background-color")
+      // val colorBeforeClick = linkText(menuLink).webElement.getCssValue("color")
 
       val menuLinkText = find(linkText(menuLink)).get
       click on menuLinkText
@@ -157,7 +158,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
   }
 
   def waitForPageToStopMoving() = {
-    new WebDriverWait(webDriver, 5).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
+    new WebDriverWait(webDriver, Duration.ofSeconds(5)).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
   }
 
   def checkBackToTopLinkAfterErrorsSection(): Unit = {
