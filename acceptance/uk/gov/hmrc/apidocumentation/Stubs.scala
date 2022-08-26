@@ -112,7 +112,7 @@ trait DeveloperFrontend {
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody("""[{"label": "John Doe", "href": "/developer/profile", "truncate" : false, "openInNewWindow": false}, {"label":"Sign out", "href":"/developer/logout", "truncate" : false, "openInNewWindow": false}]"""))
+            .withBody("""[{"label": "John Doe", "href": "/developer/profile", "truncate" : false, "openInNewWindow": false, "isSensitive": false}, {"label":"Sign out", "href":"/developer/logout", "truncate" : false, "openInNewWindow": false, "isSensitive": false}]"""))
     )
   }
 
@@ -122,7 +122,7 @@ trait DeveloperFrontend {
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody("""[{"label": "Sign in", "href": "/developer/login", "truncate" : false, "openInNewWindow": false}, {"label":"Register", "href":"/developer/registration", "truncate" : false, "openInNewWindow": false}]"""))
+            .withBody("""[{"label": "Sign in", "href": "/developer/login", "truncate" : false, "openInNewWindow": false, "isSensitive": false}, {"label":"Register", "href":"/developer/registration", "truncate" : false, "openInNewWindow": false, "isSensitive": false}]"""))
     )
   }
 }
