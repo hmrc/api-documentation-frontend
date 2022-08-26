@@ -60,7 +60,6 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
         ("#_say-hello-application", "Say hello application")
       )
     forAll(ids) { (ID: String, id: String) =>
-      // val act = new Actions(webDriver)
       clickOn(id)
       find("method-content").get.isDisplayed
     }
@@ -108,9 +107,6 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
       )
 
     forAll(menuLink) { (menuLink: String) =>
-      // val backgroundColorBeforeClick = linkText(menuLink).webElement.getCssValue("background-color")
-      // val colorBeforeClick = linkText(menuLink).webElement.getCssValue("color")
-
       val menuLinkText = find(linkText(menuLink)).get
       click on menuLinkText
 
