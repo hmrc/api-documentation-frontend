@@ -70,7 +70,7 @@
   window.addEventListener('load', function () {
     expandEnpoint()
 
-    var allLinks = document.querySelectorAll('a[href^="#"]');
+    var allLinks = document.querySelector("#endpoints").querySelectorAll('a[href^="#"]');
     for (var i = 0; i < allLinks.length; i++) {
       allLinks[i].addEventListener('click', function (e) {
         e.preventDefault();
