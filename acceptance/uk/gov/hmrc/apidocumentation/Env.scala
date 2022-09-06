@@ -21,7 +21,7 @@ import java.net.URL
 import org.openqa.selenium._
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxOptions}
-import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
+import org.openqa.selenium.remote.{RemoteWebDriver}
 
 import scala.util.{Properties, Try}
 import org.openqa.selenium.firefox.FirefoxOptions
@@ -42,14 +42,20 @@ trait Env {
   }
 
   def createRemoteChromeDriver() = {
-    val driver = new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), DesiredCapabilities.chrome)
+    val browserOptions: ChromeOptions = new ChromeOptions()
+    browserOptions.addArguments("--headless")
+    browserOptions.addArguments("--proxy-server='direct://'")
+    browserOptions.addArguments("--proxy-bypass-list=*")
+
+    val driver = new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
     driver.manage().deleteAllCookies()
     driver.manage().window().setSize(new Dimension(1280, 720))
     driver
   }
 
   def createRemoteFirefoxDriver() = {
-    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), DesiredCapabilities.firefox)
+    val browserOptions = new FirefoxOptions().setAcceptInsecureCerts(true)
+    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
   }
 
   def createChromeDriver(): WebDriver = {

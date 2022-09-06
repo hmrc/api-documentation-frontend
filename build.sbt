@@ -15,6 +15,8 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 
 import bloop.integrations.sbt.BloopDefaults
 
+Global / bloopAggregateSourceDependencies := true
+
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = (project in file("."))
@@ -60,8 +62,7 @@ lazy val microservice = (project in file("."))
   )
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
 
-  .settings(inConfig(TemplateTest)(Defaults.testSettings): _*)
-  .settings(inConfig(TemplateTest)(BloopDefaults.configSettings))
+  .settings(inConfig(TemplateTest)(Defaults.testSettings ++ BloopDefaults.configSettings))
   .settings(
     Test / testOptions := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     Test / unmanagedSourceDirectories += baseDirectory.value / "test",
@@ -71,8 +72,7 @@ lazy val microservice = (project in file("."))
   )
 
   .configs(AcceptanceTest)
-  .settings(inConfig(AcceptanceTest)(Defaults.testSettings): _*)
-  .settings(inConfig(AcceptanceTest)(BloopDefaults.configSettings))
+  .settings(inConfig(AcceptanceTest)(Defaults.testSettings ++ BloopDefaults.configSettings))
   .settings(
     testOptions in AcceptanceTest := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "acceptance",
