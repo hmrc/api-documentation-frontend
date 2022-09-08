@@ -51,13 +51,11 @@
         @for((method, index) <- res.methods.zipWithIndex) {
           @if(!method.method.equalsIgnoreCase("OPTIONS")) {
             @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
-              @if(index == 0 || index == 1) {
-                <div class="method-container">
-                  @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
-                    <code id="@{head.mkString("/")}/@tail" class="code--header">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
-                  }
-                </div>
-              }
+              <div class="method-container">
+                @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
+                  <code id="@{head.mkString("/")}/@tail" class="code--header">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
+                }
+              </div>
               <br />
               <details id="@{method.displayName}-details"class="govuk-details" data-module="govuk-details">
                 <summary id="@{method.displayName}-summary" class="govuk-details__summary detail-summary-box">
