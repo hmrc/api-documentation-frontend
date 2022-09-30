@@ -21,12 +21,12 @@
 @(documentsByCategory: Map[APICategory, Seq[Documentation]])
 
 <table class="govuk-table">
-    <caption class="visually-hidden">Services table</caption>
-    <thead class="visually-hidden">
+    <caption class="govuk-table__caption govuk-heading-m">Full list of API documentation</caption>
+    <thead class="govuk-table__head">
       <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header">Display name</th>
-        <th scope="col" class="govuk-table__header">Document name</th>
-        <th scope="col" class="govuk-table__header">Service type</th>
+        <th scope="col" class="govuk-table__header">Service</th>
+        <th scope="col" class="govuk-table__header">API documentation</th>
+        <th scope="col" class="govuk-table__header">Documentation type</th>
       </tr>
     </thead>
     @for((category, documents) <- documentsByCategory) {
