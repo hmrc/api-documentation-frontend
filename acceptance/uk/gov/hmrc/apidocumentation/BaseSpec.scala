@@ -67,6 +67,7 @@ trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterEach with BeforeAndAfte
 
   override def afterAll() = {
     wireMockServer.stop()
+    webDriver.close()
   }
 
   override def beforeEach() = {

@@ -16,21 +16,16 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import java.net.URL
-
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium._
-import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxOptions}
-import org.openqa.selenium.remote.{RemoteWebDriver}
-
 import scala.util.{Properties, Try}
-import org.openqa.selenium.firefox.FirefoxOptions
 import uk.gov.hmrc.webdriver.SingletonDriver
 
 trait Env {
 
-  val driver: WebDriver = createWebDriver
-  lazy val port = 6001
+  lazy val driver: WebDriver = createWebDriver()
 
+  val port = 6001
 
   Runtime.getRuntime addShutdownHook new Thread {
     override def run() {
@@ -38,44 +33,30 @@ trait Env {
     }
   }
 
-  def shutdown() = {
+  private def shutdown() = {
     Try(driver.close())
     Try(driver.quit())
   }
 
-  lazy val createWebDriver: WebDriver = {
-    Properties.propOrElse("browser", "chrome") match {
-      case "chrome" => createChromeDriver()
-      case "firefox" => createFirefoxDriver()
-      case "remote-chrome" => createRemoteChromeDriver()
-      case "remote-firefox" => createRemoteFirefoxDriver()
-      case other => throw new IllegalArgumentException(s"target browser $other not recognised")
+  private def browser = Properties.propOrElse("browser","chrome")
+
+  private def remoteChromeOptions = {
+    val browserOptions: ChromeOptions = new ChromeOptions()
+    browserOptions.addArguments("--headless")
+    browserOptions.addArguments("--proxy-server='direct://'")
+    browserOptions.addArguments("--proxy-bypass-list=*")
+    Some(browserOptions)
+  }
+
+  private def createWebDriver(): WebDriver = {
+    val options = browser match {
+      case "remote-chrome" => remoteChromeOptions
+      case _ => None
     }
-  }
-
-  def createRemoteChromeDriver() = {
-    val driver = SingletonDriver.getInstance()
+    val driver = SingletonDriver.getInstance(options)
     driver.manage().deleteAllCookies()
     driver.manage().window().setSize(new Dimension(1280, 720))
     driver
-  }
-
-  def createRemoteFirefoxDriver() = {
-    val browserOptions = new FirefoxOptions().setAcceptInsecureCerts(true)
-    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
-  }
-
-  def createChromeDriver(): WebDriver = {
-    val driver = SingletonDriver.getInstance()
-    driver.manage().deleteAllCookies()
-    driver.manage().window().fullscreen()
-    driver.manage().window().setSize(new Dimension(1280, 720))
-    driver
-  }
-
-  def createFirefoxDriver(): WebDriver = {
-    val fOpts = new FirefoxOptions().setAcceptInsecureCerts(true)
-    new FirefoxDriver(fOpts)
   }
 }
 

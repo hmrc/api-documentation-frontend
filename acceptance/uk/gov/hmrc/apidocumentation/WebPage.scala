@@ -23,7 +23,7 @@ import org.scalatest.matchers.should.Matchers
 
 trait WebPage extends Page with WebBrowser with Matchers with Eventually with Wait {
 
-  implicit val webDriver: WebDriver = Env.driver
+  implicit lazy val webDriver: WebDriver = Env.driver
 
   def isCurrentPage: Boolean = false
 
