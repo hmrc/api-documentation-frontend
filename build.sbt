@@ -12,7 +12,7 @@ import uk.gov.hmrc.{SbtAutoBuildPlugin, _}
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
-
+import scala.util.Properties
 import bloop.integrations.sbt.BloopDefaults
 
 Global / bloopAggregateSourceDependencies := true
@@ -62,7 +62,6 @@ lazy val microservice = (project in file("."))
   )
   .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
 
-  .settings(inConfig(TemplateTest)(Defaults.testSettings ++ BloopDefaults.configSettings))
   .settings(
     Test / testOptions := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     Test / unmanagedSourceDirectories += baseDirectory.value / "test",
@@ -80,15 +79,29 @@ lazy val microservice = (project in file("."))
     AcceptanceTest / unmanagedResourceDirectories := Seq((baseDirectory in AcceptanceTest).value / "test", (baseDirectory in AcceptanceTest).value / "target/web/public/test"),
     AcceptanceTest / fork := false,
     AcceptanceTest / parallelExecution := false,
+    AcceptanceTest / testGrouping := oneForkedJvmPerTest((definedTests in AcceptanceTest).value),
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
 
-  .settings(scalaVersion := "2.12.12")
+  .settings(scalaVersion := "2.12.15")
 
   .settings(SilencerSettings())
 
-lazy val allPhases = "tt->test;test->test;test->compile;compile->compile"
 lazy val AcceptanceTest = config("acceptance") extend Test
-lazy val TemplateTest = config("tt") extend Test
 
 lazy val appName = "api-documentation-frontend"
+
+def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
+  tests map { test =>
+    Group(
+      test.name,
+      Seq(test),
+      SubProcess(
+        ForkOptions().withRunJVMOptions(Vector(
+            s"-Dtest.name={test.name}", 
+            s"-Daccessibility.test=${Properties.propOrElse("accessibility.test", "false")}", 
+            s"-Dbrowser=${Properties.propOrElse("browser", "chrome")}"
+        ))
+      )
+    )
+  }

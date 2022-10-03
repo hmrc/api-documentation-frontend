@@ -5,7 +5,7 @@ import sbt._
 object AppDependencies {
   def apply(): Seq[ModuleID] = compile ++ test
 
-  lazy val bootstrapVersion = "7.1.0"
+  lazy val bootstrapVersion = "7.3.0"
   lazy val compile = Seq(
     ws,
     caffeine,
@@ -34,6 +34,7 @@ object AppDependencies {
     "com.github.tomakehurst"                %  "wiremock-jre8-standalone"     % "2.31.0",
     "org.mockito"                           %% "mockito-scala-scalatest"      % "1.16.46",
     "com.vladsch.flexmark"                  %  "flexmark-all"                 % "0.62.2",
-    "org.jsoup"                             %  "jsoup"                        % "1.12.1"
+    "org.jsoup"                             %  "jsoup"                        % "1.12.1",
+    "uk.gov.hmrc"                           %% "webdriver-factory"            % "0.38.0"
   ).map(_ % Test)
 }
