@@ -19,20 +19,32 @@ package uk.gov.hmrc.apidocumentation
 import java.net.URL
 
 import org.openqa.selenium._
-import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxOptions}
 import org.openqa.selenium.remote.{RemoteWebDriver}
 
 import scala.util.{Properties, Try}
 import org.openqa.selenium.firefox.FirefoxOptions
+import uk.gov.hmrc.webdriver.SingletonDriver
 
 trait Env {
 
   val driver: WebDriver = createWebDriver
   lazy val port = 6001
 
+
+  Runtime.getRuntime addShutdownHook new Thread {
+    override def run() {
+      shutdown()
+    }
+  }
+
+  def shutdown() = {
+    Try(driver.close())
+    Try(driver.quit())
+  }
+
   lazy val createWebDriver: WebDriver = {
-    Properties.propOrElse("test_driver", "chrome") match {
+    Properties.propOrElse("browser", "chrome") match {
       case "chrome" => createChromeDriver()
       case "firefox" => createFirefoxDriver()
       case "remote-chrome" => createRemoteChromeDriver()
@@ -42,12 +54,7 @@ trait Env {
   }
 
   def createRemoteChromeDriver() = {
-    val browserOptions: ChromeOptions = new ChromeOptions()
-    browserOptions.addArguments("--headless")
-    browserOptions.addArguments("--proxy-server='direct://'")
-    browserOptions.addArguments("--proxy-bypass-list=*")
-
-    val driver = new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
+    val driver = SingletonDriver.getInstance()
     driver.manage().deleteAllCookies()
     driver.manage().window().setSize(new Dimension(1280, 720))
     driver
@@ -59,13 +66,9 @@ trait Env {
   }
 
   def createChromeDriver(): WebDriver = {
-    val options = new ChromeOptions()
-    options.addArguments("--headless")
-    options.addArguments("--proxy-server='direct://'")
-    options.addArguments("--proxy-bypass-list=*")
-
-    val driver = new ChromeDriver(options)
+    val driver = SingletonDriver.getInstance()
     driver.manage().deleteAllCookies()
+    driver.manage().window().fullscreen()
     driver.manage().window().setSize(new Dimension(1280, 720))
     driver
   }
@@ -73,10 +76,6 @@ trait Env {
   def createFirefoxDriver(): WebDriver = {
     val fOpts = new FirefoxOptions().setAcceptInsecureCerts(true)
     new FirefoxDriver(fOpts)
-  }
-
-  sys addShutdownHook {
-    Try(driver.quit())
   }
 }
 

@@ -19,9 +19,9 @@ Frontend for API documentation - part of the Developer Hub
    
 4. To execute test
    
-   4a  On chrome use command ```sbt acceptance:test -Dbrowser=chrome-local``` or just ```sbt acceptance:test```.
+   4a  On chrome use command ```sbt acceptance:test -Dbrowser=chrome``` or just ```sbt acceptance:test```.
    
-   4b. On firefox use command ```sbt acceptance:test -Dbrowser=firefox-local```
+   4b. On firefox use command ```sbt acceptance:test -Dbrowser=firefox```
    
    4c. To run all the tests run the shell file **run_all_test.sh**
        A report will also be generated identifying any dependencies that need upgrading. This requires that
