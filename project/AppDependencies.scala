@@ -31,6 +31,7 @@ object AppDependencies {
     "org.seleniumhq.selenium"               %  "selenium-remote-driver"       % "4.2.0",
     "org.seleniumhq.selenium"               %  "selenium-firefox-driver"      % "4.2.0",
     "org.seleniumhq.selenium"               %  "selenium-chrome-driver"       % "4.2.0",
+    "org.seleniumhq.selenium"               %  "selenium-remote-driver"       % "4.2.0",
     "com.github.tomakehurst"                %  "wiremock-jre8-standalone"     % "2.31.0",
     "org.mockito"                           %% "mockito-scala-scalatest"      % "1.16.46",
     "com.vladsch.flexmark"                  %  "flexmark-all"                 % "0.62.2",
