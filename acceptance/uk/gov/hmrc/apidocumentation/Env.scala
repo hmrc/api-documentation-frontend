@@ -19,7 +19,6 @@ package uk.gov.hmrc.apidocumentation
 import java.net.URL
 
 import org.openqa.selenium._
-import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxOptions}
 import org.openqa.selenium.remote.{RemoteWebDriver}
 
@@ -31,6 +30,18 @@ trait Env {
 
   val driver: WebDriver = createWebDriver
   lazy val port = 6001
+
+
+  Runtime.getRuntime addShutdownHook new Thread {
+    override def run() {
+      shutdown()
+    }
+  }
+
+  def shutdown() = {
+    Try(driver.close())
+    Try(driver.quit())
+  }
 
   lazy val createWebDriver: WebDriver = {
     Properties.propOrElse("browser", "chrome") match {
@@ -65,10 +76,6 @@ trait Env {
   def createFirefoxDriver(): WebDriver = {
     val fOpts = new FirefoxOptions().setAcceptInsecureCerts(true)
     new FirefoxDriver(fOpts)
-  }
-
-  sys addShutdownHook {
-    Try(driver.quit())
   }
 }
 
