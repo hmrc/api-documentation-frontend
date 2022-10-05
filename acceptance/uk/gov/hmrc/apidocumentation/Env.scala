@@ -54,7 +54,7 @@ trait Env {
 
   def createRemoteFirefoxDriver(): WebDriver = {
     val browserOptions = new FirefoxOptions().setAcceptInsecureCerts(true)
-    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
+    new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), browserOptions)
   }
 
   private def createChromeDriver(): WebDriver = {
@@ -71,7 +71,7 @@ trait Env {
     browserOptions.addArguments("--proxy-server='direct://'")
     browserOptions.addArguments("--proxy-bypass-list=*")
 
-    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
+    new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), browserOptions)
   }
 
   private def createWebDriver(): WebDriver = {
