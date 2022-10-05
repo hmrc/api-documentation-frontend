@@ -23,13 +23,12 @@ import uk.gov.hmrc.webdriver.SingletonDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
-import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
 import java.net.URL
 
 trait Env {
 
-  lazy val driver: WebDriver = createWebDriver()
+  val driver: WebDriver = createWebDriver()
 
   val port = 6001
 
