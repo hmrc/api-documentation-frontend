@@ -79,7 +79,7 @@ lazy val microservice = (project in file("."))
     AcceptanceTest / unmanagedResourceDirectories := Seq((baseDirectory in AcceptanceTest).value / "test", (baseDirectory in AcceptanceTest).value / "target/web/public/test"),
     AcceptanceTest / fork := false,
     AcceptanceTest / parallelExecution := false,
-    AcceptanceTest / testGrouping := oneForkedJvmPerTest((definedTests in AcceptanceTest).value),
+    // AcceptanceTest / testGrouping := oneForkedJvmPerTest((definedTests in AcceptanceTest).value),
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
 
@@ -91,17 +91,17 @@ lazy val AcceptanceTest = config("acceptance") extend Test
 
 lazy val appName = "api-documentation-frontend"
 
-def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
-  tests map { test =>
-    Group(
-      test.name,
-      Seq(test),
-      SubProcess(
-        ForkOptions().withRunJVMOptions(Vector(
-            s"-Dtest.name={test.name}", 
-            s"-Daccessibility.test=${Properties.propOrElse("accessibility.test", "false")}", 
-            s"-Dbrowser=${Properties.propOrElse("browser", "chrome")}"
-        ))
-      )
-    )
-  }
+// def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
+//   tests map { test =>
+//     Group(
+//       test.name,
+//       Seq(test),
+//       SubProcess(
+//         ForkOptions().withRunJVMOptions(Vector(
+//             s"-Dtest.name={test.name}", 
+//             s"-Daccessibility.test=${Properties.propOrElse("accessibility.test", "false")}", 
+//             s"-Dbrowser=${Properties.propOrElse("browser", "chrome")}"
+//         ))
+//       )
+//     )
+//   }
