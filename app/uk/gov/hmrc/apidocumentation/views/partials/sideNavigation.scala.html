@@ -18,7 +18,7 @@
 
 @(request: play.api.mvc.Request[Any], sidebarLinks: Seq[SidebarLink])
 
-<nav class="side-nav">
+<nav class="side-nav" aria-label="Secondary menu">
   <ul class="side-nav__component">
     @for(link <- sidebarLinks){
       <li id="@link.href" class="side-nav__list@if(request.path.contains(link.href)){ side-nav__list--selected}">
