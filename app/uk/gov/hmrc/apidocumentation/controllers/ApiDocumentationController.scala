@@ -172,13 +172,6 @@ class ApiDocumentationController @Inject()(
       PageAttributes(apiDefinition.name, breadcrumbs, navLinks, sidebarLinks)
     }
 
-    def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
-      for {
-        api <- apiOption
-        apiVersion <- api.versions.find(v => v.version == version)
-        visibility <- apiVersion.visibility
-      } yield (api, apiVersion, visibility)
-
     def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
 
     def redirectToLoginPage = {
@@ -196,7 +189,7 @@ class ApiDocumentationController @Inject()(
         makePageAttributes(apiDefinition, selectedVersion, navigationService.sidebarNavigation()), apiDefinition)))
     }
 
-    def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, overviewOnly: Boolean = false)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider): Future[Result] = {
+    def renderDocumentationPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider): Future[Result] = {
       def renderRamlSpec(apiSpecification: ApiSpecification): Future[Result] = {
         val attrs = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation2(service, selectedVersion, apiSpecification))
         val viewModel = ViewModel(apiSpecification)
@@ -238,6 +231,13 @@ class ApiDocumentationController @Inject()(
       val categories = categoryMap.getOrElse(api.name, Seq.empty)
       documentationService.fetchApiSpecification(service, version, cacheBuster).flatMap(_.fold(renderOas(categories))(renderRamlSpec))
     }
+
+    def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
+      for {
+        api <- apiOption
+        apiVersion <- api.versions.find(v => v.version == version)
+        visibility <- apiVersion.visibility
+      } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED  => renderRetiredVersionJumpPage(api, selectedVersion)
