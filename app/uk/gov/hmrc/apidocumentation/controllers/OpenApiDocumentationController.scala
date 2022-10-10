@@ -33,7 +33,6 @@ import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 import scala.concurrent.Future
 import uk.gov.hmrc.http.NotFoundException
-import views.html.defaultpages.error
 
 @Singleton
 class OpenApiDocumentationController @Inject()(
@@ -61,7 +60,7 @@ class OpenApiDocumentationController @Inject()(
     sidebarLinks = navigationService.sidebarNavigation()
   )
 
-  private def doRenderApiDocumentation(service: String, version: String, apiOption: Option[ExtendedAPIDefinition]): Future[Result] = {
+  private def doRenderApiDocumentation(service: String, version: String, apiOption: Option[ExtendedAPIDefinition])(implicit request: Request[AnyContent]): Future[Result] = {
     def renderDocumentationPage(): Future[Result] = {
         successful(Ok(openApiViewRedoc(service, version)))
     }
@@ -81,7 +80,7 @@ class OpenApiDocumentationController @Inject()(
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                 => renderDocumentationPage()
       case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, _, Some(true))))                       => renderDocumentationPage()
       case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _)))                                            => badRequestPage
-      case _                                                                                                              => badRequestPage
+      case _                                                                                                              => renderNotFoundPage
     }
     
   }
