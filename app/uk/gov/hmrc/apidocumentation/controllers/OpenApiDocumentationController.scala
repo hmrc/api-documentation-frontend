@@ -33,6 +33,7 @@ import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 import scala.concurrent.Future
 import uk.gov.hmrc.http.NotFoundException
+import views.html.defaultpages.error
 
 @Singleton
 class OpenApiDocumentationController @Inject()(
@@ -65,6 +66,9 @@ class OpenApiDocumentationController @Inject()(
         successful(Ok(openApiViewRedoc(service, version)))
     }
 
+    def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
+    def badRequestPage = Future.successful(BadRequest(errorHandler.badRequestTemplate))
+
     def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
       for {
         api <- apiOption
@@ -73,11 +77,11 @@ class OpenApiDocumentationController @Inject()(
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED  => successful(BadRequest)
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED  => badRequestPage
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                 => renderDocumentationPage()
       case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, _, Some(true))))                       => renderDocumentationPage()
-      case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _)))                                            => successful(BadRequest)
-      case _                                                                                                              => successful(BadRequest)
+      case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _)))                                            => badRequestPage
+      case _                                                                                                              => badRequestPage
     }
     
   }
