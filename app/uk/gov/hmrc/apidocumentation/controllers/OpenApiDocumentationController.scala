@@ -31,14 +31,13 @@ import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
+import scala.concurrent.Future
+import uk.gov.hmrc.http.NotFoundException
 
 @Singleton
 class OpenApiDocumentationController @Inject()(
   openApiViewRedoc: OpenApiViewRedoc,
-  openApiViewRapidoc: OpenApiViewRapiDoc,
   openApiPreviewRedoc: OpenApiPreviewRedoc,
-  openApiPreviewRapidoc: OpenApiPreviewRapiDoc,
-  openApiViewSwagger: OpenApiViewSwagger,
   openApiPreviewView: OpenApiPreviewView,
   parentPage: ParentPageOuter,
   retiredVersionJumpView: RetiredVersionJumpView,
@@ -61,21 +60,54 @@ class OpenApiDocumentationController @Inject()(
     sidebarLinks = navigationService.sidebarNavigation()
   )
 
-  def renderApiDocumentation(service: String, version: String) = Action.async { _ =>
-    successful(Ok(openApiViewRedoc(service, version)))
+  private def doRenderApiDocumentation(service: String, version: String, apiOption: Option[ExtendedAPIDefinition])(implicit request: Request[AnyContent]): Future[Result] = {
+    def renderDocumentationPage(): Future[Result] = {
+        successful(Ok(openApiViewRedoc(service, version)))
+    }
+
+    def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
+    def badRequestPage = Future.successful(BadRequest(errorHandler.badRequestTemplate))
+
+    def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
+      for {
+        api <- apiOption
+        apiVersion <- api.versions.find(v => v.version == version)
+        visibility <- apiVersion.visibility
+      } yield (api, apiVersion, visibility)
+
+    findVersion(apiOption) match {
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED  => badRequestPage
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                 => renderDocumentationPage()
+      case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, _, Some(true))))                       => renderDocumentationPage()
+      case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _)))                                            => badRequestPage
+      case _                                                                                                              => renderNotFoundPage
+    }
+    
   }
 
-  def renderApiDocumentationUsingRedoc(service: String, version: String) = Action.async { _ =>
-    successful(Ok(openApiViewRedoc(service, version)))
+  private def extractDeveloperIdentifier(f: Future[Option[Developer]]): Future[Option[DeveloperIdentifier]] = {
+    f.map( o =>
+      o.map(d => UuidIdentifier(d.userId))
+    )
   }
 
-  def renderApiDocumentationUsingRapidoc(service: String, version: String) = Action.async { _ =>
-    successful(Ok(openApiViewRapidoc(service, version)))
-  }
-
-  def renderApiDocumentationUsingSwagger(service: String, version: String) = Action.async { _ =>
-    successful(Ok(openApiViewSwagger(service, version)))
-  }
+  def renderApiDocumentation(service: String, version: String) = 
+    headerNavigation { implicit request =>
+      navLinks =>
+        (for {
+          userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+          api <- apiDefinitionService.fetchExtendedDefinition(service, userId)
+          apiDocumentation <- doRenderApiDocumentation(service, version, api)
+        } yield apiDocumentation
+        ) recover {
+          case e: NotFoundException =>
+            logger.info(s"Upstream request not found: ${e.getMessage}")
+            NotFound(errorHandler.notFoundTemplate)
+          case e: Throwable =>
+            logger.error("Could not load API Documentation service", e)
+            InternalServerError(errorHandler.internalServerErrorTemplate)
+        }
+    }
 
   def fetchOas(service: String, version: String) = Action.async { implicit request =>
     downloadConnector.fetch(service, version, "application.yaml")

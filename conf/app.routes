@@ -26,12 +26,9 @@ GET         /docs/api/service/:service                                  uk.gov.h
 GET         /docs/api/service/:service/:version                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean])
 
 # Open API related endpoints    
-GET         /docs/api/service/:service/:version/oas/page/redoc          uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRedoc(service: String, version: String)
-GET         /docs/api/service/:service/:version/oas/page/rapidoc        uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingRapidoc(service: String, version: String)
-GET         /docs/api/service/:service/:version/oas/page/swagger        uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentationUsingSwagger(service: String, version: String)
 GET         /docs/api/service/:service/:version/oas/page                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentation(service: String, version: String)
 GET         /docs/openapi/preview                                       uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.previewApiDocumentationPage()
-GET         /docs/openapi/preview/rapidoc                               uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.previewApiDocumentationAction(url: Option[String])
+GET         /docs/openapi/preview/action                                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.previewApiDocumentationAction(url: Option[String])
 GET         /docs/api/service/:service/:version/oas/file                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOas(service: String, version: String)
 GET         /docs/api/service/:service/:version/oas/*resource           uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: String, version: String, resource: String)
 
