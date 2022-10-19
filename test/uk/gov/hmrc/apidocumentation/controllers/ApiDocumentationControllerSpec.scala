@@ -143,7 +143,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
         "redirect to the documentation page for the specified version" in new Setup {
           theUserIsLoggedIn()
-          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "Hello World", "1.0"))
+          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName = serviceName))
           val result = underTest.redirectToApiDocumentation(serviceName, Some(version), Option(true))(request)
           status(result) shouldBe SEE_OTHER
           headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}?cacheBuster=true")
@@ -155,7 +155,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
         "redirect to the documentation page" in new Setup {
           theUserIsLoggedIn()
-          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, "Hello World", "1.0"))
+          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName = serviceName))
           val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
           status(result) shouldBe SEE_OTHER
           headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
@@ -166,10 +166,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           val privateTrialAPIDefinition = 
             extendedApiDefinition(
-              serviceName,
-              "Hello World",
-              "1.0",
-              APIAccessType.PRIVATE,
+              serviceName = serviceName,
+              access = APIAccessType.PRIVATE,
               loggedIn = true,
               authorised = false,
               isTrial = Some(true)
@@ -187,10 +185,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           val privateTrialAPIDefinition =
             extendedApiDefinition(
-              serviceName,
-              "Hello World",
-              "1.0",
-              APIAccessType.PRIVATE,
+              serviceName = serviceName,
+              access = APIAccessType.PRIVATE,
               loggedIn = true,
               authorised = true,
               isTrial = Some(true)
@@ -250,7 +246,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       "when documentationRenderVersion is specification" should {
         "display the documentation and private API options when the API is private but the logged in user has access to it" in new DocumentationRenderVersionSetup {
           theUserIsLoggedIn()
-          val apiDefinition = extendedApiDefinition(serviceName, "Hello World", "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true)
+          val apiDefinition = extendedApiDefinition(serviceName = serviceName, access = APIAccessType.PRIVATE, loggedIn = true, authorised = true)
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
@@ -263,7 +259,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "display the private API options when not logged in and is in trial" in new DocumentationRenderVersionSetup {
           theUserIsNotLoggedIn()
 
-          val apiDefinition = extendedApiDefinition(serviceName, "Hello World", "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false, isTrial = Some(true))
+          val apiDefinition = extendedApiDefinition(serviceName = serviceName, access = APIAccessType.PRIVATE, loggedIn = false, authorised = false, isTrial = Some(true))
 
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
@@ -276,7 +272,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "display the private API options when logged in and is in trial but the user is not authorised" in new DocumentationRenderVersionSetup {
           theUserIsLoggedIn()
 
-          val apiDefinition = extendedApiDefinition(serviceName, "Hello World", "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
+          val apiDefinition = extendedApiDefinition(serviceName = serviceName, access = APIAccessType.PRIVATE, loggedIn = true, authorised = false, isTrial = Some(true))
 
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
@@ -289,7 +285,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "display the private API options when logged in and is in trial and the user is authorised" in new DocumentationRenderVersionSetup {
           theUserIsLoggedIn()
 
-          val apiDefinition = extendedApiDefinition(serviceName, "Hello World", "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
+          val apiDefinition = extendedApiDefinition(serviceName = serviceName, access = APIAccessType.PRIVATE, loggedIn = true, authorised = true, isTrial = Some(true))
 
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
@@ -302,7 +298,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "not display the private API options when not in trial, not logged in and (therefore) is not authorised" in new DocumentationRenderVersionSetup {
           theUserIsNotLoggedIn()
 
-          val apiDefinition = extendedApiDefinition(serviceName, "Hello World", "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false)
+          val apiDefinition = extendedApiDefinition(serviceName = serviceName, access = APIAccessType.PRIVATE, loggedIn = false, authorised = false)
 
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
@@ -315,7 +311,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "display the not found page when the API is private and the logged in user does not have access to it" in new DocumentationRenderVersionSetup {
           theUserIsLoggedIn()
           theDefinitionServiceWillReturnAnApiDefinition(
-            extendedApiDefinition(serviceName, "Hello World", "1.0", APIAccessType.PRIVATE, loggedIn = true, authorised = false))
+            extendedApiDefinition(serviceName = serviceName, access = APIAccessType.PRIVATE, loggedIn = true, authorised = false))
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
           val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -326,7 +322,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "redirect to the login page when the API is private and the user is not logged in" in new DocumentationRenderVersionSetup {
           theUserIsNotLoggedIn()
           theDefinitionServiceWillReturnAnApiDefinition(
-            extendedApiDefinition(serviceName, "Hello World", "1.0", APIAccessType.PRIVATE, loggedIn = false, authorised = false))
+            extendedApiDefinition(serviceName = serviceName, access = APIAccessType.PRIVATE, loggedIn = false, authorised = false))
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
           val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
