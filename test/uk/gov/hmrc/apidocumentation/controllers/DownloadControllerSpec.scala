@@ -53,21 +53,36 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
 
   "DownloadController" should {
     "download the resource when found" in new Setup {
-      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, version))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinition(
+          serviceName = serviceName, 
+          version = version
+        )
+      )
       theDownloadConnectorWillReturnTheResult(Results.Ok)
 
       await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe OK
     }
 
     "return 404 code when the resource not found" in new Setup {
-      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, version))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinition(
+          serviceName = serviceName,
+          version = version
+        )
+      )
       theDownloadConnectorWillReturnTheResult(Results.NotFound)
 
       await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe NOT_FOUND
     }
 
     "error when the resource name contains '..'" in new Setup {
-      theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName, version))
+      theDefinitionServiceWillReturnAnApiDefinition(
+        extendedApiDefinition(
+          serviceName = serviceName,
+          version = version
+        )
+      )
 
       await(underTest.downloadResource(serviceName, version, "../secret")(request)).header.status shouldBe INTERNAL_SERVER_ERROR
     }
@@ -75,7 +90,14 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
     "redirect to the login page when the API is private and the user is not logged in" in new Setup {
       theUserIsNotLoggedIn()
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(serviceName, version, APIAccessType.PRIVATE, false, false))
+        extendedApiDefinition(
+          serviceName = serviceName,
+          version = version,
+          access = APIAccessType.PRIVATE,
+          loggedIn = false,
+          authorised = false
+        )
+      )
 
       val result = underTest.downloadResource(serviceName, version, resourceName)(request)
 

@@ -214,7 +214,7 @@ class ApiDocumentationController @Inject()(
       def renderOas(categories: Seq[APICategory]): Future[Result] = {
         val withDefaultForService = withDefault(service) _
         
-        val requiredFraudPrevention = categories.contains(APICategory.VAT_MTD) || categories.contains(APICategory.INCOME_TAX_MTD)
+        val requiredFraudPrevention = (categories.contains(APICategory.VAT_MTD) || categories.contains(APICategory.INCOME_TAX_MTD)) && !api.isTestSupport
 
         for {
           overview <- withDefaultForService("overview.md", "Overview")
