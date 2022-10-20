@@ -12,8 +12,6 @@ object AppDependencies {
     "uk.gov.hmrc"                           %% "bootstrap-frontend-play-28"   % bootstrapVersion,
     "uk.gov.hmrc"                           %% "url-builder"                  % "3.6.0-play-28",
     "uk.gov.hmrc"                           %% "http-metrics"                 % "2.5.0-play-28",
-    "uk.gov.hmrc"                           %% "play-ui"                      % "9.9.0-play-28",
-    "uk.gov.hmrc"                           %% "govuk-template"               % "5.77.0-play-28",
     "uk.gov.hmrc"                           %% "play-partials"                % "8.3.0-play-28",
     "uk.gov.hmrc"                           %% "play-frontend-hmrc"           % "2.0.0-play-28",
     "org.typelevel"                         %% "cats-core"                    % "2.6.1",
