@@ -52,16 +52,17 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
 
   def anXmlApiDefinition(name: String) = XmlApiDocumentation(name, "description", "context")
 
-  def extendedApiDefinition(serviceName: String, version: String): ExtendedAPIDefinition =
-    extendedApiDefinition(serviceName, version, APIAccessType.PUBLIC, loggedIn = false, authorised = true)
-
-  def extendedApiDefinition(serviceName: String,
-                            version: String,
-                            access: APIAccessType,
-                            loggedIn: Boolean,
-                            authorised: Boolean,
-                            isTrial: Option[Boolean] = None): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+  def extendedApiDefinition(
+    serviceName: String,
+    name: String = "Hello World",
+    version: String = "1.0",
+    access: APIAccessType = APIAccessType.PUBLIC,
+    loggedIn: Boolean = false,
+    authorised: Boolean = true,
+    isTrial: Option[Boolean] = None,
+    isTestSupport: Boolean = false
+  ): ExtendedAPIDefinition = {
+    ExtendedAPIDefinition(serviceName, name, "Say Hello World", "hello", requiresTrust = false, isTestSupport,
       Seq(
         ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(access, whitelistedApplicationIds = Some(Seq.empty), isTrial = isTrial), loggedIn, authorised)), None)
