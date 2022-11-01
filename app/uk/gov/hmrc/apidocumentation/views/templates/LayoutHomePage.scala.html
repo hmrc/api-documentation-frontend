@@ -20,6 +20,8 @@
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.templates.FooterLinks
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.pagelayout.PageLayout
+@import uk.gov.hmrc.apidocumentation.views.html.FullWidthContent
 
 @this(
     govukTemplate: GovukTemplate,
@@ -28,7 +30,8 @@
     siteFooter: SiteFooter,
     footerLinks: FooterLinks,
     applicationConfig: ApplicationConfig,
-    hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet
+    hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
+    fullWidthContent: FullWidthContent
 )
 
 @(title: Option[String] = None,
@@ -62,5 +65,6 @@
     mainClasses = None,
     footerBlock = footerBlock,
     beforeContentBlock = None,
-    bodyEndBlock = Some(bodyEndDefault)
+    bodyEndBlock = Some(bodyEndDefault),
+    pageLayout = Some(fullWidthContent(_))
 )(contentBlock)
