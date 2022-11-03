@@ -86,7 +86,7 @@
             <h4 class="govuk-heading-s">1. Request authorisation</h4>
 
             <ol class="govuk-list govuk-list--number">
-                <li>Send your user to our <a class="govuk-link" href="#auth-endpoint-syntax">authorisation endpoint</a>.</li>
+                <li>Send your user to our <a class="govuk-link" href="#auth-endpoint-syntax">authorisation endpoint<span class="govuk-visually-hidden"> in-page link</span></a>.</li>
                 <li>We display a start page that explains the authorisation process.</li>
                 <li>We prompt the user to sign in using their Government Gateway account.</li>
                 <li>The user is taken through <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisation2SVPage().url">2-Step Verification (2SV)</a>.</li>
@@ -622,7 +622,7 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
         <p class="govuk-body">If the user's <code class="code--slim">refresh_token</code> has expired, calls from your application to our token endpoint will return a response with an HTTP status code of 400 (Bad Request) and an error code of <code class="code--slim">invalid_grant</code>.</p>
 
-        <p class="govuk-body">When this happens, your application must send the user back through the full process for <a class="govuk-link" href="#get-access-token">Getting an OAuth 2.0 access token</a>.</p>
+        <p class="govuk-body">When this happens, your application must send the user back through the full process for <a class="govuk-link" href="#get-access-token">Getting an OAuth 2.0 access token<span class="govuk-visually-hidden"> in-page link</span></a>.</p>
 
         <div class="govuk-inset-text">
             For a working example, see the <a class="govuk-link" href="@controllers.routes.DocumentationController.tutorialsPage().url#user-restricted">user-restricted endpoint tutorial</a>.
