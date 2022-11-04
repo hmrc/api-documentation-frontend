@@ -32,24 +32,24 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-half">
                 <ul class="govuk-list">
-                    <li><a class="govuk-link" href="#api-access">API access</a></li>
-                    <li><a class="govuk-link" href="#oauth-2.0-browser-support">Browser support for OAuth 2.0</a></li>
-                    <li><a class="govuk-link" href="#coding-in-the-open">Coding in the open</a></li>
-                    <li><a class="govuk-link" href="#common-data-types">Common data types</a></li>
-                    <li><a class="govuk-link" href="#cors">Cross-origin resource sharing (CORS)</a></li>
-                    <li><a class="govuk-link" href="#errors">Errors</a></li>
-                    <li><a class="govuk-link" href="#fraud-prevention">Send fraud prevention data</a></li>
-                    <li><a class="govuk-link" href="#http-redirection">HTTP redirection</a></li>
+                    <li><a class="govuk-link" href="#api-access">API access<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#oauth-2.0-browser-support">Browser support for OAuth 2.0<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#coding-in-the-open">Coding in the open<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#common-data-types">Common data types<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#cors">Cross-origin resource sharing (CORS)<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#errors">Errors<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#fraud-prevention">Send fraud prevention data<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#http-redirection">HTTP redirection<span class="govuk-visually-hidden"> in-page link</span></a></li>
                 </ul>
             </div>
             <div class="govuk-grid-column-one-half">
                 <ul class="govuk-list">
-                    <li><a class="govuk-link" href="#ip-allow-list">IP allow list</a></li>
-                    <li><a class="govuk-link" href="#rate-limiting">Rate limiting</a></li>
-                    <li><a class="govuk-link" href="#redirect-uris">Redirect URIs</a></li>
-                    <li><a class="govuk-link" href="#scopes">Scopes</a></li>
-                    <li><a class="govuk-link" href="#tls-standards">TLS standards</a></li>
-                    <li><a class="govuk-link" href="#versioning">Versioning</a></li>
+                    <li><a class="govuk-link" href="#ip-allow-list">IP allow list<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#rate-limiting">Rate limiting<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#redirect-uris">Redirect URIs<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#scopes">Scopes<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#tls-standards">TLS standards<span class="govuk-visually-hidden"> in-page link</span></a></li>
+                    <li><a class="govuk-link" href="#versioning">Versioning<span class="govuk-visually-hidden"> in-page link</span></a></li>
                 </ul>
             </div>
         </div>
@@ -77,17 +77,17 @@
     <section id="oauth-2.0-browser-support">
         <h2 class="govuk-heading-m">Browser support for OAuth 2.0</h2>
 
-        <p class="govuk-body">The OAuth 2.0 
+        <p class="govuk-body">The OAuth 2.0
             <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url">authorisation</a>
             journey is designed to work with most modern browsers as per the list specified on
             <a class="govuk-link" href="https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices#browsers-to-test-in">
                 Designing for different browsers and devices</a>, including mobile devices and tablets.
         </p>
-        
+
         <div class="govuk-inset-text">
             If you are using the Microsoft Web Browser Control embedded browser for the
             authorisation journey, be aware that by default this will operate in IE7 compatibility mode which we do not
-            formally support. For details of one way to handle this, see 
+            formally support. For details of one way to handle this, see
             <a class="govuk-link" href="https://blogs.msdn.microsoft.com/patricka/2015/01/12/controlling-webbrowser-control-compatibility/" target="_blank" rel="noopener noreferrer">
                 Controlling WebBrowser Control Compatibility (opens in a new tab)
             </a>.
@@ -96,11 +96,11 @@
 
     <section id="coding-in-the-open">
         <h2 class="govuk-heading-m">Coding in the open</h2>
-        <p class="govuk-body">The HMRC Developer Hub, the underlying API Platform and some of the APIs are coded in the open, as per the 
+        <p class="govuk-body">The HMRC Developer Hub, the underlying API Platform and some of the APIs are coded in the open, as per the
             <a href="https://www.gov.uk/service-manual/service-standard/make-all-new-source-code-open" class="govuk-link" rel="noreferrer noopener" target="_blank">
                 GOV.UK Digital Service Standard (opens in a new tab)</a>.
         </p>
-        <p class="govuk-body">The source code is available at 
+        <p class="govuk-body">The source code is available at
             <a href="https://github.com/hmrc" class="govuk-link" rel="noreferrer noopener" target="_blank">
                 https://github.com/hmrc (opens in a new tab)</a>. For more details, please <a class="govuk-link" href="/developer/support">contact us</a>.</p>
     </section>
@@ -155,7 +155,7 @@
 
     <section id="cors">
         <h2 class="govuk-heading-m">Cross-origin resource sharing (CORS)</h2>
-        <p class="govuk-body">The API Platform does not support 
+        <p class="govuk-body">The API Platform does not support
             <a href="https://fetch.spec.whatwg.org/#http-cors-protocol" class="govuk-link" rel="noreferrer noopener" target="_blank">cross-origin resource sharing (CORS) (opens in a new tab)</a>. It is therefore not possible to call our APIs from client-side code within a web browser, for example using Ajax.</p>
     </section>
 
@@ -358,7 +358,7 @@
                 </thead>
                 <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">The application has reached its maximum <a class="govuk-link" href="#rate-limiting">rate limit</a></td>
+                    <td class="govuk-table__cell">The application has reached its maximum <a class="govuk-link" href="#rate-limiting">rate limit<span class="govuk-visually-hidden"> in-page link</span><span class="govuk-visually-hidden"> in-page link</span></a></td>
                     <td class="govuk-table__cell"><code class="code--slim">MESSAGE_THROTTLED_OUT</code></td>
                 </tr>
                 </tbody>

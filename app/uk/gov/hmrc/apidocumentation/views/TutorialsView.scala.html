@@ -35,10 +35,10 @@
         <div class="govuk-grid-column-one-half">
             <ul class="govuk-list">
                 <li>
-                    <a class="govuk-link" href="#before-you-start">Before you start</a>
+                    <a class="govuk-link" href="#before-you-start">Before you start<span class="govuk-visually-hidden"> in-page link</span></a>
                 </li>
                 <li>
-                    <a class="govuk-link" href="#open-endpoint">Accessing an open endpoint</a>
+                    <a class="govuk-link" href="#open-endpoint">Accessing an open endpoint<span class="govuk-visually-hidden"> in-page link</span></a>
                 </li>
             </ul>
         </div>
@@ -46,10 +46,10 @@
         <div class="govuk-grid-column-one-half">
             <ul class="govuk-list">
                 <li>
-                    <a class="govuk-link" href="#app-restricted">Accessing an application-restricted endpoint</a>
+                    <a class="govuk-link" href="#app-restricted">Accessing an application-restricted endpoint<span class="govuk-visually-hidden"> in-page link</span></a>
                 </li>
                 <li>
-                    <a class="govuk-link" href="#user-restricted">Accessing a user-restricted endpoint</a>
+                    <a class="govuk-link" href="#user-restricted">Accessing a user-restricted endpoint<span class="govuk-visually-hidden"> in-page link</span></a>
                 </li>
             </ul>
         </div>
@@ -63,7 +63,7 @@
     <p class="govuk-body">All base URLs in these tutorials use the sandbox environment.</p>
     <p class="govuk-body">All code snippets in these tutorials are in Java. They use:</p>
 
-    <ul class="govuk-list govuk-list--bullet"">
+    <ul class="govuk-list govuk-list--bullet">
         <li>
             the <a class="govuk-link" href="http://hc.apache.org/" rel="noreferrer noopener" target="_blank">Apache HttpClient (opens in a new tab)</a>
             library for accessing HTTP resources
@@ -232,7 +232,7 @@ String responseBody = EntityUtils.toString(response.getEntity());
         and <code class="code--slim">client_secret</code>.
     </p>
     <p class="govuk-body">
-        For more information about requesting, refreshing or revoking an OAuth 2.0 <code class="code--slim">access_token</code>, see the 
+        For more information about requesting, refreshing or revoking an OAuth 2.0 <code class="code--slim">access_token</code>, see the
         <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">authorisation</a>
         section.
     </p>
@@ -264,8 +264,8 @@ httpServletResponse.sendRedirect(request.getLocationUri());
     <p class="govuk-body">Once the user has granted the requested authority, we will redirect back to your application via the redirect
         URI. We'll provide it with an authorisation code as a querystring parameter.</p>
 
-    <p class="govuk-body">This authorisation code can then be exchanged for an 
-        <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">OAuth 2.0</a> 
+    <p class="govuk-body">This authorisation code can then be exchanged for an
+        <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">OAuth 2.0</a>
         <code class="code--slim">access_token</code>
         and a <code class="code--slim">refresh_token</code>.
     </p>
@@ -325,7 +325,7 @@ String responseBody = EntityUtils.toString(response.getEntity());
     <p class="govuk-body">This should give you a "Hello User!" response. This may vary depending on whether you used your testing or
         production <code class="code--slim">client_id</code>
         and <code class="code--slim">client_secret</code>
-        when you started 
+        when you started
         <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisationUserRestrictedEndpointsPage()">OAuth 2.0</a> flow.
     </p>
 
@@ -364,7 +364,7 @@ Long expiresIn = response.getExpiresIn();
 
 <br/>
 
-<p class="govuk-body">You should now be ready to start integrating with 
+<p class="govuk-body">You should now be ready to start integrating with
     <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">our APIs</a>.
 </p>
 
