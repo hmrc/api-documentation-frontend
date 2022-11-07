@@ -23,6 +23,6 @@
 @import params._
 
 
-<main id="main-content" role="main"@mainLang.filter(_.nonEmpty).map {mainLang => lang="@mainLang"}>
+<main class="govuk-!-margin-bottom-6" id="main-content" role="main"@mainLang.filter(_.nonEmpty).map {mainLang => lang="@mainLang"}>
  @contentBlock
 </main>
