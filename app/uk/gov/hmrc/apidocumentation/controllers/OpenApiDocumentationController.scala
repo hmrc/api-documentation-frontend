@@ -33,6 +33,7 @@ import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 import scala.concurrent.Future
 import uk.gov.hmrc.http.NotFoundException
+import play.mvc.Http.HeaderNames
 
 @Singleton
 class OpenApiDocumentationController @Inject()(
@@ -110,8 +111,10 @@ class OpenApiDocumentationController @Inject()(
     }
 
   def fetchOas(service: String, version: String) = Action.async { implicit request =>
-    downloadConnector.fetch(service, version, "application.yaml")
+    val result = downloadConnector.fetch(service, version, "application.yaml")
     .map(_.getOrElse(NotFound(errorHandler.notFoundTemplate)))
+
+    result.map(_.withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\""))
   }
   
   def previewApiDocumentationPage(): Action[AnyContent] = headerNavigation { implicit request =>
