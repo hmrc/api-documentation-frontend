@@ -111,10 +111,11 @@ class OpenApiDocumentationController @Inject()(
     }
 
   def fetchOas(service: String, version: String) = Action.async { implicit request =>
-    val result = downloadConnector.fetch(service, version, "application.yaml")
-    .map(_.getOrElse(NotFound(errorHandler.notFoundTemplate)))
-
-    result.map(_.withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\""))
+    downloadConnector.fetch(service, version, "application.yaml")
+      .map {
+        case Some(result)   => result.withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
+        case None           => NotFound(errorHandler.notFoundTemplate)
+      }
   }
   
   def previewApiDocumentationPage(): Action[AnyContent] = headerNavigation { implicit request =>
