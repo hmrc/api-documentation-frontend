@@ -50,35 +50,34 @@
       @if(res.methods.nonEmpty) {
         @for((method, index) <- res.methods.zipWithIndex) {
           @if(!method.method.equalsIgnoreCase("OPTIONS")) {
-            @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}_accordion") { methodSlug =>
+            @defining(s"${Slugify(titleSection)}_${Slugify(method.displayName)}_${method.method.toLowerCase()}") { baseId =>
               <div class="method-container">
                 @defining(res.resourcePath.split("/").toSeq) { case head :+ tail =>
                   <code id="@{head.mkString("/")}/@tail" class="code--header">@{head.mkString("/")}/<strong class="bold-xsmall">@tail</strong></code>
                 }
               </div>
               <br />
-              <details id="@{method.displayName}-details"class="govuk-details" data-module="govuk-details">
-                <summary id="@{method.displayName}-summary" class="govuk-details__summary detail-summary-box">
-                  <a class="govuk-link govuk-link--no-visited-state api-links" href="#@{method.displayName}">
-                    <span class="govuk-details__summary-text" id="@{method.displayName}">
-                      @{method.displayName}
-                    </span>
-                  </a>
+              <details id="@{baseId}-details" class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary govuk-!-width-full">
+                  <span class="govuk-details__summary-text">
+                    @{method.displayName}
+                  </span>
                   <div class="float-right">
-                    <strong id="@method.method.toUpperCase" class="@getHttpPillClass(method.method.toUpperCase)">
+                    <strong class="@getHttpPillClass(method.method.toUpperCase)">
                       @method.method.toUpperCase
                     </strong>
                   </div>
-                </summary>
-                <div id="@{method.displayName}" class="govuk-details__text custom-detail-box">
+                </summary> 
+
+                <div class="govuk-details__text custom-detail-box">
                   @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
-                    <div id="method-content" class="markdown-text-styles">
+                    <div class="markdown-text-styles">
                       @Markdown(method.description)
                     </div>
                     @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
                   }
                   <br />
-                  <a id="@{method.displayName}-back-btn" href="#@{method.displayName}" class="govuk-link govuk-link--no-visited-state float-right api-back-btn">Close Section</a>
+                  <a id="@{baseId}--back-btn" href="#@{baseId}-details" class="govuk-link govuk-link--no-visited-state float-right api-back-btn">Close Section</a>
                   <br />
                 </div>
               </details>

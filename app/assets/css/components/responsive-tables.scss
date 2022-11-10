@@ -173,4 +173,12 @@
       margin-bottom: 0.3em;
     }
   }
+
+  details .custom-detail-box{
+    display: none;
+  }
+  
+  details[open] .custom-detail-box{
+    display: block;
+  }
 }
