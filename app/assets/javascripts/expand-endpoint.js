@@ -52,7 +52,7 @@
   var backBtns = document.getElementsByClassName("api-back-btn");
   for (var i = 0; i < backBtns.length; i++) {
     backBtns[i].addEventListener("click", function (e) {
-      var clickedBackBnt = e.target.id.split('-')[0]
+      var clickedBackBnt = e.target.id.split('--')[0]
       var backBntParent = document.getElementById(clickedBackBnt + "-details");
       backBntParent.removeAttribute("open");
     });

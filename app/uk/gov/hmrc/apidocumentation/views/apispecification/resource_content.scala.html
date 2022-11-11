@@ -22,7 +22,7 @@
 @(res: Resource, meth: Method, viewModel: ViewModel, contentID: String, authorisation: (String, Option[String]))
 
 <div id="authorisation_@contentID" class="section">
-    <h4 class="govuk-heading-s">Authorisation</h4>
+    <h3 class="govuk-heading-s">Authorisation</h3>
     @{
         authorisation match {
             case ("user", Some(scope)) => {
