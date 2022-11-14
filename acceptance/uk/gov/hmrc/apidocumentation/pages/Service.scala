@@ -55,13 +55,13 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     val ids =
       Table(
         ("ID", "id"),
-        ("#_say-hello-world", "Say hello world"),
-        ("#_say-hello-user", "Say hello user"),
-        ("#_say-hello-application", "Say hello application")
+        ("_say-hello-world_get_details", "_say-hello-world_get_content"),
+        ("_say-hello-user_get_details", "_say-hello-user_get_content"),
+        ("_say-hello-application_get_details", "_say-hello-application_get_content")
       )
     forAll(ids) { (ID: String, id: String) =>
-      clickOn(id)
-      find("method-content").get.isDisplayed
+      clickOn(ID)
+      find(id).get.isDisplayed
     }
   }
 
@@ -69,14 +69,13 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     val endpoints =
       Table(
         ("ID", "Endpoint Title", "Endpoint Request Type", "Endpoint URI"),
-        ("Say hello world", "Say hello world", "GET", "/hello/world"),
-        ("Say hello user", "Say hello user", "GET", "/hello/user"),
-        ("Say hello application", "Say hello application", "GET", "/hello/application")
+        ("_say-hello-world_get_details", "Say hello world", "GET", "/hello/world"),
+        ("_say-hello-user_get_details", "Say hello user", "GET", "/hello/user"),
+        ("_say-hello-application_get_details", "Say hello application", "GET", "/hello/application")
       )
 
     forAll(endpoints) { (id: String, endpointTitle: String, endpointRequestType: String, endpointUri: String) =>
-      WebBrowser.id(id).element.text shouldBe endpointTitle
-      WebBrowser.id(endpointRequestType).element.text shouldBe endpointRequestType
+      WebBrowser.id(id).element.text should endWith(endpointRequestType)
       WebBrowser.id(endpointUri).element.text shouldBe endpointUri
     }
   }
@@ -216,7 +215,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
   }
 
   def checkAPIVersionInRequestHeader(): Unit = {
-    clickOn("post")
+    clickOn("Users_post_details")
     waitForElement(By.id("application/vnd.hmrc.1.1+json")).getText should include("application/vnd.hmrc.1.1+json")
 
   }

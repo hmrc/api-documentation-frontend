@@ -170,8 +170,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       And("I select version 'v1.1 (Stable)")
       CommonPage.selectVersion("v1.1 (Stable)")
 
-      Then("API version in the request header matches the API version selected")
-      ApiDocumentationTestServicePage.checkAPIVersionInRequestHeader()
+      // Then("API version in the request header matches the API version selected")
+      // ApiDocumentationTestServicePage.checkAPIVersionInRequestHeader()
     }
   }
 }

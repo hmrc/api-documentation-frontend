@@ -57,7 +57,7 @@
                 }
               </div>
               <br />
-              <details id="@{baseId}-details" class="govuk-details" data-module="govuk-details">
+              <details id="@{baseId}_details" class="govuk-details" data-module="govuk-details">
                 <summary class="govuk-details__summary govuk-!-width-full">
                   <span class="govuk-details__summary-text">
                     @{method.displayName}
@@ -69,15 +69,15 @@
                   </div>
                 </summary> 
 
-                <div class="govuk-details__text custom-detail-box">
+                <div name=class="govuk-details__text custom-detail-box">
                   @defining(s"${Slugify(method.displayName)}-${method.method.toLowerCase}") { contentID =>
-                    <div class="markdown-text-styles">
+                    <div id="@{baseId}_content" class="markdown-text-styles">
                       @Markdown(method.description)
                     </div>
                     @resource_content(res, method, viewModel, contentID, method.securedBy.map(x => (x.`type`, x.scope)).getOrElse(("none", None)))
                   }
                   <br />
-                  <a id="@{baseId}--back-btn" href="#@{baseId}-details" class="govuk-link govuk-link--no-visited-state float-right api-back-btn">Close Section</a>
+                  <a id="@{baseId}_back-btn" href="#@{baseId}_details" class="govuk-link govuk-link--no-visited-state float-right api-back-btn">Close Section</a>
                   <br />
                 </div>
               </details>
