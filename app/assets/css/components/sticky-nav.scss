@@ -138,3 +138,10 @@ ul.fixed-navigation__sub-list {
   background-color: #ffbf47;
 }
 
+@media (min-width: 641px) {
+  .left-nav-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+  }
+}
