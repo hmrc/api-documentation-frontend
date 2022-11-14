@@ -215,7 +215,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
   }
 
   def checkAPIVersionInRequestHeader(): Unit = {
-    clickOn("Users_post_details")
+    clickOn("users_post_post_details")
     waitForElement(By.id("application/vnd.hmrc.1.1+json")).getText should include("application/vnd.hmrc.1.1+json")
 
   }
