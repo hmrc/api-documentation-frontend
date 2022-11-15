@@ -142,8 +142,10 @@ class NavigationService @Inject()(
   }
 
   def openApiSidebarNavigation(service: String, version: ExtendedAPIVersion, markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
-    markdownBlocks
-    .map(mb => SidebarLink(label = mb.title, href = s"#${Slugify(mb.title)}"))
+    val variableSidebar = markdownBlocks.map(mb => SidebarLink(label = mb.title, href = s"#${Slugify(mb.title)}"))
+    val fixedSidebar = SidebarLink(label = "Endpoints", href = s"#endpoints-title")
+
+    variableSidebar :+ fixedSidebar
   }
 
   private def ramlPreviewLink() =
