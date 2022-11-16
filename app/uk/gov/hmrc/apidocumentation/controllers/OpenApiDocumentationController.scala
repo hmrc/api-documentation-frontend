@@ -30,7 +30,6 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
-import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 import scala.concurrent.Future
 import uk.gov.hmrc.http.NotFoundException
 import play.mvc.Http.HeaderNames
@@ -40,7 +39,6 @@ class OpenApiDocumentationController @Inject()(
   openApiViewRedoc: OpenApiViewRedoc,
   openApiPreviewRedoc: OpenApiPreviewRedoc,
   openApiPreviewView: OpenApiPreviewView,
-  parentPage: ParentPageOuter,
   retiredVersionJumpView: RetiredVersionJumpView,
   downloadConnector:DownloadConnector,
   mcc: MessagesControllerComponents,
