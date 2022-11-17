@@ -115,6 +115,8 @@
 
                   <p class="govuk-body">The way we show <a class="govuk-link" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, maybeVersion.get.version).url">@{title} API v@{maybeVersion.get.version} endpoints</a> has changed, which might look different to other Developer Hub APIs.</p>
 
+                  <p class="govuk-body">The API has not changed. You do not need to make any updates to your application if you already use this API.</p>
+
                 </section>
             } else {
                 @if(visibility == DocsVisibility.OVERVIEW_ONLY) {
