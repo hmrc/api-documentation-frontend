@@ -20,12 +20,16 @@
     "context": "/guides/ctc-traders-phase4-service-guide/"
   },
   {
+    "name": "CTC Traders phase 4 testing guide",
+    "context": "/guides/ctc-traders-phase4-testing-guide/"
+  },
+  {
     "name": "CTC Traders phase 5 service guide",
     "context": "/guides/ctc-traders-phase5-service-guide/"
   },
   {
-    "name": "CTC Traders phase 4 testing guide",
-    "context": "/guides/ctc-traders-phase4-testing-guide/"
+    "name": "CTC Traders phase 5 technical interface specification",
+    "context": "/guides/ctc-traders-phase5-tis/"
   },
   {
     "name": "Goods Vehicle Movements service guide",
