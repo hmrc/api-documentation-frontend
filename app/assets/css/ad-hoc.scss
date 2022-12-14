@@ -334,6 +334,7 @@ pre, code {
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
   margin-top: 0;
+
   section {
     margin-bottom: 15px;
     font-size: 1rem;
@@ -343,15 +344,26 @@ pre, code {
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
   }
+
+  blockquote {
+    color: #333;
+    border-left: 10px solid #b1b4b6;
+    padding-left: 20px;
+    margin-left: 0;
+  }
+
   a:link {
     color: #1d70b8;
   }
+
   a:hover {
     color: #003078;
   }
+
   a:active {
     color: #0b0c0c;
   }
+
   a:focus {
     outline: 3px solid transparent;
     color: #0b0c0c;
@@ -359,6 +371,7 @@ pre, code {
     box-shadow: 0 -2px #fd0,0 4px #0b0c0c;
     text-decoration: none;
   }
+
   ul {
     font-family: "GDS Transport",Arial,sans-serif;
     -moz-osx-font-smoothing: grayscale;
@@ -371,6 +384,7 @@ pre, code {
     padding-left: 20px;
     list-style-type: disc;
   }
+
   ol {
     font-family: "GDS Transport",arial,sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -387,6 +401,7 @@ pre, code {
     padding-left: 20px;
     list-style-type: decimal;
   }
+
   table {
     font-family: "GDS Transport",arial,sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -401,6 +416,7 @@ pre, code {
     border-spacing: 0;
     border-collapse: collapse;
   }
+
   th {
     padding: 10px 20px 10px 0;
     border-bottom: 1px solid #b1b4b6;
@@ -408,12 +424,14 @@ pre, code {
     vertical-align: top;
     font-weight: 700;
   }
+
   td {
     padding: 5px 20px 5px 0;
     border-bottom: 1px solid #b1b4b6;
     text-align: left;
     vertical-align: top;
   }
+
   td:last-child {
     padding-right: 0;
   } 
@@ -424,16 +442,19 @@ pre, code {
     margin-bottom: 20px;
     font-size: 1.1875rem;
     line-height: 1.31579;
+
     ul {
       margin-bottom: 20px;
       font-size: 1.1875rem;
       line-height: 1.31579;
     }
+
     ol {
       font-size: 1.1875rem;
       line-height: 1.31579;
       margin-bottom: 20px;
     }
+
     section {
       margin-bottom: 15px;
       font-size: 1.1875rem;
@@ -443,6 +464,7 @@ pre, code {
       -moz-osx-font-smoothing: grayscale;
       font-weight: 400;
     }
+
     table {
       font-size: 16px;
       font-size: 1.1875rem;
