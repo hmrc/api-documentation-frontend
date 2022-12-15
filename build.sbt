@@ -44,8 +44,7 @@ lazy val microservice = (project in file("."))
   .settings(
     resolvers ++= Seq(
       Resolver.sonatypeRepo("releases")
-    ),
-    resolvers += "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/"
+    )
   )
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
