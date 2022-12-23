@@ -19,7 +19,7 @@ Global / bloopAggregateSourceDependencies := true
 
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
-lazy val microservice = (project in file("."))
+lazy val microservice = Project(appName, file("."))
   .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin) ++ plugins: _*)
   .settings(
     name := appName
@@ -34,9 +34,9 @@ lazy val microservice = (project in file("."))
       "unused=true",
       "dead_code=true"
     ),
-    includeFilter in uglify := GlobFilter("apis-*.js"),
+    uglify / includeFilter := GlobFilter("apis-*.js"),
     pipelineStages := Seq(digest),
-    pipelineStages in Assets := Seq(
+    Assets / pipelineStages := Seq(
       concat,
       uglify
     )
@@ -55,11 +55,11 @@ lazy val microservice = (project in file("."))
     targetJvm := "jvm-1.8",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+    update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     majorVersion := 0,
     scalacOptions += "-Ypartial-unification"
   )
-  .settings(unmanagedResourceDirectories in Compile += baseDirectory.value / "resources")
+  .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
 
   .settings(
     Test / testOptions := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
@@ -72,10 +72,10 @@ lazy val microservice = (project in file("."))
   .configs(AcceptanceTest)
   .settings(inConfig(AcceptanceTest)(Defaults.testSettings ++ BloopDefaults.configSettings))
   .settings(
-    testOptions in AcceptanceTest := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
+    AcceptanceTest / testOptions := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
     AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "acceptance",
     AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "testcommon",
-    AcceptanceTest / unmanagedResourceDirectories := Seq((baseDirectory in AcceptanceTest).value / "test", (baseDirectory in AcceptanceTest).value / "target/web/public/test"),
+    AcceptanceTest / unmanagedResourceDirectories := Seq((AcceptanceTest / baseDirectory).value / "test", (AcceptanceTest / baseDirectory).value / "target/web/public/test"),
     AcceptanceTest / fork := false,
     AcceptanceTest / parallelExecution := false,
     // AcceptanceTest / testGrouping := oneForkedJvmPerTest((definedTests in AcceptanceTest).value),
