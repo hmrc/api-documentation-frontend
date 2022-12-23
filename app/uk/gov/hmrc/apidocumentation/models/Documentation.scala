@@ -311,7 +311,7 @@ case class Endpoint(
 
 object HttpMethod extends Enumeration {
   type HttpMethod = Value
-  val GET, POST, PUT, PATCH, DELETE, OPTIONS = Value
+  val GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD = Value
 }
 
 case class Parameter(name: String, required: Boolean = false)
