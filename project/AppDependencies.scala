@@ -5,7 +5,10 @@ import sbt._
 object AppDependencies {
   def apply(): Seq[ModuleID] = compile ++ test
 
-  lazy val bootstrapVersion = "7.3.0"
+  lazy val playJsonVersion = "2.9.2"
+  lazy val bootstrapVersion = "7.12.0"
+  lazy val seleniumVersion = "4.2.0"
+
   lazy val compile = Seq(
     ws,
     caffeine,
@@ -16,8 +19,8 @@ object AppDependencies {
     "uk.gov.hmrc"                           %% "play-frontend-hmrc"           % "2.0.0-play-28",
     "org.typelevel"                         %% "cats-core"                    % "2.6.1",
     "org.commonjava.googlecode.markdown4j"  %  "markdown4j"                   % "2.2-cj-1.1",
-    "com.typesafe.play"                     %% "play-json"                    % "2.9.2",
-    "com.typesafe.play"                     %% "play-json-joda"               % "2.9.2"
+    "com.typesafe.play"                     %% "play-json"                    % playJsonVersion,
+    "com.typesafe.play"                     %% "play-json-joda"               % playJsonVersion
   )
 
   lazy val test = Seq(
@@ -26,10 +29,10 @@ object AppDependencies {
     "io.cucumber"                           %  "cucumber-junit"               % "5.7.0",
     "org.pegdown"                           %  "pegdown"                      % "1.6.0",
     "org.scalatestplus"                     %% "selenium-4-2"                 % "3.2.13.0",
-    "org.seleniumhq.selenium"               %  "selenium-remote-driver"       % "4.2.0",
-    "org.seleniumhq.selenium"               %  "selenium-firefox-driver"      % "4.2.0",
-    "org.seleniumhq.selenium"               %  "selenium-chrome-driver"       % "4.2.0",
-    "org.seleniumhq.selenium"               %  "selenium-remote-driver"       % "4.2.0",
+    "org.seleniumhq.selenium"               %  "selenium-remote-driver"       % seleniumVersion,
+    "org.seleniumhq.selenium"               %  "selenium-firefox-driver"      % seleniumVersion,
+    "org.seleniumhq.selenium"               %  "selenium-chrome-driver"       % seleniumVersion,
+    "org.seleniumhq.selenium"               %  "selenium-remote-driver"       % seleniumVersion,
     "com.github.tomakehurst"                %  "wiremock-jre8-standalone"     % "2.31.0",
     "org.mockito"                           %% "mockito-scala-scalatest"      % "1.16.46",
     "com.vladsch.flexmark"                  %  "flexmark-all"                 % "0.62.2",
