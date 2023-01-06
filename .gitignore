@@ -2,6 +2,7 @@
 ensime.sbt
 !.gitignore
 !.scalafmt.conf
+!.scalafix.conf
 
 conf/local.conf
 .cache
