@@ -61,6 +61,7 @@ object RequestResponseField2 {
     }
   }
 
+  // scalastyle:off method.length
   private def extractFields(
       schema: JsonSchema,
       fieldName: Option[String] = None,
@@ -127,6 +128,7 @@ object RequestResponseField2 {
       }
     }
   }
+  // scalastyle:on method.length
 
   def requestFields(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = {
     extractFields(method.body)

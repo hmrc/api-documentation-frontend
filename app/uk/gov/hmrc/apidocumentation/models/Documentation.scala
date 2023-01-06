@@ -28,7 +28,7 @@ import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
 import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
 import uk.gov.hmrc.apidocumentation.models.HttpMethod.HttpMethod
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 
 trait Documentation {
 
@@ -214,7 +214,7 @@ case class ExtendedAPIDefinition(
 
   def userAccessibleApiDefinition = {
     def isAccessible(availability: Option[APIAvailability]) =
-      availability.fold(false)(avail => avail.authorised || avail.access.isTrial.contains(true))
+      availability.fold(false)(avail => avail.authorised || avail.access.isTrial.contains(true)) // scalastyle:ignore
 
     copy(versions = versions.filter(v => isAccessible(v.productionAvailability) || isAccessible(v.sandboxAvailability)))
   }

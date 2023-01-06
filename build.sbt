@@ -19,6 +19,8 @@ Global / bloopAggregateSourceDependencies := true
 
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
 
+ThisBuild / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
+
 inThisBuild(
   List(
     scalaVersion := "2.12.15",
@@ -64,7 +66,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     majorVersion := 0,
     scalacOptions += "-Ypartial-unification"
   )

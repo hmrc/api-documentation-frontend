@@ -73,7 +73,7 @@ object ErrorScenarios {
   }
 
   private def responseFromJson2(example: ExampleSpec): Option[ErrorResponse] = {
-    import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+    import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
     example.value.flatMap(v => Try(Json.parse(v).as[ErrorResponse]).toOption)
   }
 

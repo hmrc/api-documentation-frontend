@@ -25,7 +25,7 @@ import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.connectionExceptionsAsHtmlPartialFailure
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
 
 @Singleton
