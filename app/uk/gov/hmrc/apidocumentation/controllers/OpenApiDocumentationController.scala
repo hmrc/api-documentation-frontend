@@ -60,8 +60,8 @@ class OpenApiDocumentationController @Inject()(
   )
 
   private def doRenderApiDocumentation(service: String, version: String, apiOption: Option[ExtendedAPIDefinition])(implicit request: Request[AnyContent]): Future[Result] = {
-    def renderDocumentationPage(): Future[Result] = {
-        successful(Ok(openApiViewRedoc(service, version)))
+    def renderDocumentationPage(apiName: String): Future[Result] = {
+        successful(Ok(openApiViewRedoc(service, version, apiName)))
     }
 
     def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
@@ -76,8 +76,8 @@ class OpenApiDocumentationController @Inject()(
 
     findVersion(apiOption) match {
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED  => badRequestPage
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                 => renderDocumentationPage()
-      case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, _, Some(true))))                       => renderDocumentationPage()
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                 => renderDocumentationPage(api.name)
+      case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, _, Some(true))))                       => renderDocumentationPage(api.name)
       case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _)))                                            => badRequestPage
       case _                                                                                                              => renderNotFoundPage
     }
