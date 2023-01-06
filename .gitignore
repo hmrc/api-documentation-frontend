@@ -1,6 +1,7 @@
 .*
 ensime.sbt
 !.gitignore
+!.scalafmt.conf
 
 conf/local.conf
 .cache
