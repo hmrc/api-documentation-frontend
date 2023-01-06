@@ -91,8 +91,10 @@ lazy val microservice = Project(appName, file("."))
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
 
-  .settings(scalaVersion := "2.12.15")
+  .settings(DefaultBuildSettings.integrationTestSettings())
 
+  .settings(scalaVersion := "2.12.15")
+  .settings(headerSettings(AcceptanceTest) ++ automateHeaderSettings(AcceptanceTest))
   .settings(SilencerSettings())
 
 lazy val AcceptanceTest = config("acceptance") extend Test
