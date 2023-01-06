@@ -55,7 +55,7 @@ trait ApplicationConfig {
 }
 
 @Singleton
-class ApplicationConfigImpl @Inject()(config: Configuration)
+class ApplicationConfigImpl @Inject() (config: Configuration)
     extends ServicesConfig(config)
     with ApplicationConfig {
 
@@ -64,38 +64,36 @@ class ApplicationConfigImpl @Inject()(config: Configuration)
   val developerFrontendUrl = getString("developer-frontend-url")
 
   val developerFrontendBaseUrl = baseUrl("developer-frontend")
-  val thirdPartyDeveloperUrl = baseUrl("third-party-developer")
+  val thirdPartyDeveloperUrl   = baseUrl("third-party-developer")
 
-  /**
-   * This value needs to be lazy because it doesn't actually exist in all environments that we deploy to.
-   * Specifically, it doesn't exist in Development which really shouldn't need this app deployed but does due
-   * to api-publisher needing it.
-   *
-   * DO NOT REMOVE
-   */
+  /** This value needs to be lazy because it doesn't actually exist in all environments that we deploy to. Specifically, it doesn't exist in Development which really shouldn't need
+    * this app deployed but does due to api-publisher needing it.
+    *
+    * DO NOT REMOVE
+    */
   lazy val apiPlatformMicroserviceBaseUrl = baseUrl("api-platform-microservice")
   lazy val ramlPreviewMicroserviceBaseUrl = baseUrl("raml-preview-microservice")
-  
-  val securedCookie = getBoolean("cookie.secure")
-  val ramlPreviewEnabled = getBoolean("features.ramlPreview")
+
+  val securedCookie         = getBoolean("cookie.secure")
+  val ramlPreviewEnabled    = getBoolean("features.ramlPreview")
   val openApiPreviewEnabled = getBoolean("features.openApiPreview")
 
   val showProductionAvailability = getBoolean("features.showProductionAvailability")
-  val showSandboxAvailability = getBoolean("features.showSandboxAvailability")
-  val productionWwwHost = getString("platform.production.www.host")
-  val productionApiBaseUrl = platformBaseUrl("platform.production.api")
+  val showSandboxAvailability    = getBoolean("features.showSandboxAvailability")
+  val productionWwwHost          = getString("platform.production.www.host")
+  val productionApiBaseUrl       = platformBaseUrl("platform.production.api")
 
   val sandboxApiBaseUrl = platformBaseUrl("platform.sandbox.api")
   val sandboxWwwBaseUrl = platformBaseUrl("platform.sandbox.www")
 
   val documentationRenderVersion = getString("features.documentationRenderVersion")
 
-  val nameOfPrincipalEnvironment = getString("features.nameOfPrincipalEnvironment")
+  val nameOfPrincipalEnvironment   = getString("features.nameOfPrincipalEnvironment")
   val nameOfSubordinateEnvironment = getString("features.nameOfSubordinateEnvironment")
-  val principalBaseUrl = getString("features.principalBaseUrl")
-  val subordinateBaseUrl = getString("features.subordinateBaseUrl")
+  val principalBaseUrl             = getString("features.principalBaseUrl")
+  val subordinateBaseUrl           = getString("features.subordinateBaseUrl")
 
-  val title = "HMRC Developer Hub"
+  val title         = "HMRC Developer Hub"
   val xmlApiBaseUrl = getString("xml-api.base-url")
 
   val feedbackSurveyUrl: String = getString("feedbackBanner.generic.surveyUrl")
@@ -103,8 +101,8 @@ class ApplicationConfigImpl @Inject()(config: Configuration)
   private def platformBaseUrl(key: String) = {
     (getConfigDefaulted(s"$key.protocol", ""), getConfigDefaulted(s"$key.host", "")) match {
       case (p, h) if !p.isEmpty && !h.isEmpty => s"$p://$h"
-      case (p, h) if p.isEmpty => s"https://$h"
-      case _ => ""
+      case (p, h) if p.isEmpty                => s"https://$h"
+      case _                                  => ""
     }
   }
 

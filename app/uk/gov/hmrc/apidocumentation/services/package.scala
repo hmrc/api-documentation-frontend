@@ -25,8 +25,8 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 package object services {
 
   def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
-      case Some(v) => VersionDocsVisible(v.visibility)
-      case _ => DocsVisibility.VISIBLE
+    case Some(v) => VersionDocsVisible(v.visibility)
+    case _       => DocsVisibility.VISIBLE
   }
 
   def filterForVisibility(version: Option[ExtendedAPIVersion]): (List[DocumentationItem]) => List[DocumentationItem] = (input) => {

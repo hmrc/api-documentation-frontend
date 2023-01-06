@@ -23,8 +23,9 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.Future
 
 @Singleton
-class RedirectController @Inject()(cc: MessagesControllerComponents)
+class RedirectController @Inject() (cc: MessagesControllerComponents)
     extends FrontendController(cc) {
+
   def redirectToDocumentationIndexPage(): Action[AnyContent] = {
     val redirectTo =
       routes.ApiDocumentationController.apiIndexPage(None, None, None).url
@@ -33,9 +34,7 @@ class RedirectController @Inject()(cc: MessagesControllerComponents)
     }
   }
 
-  def redirectToApiDocumentationPage(service: String,
-                                     version: String,
-                                     endpoint: String): Action[AnyContent] = {
+  def redirectToApiDocumentationPage(service: String, version: String, endpoint: String): Action[AnyContent] = {
     val redirectTo = routes.ApiDocumentationController
       .renderApiDocumentation(service, version, None)
       .url

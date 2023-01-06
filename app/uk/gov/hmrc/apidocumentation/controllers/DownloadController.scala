@@ -31,40 +31,39 @@ import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 
 @Singleton
-class DownloadController @Inject()(documentationService: DocumentationService,
-                                   apiDefinitionService: ApiDefinitionService,
-                                   downloadConnector: DownloadConnector,
-                                   loggedInUserService: LoggedInUserService,
-                                   errorHandler: ErrorHandler,
-                                   val appConfig: ApplicationConfig,
-                                   cc: MessagesControllerComponents)
-                                  (implicit val ec: ExecutionContext)
-  extends FrontendController(cc) with ApplicationLogger {
+class DownloadController @Inject() (
+    documentationService: DocumentationService,
+    apiDefinitionService: ApiDefinitionService,
+    downloadConnector: DownloadConnector,
+    loggedInUserService: LoggedInUserService,
+    errorHandler: ErrorHandler,
+    val appConfig: ApplicationConfig,
+    cc: MessagesControllerComponents
+  )(implicit val ec: ExecutionContext
+  ) extends FrontendController(cc) with ApplicationLogger {
 
   def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
-
     (for {
-      userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
-      api <- apiDefinitionService.fetchExtendedDefinition(service, userId)
+      userId       <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+      api          <- apiDefinitionService.fetchExtendedDefinition(service, userId)
       validResource = validateResource(resource)
-      result <- fetchResourceForApi(api, version, validResource)
+      result       <- fetchResourceForApi(api, version, validResource)
     } yield {
       result
     }) recover {
       case e: NotFoundException =>
         logger.info(s"Resource not found: ${e.getMessage}")
         NotFound(errorHandler.notFoundTemplate)
-      case e: Throwable =>
+      case e: Throwable         =>
         logger.error("Could not load resource", e)
         InternalServerError(errorHandler.internalServerErrorTemplate)
     }
   }
 
-  private def fetchResourceForApi(apiOption: Option[ExtendedAPIDefinition], version: String, validResource: String)
-                                 (implicit request: Request[_]): Future[Result] = {
+  private def fetchResourceForApi(apiOption: Option[ExtendedAPIDefinition], version: String, validResource: String)(implicit request: Request[_]): Future[Result] = {
     def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
       for {
-        api <- apiOption
+        api        <- apiOption
         apiVersion <- api.versions.find(v => v.version == version)
         visibility <- apiVersion.visibility
       } yield (api, apiVersion, visibility)
@@ -74,7 +73,8 @@ class DownloadController @Inject()(documentationService: DocumentationService,
 
     def redirectToLoginPage(service: String) =
       Future.successful(Redirect("/developer/login").withSession(
-        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url))
+        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url
+      ))
 
     findVersion(apiOption) match {
       case Some((api, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _))) =>
@@ -82,7 +82,7 @@ class DownloadController @Inject()(documentationService: DocumentationService,
 
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
         downloadConnector.fetch(api.serviceName, selectedVersion.version, validResource)
-        .map(_.getOrElse(renderNotFoundPage))
+          .map(_.getOrElse(renderNotFoundPage))
 
       case _ =>
         Future.successful(renderNotFoundPage)
@@ -95,9 +95,8 @@ class DownloadController @Inject()(documentationService: DocumentationService,
   }
 
   private def extractDeveloperIdentifier(f: Future[Option[Developer]]): Future[Option[DeveloperIdentifier]] = {
-    f.map( o =>
+    f.map(o =>
       o.map(d => UuidIdentifier(d.userId))
     )
   }
 }
-

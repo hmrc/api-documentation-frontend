@@ -28,15 +28,14 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.play.http.metrics.common._
 
 @Singleton
-class RamlPreviewConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
+class RamlPreviewConnector @Inject() (http: HttpClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
 
   private lazy val serviceBaseUrl = appConfig.ramlPreviewMicroserviceBaseUrl
 
   val api = API("api-definition")
-  
+
   def fetchPreviewApiSpecification(ramlUrl: String)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
     http.GET[ApiSpecification](s"$serviceBaseUrl/preview?ramlUrl=${URLEncoder.encode(ramlUrl, "UTF-8")}")
   }
 }
-

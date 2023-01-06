@@ -23,7 +23,7 @@ import uk.gov.hmrc.play.partials.HtmlPartial
 
 import scala.concurrent.Future
 
-class PartialsService @Inject()(connector: DeveloperFrontendConnector) {
+class PartialsService @Inject() (connector: DeveloperFrontendConnector) {
 
   def termsOfUsePartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = {
     connector.fetchTermsOfUsePartial

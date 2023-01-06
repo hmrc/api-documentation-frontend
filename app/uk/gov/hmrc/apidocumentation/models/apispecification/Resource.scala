@@ -19,14 +19,13 @@ package uk.gov.hmrc.apidocumentation.models.apispecification
 case class Resource(resourcePath: String, methods: List[Method], uriParameters: List[TypeDeclaration], relativeUri: String, displayName: String, children: List[Resource])
 
 object ResourcesAndGroups {
-  type GroupMap = Map[Resource,Group]
+  type GroupMap = Map[Resource, Group]
 
   val emptyGroupMap: GroupMap = Map.empty
 
-  def flatten(gm: GroupMap, gms: List[GroupMap]): GroupMap = gms.fold(gm)( (l,r) => l ++ r)
+  def flatten(gm: GroupMap, gms: List[GroupMap]): GroupMap = gms.fold(gm)((l, r) => l ++ r)
 
   def flatten(gms: List[GroupMap]): GroupMap = flatten(emptyGroupMap, gms)
 }
 
 case class ResourcesAndGroups(resource: Resource, groupMap: ResourcesAndGroups.GroupMap)
-

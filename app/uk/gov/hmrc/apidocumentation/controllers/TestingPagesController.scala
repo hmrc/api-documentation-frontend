@@ -27,25 +27,25 @@ import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
-class TestingPagesController @Inject()(
-                                        val navigationService: NavigationService,
-                                        mcc: MessagesControllerComponents,
-                                        testingView: TestingView,
-                                        testUsersDataStatefulBehaviourView: TestUsersDataStatefulBehaviourView
-                                      )
-                                      (implicit ec: ExecutionContext, applicationConfig: ApplicationConfig) extends FrontendController(mcc) with HeaderNavigation with ApplicationLogger with PageAttributesHelper with HomeCrumb {
-  def testingPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      Future.successful(Ok(testingView(pageAttributes("Testing in the sandbox", routes.TestingPagesController.testingPage().url, navLinks))))
+class TestingPagesController @Inject() (
+    val navigationService: NavigationService,
+    mcc: MessagesControllerComponents,
+    testingView: TestingView,
+    testUsersDataStatefulBehaviourView: TestUsersDataStatefulBehaviourView
+  )(implicit ec: ExecutionContext,
+    applicationConfig: ApplicationConfig
+  ) extends FrontendController(mcc) with HeaderNavigation with ApplicationLogger with PageAttributesHelper with HomeCrumb {
+
+  def testingPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
+    Future.successful(Ok(testingView(pageAttributes("Testing in the sandbox", routes.TestingPagesController.testingPage().url, navLinks))))
   }
 
-  def testingStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { _ =>
-    _ => Future.successful(MovedPermanently(routes.TestingPagesController.testUsersDataStatefulBehaviourPage().url))
+  def testingStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { _ => _ =>
+    Future.successful(MovedPermanently(routes.TestingPagesController.testUsersDataStatefulBehaviourPage().url))
   }
 
-  def testUsersDataStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { implicit request =>
-    navLinks =>
-      val testUsersDataStatefulBehaviourUrl = routes.TestingPagesController.testUsersDataStatefulBehaviourPage().url
-      Future.successful(Ok(testUsersDataStatefulBehaviourView(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
+  def testUsersDataStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
+    val testUsersDataStatefulBehaviourUrl = routes.TestingPagesController.testUsersDataStatefulBehaviourPage().url
+    Future.successful(Ok(testUsersDataStatefulBehaviourView(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
   }
 }

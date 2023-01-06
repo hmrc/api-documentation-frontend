@@ -19,34 +19,34 @@ package uk.gov.hmrc.apidocumentation.models
 import play.api.libs.json._
 
 package object JsonFormatters {
-  implicit val formatHttpMethod = EnumJson.enumFormat(HttpMethod)
-  implicit val formatAPICategory = EnumJson.enumFormat(APICategory)
-  implicit val formatAPIStatus = EnumJson.enumFormat(APIStatus)
+  implicit val formatHttpMethod    = EnumJson.enumFormat(HttpMethod)
+  implicit val formatAPICategory   = EnumJson.enumFormat(APICategory)
+  implicit val formatAPIStatus     = EnumJson.enumFormat(APIStatus)
   implicit val formatAPIAccessType = EnumJson.enumFormat(APIAccessType)
   implicit val formatLoggedInState = EnumJson.enumFormat(LoggedInState)
 
-  implicit val formatAPIAccess = Json.format[APIAccess]
-  implicit val formatVersionVisibility = Json.format[VersionVisibility]
-  implicit val formatParameter = Json.format[Parameter]
-  implicit val formatEndpoint = Json.format[Endpoint]
-  implicit val formatAPIVersion = Json.format[APIVersion]
-  implicit val formatAPIDefinition = Json.format[APIDefinition]
+  implicit val formatAPIAccess          = Json.format[APIAccess]
+  implicit val formatVersionVisibility  = Json.format[VersionVisibility]
+  implicit val formatParameter          = Json.format[Parameter]
+  implicit val formatEndpoint           = Json.format[Endpoint]
+  implicit val formatAPIVersion         = Json.format[APIVersion]
+  implicit val formatAPIDefinition      = Json.format[APIDefinition]
   implicit val formatExtAPIAvailability = Json.format[APIAvailability]
-  implicit val formatExtAPIVersion = Json.format[ExtendedAPIVersion]
-  implicit val formatExtAPIDefinition = Json.format[ExtendedAPIDefinition]
-  implicit val formatServiceDetails = Json.format[ServiceDetails]
-  implicit val formatTestEndpoint = Json.format[TestEndpoint]
-  implicit val formatDeveloper = Json.format[Developer]
-  implicit val formatSession = Json.format[Session]
-  implicit val formatSidebarLink = Json.format[SidebarLink]
-  implicit val formatNavLink = Json.format[NavLink]
-  implicit val formatErrorResponse = Json.format[ErrorResponse]
+  implicit val formatExtAPIVersion      = Json.format[ExtendedAPIVersion]
+  implicit val formatExtAPIDefinition   = Json.format[ExtendedAPIDefinition]
+  implicit val formatServiceDetails     = Json.format[ServiceDetails]
+  implicit val formatTestEndpoint       = Json.format[TestEndpoint]
+  implicit val formatDeveloper          = Json.format[Developer]
+  implicit val formatSession            = Json.format[Session]
+  implicit val formatSidebarLink        = Json.format[SidebarLink]
+  implicit val formatNavLink            = Json.format[NavLink]
+  implicit val formatErrorResponse      = Json.format[ErrorResponse]
 }
 
-
-package object EnumJson {
+package object EnumJson       {
 
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] = new Reads[E#Value] {
+
     def reads(json: JsValue): JsResult[E#Value] = json match {
       case JsString(s) => {
         try {
@@ -56,7 +56,7 @@ package object EnumJson {
             JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not contain '$s'")
         }
       }
-      case _ => JsError("String value expected")
+      case _           => JsError("String value expected")
     }
   }
 

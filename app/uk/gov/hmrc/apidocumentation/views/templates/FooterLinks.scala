@@ -23,7 +23,7 @@ import views.templates.FooterConfig
 
 import javax.inject.Inject
 
-class FooterLinks @Inject()(appConfig: FooterConfig) {
+class FooterLinks @Inject() (appConfig: FooterConfig) {
 
   def cookieLink(implicit messages: Messages): FooterItem = FooterItem(
     Some(Messages("footer.links.cookies.text")),

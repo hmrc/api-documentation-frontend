@@ -26,24 +26,21 @@ import uk.gov.hmrc.play.http.metrics.common._
 
 import scala.concurrent.Future.successful
 
-
 @Singleton
-class XmlServicesService @Inject()(val xmlServicesConnector: XmlServicesConnector, val apiMetrics: ApiMetrics)
-                                    (implicit ec: ExecutionContext) extends RecordMetrics {
+class XmlServicesService @Inject() (val xmlServicesConnector: XmlServicesConnector, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
   val api: API = API("api-platform-xml-services")
 
   def fetchAllXmlApis()(implicit hc: HeaderCarrier): Future[Seq[XmlApiDocumentation]] =
     record {
-        xmlServicesConnector.fetchAllXmlApis()
+      xmlServicesConnector.fetchAllXmlApis()
     }
 
   def fetchXmlApi(name: String)(implicit hc: HeaderCarrier): Future[Option[XmlApiDocumentation]] =
     record {
-      xmlServicesConnector.fetchXmlApi(name) flatMap  {
+      xmlServicesConnector.fetchXmlApi(name) flatMap {
         case Right(x) => successful(x)
-        case Left(_) => xmlServicesConnector.fetchXmlApiByServiceName(name)
+        case Left(_)  => xmlServicesConnector.fetchXmlApiByServiceName(name)
       }
     }
-
 
 }

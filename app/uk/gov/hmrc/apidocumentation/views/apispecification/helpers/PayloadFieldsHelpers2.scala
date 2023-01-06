@@ -21,18 +21,29 @@ import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 
 case class EnumValue(
-                      name: String,
-                      description: Option[String] = None
-                    )
+    name: String,
+    description: Option[String] = None
+  )
 
-case class RequestResponseField2(name: String, `type`: String, typeId: String, isArray: Boolean, required: Boolean, example: Option[String],
-                                description: Option[String], pattern: Option[String], depth: Int, enumValues: Seq[EnumValue])
+case class RequestResponseField2(
+    name: String,
+    `type`: String,
+    typeId: String,
+    isArray: Boolean,
+    required: Boolean,
+    example: Option[String],
+    description: Option[String],
+    pattern: Option[String],
+    depth: Int,
+    enumValues: Seq[EnumValue]
+  )
 
 object RequestResponseField2 {
+
   def extractFields(requestResponseBodies: List[uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration]): Seq[RequestResponseField2] = {
     val fields = for {
-      body    <- requestResponseBodies
-      schema  <- schema(body)
+      body   <- requestResponseBodies
+      schema <- schema(body)
     } yield {
       extractFields(schema)
     }
@@ -46,22 +57,24 @@ object RequestResponseField2 {
         val json: JsValue = Json.parse(jsonText)
         json.validate[JsonSchema].asOpt
       }
-      case _ => None
+      case _                                         => None
     }
   }
 
-  private def extractFields(schema: JsonSchema,
-                            fieldName: Option[String] = None,
-                            description: Option[String] = None,
-                            required: Boolean = false,
-                            depth: Int = -1,
-                            acc: Seq[RequestResponseField2] = Nil,
-                            isArray: Boolean = false,
-                            isPatternproperty: Boolean = false): Seq[RequestResponseField2] = {
+  private def extractFields(
+      schema: JsonSchema,
+      fieldName: Option[String] = None,
+      description: Option[String] = None,
+      required: Boolean = false,
+      depth: Int = -1,
+      acc: Seq[RequestResponseField2] = Nil,
+      isArray: Boolean = false,
+      isPatternproperty: Boolean = false
+    ): Seq[RequestResponseField2] = {
 
     def extractEnumValues(schema: JsonSchema): Seq[EnumValue] = {
 
-      val enum = schema.enum.map( e => EnumValue(e.value))
+      val enum = schema.enum.map(e => EnumValue(e.value))
 
       val oneOf = schema.oneOf.map { e =>
         EnumValue(e.enum.headOption.fold("")(_.value), e.description)
@@ -83,33 +96,33 @@ object RequestResponseField2 {
           schema.description.orElse(description).filter(_.nonEmpty),
           schema.pattern.filter(_.nonEmpty),
           depth,
-          extractEnumValues(schema)))
+          extractEnumValues(schema)
+        ))
       }
-      case _ => None
+      case _                                      => None
     }
 
     schema.`type` match {
       case Some("object") => {
         val propertyFields = for {
           (fieldName, definition) <- schema.properties
-          field <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth+1)
+          field                   <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth + 1)
         } yield {
           field
         }
 
         val patternFields = for {
           (fieldName, definition) <- schema.patternProperties
-          field <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth+1,
-            isPatternproperty=true)
+          field                   <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth + 1, isPatternproperty = true)
         } yield {
           field
         }
         currentField.fold(acc)(acc :+ _) ++ propertyFields ++ patternFields
       }
-      case Some("array") => {
+      case Some("array")  => {
         extractFields(schema.items.get, fieldName, schema.description, required, depth, acc, true)
       }
-      case _ => {
+      case _              => {
         currentField.fold(acc)(acc :+ _)
       }
     }
@@ -125,4 +138,3 @@ object RequestFields2 {
 
   def apply(method: uk.gov.hmrc.apidocumentation.models.apispecification.Method): Seq[RequestResponseField2] = RequestResponseField2.requestFields(method)
 }
-

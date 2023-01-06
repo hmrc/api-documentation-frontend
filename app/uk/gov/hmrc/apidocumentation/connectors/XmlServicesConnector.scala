@@ -26,10 +26,9 @@ import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
 import uk.gov.hmrc.play.http.metrics.common._
 
 @Singleton
-class XmlServicesConnector @Inject()(http: HttpClient, appConfig: XmlServicesConnector.Config, val apiMetrics: ApiMetrics)
-                                    (implicit ec: ExecutionContext) extends RecordMetrics {
+class XmlServicesConnector @Inject() (http: HttpClient, appConfig: XmlServicesConnector.Config, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
 
-  val api = API("api-platform-xml-services")
+  val api                                 = API("api-platform-xml-services")
   private lazy val serviceBaseUrl: String = appConfig.serviceBaseUrl
 
   def fetchAllXmlApis()(implicit hc: HeaderCarrier): Future[Seq[XmlApiDocumentation]] = record {
@@ -45,11 +44,10 @@ class XmlServicesConnector @Inject()(http: HttpClient, appConfig: XmlServicesCon
   }
 
   def fetchXmlApiByServiceName(name: String)(implicit hc: HeaderCarrier): Future[Option[XmlApiDocumentation]] = record {
-    http.GET[Option[XmlApiDocumentation]](s"$serviceBaseUrl/api-platform-xml-services/xml/api", queryParams = Seq(("serviceName",  name)))
+    http.GET[Option[XmlApiDocumentation]](s"$serviceBaseUrl/api-platform-xml-services/xml/api", queryParams = Seq(("serviceName", name)))
   }
 }
 
 object XmlServicesConnector {
   case class Config(serviceBaseUrl: String)
 }
-

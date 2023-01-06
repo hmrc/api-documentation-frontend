@@ -26,36 +26,35 @@ import play.twirl.api.Html
 object Slugify {
   def apply(text: String): String = makeSlug(text)
 
-  def apply(obj: {def value(): String}): String = Option(obj).fold("")(obj => makeSlug(obj.value()))
+  def apply(obj: { def value(): String }): String = Option(obj).fold("")(obj => makeSlug(obj.value()))
 
   private def makeSlug(text: String) = Option(text).fold("") { obj =>
     obj.replaceAll("[^\\w\\s]", "").replaceAll("\\s+", "-").toLowerCase
   }
 }
 
-
 object Val {
   def apply(obj: String): String = Option(obj).getOrElse("")
 
   def apply(obj: Option[String]): String = obj.getOrElse("")
 
-  def apply(obj: {def value(): String}): String = Option(obj).fold("")(_.value())
+  def apply(obj: { def value(): String }): String = Option(obj).fold("")(_.value())
 }
 
 object HeaderVal {
+
   def apply(header: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration, version: String): String = {
     def replace(example: String) = {
       example.replace("application/vnd.hmrc.1.0", "application/vnd.hmrc." + version)
     }
-    val exampleValue = header.example.fold("")(e => e.value.getOrElse(""))
+    val exampleValue             = header.example.fold("")(e => e.value.getOrElse(""))
     header.displayName match {
-      case "Accept"=> replace(exampleValue)
+      case "Accept"       => replace(exampleValue)
       case "Content-Type" => replace(exampleValue)
-      case _  => exampleValue
+      case _              => exampleValue
     }
   }
 }
-
 
 object Markdown {
 
@@ -63,7 +62,7 @@ object Markdown {
 
   def apply(text: Option[String]): Html = apply(text.getOrElse(""))
 
-  def apply(obj: {def value(): String}): Html = Option(obj).fold(emptyHtml)(node => apply(node.value()))
+  def apply(obj: { def value(): String }): Html = Option(obj).fold(emptyHtml)(node => apply(node.value()))
 
   import com.github.rjeschke.txtmark.{Configuration, Processor}
   import org.markdown4j._
@@ -92,46 +91,51 @@ object HttpStatus {
 
   def apply(statusCode: Int): String = {
 
-    val responseStatus: StatusCode = try {
-       StatusCode.int2StatusCode(statusCode)
-    } catch {
-      case _ : RuntimeException => StatusCodes.custom(statusCode,"non-standard", "" )
-    }
+    val responseStatus: StatusCode =
+      try {
+        StatusCode.int2StatusCode(statusCode)
+      } catch {
+        case _: RuntimeException => StatusCodes.custom(statusCode, "non-standard", "")
+      }
 
     s"$statusCode (${responseStatus.reason})"
   }
 }
 
 object AvailabilityPhrase {
-  val yes = "Yes"
+  val yes             = "Yes"
   val yesPrivateTrial = "Yes - private trial"
-  val no = "No"
+  val no              = "No"
 }
 
 object EndpointsAvailable {
+
   def apply(availability: Option[APIAvailability]): String = availability match {
-    case Some(APIAvailability(endpointsEnabled, access, _, authorised)) if endpointsEnabled => access.`type` match {
-      case APIAccessType.PUBLIC => AvailabilityPhrase.yes
-      case APIAccessType.PRIVATE if access.isTrial.getOrElse(false) => AvailabilityPhrase.yesPrivateTrial
-      case APIAccessType.PRIVATE if authorised => AvailabilityPhrase.yes
-      case _ => AvailabilityPhrase.no
-    }
-    case _ => AvailabilityPhrase.no
+    case Some(APIAvailability(endpointsEnabled, access, _, authorised)) if endpointsEnabled =>
+      access.`type` match {
+        case APIAccessType.PUBLIC                                     => AvailabilityPhrase.yes
+        case APIAccessType.PRIVATE if access.isTrial.getOrElse(false) => AvailabilityPhrase.yesPrivateTrial
+        case APIAccessType.PRIVATE if authorised                      => AvailabilityPhrase.yes
+        case _                                                        => AvailabilityPhrase.no
+      }
+    case _                                                                                  => AvailabilityPhrase.no
   }
 }
 
 object ShowBaseURL {
-  def apply(availability: Option[APIAvailability]) =  EndpointsAvailable(availability) match {
+
+  def apply(availability: Option[APIAvailability]) = EndpointsAvailable(availability) match {
     case AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial => true
-    case _ => false
+    case _                                                           => false
   }
 }
 
 object VersionDocsVisible {
+
   def apply(availability: Option[VersionVisibility]): DocsVisibility = availability match {
-    case Some(VersionVisibility(APIAccessType.PUBLIC, _, _, _)) => DocsVisibility.VISIBLE                     // PUBLIC
-    case Some(VersionVisibility(APIAccessType.PRIVATE, true, true, _)) => DocsVisibility.VISIBLE              // PRIVATE, logged in, whitelisted (authorised)
+    case Some(VersionVisibility(APIAccessType.PUBLIC, _, _, _))               => DocsVisibility.VISIBLE       // PUBLIC
+    case Some(VersionVisibility(APIAccessType.PRIVATE, true, true, _))        => DocsVisibility.VISIBLE       // PRIVATE, logged in, whitelisted (authorised)
     case Some(VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
-    case _ => DocsVisibility.NOT_VISIBLE
+    case _                                                                    => DocsVisibility.NOT_VISIBLE
   }
 }

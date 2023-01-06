@@ -28,16 +28,16 @@ import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.play.http.metrics.common._
 
 @Singleton
-class UserSessionConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
+class UserSessionConnector @Inject() (http: HttpClient, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
 
-  val api = API("third-party-developer")
+  val api                                 = API("third-party-developer")
   private lazy val serviceBaseUrl: String = appConfig.thirdPartyDeveloperUrl
 
   def fetchSession(sessionId: String)(implicit hc: HeaderCarrier): Future[Session] = record {
     http.GET[Option[Session]](s"$serviceBaseUrl/session/$sessionId")
-    .map {
-      case Some(session) => session
-      case None => throw new SessionInvalid
-    }
+      .map {
+        case Some(session) => session
+        case None          => throw new SessionInvalid
+      }
   }
 }

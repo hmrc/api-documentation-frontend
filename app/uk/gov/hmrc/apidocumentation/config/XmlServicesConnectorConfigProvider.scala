@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.config
 
-import javax.inject.{Inject, Singleton, Provider}
+import javax.inject.{Inject, Provider, Singleton}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
 
 @Singleton
 class XmlServicesConnectorConfigProvider @Inject() (config: ServicesConfig) extends Provider[XmlServicesConnector.Config] {
+
   override def get(): XmlServicesConnector.Config =
     XmlServicesConnector.Config(
       serviceBaseUrl = config.baseUrl("api-platform-xml-services")

@@ -20,12 +20,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers.routes
-import uk.gov.hmrc.apidocumentation.models.{
-  DocsVisibility,
-  ExtendedAPIVersion,
-  NavLink,
-  SidebarLink
-}
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, NavLink, SidebarLink}
 import uk.gov.hmrc.apidocumentation.views.helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -34,26 +29,34 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
 
 @Singleton
-class NavigationService @Inject()(
-  connector: DeveloperFrontendConnector,
-  appConfig: ApplicationConfig
-)(implicit ec: ExecutionContext) {
-  lazy val gettingStartedUrl =
+class NavigationService @Inject() (
+    connector: DeveloperFrontendConnector,
+    appConfig: ApplicationConfig
+  )(implicit ec: ExecutionContext
+  ) {
+
+  lazy val gettingStartedUrl       =
     routes.DocumentationController.usingTheHubPage().url
-  lazy val apiDocumentationUrl =
+
+  lazy val apiDocumentationUrl     =
     routes.ApiDocumentationController.apiIndexPage(None, None, None).url
-  lazy val referenceGuideUrl =
+
+  lazy val referenceGuideUrl       =
     routes.DocumentationController.referenceGuidePage().url
-  lazy val namingGuidelinesUrl =
+
+  lazy val namingGuidelinesUrl     =
     routes.DocumentationController.nameGuidelinesPage().url
-  lazy val authorisationUri =
+
+  lazy val authorisationUri        =
     routes.AuthorisationController.authorisationPage().url
-  lazy val tutorialsUri = routes.DocumentationController.tutorialsPage().url
-  lazy val termsOfUseUri = routes.DocumentationController.termsOfUsePage().url
-  lazy val testingUri = routes.TestingPagesController.testingPage().url
-  lazy val mtdIntroductionPageUrl =
+  lazy val tutorialsUri            = routes.DocumentationController.tutorialsPage().url
+  lazy val termsOfUseUri           = routes.DocumentationController.termsOfUsePage().url
+  lazy val testingUri              = routes.TestingPagesController.testingPage().url
+
+  lazy val mtdIntroductionPageUrl  =
     routes.DocumentationController.mtdIntroductionPage().url
-  lazy val fraudPreventionPageUrl = "/guides/fraud-prevention"
+  lazy val fraudPreventionPageUrl  = "/guides/fraud-prevention"
+
   lazy val developmentPracticesUrl =
     routes.DocumentationController.developmentPracticesPage().url
 
@@ -73,51 +76,51 @@ class NavigationService @Inject()(
       href = apiDocumentationUrl
     )
   ) ++
-  ramlPreviewLink() ++
-  openApiPreviewLink() ++
-  Seq(
-    SidebarLink(
-      label = "Reference guide",
-      href = referenceGuideUrl
-    ),
-    SidebarLink(
-      label = "Development practices",
-      href = developmentPracticesUrl
-    ),
-    SidebarLink(
-      label = "Send fraud prevention data",
-      href = fraudPreventionPageUrl
+    ramlPreviewLink() ++
+    openApiPreviewLink() ++
+    Seq(
+      SidebarLink(
+        label = "Reference guide",
+        href = referenceGuideUrl
       ),
-    SidebarLink(
-      label = "Authorisation", 
-      href = authorisationUri
-    ),
-    SidebarLink(
-      label = "Tutorials",
-      href = tutorialsUri
-    ),
-    SidebarLink(
-      label = "Testing in the sandbox",
-      href = testingUri
-    ),
-    SidebarLink(
-      label = "Terms of use",
-      href = termsOfUseUri
-    ),
-    SidebarLink(
-      label = "Making Tax Digital guides",
-      href = mtdIntroductionPageUrl
+      SidebarLink(
+        label = "Development practices",
+        href = developmentPracticesUrl
+      ),
+      SidebarLink(
+        label = "Send fraud prevention data",
+        href = fraudPreventionPageUrl
+      ),
+      SidebarLink(
+        label = "Authorisation",
+        href = authorisationUri
+      ),
+      SidebarLink(
+        label = "Tutorials",
+        href = tutorialsUri
+      ),
+      SidebarLink(
+        label = "Testing in the sandbox",
+        href = testingUri
+      ),
+      SidebarLink(
+        label = "Terms of use",
+        href = termsOfUseUri
+      ),
+      SidebarLink(
+        label = "Making Tax Digital guides",
+        href = mtdIntroductionPageUrl
+      )
     )
-  )
 
   def sidebarNavigation() = sidebarNavigationLinks
 
   def apiSidebarNavigation2(service: String, version: ExtendedAPIVersion, apiSpecification: ApiSpecification): Seq[SidebarLink] = {
     val subLinks = apiSpecification.resourceGroups
-                  .map(group => group.name)
-                  .filter(_.nonEmpty)
-                  .flatten
-                  .map(name => SidebarLink(label = name, href = s"#${Slugify(name)}"))
+      .map(group => group.name)
+      .filter(_.nonEmpty)
+      .flatten
+      .map(name => SidebarLink(label = name, href = s"#${Slugify(name)}"))
 
     val sections = apiSpecification.documentationForVersionFilteredByVisibility(version).map { doc =>
       SidebarLink(label = doc.title, href = s"#${Slugify(doc.title)}")
@@ -143,7 +146,7 @@ class NavigationService @Inject()(
 
   def openApiSidebarNavigation(service: String, version: ExtendedAPIVersion, markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
     val variableSidebar = markdownBlocks.map(mb => SidebarLink(label = mb.title, href = s"#${Slugify(mb.title)}"))
-    val fixedSidebar = SidebarLink(label = "Endpoints", href = s"#endpoints-title")
+    val fixedSidebar    = SidebarLink(label = "Endpoints", href = s"#endpoints-title")
 
     variableSidebar :+ fixedSidebar
   }
@@ -171,9 +174,7 @@ class NavigationService @Inject()(
     }
 
   def headerNavigation()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] =
-    connector.fetchNavLinks() map (
-      navLinks => addUrlPrefix(appConfig.developerFrontendUrl, navLinks)
-    )
+    connector.fetchNavLinks() map (navLinks => addUrlPrefix(appConfig.developerFrontendUrl, navLinks))
 
   private def addUrlPrefix(urlPrefix: String, links: Seq[NavLink]) =
     links map (link => link.copy(href = urlPrefix.concat(link.href)))

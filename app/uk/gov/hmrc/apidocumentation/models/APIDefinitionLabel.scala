@@ -22,9 +22,9 @@ object APIDefinitionLabel extends Enumeration {
   protected case class Val(displayName: String, modifier: String) extends super.Val
   implicit def valueToAPIDefinitionLabelVal(x: Value): Val = x.asInstanceOf[Val]
 
-  val ROADMAP = Val("Roadmap", "roadmap")
-  val SERVICE_GUIDE = Val("Service Guide", "service-guide")
-  val REST_API = Val("REST API", "rest")
+  val ROADMAP          = Val("Roadmap", "roadmap")
+  val SERVICE_GUIDE    = Val("Service Guide", "service-guide")
+  val REST_API         = Val("REST API", "rest")
   val TEST_SUPPORT_API = Val("Test Support API", "test")
-  val XML_API = Val("XML API", "xml")
+  val XML_API          = Val("XML API", "xml")
 }

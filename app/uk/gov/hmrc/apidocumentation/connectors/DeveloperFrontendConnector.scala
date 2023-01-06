@@ -29,9 +29,9 @@ import uk.gov.hmrc.play.http.metrics.common._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeveloperFrontendConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
+class DeveloperFrontendConnector @Inject() (http: HttpClient, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
 
-  val api = API("third-party-developer-frontend")
+  val api                         = API("third-party-developer-frontend")
   private lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = record {

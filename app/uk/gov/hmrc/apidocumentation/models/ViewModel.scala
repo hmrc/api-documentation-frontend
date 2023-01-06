@@ -20,36 +20,37 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.models.apispecification._
 
 case class ViewModel(
-  apiSpecification: ApiSpecification,
-  relationships: Map[Resource, Option[Resource]]
-) {
-  lazy val title: String = apiSpecification.title
-  lazy val version: String = apiSpecification.version
-  lazy val deprecationMessage: Option[String] = apiSpecification.deprecationMessage
+    apiSpecification: ApiSpecification,
+    relationships: Map[Resource, Option[Resource]]
+  ) {
+  lazy val title: String                               = apiSpecification.title
+  lazy val version: String                             = apiSpecification.version
+  lazy val deprecationMessage: Option[String]          = apiSpecification.deprecationMessage
   lazy val documentationItems: List[DocumentationItem] = apiSpecification.documentationItems
-  lazy val resourceGroups: List[ResourceGroup] = apiSpecification.resourceGroups
-  lazy val types: List[TypeDeclaration] = apiSpecification.types
-  lazy val isFieldOptionalityKnown: Boolean = apiSpecification.isFieldOptionalityKnown
+  lazy val resourceGroups: List[ResourceGroup]         = apiSpecification.resourceGroups
+  lazy val types: List[TypeDeclaration]                = apiSpecification.types
+  lazy val isFieldOptionalityKnown: Boolean            = apiSpecification.isFieldOptionalityKnown
 }
 
 object ViewModel {
+
   def apply(apiSpecification: ApiSpecification): ViewModel = {
 
     val allResources: List[Resource] = apiSpecification.resourceGroups.flatMap(_.resources)
 
     val parentChildRelationships: Map[Resource, Option[Resource]] = {
-      val startWithoutParents: Map[Resource, Option[Resource]] = allResources.map(r => (r->None)).toMap
+      val startWithoutParents: Map[Resource, Option[Resource]] = allResources.map(r => (r -> None)).toMap
       allResources.map { p =>
         p.children.map { c =>
           (c -> Option(p))
         }.toMap
       }
-      .foldLeft(startWithoutParents)( (m1, m2) => m1 ++ m2)
+        .foldLeft(startWithoutParents)((m1, m2) => m1 ++ m2)
     }
 
     ViewModel(
       apiSpecification,
       relationships = parentChildRelationships
-   )
+    )
   }
 }

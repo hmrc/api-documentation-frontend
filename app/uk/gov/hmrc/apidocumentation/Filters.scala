@@ -25,8 +25,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import play.api.routing.Router
 
 @Singleton
-class SessionRedirectFilter @Inject()(implicit override val mat: Materializer,
-                            exec: ExecutionContext) extends Filter {
+class SessionRedirectFilter @Inject() (implicit override val mat: Materializer, exec: ExecutionContext) extends Filter {
 
   private val classesToReWrite = List(
     classOf[ApiDocumentationController],
@@ -34,16 +33,16 @@ class SessionRedirectFilter @Inject()(implicit override val mat: Materializer,
     classOf[AuthorisationController],
     classOf[TestingPagesController],
     classOf[HelpPagesController]
-    )
+  )
 
   private val rewriteControllers = classesToReWrite.map(_.getCanonicalName)
 
   override def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     nextFilter(requestHeader).map { result =>
       val root = "/api-documentation"
-      
-      val handlerDef = requestHeader.attrs.get(Router.Attrs.HandlerDef)
-      val routePattern = handlerDef.map(_.path).getOrElse(root)
+
+      val handlerDef     = requestHeader.attrs.get(Router.Attrs.HandlerDef)
+      val routePattern   = handlerDef.map(_.path).getOrElse(root)
       val controllerName = handlerDef.map(_.controller).getOrElse("")
 
       if (rewriteControllers.contains(controllerName)) {
