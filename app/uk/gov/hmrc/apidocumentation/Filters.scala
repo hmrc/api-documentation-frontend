@@ -16,13 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import akka.stream.Materializer
 import javax.inject.{Inject, Singleton}
-import play.api.mvc._
-import uk.gov.hmrc.apidocumentation.controllers._
-
 import scala.concurrent.{ExecutionContext, Future}
+
+import akka.stream.Materializer
+
+import play.api.mvc._
 import play.api.routing.Router
+
+import uk.gov.hmrc.apidocumentation.controllers._
 
 @Singleton
 class SessionRedirectFilter @Inject() (implicit override val mat: Materializer, exec: ExecutionContext) extends Filter {

@@ -16,18 +16,19 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
+import scala.collection.immutable.ListMap
+import scala.io.Source
+import scala.util.Try
+
 import play.api.Configuration
 import play.api.libs.json._
+
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
 import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 import uk.gov.hmrc.apidocumentation.models.HttpMethod.HttpMethod
-
-import scala.collection.immutable.ListMap
-import scala.io.Source
-import scala.util.Try
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
 
 trait Documentation {
 

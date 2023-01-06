@@ -17,19 +17,16 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
 import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.http.HttpReads.Implicits._
-
-import uk.gov.hmrc.apidocumentation.models.DeveloperIdentifier
-
-import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-
+import uk.gov.hmrc.apidocumentation.models.{APIDefinition, DeveloperIdentifier, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton

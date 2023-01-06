@@ -17,22 +17,21 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc._
-import scala.concurrent.ExecutionContext
 import scala.concurrent.Future.successful
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.apidocumentation.views.html._
-import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
-import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
-import uk.gov.hmrc.apidocumentation.services.NavigationService
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
-import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
-import scala.concurrent.Future
-import uk.gov.hmrc.http.NotFoundException
+import scala.concurrent.{ExecutionContext, Future}
+
+import play.api.mvc._
 import play.mvc.Http.HeaderNames
+import uk.gov.hmrc.http.NotFoundException
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
+import uk.gov.hmrc.apidocumentation.ErrorHandler
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
+import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService, NavigationService}
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+import uk.gov.hmrc.apidocumentation.views.html._
 
 @Singleton
 class OpenApiDocumentationController @Inject() (

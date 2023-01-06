@@ -16,11 +16,9 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
 import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, ViewModel}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
-
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 package object services {
 

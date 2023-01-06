@@ -17,16 +17,16 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
+import uk.gov.hmrc.http.HeaderCarrier
+
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers.routes
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
 import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, NavLink, SidebarLink}
 import uk.gov.hmrc.apidocumentation.views.helpers._
-import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
 
 @Singleton
 class NavigationService @Inject() (

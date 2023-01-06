@@ -17,11 +17,12 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.Inject
-import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
-import uk.gov.hmrc.apidocumentation.models.{LoggedInState, Session, SessionInvalid}
+import scala.concurrent.{ExecutionContext, Future}
+
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
+import uk.gov.hmrc.apidocumentation.models.{LoggedInState, Session, SessionInvalid}
 
 class SessionService @Inject() (connector: UserSessionConnector)(implicit ec: ExecutionContext) {
 

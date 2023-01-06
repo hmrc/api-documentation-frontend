@@ -17,14 +17,14 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.http.HeaderCarrier
-
+import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
+
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.common._
 
-import scala.concurrent.Future.successful
+import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
+import uk.gov.hmrc.apidocumentation.models._
 
 @Singleton
 class XmlServicesService @Inject() (val xmlServicesConnector: XmlServicesConnector, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {

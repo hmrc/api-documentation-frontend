@@ -16,11 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.views.apispecification.helpers
 
-import uk.gov.hmrc.apidocumentation.models.apispecification._
-import uk.gov.hmrc.apidocumentation.models.ErrorResponse
 import scala.util.Try
+
 import play.api.libs.json.Json
 import play.libs.XML
+
+import uk.gov.hmrc.apidocumentation.models.ErrorResponse
+import uk.gov.hmrc.apidocumentation.models.apispecification._
 
 object BodyExamples {
 

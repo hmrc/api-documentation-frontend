@@ -17,6 +17,16 @@ import bloop.integrations.sbt.BloopDefaults
 
 Global / bloopAggregateSourceDependencies := true
 
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+
+inThisBuild(
+  List(
+    scalaVersion := "2.12.15",
+    semanticdbEnabled := true,
+    semanticdbVersion := scalafixSemanticdb.revision
+  )
+)
+
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = Project(appName, file("."))

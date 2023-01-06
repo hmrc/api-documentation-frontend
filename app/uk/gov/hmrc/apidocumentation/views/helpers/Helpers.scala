@@ -16,12 +16,14 @@
 
 package uk.gov.hmrc.apidocumentation.views.helpers
 
+import scala.language.reflectiveCalls
+
 import akka.http.scaladsl.model.{StatusCode, StatusCodes}
+
+import play.twirl.api.Html
+
 import uk.gov.hmrc.apidocumentation.models.DocsVisibility.DocsVisibility
 import uk.gov.hmrc.apidocumentation.models._
-
-import scala.language.reflectiveCalls
-import play.twirl.api.Html
 
 object Slugify {
   def apply(text: String): String = makeSlug(text)

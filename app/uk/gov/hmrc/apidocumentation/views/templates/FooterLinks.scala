@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.views.templates
 
+import javax.inject.Inject
+
+import views.templates.FooterConfig
+
 import play.api.i18n.Messages
 import play.api.mvc.Request
 import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.FooterItem
-import views.templates.FooterConfig
-
-import javax.inject.Inject
 
 class FooterLinks @Inject() (appConfig: FooterConfig) {
 

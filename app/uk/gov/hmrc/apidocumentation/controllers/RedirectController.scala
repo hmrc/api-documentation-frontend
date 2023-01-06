@@ -17,10 +17,10 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.Future
+
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
-import scala.concurrent.Future
 
 @Singleton
 class RedirectController @Inject() (cc: MessagesControllerComponents)

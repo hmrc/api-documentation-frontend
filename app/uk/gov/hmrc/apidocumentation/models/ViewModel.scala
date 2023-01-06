@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-import uk.gov.hmrc.apidocumentation.models.apispecification._
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, _}
 
 case class ViewModel(
     apiSpecification: ApiSpecification,

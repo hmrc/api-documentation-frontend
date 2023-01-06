@@ -17,16 +17,17 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services._
-import uk.gov.hmrc.apidocumentation.views.html._
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
-import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+import uk.gov.hmrc.apidocumentation.views.html._
 
 @Singleton
 class DocumentationController @Inject() (

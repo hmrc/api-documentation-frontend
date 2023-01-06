@@ -17,19 +17,17 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import play.api.cache._
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-
-import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
+import scala.concurrent.{ExecutionContext, Future}
+
+import play.api.cache._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
+
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.models.TestEndpoint
-import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
-import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, Resource, ResourceGroup}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
-import scala.concurrent.Future
 
 @Singleton
 class DocumentationService @Inject() (appConfig: ApplicationConfig, cache: AsyncCacheApi, apm: ApiPlatformMicroserviceConnector)(implicit ec: ExecutionContext)

@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.apidocumentation.views.apispecification.helpers
 
+import play.api.libs.json.{JsValue, Json}
+
 import uk.gov.hmrc.apidocumentation.models.JsonSchema
-import play.api.libs.json.JsValue
-import play.api.libs.json.Json
 
 case class EnumValue(
     name: String,

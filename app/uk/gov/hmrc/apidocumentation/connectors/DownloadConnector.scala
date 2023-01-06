@@ -17,16 +17,17 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future}
+
 import play.api.http.HttpEntity
 import play.api.http.Status._
 import play.api.libs.ws._
-import play.api.mvc._
 import play.api.mvc.Results._
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import play.api.mvc._
 import uk.gov.hmrc.http.InternalServerException
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration._
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 @Singleton
 class DownloadConnector @Inject() (ws: WSClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {

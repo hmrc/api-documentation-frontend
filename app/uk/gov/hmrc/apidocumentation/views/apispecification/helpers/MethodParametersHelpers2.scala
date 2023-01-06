@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation.views.apispecification.helpers
 
-import uk.gov.hmrc.apidocumentation.models.apispecification._
 import uk.gov.hmrc.apidocumentation.models.ViewModel
+import uk.gov.hmrc.apidocumentation.models.apispecification._
 
 case class MethodParameter2(
     name: String,

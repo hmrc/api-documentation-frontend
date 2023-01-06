@@ -17,16 +17,17 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import java.security.MessageDigest
-
 import javax.inject.{Inject, Singleton}
-import play.api.libs.crypto.CookieSigner
-import play.api.mvc.Request
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
-import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+
+import play.api.libs.crypto.CookieSigner
+import play.api.mvc.Request
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
+
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
 
 @Singleton
 class LoggedInUserService @Inject() (config: ApplicationConfig, sessionService: SessionService, val cookieSigner: CookieSigner)(implicit ec: ExecutionContext)

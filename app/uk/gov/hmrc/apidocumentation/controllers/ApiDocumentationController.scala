@@ -17,35 +17,33 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
-import org.joda.time.{DateTime, DateTimeZone}
-import play.api.i18n.MessagesProvider
-import play.api.libs.json.Json
-import play.api.mvc._
-import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.apidocumentation.services._
-import uk.gov.hmrc.apidocumentation.views.html._
-import uk.gov.hmrc.http.NotFoundException
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-
-import uk.gov.hmrc.apidocumentation.connectors.{DownloadConnector, RamlPreviewConnector}
-import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
-import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
-import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
-import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
-
-import uk.gov.hmrc.apidocumentation.models.APICategory.{categoryMap, APICategory}
-
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
+import scala.util.{Failure, Success, Try}
 
 import akka.stream.Materializer
 import controllers.Assets
+import org.joda.time.{DateTime, DateTimeZone}
+
+import play.api.i18n.MessagesProvider
+import play.api.libs.json.Json
+import play.api.mvc._
+import uk.gov.hmrc.http.NotFoundException
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
+import uk.gov.hmrc.apidocumentation.ErrorHandler
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.connectors.{DownloadConnector, RamlPreviewConnector}
+import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
+import uk.gov.hmrc.apidocumentation.models.APICategory.{APICategory, categoryMap}
+import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
+import uk.gov.hmrc.apidocumentation.services._
+import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 
 object ApiDocumentationController {
   case class RamlParseException(msg: String) extends RuntimeException(msg)
