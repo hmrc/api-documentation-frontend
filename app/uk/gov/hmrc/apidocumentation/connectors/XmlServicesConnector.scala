@@ -17,19 +17,18 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.http.HttpReads.Implicits._
-
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
+
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import uk.gov.hmrc.play.http.metrics.common._
 
-@Singleton
-class XmlServicesConnector @Inject()(http: HttpClient, appConfig: XmlServicesConnector.Config, val apiMetrics: ApiMetrics)
-                                    (implicit ec: ExecutionContext) extends RecordMetrics {
+import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
 
-  val api = API("api-platform-xml-services")
+@Singleton
+class XmlServicesConnector @Inject() (http: HttpClient, appConfig: XmlServicesConnector.Config, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
+
+  val api                                 = API("api-platform-xml-services")
   private lazy val serviceBaseUrl: String = appConfig.serviceBaseUrl
 
   def fetchAllXmlApis()(implicit hc: HeaderCarrier): Future[Seq[XmlApiDocumentation]] = record {
@@ -45,11 +44,10 @@ class XmlServicesConnector @Inject()(http: HttpClient, appConfig: XmlServicesCon
   }
 
   def fetchXmlApiByServiceName(name: String)(implicit hc: HeaderCarrier): Future[Option[XmlApiDocumentation]] = record {
-    http.GET[Option[XmlApiDocumentation]](s"$serviceBaseUrl/api-platform-xml-services/xml/api", queryParams = Seq(("serviceName",  name)))
+    http.GET[Option[XmlApiDocumentation]](s"$serviceBaseUrl/api-platform-xml-services/xml/api", queryParams = Seq(("serviceName", name)))
   }
 }
 
 object XmlServicesConnector {
   case class Config(serviceBaseUrl: String)
 }
-

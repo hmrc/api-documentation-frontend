@@ -17,6 +17,18 @@ import bloop.integrations.sbt.BloopDefaults
 
 Global / bloopAggregateSourceDependencies := true
 
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+
+ThisBuild / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
+
+inThisBuild(
+  List(
+    scalaVersion := "2.12.15",
+    semanticdbEnabled := true,
+    semanticdbVersion := scalafixSemanticdb.revision
+  )
+)
+
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = Project(appName, file("."))
@@ -52,10 +64,8 @@ lazy val microservice = Project(appName, file("."))
   .settings(ScoverageSettings(): _*)
   .settings(defaultSettings(): _*)
   .settings(
-    targetJvm := "jvm-1.8",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     majorVersion := 0,
     scalacOptions += "-Ypartial-unification"
   )
@@ -78,29 +88,15 @@ lazy val microservice = Project(appName, file("."))
     AcceptanceTest / unmanagedResourceDirectories := Seq((AcceptanceTest / baseDirectory).value / "test", (AcceptanceTest / baseDirectory).value / "target/web/public/test"),
     AcceptanceTest / fork := false,
     AcceptanceTest / parallelExecution := false,
-    // AcceptanceTest / testGrouping := oneForkedJvmPerTest((definedTests in AcceptanceTest).value),
     addTestReportOption(AcceptanceTest, "acceptance-test-reports")
   )
 
-  .settings(scalaVersion := "2.12.15")
+  .settings(DefaultBuildSettings.integrationTestSettings())
 
+  .settings(scalaVersion := "2.12.15")
+  .settings(headerSettings(AcceptanceTest) ++ automateHeaderSettings(AcceptanceTest))
   .settings(SilencerSettings())
 
 lazy val AcceptanceTest = config("acceptance") extend Test
 
 lazy val appName = "api-documentation-frontend"
-
-// def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
-//   tests map { test =>
-//     Group(
-//       test.name,
-//       Seq(test),
-//       SubProcess(
-//         ForkOptions().withRunJVMOptions(Vector(
-//             s"-Dtest.name={test.name}", 
-//             s"-Daccessibility.test=${Properties.propOrElse("accessibility.test", "false")}", 
-//             s"-Dbrowser=${Properties.propOrElse("browser", "chrome")}"
-//         ))
-//       )
-//     )
-//   }

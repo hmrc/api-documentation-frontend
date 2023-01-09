@@ -17,39 +17,34 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import play.api.cache._
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-
-import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
+import scala.concurrent.{ExecutionContext, Future}
+
+import play.api.cache._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
+
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.models.TestEndpoint
-import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
-import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, Resource, ResourceGroup}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
-import scala.concurrent.Future
 
 @Singleton
-class DocumentationService @Inject()( appConfig: ApplicationConfig,
-                                      cache: AsyncCacheApi,
-                                      apm: ApiPlatformMicroserviceConnector
-                                      )
-                                      (implicit ec: ExecutionContext) extends ApplicationLogger {
+class DocumentationService @Inject() (appConfig: ApplicationConfig, cache: AsyncCacheApi, apm: ApiPlatformMicroserviceConnector)(implicit ec: ExecutionContext)
+    extends ApplicationLogger {
   val defaultExpiration = 1.hour
 
   def fetchApiSpecification(serviceName: String, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
     def removeEntry(key: String): Unit = {
       cache.remove(key)
     }
-    
-    val key = serviceName+":"+version
+
+    val key = serviceName + ":" + version
     if (cacheBuster) cache.remove(key)
 
     val spec = cache.getOrElseUpdate(key, defaultExpiration) {
       logger.info(s"****** Specification Cache miss for $key")
-      apm.fetchApiSpecification(serviceName,version)(hc)
+      apm.fetchApiSpecification(serviceName, version)(hc)
     }
     // Remove entry on error or None
     spec.onComplete(t => t.fold(e => removeEntry(key), o => o.fold(removeEntry(key))(identity)))
@@ -65,9 +60,9 @@ class DocumentationService @Inject()( appConfig: ApplicationConfig,
       val nested: List[TestEndpoint] = r.children.flatMap(cr => buildResource(cr))
       r.methods match {
         case Nil => nested
-        case ms => 
+        case ms  =>
           val myMethods: List[String] = ms.map(m => m.method.toUpperCase).sorted
-          TestEndpoint(s"{service-url}${r.resourcePath}", myMethods:_*) +: nested
+          TestEndpoint(s"{service-url}${r.resourcePath}", myMethods: _*) +: nested
       }
     }
 

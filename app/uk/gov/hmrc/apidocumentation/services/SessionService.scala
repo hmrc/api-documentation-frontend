@@ -17,20 +17,21 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.Inject
-import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
-import uk.gov.hmrc.apidocumentation.models.{LoggedInState, Session, SessionInvalid}
-import uk.gov.hmrc.http.HeaderCarrier
-
 import scala.concurrent.{ExecutionContext, Future}
 
-class SessionService @Inject()(connector: UserSessionConnector)(implicit ec: ExecutionContext) {
+import uk.gov.hmrc.http.HeaderCarrier
+
+import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
+import uk.gov.hmrc.apidocumentation.models.{LoggedInState, Session, SessionInvalid}
+
+class SessionService @Inject() (connector: UserSessionConnector)(implicit ec: ExecutionContext) {
 
   def fetch(sessionId: String)(implicit hc: HeaderCarrier): Future[Option[Session]] = {
 
     def convertSession(session: Session): Option[Session] = {
       session.loggedInState match {
         case LoggedInState.LOGGED_IN => Some(session)
-        case _ => None
+        case _                       => None
       }
     }
 
@@ -38,7 +39,7 @@ class SessionService @Inject()(connector: UserSessionConnector)(implicit ec: Exe
       .fetchSession(sessionId)
       .map(convertSession)
       .recover {
-       case _: SessionInvalid => None
+        case _: SessionInvalid => None
       }
   }
 }

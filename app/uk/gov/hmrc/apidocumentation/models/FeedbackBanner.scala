@@ -22,6 +22,6 @@ sealed trait FeedbackBanner {
 }
 
 case object GenericFeedbackBanner extends FeedbackBanner {
-  override val description: String = "Take our survey and answer questions about the service."
+  override val description: String  = "Take our survey and answer questions about the service."
   override val surveyUrlKey: String = "feedbackBanner.generic.surveyUrl"
 }

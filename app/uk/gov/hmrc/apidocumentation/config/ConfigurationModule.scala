@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.apidocumentation.config
 
-import play.api.{Configuration, Environment}
 import play.api.inject.Module
+import play.api.{Configuration, Environment}
+
 import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
 
 class ConfigurationModule extends Module {

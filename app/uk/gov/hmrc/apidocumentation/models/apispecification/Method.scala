@@ -17,13 +17,13 @@
 package uk.gov.hmrc.apidocumentation.models.apispecification
 
 case class Method(
-  method: String,
-  displayName: String,
-  body: List[TypeDeclaration],
-  headers: List[TypeDeclaration],
-  queryParameters: List[TypeDeclaration],
-  description: Option[String],
-  securedBy: Option[SecurityScheme],
-  responses: List[Response],
-  sandboxData: Option[String]
-)
+    method: String,
+    displayName: String,
+    body: List[TypeDeclaration],
+    headers: List[TypeDeclaration],
+    queryParameters: List[TypeDeclaration],
+    description: Option[String],
+    securedBy: Option[SecurityScheme],
+    responses: List[Response],
+    sandboxData: Option[String]
+  )

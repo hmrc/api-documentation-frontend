@@ -17,27 +17,27 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.{Session, SessionInvalid}
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.http.HttpReads.Implicits._
-
 import scala.concurrent.{ExecutionContext, Future}
+
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import uk.gov.hmrc.play.http.metrics.common._
 
-@Singleton
-class UserSessionConnector @Inject()(http: HttpClient, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.{Session, SessionInvalid}
 
-  val api = API("third-party-developer")
+@Singleton
+class UserSessionConnector @Inject() (http: HttpClient, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
+
+  val api                                 = API("third-party-developer")
   private lazy val serviceBaseUrl: String = appConfig.thirdPartyDeveloperUrl
 
   def fetchSession(sessionId: String)(implicit hc: HeaderCarrier): Future[Session] = record {
     http.GET[Option[Session]](s"$serviceBaseUrl/session/$sessionId")
-    .map {
-      case Some(session) => session
-      case None => throw new SessionInvalid
-    }
+      .map {
+        case Some(session) => session
+        case None          => throw new SessionInvalid
+      }
   }
 }

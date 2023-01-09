@@ -17,4 +17,3 @@
 package uk.gov.hmrc.apidocumentation.models
 
 case class TestEndpoint(url: String, methods: String*)
-

@@ -16,17 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
 import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, ViewModel}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
-
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 package object services {
 
   def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
-      case Some(v) => VersionDocsVisible(v.visibility)
-      case _ => DocsVisibility.VISIBLE
+    case Some(v) => VersionDocsVisible(v.visibility)
+    case _       => DocsVisibility.VISIBLE
   }
 
   def filterForVisibility(version: Option[ExtendedAPIVersion]): (List[DocumentationItem]) => List[DocumentationItem] = (input) => {

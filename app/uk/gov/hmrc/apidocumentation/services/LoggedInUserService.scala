@@ -17,24 +17,22 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import java.security.MessageDigest
-
 import javax.inject.{Inject, Singleton}
-import play.api.libs.crypto.CookieSigner
-import play.api.mvc.Request
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
-import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+
+import play.api.libs.crypto.CookieSigner
+import play.api.mvc.Request
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
 
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
+
 @Singleton
-class LoggedInUserService @Inject()(config: ApplicationConfig,
-                                    sessionService: SessionService,
-                                    val cookieSigner : CookieSigner)
-                                   (implicit ec: ExecutionContext)
-                                   extends CookieEncoding
-                                   with FrontendHeaderCarrierProvider {
+class LoggedInUserService @Inject() (config: ApplicationConfig, sessionService: SessionService, val cookieSigner: CookieSigner)(implicit ec: ExecutionContext)
+    extends CookieEncoding
+    with FrontendHeaderCarrierProvider {
 
   import LoggedInUserService._
 
@@ -45,7 +43,7 @@ class LoggedInUserService @Inject()(config: ApplicationConfig,
 
   private def loadSession[A](implicit request: Request[A]): Future[Option[Session]] = {
     (for {
-      cookie <- request.cookies.get(cookieName)
+      cookie    <- request.cookies.get(cookieName)
       sessionId <- decodeCookie(cookie.value)
     } yield fetchDeveloperSession(sessionId))
       .getOrElse(Future.successful(None))
@@ -63,15 +61,15 @@ object LoggedInUserService {
 
 trait CookieEncoding {
 
-  val cookieSigner : CookieSigner
+  val cookieSigner: CookieSigner
 
-  def encodeCookie(token : String) : String = {
+  def encodeCookie(token: String): String = {
     cookieSigner.sign(token) + token
   }
 
-  def decodeCookie(token : String) : Option[String] = {
+  def decodeCookie(token: String): Option[String] = {
     Try({
-      val (hmac, value) = token.splitAt(40)
+      val (hmac, value) = token.splitAt(40) // scalastyle:ignore
 
       val signedValue = cookieSigner.sign(value)
 

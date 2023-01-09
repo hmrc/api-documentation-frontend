@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import play.api.libs.json._
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-
 import scala.io.Source
+
+import play.api.libs.json._
+
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 
 object APICategory extends Enumeration {
   type APICategory = Value
@@ -27,28 +28,28 @@ object APICategory extends Enumeration {
   protected case class Val(displayName: String, filter: String) extends super.Val
   implicit def valueToAPICategoryVal(x: Value): Val = x.asInstanceOf[Val]
 
-  val EXAMPLE = Val("Example", "example")
-  val AGENTS = Val("Agents", "agents")
-  val BUSINESS_RATES = Val("Business Rates", "business-rates")
-  val CHARITIES = Val("Charities", "charities")
+  val EXAMPLE                      = Val("Example", "example")
+  val AGENTS                       = Val("Agents", "agents")
+  val BUSINESS_RATES               = Val("Business Rates", "business-rates")
+  val CHARITIES                    = Val("Charities", "charities")
   val CONSTRUCTION_INDUSTRY_SCHEME = Val("Construction Industry Scheme", "construction-industry-scheme")
-  val CORPORATION_TAX = Val("Corporation Tax", "corporation-tax")
-  val CUSTOMS = Val("Customs", "customs")
-  val ESTATES = Val("Estates", "estates")
-  val HELP_TO_SAVE = Val("Help to Save", "help-to-save")
-  val INCOME_TAX_MTD = Val("Income Tax (Making Tax Digital)", "income-tax")
-  val LIFETIME_ISA = Val("Lifetime ISA", "lifetime-isa")
-  val MARRIAGE_ALLOWANCE = Val("Marriage Allowance", "marriage-allowance")
-  val NATIONAL_INSURANCE = Val("National Insurance", "national-insurance")
-  val PAYE = Val("PAYE", "paye")
-  val PENSIONS = Val("Pensions", "pensions")
-  val PRIVATE_GOVERNMENT = Val("Private Government", "private-government")
-  val RELIEF_AT_SOURCE = Val("Relief at Source", "relief-at-source")
-  val SELF_ASSESSMENT = Val("Self Assessment", "self-assessment")
-  val STAMP_DUTY = Val("Stamp Duty", "stamp-duty")
-  val TRUSTS = Val("Trusts", "trusts")
-  val VAT_MTD = Val("VAT (Making Tax Digital)", "vat")
-  val VAT = Val("VAT", "vat")
+  val CORPORATION_TAX              = Val("Corporation Tax", "corporation-tax")
+  val CUSTOMS                      = Val("Customs", "customs")
+  val ESTATES                      = Val("Estates", "estates")
+  val HELP_TO_SAVE                 = Val("Help to Save", "help-to-save")
+  val INCOME_TAX_MTD               = Val("Income Tax (Making Tax Digital)", "income-tax")
+  val LIFETIME_ISA                 = Val("Lifetime ISA", "lifetime-isa")
+  val MARRIAGE_ALLOWANCE           = Val("Marriage Allowance", "marriage-allowance")
+  val NATIONAL_INSURANCE           = Val("National Insurance", "national-insurance")
+  val PAYE                         = Val("PAYE", "paye")
+  val PENSIONS                     = Val("Pensions", "pensions")
+  val PRIVATE_GOVERNMENT           = Val("Private Government", "private-government")
+  val RELIEF_AT_SOURCE             = Val("Relief at Source", "relief-at-source")
+  val SELF_ASSESSMENT              = Val("Self Assessment", "self-assessment")
+  val STAMP_DUTY                   = Val("Stamp Duty", "stamp-duty")
+  val TRUSTS                       = Val("Trusts", "trusts")
+  val VAT_MTD                      = Val("VAT (Making Tax Digital)", "vat")
+  val VAT                          = Val("VAT", "vat")
 
   val OTHER = Val("Other", "other")
 

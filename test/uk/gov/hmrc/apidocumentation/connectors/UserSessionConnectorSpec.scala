@@ -24,7 +24,7 @@ import uk.gov.hmrc.apidocumentation.models.UserId
 import play.api.Configuration
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.test.Helpers._
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 
 class UserSessionConnectorSpec extends ConnectorSpec {
   val thirdPartyDeveloperUrl = "https://third-party-developer.example.com"

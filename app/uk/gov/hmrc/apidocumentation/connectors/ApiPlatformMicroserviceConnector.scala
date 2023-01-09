@@ -17,24 +17,20 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.http.HttpReads.Implicits._
-
-import uk.gov.hmrc.apidocumentation.models.DeveloperIdentifier
-
-import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-
+import uk.gov.hmrc.apidocumentation.models.{APIDefinition, DeveloperIdentifier, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
-class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appConfig: ApplicationConfig)
-                                      (implicit val ec: ExecutionContext) extends ApplicationLogger {
+class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appConfig: ApplicationConfig)(implicit val ec: ExecutionContext) extends ApplicationLogger {
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
@@ -55,11 +51,11 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
 
   def fetchApiDefinition(serviceName: String, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
     logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
-    
+
     val r = http.GET[Option[ExtendedAPIDefinition]](definitionUrl(serviceBaseUrl, serviceName), queryParams(developerId))
 
     r.map(_.map(defn => logger.info(s"Found ${defn.name}")))
-    
+
     r.recover {
       case e => logger.error(s"Failed $e"); throw e
     }
@@ -74,6 +70,6 @@ object ApiPlatformMicroserviceConnector {
   def queryParams(developerIdOpt: Option[DeveloperIdentifier]): Params =
     developerIdOpt.fold(noParams)(developerId => Seq("developerId" -> developerId.asText))
 
-  def definitionsUrl(serviceBaseUrl: String) = s"$serviceBaseUrl/combined-api-definitions"
+  def definitionsUrl(serviceBaseUrl: String)                     = s"$serviceBaseUrl/combined-api-definitions"
   def definitionUrl(serviceBaseUrl: String, serviceName: String) = s"$serviceBaseUrl/combined-api-definitions/$serviceName"
 }

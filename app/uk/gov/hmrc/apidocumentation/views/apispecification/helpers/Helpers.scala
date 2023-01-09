@@ -16,19 +16,22 @@
 
 package uk.gov.hmrc.apidocumentation.views.apispecification.helpers
 
-import uk.gov.hmrc.apidocumentation.models.apispecification._
-import uk.gov.hmrc.apidocumentation.models.ErrorResponse
 import scala.util.Try
+
 import play.api.libs.json.Json
 import play.libs.XML
 
+import uk.gov.hmrc.apidocumentation.models.ErrorResponse
+import uk.gov.hmrc.apidocumentation.models.apispecification._
 
 object BodyExamples {
+
   def apply(body: TypeDeclaration): Seq[ExampleSpec] = {
-    if (body.examples.size > 0) body.examples else {
+    if (body.examples.size > 0) body.examples
+    else {
       body.example match {
         case Some(e) => Seq(e)
-        case None => Seq.empty
+        case None    => Seq.empty
       }
     }
   }
@@ -59,23 +62,24 @@ object Responses {
   }
 }
 
-
 object ErrorScenarios {
+
   private def errorResponse2(example: uk.gov.hmrc.apidocumentation.models.apispecification.ExampleSpec): Option[ErrorResponse] = {
     example.code.fold(responseFromBody2(example))(code => Some(ErrorResponse(code = Some(code))))
   }
 
-  private def  responseFromBody2(example: ExampleSpec): Option[ErrorResponse] = {
+  private def responseFromBody2(example: ExampleSpec): Option[ErrorResponse] = {
     responseFromJson2(example).orElse(responseFromXML2(example))
   }
 
   private def responseFromJson2(example: ExampleSpec): Option[ErrorResponse] = {
-    import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+    import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
     example.value.flatMap(v => Try(Json.parse(v).as[ErrorResponse]).toOption)
   }
-  private def responseFromXML2(example: ExampleSpec): Option[ErrorResponse] = {
+
+  private def responseFromXML2(example: ExampleSpec): Option[ErrorResponse]  = {
     for {
-      v <- example.value
+      v     <- example.value
       codes <- Try(XML.fromString(v).getElementsByTagName("code")).toOption
       first <- Option(codes.item(0))
     } yield {
@@ -86,20 +90,17 @@ object ErrorScenarios {
   def apply(method: Method): Seq[Map[String, String]] = {
 
     val errorScenarios = for {
-      response <- Responses.error(method)
-      body <- response.body
-      example <- BodyExamples(body)
+      response            <- Responses.error(method)
+      body                <- response.body
+      example             <- BodyExamples(body)
       scenarioDescription <- scenarioDescription(body, example)
-      errorResponse <- errorResponse2(example)
+      errorResponse       <- errorResponse2(example)
     } yield {
       errorResponse.code.fold(
-        Map("scenario" -> scenarioDescription,
-          "code" -> "",
-          "httpStatus" -> response.code)
-        )(code =>
-        Map("scenario" -> scenarioDescription,
-          "code" -> code,
-          "httpStatus" -> response.code))
+        Map("scenario" -> scenarioDescription, "code" -> "", "httpStatus" -> response.code)
+      )(code =>
+        Map("scenario" -> scenarioDescription, "code" -> code, "httpStatus" -> response.code)
+      )
     }
     errorScenarios
   }
@@ -108,4 +109,3 @@ object ErrorScenarios {
     example.description.orElse(body.description)
   }
 }
-

@@ -21,19 +21,20 @@ case class DocumentationItem(title: String, content: String)
 case class SecurityScheme(`type`: String, scope: Option[String])
 
 case class Response(
-  code: String,
-  body: List[TypeDeclaration],
-  headers: List[TypeDeclaration],
-  description: Option[String])
+    code: String,
+    body: List[TypeDeclaration],
+    headers: List[TypeDeclaration],
+    description: Option[String]
+  )
 
 case class Group(name: String, description: String)
 
-case class ApiSpecification (
-  title: String,
-  version: String,
-  deprecationMessage: Option[String],
-  documentationItems: List[DocumentationItem],
-  resourceGroups: List[ResourceGroup],
-  types: List[TypeDeclaration],
-  isFieldOptionalityKnown: Boolean
-)
+case class ApiSpecification(
+    title: String,
+    version: String,
+    deprecationMessage: Option[String],
+    documentationItems: List[DocumentationItem],
+    resourceGroups: List[ResourceGroup],
+    types: List[TypeDeclaration],
+    isFieldOptionalityKnown: Boolean
+  )

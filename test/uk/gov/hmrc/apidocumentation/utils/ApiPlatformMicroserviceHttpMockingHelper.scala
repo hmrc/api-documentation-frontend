@@ -29,7 +29,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
 
   def apiPlatformMicroserviceBaseUrl: String
 
-  import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+  import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 
   def whenGetAllDefinitionsByUserId(userId: UuidIdentifier)(definitions: APIDefinition*): Unit = {
     val url = definitionsUrl("")

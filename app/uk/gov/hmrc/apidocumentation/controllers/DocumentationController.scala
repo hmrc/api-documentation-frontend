@@ -17,36 +17,38 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
 import play.api.mvc._
 import uk.gov.hmrc.apidocumentation
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services._
-import uk.gov.hmrc.apidocumentation.views.html._
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
-import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
+import uk.gov.hmrc.apidocumentation.views.html._
 
 @Singleton
-class DocumentationController @Inject()(
-  val navigationService: NavigationService,
-  partialsService: PartialsService,
-  mcc: MessagesControllerComponents,
-  indexView: IndexView,
-  retiredVersionJumpView: RetiredVersionJumpView,
-  tutorialsView: TutorialsView,
-  credentialsView: CredentialsView,
-  developmentPracticesView: DevelopmentPracticesView,
-  mtdIntroductionView: MtdIntroductionView,
-  namingGuidelinesView: NamingGuidelinesView,
-  referenceView: ReferenceView,
-  termsOfUseView: TermsOfUseView,
-  termsOfUseWhatYouCanExpectView: TermsOfUseWhatYouCanExpectView,
-  termsOfUseNotMeetingView: TermsOfUseNotMeetingView,
-  usingTheHubView: UsingTheHubView
-)(implicit val appConfig: ApplicationConfig, val ec: ExecutionContext)
-    extends FrontendController(mcc)
+class DocumentationController @Inject() (
+    val navigationService: NavigationService,
+    partialsService: PartialsService,
+    mcc: MessagesControllerComponents,
+    indexView: IndexView,
+    retiredVersionJumpView: RetiredVersionJumpView,
+    tutorialsView: TutorialsView,
+    credentialsView: CredentialsView,
+    developmentPracticesView: DevelopmentPracticesView,
+    mtdIntroductionView: MtdIntroductionView,
+    namingGuidelinesView: NamingGuidelinesView,
+    referenceView: ReferenceView,
+    termsOfUseView: TermsOfUseView,
+    termsOfUseWhatYouCanExpectView: TermsOfUseWhatYouCanExpectView,
+    termsOfUseNotMeetingView: TermsOfUseNotMeetingView,
+    usingTheHubView: UsingTheHubView
+  )(implicit val appConfig: ApplicationConfig,
+    val ec: ExecutionContext
+  ) extends FrontendController(mcc)
     with HeaderNavigation
     with PageAttributesHelper
     with HomeCrumb
@@ -206,6 +208,7 @@ class DocumentationController @Inject()(
 }
 
 trait HomeCrumb {
+
   lazy val homeCrumb =
     Crumb("Home", routes.DocumentationController.indexPage().url)
 }
@@ -215,10 +218,7 @@ trait PageAttributesHelper {
 
   def navigationService: NavigationService
 
-  def pageAttributes(title: String,
-                     url: String,
-                     headerNavLinks: Seq[NavLink],
-                     customBreadcrumbs: Option[Breadcrumbs] = None) = {
+  def pageAttributes(title: String, url: String, headerNavLinks: Seq[NavLink], customBreadcrumbs: Option[Breadcrumbs] = None) = {
     val breadcrumbs =
       customBreadcrumbs.getOrElse(Breadcrumbs(Crumb(title, url), homeCrumb))
     apidocumentation.models.PageAttributes(
@@ -236,8 +236,9 @@ trait HeaderNavigation {
   def navigationService: NavigationService
 
   def headerNavigation(
-    f: MessagesRequest[AnyContent] => Seq[NavLink] => Future[Result]
-  )(implicit ec: ExecutionContext): Action[AnyContent] = {
+      f: MessagesRequest[AnyContent] => Seq[NavLink] => Future[Result]
+    )(implicit ec: ExecutionContext
+    ): Action[AnyContent] = {
     Action.async { implicit request =>
       // We use a non-standard cookie which doesn't get propagated in the header carrier
       val newHc = request.headers.get(COOKIE).fold(hc) { cookie =>

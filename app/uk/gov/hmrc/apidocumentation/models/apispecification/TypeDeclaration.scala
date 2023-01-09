@@ -17,13 +17,14 @@
 package uk.gov.hmrc.apidocumentation.models.apispecification
 
 case class TypeDeclaration(
-  name: String,
-  displayName: String,
-  `type`: String,
-  required: Boolean,
-  description: Option[String],
-  examples: List[ExampleSpec],
-  enumValues: List[String],
-  pattern: Option[String]){
-    val example : Option[ExampleSpec] = examples.headOption
-  }
+    name: String,
+    displayName: String,
+    `type`: String,
+    required: Boolean,
+    description: Option[String],
+    examples: List[ExampleSpec],
+    enumValues: List[String],
+    pattern: Option[String]
+  ) {
+  val example: Option[ExampleSpec] = examples.headOption
+}

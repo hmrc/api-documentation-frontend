@@ -23,7 +23,7 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.HtmlPartial
 import play.api.test.Helpers._
-import uk.gov.hmrc.apidocumentation.models.JsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 import play.api.Configuration
 import uk.gov.hmrc.play.http.metrics.common.API
 

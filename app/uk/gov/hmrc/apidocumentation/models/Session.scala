@@ -18,4 +18,4 @@ package uk.gov.hmrc.apidocumentation.models
 
 import uk.gov.hmrc.apidocumentation.models.LoggedInState.LoggedInState
 
-case class Session(sessionId: String,loggedInState: LoggedInState, developer: Developer)
+case class Session(sessionId: String, loggedInState: LoggedInState, developer: Developer)

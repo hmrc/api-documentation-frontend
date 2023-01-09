@@ -17,19 +17,20 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future}
+
 import play.api.http.HttpEntity
 import play.api.http.Status._
 import play.api.libs.ws._
-import play.api.mvc._
 import play.api.mvc.Results._
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import play.api.mvc._
 import uk.gov.hmrc.http.InternalServerException
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration._
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 @Singleton
-class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
+class DownloadConnector @Inject() (ws: WSClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
@@ -41,24 +42,21 @@ class DownloadConnector @Inject()(ws: WSClient, appConfig: ApplicationConfig)(im
 
   def fetch(serviceName: String, version: String, resource: String): Future[Option[Result]] = {
     makeRequest(serviceName, version, resource).map { response =>
-      if(response.status == OK) {
+      if (response.status == OK) {
         val contentType = response.headers.get("Content-Type").flatMap(_.headOption)
           .getOrElse("application/octet-stream")
 
         response.headers.get("Content-Length") match {
           case Some(Seq(length)) =>
             Some(Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, Some(length.toLong), Some(contentType))))
-          case _ =>
+          case _                 =>
             Some(Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, None, Some(contentType))))
         }
-      }
-      else if(response.status == NOT_FOUND) {
+      } else if (response.status == NOT_FOUND) {
         None
-      }
-      else {
+      } else {
         throw new InternalServerException(s"Error (status ${response.status}) downloading $resource for $serviceName $version")
       }
     }
   }
 }
-

@@ -16,24 +16,26 @@
 
 package uk.gov.hmrc.apidocumentation.views.apispecification.helpers
 
-import uk.gov.hmrc.apidocumentation.models.apispecification._
 import uk.gov.hmrc.apidocumentation.models.ViewModel
+import uk.gov.hmrc.apidocumentation.models.apispecification._
 
-case class MethodParameter2 (
-  name: String,
-  typeName: String,
-  baseTypeName: String,
-  required: Boolean,
-  description: String,
-  example: Option[ExampleSpec],
-  pattern: Option[String] = None,
-  enumValues: List[String] = List.empty)
+case class MethodParameter2(
+    name: String,
+    typeName: String,
+    baseTypeName: String,
+    required: Boolean,
+    description: String,
+    example: Option[ExampleSpec],
+    pattern: Option[String] = None,
+    enumValues: List[String] = List.empty
+  )
 
 case object Parameters {
+
   def fromTypeDeclaration(td: TypeDeclaration) = {
     val typeName = td.`type` match {
       case "date-only" => "date"
-      case other => other
+      case other       => other
     }
     MethodParameter2(td.name, typeName, typeName, td.required, td.description.getOrElse(""), td.examples.headOption)
   }
@@ -47,13 +49,13 @@ case object Parameters {
     }
 
     parameters.map { p =>
-
       findType(p).fold(fromTypeDeclaration(p))(t =>
         fromTypeDeclaration(p).copy(
           baseTypeName = t.`type`,
           pattern = t.pattern,
           enumValues = t.enumValues,
-          example = Option(p.example).getOrElse(t.example))
+          example = Option(p.example).getOrElse(t.example)
+        )
       )
     }
   }
@@ -70,4 +72,3 @@ case object Parameters {
     }
   }
 }
-

@@ -17,33 +17,30 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.http.HeaderCarrier
-
+import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
+
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.common._
 
-import scala.concurrent.Future.successful
-
+import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
+import uk.gov.hmrc.apidocumentation.models._
 
 @Singleton
-class XmlServicesService @Inject()(val xmlServicesConnector: XmlServicesConnector, val apiMetrics: ApiMetrics)
-                                    (implicit ec: ExecutionContext) extends RecordMetrics {
+class XmlServicesService @Inject() (val xmlServicesConnector: XmlServicesConnector, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
   val api: API = API("api-platform-xml-services")
 
   def fetchAllXmlApis()(implicit hc: HeaderCarrier): Future[Seq[XmlApiDocumentation]] =
     record {
-        xmlServicesConnector.fetchAllXmlApis()
+      xmlServicesConnector.fetchAllXmlApis()
     }
 
   def fetchXmlApi(name: String)(implicit hc: HeaderCarrier): Future[Option[XmlApiDocumentation]] =
     record {
-      xmlServicesConnector.fetchXmlApi(name) flatMap  {
+      xmlServicesConnector.fetchXmlApi(name) flatMap {
         case Right(x) => successful(x)
-        case Left(_) => xmlServicesConnector.fetchXmlApiByServiceName(name)
+        case Left(_)  => xmlServicesConnector.fetchXmlApiByServiceName(name)
       }
     }
-
 
 }

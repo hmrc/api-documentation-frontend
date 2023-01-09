@@ -17,12 +17,14 @@
 package views.templates
 
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import play.api.mvc.Request
+
 import views.html.helper
 
+import play.api.Configuration
+import play.api.mvc.Request
+
 @Singleton
-class FooterConfig @Inject()(config: Configuration) {
+class FooterConfig @Inject() (config: Configuration) {
 
   private lazy val urlFooterConfig = config.underlying.getConfig("urls.footer")
 
