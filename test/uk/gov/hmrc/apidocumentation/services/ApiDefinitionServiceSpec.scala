@@ -26,11 +26,21 @@ import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.apidocumentation.models.UserId
 import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
+import play.api.cache._
 
 class ApiDefinitionServiceSpec extends AsyncHmrcSpec
- 
- 
   with ApiDefinitionTestDataHelper {
+
+    val doNothingCache = new AsyncCacheApi {
+        def set(key: String, value: Any, expiration: Duration = Duration.Inf): Future[Done] = Future.successful(Done)
+        def remove(key: String): Future[Done] = Future.successful(Done)
+
+        def getOrElseUpdate[A: ClassTag](key: String, expiration: Duration = Duration.Inf)(orElse: => Future[A]): Future[A] = orElse
+
+        def get[T: ClassTag](key: String): Future[Option[T]] = Future.successful(None)
+
+        def removeAll(): Future[Done] = Future.successful(Done)
+    }
 
   trait LocalSetup extends ApiPlatformMicroserviceConnectorMockingHelper {
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -38,8 +48,7 @@ class ApiDefinitionServiceSpec extends AsyncHmrcSpec
     val loggedInUserId = UuidIdentifier(UserId.random)
 
     val apiPlatformMicroserviceConnector = mock[ApiPlatformMicroserviceConnector]
-
-    val underTest = new ApiDefinitionService(apiPlatformMicroserviceConnector, new NoopApiMetrics)
+    val underTest = new ApiDefinitionService(doNothingCache, apiPlatformMicroserviceConnector, new NoopApiMetrics)
 
   }
 

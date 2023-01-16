@@ -19,6 +19,7 @@ package uk.gov.hmrc.apidocumentation.services
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
+import play.api.cache._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.common._
 
@@ -31,15 +32,26 @@ trait BaseApiDefinitionService {
   def fetchAllDefinitions(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 }
 
+case class PossibleDefinition(odefn: Option[ExtendedAPIDefinition])
+
 @Singleton
-class ApiDefinitionService @Inject() (val apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext)
+class ApiDefinitionService @Inject() (cache: AsyncCacheApi, apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector, apiMetrics: ApiMetrics)(implicit ec: ExecutionContext)
     extends BaseApiDefinitionService with RecordMetrics {
   val api: API = API("api-definition")
 
-  def fetchExtendedDefinition(serviceName: String, developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] =
-    record {
-      apiPlatformMicroserviceConnector.fetchApiDefinition(serviceName, developerId)
+  val cacheExpiry: FiniteDuration = 5.seconds
+
+  def fetchExtendedDefinition(serviceName: String, developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
+    val key = s"${serviceName}---${developerId.map(_.asText).getOrElse("NONE")}"
+
+    cache.getOrElseUpdate[PossibleDefinition](key, cacheExpiry) {
+      // record {
+        apiPlatformMicroserviceConnector.fetchApiDefinition(serviceName, developerId)(hc)
+        .map(PossibleDefinition)
+      // }
     }
+    .map(_.odefn)
+  }
 
   def fetchAllDefinitions(developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
     record {
