@@ -34,8 +34,6 @@ trait BaseApiDefinitionService {
   def fetchAllDefinitions(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
 }
 
-case class PossibleDefinition(odefn: Option[ExtendedAPIDefinition])
-
 @Singleton
 class ApiDefinitionService @Inject() (cache: AsyncCacheApi, apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext)
     extends BaseApiDefinitionService with RecordMetrics with ApplicationLogger {
@@ -46,14 +44,12 @@ class ApiDefinitionService @Inject() (cache: AsyncCacheApi, apiPlatformMicroserv
   def fetchExtendedDefinition(serviceName: String, developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
     val key = s"${serviceName}---${developerId.map(_.asText).getOrElse("NONE")}"
 
-    cache.getOrElseUpdate[PossibleDefinition](key, cacheExpiry) {
-      logger.info(s"Extended defintion for $serviceName for $developerId not found in cache")
+    cache.getOrElseUpdate(key, cacheExpiry) {
+      logger.info(s"Extended definition for $serviceName for $developerId not found in cache")
       record {
         apiPlatformMicroserviceConnector.fetchApiDefinition(serviceName, developerId)(hc)
-        .map(PossibleDefinition)
       }
     }
-    .map(_.odefn)
   }
 
   def fetchAllDefinitions(developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
