@@ -255,7 +255,7 @@ class ApiDocumentationController @Inject() (
     findVersion(apiOption) match {
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED => renderRetiredVersionJumpPage(api, selectedVersion)
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                => renderDocumentationPage(api, selectedVersion)
-      case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, _, Some(true))))                      => renderDocumentationPage(api, selectedVersion)
+      case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))))                  => renderDocumentationPage(api, selectedVersion)
       case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _)))                                           => redirectToLoginPage
       case _                                                                                                             => renderNotFoundPage
     }
