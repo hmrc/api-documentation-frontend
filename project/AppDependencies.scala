@@ -13,7 +13,6 @@ object AppDependencies {
     ws,
     caffeine,
     "uk.gov.hmrc"                           %% "bootstrap-frontend-play-28"   % bootstrapVersion,
-    "uk.gov.hmrc"                           %% "url-builder"                  % "3.6.0-play-28",
     "uk.gov.hmrc"                           %% "http-metrics"                 % "2.5.0-play-28",
     "uk.gov.hmrc"                           %% "play-partials"                % "8.3.0-play-28",
     "uk.gov.hmrc"                           %% "play-frontend-hmrc"           % "6.2.0-play-28",
@@ -36,6 +35,6 @@ object AppDependencies {
     "org.mockito"                           %% "mockito-scala-scalatest"      % "1.16.46",
     "com.vladsch.flexmark"                  %  "flexmark-all"                 % "0.62.2",
     "org.jsoup"                             %  "jsoup"                        % "1.12.1",
-    "uk.gov.hmrc"                           %% "webdriver-factory"            % "0.39.0"
+    "uk.gov.hmrc"                           %% "webdriver-factory"            % "0.41.0"
   ).map(_ % Test)
 }
