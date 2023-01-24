@@ -36,6 +36,6 @@ object AppDependencies {
     "org.mockito"                           %% "mockito-scala-scalatest"      % "1.16.46",
     "com.vladsch.flexmark"                  %  "flexmark-all"                 % "0.62.2",
     "org.jsoup"                             %  "jsoup"                        % "1.12.1",
-    "uk.gov.hmrc"                           %% "webdriver-factory"            % "0.41.0"
+    "uk.gov.hmrc"                           %% "webdriver-factory"            % "0.39.0"
   ).map(_ % Test)
 }
