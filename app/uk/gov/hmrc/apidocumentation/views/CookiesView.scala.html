@@ -19,7 +19,7 @@
 
 @this(main: main)
 
-@()(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, hmrcNewTabLink: HmrcNewTabLink, request: play.api.mvc.Request[Any])
+@()(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
 
 @metaTitle = {
     <meta name="description" content="@Messages("help.cookies.metatitle")">
@@ -147,13 +147,10 @@
        </tbody>
     </table>
     <p class="govuk-body">
-        @Messages("help.cookies.how_used.measuring_usage.opt_out.info")
-        @hmrcNewTabLink(
-        NewTabLink(
-        classList = Some("govuk-link"),
-        href = Some({Messages("help.cookies.how_used.measuring_usage.opt_out.link.url")}),
-        text = {Messages("help.cookies.how_used.measuring_usage.opt_out.link.text")}
-        )).
+        @Html(Messages("help.cookies.how_used.measuring_usage.opt_out.info",
+        <a href="@Messages(\"help.cookies.how_used.measuring_usage.opt_out.link.url\")" class="govuk-link" rel="noreferrer noopener" target="_blank">
+            {Messages("help.cookies.how_used.measuring_usage.opt_out.link.text")}
+        </a>))
     </p>
     <h3 class="govuk-heading-s">@Messages("help.cookies.optimizely")</h3>
     <div>
