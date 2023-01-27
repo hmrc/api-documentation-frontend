@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.urls.Link
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
@@ -148,9 +147,10 @@
        </tbody>
     </table>
     <p class="govuk-body">
-       @Html(Messages("help.cookies.how_used.measuring_usage.opt_out.info", Link.toExternalPage(url =
-       Messages("help.cookies.how_used.measuring_usage.opt_out.link.url"), value =
-       Some(Messages("help.cookies.how_used.measuring_usage.opt_out.link.text"))).toHtml))
+        @Html(Messages("help.cookies.how_used.measuring_usage.opt_out.info",
+        <a href={Messages("help.cookies.how_used.measuring_usage.opt_out.link.url")} class="govuk-link" rel="noreferrer noopener" target="_blank">
+            {Messages("help.cookies.how_used.measuring_usage.opt_out.link.text")}
+        </a>))
     </p>
     <h3 class="govuk-heading-s">@Messages("help.cookies.optimizely")</h3>
     <div>
