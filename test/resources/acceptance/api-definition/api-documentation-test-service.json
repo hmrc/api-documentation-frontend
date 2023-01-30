@@ -425,6 +425,16 @@
         },
         "loggedIn": true,
         "authorised": true
+        
+        ],
+      "productionAvailability": {
+        "endpointsEnabled": true,
+        "access": {
+          "type": "PUBLIC"
+        },
+        "loggedIn": true,
+        "authorised": true
+      }
       }
     }
   ]
