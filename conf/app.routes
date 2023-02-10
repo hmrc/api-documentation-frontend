@@ -43,6 +43,7 @@ GET         /docs/fraud-prevention                                      uk.gov.h
 GET         /docs/api/mtd-income-tax-service-guide                      uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIncomeTaxServiceGuidePage()
 
 GET         /docs/help/cookies                                          uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.cookiesPage()
+GET         /docs/help/cookie-details                                   uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.cookiesPage()
 GET         /docs/help/privacy                                          uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.privacyPolicyPage()
 GET         /docs/help/terms-and-conditions                             uk.gov.hmrc.apidocumentation.controllers.HelpPagesController.termsAndConditionsPage()
 
