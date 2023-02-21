@@ -53,6 +53,8 @@ trait ApplicationConfig {
   def title: String
   def xmlApiBaseUrl: String
   def feedbackSurveyUrl: String
+
+  def cookieSettingsUrl: String
 }
 
 @Singleton
@@ -98,6 +100,8 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
   val xmlApiBaseUrl = getString("xml-api.base-url")
 
   val feedbackSurveyUrl: String = getString("feedbackBanner.generic.surveyUrl")
+
+  val cookieSettingsUrl: String = s"/${getString("tracking-consent-frontend.cookie-settings-path")}"
 
   private def platformBaseUrl(key: String) = {
     (getConfigDefaulted(s"$key.protocol", ""), getConfigDefaulted(s"$key.host", "")) match {

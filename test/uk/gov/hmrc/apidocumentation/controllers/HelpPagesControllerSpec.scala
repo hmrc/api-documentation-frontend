@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import play.api.test.Helpers._
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.mocks.services.ApiDocumentationServiceMock
 import uk.gov.hmrc.apidocumentation.views.html.{CookiesView, PrivacyView, TermsAndConditionsView}
@@ -29,13 +30,19 @@ class HelpPagesControllerSpec extends CommonControllerBaseSpec {
     val privacyView = app.injector.instanceOf[PrivacyView]
     val termsAndConditionsView = app.injector.instanceOf[TermsAndConditionsView]
 
-    val helpPages = new HelpPagesController(mcc, cookiesView, privacyView, termsAndConditionsView)
+    val helpPages = new HelpPagesController(appConfig, mcc, cookiesView, privacyView, termsAndConditionsView)
   }
 
   "helpPagesController" should {
 
     "display the cookies page" in new Setup {
-      isPresentAndCorrect("Cookies","Cookies")(helpPages.cookiesPage()(request))
+      val result = helpPages.cookiesPage()(request)
+      status(result) shouldBe SEE_OTHER
+      headers(result).get("Location") shouldBe Some(appConfig.cookieSettingsUrl)
+    }
+
+    "display the cookies details page" in new Setup {
+      isPresentAndCorrect("Cookies","Cookies")(helpPages.cookiesDetailsPage()(request))
     }
 
     "display the privacy policy page" in new Setup {
