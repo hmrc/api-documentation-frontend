@@ -32,7 +32,7 @@ class SessionServiceSpec extends AsyncHmrcSpec {
   def sessionService = new SessionService(userSessionConnectorMock)
 
   "The SessionService" should {
-    val developer = Developer("email","John", "Smith", UserId.random)
+    val developer = Developer("email", "John", "Smith", UserId.random)
 
     "Return session if the session is logged in" in {
       val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)

@@ -44,28 +44,32 @@ class DocumentationControllerSpec
       with NavigationServiceMock {
 
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
-    val partialsService = new PartialsService(developerFrontendConnector)
-    val errorHandler = app.injector.instanceOf[ErrorHandler]
-    val mcc = app.injector.instanceOf[MessagesControllerComponents]
+    val partialsService            = new PartialsService(developerFrontendConnector)
+    val errorHandler               = app.injector.instanceOf[ErrorHandler]
+    val mcc                        = app.injector.instanceOf[MessagesControllerComponents]
 
     implicit lazy val materializer = app.materializer
 
-    private lazy val indexView = app.injector.instanceOf[IndexView]
-    private lazy val retiredVersionJumpView =
+    private lazy val indexView                      = app.injector.instanceOf[IndexView]
+
+    private lazy val retiredVersionJumpView         =
       app.injector.instanceOf[RetiredVersionJumpView]
-    private lazy val tutorialsView = app.injector.instanceOf[TutorialsView]
-    private lazy val credentialsView = app.injector.instanceOf[CredentialsView]
-    private lazy val developmentPracticesView =
+    private lazy val tutorialsView                  = app.injector.instanceOf[TutorialsView]
+    private lazy val credentialsView                = app.injector.instanceOf[CredentialsView]
+
+    private lazy val developmentPracticesView       =
       app.injector.instanceOf[DevelopmentPracticesView]
-    private lazy val mtdIntroductionView =
+
+    private lazy val mtdIntroductionView            =
       app.injector.instanceOf[MtdIntroductionView]
-    private lazy val namingGuidelinesView =
+
+    private lazy val namingGuidelinesView           =
       app.injector.instanceOf[NamingGuidelinesView]
-    private lazy val referenceView = app.injector.instanceOf[ReferenceView]
-    private lazy val termsOfUseView = app.injector.instanceOf[TermsOfUseView]
-    private lazy val usingTheHubView = app.injector.instanceOf[UsingTheHubView]
+    private lazy val referenceView                  = app.injector.instanceOf[ReferenceView]
+    private lazy val termsOfUseView                 = app.injector.instanceOf[TermsOfUseView]
+    private lazy val usingTheHubView                = app.injector.instanceOf[UsingTheHubView]
     private lazy val termsOfUseWhatYouCanExpectView = app.injector.instanceOf[TermsOfUseWhatYouCanExpectView]
-    private lazy val termsOfUseNotMeetingView = app.injector.instanceOf[TermsOfUseNotMeetingView]
+    private lazy val termsOfUseNotMeetingView       = app.injector.instanceOf[TermsOfUseNotMeetingView]
 
     lazy val usingTheHubBreadcrumb = Crumb(
       "Using the Developer Hub",
@@ -102,10 +106,10 @@ class DocumentationControllerSpec
       when(
         developerFrontendConnector.fetchTermsOfUsePartial()(*)
       ).thenReturn(
-          Future.successful(
-            HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))
-          )
+        Future.successful(
+          HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))
         )
+      )
 
       verifyPageRendered(
         pageTitle("Terms Of Use"),

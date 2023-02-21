@@ -24,10 +24,10 @@ import scala.concurrent.Future.successful
 import uk.gov.hmrc.apidocumentation.models.UserId
 import org.mockito.ArgumentMatchersSugar
 
-trait LoggedInUserServiceMock extends MockitoSugar with ArgumentMatchersSugar{
-  val loggedInEmail = "mr.abcd@example.com"
+trait LoggedInUserServiceMock extends MockitoSugar with ArgumentMatchersSugar {
+  val loggedInEmail  = "mr.abcd@example.com"
   val noUserLoggedIn = None
-  val userLoggedIn = Some(Developer(loggedInEmail, "Anony", "Mouse", UserId.random))
+  val userLoggedIn   = Some(Developer(loggedInEmail, "Anony", "Mouse", UserId.random))
 
   lazy val loggedInUserService: LoggedInUserService = mock[LoggedInUserService]
 

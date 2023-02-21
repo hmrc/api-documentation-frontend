@@ -25,9 +25,9 @@ class HelpPagesControllerSpec extends CommonControllerBaseSpec {
 
   trait Setup extends ApiDocumentationServiceMock {
 
-    implicit val appConfig = app.injector.instanceOf[ApplicationConfig]
-    val cookiesView = app.injector.instanceOf[CookiesView]
-    val privacyView = app.injector.instanceOf[PrivacyView]
+    implicit val appConfig     = app.injector.instanceOf[ApplicationConfig]
+    val cookiesView            = app.injector.instanceOf[CookiesView]
+    val privacyView            = app.injector.instanceOf[PrivacyView]
     val termsAndConditionsView = app.injector.instanceOf[TermsAndConditionsView]
 
     val helpPages = new HelpPagesController(appConfig, mcc, cookiesView, privacyView, termsAndConditionsView)
@@ -42,15 +42,15 @@ class HelpPagesControllerSpec extends CommonControllerBaseSpec {
     }
 
     "display the cookies details page" in new Setup {
-      isPresentAndCorrect("Cookies","Cookies")(helpPages.cookiesDetailsPage()(request))
+      isPresentAndCorrect("Cookies", "Cookies")(helpPages.cookiesDetailsPage()(request))
     }
 
     "display the privacy policy page" in new Setup {
-      isPresentAndCorrect("Privacy","Privacy policy")(helpPages.privacyPolicyPage()(request))
+      isPresentAndCorrect("Privacy", "Privacy policy")(helpPages.privacyPolicyPage()(request))
     }
 
     "display the terms and conditions page" in new Setup {
-      isPresentAndCorrect("Terms","Terms and conditions")(helpPages.termsAndConditionsPage()(request))
+      isPresentAndCorrect("Terms", "Terms and conditions")(helpPages.termsAndConditionsPage()(request))
     }
   }
 }

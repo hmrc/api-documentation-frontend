@@ -19,7 +19,7 @@ package uk.gov.hmrc.apidocumentation.connectors
 import java.util.UUID
 
 import play.api.Configuration
-import play.api.http.Status.{INTERNAL_SERVER_ERROR}
+import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.utils.ApiPlatformMicroserviceHttpMockingHelper
 import uk.gov.hmrc.http.HeaderCarrier
@@ -31,25 +31,25 @@ import uk.gov.hmrc.apidocumentation.models.UserId
 class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
-  val UpstreamException = UpstreamErrorResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)
+  val UpstreamException          = UpstreamErrorResponse("Internal server error", INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR)
 
-  val bearer = "TestBearerToken"
+  val bearer     = "TestBearerToken"
   val apiKeyTest = UUID.randomUUID().toString
 
   val serviceName = "someService"
-  val userId = UuidIdentifier(UserId.random)
+  val userId      = UuidIdentifier(UserId.random)
 
   val apiName1 = "Calendar"
   val apiName2 = "HelloWorld"
 
   val stubConfig = Configuration(
-    "metrics.jvm" -> false,
+    "metrics.jvm"                                          -> false,
     "microservice.services.api-platform-microservice.host" -> stubHost,
     "microservice.services.api-platform-microservice.port" -> stubPort
   )
 
   trait LocalSetup extends ApiPlatformMicroserviceHttpMockingHelper {
-    val config = app.injector.instanceOf[ApplicationConfig]
+    val config                         = app.injector.instanceOf[ApplicationConfig]
     val apiPlatformMicroserviceBaseUrl = config.apiPlatformMicroserviceBaseUrl
 
     val underTest = app.injector.instanceOf[ApiPlatformMicroserviceConnector]
@@ -73,7 +73,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
       result.size shouldBe 2
       result.map(_.name) shouldBe Seq(apiName1, apiName2)
     }
-    
+
     "throw an exception correctly" in new LocalSetup {
       whenGetAllDefinitionsFails(400)
 

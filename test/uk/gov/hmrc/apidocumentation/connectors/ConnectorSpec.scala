@@ -91,7 +91,7 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
      """.stripMargin).as[ExtendedAPIDefinition]
   }
 
-  def apiDefinition(name: String) = {
+  def apiDefinition(name: String)    = {
     Json.parse(s"""{
                   |  "name" : "$name",
                   |  "description" : "Test API",

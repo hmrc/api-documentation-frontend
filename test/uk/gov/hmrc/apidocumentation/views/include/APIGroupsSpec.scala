@@ -28,11 +28,12 @@ import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import scala.collection.JavaConverters._
 
 class APIGroupsSpec extends AsyncHmrcSpec {
+
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
-    lazy val tableBodies = dom.getElementsByTag("tbody")
+    lazy val tableBodies   = dom.getElementsByTag("tbody")
     lazy val tableHeadings = dom.getElementsByClass("api-group")
-    lazy val serviceTags = dom.getElementsByClass("govuk-tag")
+    lazy val serviceTags   = dom.getElementsByClass("govuk-tag")
   }
 
   private def anApiDefinition(name: String, isTestSupport: Option[Boolean] = None) =
@@ -45,22 +46,26 @@ class APIGroupsSpec extends AsyncHmrcSpec {
     ServiceGuide(name, "context")
 
   trait Setup {
+
     val customsApis = Seq(
       anApiDefinition("customsTestSupport1", isTestSupport = Some(true)),
       anXmlApiDefinition("customsXmlApi2"),
       anApiDefinition("customsRestApi2"),
       anApiDefinition("customsRestApi1"),
       anXmlApiDefinition("customsXmlApi1"),
-      anApiDefinition("customsTestSupport2", isTestSupport = Some(true)))
-    val vatApis = Seq(
+      anApiDefinition("customsTestSupport2", isTestSupport = Some(true))
+    )
+
+    val vatApis     = Seq(
       anApiDefinition("vatTestSupport1", isTestSupport = Some(true)),
       anXmlApiDefinition("vatXmlApi1"),
       anApiDefinition("vatRestApi2"),
       anApiDefinition("vatRestApi1"),
-      anApiDefinition("vatTestSupport2", isTestSupport = Some(true)))
+      anApiDefinition("vatTestSupport2", isTestSupport = Some(true))
+    )
 
     val apisByCategory: Map[APICategory, Seq[Documentation]] = Map(CUSTOMS -> customsApis, VAT -> vatApis)
-    val page = Page(views.html.include.documentGroups(apisByCategory))
+    val page                                                 = Page(views.html.include.documentGroups(apisByCategory))
   }
 
   "API Groups view" should {

@@ -1,18 +1,11 @@
-import _root_.play.core.PlayVersion
-import _root_.play.sbt.PlayImport._
 import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.uglify.Import.{uglifyCompressOptions, _}
 import com.typesafe.sbt.web.Import._
 import net.ground5hark.sbt.concat.Import._
 import sbt.Keys._
-import sbt.Tests.{Group, SubProcess}
 import sbt._
+import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.{SbtAutoBuildPlugin, _}
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
-import uk.gov.hmrc.versioning.SbtGitVersioning
-import scala.util.Properties
 import bloop.integrations.sbt.BloopDefaults
 
 Global / bloopAggregateSourceDependencies := true
@@ -32,7 +25,7 @@ inThisBuild(
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin) ++ plugins: _*)
+  .enablePlugins(Seq(PlayScala) ++ plugins: _*)
   .settings(
     name := appName
   )
@@ -54,13 +47,10 @@ lazy val microservice = Project(appName, file("."))
     )
   )
   .settings(
-    resolvers ++= Seq(
-      Resolver.sonatypeRepo("releases")
-    )
+    resolvers ++= Resolver.sonatypeOssRepos("releases")
   )
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(publishingSettings: _*)
   .settings(ScoverageSettings(): _*)
   .settings(defaultSettings(): _*)
   .settings(

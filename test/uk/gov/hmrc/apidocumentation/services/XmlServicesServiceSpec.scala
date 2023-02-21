@@ -31,7 +31,7 @@ class XmlServicesServiceSpec extends AsyncHmrcSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val xmlServicesConnector = mock[XmlServicesConnector]
-    val underTest = new XmlServicesService(xmlServicesConnector, new NoopApiMetrics)
+    val underTest            = new XmlServicesService(xmlServicesConnector, new NoopApiMetrics)
 
   }
 

@@ -22,6 +22,7 @@ import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
 class EnumerationValueSpec extends HmrcSpec {
 
   trait Setup {
+
     def read(json: JsValue): JsResult[EnumerationValue] =
       EnumerationValue.format.reads(json)
   }

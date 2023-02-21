@@ -28,16 +28,17 @@ import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 
 class UserSessionConnectorSpec extends ConnectorSpec {
   val thirdPartyDeveloperUrl = "https://third-party-developer.example.com"
-  val sessionId = "A_SESSION_ID"
+  val sessionId              = "A_SESSION_ID"
 
   val stubConfig = Configuration(
-    "metrics.jvm" -> false,
+    "metrics.jvm"                                      -> false,
     "microservice.services.third-party-developer.host" -> stubHost,
     "microservice.services.third-party-developer.port" -> stubPort
   )
+
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val connector = app.injector.instanceOf[UserSessionConnector]
+    val connector   = app.injector.instanceOf[UserSessionConnector]
   }
 
   "api" should {
@@ -54,11 +55,11 @@ class UserSessionConnectorSpec extends ConnectorSpec {
         get(
           urlPathEqualTo(s"/session/$sessionId")
         )
-        .willReturn(
-          aResponse()
-          .withStatus(OK)
-          .withJsonBody(session)
-        )
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withJsonBody(session)
+          )
       )
 
       val result = await(connector.fetchSession(sessionId))
@@ -71,10 +72,10 @@ class UserSessionConnectorSpec extends ConnectorSpec {
         get(
           urlPathEqualTo(s"/session/$sessionId")
         )
-        .willReturn(
-          aResponse()
-          .withStatus(NOT_FOUND)
-        )
+          .willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+          )
       )
       intercept[SessionInvalid] {
         await(connector.fetchSession(sessionId))

@@ -37,12 +37,12 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
       get(
         urlPathEqualTo(url)
       )
-      .withQueryParam("developerId", equalTo(userId.asText))
-      .willReturn(
-        aResponse()
-        .withStatus(OK)
-        .withJsonBody(definitions.toSeq)
-      )
+        .withQueryParam("developerId", equalTo(userId.asText))
+        .willReturn(
+          aResponse()
+            .withStatus(OK)
+            .withJsonBody(definitions.toSeq)
+        )
     )
   }
 
@@ -52,11 +52,11 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
       get(
         urlEqualTo(url)
       )
-      .willReturn(
-        aResponse()
-        .withStatus(OK)
-        .withJsonBody(definitions.toSeq)
-      )
+        .willReturn(
+          aResponse()
+            .withStatus(OK)
+            .withJsonBody(definitions.toSeq)
+        )
     )
   }
 
@@ -66,39 +66,39 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
       get(
         urlEqualTo(url)
       )
-      .willReturn(
-        aResponse()
-        .withStatus(status)
-      )
+        .willReturn(
+          aResponse()
+            .withStatus(status)
+        )
     )
   }
 
   def whenGetDefinitionByEmail(serviceName: String, userId: UuidIdentifier)(definition: ExtendedAPIDefinition): Unit = {
-    val url = definitionUrl("",serviceName)
+    val url = definitionUrl("", serviceName)
     stubFor(
       get(
         urlPathEqualTo(url)
       )
-      .withQueryParam("developerId", equalTo(userId.asText))
-      .willReturn(
-        aResponse()
-        .withStatus(OK)
-        .withJsonBody(definition)
-      )
+        .withQueryParam("developerId", equalTo(userId.asText))
+        .willReturn(
+          aResponse()
+            .withStatus(OK)
+            .withJsonBody(definition)
+        )
     )
   }
 
   def whenGetDefinition(serviceName: String)(definition: ExtendedAPIDefinition): Unit = {
-    val url = definitionUrl("",serviceName)
+    val url = definitionUrl("", serviceName)
     stubFor(
       get(
         urlEqualTo(url)
       )
-      .willReturn(
-        aResponse()
-        .withStatus(OK)
-        .withJsonBody(definition)
-      )
+        .willReturn(
+          aResponse()
+            .withStatus(OK)
+            .withJsonBody(definition)
+        )
     )
   }
 
@@ -108,11 +108,11 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
       get(
         urlEqualTo(url)
       )
-      .willReturn(
-        aResponse()
-        .withStatus(NOT_FOUND)
-      )
-    )    
+        .willReturn(
+          aResponse()
+            .withStatus(NOT_FOUND)
+        )
+    )
   }
 
   def whenGetDefinitionFails(serviceName: String)(status: Int): Unit = {
@@ -121,10 +121,10 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
       get(
         urlEqualTo(url)
       )
-      .willReturn(
-        aResponse()
-        .withStatus(status)
-      )
+        .willReturn(
+          aResponse()
+            .withStatus(status)
+        )
     )
   }
 }

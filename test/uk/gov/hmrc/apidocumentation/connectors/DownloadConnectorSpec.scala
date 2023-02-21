@@ -32,14 +32,15 @@ class DownloadConnectorSpec extends ConnectorSpec {
   val apiDocumentationUrl = "https://api-documentation.example.com"
 
   val serviceName = "hello-world"
-  val version = "1.0"
-  val stubConfig = Configuration(
+  val version     = "1.0"
+
+  val stubConfig  = Configuration(
     "metrics.jvm" -> false
   )
 
   trait Setup {
 
-    implicit val hc = HeaderCarrier()
+    implicit val hc   = HeaderCarrier()
     val mockAppConfig = mock[ApplicationConfig]
     when(mockAppConfig.apiPlatformMicroserviceBaseUrl).thenReturn("")
   }
@@ -50,13 +51,13 @@ class DownloadConnectorSpec extends ConnectorSpec {
         import components.{defaultActionBuilder => Action}
         {
           case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resource") => Action {
-            Ok("hello world")
-          }
+              Ok("hello world")
+            }
         }
       } { implicit port =>
         WsTestClient.withClient { client =>
           val connector = new DownloadConnector(client, mockAppConfig)
-          val result = connector.fetch(serviceName, version, "some/resource")
+          val result    = connector.fetch(serviceName, version, "some/resource")
 
           status(result.map(_.value)) shouldBe OK
         }
@@ -68,8 +69,8 @@ class DownloadConnectorSpec extends ConnectorSpec {
         import components.{defaultActionBuilder => Action}
         {
           case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resourceNotThere") => Action {
-            NotFound
-          }
+              NotFound
+            }
         }
       } { implicit port =>
         WsTestClient.withClient { client =>
@@ -87,11 +88,11 @@ class DownloadConnectorSpec extends ConnectorSpec {
         import components.{defaultActionBuilder => Action}
         {
           case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/resourceInvalid") => Action {
-            ServiceUnavailable
-          }
-          case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/timeout") => Action {
-            RequestTimeout
-          }
+              ServiceUnavailable
+            }
+          case GET(p"/combined-api-definitions/hello-world/1.0/documentation/some/timeout")         => Action {
+              RequestTimeout
+            }
         }
       } { implicit port =>
         WsTestClient.withClient { client =>

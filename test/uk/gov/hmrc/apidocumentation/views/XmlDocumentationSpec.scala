@@ -29,18 +29,19 @@ import uk.gov.hmrc.apidocumentation.views.html.XmlDocumentationView
 import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
 
 class XmlDocumentationSpec extends CommonViewSpec {
+
   case class Page(doc: Appendable) {
     lazy val dom: Document = Jsoup.parse(doc.body)
-    lazy val heading = dom.getElementsByTag("h1").first
-    lazy val description = dom.getElementById("xml-api-description")
-    lazy val link = dom.getElementById("xml-api-link")
+    lazy val heading       = dom.getElementsByTag("h1").first
+    lazy val description   = dom.getElementById("xml-api-description")
+    lazy val link          = dom.getElementById("xml-api-link")
   }
 
   trait Setup {
-    val baseUrl = "http://example.com"
-    val context = "/example/path"
+    val baseUrl     = "http://example.com"
+    val context     = "/example/path"
     val description = "An XML API for testing with embedded <b>HTML</b>"
-    val name = "Test Online Service"
+    val name        = "Test Online Service"
 
     implicit val appConfig = mock[ApplicationConfig]
     val messages: Messages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
@@ -56,7 +57,7 @@ class XmlDocumentationSpec extends CommonViewSpec {
     val apiMain = app.injector.instanceOf[apiMain]
 
     val apiDefinition = XmlApiDocumentation(name, context, description)
-    val xmlDocView = new XmlDocumentationView(apiMain)(pageAttributes, apiDefinition)
+    val xmlDocView    = new XmlDocumentationView(apiMain)(pageAttributes, apiDefinition)
 
     val page = Page(xmlDocView)
   }

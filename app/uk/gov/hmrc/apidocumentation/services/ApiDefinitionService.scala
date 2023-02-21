@@ -35,8 +35,12 @@ trait BaseApiDefinitionService {
 }
 
 @Singleton
-class ApiDefinitionService @Inject() (cache: AsyncCacheApi, apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext)
-    extends BaseApiDefinitionService with RecordMetrics with ApplicationLogger {
+class ApiDefinitionService @Inject() (
+    cache: AsyncCacheApi,
+    apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector,
+    val apiMetrics: ApiMetrics
+  )(implicit ec: ExecutionContext
+  ) extends BaseApiDefinitionService with RecordMetrics with ApplicationLogger {
   val api: API = API("api-definition")
 
   val cacheExpiry: FiniteDuration = 5 seconds

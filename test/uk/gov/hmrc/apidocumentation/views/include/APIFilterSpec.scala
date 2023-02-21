@@ -25,18 +25,21 @@ import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 class APIFilterSpec extends AsyncHmrcSpec {
+
   case class Page(doc: Appendable) {
-    lazy val dom: Document = Jsoup.parse(doc.body)
-    lazy val dropdown = dom.getElementById("service-filter")
-    lazy val options = dropdown.getElementsByTag("option")
+    lazy val dom: Document   = Jsoup.parse(doc.body)
+    lazy val dropdown        = dom.getElementById("service-filter")
+    lazy val options         = dropdown.getElementsByTag("option")
     lazy val selectedVersion = dropdown.getElementsByAttribute("selected").last
   }
 
   class Setup(filter: Option[APICategory] = None) {
+
     val apisByCategory: Map[APICategory, Seq[APIDefinition]] = Map(
       CUSTOMS -> Seq.empty,
-      VAT -> Seq.empty)
-    val page = Page(views.html.include.documentFilter(apisByCategory, filter))
+      VAT     -> Seq.empty
+    )
+    val page                                                 = Page(views.html.include.documentFilter(apisByCategory, filter))
   }
 
   "api filter" when {

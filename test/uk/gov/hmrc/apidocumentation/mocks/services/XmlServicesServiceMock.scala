@@ -22,7 +22,8 @@ import uk.gov.hmrc.apidocumentation.services.XmlServicesService
 
 import scala.concurrent.Future.{failed, successful}
 
-trait XmlServicesServiceMock extends MockitoSugar with ArgumentMatchersSugar{
+trait XmlServicesServiceMock extends MockitoSugar with ArgumentMatchersSugar {
+
   val xmlApi1: XmlApiDocumentation = XmlApiDocumentation(
     name = "xml api 1",
     context = "xml api context",
@@ -31,14 +32,15 @@ trait XmlServicesServiceMock extends MockitoSugar with ArgumentMatchersSugar{
   )
 
   val xmlApi2: XmlApiDocumentation = xmlApi1.copy(name = "xml api 2")
-  val xmlApis = Seq(xmlApi1, xmlApi2)
+  val xmlApis                      = Seq(xmlApi1, xmlApi2)
 
-  val vatXmlApi = XmlApiDocumentation(name = "VAT and EC Sales List Online",
+  val vatXmlApi = XmlApiDocumentation(
+    name = "VAT and EC Sales List Online",
     context = "/government/collections/vat-and-ec-sales-list-online-support-for-software-developers",
-    description = "Technical specifications for software developers working with the VAT and EC Sales List Online service. This API is not part of the Making Tax Digital initiative.",
+    description =
+      "Technical specifications for software developers working with the VAT and EC Sales List Online service. This API is not part of the Making Tax Digital initiative.",
     categories = Some(Seq(APICategory.VAT, APICategory.CUSTOMS))
   )
-
 
   lazy val xmlServicesService: XmlServicesService = mock[XmlServicesService]
 

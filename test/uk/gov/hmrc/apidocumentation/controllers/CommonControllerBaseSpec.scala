@@ -31,88 +31,148 @@ import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import scala.concurrent.Future
 
 class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataHelper with GuiceOneAppPerSuite {
+
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()
       .configure(("metrics.jvm", false))
       .build()
 
   implicit lazy val request: Request[AnyContent] = FakeRequest()
-  implicit lazy val materializer = app.materializer
-  lazy val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  implicit lazy val materializer                 = app.materializer
+  lazy val mcc                                   = app.injector.instanceOf[MessagesControllerComponents]
 
   implicit val hc = HeaderCarrier()
 
-  val serviceName = "hello-world"
+  val serviceName  = "hello-world"
   val endpointName = "Say Hello World!"
 
   def anApiDefinition(serviceName: String, version: String): APIDefinition = {
-    APIDefinition(serviceName, "Hello World", "Say Hello World", "hello", None, None,
-      Seq(APIVersion(version, None, APIStatus.STABLE, Seq(endpoint()))))
+    APIDefinition(serviceName, "Hello World", "Say Hello World", "hello", None, None, Seq(APIVersion(version, None, APIStatus.STABLE, Seq(endpoint()))))
   }
 
   def anXmlApiDefinition(name: String) = XmlApiDocumentation(name, "description", "context")
 
   def extendedApiDefinition(
-    serviceName: String,
-    name: String = "Hello World",
-    version: String = "1.0",
-    access: APIAccessType = APIAccessType.PUBLIC,
-    loggedIn: Boolean = false,
-    authorised: Boolean = true,
-    isTrial: Option[Boolean] = None,
-    isTestSupport: Boolean = false
-  ): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(serviceName, name, "Say Hello World", "hello", requiresTrust = false, isTestSupport,
+      serviceName: String,
+      name: String = "Hello World",
+      version: String = "1.0",
+      access: APIAccessType = APIAccessType.PUBLIC,
+      loggedIn: Boolean = false,
+      authorised: Boolean = true,
+      isTrial: Option[Boolean] = None,
+      isTestSupport: Boolean = false
+    ): ExtendedAPIDefinition = {
+    ExtendedAPIDefinition(
+      serviceName,
+      name,
+      "Say Hello World",
+      "hello",
+      requiresTrust = false,
+      isTestSupport,
       Seq(
-        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-          Some(APIAvailability(endpointsEnabled = true, APIAccess(access, whitelistedApplicationIds = Some(Seq.empty), isTrial = isTrial), loggedIn, authorised)), None)
-      ))
+        ExtendedAPIVersion(
+          version,
+          APIStatus.STABLE,
+          Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
+          Some(APIAvailability(endpointsEnabled = true, APIAccess(access, whitelistedApplicationIds = Some(Seq.empty), isTrial = isTrial), loggedIn, authorised)),
+          None
+        )
+      )
+    )
   }
 
   def extendedApiDefinitionWithNoAPIAvailability(serviceName: String, version: String): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+    ExtendedAPIDefinition(
+      serviceName,
+      "Hello World",
+      "Say Hello World",
+      "hello",
+      requiresTrust = false,
+      isTestSupport = false,
       Seq(
         ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)), None, None)
-      ))
+      )
+    )
   }
 
   def extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
       serviceName: String,
       version: String,
       principalApiAvailability: Option[APIAvailability],
-      subordinateApiAvailability: Option[APIAvailability]): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+      subordinateApiAvailability: Option[APIAvailability]
+    ): ExtendedAPIDefinition = {
+    ExtendedAPIDefinition(
+      serviceName,
+      "Hello World",
+      "Say Hello World",
+      "hello",
+      requiresTrust = false,
+      isTestSupport = false,
       Seq(
-        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-          principalApiAvailability, subordinateApiAvailability)
-      ))
+        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)), principalApiAvailability, subordinateApiAvailability)
+      )
+    )
   }
 
   def extendedApiDefinitionWithRetiredVersion(serviceName: String, retiredVersion: String, nonRetiredVersion: String) = {
-    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+    ExtendedAPIDefinition(
+      serviceName,
+      "Hello World",
+      "Say Hello World",
+      "hello",
+      requiresTrust = false,
+      isTestSupport = false,
       Seq(
-        ExtendedAPIVersion(retiredVersion, APIStatus.RETIRED, Seq(endpoint(endpointName)),
+        ExtendedAPIVersion(
+          retiredVersion,
+          APIStatus.RETIRED,
+          Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
-          None),
-        ExtendedAPIVersion(nonRetiredVersion, APIStatus.STABLE, Seq(endpoint(endpointName)),
+          None
+        ),
+        ExtendedAPIVersion(
+          nonRetiredVersion,
+          APIStatus.STABLE,
+          Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC, Some(Seq.empty)), loggedIn = false, authorised = true)),
-          None)
-      ))
+          None
+        )
+      )
+    )
   }
 
   def extendedApiDefinitionWithRetiredVersionAndInaccessibleLatest(serviceName: String): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(serviceName, "Hello World", "Say Hello World", "hello", requiresTrust = false, isTestSupport = false,
+    ExtendedAPIDefinition(
+      serviceName,
+      "Hello World",
+      "Say Hello World",
+      "hello",
+      requiresTrust = false,
+      isTestSupport = false,
       Seq(
-        ExtendedAPIVersion("1.0", APIStatus.RETIRED, Seq(endpoint(endpointName)),
+        ExtendedAPIVersion(
+          "1.0",
+          APIStatus.RETIRED,
+          Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
-          None),
-        ExtendedAPIVersion("1.1", APIStatus.BETA, Seq(endpoint(endpointName)),
+          None
+        ),
+        ExtendedAPIVersion(
+          "1.1",
+          APIStatus.BETA,
+          Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
-          None),
-        ExtendedAPIVersion("1.2", APIStatus.STABLE, Seq(endpoint(endpointName)),
+          None
+        ),
+        ExtendedAPIVersion(
+          "1.2",
+          APIStatus.STABLE,
+          Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
-          None)
-      ))
+          None
+        )
+      )
+    )
   }
 
   def aServiceGuide(name: String) = ServiceGuide(name, "context")
@@ -132,4 +192,3 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
     contentAsString(result) should include(pageTitle(title))
   }
 }
-

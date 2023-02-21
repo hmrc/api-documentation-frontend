@@ -18,7 +18,7 @@ package uk.gov.hmrc.apidocumentation.controllers.utils
 
 import play.api.test.Helpers._
 import play.api.mvc._
-import uk.gov.hmrc.apidocumentation.controllers.{routes, CommonControllerBaseSpec}
+import uk.gov.hmrc.apidocumentation.controllers.{CommonControllerBaseSpec, routes}
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
 
@@ -31,13 +31,13 @@ trait PageRenderVerification {
   import NavigationServiceMock.sidebarLink
 
   private implicit val materializer = NoMaterializer
-  
-  lazy val homeBreadcrumb = Crumb("Home", routes.DocumentationController.indexPage().url)
+
+  lazy val homeBreadcrumb    = Crumb("Home", routes.DocumentationController.indexPage().url)
   lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
 
   def titleOf(result: Future[Result]) = {
     val titleRegEx = """<title[^>]*>(.*)</title>""".r
-    val title = titleRegEx.findFirstMatchIn(contentAsString(result)).map(_.group(1))
+    val title      = titleRegEx.findFirstMatchIn(contentAsString(result)).map(_.group(1))
     title.isDefined shouldBe true
     title.get
   }
@@ -60,19 +60,20 @@ trait PageRenderVerification {
 
   def verifyBreadcrumbRendered(actualPage: Future[Result], crumb: Crumb) {
     contentAsString(actualPage) should include(s"""
-                                         |                    <li class="govuk-breadcrumbs__list-item">
-                                         |                        <a class="govuk-breadcrumbs__link" href="${crumb.url}">${crumb.name}</a>
-                                         |                    </li>""".stripMargin)
+                                                  |                    <li class="govuk-breadcrumbs__list-item">
+                                                  |                        <a class="govuk-breadcrumbs__link" href="${crumb.url}">${crumb.name}</a>
+                                                  |                    </li>""".stripMargin)
   }
 
-  def verifyPageRendered(expectedTitle: String,
-                          breadcrumbs: List[Crumb] = List(homeBreadcrumb),
-                          sideNavLinkRendered: Boolean = true,
-                          subNavRendered: Boolean = false,
-                          bodyContains: Seq[String] = Seq.empty
-                          )(
-                            actualPage: Future[Result]
-                          ): Unit = {
+  def verifyPageRendered(
+      expectedTitle: String,
+      breadcrumbs: List[Crumb] = List(homeBreadcrumb),
+      sideNavLinkRendered: Boolean = true,
+      subNavRendered: Boolean = false,
+      bodyContains: Seq[String] = Seq.empty
+    )(
+      actualPage: Future[Result]
+    ): Unit = {
     status(actualPage) shouldBe 200
     titleOf(actualPage) shouldBe expectedTitle
 
@@ -85,7 +86,6 @@ trait PageRenderVerification {
   def verifyNotFoundPageRendered(actualPage: Future[Result]) {
     status(actualPage) shouldBe NOT_FOUND
   }
-
 
   def verifyErrorPageRendered(expectedStatus: Int, expectedError: String)(actualPage: Future[Result]) {
     status(actualPage) shouldBe expectedStatus
