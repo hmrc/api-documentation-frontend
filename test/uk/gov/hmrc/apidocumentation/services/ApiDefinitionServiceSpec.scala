@@ -33,26 +33,26 @@ import akka.Done
 import scala.reflect.ClassTag
 
 class ApiDefinitionServiceSpec extends AsyncHmrcSpec
-  with ApiDefinitionTestDataHelper {
+    with ApiDefinitionTestDataHelper {
 
-    val doNothingCache = new AsyncCacheApi {
-        def set(key: String, value: Any, expiration: Duration = Duration.Inf): Future[Done] = Future.successful(Done)
-        def remove(key: String): Future[Done] = Future.successful(Done)
+  val doNothingCache = new AsyncCacheApi {
+    def set(key: String, value: Any, expiration: Duration = Duration.Inf): Future[Done] = Future.successful(Done)
+    def remove(key: String): Future[Done]                                               = Future.successful(Done)
 
-        def getOrElseUpdate[A: ClassTag](key: String, expiration: Duration = Duration.Inf)(orElse: => Future[A]): Future[A] = orElse
+    def getOrElseUpdate[A: ClassTag](key: String, expiration: Duration = Duration.Inf)(orElse: => Future[A]): Future[A] = orElse
 
-        def get[T: ClassTag](key: String): Future[Option[T]] = Future.successful(None)
+    def get[T: ClassTag](key: String): Future[Option[T]] = Future.successful(None)
 
-        def removeAll(): Future[Done] = Future.successful(Done)
-    }
+    def removeAll(): Future[Done] = Future.successful(Done)
+  }
 
   trait LocalSetup extends ApiPlatformMicroserviceConnectorMockingHelper {
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    val loggedInUserEmail = "3rdparty@example.com"
-    val loggedInUserId = UuidIdentifier(UserId.random)
+    val loggedInUserEmail          = "3rdparty@example.com"
+    val loggedInUserId             = UuidIdentifier(UserId.random)
 
     val apiPlatformMicroserviceConnector = mock[ApiPlatformMicroserviceConnector]
-    val underTest = new ApiDefinitionService(doNothingCache, apiPlatformMicroserviceConnector, new NoopApiMetrics)
+    val underTest                        = new ApiDefinitionService(doNothingCache, apiPlatformMicroserviceConnector, new NoopApiMetrics)
 
   }
 

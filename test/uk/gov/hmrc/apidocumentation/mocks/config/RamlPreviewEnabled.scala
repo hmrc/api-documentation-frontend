@@ -18,5 +18,5 @@ package uk.gov.hmrc.apidocumentation.mocks.config
 
 trait RamlPreviewEnabled {
   self: AppConfigMock =>
-    when(appConfig.ramlPreviewEnabled).thenReturn(true)
+  when(appConfig.ramlPreviewEnabled).thenReturn(true)
 }

@@ -35,27 +35,27 @@ class NavigationService @Inject() (
   )(implicit ec: ExecutionContext
   ) {
 
-  lazy val gettingStartedUrl       =
+  lazy val gettingStartedUrl =
     routes.DocumentationController.usingTheHubPage().url
 
-  lazy val apiDocumentationUrl     =
+  lazy val apiDocumentationUrl =
     routes.ApiDocumentationController.apiIndexPage(None, None, None).url
 
-  lazy val referenceGuideUrl       =
+  lazy val referenceGuideUrl =
     routes.DocumentationController.referenceGuidePage().url
 
-  lazy val namingGuidelinesUrl     =
+  lazy val namingGuidelinesUrl =
     routes.DocumentationController.nameGuidelinesPage().url
 
-  lazy val authorisationUri        =
+  lazy val authorisationUri =
     routes.AuthorisationController.authorisationPage().url
-  lazy val tutorialsUri            = routes.DocumentationController.tutorialsPage().url
-  lazy val termsOfUseUri           = routes.DocumentationController.termsOfUsePage().url
-  lazy val testingUri              = routes.TestingPagesController.testingPage().url
+  lazy val tutorialsUri     = routes.DocumentationController.tutorialsPage().url
+  lazy val termsOfUseUri    = routes.DocumentationController.termsOfUsePage().url
+  lazy val testingUri       = routes.TestingPagesController.testingPage().url
 
-  lazy val mtdIntroductionPageUrl  =
+  lazy val mtdIntroductionPageUrl =
     routes.DocumentationController.mtdIntroductionPage().url
-  lazy val fraudPreventionPageUrl  = "/guides/fraud-prevention"
+  lazy val fraudPreventionPageUrl = "/guides/fraud-prevention"
 
   lazy val developmentPracticesUrl =
     routes.DocumentationController.developmentPracticesPage().url

@@ -35,6 +35,6 @@ trait NavigationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
 }
 
 object NavigationServiceMock {
-  lazy val navLink = NavLink("Header Link", "/api-documentation/headerlink")
+  lazy val navLink     = NavLink("Header Link", "/api-documentation/headerlink")
   lazy val sidebarLink = SidebarLink("API Documentation", "/api-documentation/docs/api")
 }

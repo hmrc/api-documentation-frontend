@@ -19,7 +19,6 @@ package uk.gov.hmrc.apidocumentation.models
 import play.api.libs.json.Json
 import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
 
-
 import scala.collection.immutable.ListMap
 
 class JsonSchemaSpec extends HmrcSpec {
@@ -37,7 +36,8 @@ class JsonSchemaSpec extends HmrcSpec {
           |    "description": "Name of the business",
           |    "type": "string"
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
       actual shouldBe JsonSchema(title = Some("Business name"), description = Some("Name of the business"), `type` = Some("string"))
     }
@@ -51,7 +51,8 @@ class JsonSchemaSpec extends HmrcSpec {
           |    "example": "Json Limited",
           |    "type": "string"
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
       actual shouldBe JsonSchema(description = Some("Name of the business"), example = Some("Json Limited"), `type` = Some("string"))
     }
@@ -73,12 +74,16 @@ class JsonSchemaSpec extends HmrcSpec {
           |        }
           |    }
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
-      actual shouldBe JsonSchema(`type` = Some("object"), properties = ListMap(
-        "name" -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
-        "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))
-      ))
+      actual shouldBe JsonSchema(
+        `type` = Some("object"),
+        properties = ListMap(
+          "name"       -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
+          "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))
+        )
+      )
     }
 
     "support objects containing objects" in {
@@ -108,14 +113,18 @@ class JsonSchemaSpec extends HmrcSpec {
           |        }
           |    }
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
-      actual shouldBe JsonSchema(`type` = Some("object"),
+      actual shouldBe JsonSchema(
+        `type` = Some("object"),
         properties = ListMap(
-          "name" -> JsonSchema(description = Some("Business name"), `type` = Some("object"),
+          "name"       -> JsonSchema(
+            description = Some("Business name"),
+            `type` = Some("object"),
             properties = ListMap(
               "registeredName" -> JsonSchema(description = Some("The registered name for the business"), `type` = Some("string")),
-              "tradingName" -> JsonSchema(description = Some("The name the business trades by"), `type` = Some("string"))
+              "tradingName"    -> JsonSchema(description = Some("The name the business trades by"), `type` = Some("string"))
             )
           ),
           "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))
@@ -140,11 +149,15 @@ class JsonSchemaSpec extends HmrcSpec {
           |        }
           |    }
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
-      actual shouldBe JsonSchema(`type` = Some("object"),
-        patternProperties = ListMap("[A-Z0-9]{4}-[A-Z0-9]{5}" -> JsonSchema(description = Some("First"), `type` = Some("string")),
-          "\\d{5}-\\d{2}" -> JsonSchema(description = Some("Second"), `type` = Some("string")))
+      actual shouldBe JsonSchema(
+        `type` = Some("object"),
+        patternProperties = ListMap(
+          "[A-Z0-9]{4}-[A-Z0-9]{5}" -> JsonSchema(description = Some("First"), `type` = Some("string")),
+          "\\d{5}-\\d{2}"           -> JsonSchema(description = Some("Second"), `type` = Some("string"))
+        )
       )
     }
 
@@ -166,11 +179,15 @@ class JsonSchemaSpec extends HmrcSpec {
           |    },
           |    "required": ["name"]
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
-      actual shouldBe JsonSchema(`type` = Some("object"),
-        properties = ListMap("name" -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
-          "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))),
+      actual shouldBe JsonSchema(
+        `type` = Some("object"),
+        properties = ListMap(
+          "name"       -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
+          "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))
+        ),
         required = Seq("name")
       )
     }
@@ -186,11 +203,10 @@ class JsonSchemaSpec extends HmrcSpec {
           |        "type": "string"
           |    }
           |}
-        """.stripMargin)
-
-      actual shouldBe JsonSchema(`type` = Some("array"),
-        items = Some(JsonSchema(description = Some("Business name"), `type` = Some("string")))
+        """.stripMargin
       )
+
+      actual shouldBe JsonSchema(`type` = Some("array"), items = Some(JsonSchema(description = Some("Business name"), `type` = Some("string"))))
     }
 
     "support definitions" in {
@@ -209,12 +225,15 @@ class JsonSchemaSpec extends HmrcSpec {
           |        }
           |    }
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
-      actual shouldBe JsonSchema(definitions = ListMap(
-        "name" -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
-        "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))
-      ))
+      actual shouldBe JsonSchema(definitions =
+        ListMap(
+          "name"       -> JsonSchema(description = Some("Business name"), `type` = Some("string")),
+          "activities" -> JsonSchema(description = Some("Activities of the business"), `type` = Some("string"))
+        )
+      )
     }
 
     "support references" in {
@@ -235,9 +254,11 @@ class JsonSchemaSpec extends HmrcSpec {
           |        }
           |    }
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
-      actual shouldBe JsonSchema(`type` = Some("object"),
+      actual shouldBe JsonSchema(
+        `type` = Some("object"),
         properties = ListMap(
           "name" -> JsonSchema(ref = Some("#/definitions/name"))
         ),
@@ -256,12 +277,14 @@ class JsonSchemaSpec extends HmrcSpec {
           |    "type": "string",
           |    "enum": ["CREDIT", "DEBIT"]
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
       actual shouldBe JsonSchema(
         description = Some("Transaction type"),
         `type` = Some("string"),
-        enum = Seq(EnumerationValue("CREDIT"), EnumerationValue("DEBIT")))
+        enum = Seq(EnumerationValue("CREDIT"), EnumerationValue("DEBIT"))
+      )
     }
 
     "support oneOf for specifying enums with descriptions" in {
@@ -275,9 +298,11 @@ class JsonSchemaSpec extends HmrcSpec {
           |        { "enum": ["DEBIT"], "description": "A debit" }
           |    ]
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
-      actual shouldBe JsonSchema(description = Some("Transaction type"),
+      actual shouldBe JsonSchema(
+        description = Some("Transaction type"),
         oneOf = Seq(
           JsonSchema(enum = Seq(EnumerationValue("CREDIT")), description = Some("A credit")),
           JsonSchema(enum = Seq(EnumerationValue("DEBIT")), description = Some("A debit"))
@@ -294,7 +319,8 @@ class JsonSchemaSpec extends HmrcSpec {
           |    "type": "string",
           |    "pattern": "^[A-Z0-9]{6}$"
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
       actual shouldBe JsonSchema(description = Some("Name of the business"), pattern = Some("^[A-Z0-9]{6}$"), `type` = Some("string"))
     }
@@ -308,7 +334,8 @@ class JsonSchemaSpec extends HmrcSpec {
           |    "type": "string",
           |    "id": "full-date"
           |}
-        """.stripMargin)
+        """.stripMargin
+      )
 
       actual shouldBe JsonSchema(description = Some("Date"), id = Some("full-date"), `type` = Some("string"))
     }

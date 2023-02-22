@@ -77,7 +77,7 @@ object ErrorScenarios {
     example.value.flatMap(v => Try(Json.parse(v).as[ErrorResponse]).toOption)
   }
 
-  private def responseFromXML2(example: ExampleSpec): Option[ErrorResponse]  = {
+  private def responseFromXML2(example: ExampleSpec): Option[ErrorResponse] = {
     for {
       v     <- example.value
       codes <- Try(XML.fromString(v).getElementsByTagName("code")).toOption

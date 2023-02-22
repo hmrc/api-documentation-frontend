@@ -39,7 +39,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
 
     val errorHandler = app.injector.instanceOf[ErrorHandler]
 
-    val version = "2.0"
+    val version      = "2.0"
     val resourceName = "some/resource"
 
     val underTest = new DownloadController(documentationService, apiDefinitionService, downloadConnector, loggedInUserService, errorHandler, appConfig, mcc)
@@ -55,7 +55,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
     "download the resource when found" in new Setup {
       theDefinitionServiceWillReturnAnApiDefinition(
         extendedApiDefinition(
-          serviceName = serviceName, 
+          serviceName = serviceName,
           version = version
         )
       )

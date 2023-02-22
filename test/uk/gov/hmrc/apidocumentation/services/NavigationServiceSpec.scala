@@ -30,13 +30,13 @@ import scala.concurrent.Future
 class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
 
   class Setup {
-    implicit val hc = HeaderCarrier()
+    implicit val hc                           = HeaderCarrier()
     val connector: DeveloperFrontendConnector = mock[DeveloperFrontendConnector]
-    val config = mock[ApplicationConfig]
+    val config                                = mock[ApplicationConfig]
     when(config.title).thenReturn("Unit Test Title")
-    val underTest = new NavigationService(connector, config)
+    val underTest                             = new NavigationService(connector, config)
 
-    val cache = app.injector.instanceOf[AsyncCacheApi]
+    val cache  = app.injector.instanceOf[AsyncCacheApi]
     val docSvc = app.injector.instanceOf[DocumentationService]
   }
 
@@ -57,7 +57,8 @@ class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
       when(config.developerFrontendUrl).thenReturn("http://localhost:9865")
       when(connector.fetchNavLinks()(*)).thenReturn(Future.successful(Seq(
         NavLink("Register", "/developer/registration"),
-        NavLink("Sign in", "/developer/login"))))
+        NavLink("Sign in", "/developer/login")
+      )))
 
       val headerNavLinks = await(underTest.headerNavigation())
       verify(connector, times(1)).fetchNavLinks()(*)

@@ -36,7 +36,7 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   )
 
   trait Setup {
-    val config = app.injector.instanceOf[ApplicationConfig]
+    val config    = app.injector.instanceOf[ApplicationConfig]
     val connector = app.injector.instanceOf[DeveloperFrontendConnector]
   }
 
@@ -70,7 +70,7 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   "fetchTermsOfUsePartial" should {
     "return the terms of use as a partial" in new Setup {
       implicit val hc = HeaderCarrier()
-      val response = HtmlPartial.Success(None, Html("<p>some terms of use</p>"))
+      val response    = HtmlPartial.Success(None, Html("<p>some terms of use</p>"))
 
       stubFor(
         get(urlPathEqualTo("/developer/partials/terms-of-use"))

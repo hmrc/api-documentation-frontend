@@ -37,25 +37,26 @@ trait ApiPlatformMicroserviceConnectorMockingHelper extends MockitoSugar with Ar
       .thenReturn(Future.successful(apis.toSeq))
   }
 
-  def whenFetchExtendedDefinition[T <: ApiPlatformMicroserviceConnector](base: T)
-                                                              (serviceName: String)
-                                                              (api: ExtendedAPIDefinition)
-                                                              (implicit hc: HeaderCarrier) = {
+  def whenFetchExtendedDefinition[T <: ApiPlatformMicroserviceConnector](base: T)(serviceName: String)(api: ExtendedAPIDefinition)(implicit hc: HeaderCarrier) = {
     when(base.fetchApiDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
-  def whenFetchExtendedDefinitionWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)
-                                                                       (serviceName: String, userId: UuidIdentifier)
-                                                                       (api: ExtendedAPIDefinition)
-                                                                       (implicit hc: HeaderCarrier) = {
+
+  def whenFetchExtendedDefinitionWithEmail[T <: ApiPlatformMicroserviceConnector](
+      base: T
+    )(
+      serviceName: String,
+      userId: UuidIdentifier
+    )(
+      api: ExtendedAPIDefinition
+    )(implicit hc: HeaderCarrier
+    ) = {
     when(base.fetchApiDefinition(eqTo(serviceName), *)(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
-  def whenFetchExtendedDefinitionFails[T <: ApiPlatformMicroserviceConnector](base: T)
-                                                                   (exception: Throwable)
-                                                                   (implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinition(*,*)(eqTo(hc)))
+  def whenFetchExtendedDefinitionFails[T <: ApiPlatformMicroserviceConnector](base: T)(exception: Throwable)(implicit hc: HeaderCarrier) = {
+    when(base.fetchApiDefinition(*, *)(eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 }

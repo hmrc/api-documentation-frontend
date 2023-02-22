@@ -24,23 +24,26 @@ import uk.gov.hmrc.apidocumentation.views.html._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class AuthorisationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
-  trait Setup extends NavigationServiceMock {
-    implicit val appConfig = app.injector.instanceOf[ApplicationConfig]
-    val authorisationView = app.injector.instanceOf[AuthorisationView]
-    val authorisation2SVView = app.injector.instanceOf[Authorisation2SVView]
-    val authorisationAppRestrictedEndpointsView = app.injector.instanceOf[AuthorisationAppRestrictedEndpointsView]
-    val authorisationOpenAccessEndpointsView = app.injector.instanceOf[AuthorisationOpenAccessEndpointsView]
-    val authorisationUserRestrictedEndpointsView = app.injector.instanceOf[AuthorisationUserRestrictedEndpointsView]
-    val credentialsView = app.injector.instanceOf[CredentialsView]
 
-    val authorisationController = new AuthorisationController(  mcc,
-                                                                navigationService,
-                                                                authorisationView,
-                                                                authorisation2SVView ,
-                                                                authorisationAppRestrictedEndpointsView ,
-                                                                authorisationOpenAccessEndpointsView ,
-                                                                authorisationUserRestrictedEndpointsView,
-                                                                credentialsView)
+  trait Setup extends NavigationServiceMock {
+    implicit val appConfig                       = app.injector.instanceOf[ApplicationConfig]
+    val authorisationView                        = app.injector.instanceOf[AuthorisationView]
+    val authorisation2SVView                     = app.injector.instanceOf[Authorisation2SVView]
+    val authorisationAppRestrictedEndpointsView  = app.injector.instanceOf[AuthorisationAppRestrictedEndpointsView]
+    val authorisationOpenAccessEndpointsView     = app.injector.instanceOf[AuthorisationOpenAccessEndpointsView]
+    val authorisationUserRestrictedEndpointsView = app.injector.instanceOf[AuthorisationUserRestrictedEndpointsView]
+    val credentialsView                          = app.injector.instanceOf[CredentialsView]
+
+    val authorisationController = new AuthorisationController(
+      mcc,
+      navigationService,
+      authorisationView,
+      authorisation2SVView,
+      authorisationAppRestrictedEndpointsView,
+      authorisationOpenAccessEndpointsView,
+      authorisationUserRestrictedEndpointsView,
+      credentialsView
+    )
   }
 
   "display the authorisation page" in new Setup {
@@ -49,7 +52,7 @@ class AuthorisationControllerSpec extends CommonControllerBaseSpec with PageRend
 
   "display the authorisation credentials page" in new Setup {
     verifyPageRendered(pageTitle("Credentials"))(authorisationController.authorisationCredentialsPage()(request))
-   }
+  }
 
   "display the authorisation open Access Endpoints page" in new Setup {
     verifyPageRendered(pageTitle("Open access endpoints"))(authorisationController.authorisationOpenAccessEndpointsPage()(request))

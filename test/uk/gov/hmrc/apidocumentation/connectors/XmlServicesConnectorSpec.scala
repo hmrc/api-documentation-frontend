@@ -28,21 +28,22 @@ import uk.gov.hmrc.http.UpstreamErrorResponse
 class XmlServicesConnectorSpec extends ConnectorSpec {
 
   val stubConfig: Configuration = Configuration(
-    "metrics.jvm" -> false,
+    "metrics.jvm"                                          -> false,
     "microservice.services.api-platform-xml-services.host" -> stubHost,
     "microservice.services.api-platform-xml-services.port" -> stubPort
   )
 
   trait Setup {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-    val connector: XmlServicesConnector = app.injector.instanceOf[XmlServicesConnector]
+    implicit val hc: HeaderCarrier               = HeaderCarrier()
+    val connector: XmlServicesConnector          = app.injector.instanceOf[XmlServicesConnector]
+
     val UpstreamException: UpstreamErrorResponse = UpstreamErrorResponse(
       "Internal server error",
       INTERNAL_SERVER_ERROR,
       INTERNAL_SERVER_ERROR
     )
 
-    val getAllXmlApisUrl = "/api-platform-xml-services/xml/apis"
+    val getAllXmlApisUrl           = "/api-platform-xml-services/xml/apis"
     def getXmlApiUrl(name: String) = s"/api-platform-xml-services/xml/api/${UriEncoding.encodePathSegment(name, "UTF-8")}"
 
     val getXmlApiUrl = "/api-platform-xml-services/xml/api"
@@ -55,7 +56,7 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
     )
 
     val xmlApi2: XmlApiDocumentation = xmlApi1.copy(name = "xml api 2")
-    val xmlApis = Seq(xmlApi1, xmlApi2)
+    val xmlApis                      = Seq(xmlApi1, xmlApi2)
 
   }
 
@@ -69,9 +70,9 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
     "return all Xml Apis" in new Setup {
 
       stubFor(get(urlPathEqualTo(getAllXmlApisUrl))
-          .willReturn(aResponse()
-              .withStatus(OK)
-              .withJsonBody(xmlApis)))
+        .willReturn(aResponse()
+          .withStatus(OK)
+          .withJsonBody(xmlApis)))
 
       val result: Seq[XmlApiDocumentation] = await(connector.fetchAllXmlApis)
 
@@ -80,8 +81,8 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
 
     "throw an exception correctly" in new Setup {
       stubFor(get(urlPathEqualTo(getAllXmlApisUrl))
-          .willReturn(aResponse()
-              .withStatus(BAD_REQUEST)))
+        .willReturn(aResponse()
+          .withStatus(BAD_REQUEST)))
 
       intercept[UpstreamException.type] {
         await(connector.fetchAllXmlApis)
@@ -109,9 +110,8 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
         .willReturn(aResponse()
           .withStatus(NOT_FOUND)))
 
-
-        val result = await(connector.fetchXmlApiByServiceName(xmlApi1.name))
-             result shouldBe None
+      val result = await(connector.fetchXmlApiByServiceName(xmlApi1.name))
+      result shouldBe None
     }
   }
 }

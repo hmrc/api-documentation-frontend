@@ -27,45 +27,43 @@ import org.mockito.ArgumentMatchersSugar
 
 trait BaseApiDefinitionServiceMockingHelper extends MockitoSugar with ArgumentMatchersSugar {
 
-  def whenFetchAllDefinitions[T <: BaseApiDefinitionService](base: T)
-                             (apis: APIDefinition*)
-                             (implicit hc: HeaderCarrier) = {
+  def whenFetchAllDefinitions[T <: BaseApiDefinitionService](base: T)(apis: APIDefinition*)(implicit hc: HeaderCarrier)                                  = {
     when(base.fetchAllDefinitions(*)(eqTo(hc)))
       .thenReturn(Future.successful(apis.toSeq))
   }
-  def whenFetchAllDefinitionsWithEmail[T <: BaseApiDefinitionService](base: T)
-                                      (userId: UuidIdentifier)
-                                      (apis: APIDefinition*)
-                                      (implicit hc: HeaderCarrier) = {
+
+  def whenFetchAllDefinitionsWithEmail[T <: BaseApiDefinitionService](base: T)(userId: UuidIdentifier)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
     when(base.fetchAllDefinitions(*)(eqTo(hc)))
       .thenReturn(Future.successful(apis.toSeq))
   }
-  def whenFetchExtendedDefinition[T <: BaseApiDefinitionService](base: T)
-                                 (serviceName: String)
-                                 (api: ExtendedAPIDefinition)
-                                 (implicit hc: HeaderCarrier) = {
+
+  def whenFetchExtendedDefinition[T <: BaseApiDefinitionService](base: T)(serviceName: String)(api: ExtendedAPIDefinition)(implicit hc: HeaderCarrier)   = {
     when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
-  def whenFetchExtendedDefinitionWithEmail[T <: BaseApiDefinitionService](base: T)
-                                          (serviceName: String, userId: UuidIdentifier)
-                                          (api: ExtendedAPIDefinition)
-                                          (implicit hc: HeaderCarrier) = {
+
+  def whenFetchExtendedDefinitionWithEmail[T <: BaseApiDefinitionService](
+      base: T
+    )(
+      serviceName: String,
+      userId: UuidIdentifier
+    )(
+      api: ExtendedAPIDefinition
+    )(implicit hc: HeaderCarrier
+    ) = {
     when(base.fetchExtendedDefinition(eqTo(serviceName), *)(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
-  def whenApiDefinitionFails[T <: BaseApiDefinitionService](base: T)
-                            (exception: Throwable)
-                            (implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(any[String],*)(eqTo(hc)))
+  def whenApiDefinitionFails[T <: BaseApiDefinitionService](base: T)(exception: Throwable)(implicit hc: HeaderCarrier) = {
+    when(base.fetchExtendedDefinition(any[String], *)(eqTo(hc)))
       .thenReturn(Future.failed(exception))
     when(base.fetchAllDefinitions(*)(eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 
   def whenNoApiDefinitions[T <: BaseApiDefinitionService](base: T) = {
-    when(base.fetchExtendedDefinition(any[String],*)(*))
+    when(base.fetchExtendedDefinition(any[String], *)(*))
       .thenReturn(Future.successful(None))
     when(base.fetchAllDefinitions(*)(*))
       .thenReturn(Future.successful(Seq.empty))

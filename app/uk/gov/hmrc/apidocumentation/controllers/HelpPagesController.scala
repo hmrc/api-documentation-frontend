@@ -26,6 +26,7 @@ import uk.gov.hmrc.apidocumentation.views.html._
 
 @Singleton
 class HelpPagesController @Inject() (
+    appConfig: ApplicationConfig,
     mcc: MessagesControllerComponents,
     cookiesView: CookiesView,
     privacyView: PrivacyView,
@@ -34,6 +35,10 @@ class HelpPagesController @Inject() (
   ) extends FrontendController(mcc) {
 
   def cookiesPage(): Action[AnyContent] = Action { implicit request =>
+    Redirect(appConfig.cookieSettingsUrl)
+  }
+
+  def cookiesDetailsPage(): Action[AnyContent] = Action { implicit request =>
     Ok(cookiesView())
   }
 

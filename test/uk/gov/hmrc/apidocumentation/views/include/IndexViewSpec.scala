@@ -29,10 +29,10 @@ import uk.gov.hmrc.apidocumentation.views.html.templates.LayoutHomePage
 
 class IndexViewSpec extends CommonViewSpec {
 
-  val pageTitle = "pageTitle"
-  val navLinks = Seq[NavLink]()
-  val mockRequest = mock[Request[Any]]
-  val mockMessages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
+  val pageTitle                      = "pageTitle"
+  val navLinks                       = Seq[NavLink]()
+  val mockRequest                    = mock[Request[Any]]
+  val mockMessages                   = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
   implicit val mockApplicationConfig = mock[ApplicationConfig]
 
   val main = app.injector.instanceOf[LayoutHomePage]
@@ -45,4 +45,3 @@ class IndexViewSpec extends CommonViewSpec {
     }
   }
 }
-

@@ -26,8 +26,7 @@ class RedirectControllerSpec extends CommonControllerBaseSpec {
 
     val underTest = new RedirectController(mcc)
 
-    def verifyPageRedirected(actualPage: Future[Result],
-                             expectedUrl: String) {
+    def verifyPageRedirected(actualPage: Future[Result], expectedUrl: String) {
       status(actualPage) shouldBe 301
       headers(actualPage).get("Location") shouldBe Some(expectedUrl)
     }

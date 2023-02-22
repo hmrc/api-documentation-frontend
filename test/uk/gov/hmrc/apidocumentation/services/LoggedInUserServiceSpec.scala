@@ -33,18 +33,18 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
   "Fetching logged in user" should {
 
     val mockApplicationConfig = mock[ApplicationConfig]
-    val mockSessionService = mock[SessionService]
-    val mockCookieSigner = mock[CookieSigner]
+    val mockSessionService    = mock[SessionService]
+    val mockCookieSigner      = mock[CookieSigner]
 
-    val developer = Developer("email","John", "Smith", UserId.random)
-    val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
+    val developer = Developer("email", "John", "Smith", UserId.random)
+    val session   = Session("sessionId", LoggedInState.LOGGED_IN, developer)
 
-    val cookie = play.api.mvc.Cookie(cookieName, "bobbins")
+    val cookie                   = play.api.mvc.Cookie(cookieName, "bobbins")
     val fakeRequestWithoutCookie = FakeRequest()
-    val fakeRequestWithCookie = FakeRequest().withCookies(cookie)
+    val fakeRequestWithCookie    = FakeRequest().withCookies(cookie)
 
     "Be None when no cookie" in {
-      implicit val request = fakeRequestWithoutCookie
+      implicit val request    = fakeRequestWithoutCookie
       val loggedInUserService = new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner)
 
       val result: Option[Developer] = await(loggedInUserService.fetchLoggedInUser())
@@ -62,10 +62,10 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
       result shouldBe None
     }
 
-   "Be None when no session from sessionService" in {
+    "Be None when no session from sessionService" in {
       implicit val request = fakeRequestWithCookie
 
-      val fakeId = "123"
+      val fakeId              = "123"
       val decodeSessionResult = Some(fakeId)
 
       when(mockSessionService.fetch(eqTo(fakeId))(*))
@@ -73,7 +73,7 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
 
       val loggedInUserService =
         new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner) {
-          override def decodeCookie(token: String) : Option[String] = decodeSessionResult
+          override def decodeCookie(token: String): Option[String] = decodeSessionResult
         }
 
       val result: Option[Developer] = await(loggedInUserService.fetchLoggedInUser())
@@ -81,11 +81,10 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
       result shouldBe None
     }
 
-
     "Be a Developer when a valid cookie and session" in {
       implicit val request = fakeRequestWithCookie
 
-      val fakeId = "123"
+      val fakeId              = "123"
       val decodeSessionResult = Some(fakeId)
 
       when(mockSessionService.fetch(eqTo(fakeId))(*))
@@ -93,7 +92,7 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
 
       val loggedInUserService =
         new LoggedInUserService(mockApplicationConfig, mockSessionService, mockCookieSigner) {
-          override def decodeCookie(token: String) : Option[String] = decodeSessionResult
+          override def decodeCookie(token: String): Option[String] = decodeSessionResult
         }
 
       val result: Option[Developer] = await(loggedInUserService.fetchLoggedInUser())

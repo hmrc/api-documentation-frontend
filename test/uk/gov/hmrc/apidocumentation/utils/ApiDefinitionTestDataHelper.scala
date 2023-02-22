@@ -20,6 +20,7 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.APIStatus.{APIStatus, STABLE}
 
 trait ApiDefinitionTestDataHelper {
+
   def apiDefinition(name: String, versions: Seq[APIVersion] = Seq(apiVersion("1.0", STABLE))) = {
     APIDefinition(name, name, name, name, None, None, versions)
   }
@@ -33,16 +34,20 @@ trait ApiDefinitionTestDataHelper {
   }
 
   implicit class ApiAccessModifier(val inner: APIAccess) {
-    def asPublic : APIAccess = {
+
+    def asPublic: APIAccess  = {
       inner.copy(`type` = APIAccessType.PUBLIC)
     }
-    def asPrivate : APIAccess = {
+
+    def asPrivate: APIAccess = {
       inner.copy(`type` = APIAccessType.PRIVATE)
     }
-    def asTrial : APIAccess = {
+
+    def asTrial: APIAccess   = {
       inner.copy(isTrial = Some(true))
     }
-    def notTrial: APIAccess = {
+
+    def notTrial: APIAccess  = {
       inner.copy(isTrial = Some(false))
     }
   }
@@ -61,13 +66,14 @@ trait ApiDefinitionTestDataHelper {
   }
 
   implicit class ApiAvailabilityModifier(val inner: APIAvailability) {
-    def asPublic : APIAvailability =
+
+    def asPublic: APIAvailability =
       inner.copy(access = inner.access.asPublic)
 
-    def asPrivate : APIAvailability =
+    def asPrivate: APIAvailability =
       inner.copy(access = inner.access.asPrivate)
 
-    def asTrial : APIAvailability =
+    def asTrial: APIAvailability =
       inner.copy(access = inner.access.asTrial)
 
     def notTrial: APIAvailability =
@@ -99,13 +105,14 @@ trait ApiDefinitionTestDataHelper {
   }
 
   implicit class SomeApiAvailabilityModifier(val inner: Option[APIAvailability]) {
-    def asPublic : Option[APIAvailability] =
+
+    def asPublic: Option[APIAvailability] =
       inner.map(_.asPublic)
 
-    def asPrivate : Option[APIAvailability] =
+    def asPrivate: Option[APIAvailability] =
       inner.map(_.asPrivate)
 
-    def asTrial : Option[APIAvailability] =
+    def asTrial: Option[APIAvailability] =
       inner.map(_.asTrial)
 
     def notTrial: Option[APIAvailability] =
@@ -130,44 +137,52 @@ trait ApiDefinitionTestDataHelper {
       inner.map(_.endpointsDisabled)
   }
 
-  def endpoint(endpointName: String = "Hello World", url: String = "/world") : Endpoint = {
+  def endpoint(endpointName: String = "Hello World", url: String = "/world"): Endpoint = {
     Endpoint(endpointName, url, HttpMethod.GET, None)
   }
 
   implicit class EndpointModifier(val inner: Endpoint) {
+
     def asPost: Endpoint =
       inner.copy(method = HttpMethod.POST)
   }
 
   def apiVersion(version: String = "1.0", status: APIStatus = STABLE, access: Option[APIAccess] = None): APIVersion = {
-    APIVersion(version, access, status, Seq(
-      endpoint("Today's Date", "/today"),
-      endpoint("Yesterday's Date", "/yesterday")))
+    APIVersion(
+      version,
+      access,
+      status,
+      Seq(
+        endpoint("Today's Date", "/today"),
+        endpoint("Yesterday's Date", "/yesterday")
+      )
+    )
   }
 
   implicit class ApiVersionModifier(val inner: APIVersion) {
-    def asAlpha : APIVersion =
+
+    def asAlpha: APIVersion =
       inner.copy(status = APIStatus.ALPHA)
 
-    def asBeta : APIVersion =
+    def asBeta: APIVersion =
       inner.copy(status = APIStatus.BETA)
 
-    def asStable : APIVersion =
+    def asStable: APIVersion =
       inner.copy(status = APIStatus.STABLE)
 
-    def asDeprecated : APIVersion =
+    def asDeprecated: APIVersion =
       inner.copy(status = APIStatus.DEPRECATED)
 
-    def asRETIRED : APIVersion =
+    def asRETIRED: APIVersion =
       inner.copy(status = APIStatus.RETIRED)
 
-    def asPublic : APIVersion =
+    def asPublic: APIVersion =
       inner.copy(access = inner.access.map(_.asPublic))
 
-    def asPrivate : APIVersion =
+    def asPrivate: APIVersion =
       inner.copy(access = inner.access.map(_.asPrivate))
 
-    def asTrial : APIVersion =
+    def asTrial: APIVersion =
       inner.copy(access = inner.access.map(_.asTrial))
 
     def notTrial: APIVersion =
@@ -176,24 +191,31 @@ trait ApiDefinitionTestDataHelper {
     def withAccess(altAccess: Option[APIAccess]): APIVersion =
       inner.copy(access = altAccess)
 
-    def withNoAccess : APIVersion =
+    def withNoAccess: APIVersion =
       inner.copy(access = None)
   }
 
   def extendedApiDefinition(name: String) = {
-    ExtendedAPIDefinition(name, name, name, name, requiresTrust = false, isTestSupport = false,
+    ExtendedAPIDefinition(
+      name,
+      name,
+      name,
+      name,
+      requiresTrust = false,
+      isTestSupport = false,
       Seq(
         ExtendedAPIVersion(
           version = "1.0",
           status = APIStatus.STABLE,
           endpoints = Seq(
             Endpoint("Today's Date", "/today", HttpMethod.GET, None),
-            Endpoint("Yesterday's Date", "/yesterday", HttpMethod.GET, None
-            )
+            Endpoint("Yesterday's Date", "/yesterday", HttpMethod.GET, None)
           ),
           productionAvailability = someApiAvailability(),
-          sandboxAvailability = None)
-      ))
+          sandboxAvailability = None
+        )
+      )
+    )
   }
 
 }

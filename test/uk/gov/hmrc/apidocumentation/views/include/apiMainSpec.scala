@@ -28,7 +28,7 @@ import scala.jdk.CollectionConverters.asScalaBufferConverter
 class apiMainSpec extends CommonViewSpec {
 
   trait Setup {
-    val usingTheHubView = app.injector.instanceOf[UsingTheHubView]
+    val usingTheHubView                = app.injector.instanceOf[UsingTheHubView]
     implicit val mockApplicationConfig = mock[ApplicationConfig]
 
     def elementExistsById(doc: Document, id: String): Boolean = doc.select(s"#$id").asScala.nonEmpty
@@ -52,4 +52,3 @@ class apiMainSpec extends CommonViewSpec {
     }
   }
 }
-

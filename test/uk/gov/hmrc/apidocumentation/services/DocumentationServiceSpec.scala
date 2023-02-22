@@ -39,11 +39,11 @@ import play.api.cache.AsyncCacheApi
 
 class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest with ApiDefinitionTestDataHelper {
 
-  val contentType = "application/xml"
-  val rawXml = "<date>2001-01-01</date>"
-  val html = "<b>Today is 01 January 2001</b>"
-  val serviceName = "calendar"
-  val serviceUrl = "http://localhost:1234"
+  val contentType        = "application/xml"
+  val rawXml             = "<date>2001-01-01</date>"
+  val html               = "<b>Today is 01 January 2001</b>"
+  val serviceName        = "calendar"
+  val serviceUrl         = "http://localhost:1234"
   val api: APIDefinition = apiDefinition("gregorian-calendar")
 
   override def fakeApplication(): Application =
@@ -53,9 +53,9 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
 
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val cache = app.injector.instanceOf[AsyncCacheApi]
-    val appConfig = mock[ApplicationConfig]
-    val apm = mock[ApiPlatformMicroserviceConnector]
+    val cache       = app.injector.instanceOf[AsyncCacheApi]
+    val appConfig   = mock[ApplicationConfig]
+    val apm         = mock[ApiPlatformMicroserviceConnector]
     when(appConfig.apiPlatformMicroserviceBaseUrl).thenReturn(serviceUrl)
 
     val underTest = new DocumentationService(appConfig, cache, apm)
@@ -73,10 +73,10 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
       false
     )
 
-    def defaultResource(path: String, methods: String*) = 
+    def defaultResource(path: String, methods: String*) =
       Resource(
         resourcePath = path,
-        methods = toMethods(methods:_*),
+        methods = toMethods(methods: _*),
         uriParameters = List.empty,
         relativeUri = "",
         displayName = "",
@@ -88,7 +88,7 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
     }
 
     def defaultMethod(verb: String) = Method(
-      method =  verb,
+      method = verb,
       displayName = "name",
       body = List.empty,
       headers = List.empty,
@@ -101,7 +101,7 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
 
     "create a simple testers URL output file with just endpoint information" in new Setup {
       val specification = defaultApiSpecification
-      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(Some(specification)))
+      when(apm.fetchApiSpecification(*, *)(*)).thenReturn(successful(Some(specification)))
       await(underTest.buildTestEndpoints("minimal", "1.0")) shouldBe Seq.empty
     }
 
@@ -110,19 +110,19 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
         resourceGroups = List(
           ResourceGroup(
             name = None,
-            description = None, 
+            description = None,
             resources = List(
               defaultResource("/hello")
-              .copy(
-                children = List(
-                  defaultResource("/hello/world", "get")
+                .copy(
+                  children = List(
+                    defaultResource("/hello/world", "get")
+                  )
                 )
-              )
             )
           )
         )
       )
-      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(Some(specification)))
+      when(apm.fetchApiSpecification(*, *)(*)).thenReturn(successful(Some(specification)))
 
       val expected = Seq(TestEndpoint("{service-url}/hello/world", "GET"))
       await(underTest.buildTestEndpoints("single-endpoint", "1.0")) shouldBe expected
@@ -133,27 +133,27 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
         resourceGroups = List(
           ResourceGroup(
             name = None,
-            description = None, 
+            description = None,
             resources = List(
               defaultResource("/hello")
-              .copy(
-                children = List(
-                  defaultResource("/hello/there", "options", "get", "put").copy(
-                    children = List(
-                      defaultResource("/hello/there/{empref}", "delete").copy(
-                        children = List(
-                          defaultResource("/hello/there/{empref}/year", "post")
+                .copy(
+                  children = List(
+                    defaultResource("/hello/there", "options", "get", "put").copy(
+                      children = List(
+                        defaultResource("/hello/there/{empref}", "delete").copy(
+                          children = List(
+                            defaultResource("/hello/there/{empref}/year", "post")
+                          )
                         )
                       )
                     )
                   )
                 )
-              )
             )
           )
         )
       )
-      when(apm.fetchApiSpecification(*,*)(*)).thenReturn(successful(Some(specification)))
+      when(apm.fetchApiSpecification(*, *)(*)).thenReturn(successful(Some(specification)))
 
       val expected = Seq(
         TestEndpoint("{service-url}/hello/there", "GET", "OPTIONS", "PUT"),
