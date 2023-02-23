@@ -47,7 +47,9 @@ lazy val microservice = Project(appName, file("."))
     )
   )
   .settings(
-    resolvers ++= Resolver.sonatypeOssRepos("releases")
+    resolvers ++= Seq(
+      Resolver.typesafeRepo("releases")
+    )
   )
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
