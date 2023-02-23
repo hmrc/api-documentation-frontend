@@ -6,6 +6,7 @@ import sbt.Keys._
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings._
+import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import bloop.integrations.sbt.BloopDefaults
 
 Global / bloopAggregateSourceDependencies := true
@@ -22,10 +23,10 @@ inThisBuild(
   )
 )
 
-lazy val plugins: Seq[Plugins] = Seq.empty
+lazy val plugins: Seq[Plugins] = Seq(PlayScala, SbtDistributablesPlugin)
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(PlayScala) ++ plugins: _*)
+  .enablePlugins(plugins: _*)
   .settings(
     name := appName
   )
