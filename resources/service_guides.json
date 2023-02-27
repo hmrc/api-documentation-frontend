@@ -52,6 +52,10 @@
     "context": "/guides/ctc-guarantee-balance-testing-guide/"
   },
   {
+    "name": "CTC Guarantee Balance phase 5 service guide",
+    "context": "/guides/ctc-guarantee-balance-phase5-service-guide/"
+  },
+  {
     "name": "Import Control System 2 Presentation of Goods service guide",
     "context": "/guides/import-control-presentation-of-goods-end-to-end-service-guide"
   }
