@@ -17,7 +17,7 @@ ThisBuild / evictionWarningOptions := EvictionWarningOptions.default.withWarnSca
 
 inThisBuild(
   List(
-    scalaVersion := "2.12.15",
+    scalaVersion := "2.13.8",
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision
   )
@@ -60,7 +60,7 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     majorVersion := 0,
-    scalacOptions += "-Ypartial-unification"
+    scalacOptions += "-language:postfixOps"
   )
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
 
@@ -86,7 +86,7 @@ lazy val microservice = Project(appName, file("."))
 
   .settings(DefaultBuildSettings.integrationTestSettings())
 
-  .settings(scalaVersion := "2.12.15")
+  .settings(scalaVersion := "2.13.8")
   .settings(headerSettings(AcceptanceTest) ++ automateHeaderSettings(AcceptanceTest))
   .settings(SilencerSettings())
 

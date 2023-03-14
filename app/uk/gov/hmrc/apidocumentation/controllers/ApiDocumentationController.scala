@@ -90,7 +90,7 @@ class ApiDocumentationController @Inject() (
         (for {
           userId  <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
           apis    <- apiDefinitionService.fetchAllDefinitions(userId)
-          xmlApis <- xmlServicesService.fetchAllXmlApis
+          xmlApis <- xmlServicesService.fetchAllXmlApis()
         } yield {
           val apisByCategory = Documentation.groupedByCategory(apis, xmlApis, ServiceGuide.serviceGuides, RoadMap.roadMaps)
 

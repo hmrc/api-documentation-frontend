@@ -13,7 +13,7 @@ object AppDependencies {
     ws,
     caffeine,
     "uk.gov.hmrc"                           %% "bootstrap-frontend-play-28"   % bootstrapVersion,
-    "uk.gov.hmrc"                           %% "http-metrics"                 % "2.5.0-play-28",
+    "uk.gov.hmrc"                           %% "http-metrics"                 % "2.7.0",
     "uk.gov.hmrc"                           %% "play-partials"                % "8.3.0-play-28",
     "uk.gov.hmrc"                           %% "play-frontend-hmrc"           % "6.2.0-play-28",
     "org.typelevel"                         %% "cats-core"                    % "2.6.1",

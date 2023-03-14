@@ -53,7 +53,7 @@ class OpenApiDocumentationController @Inject() (
     PageAttributes(
       title = "OpenAPI Documentation Preview",
       breadcrumbs = Breadcrumbs(
-        Crumb("Preview OpenAPI", routes.OpenApiDocumentationController.previewApiDocumentationPage.url),
+        Crumb("Preview OpenAPI", routes.OpenApiDocumentationController.previewApiDocumentationPage().url),
         homeCrumb
       ),
       headerLinks = navLinks,

@@ -33,7 +33,7 @@
     @documentFilter(documentsByCategory, filter)
 
     @filter.map { f =>
-        @defining(documentsByCategory.filterKeys(_.filter == f.filter)) { filteredDocuments =>
+        @defining(documentsByCategory.filterKeys(_.filter == f.filter).toMap) { filteredDocuments =>
             @defining(filteredDocuments.values.toSeq.flatten.length) { numDocuments =>
                 <p class="govuk-body">@numDocuments document@if(numDocuments != 1){s} found in <strong class="bold-small">@f.displayName</strong></p>
 

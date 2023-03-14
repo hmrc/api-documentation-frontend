@@ -20,9 +20,10 @@
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.apispecification.helpers._
 @import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
+@import uk.gov.hmrc.apidocumentation.views.html.apispecification.MainView
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, ourMainView: apispecification.MainView)
+@this(apiMain: apiMain, ourMainView: MainView)
 
 @(pageAttributes: PageAttributes, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, viewModel: ViewModel, loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 

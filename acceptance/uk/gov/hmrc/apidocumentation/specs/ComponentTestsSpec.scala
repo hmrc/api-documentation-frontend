@@ -24,7 +24,7 @@ trait ComponentTestsSpec extends GivenWhenThen { baseSpec: BaseSpec =>
 
   object Given extends DescriptiveMocks {
     override def condition(message: String) {
-      Given(message:String)
+      Given(message: String)
     }
   }
 

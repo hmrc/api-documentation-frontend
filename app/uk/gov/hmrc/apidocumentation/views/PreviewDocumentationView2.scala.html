@@ -19,9 +19,10 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers.routes
 @import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.views.html.apispecification.MainView
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
-@this(apiMain: apiMain, ourMainView: apispecification.MainView)
+@this(apiMain: apiMain, ourMainView: MainView)
 
 @(pageAttributes: PageAttributes, url: Option[String], result: Try[Option[ViewModel]])(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
