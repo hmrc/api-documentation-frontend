@@ -15,8 +15,8 @@
  */
 
 package uk.gov.hmrc.apidocumentation.specs
-import uk.gov.hmrc.apidocumentation.BaseSpec
 
+import uk.gov.hmrc.apidocumentation.BaseSpec
 import uk.gov.hmrc.apidocumentation.pages._
 import org.scalatest.prop.TableDrivenPropertyChecks
 import uk.gov.hmrc.apidocumentation.TableDrivenPropertyMocks
@@ -31,7 +31,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
     ignore("User is navigated to the top when Back to top link is clicked") {
       Given("I have navigated to the API documentation page")
-      Given apiServicesIsDeployed()
+      Given.apiServicesIsDeployed
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
@@ -65,7 +65,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
     Scenario("Left menu options are displayed when selected an API") {
       Given("I have navigated to the API documentation page")
-      Given apiServicesIsDeployed()
+      Given.apiServicesIsDeployed
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
@@ -81,7 +81,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
     Scenario("User is navigated to the appropriate sections when user clicks on the sections on the left side") {
       Given("I have navigated to the API documentation page")
-      Given apiServicesIsDeployed()
+      Given.apiServicesIsDeployed
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
@@ -98,7 +98,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
     Scenario("Dev Hub Name") {
       val expectedApplicationName = "HMRC Developer Hub"
       Given("I have navigated to the Home page")
-      Given apiServicesIsDeployed()
+      Given.apiServicesIsDeployed
       goOn(HomePage)
       on(HomePage)
 
@@ -123,7 +123,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
     Scenario("Ensure back to the top link only exists after Errors section") {
       Given("I have navigated to the API documentation page")
-      Given apiServicesIsDeployed()
+      Given.apiServicesIsDeployed
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 

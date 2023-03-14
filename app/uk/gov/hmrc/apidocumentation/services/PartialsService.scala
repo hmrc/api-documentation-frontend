@@ -27,6 +27,6 @@ import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 class PartialsService @Inject() (connector: DeveloperFrontendConnector) {
 
   def termsOfUsePartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = {
-    connector.fetchTermsOfUsePartial
+    connector.fetchTermsOfUsePartial()
   }
 }

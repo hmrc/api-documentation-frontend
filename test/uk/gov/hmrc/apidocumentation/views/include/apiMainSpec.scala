@@ -23,7 +23,7 @@ import uk.gov.hmrc.apidocumentation.models.{Breadcrumbs, Crumb, PageAttributes}
 import uk.gov.hmrc.apidocumentation.views.CommonViewSpec
 import uk.gov.hmrc.apidocumentation.views.html.UsingTheHubView
 
-import scala.jdk.CollectionConverters.asScalaBufferConverter
+import scala.jdk.CollectionConverters._
 
 class apiMainSpec extends CommonViewSpec {
 

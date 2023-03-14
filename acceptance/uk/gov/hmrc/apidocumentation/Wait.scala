@@ -44,7 +44,7 @@ trait Wait extends Eventually {
         throw new RuntimeException("Old element still present")
       }
       catch {
-        case _: StaleElementReferenceException => Unit
+        case _: StaleElementReferenceException => ()
       }
     }
   }

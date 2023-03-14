@@ -166,7 +166,7 @@ class NavigationService @Inject() (
       Seq(
         SidebarLink(
           "Preview OpenAPI",
-          routes.OpenApiDocumentationController.previewApiDocumentationPage.url
+          routes.OpenApiDocumentationController.previewApiDocumentationPage().url
         )
       )
     } else {

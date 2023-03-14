@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import scala.collection.Seq
 import scala.collection.immutable.ListMap
 
 import play.api.libs.functional.syntax._
@@ -40,7 +39,7 @@ case class JsonSchema(
     required: Seq[String] = Nil,
     definitions: ListMap[String, JsonSchema] = ListMap(),       // See above regarding use of ListMap
     ref: Option[String] = None,
-    enum: Seq[EnumerationValue] = Nil,
+    `enum`: Seq[EnumerationValue] = Nil,
     oneOf: Seq[JsonSchema] = Nil,
     pattern: Option[String] = None
   )
@@ -82,7 +81,7 @@ object JsonSchema {
 
     def reads(json: JsValue) = json match {
       case JsObject(m) =>
-        type Errors = Seq[(JsPath, Seq[JsonValidationError])]
+        type Errors = scala.collection.Seq[(JsPath, scala.collection.Seq[JsonValidationError])]
 
         def locate(e: Errors, key: String) = e.map { case (path, validationError) => (JsPath \ key) ++ path -> validationError }
 
