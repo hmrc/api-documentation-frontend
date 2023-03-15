@@ -61,6 +61,7 @@ trait Env {
     options.addArguments("--headless")
     options.addArguments("--proxy-server='direct://'")
     options.addArguments("--proxy-bypass-list=*")
+    options.addArguments("--remote-allow-origins=*")
     new ChromeDriver(options)
   }
 
