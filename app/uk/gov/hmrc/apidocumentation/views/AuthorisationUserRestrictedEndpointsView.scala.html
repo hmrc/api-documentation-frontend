@@ -54,7 +54,7 @@
         HMRC on their behalf, without sharing their access credentials.
     </p>
 
-    <p class="govuk-body">The end user authenticates directly with us using their Government Gateway account, and grants authority for specific <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage()#scopes">scopes</a>.</p>
+    <p class="govuk-body">The end user authenticates directly with us using their Government Gateway account, and grants authority for specific <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</p>
 
     <p class="govuk-body">We then issue an OAuth 2.0 <a class="govuk-link" href="https://tools.ietf.org/html/rfc6749#section-1.4" rel="noopener noreferrer">access token</a> that’s specific to the end user. Your application passes the access token in subsequent API requests to user-restricted endpoints.</p>
 
@@ -91,7 +91,7 @@
                 <li>We prompt the user to sign in using their Government Gateway account.</li>
                 <li>The user is taken through <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisation2SVPage().url">2-Step Verification (2SV)</a>.</li>
                 <li>The user may be asked to confirm their identity. This depends on the user type, the specific API scopes being requested and whether or not the user has previously confirmed their identity.</li>
-                <li>The user is asked to grant your application the authority to access certain <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage()#scopes">scopes</a>.</li>
+                <li>The user is asked to grant your application the authority to access certain <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</li>
             </ol>
 
             <p class="govuk-body">The following diagram illustrates the process:</p>
