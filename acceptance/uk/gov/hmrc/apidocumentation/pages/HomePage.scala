@@ -27,7 +27,7 @@ object HomePage extends WebPage {
 
   def applicationName = WebBrowser.id("HMRC-Developer-Hub").element.text
 
-  def selectApidoc() {
+  def selectApidoc(): Unit = {
     val apiDocLInk = find(linkText("API documentation")).get
     click on apiDocLInk
   }

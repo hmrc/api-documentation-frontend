@@ -26,7 +26,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future.successful
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-import akka.http.scaladsl.model.headers.LinkParams.title
 import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
 import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
 import uk.gov.hmrc.apidocumentation.models.apispecification.Method

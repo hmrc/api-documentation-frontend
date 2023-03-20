@@ -18,7 +18,6 @@ package uk.gov.hmrc.apidocumentation.pages
 
 import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 import org.openqa.selenium.By
-import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.Select
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.openqa.selenium.support.ui.WebDriverWait
@@ -41,17 +40,17 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   def applicationName = WebBrowser.id("HMRC-Developer-Hub").element.text
 
-  def selectErrorsBackToTop() {
+  def selectErrorsBackToTop(): Unit = {
     click on errorsBackToTop
     waitForPageToStopMoving()
   }
 
-  def selectEndpointsBackToTop() {
+  def selectEndpointsBackToTop(): Unit = {
     click on endpointsBackToTop
     waitForPageToStopMoving()
   }
 
-  def assertEndpointsDetails() {
+  def assertEndpointsDetails(): Unit = {
     val ids =
       Table(
         ("ID", "id"),
@@ -65,7 +64,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     }
   }
 
-  def assertAPIEndpoints() {
+  def assertAPIEndpoints(): Unit = {
     val endpoints =
       Table(
         ("ID", "Endpoint Title", "Endpoint Request Type", "Endpoint URI"),
@@ -95,7 +94,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     }
   }
 
-  def assertMenuLinkColors() {
+  def assertMenuLinkColors(): Unit = {
     val menuLink =
       Table(
         "menuLink",
@@ -117,7 +116,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     }
   }
 
-  def assertLeftMenuIsDisplayed() {
+  def assertLeftMenuIsDisplayed(): Unit = {
     val navigationItems =
       Table(
         ("Navigation links", "Number"),
@@ -132,7 +131,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
     }
   }
 
-  def waitUntilLinksGetToTheTopOfThePage() {
+  def waitUntilLinksGetToTheTopOfThePage(): Unit = {
     val navigationItems =
       Table(
         "Navigation links",
@@ -175,7 +174,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
   def locationFieldOptional = find(cssSelector(locationFieldOptionalId)).get
 
 
-  def selectCreateUser() {
+  def selectCreateUser(): Unit = {
     click on className("govuk-details__summary")
     waitForPageToStopMoving()
   }

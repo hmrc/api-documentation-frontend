@@ -104,7 +104,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       "render the API List" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
-        fetchAllXmlApisReturnsApis
+        fetchAllXmlApisReturnsApis()
 
         val result = underTest.apiIndexPage(None, None, None)(request)
         verifyPageRendered(pageTitle("API Documentation"), bodyContains = Seq("API documentation"))(result)
@@ -113,7 +113,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       "render the filtered API list" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
-        fetchAllXmlApisReturnsVatApi
+        fetchAllXmlApisReturnsVatApi()
 
         val result = underTest.apiIndexPage(None, None, Some("vat"))(request)
 

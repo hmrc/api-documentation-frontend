@@ -20,28 +20,28 @@ trait DescriptiveMocks extends Stubs {
 
   def condition(message: String): Unit
 
-  def apiServicesIsDeployed {
+  def apiServicesIsDeployed(): Unit = {
     condition("All the API services are deployed")
     developerIsSignedIn()
     fetchAll()
     fetchAllXmlApis()
   }
 
-  def helloWorldIsDeployed(serviceName: String, version: String) {
+  def helloWorldIsDeployed(serviceName: String, version: String): Unit = {
     condition(s"$serviceName is deployed with version $version")
     developerIsSignedIn()
     fetchDefinition(serviceName)
     fetchApiSpec(serviceName, version)
   }
 
-  def apiDocumentationTestServiceIsDeployed(serviceName: String, version: String) {
+  def apiDocumentationTestServiceIsDeployed(serviceName: String, version: String): Unit = {
     condition(s"$serviceName is deployed with version $version")
     developerIsSignedIn()
     fetchDefinition(serviceName)
     fetchApiSpec(serviceName,version)
   }
 
-  def apiDocumentationTestServiceVersionsIsDeployed {
+  def apiDocumentationTestServiceVersionsIsDeployed(): Unit = {
     val versions = List("0.1", "0.2", "0.3", "0.4", "1.0", "1.1", "1.2","1.3", "1.5", "2.0")
     versions.foreach { version =>
       apiDocumentationTestServiceIsDeployed("api-documentation-test-service", version)

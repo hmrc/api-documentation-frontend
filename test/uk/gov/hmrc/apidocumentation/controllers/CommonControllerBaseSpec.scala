@@ -177,7 +177,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
 
   def aServiceGuide(name: String) = ServiceGuide(name, "context")
 
-  def verifyRedirectToLoginPage(actualPage: Future[Result], service: String, version: String) {
+  def verifyRedirectToLoginPage(actualPage: Future[Result], service: String, version: String): Unit = {
     status(actualPage) shouldBe 303
 
     headers(actualPage).get("Location") shouldBe Some("/developer/login")
