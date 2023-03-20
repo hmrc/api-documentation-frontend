@@ -5,7 +5,6 @@
     var lastPart = url.split("#").pop();
     var endpoint = document.getElementById(lastPart + "-details");
     if (endpoint != null) {
-      var endpoint = document.getElementById(lastPart + "-details");
       var att = document.createAttribute("open");
       att.value = "";
       endpoint.setAttributeNode(att);
@@ -37,10 +36,8 @@
       var clickedEndpoint = e.target.id
       var parentEndpoint = document.getElementById(clickedEndpoint + "-details");
       if (parentEndpoint.hasAttribute("open")) {
-        var parentEndpoint = document.getElementById(clickedEndpoint + "-details");
         parentEndpoint.removeAttribute("open");
       } else {
-        var parentEndpoint = document.getElementById(clickedEndpoint + "-details");
         var att = document.createAttribute("open");
         att.value = "";
         parentEndpoint.setAttributeNode(att);
@@ -70,14 +67,17 @@
   window.addEventListener('load', function () {
     expandEnpoint()
 
-    var allLinks = document.querySelector("#endpoints").querySelectorAll('a[href^="#"]');
-    for (var i = 0; i < allLinks.length; i++) {
-      allLinks[i].addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
+    var endpoints = document.querySelector("#endpoints")
+    if (endpoints) {
+      var allLinks = endpoints.querySelectorAll('a[href^="#"]');
+      for (var i = 0; i < allLinks.length; i++) {
+        allLinks[i].addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
         });
-      });
+      }
     }
   });
 })();
