@@ -22,10 +22,12 @@
 @import uk.gov.hmrc.apidocumentation.services._
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
+@import views.html.helper.CSPNonce
 
 @this(applicationConfig: ApplicationConfig)
 
-@(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)
+@(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false
+)(implicit requestHeader: RequestHeader)
 
 @renderGetApiVersionForm = {
     @for(api <- maybeApi) {
@@ -138,4 +140,4 @@
         }
     </div>
 </div>
-<script src='@routes.Assets.versioned("javascripts/expand-endpoint.js")' type="text/javascript"></script> 
+<script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/expand-endpoint.js")' type="text/javascript"></script> 

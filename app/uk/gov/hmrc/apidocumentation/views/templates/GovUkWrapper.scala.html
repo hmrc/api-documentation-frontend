@@ -24,6 +24,7 @@
 @import uk.gov.hmrc.apidocumentation.views.html.include
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import uk.gov.hmrc.apidocumentation.views.html.templates._
+@import views.html.helper.CSPNonce
 
 @this(
         govukTemplate: GovukTemplate,
@@ -44,7 +45,7 @@
         navLinks: Seq[NavLink] = Seq.empty,
         leftNav: Option[Html] = None,
         feedbackBanner: Option[FeedbackBanner] = Some(GenericFeedbackBanner)
-)(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any])
+)(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any], requestHeader: RequestHeader)
 
 @head = {
 @hmrcTrackingConsentSnippet()
@@ -52,9 +53,9 @@
 }
 
 @scripts = {
-    <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
-    <script src='@routes.Assets.versioned("javascripts/feedback.js")' type="text/javascript"></script>
-    <script>window.GOVUKFrontend.initAll();</script>
+    <script @CSPNonce.attr src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/feedback.js")' type="text/javascript"></script>
+    <script @CSPNonce.attr>window.GOVUKFrontend.initAll();</script>
 }
 
 
@@ -103,7 +104,7 @@
             @siteHelper()
             </div>
         </div>
-        <script src='@routes.Assets.versioned("javascripts/nav-scroll.js")' type="text/javascript"></script>
+        <script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/nav-scroll.js")' type="text/javascript"></script>
     </div>
 }
 
