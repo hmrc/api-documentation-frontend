@@ -28,16 +28,16 @@ import java.time.Duration
 
 trait NavigationSugar extends WebBrowser with Eventually with Assertions with Matchers with IntegrationPatience with Wait {
 
-  def goOn(page: WebPage)(implicit webDriver: WebDriver) {
+  def goOn(page: WebPage)(implicit webDriver: WebDriver): Unit = {
     go(page)
     on(page)
   }
 
-  def go(page: WebPage)(implicit webDriver: WebDriver) {
+  def go(page: WebPage)(implicit webDriver: WebDriver): Unit = {
     goo to page
   }
 
-  def goToUrl(url: String)(implicit webDriver: WebDriver) {
+  def goToUrl(url: String)(implicit webDriver: WebDriver): Unit = {
     goo to url
   }
 
@@ -59,15 +59,15 @@ trait NavigationSugar extends WebBrowser with Eventually with Assertions with Ma
     )
   }
 
-  def anotherTabIsOpened()(implicit webDriver: WebDriver) {
+  def anotherTabIsOpened()(implicit webDriver: WebDriver): Unit = {
     webDriver.getWindowHandles.size() should be(2)
   }
 
-  def browserGoBack()(implicit webDriver: WebDriver) {
+  def browserGoBack()(implicit webDriver: WebDriver): Unit = {
     webDriver.navigate().back()
   }
 
-  def browserGoForward()(implicit webDriver: WebDriver) {
+  def browserGoForward()(implicit webDriver: WebDriver): Unit = {
     webDriver.navigate().forward()
   }
 

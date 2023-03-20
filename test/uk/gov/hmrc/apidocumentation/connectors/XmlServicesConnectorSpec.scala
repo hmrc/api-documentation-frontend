@@ -74,7 +74,7 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
           .withStatus(OK)
           .withJsonBody(xmlApis)))
 
-      val result: Seq[XmlApiDocumentation] = await(connector.fetchAllXmlApis)
+      val result: Seq[XmlApiDocumentation] = await(connector.fetchAllXmlApis())
 
       result shouldBe xmlApis
     }
@@ -85,7 +85,7 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
           .withStatus(BAD_REQUEST)))
 
       intercept[UpstreamException.type] {
-        await(connector.fetchAllXmlApis)
+        await(connector.fetchAllXmlApis())
       }
     }
   }

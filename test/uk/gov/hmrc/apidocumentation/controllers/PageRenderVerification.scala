@@ -58,7 +58,7 @@ trait PageRenderVerification {
     contentAsString(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
   }
 
-  def verifyBreadcrumbRendered(actualPage: Future[Result], crumb: Crumb) {
+  def verifyBreadcrumbRendered(actualPage: Future[Result], crumb: Crumb): Unit = {
     contentAsString(actualPage) should include(s"""
                                                   |                    <li class="govuk-breadcrumbs__list-item">
                                                   |                        <a class="govuk-breadcrumbs__link" href="${crumb.url}">${crumb.name}</a>
@@ -83,11 +83,11 @@ trait PageRenderVerification {
     bodyContains.foreach { snippet => contentAsString(actualPage) should include(snippet) }
   }
 
-  def verifyNotFoundPageRendered(actualPage: Future[Result]) {
+  def verifyNotFoundPageRendered(actualPage: Future[Result]): Unit = {
     status(actualPage) shouldBe NOT_FOUND
   }
 
-  def verifyErrorPageRendered(expectedStatus: Int, expectedError: String)(actualPage: Future[Result]) {
+  def verifyErrorPageRendered(expectedStatus: Int, expectedError: String)(actualPage: Future[Result]): Unit = {
     status(actualPage) shouldBe expectedStatus
     contentAsString(actualPage) should include(expectedError)
   }

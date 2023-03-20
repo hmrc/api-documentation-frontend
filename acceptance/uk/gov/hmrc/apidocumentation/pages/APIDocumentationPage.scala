@@ -29,13 +29,13 @@ object APIDocumentationPage extends WebPage {
 
   override def isCurrentPage: Boolean = find(className("govuk-heading-l")).fold(false)(_.text == "API documentation")
 
-  def selectHelloWorld() {
+  def selectHelloWorld(): Unit = {
     val helloWorldLink = find(linkText("Hello World")).get
     click on helloWorldLink
     waitForPageToStopMoving()
   }
 
-  def selectAPIDocumentationTestService() {
+  def selectAPIDocumentationTestService(): Unit = {
     val apiDocumentationTestService = find(linkText("API Documentation Test")).get
     click on apiDocumentationTestService
     waitForPageToStopMoving()

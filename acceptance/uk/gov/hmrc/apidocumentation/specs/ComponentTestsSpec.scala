@@ -23,19 +23,19 @@ import uk.gov.hmrc.apidocumentation.DescriptiveMocks
 trait ComponentTestsSpec extends GivenWhenThen { baseSpec: BaseSpec =>
 
   object Given extends DescriptiveMocks {
-    override def condition(message: String) {
+    override def condition(message: String): Unit = {
       Given(message: String)
     }
   }
 
   object When extends DescriptiveMocks {
-    override def condition(message: String) {
+    override def condition(message: String): Unit = {
       When(message: String)
     }
   }
 
   object And extends DescriptiveMocks {
-    override def condition(message: String) {
+    override def condition(message: String): Unit = {
       And(message: String)
     }
   }

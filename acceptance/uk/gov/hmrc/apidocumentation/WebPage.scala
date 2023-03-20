@@ -34,7 +34,7 @@ trait WebPage extends Page with WebBrowser with Matchers with Eventually with Wa
   def containsFragment(fragment: String) =
     webDriver.getPageSource.contains(fragment)
 
-  def clickElement(elementId: String) {
+  def clickElement(elementId: String): Unit = {
     click on id(elementId)
   }
 

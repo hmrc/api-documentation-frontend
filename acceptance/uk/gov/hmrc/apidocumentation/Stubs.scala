@@ -39,7 +39,7 @@ trait XmlServices {
 }
 
 trait ApiPlatformMicroservice{
-  def fetchAll() {
+  def fetchAll(): Unit = {
     val allDefinitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/all.json")).mkString
 
     stubFor(
@@ -51,7 +51,7 @@ trait ApiPlatformMicroservice{
     )
   }
 
-  def fetchDefinition(serviceName: String) {
+  def fetchDefinition(serviceName: String): Unit = {
     val definitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/$serviceName.json")).mkString
     stubFor(
       get(urlMatching(s"/combined-api-definitions/$serviceName"))
@@ -62,7 +62,7 @@ trait ApiPlatformMicroservice{
     )
   }
 
-  def fetchApiSpec(serviceName: String, version: String) = {
+  def fetchApiSpec(serviceName: String, version: String): Unit = {
     val url = getClass.getResource(s"/services/$serviceName/spec_${version}.json")
     val file = Source.fromURL(url).mkString
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
@@ -78,7 +78,7 @@ trait ApiPlatformMicroservice{
     )
   }
 
-  def failToFetch(serviceName: String) {
+  def failToFetch(serviceName: String): Unit = {
     stubFor(
       get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/definition"))
         .willReturn(aResponse()
@@ -89,7 +89,7 @@ trait ApiPlatformMicroservice{
 
 trait ApiMicroservice {
 
-  def documentation(serviceName: String, version: String, endpointName: String) {
+  def documentation(serviceName: String, version: String, endpointName: String): Unit = {
     val documentationXml = Source.fromURL(
       getClass.getResource(s"/acceptance/$serviceName/${endpointName.toLowerCase.replace(" ", "-")}/documentation.xml")
     ).mkString
@@ -106,7 +106,7 @@ trait ApiMicroservice {
 
 trait DeveloperFrontend {
 
-  def developerIsSignedIn() {
+  def developerIsSignedIn(): Unit = {
     stubFor(
       get(urlPathEqualTo(s"/developer/user-navlinks"))
         .willReturn(
@@ -116,7 +116,7 @@ trait DeveloperFrontend {
     )
   }
 
-  def developerIsSignedOut() {
+  def developerIsSignedOut(): Unit = {
     stubFor(
       get(urlPathEqualTo(s"/developer/user-navlinks"))
         .willReturn(

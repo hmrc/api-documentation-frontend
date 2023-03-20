@@ -27,12 +27,12 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
 
     Scenario("Show endpoint page for the default version of a selected API") {
       Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
-      Given helloWorldIsDeployed("api-example-microservice", "1.0")
+      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
 
@@ -42,12 +42,12 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
 
     Scenario("OPTIONS endpoints are not displayed for the selected API") {
       Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
-      Given helloWorldIsDeployed("api-example-microservice", "1.0")
+      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
 
@@ -57,12 +57,12 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
 
     Scenario("Breadcrumb for the API endpoint") {
       Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
-      Given helloWorldIsDeployed("api-example-microservice", "1.0")
+      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
 
@@ -75,12 +75,12 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
 
     Scenario("Ensure end point details are displayed when endpoint HTTP verb button is selected") {
       Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
-      Given helloWorldIsDeployed("api-example-microservice", "1.0")
+      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
       loadPage()
@@ -90,8 +90,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     }
 
     Scenario("Ensure the same version that is displayed on the API index page is also displayed by default when API Documentation Test Service is selected") {
-      Given.apiServicesIsDeployed
-      Given.apiDocumentationTestServiceVersionsIsDeployed
+      Given.apiServicesIsDeployed()
+      Given.apiDocumentationTestServiceVersionsIsDeployed()
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
@@ -105,8 +105,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     }
 
     Scenario("Ensure all API versions are sorted correctly and can be viewed by the user") {
-      Given.apiServicesIsDeployed
-      Given.apiDocumentationTestServiceVersionsIsDeployed
+      Given.apiServicesIsDeployed()
+      Given.apiDocumentationTestServiceVersionsIsDeployed()
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
@@ -120,8 +120,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     }
 
     Scenario("Optional header displays as 'optional' in API docs") {
-      Given.apiServicesIsDeployed
-      Given.apiDocumentationTestServiceVersionsIsDeployed
+      Given.apiServicesIsDeployed()
+      Given.apiDocumentationTestServiceVersionsIsDeployed()
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
@@ -140,7 +140,7 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
 
     Scenario("Ensure user can access the Hello World API Summary Details page and view all endpoints for a Beta version") {
       Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
@@ -157,8 +157,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
     }
 
     Scenario("Update API Version in the request header") {
-      Given.apiServicesIsDeployed
-      Given.apiDocumentationTestServiceVersionsIsDeployed
+      Given.apiServicesIsDeployed()
+      Given.apiDocumentationTestServiceVersionsIsDeployed()
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)

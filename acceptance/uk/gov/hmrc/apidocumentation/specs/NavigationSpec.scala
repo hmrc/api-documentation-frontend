@@ -31,12 +31,12 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
     ignore("User is navigated to the top when Back to top link is clicked") {
       Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
-      Given helloWorldIsDeployed("api-example-microservice", "1.0")
+      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
       loadPage()
@@ -65,12 +65,12 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
     Scenario("Left menu options are displayed when selected an API") {
       Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
-      Given helloWorldIsDeployed("api-example-microservice", "1.0")
+      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
       loadPage()
@@ -81,12 +81,12 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
     Scenario("User is navigated to the appropriate sections when user clicks on the sections on the left side") {
       Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
-      Given helloWorldIsDeployed("api-example-microservice", "1.0")
+      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
       loadPage()
@@ -98,7 +98,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
     Scenario("Dev Hub Name") {
       val expectedApplicationName = "HMRC Developer Hub"
       Given("I have navigated to the Home page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(HomePage)
       on(HomePage)
 
@@ -113,7 +113,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       APIDocumentationPage.applicationName shouldBe expectedApplicationName
 
       Given("I have navigated to the Hello World Page")
-      Given helloWorldIsDeployed("api-example-microservice", "1.0")
+      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       goOn(HelloWorldPage)
       on(HelloWorldPage)
 
@@ -123,12 +123,12 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
     Scenario("Ensure back to the top link only exists after Errors section") {
       Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed
+      Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
       on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
-      Given helloWorldIsDeployed("api-example-microservice", "1.0")
+      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
       loadPage()

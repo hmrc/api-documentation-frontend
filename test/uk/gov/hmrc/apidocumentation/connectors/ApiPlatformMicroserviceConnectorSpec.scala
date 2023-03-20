@@ -90,7 +90,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
 
       val result = await(underTest.fetchApiDefinition(serviceName, Some(userId)))
 
-      result should be('defined)
+      result shouldBe defined
       result.head.name shouldBe apiName1
     }
 
@@ -99,7 +99,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
 
       val result = await(underTest.fetchApiDefinition(serviceName, None))
 
-      result should be('defined)
+      result shouldBe defined
       result.head.name shouldBe apiName1
     }
 
@@ -115,7 +115,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
       whenGetDefinitionFindsNothing(serviceName)
 
       val result = await(underTest.fetchApiDefinition(serviceName, None))
-      result should not be 'defined
+      result should not be defined
     }
   }
 }

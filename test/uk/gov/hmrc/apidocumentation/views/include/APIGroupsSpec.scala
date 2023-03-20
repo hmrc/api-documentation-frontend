@@ -25,7 +25,7 @@ import uk.gov.hmrc.apidocumentation.models.APIStatus._
 import uk.gov.hmrc.apidocumentation.views
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 class APIGroupsSpec extends AsyncHmrcSpec {
 

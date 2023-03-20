@@ -33,7 +33,7 @@ trait Env {
   val port = 6001
 
   Runtime.getRuntime addShutdownHook new Thread {
-    override def run() {
+    override def run(): Unit = {
       shutdown()
     }
   }

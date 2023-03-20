@@ -75,13 +75,13 @@ object RequestResponseField2 {
 
     def extractEnumValues(schema: JsonSchema): Seq[EnumValue] = {
 
-      val enum = schema.`enum`.map(e => EnumValue(e.value))
+      val enumValues = schema.`enum`.map(e => EnumValue(e.value))
 
       val oneOf = schema.oneOf.map { e =>
         EnumValue(e.`enum`.headOption.fold("")(_.value), e.description)
       }
 
-      enum ++ oneOf
+      enumValues ++ oneOf
     }
 
     val currentField = fieldName match {
