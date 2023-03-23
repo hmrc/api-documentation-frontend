@@ -72,7 +72,7 @@
         requests and then read back that same data through retrieval (GET) requests.
     </p>
     <p class="govuk-body">Some stateful APIs have an accompanying test support API for setting up test data, which you can find on our
-        <a class="govuk-link" href="https://developer.service.hmrc.gov.uk/api-documentation/docs/api">API documentation page</a>.
+        <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation page</a>.
         For example, the Individual Tax API only supports retrieval (GET) requests so the accompanying Individual PAYE
         Test Support API can create (POST) test data for it.
     </p>

@@ -22,6 +22,7 @@
 @import uk.gov.hmrc.apidocumentation.views.templates.FooterLinks
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.pagelayout.PageLayout
 @import uk.gov.hmrc.apidocumentation.views.html.FullWidthContent
+@import views.html.helper.CSPNonce
 
 @this(
     govukTemplate: GovukTemplate,
@@ -46,8 +47,8 @@
 }
 
 @scripts = {
-    <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
-    <script>window.GOVUKFrontend.initAll();</script>
+    <script @CSPNonce.attr src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script @CSPNonce.attr>window.GOVUKFrontend.initAll();</script>
 }
 
 @bodyEndDefault = {
