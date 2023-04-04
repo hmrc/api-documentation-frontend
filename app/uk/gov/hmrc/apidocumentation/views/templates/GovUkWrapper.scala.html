@@ -48,7 +48,7 @@
 )(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any], requestHeader: RequestHeader)
 
 @head = {
-@hmrcTrackingConsentSnippet()
+    @hmrcTrackingConsentSnippet()
     <link href='@controllers.routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />
 }
 
@@ -60,6 +60,13 @@
 
 
 @beforeContentBlock = {
+    <div id="feedback-banner" class="govuk-phase-banner">
+      <p id="feedback-title" class="govuk-phase-banner__content">
+          <span class="govuk-phase-banner__text">
+              Your <a class="govuk-link" href="@{applicationConfig.feedbackSurveyUrl}" target="_blank">feedback (opens in new tab)</a> will help us to improve this service.
+          </span>
+      </p>
+    </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full subnav">
             @breadcrumbs.map { crumbs =>
@@ -71,20 +78,12 @@
 }
 
 @footerBlock = {
-    <div class="govuk-!-margin-top-8">
-        @feedbackBanner match {
-            case Some(fb) => {
-                @feedbackBannerView(fb)
-            }
-            case _ => {}
-        }
-    </div>
     @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
 
 @bodyEndDefault = {
     @bodyEndBlock
-@scripts
+    @scripts
 }
 
 @mainContentDefault = {
