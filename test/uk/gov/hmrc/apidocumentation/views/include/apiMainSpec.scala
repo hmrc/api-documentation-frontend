@@ -35,7 +35,6 @@ class apiMainSpec extends CommonViewSpec {
   }
 
   "htmlView" must {
-
     "render the page with feedback banner" in new Setup {
       val document = Jsoup.parse(
         usingTheHubView.render(
@@ -46,9 +45,8 @@ class apiMainSpec extends CommonViewSpec {
         ).body
       )
 
-      elementExistsById(document, "feedback") shouldBe true
-      elementExistsById(document, "show-survey") shouldBe true
-      document.getElementById("feedback-title").text() shouldBe "Your feedback helps us improve our service"
+      elementExistsById(document, "feedback-banner") shouldBe true
+      document.getElementById("feedback-title").text() shouldBe "Your feedback (opens in new tab) will help us to improve this service."
     }
   }
 }
