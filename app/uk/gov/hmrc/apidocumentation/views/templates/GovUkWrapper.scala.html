@@ -20,7 +20,6 @@
 @import uk.gov.hmrc.apidocumentation.models.{Breadcrumbs, GenericFeedbackBanner, _}
 @import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.apidocumentation.views.templates.FooterLinks
-@import uk.gov.hmrc.apidocumentation.views.html.include.FeedbackBannerView
 @import uk.gov.hmrc.apidocumentation.views.html.include
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import uk.gov.hmrc.apidocumentation.views.html.templates._
@@ -32,8 +31,7 @@
         siteFooter: SiteFooter,
         siteHeader: SiteHeader,
         siteHelper: SiteHelper,
-        hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
-        feedbackBannerView: FeedbackBannerView
+        hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet
 )
 @(
         pageTitle: Option[String] = None,
@@ -43,8 +41,7 @@
         bodyEndBlock: Option[Html] = None,
         breadcrumbs: Option[Breadcrumbs] = None,
         navLinks: Seq[NavLink] = Seq.empty,
-        leftNav: Option[Html] = None,
-        feedbackBanner: Option[FeedbackBanner] = Some(GenericFeedbackBanner)
+        leftNav: Option[Html] = None
 )(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any], requestHeader: RequestHeader)
 
 @head = {
