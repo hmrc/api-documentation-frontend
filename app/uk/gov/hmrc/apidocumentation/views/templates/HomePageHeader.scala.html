@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.views.html.templates.SiteHeader
 @import uk.gov.hmrc.apidocumentation.views.html.partials
 @import uk.gov.hmrc.apidocumentation.views.html.include
@@ -21,11 +22,18 @@
 
 @this(siteHeader: SiteHeader)
 
-@(headerNavLinks: Option[Html] = None, navLinks: Seq[NavLink] = Seq.empty)(implicit messages: Messages)
+@(headerNavLinks: Option[Html] = None, navLinks: Seq[NavLink] = Seq.empty)(implicit messages: Messages, applicationConfig: ApplicationConfig)
 
 @siteHeader(navLinks)
 <!-- Notification Banner -->
 <div class="govuk-width-container">
+    <div id="feedback-banner" class="govuk-phase-banner">
+        <p id="feedback-title" class="govuk-phase-banner__content">
+            <span class="govuk-phase-banner__text">
+                Your <a class="govuk-link" href="@{applicationConfig.feedbackSurveyUrl}" target="_blank">feedback (opens in new tab)</a> will help us to improve this service.
+            </span>
+        </p>
+    </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full subnav subnav-margins">
             @include.api_header_nav(navLinks = headerNavLinks)
