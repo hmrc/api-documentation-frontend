@@ -29,6 +29,22 @@
 ) {
 <!-- Index blue banner -->
 <div class="hero">
+    <div class="govuk-width-container">
+      <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full subnav subnav-margins">
+              <ul id="proposition-links" class="govuk-list subnav-auth">
+                @for(link <- navLinks) {
+                  <li>
+                    <a class="govuk-link govuk-link--inverse @if(link.isSensitive){hmrc-redacted}" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>
+                      @{link.label}
+                    </a>
+                  </li>
+                }
+              </ul>
+          </div>
+        </div>
+        <hr class="govuk-section-break govuk-section-break--s govuk-section-break--visible">
+    </div>
     <div class="govuk-width-container hero-padding-top">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
