@@ -23,7 +23,7 @@ object HomePage extends WebPage {
 
   override val url = s"http://localhost:${Env.port}/api-documentation"
 
-  override def isCurrentPage: Boolean = find("RESTful-APIs-Title").fold(false)(_.text == "RESTful APIs for building smarter tax software")
+  override def isCurrentPage: Boolean = find("RESTful-APIs-Title").fold(false)(_.text == "Create tax software and apps using HMRC APIs")
 
   def applicationName = WebBrowser.id("HMRC-Developer-Hub").element.text
 
