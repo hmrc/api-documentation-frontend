@@ -63,55 +63,53 @@ class NavigationService @Inject() (
   lazy val sidebarNavigationLinks = Seq(
     SidebarLink(
       label = "Using the Developer Hub",
-      href = gettingStartedUrl,
-      subLinks = Seq(
-        SidebarLink(
-          label = "Application naming guidelines",
-          href = namingGuidelinesUrl
-        )
-      )
+      href = gettingStartedUrl
     ),
     SidebarLink(
       label = "API documentation",
       href = apiDocumentationUrl
+    ),
+    SidebarLink(
+      label = "Application naming guidelines",
+      href = namingGuidelinesUrl
     )
   ) ++
-    ramlPreviewLink() ++
-    openApiPreviewLink() ++
-    Seq(
-      SidebarLink(
-        label = "Reference guide",
-        href = referenceGuideUrl
-      ),
-      SidebarLink(
-        label = "Development practices",
-        href = developmentPracticesUrl
-      ),
-      SidebarLink(
-        label = "Send fraud prevention data",
-        href = fraudPreventionPageUrl
-      ),
-      SidebarLink(
-        label = "Authorisation",
-        href = authorisationUri
-      ),
-      SidebarLink(
-        label = "Tutorials",
-        href = tutorialsUri
-      ),
-      SidebarLink(
-        label = "Testing in the sandbox",
-        href = testingUri
-      ),
-      SidebarLink(
-        label = "Terms of use",
-        href = termsOfUseUri
-      ),
-      SidebarLink(
-        label = "Making Tax Digital guides",
-        href = mtdIntroductionPageUrl
-      )
+  ramlPreviewLink() ++
+  openApiPreviewLink() ++
+  Seq(
+    SidebarLink(
+      label = "Reference guide",
+      href = referenceGuideUrl
+    ),
+    SidebarLink(
+      label = "Development practices",
+      href = developmentPracticesUrl
+    ),
+    SidebarLink(
+      label = "Send fraud prevention data",
+      href = fraudPreventionPageUrl
+    ),
+    SidebarLink(
+      label = "Authorisation",
+      href = authorisationUri
+    ),
+    SidebarLink(
+      label = "Tutorials",
+      href = tutorialsUri
+    ),
+    SidebarLink(
+      label = "Testing in the sandbox",
+      href = testingUri
+    ),
+    SidebarLink(
+      label = "Terms of use",
+      href = termsOfUseUri
+    ),
+    SidebarLink(
+      label = "Making Tax Digital guides",
+      href = mtdIntroductionPageUrl
     )
+  )
 
   def sidebarNavigation() = sidebarNavigationLinks
 

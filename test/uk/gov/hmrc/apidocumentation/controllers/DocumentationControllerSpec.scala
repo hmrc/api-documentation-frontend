@@ -148,10 +148,9 @@ class DocumentationControllerSpec
     }
 
     "display the naming guidelines page" in new Setup {
-      verifyPageRendered(
-        pageTitle("Application naming guidelines"),
-        breadcrumbs = List(homeBreadcrumb, usingTheHubBreadcrumb)
-      )(underTest.nameGuidelinesPage()(request))
+      verifyPageRendered(pageTitle("Application naming guidelines"))(
+        underTest.nameGuidelinesPage()(request)
+      )
     }
 
     "display the Making Tax Digital guides page" in new Setup {

@@ -54,11 +54,6 @@ class DocumentationController @Inject() (
     with HomeCrumb
     with ApplicationLogger {
 
-  private lazy val usingTheHubCrumb = Crumb(
-    "Using the Developer Hub",
-    routes.DocumentationController.usingTheHubPage().url
-  )
-
   def indexPage(): Action[AnyContent] = headerNavigation {
     implicit request => navLinks =>
       Future.successful(Ok(indexView("Home", navLinks)))
@@ -123,7 +118,7 @@ class DocumentationController @Inject() (
         Ok(
           usingTheHubView(
             pageAttributes(
-              s"Using the Developer Hub",
+              "Using the Developer Hub",
               routes.DocumentationController.usingTheHubPage().url,
               navLinks
             )
@@ -182,24 +177,24 @@ class DocumentationController @Inject() (
       )
   }
 
+  def nameGuidelinesRedirect(): Action[AnyContent] = headerNavigation {
+    implicit request => navLinks =>
+      Future.successful(
+        Redirect(
+          routes.DocumentationController.nameGuidelinesPage().url
+        )
+      )
+  }
+
   def nameGuidelinesPage(): Action[AnyContent] = headerNavigation {
     implicit request => navLinks =>
-      val breadcrumbs = Breadcrumbs(
-        Crumb(
-          "Application naming guidelines",
-          routes.DocumentationController.nameGuidelinesPage().url
-        ),
-        usingTheHubCrumb,
-        homeCrumb
-      )
       Future.successful(
         Ok(
           namingGuidelinesView(
             pageAttributes(
               "Application naming guidelines",
               routes.DocumentationController.nameGuidelinesPage().url,
-              navLinks,
-              Some(breadcrumbs)
+              navLinks
             )
           )
         )
