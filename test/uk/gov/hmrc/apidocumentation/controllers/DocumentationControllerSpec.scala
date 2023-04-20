@@ -16,23 +16,24 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.concurrent.duration._
+
 import play.api.http.Status.MOVED_PERMANENTLY
 import play.api.mvc._
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import uk.gov.hmrc.apidocumentation.{ErrorHandler, controllers}
+import uk.gov.hmrc.play.partials.HtmlPartial
+
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers.utils._
+import uk.gov.hmrc.apidocumentation.mocks.config._
+import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.PartialsService
 import uk.gov.hmrc.apidocumentation.views.html.{TermsOfUseNotMeetingView, TermsOfUseWhatYouCanExpectView, _}
-import uk.gov.hmrc.apidocumentation.mocks.services._
-import uk.gov.hmrc.apidocumentation.mocks.config._
-import uk.gov.hmrc.play.partials.HtmlPartial
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.concurrent.duration._
+import uk.gov.hmrc.apidocumentation.{ErrorHandler, controllers}
 
 class DocumentationControllerSpec
     extends CommonControllerBaseSpec
@@ -50,17 +51,17 @@ class DocumentationControllerSpec
 
     implicit lazy val materializer = app.materializer
 
-    private lazy val indexView                      = app.injector.instanceOf[IndexView]
+    private lazy val indexView = app.injector.instanceOf[IndexView]
 
-    private lazy val retiredVersionJumpView         =
+    private lazy val retiredVersionJumpView =
       app.injector.instanceOf[RetiredVersionJumpView]
-    private lazy val tutorialsView                  = app.injector.instanceOf[TutorialsView]
-    private lazy val credentialsView                = app.injector.instanceOf[CredentialsView]
+    private lazy val tutorialsView          = app.injector.instanceOf[TutorialsView]
+    private lazy val credentialsView        = app.injector.instanceOf[CredentialsView]
 
-    private lazy val developmentPracticesView       =
+    private lazy val developmentPracticesView =
       app.injector.instanceOf[DevelopmentPracticesView]
 
-    private lazy val mtdIntroductionView            =
+    private lazy val mtdIntroductionView =
       app.injector.instanceOf[MtdIntroductionView]
 
     private lazy val namingGuidelinesView           =

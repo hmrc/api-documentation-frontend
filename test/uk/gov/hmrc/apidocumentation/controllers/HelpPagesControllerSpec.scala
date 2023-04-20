@@ -17,6 +17,7 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import play.api.test.Helpers._
+
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.mocks.services.ApiDocumentationServiceMock
 import uk.gov.hmrc.apidocumentation.views.html.{CookiesView, PrivacyView, TermsAndConditionsView}

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.apidocumentation.models
 
 import play.api.libs.json._
+
 import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
 
 class EnumerationValueSpec extends HmrcSpec {

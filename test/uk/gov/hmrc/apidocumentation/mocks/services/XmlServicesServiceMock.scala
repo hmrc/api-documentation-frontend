@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.services
 
+import scala.concurrent.Future.{failed, successful}
+
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
+
 import uk.gov.hmrc.apidocumentation.models.{APICategory, XmlApiDocumentation}
 import uk.gov.hmrc.apidocumentation.services.XmlServicesService
-
-import scala.concurrent.Future.{failed, successful}
 
 trait XmlServicesServiceMock extends MockitoSugar with ArgumentMatchersSugar {
 

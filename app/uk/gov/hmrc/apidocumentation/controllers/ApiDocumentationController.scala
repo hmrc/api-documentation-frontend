@@ -37,9 +37,9 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.{DownloadConnector, RamlPreviewConnector}
 import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
 import uk.gov.hmrc.apidocumentation.models.APICategory.{APICategory, categoryMap}
-import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html._

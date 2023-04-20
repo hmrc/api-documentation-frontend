@@ -18,11 +18,13 @@ package uk.gov.hmrc.apidocumentation.views.include
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+
 import play.twirl.api.HtmlFormat.Appendable
+
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.APIDefinition
 import uk.gov.hmrc.apidocumentation.views
-import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 class APIFilterSpec extends AsyncHmrcSpec {
 

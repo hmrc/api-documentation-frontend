@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.common.API
-import play.api.Configuration
 import com.github.tomakehurst.wiremock.client.WireMock._
+
+import play.api.Configuration
 import play.api.test.Helpers._
 import play.utils.UriEncoding
+import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.play.http.metrics.common.API
+
 import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
-import uk.gov.hmrc.http.UpstreamErrorResponse
 
 class XmlServicesConnectorSpec extends ConnectorSpec {
 
@@ -34,8 +35,8 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
   )
 
   trait Setup {
-    implicit val hc: HeaderCarrier               = HeaderCarrier()
-    val connector: XmlServicesConnector          = app.injector.instanceOf[XmlServicesConnector]
+    implicit val hc: HeaderCarrier      = HeaderCarrier()
+    val connector: XmlServicesConnector = app.injector.instanceOf[XmlServicesConnector]
 
     val UpstreamException: UpstreamErrorResponse = UpstreamErrorResponse(
       "Internal server error",

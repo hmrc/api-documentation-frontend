@@ -16,14 +16,12 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
-import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import uk.gov.hmrc.apidocumentation.models.UserId
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
+import uk.gov.hmrc.apidocumentation.connectors.UserSessionConnector
+import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, UserId}
 
 class SessionServiceSpec extends AsyncHmrcSpec {
 

@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation.utils
 
-import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.APIStatus.{APIStatus, STABLE}
+import uk.gov.hmrc.apidocumentation.models._
 
 trait ApiDefinitionTestDataHelper {
 
@@ -35,7 +35,7 @@ trait ApiDefinitionTestDataHelper {
 
   implicit class ApiAccessModifier(val inner: APIAccess) {
 
-    def asPublic: APIAccess  = {
+    def asPublic: APIAccess = {
       inner.copy(`type` = APIAccessType.PUBLIC)
     }
 
@@ -43,11 +43,11 @@ trait ApiDefinitionTestDataHelper {
       inner.copy(`type` = APIAccessType.PRIVATE)
     }
 
-    def asTrial: APIAccess   = {
+    def asTrial: APIAccess = {
       inner.copy(isTrial = Some(true))
     }
 
-    def notTrial: APIAccess  = {
+    def notTrial: APIAccess = {
       inner.copy(isTrial = Some(false))
     }
   }

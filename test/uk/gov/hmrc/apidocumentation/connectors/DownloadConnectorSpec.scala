@@ -16,17 +16,18 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import play.api.Configuration
 import play.api.http.Status._
 import play.api.mvc.Results._
-import play.api.test.Helpers.status
 import play.api.routing.sird._
+import play.api.test.Helpers.status
 import play.api.test.WsTestClient
 import play.core.server.Server
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.Configuration
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 class DownloadConnectorSpec extends ConnectorSpec {
   val apiDocumentationUrl = "https://api-documentation.example.com"
@@ -34,7 +35,7 @@ class DownloadConnectorSpec extends ConnectorSpec {
   val serviceName = "hello-world"
   val version     = "1.0"
 
-  val stubConfig  = Configuration(
+  val stubConfig = Configuration(
     "metrics.jvm" -> false
   )
 

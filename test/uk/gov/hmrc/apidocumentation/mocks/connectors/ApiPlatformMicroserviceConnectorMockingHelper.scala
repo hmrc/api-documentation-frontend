@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.connectors
 
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
+import scala.concurrent.Future
+
+import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
+
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
-import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
-import org.mockito.MockitoSugar
-import org.mockito.ArgumentMatchersSugar
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
+import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition, UuidIdentifier}
 
 trait ApiPlatformMicroserviceConnectorMockingHelper extends MockitoSugar with ArgumentMatchersSugar {
 

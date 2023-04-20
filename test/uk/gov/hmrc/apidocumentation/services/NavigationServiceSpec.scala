@@ -16,16 +16,18 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
+
 import play.api.cache.AsyncCacheApi
+import uk.gov.hmrc.http.HeaderCarrier
+
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
 

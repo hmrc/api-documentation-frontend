@@ -16,16 +16,17 @@
 
 package unit.uk.gov.hmrc.apidocumentation
 
+import scala.concurrent.{ExecutionContext, Future}
+
+import akka.stream.Materializer
+import akka.stream.testkit.NoMaterializer
+
 import play.api.mvc.{RequestHeader, Result, Session}
+import play.api.routing.{HandlerDef, Router}
 import play.api.test.FakeRequest
+
 import uk.gov.hmrc.apidocumentation.SessionRedirectFilter
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-
-import scala.concurrent.{ExecutionContext, Future}
-import akka.stream.Materializer
-import play.api.routing.Router
-import play.api.routing.HandlerDef
-import akka.stream.testkit.NoMaterializer
 
 class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
 

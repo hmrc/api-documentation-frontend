@@ -16,14 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.utils
 
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl}
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 import com.github.tomakehurst.wiremock.client.WireMock._
 
-import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
-import uk.gov.hmrc.apidocumentation.common.utils._
-
 import play.api.test.Helpers._
+
+import uk.gov.hmrc.apidocumentation.common.utils._
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl}
+import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition, UuidIdentifier}
 
 trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
 

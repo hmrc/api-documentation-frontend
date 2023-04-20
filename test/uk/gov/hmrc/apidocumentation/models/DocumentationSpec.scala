@@ -18,9 +18,10 @@ package uk.gov.hmrc.apidocumentation.models
 
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
+
+import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
 import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.APIStatus._
-import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
 
 class DocumentationSpec extends HmrcSpec {
 

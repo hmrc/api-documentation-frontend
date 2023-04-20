@@ -16,21 +16,22 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
-import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
-import uk.gov.hmrc.apidocumentation.mocks.connectors.ApiPlatformMicroserviceConnectorMockingHelper
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.reflect.ClassTag
+
+import akka.Done
+
+import play.api.cache._
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.common.NoopApiMetrics
-import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import uk.gov.hmrc.apidocumentation.models.UserId
-import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
-import play.api.cache._
-import scala.concurrent.duration._
-import scala.concurrent.Future
-import akka.Done
-import scala.reflect.ClassTag
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
+import uk.gov.hmrc.apidocumentation.mocks.connectors.ApiPlatformMicroserviceConnectorMockingHelper
+import uk.gov.hmrc.apidocumentation.models.{UserId, UuidIdentifier}
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 class ApiDefinitionServiceSpec extends AsyncHmrcSpec
     with ApiDefinitionTestDataHelper {

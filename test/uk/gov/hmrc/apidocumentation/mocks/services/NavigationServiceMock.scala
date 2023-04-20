@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.services
 
-import uk.gov.hmrc.apidocumentation.models._
-
 import scala.concurrent.Future.successful
-import org.mockito.ArgumentMatchersSugar
-import org.mockito.MockitoSugar
+
+import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
+
+import uk.gov.hmrc.apidocumentation.models._
 
 trait NavigationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   import NavigationServiceMock._

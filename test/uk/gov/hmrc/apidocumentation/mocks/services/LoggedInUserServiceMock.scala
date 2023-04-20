@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.services
 
-import org.mockito.MockitoSugar
-import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
-import uk.gov.hmrc.apidocumentation.models.Developer
-
 import scala.concurrent.Future.successful
-import uk.gov.hmrc.apidocumentation.models.UserId
-import org.mockito.ArgumentMatchersSugar
+
+import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
+
+import uk.gov.hmrc.apidocumentation.models.{Developer, UserId}
+import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
 
 trait LoggedInUserServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   val loggedInEmail  = "mr.abcd@example.com"
