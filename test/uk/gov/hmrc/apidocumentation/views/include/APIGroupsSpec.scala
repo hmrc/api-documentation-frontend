@@ -16,16 +16,18 @@
 
 package uk.gov.hmrc.apidocumentation.views.include
 
+import scala.jdk.CollectionConverters._
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+
 import play.twirl.api.HtmlFormat.Appendable
-import uk.gov.hmrc.apidocumentation.models.{APICategory => _, _}
+
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.models.APICategory._
 import uk.gov.hmrc.apidocumentation.models.APIStatus._
+import uk.gov.hmrc.apidocumentation.models.{APICategory => _, _}
 import uk.gov.hmrc.apidocumentation.views
-import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-
-import scala.jdk.CollectionConverters._
 
 class APIGroupsSpec extends AsyncHmrcSpec {
 
@@ -56,7 +58,7 @@ class APIGroupsSpec extends AsyncHmrcSpec {
       anApiDefinition("customsTestSupport2", isTestSupport = Some(true))
     )
 
-    val vatApis     = Seq(
+    val vatApis = Seq(
       anApiDefinition("vatTestSupport1", isTestSupport = Some(true)),
       anXmlApiDefinition("vatXmlApi1"),
       anApiDefinition("vatRestApi2"),

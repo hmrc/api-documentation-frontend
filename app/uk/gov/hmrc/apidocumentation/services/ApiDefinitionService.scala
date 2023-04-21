@@ -17,6 +17,7 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.cache._
@@ -25,7 +26,6 @@ import uk.gov.hmrc.play.http.metrics.common._
 
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
 import uk.gov.hmrc.apidocumentation.models._
-import scala.concurrent.duration._
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 trait BaseApiDefinitionService {

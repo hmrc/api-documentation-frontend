@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.views.include
 
+import scala.jdk.CollectionConverters._
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Breadcrumbs, Crumb, PageAttributes}
 import uk.gov.hmrc.apidocumentation.views.CommonViewSpec
 import uk.gov.hmrc.apidocumentation.views.html.UsingTheHubView
-
-import scala.jdk.CollectionConverters._
 
 class apiMainSpec extends CommonViewSpec {
 

@@ -19,8 +19,10 @@ package uk.gov.hmrc.apidocumentation.views.include
 import java.util.Locale
 
 import junit.framework.TestCase
+
 import play.api.i18n.{DefaultMessagesApi, Lang}
 import play.api.mvc.Request
+
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.NavLink
 import uk.gov.hmrc.apidocumentation.views.CommonViewSpec

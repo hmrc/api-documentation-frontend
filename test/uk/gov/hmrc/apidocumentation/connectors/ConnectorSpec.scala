@@ -16,13 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import play.api.{Application, Configuration}
-import play.api.libs.json.Json
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
-import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
-import uk.gov.hmrc.apidocumentation.common.utils._
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.Json
+import play.api.{Application, Configuration}
+
+import uk.gov.hmrc.apidocumentation.common.utils._
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 
 trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarExtensions with GuiceOneAppPerSuite {
 

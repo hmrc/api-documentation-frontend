@@ -20,13 +20,11 @@ import java.util.UUID
 
 import play.api.Configuration
 import play.api.http.Status.INTERNAL_SERVER_ERROR
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.utils.ApiPlatformMicroserviceHttpMockingHelper
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 
-import uk.gov.hmrc.http.UpstreamErrorResponse
-import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
-import uk.gov.hmrc.apidocumentation.models.UserId
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models.{UserId, UuidIdentifier}
+import uk.gov.hmrc.apidocumentation.utils.ApiPlatformMicroserviceHttpMockingHelper
 
 class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
 

@@ -16,27 +16,27 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import play.api.test.Helpers._
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SEE_OTHER}
-import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.views.html._
-import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.mocks.services._
-import uk.gov.hmrc.apidocumentation.controllers.utils._
-import uk.gov.hmrc.http.NotFoundException
-import uk.gov.hmrc.apidocumentation.mocks.config._
-
-import scala.concurrent.Future.successful
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future.failed
-import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem, ResourceGroup, TypeDeclaration}
-import uk.gov.hmrc.apidocumentation.connectors.RamlPreviewConnector
-import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
-import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
-import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
+import scala.concurrent.Future.{failed, successful}
+
 import akka.stream.Materializer
 import controllers.Assets
+
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SEE_OTHER}
+import play.api.mvc.MessagesControllerComponents
+import play.api.test.Helpers._
+import uk.gov.hmrc.http.NotFoundException
+
+import uk.gov.hmrc.apidocumentation.ErrorHandler
+import uk.gov.hmrc.apidocumentation.connectors.{DownloadConnector, RamlPreviewConnector}
+import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
+import uk.gov.hmrc.apidocumentation.controllers.utils._
+import uk.gov.hmrc.apidocumentation.mocks.config._
+import uk.gov.hmrc.apidocumentation.mocks.services._
+import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem, ResourceGroup, TypeDeclaration}
+import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 

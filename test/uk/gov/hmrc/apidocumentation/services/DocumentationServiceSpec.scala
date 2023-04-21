@@ -16,25 +16,22 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.Application
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.TestEndpoint
-import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
-import uk.gov.hmrc.http.HeaderCarrier
-import scala.concurrent.Future.successful
-import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-import uk.gov.hmrc.apidocumentation.models.apispecification.ResourceGroup
-import uk.gov.hmrc.apidocumentation.models.apispecification.Resource
-import uk.gov.hmrc.apidocumentation.models.apispecification.Method
-import uk.gov.hmrc.apidocumentation.models.APIDefinition
-
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future.successful
+
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
+
+import play.api.Application
+import play.api.cache.AsyncCacheApi
+import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-import play.api.cache.AsyncCacheApi
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
+import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, Method, Resource, ResourceGroup}
+import uk.gov.hmrc.apidocumentation.models.{APIDefinition, TestEndpoint}
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest with ApiDefinitionTestDataHelper {
 

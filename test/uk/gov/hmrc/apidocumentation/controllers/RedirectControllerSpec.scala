@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import scala.concurrent.Future
+
 import play.api.mvc._
 import play.api.test.Helpers._
-import scala.concurrent.Future
 
 class RedirectControllerSpec extends CommonControllerBaseSpec {
 

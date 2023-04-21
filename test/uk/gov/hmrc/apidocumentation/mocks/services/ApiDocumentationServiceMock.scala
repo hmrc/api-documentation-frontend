@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.services
 
+import scala.concurrent.Future.successful
+
+import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
+
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
-
-import scala.concurrent.Future.successful
-import org.mockito.ArgumentMatchersSugar
-import org.mockito.MockitoSugar
 
 trait ApiDocumentationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   val documentationService = mock[DocumentationService]

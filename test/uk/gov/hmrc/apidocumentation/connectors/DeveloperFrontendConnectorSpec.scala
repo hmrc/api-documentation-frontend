@@ -17,15 +17,17 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
+
+import play.api.Configuration
+import play.api.test.Helpers._
 import play.twirl.api.Html
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.http.metrics.common.API
+import uk.gov.hmrc.play.partials.HtmlPartial
+
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.partials.HtmlPartial
-import play.api.test.Helpers._
 import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
-import play.api.Configuration
-import uk.gov.hmrc.play.http.metrics.common.API
 
 class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   val developerFrontendUrl = "http://developer-frontend.example.com"

@@ -16,19 +16,21 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
-import play.api.test.Helpers._
+import scala.concurrent.Future
+
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.mvc._
-import play.api.test.FakeRequest
+
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
-import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+import play.api.mvc._
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
-import scala.concurrent.Future
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
+import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
+import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataHelper with GuiceOneAppPerSuite {
 

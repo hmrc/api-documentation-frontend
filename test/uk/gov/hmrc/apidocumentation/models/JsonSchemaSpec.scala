@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import play.api.libs.json.Json
-import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
-
 import scala.collection.immutable.ListMap
+
+import play.api.libs.json.Json
+
+import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
 
 class JsonSchemaSpec extends HmrcSpec {
 

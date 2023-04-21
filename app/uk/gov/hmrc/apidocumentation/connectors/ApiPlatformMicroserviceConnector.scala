@@ -24,8 +24,8 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
-import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 import uk.gov.hmrc.apidocumentation.models.{APIDefinition, DeveloperIdentifier, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 

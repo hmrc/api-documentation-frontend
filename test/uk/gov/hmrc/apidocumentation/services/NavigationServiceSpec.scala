@@ -16,16 +16,18 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
+
 import play.api.cache.AsyncCacheApi
+import uk.gov.hmrc.http.HeaderCarrier
+
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
 
@@ -43,11 +45,11 @@ class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
   "sidebarNavigation" should {
     "return sidebar navigation links" in new Setup {
       val sidebarNavLinks = underTest.sidebarNavigation()
-      sidebarNavLinks.size shouldBe 10
+      sidebarNavLinks.size shouldBe 11
       sidebarNavLinks.head.href shouldBe "/api-documentation/docs/using-the-hub"
       sidebarNavLinks.head.label shouldBe "Using the Developer Hub"
-      sidebarNavLinks(8).href shouldBe "/api-documentation/docs/terms-of-use"
-      sidebarNavLinks(8).label shouldBe "Terms of use"
+      sidebarNavLinks(9).href shouldBe "/api-documentation/docs/terms-of-use"
+      sidebarNavLinks(9).label shouldBe "Terms of use"
     }
 
   }

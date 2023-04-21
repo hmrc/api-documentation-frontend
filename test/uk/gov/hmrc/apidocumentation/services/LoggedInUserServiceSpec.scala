@@ -16,15 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.services
 
-import play.api.libs.crypto.CookieSigner
-import play.api.test.FakeRequest
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session}
-import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import uk.gov.hmrc.apidocumentation.models.UserId
+
+import play.api.libs.crypto.CookieSigner
+import play.api.test.FakeRequest
+
+import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, UserId}
 
 class LoggedInUserServiceSpec extends AsyncHmrcSpec {
 
