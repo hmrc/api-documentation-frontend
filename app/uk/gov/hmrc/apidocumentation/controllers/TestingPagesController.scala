@@ -26,6 +26,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.services.NavigationService
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.models._
 
 @Singleton
 class TestingPagesController @Inject() (
@@ -35,10 +36,10 @@ class TestingPagesController @Inject() (
     testUsersDataStatefulBehaviourView: TestUsersDataStatefulBehaviourView
   )(implicit ec: ExecutionContext,
     applicationConfig: ApplicationConfig
-  ) extends FrontendController(mcc) with HeaderNavigation with ApplicationLogger with PageAttributesHelper with HomeCrumb {
+  ) extends FrontendController(mcc) with HeaderNavigation with ApplicationLogger with PageAttributesHelper with BaseCrumbs {
 
   def testingPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(testingView(pageAttributes("Testing in the sandbox", routes.TestingPagesController.testingPage().url, navLinks))))
+    Future.successful(Ok(testingView(pageAttributes("Testing in the sandbox", navLinks, baseCrumbs))))
   }
 
   def testingStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { _ => _ =>
@@ -46,7 +47,10 @@ class TestingPagesController @Inject() (
   }
 
   def testUsersDataStatefulBehaviourPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    val testUsersDataStatefulBehaviourUrl = routes.TestingPagesController.testUsersDataStatefulBehaviourPage().url
-    Future.successful(Ok(testUsersDataStatefulBehaviourView(pageAttributes("Test users, test data and stateful behaviour", testUsersDataStatefulBehaviourUrl, navLinks))))
+    Future.successful(Ok(testUsersDataStatefulBehaviourView(pageAttributes(
+      "Test users, test data and stateful behaviour",
+      navLinks,
+      basePlus(Crumb("Testing in the sandbox", routes.TestingPagesController.testingPage().url))
+    ))))
   }
 }

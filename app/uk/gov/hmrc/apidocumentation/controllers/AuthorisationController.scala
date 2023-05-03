@@ -40,82 +40,32 @@ class AuthorisationController @Inject() (
     credentialsView: CredentialsView
   )(implicit ec: ExecutionContext,
     applicationConfig: ApplicationConfig
-  ) extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb
+  ) extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with BaseCrumbs
     with ApplicationLogger {
 
   private lazy val authCrumb = Crumb("Authorisation", routes.AuthorisationController.authorisationPage().url)
 
   def authorisationPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(authorisationView(pageAttributes("Authorisation", routes.AuthorisationController.authorisationPage().url, navLinks))))
+    Future.successful(Ok(authorisationView(pageAttributes("Authorisation", navLinks, baseCrumbs))))
   }
 
   def authorisation2SVPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("2-step verification", routes.AuthorisationController.authorisation2SVPage().url),
-      authCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(authorisation2SVView(pageAttributes(
-      "2-step verification",
-      routes.AuthorisationController.authorisation2SVPage().url,
-      navLinks,
-      Some(breadcrumbs)
-    ))))
+    Future.successful(Ok(authorisation2SVView(pageAttributes("2-step verification", navLinks, basePlus(authCrumb)))))
   }
 
   def authorisationCredentialsPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("Credentials", routes.AuthorisationController.authorisationCredentialsPage().url),
-      authCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(credentialsView(pageAttributes(
-      "Credentials",
-      routes.AuthorisationController.authorisationCredentialsPage().url,
-      navLinks,
-      Some(breadcrumbs)
-    ))))
+    Future.successful(Ok(credentialsView(pageAttributes("Credentials", navLinks, basePlus(authCrumb)))))
   }
 
   def authorisationOpenAccessEndpointsPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("Open access endpoints", routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url),
-      authCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(authorisationOpenAccessEndpointsView(pageAttributes(
-      "Open access endpoints",
-      routes.AuthorisationController.authorisationOpenAccessEndpointsPage().url,
-      navLinks,
-      Some(breadcrumbs)
-    ))))
+    Future.successful(Ok(authorisationOpenAccessEndpointsView(pageAttributes("Open access endpoints", navLinks, basePlus(authCrumb)))))
   }
 
   def authorisationAppRestrictedEndpointsPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("Application-restricted endpoints", routes.AuthorisationController.authorisationAppRestrictedEndpointsPage().url),
-      authCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(authorisationAppRestrictedEndpointsView(pageAttributes(
-      "Application-restricted endpoints",
-      routes.AuthorisationController.authorisationAppRestrictedEndpointsPage().url,
-      navLinks,
-      Some(breadcrumbs)
-    ))))
+    Future.successful(Ok(authorisationAppRestrictedEndpointsView(pageAttributes("Application-restricted endpoints", navLinks, basePlus(authCrumb)))))
   }
 
   def authorisationUserRestrictedEndpointsPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    val breadcrumbs = Breadcrumbs(
-      Crumb("User-restricted endpoints", routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url),
-      authCrumb,
-      homeCrumb
-    )
-    Future.successful(Ok(authorisationUserRestrictedEndpointsView(pageAttributes(
-      "User-restricted endpoints",
-      routes.AuthorisationController.authorisationUserRestrictedEndpointsPage().url,
-      navLinks,
-      Some(breadcrumbs)
-    ))))
+    Future.successful(Ok(authorisationUserRestrictedEndpointsView(pageAttributes("User-restricted endpoints", navLinks, basePlus(authCrumb)))))
   }
 }
