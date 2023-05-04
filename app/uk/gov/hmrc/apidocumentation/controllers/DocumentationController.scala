@@ -51,7 +51,8 @@ class DocumentationController @Inject() (
   ) extends FrontendController(mcc)
     with HeaderNavigation
     with PageAttributesHelper
-    with HomeCrumb
+    with BaseCrumbs
+    with TermsCrumb
     with ApplicationLogger {
 
   def indexPage(): Action[AnyContent] = headerNavigation {
@@ -64,11 +65,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           tutorialsView(
-            pageAttributes(
-              "Tutorials",
-              routes.DocumentationController.tutorialsPage().url,
-              navLinks
-            )
+            pageAttributes("Tutorials", navLinks, baseCrumbs)
           )
         )
       )
@@ -79,11 +76,7 @@ class DocumentationController @Inject() (
       partialsService.termsOfUsePartial() map { termsOfUsePartial =>
         Ok(
           termsOfUseView(
-            pageAttributes(
-              "Terms Of Use",
-              routes.DocumentationController.termsOfUsePage().url,
-              navLinks
-            ),
+            pageAttributes("Terms Of Use", navLinks, baseCrumbs),
             termsOfUsePartial
           )
         )
@@ -95,7 +88,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           termsOfUseWhatYouCanExpectView(
-            pageAttributes("What you can expect from us", routes.DocumentationController.termsOfUseWhatYouCanExpectPage().url, navLinks)
+            pageAttributes("What you can expect from us", navLinks, basePlus(termsCrumb))
           )
         )
       )
@@ -106,7 +99,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           termsOfUseNotMeetingView(
-            pageAttributes("Not meeting the terms of use", routes.DocumentationController.termsOfUseNotMeetingPage().url, navLinks)
+            pageAttributes("Not meeting the terms of use", navLinks, basePlus(termsCrumb))
           )
         )
       )
@@ -117,11 +110,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           usingTheHubView(
-            pageAttributes(
-              "Using the Developer Hub",
-              routes.DocumentationController.usingTheHubPage().url,
-              navLinks
-            )
+            pageAttributes("Using the Developer Hub", navLinks)
           )
         )
       )
@@ -134,7 +123,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           mtdIntroductionView(
-            pageAttributes("Making Tax Digital guides", introPageUrl, navLinks)
+            pageAttributes("Making Tax Digital guides", navLinks, baseCrumbs)
           )
         )
       )
@@ -152,11 +141,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           referenceView(
-            pageAttributes(
-              "Reference guide",
-              routes.DocumentationController.referenceGuidePage().url,
-              navLinks
-            )
+            pageAttributes("Reference guide", navLinks)
           )
         )
       )
@@ -167,11 +152,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           developmentPracticesView(
-            pageAttributes(
-              "Development practices",
-              routes.DocumentationController.developmentPracticesPage().url,
-              navLinks
-            )
+            pageAttributes("Development practices", navLinks)
           )
         )
       )
@@ -191,11 +172,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           namingGuidelinesView(
-            pageAttributes(
-              "Application naming guidelines",
-              routes.DocumentationController.nameGuidelinesPage().url,
-              navLinks
-            )
+            pageAttributes("Application naming guidelines", navLinks, baseCrumbs)
           )
         )
       )
@@ -208,14 +185,32 @@ trait HomeCrumb {
     Crumb("Home", routes.DocumentationController.indexPage().url)
 }
 
+trait DocumentationCrumb {
+
+  lazy val documentationCrumb =
+    Crumb("Documentation", routes.DocumentationController.usingTheHubPage().url)
+}
+
+trait TermsCrumb {
+  lazy val termsCrumb = Crumb("Terms of use", routes.DocumentationController.termsOfUsePage().url)
+}
+
+trait BaseCrumbs extends HomeCrumb with DocumentationCrumb {
+
+  lazy val baseCrumbs = Some(Breadcrumbs(documentationCrumb, homeCrumb))
+
+  def basePlus(crumb: Crumb): Option[Breadcrumbs] = {
+    Some(Breadcrumbs(crumb, documentationCrumb, homeCrumb))
+  }
+}
+
 trait PageAttributesHelper {
   self: FrontendController with HomeCrumb =>
 
   def navigationService: NavigationService
 
-  def pageAttributes(title: String, url: String, headerNavLinks: Seq[NavLink], customBreadcrumbs: Option[Breadcrumbs] = None) = {
-    val breadcrumbs =
-      customBreadcrumbs.getOrElse(Breadcrumbs(Crumb(title, url), homeCrumb))
+  def pageAttributes(title: String, headerNavLinks: Seq[NavLink], customBreadcrumbs: Option[Breadcrumbs] = None): PageAttributes = {
+    val breadcrumbs = customBreadcrumbs.getOrElse(Breadcrumbs(homeCrumb))
     apidocumentation.models.PageAttributes(
       title,
       breadcrumbs,

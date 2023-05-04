@@ -71,14 +71,14 @@ class ApiDocumentationController @Inject() (
   )(implicit val ec: ExecutionContext,
     appConfig: ApplicationConfig,
     mat: Materializer
-  ) extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb with ApplicationLogger {
+  ) extends FrontendController(mcc) with HeaderNavigation with PageAttributesHelper with HomeCrumb with DocumentationCrumb with ApplicationLogger {
 
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
   private lazy val apiDocCrumb         = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
 
   def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def pageAttributes(title: String = "API Documentation") =
-      PageAttributes(title, breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
+      PageAttributes(title, breadcrumbs = Breadcrumbs(documentationCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
 
     val params = for (a <- service; b <- version) yield (a, b)
 
@@ -165,12 +165,8 @@ class ApiDocumentationController @Inject() (
     )(implicit request: Request[AnyContent],
       messagesProvider: MessagesProvider
     ): Future[Result] = {
-    def makePageAttributes(apiDefinition: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion, sidebarLinks: Seq[SidebarLink]): PageAttributes = {
+    def makePageAttributes(apiDefinition: ExtendedAPIDefinition, sidebarLinks: Seq[SidebarLink]) = {
       val breadcrumbs = Breadcrumbs(
-        Crumb(
-          makeBreadcrumbName(apiDefinition, selectedVersion),
-          routes.ApiDocumentationController.renderApiDocumentation(service, selectedVersion.version, None).url
-        ),
         apiDocCrumb,
         homeCrumb
       )
@@ -192,7 +188,7 @@ class ApiDocumentationController @Inject() (
       val apiDefinition = api.userAccessibleApiDefinition
 
       Future.successful(Ok(retiredVersionJumpView(
-        makePageAttributes(apiDefinition, selectedVersion, navigationService.sidebarNavigation()),
+        makePageAttributes(apiDefinition, navigationService.sidebarNavigation()),
         apiDefinition
       )))
     }
@@ -204,7 +200,7 @@ class ApiDocumentationController @Inject() (
         messagesProvider: MessagesProvider
       ): Future[Result] = {
       def renderRamlSpec(apiSpecification: ApiSpecification): Future[Result] = {
-        val attrs     = makePageAttributes(api, selectedVersion, navigationService.apiSidebarNavigation2(service, selectedVersion, apiSpecification))
+        val attrs     = makePageAttributes(api, navigationService.apiSidebarNavigation2(service, selectedVersion, apiSpecification))
         val viewModel = ViewModel(apiSpecification)
         successful(Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, developerId.isDefined)).withHeaders(cacheControlHeaders))
       }
@@ -236,7 +232,7 @@ class ApiDocumentationController @Inject() (
           fraudPrevention <- withDefaultForService("fraud-prevention.md", "Fraud Prevention")
           versioning      <- withDefaultForService("versioning.md", "Versioning")
           markdownBlocks   = List(overview, errors, testing) ++ (if (requiredFraudPrevention) List(fraudPrevention) else List()) ++ List(versioning)
-          attrs            = makePageAttributes(api, selectedVersion, navigationService.openApiSidebarNavigation(service, selectedVersion, markdownBlocks))
+          attrs            = makePageAttributes(api, navigationService.openApiSidebarNavigation(service, selectedVersion, markdownBlocks))
 
         } yield Ok(parentPage(attrs, markdownBlocks, api.name, api, selectedVersion, developerId.isDefined)).withHeaders(cacheControlHeaders)
       }
