@@ -141,7 +141,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           referenceView(
-            pageAttributes("Reference guide", navLinks)
+            pageAttributes("Reference guide", navLinks, baseCrumbs)
           )
         )
       )
@@ -152,7 +152,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           developmentPracticesView(
-            pageAttributes("Development practices", navLinks)
+            pageAttributes("Development practices", navLinks, baseCrumbs)
           )
         )
       )
