@@ -53,8 +53,6 @@ class NavigationService @Inject() (
   lazy val termsOfUseUri    = routes.DocumentationController.termsOfUsePage().url
   lazy val testingUri       = routes.TestingPagesController.testingPage().url
 
-  lazy val mtdIntroductionPageUrl =
-    routes.DocumentationController.mtdIntroductionPage().url
   lazy val fraudPreventionPageUrl = "/guides/fraud-prevention"
 
   lazy val developmentPracticesUrl =
@@ -104,10 +102,6 @@ class NavigationService @Inject() (
       SidebarLink(
         label = "Terms of use",
         href = termsOfUseUri
-      ),
-      SidebarLink(
-        label = "Making Tax Digital guides",
-        href = mtdIntroductionPageUrl
       )
     )
 

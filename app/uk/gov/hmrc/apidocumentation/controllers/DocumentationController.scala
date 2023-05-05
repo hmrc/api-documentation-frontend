@@ -117,14 +117,10 @@ class DocumentationController @Inject() (
   }
 
   def mtdIntroductionPage(): Action[AnyContent] = headerNavigation {
-    implicit request => navLinks =>
-      val introPageUrl =
-        routes.DocumentationController.mtdIntroductionPage().url
+    _ => navLinks =>
       Future.successful(
-        Ok(
-          mtdIntroductionView(
-            pageAttributes("Making Tax Digital guides", navLinks, baseCrumbs)
-          )
+        Redirect(
+          routes.ApiDocumentationController.apiIndexPage(None, None, None).url
         )
       )
   }

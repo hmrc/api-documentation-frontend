@@ -21,6 +21,7 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 import play.api.http.Status.MOVED_PERMANENTLY
+import play.api.http.HeaderNames.LOCATION
 import play.api.mvc._
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -155,15 +156,15 @@ class DocumentationControllerSpec
     }
 
     "display the Making Tax Digital guides page" in new Setup {
-      verifyPageRendered(pageTitle("Making Tax Digital guides"))(
-        underTest.mtdIntroductionPage()(request)
-      )
+      val result = underTest.mtdIntroductionPage()(request)
+      status(result) shouldBe SEE_OTHER
+      headers(result).get(LOCATION) shouldBe Some("/api-documentation/docs/api")
     }
 
     "display the Income Tax (MTD) End-to-End Service Guide page" in new Setup {
       val result = underTest.mtdIncomeTaxServiceGuidePage()(request)
       status(result) shouldBe MOVED_PERMANENTLY
-      headers(result).get("Location") shouldBe Some(
+      headers(result).get(LOCATION) shouldBe Some(
         "/guides/income-tax-mtd-end-to-end-service-guide/"
       )
     }
