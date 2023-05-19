@@ -28,6 +28,10 @@
     "context": "/guides/ctc-traders-phase5-service-guide/"
   },
   {
+    "name": "CTC Traders phase 5 testing guide",
+    "context": "/guides/ctc-traders-phase5-testing-guide/"
+  },
+  {
     "name": "CTC Traders phase 5 technical interface specification",
     "context": "/guides/ctc-traders-phase5-tis/"
   },
