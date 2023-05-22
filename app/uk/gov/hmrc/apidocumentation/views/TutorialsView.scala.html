@@ -57,7 +57,7 @@
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
 
-<section id="before-you-start">
+<section aria-labelledby="before-you-start">
     <h2 class="govuk-heading-m" id="before-you-start">Before you start</h2>
     <p class="govuk-body">All base URLs in these tutorials use the sandbox environment.</p>
     <p class="govuk-body">All code snippets in these tutorials are in Java. They use:</p>
@@ -123,7 +123,7 @@
     </table>
 </section>
 
-<section id="open-endpoint">
+<section aria-labelledby="open-endpoint">
     <h2 class="govuk-heading-m" id="open-endpoint">Accessing an open endpoint</h2>
     <p class="govuk-body">In this example, you'll access the Hello World API ‘Hello World’ endpoint.</p>
     <p class="govuk-body">
@@ -149,8 +149,8 @@ String responseBody = EntityUtils.toString(response.getEntity());
 </pre>
 </section>
 
-<section id="app-restricted">
-    <h2 class="govuk-heading-m" id="application-restricted-endpoint">Accessing an application-restricted endpoint</h2>
+<section aria-labelledby="app-restricted">
+    <h2 class="govuk-heading-m" id="app-restricted">Accessing an application-restricted endpoint</h2>
     <p class="govuk-body">In this example, you will request an OAuth 2.0 <code class="code--slim">access_token</code> and
         then use it to access the Hello World API ‘Hello Application’ endpoint.
     </p>
@@ -217,8 +217,8 @@ String responseBody = EntityUtils.toString(response.getEntity());
     <p class="govuk-body">This should give you a "Hello Application" response.</p>
 </section>
 
-<section id="user-restricted">
-    <h2 class="govuk-heading-m" id="user-restricted-endpoint">Accessing a user-restricted endpoint</h2>
+<section aria-labelledby="user-restricted">
+    <h2 class="govuk-heading-m" id="user-restricted">Accessing a user-restricted endpoint</h2>
     <p class="govuk-body">In this example, you will request an OAuth 2.0<code class="code--slim">access_token</code>
         and then use it to access the Hello World API ‘Hello User’ endpoint.
     </p>
