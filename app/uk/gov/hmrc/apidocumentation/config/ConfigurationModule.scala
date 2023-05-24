@@ -16,17 +16,16 @@
 
 package uk.gov.hmrc.apidocumentation.config
 
-import play.api.inject.Module
-import play.api.{Configuration, Environment}
+import com.google.inject.AbstractModule
+import io.swagger.v3.parser.OpenAPIV3Parser
+import io.swagger.v3.parser.core.extensions.SwaggerParserExtension
 
 import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
 
-class ConfigurationModule extends Module {
+class ConfigurationModule extends AbstractModule {
 
-  override def bindings(environment: Environment, configuration: Configuration) = {
-
-    Seq(
-      bind[XmlServicesConnector.Config].toProvider[XmlServicesConnectorConfigProvider]
-    )
+  override def configure(): Unit = {
+    bind(classOf[XmlServicesConnector.Config]).toProvider(classOf[XmlServicesConnectorConfigProvider])
+    bind(classOf[SwaggerParserExtension]).toInstance(new OpenAPIV3Parser)
   }
 }

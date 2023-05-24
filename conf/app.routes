@@ -31,6 +31,7 @@ GET         /docs/api/service/:service/:version/oas/page                uk.gov.h
 GET         /docs/openapi/preview                                       uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.previewApiDocumentationPage()
 GET         /docs/openapi/preview/action                                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.previewApiDocumentationAction(url: Option[String])
 GET         /docs/api/service/:service/:version/oas/file                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOas(service: String, version: String)
+GET         /docs/api/service/:service/:version/oas/resolved            uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOasResolved(service: String, version: String)
 GET         /docs/api/service/:service/:version/oas/*resource           uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: String, version: String, resource: String)
 
 GET         /docs/preview                                               uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.previewApiDocumentation(url: Option[String])

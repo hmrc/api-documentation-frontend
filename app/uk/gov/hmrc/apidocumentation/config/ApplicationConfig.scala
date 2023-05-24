@@ -55,6 +55,8 @@ trait ApplicationConfig {
   def feedbackSurveyUrl: String
 
   def cookieSettingsUrl: String
+
+  def oasFetchResolvedMaxDuration: Long
 }
 
 @Singleton
@@ -102,6 +104,8 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
   val feedbackSurveyUrl: String = getString("feedbackBanner.generic.surveyUrl")
 
   val cookieSettingsUrl: String = s"/${getString("tracking-consent-frontend.cookie-settings-path")}"
+
+  val oasFetchResolvedMaxDuration: Long = config.getMillis("oasFetchResolvedMaxDurationMilliseconds")
 
   private def platformBaseUrl(key: String) = {
     (getConfigDefaulted(s"$key.protocol", ""), getConfigDefaulted(s"$key.host", "")) match {
