@@ -16,9 +16,19 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import java.io.FileNotFoundException
+import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future.successful
+import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future, blocking}
+
+import akka.actor.ActorSystem
+import io.swagger.v3.core.util.Yaml
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.parser.core.extensions.SwaggerParserExtension
+import io.swagger.v3.parser.core.models.ParseOptions
+import io.swagger.v3.parser.exception.ReadContentException
 
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
@@ -32,15 +42,6 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService, NavigationService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html._
-import io.swagger.v3.parser.core.models.ParseOptions
-import io.swagger.v3.parser.core.extensions.SwaggerParserExtension
-import io.swagger.v3.core.util.Yaml
-import java.io.FileNotFoundException
-import akka.actor.ActorSystem
-import scala.concurrent.duration.FiniteDuration
-import java.util.concurrent.TimeUnit
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.parser.exception.ReadContentException
 
 @Singleton
 class OpenApiDocumentationController @Inject() (
@@ -127,12 +128,13 @@ class OpenApiDocumentationController @Inject() (
   }
 
   def fetchOasResolved(service: String, version: String) = Action.async { implicit request =>
-    def handleSuccess(openApi: OpenAPI): Result = Ok(Yaml.pretty.writeValueAsString(openApi)).withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
-    val handleFailure: Result = NotFound
+    def handleSuccess(openApi: OpenAPI): Result =
+      Ok(Yaml.pretty.writeValueAsString(openApi)).withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
+    val handleFailure: Result                   = NotFound
 
-    val parseOptions  = new ParseOptions();
-    parseOptions.setResolve(true);
-    parseOptions.setResolveFully(true);
+    val parseOptions = new ParseOptions()
+    parseOptions.setResolve(true)
+    parseOptions.setResolveFully(true)
 
     val emptyAuthList = java.util.Collections.emptyList[io.swagger.v3.parser.core.models.AuthorizationValue]()
 
@@ -150,7 +152,7 @@ class OpenApiDocumentationController @Inject() (
               handleSuccess(openApi)
             }
             // The OAS specification has been found but there was a parsing problem - return an empty specification to the caller.
-            case None => {
+            case None          => {
               logger.info(s"There was a problem parsing the OAS specification.")
               handleFailure
             }
@@ -161,7 +163,7 @@ class OpenApiDocumentationController @Inject() (
             logger.info("The OAS specification could not be found.")
             handleFailure
           }
-          case e: ReadContentException => {
+          case e: ReadContentException  => {
             logger.info("The OAS specification could not be found.")
             handleFailure
           }
@@ -169,7 +171,9 @@ class OpenApiDocumentationController @Inject() (
       }
     }
 
-    val futureTimer: Future[Result] = akka.pattern.after(FiniteDuration(appConfig.oasFetchResolvedMaxDuration, TimeUnit.MILLISECONDS), using = system.scheduler)(Future.failed(new IllegalStateException("Exceeded OAS parse time")))
+    val futureTimer: Future[Result] = akka.pattern.after(FiniteDuration(appConfig.oasFetchResolvedMaxDuration, TimeUnit.MILLISECONDS), using = system.scheduler)(
+      Future.failed(new IllegalStateException("Exceeded OAS parse time"))
+    )
 
     Future.firstCompletedOf(List(futureParsing, futureTimer))
   }

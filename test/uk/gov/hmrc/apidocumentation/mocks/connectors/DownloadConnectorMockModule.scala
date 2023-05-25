@@ -16,15 +16,19 @@
 
 package uk.gov.hmrc.apidocumentation.mocks.connectors
 
-import org.mockito.{ArgumentMatchersSugar , MockitoSugar}
-import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import scala.concurrent.Future.successful
 
-trait DownloadConnectorMockModule extends MockitoSugar with ArgumentMatchersSugar  {
+import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
+
+import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
+
+trait DownloadConnectorMockModule extends MockitoSugar with ArgumentMatchersSugar {
+
   trait AbstractDownloadConnectorMock {
     def aMock: DownloadConnector
 
     object Fetch {
+
       def returnsNoneIfNotFound() = {
         when(aMock.fetch(*, *, *)).thenReturn(successful(None))
       }

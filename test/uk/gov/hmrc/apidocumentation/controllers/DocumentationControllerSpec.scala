@@ -20,8 +20,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-import play.api.http.Status.MOVED_PERMANENTLY
 import play.api.http.HeaderNames.LOCATION
+import play.api.http.Status.MOVED_PERMANENTLY
 import play.api.mvc._
 import play.api.test.Helpers._
 import play.twirl.api.Html
