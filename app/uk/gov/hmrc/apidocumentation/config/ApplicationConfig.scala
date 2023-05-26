@@ -29,6 +29,7 @@ trait ApplicationConfig {
   def thirdPartyDeveloperUrl: String
   def apiPlatformMicroserviceBaseUrl: String
   def ramlPreviewMicroserviceBaseUrl: String
+  def apiDocumentationBaseUrl: String
 
   def securedCookie: Boolean
   def ramlPreviewEnabled: Boolean
@@ -78,6 +79,8 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
     */
   lazy val apiPlatformMicroserviceBaseUrl = baseUrl("api-platform-microservice")
   lazy val ramlPreviewMicroserviceBaseUrl = baseUrl("raml-preview-microservice")
+
+  lazy val apiDocumentationBaseUrl = getString("apidocumentation.base.url")
 
   val securedCookie         = getBoolean("cookie.secure")
   val ramlPreviewEnabled    = getBoolean("features.ramlPreview")
