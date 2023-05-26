@@ -43,6 +43,8 @@ import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUser
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html._
 
+import scala.jdk.CollectionConverters._
+
 @Singleton
 class OpenApiDocumentationController @Inject() (
     openApiViewRedoc: OpenApiViewRedoc,
@@ -143,17 +145,21 @@ class OpenApiDocumentationController @Inject() (
     val futureParsing = Future {
       blocking {
         try {
+          logger.info("Starting reading OAS specification")
           val parserResult = openAPIV3Parser.readLocation(oasFileLocation, emptyAuthList, parseOptions)
+          logger.info("Finished reading OAS specification")
 
           Option(parserResult.getOpenAPI()) match {
             // The OAS specification has been found and parsed by Swagger - return the fully resolved specification to the caller.
             case Some(openApi) => {
               logger.info("Successfully parsed the OAS specification.")
+              logger.info(parserResult.getMessages().asScala.mkString)
               handleSuccess(openApi)
             }
             // The OAS specification has been found but there was a parsing problem - return an empty specification to the caller.
             case None          => {
-              logger.info(s"There was a problem parsing the OAS specification.")
+              logger.info("There was a problem parsing the OAS specification.")
+              logger.info(parserResult.getMessages().asScala.mkString)
               handleFailure
             }
           }
