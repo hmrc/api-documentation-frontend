@@ -35,8 +35,12 @@ To fix this issue:
 https://github.com/Redocly/redoc/issues/1108#issuecomment-585990742
 *@
 <script @CSPNonce.attr>
+  var oasUrl = "@uk.gov.hmrc.apidocumentation.controllers.routes.OpenApiDocumentationController.fetchOas(serviceName, version)"
+  var oasArchiveUrl = "@uk.gov.hmrc.apidocumentation.controllers.routes.OpenApiDocumentationController.fetchOasResolved(serviceName, version)"
+
   var options = {
-    hideDownloadButton: true,
+    hideDownloadButton: false,
+    downloadDefinitionUrl: oasArchiveUrl,
     theme: {
       spacing: {
         sectionVertical: '35px',
@@ -48,8 +52,6 @@ https://github.com/Redocly/redoc/issues/1108#issuecomment-585990742
       }
     }
   };
-
-  var oasUrl = "@uk.gov.hmrc.apidocumentation.controllers.routes.OpenApiDocumentationController.fetchOas(serviceName, version)"
 
   Redoc.init(oasUrl, options, document.getElementById("redoc"), applyRedocFixes);
 

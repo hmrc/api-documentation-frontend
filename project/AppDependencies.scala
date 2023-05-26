@@ -8,6 +8,8 @@ object AppDependencies {
   lazy val playJsonVersion = "2.9.2"
   lazy val bootstrapVersion = "7.14.0"
   lazy val seleniumVersion = "4.2.0"
+  lazy val jacksonDatabindVersion = "2.10.5.1"
+  lazy val jacksonVersion = "2.10.5"
 
   lazy val compile = Seq(
     ws,
@@ -19,7 +21,20 @@ object AppDependencies {
     "org.typelevel"                         %% "cats-core"                    % "2.6.1",
     "org.commonjava.googlecode.markdown4j"  %  "markdown4j"                   % "2.2-cj-1.1",
     "com.typesafe.play"                     %% "play-json"                    % playJsonVersion,
-    "com.typesafe.play"                     %% "play-json-joda"               % playJsonVersion
+    "com.typesafe.play"                     %% "play-json-joda"               % playJsonVersion,
+    "io.swagger.parser.v3"                  %  "swagger-parser"               % "2.1.9"
+      excludeAll(
+        ExclusionRule("com.fasterxml.jackson.core", "jackson-databind"),
+        ExclusionRule("com.fasterxml.jackson.core", "jackson-core"),
+        ExclusionRule("com.fasterxml.jackson.core", "jackson-annotations"),
+        ExclusionRule("com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml"),
+        ExclusionRule("com.fasterxml.jackson.datatype", "jackson-datatype-jsr310")
+      ),
+    "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
+    "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
+    "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+    "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % jacksonVersion,
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
   )
 
   lazy val test = Seq(

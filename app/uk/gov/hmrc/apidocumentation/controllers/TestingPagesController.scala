@@ -23,10 +23,10 @@ import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.NavigationService
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html._
-import uk.gov.hmrc.apidocumentation.models._
 
 @Singleton
 class TestingPagesController @Inject() (

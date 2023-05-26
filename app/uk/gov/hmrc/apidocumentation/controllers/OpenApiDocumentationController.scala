@@ -16,9 +16,19 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import java.io.FileNotFoundException
+import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future.successful
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.{ExecutionContext, Future, blocking}
+
+import akka.actor.ActorSystem
+import io.swagger.v3.core.util.Yaml
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.parser.core.extensions.SwaggerParserExtension
+import io.swagger.v3.parser.core.models.ParseOptions
+import io.swagger.v3.parser.exception.ReadContentException
 
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
@@ -44,9 +54,11 @@ class OpenApiDocumentationController @Inject() (
     apiDefinitionService: ApiDefinitionService,
     loggedInUserService: LoggedInUserService,
     errorHandler: ErrorHandler,
-    val navigationService: NavigationService
+    val navigationService: NavigationService,
+    openAPIV3Parser: SwaggerParserExtension
   )(implicit val ec: ExecutionContext,
-    appConfig: ApplicationConfig
+    appConfig: ApplicationConfig,
+    system: ActorSystem
   ) extends FrontendController(mcc) with HeaderNavigation with HomeCrumb with ApplicationLogger {
 
   private val buildPageAttributes = (navLinks: Seq[NavLink]) =>
@@ -113,6 +125,57 @@ class OpenApiDocumentationController @Inject() (
         case Some(result) => result.withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
         case None         => NotFound(errorHandler.notFoundTemplate)
       }
+  }
+
+  def fetchOasResolved(service: String, version: String) = Action.async { implicit request =>
+    def handleSuccess(openApi: OpenAPI): Result =
+      Ok(Yaml.pretty.writeValueAsString(openApi)).withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
+    val handleFailure: Result                   = NotFound
+
+    val parseOptions = new ParseOptions()
+    parseOptions.setResolve(true)
+    parseOptions.setResolveFully(true)
+
+    val emptyAuthList = java.util.Collections.emptyList[io.swagger.v3.parser.core.models.AuthorizationValue]()
+
+    val oasFileLocation = routes.OpenApiDocumentationController.fetchOas(service, version).absoluteURL()
+
+    val futureParsing = Future {
+      blocking {
+        try {
+          val parserResult = openAPIV3Parser.readLocation(oasFileLocation, emptyAuthList, parseOptions)
+
+          Option(parserResult.getOpenAPI()) match {
+            // The OAS specification has been found and parsed by Swagger - return the fully resolved specification to the caller.
+            case Some(openApi) => {
+              logger.info("Successfully parsed the OAS specification.")
+              handleSuccess(openApi)
+            }
+            // The OAS specification has been found but there was a parsing problem - return an empty specification to the caller.
+            case None          => {
+              logger.info(s"There was a problem parsing the OAS specification.")
+              handleFailure
+            }
+          }
+        } catch {
+          // The OAS specification has not been found.
+          case e: FileNotFoundException => {
+            logger.info("The OAS specification could not be found.")
+            handleFailure
+          }
+          case e: ReadContentException  => {
+            logger.info("The OAS specification could not be found.")
+            handleFailure
+          }
+        }
+      }
+    }
+
+    val futureTimer: Future[Result] = akka.pattern.after(FiniteDuration(appConfig.oasFetchResolvedMaxDuration, TimeUnit.MILLISECONDS), using = system.scheduler)(
+      Future.failed(new IllegalStateException("Exceeded OAS parse time"))
+    )
+
+    Future.firstCompletedOf(List(futureParsing, futureTimer))
   }
 
   def previewApiDocumentationPage(): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
