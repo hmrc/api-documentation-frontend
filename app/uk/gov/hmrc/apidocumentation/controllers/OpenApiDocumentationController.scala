@@ -140,7 +140,7 @@ class OpenApiDocumentationController @Inject() (
 
     val emptyAuthList = java.util.Collections.emptyList[io.swagger.v3.parser.core.models.AuthorizationValue]()
 
-    val oasFileLocation = routes.OpenApiDocumentationController.fetchOas(service, version).absoluteURL()
+    val oasFileLocation = routes.OpenApiDocumentationController.fetchOas(service, version).absoluteURL(true)
 
     logger.info(s"OAS File Location: $oasFileLocation")
 
