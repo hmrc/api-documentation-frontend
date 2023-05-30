@@ -29,7 +29,6 @@ trait ApplicationConfig {
   def thirdPartyDeveloperUrl: String
   def apiPlatformMicroserviceBaseUrl: String
   def ramlPreviewMicroserviceBaseUrl: String
-  def apiDocumentationBaseUrl: String
 
   def securedCookie: Boolean
   def ramlPreviewEnabled: Boolean
@@ -58,6 +57,7 @@ trait ApplicationConfig {
   def cookieSettingsUrl: String
 
   def oasFetchResolvedMaxDuration: Long
+  def oasFetchResolvedUsingHttps: Boolean
 }
 
 @Singleton
@@ -79,8 +79,6 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
     */
   lazy val apiPlatformMicroserviceBaseUrl = baseUrl("api-platform-microservice")
   lazy val ramlPreviewMicroserviceBaseUrl = baseUrl("raml-preview-microservice")
-
-  lazy val apiDocumentationBaseUrl = getString("apidocumentation.base.url")
 
   val securedCookie         = getBoolean("cookie.secure")
   val ramlPreviewEnabled    = getBoolean("features.ramlPreview")
@@ -109,6 +107,7 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
   val cookieSettingsUrl: String = s"/${getString("tracking-consent-frontend.cookie-settings-path")}"
 
   val oasFetchResolvedMaxDuration: Long = config.getMillis("oasFetchResolvedMaxDurationMilliseconds")
+  val oasFetchResolvedUsingHttps: Boolean = getBoolean("oasFetchResolvedUsingHttps")
 
   private def platformBaseUrl(key: String) = {
     (getConfigDefaulted(s"$key.protocol", ""), getConfigDefaulted(s"$key.host", "")) match {

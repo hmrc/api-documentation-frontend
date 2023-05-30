@@ -139,17 +139,13 @@ class OpenApiDocumentationController @Inject() (
     parseOptions.setResolveFully(true)
 
     val emptyAuthList = java.util.Collections.emptyList[io.swagger.v3.parser.core.models.AuthorizationValue]()
-
-    val oasFileLocation = routes.OpenApiDocumentationController.fetchOas(service, version).absoluteURL(true)
-
-    logger.info(s"OAS File Location: $oasFileLocation")
+    val fetchUsingHttps = appConfig.oasFetchResolvedUsingHttps
+    val oasFileLocation = routes.OpenApiDocumentationController.fetchOas(service, version).absoluteURL(fetchUsingHttps)
 
     val futureParsing = Future {
       blocking {
         try {
-          logger.info("Starting reading OAS specification")
           val parserResult = openAPIV3Parser.readLocation(oasFileLocation, emptyAuthList, parseOptions)
-          logger.info("Finished reading OAS specification")
 
           Option(parserResult.getOpenAPI()) match {
             // The OAS specification has been found and parsed by Swagger - return the fully resolved specification to the caller.
