@@ -363,19 +363,6 @@ class DocumentationSpec extends HmrcSpec {
 
       result shouldBe Map.empty
     }
-
-    def anApiDefinition(name: String, categories: Option[Seq[APICategory]] = None, isTestSupport: Option[Boolean] = None) =
-      APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), categories)
-
-    def anXmlApiDefinition(name: String, categories: Option[Seq[APICategory]] = None) =
-      XmlApiDocumentation(name, "description", "context", categories)
-
-    def aServiceGuide(name: String, categories: Option[Seq[APICategory]] = None) =
-      ServiceGuide(name, "context", categories)
-
-    def aRoadMap(name: String, categories: Option[Seq[APICategory]] = None) =
-      RoadMap(name, "context", categories)
-
   }
 
   "decoratedUriPattern" should {
@@ -403,4 +390,33 @@ class DocumentationSpec extends HmrcSpec {
       Endpoint("Get Today's Date", uriPattern, HttpMethod.GET, parameters)
     }
   }
+
+  "nameAsId" should {
+    "swap spaces for hyphens and lower case" in {
+      val api1        = anApiDefinition("Hello World")
+      api1.nameAsId shouldBe "hello-world"
+    }
+
+    "remove brackets" in {
+      val api1        = anApiDefinition("Income Tax (MTD) end-to-end service guide")
+      api1.nameAsId shouldBe "income-tax-mtd-end-to-end-service-guide"
+    }
+
+    "remove any other chars" in {
+      val api1        = anApiDefinition("Income Tax (MTD):+{}=#@£!& [end-to-end service guide]")
+      api1.nameAsId shouldBe "income-tax-mtd-end-to-end-service-guide"
+    }
+  }
+
+  def anApiDefinition(name: String, categories: Option[Seq[APICategory]] = None, isTestSupport: Option[Boolean] = None) =
+    APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), categories)
+
+  def anXmlApiDefinition(name: String, categories: Option[Seq[APICategory]] = None) =
+    XmlApiDocumentation(name, "description", "context", categories)
+
+  def aServiceGuide(name: String, categories: Option[Seq[APICategory]] = None) =
+    ServiceGuide(name, "context", categories)
+
+  def aRoadMap(name: String, categories: Option[Seq[APICategory]] = None) =
+    RoadMap(name, "context", categories)
 }
