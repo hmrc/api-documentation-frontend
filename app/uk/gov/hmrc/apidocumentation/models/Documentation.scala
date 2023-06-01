@@ -46,6 +46,7 @@ trait Documentation {
 
   lazy val isRestOrXmlApi = label == REST_API || label == XML_API
 
+  lazy val nameAsId = name.toLowerCase().replaceAll(" ", "-").replaceAll("[^a-z0-9-]", "")
 }
 
 object Documentation {
