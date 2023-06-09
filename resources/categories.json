@@ -41,6 +41,7 @@
   "Real Time Income Information": ["PRIVATE_GOVERNMENT"],
   "Relief At Source": ["RELIEF_AT_SOURCE"],
   "Self Assessment (MTD)": ["INCOME_TAX_MTD"],
+  "Self Assessment Individual Details (MTD)": ["INCOME_TAX_MTD"],
   "State Pension": ["PRIVATE_GOVERNMENT"],
   "SSO In": ["PRIVATE_GOVERNMENT"],
   "Submission Tracker": ["PRIVATE_GOVERNMENT"],
