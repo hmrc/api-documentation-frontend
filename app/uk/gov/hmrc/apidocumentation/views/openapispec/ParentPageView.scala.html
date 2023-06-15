@@ -56,13 +56,6 @@
         </h1>
         @for(version <- maybeVersion) {
             <table class="govuk-table">
-                <caption class="visually-hidden">Dates and amounts</caption>
-                <thead class="visually-hidden">
-                  <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Date</th>
-                    <th scope="col" class="govuk-table__header">Amount</th>
-                  </tr>
-                </thead>
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">Version and status</th>
@@ -110,21 +103,32 @@
 
         @defining(VersionDocsVisible(maybeVersion.flatMap(_.visibility))) { case visibility =>
             @if(visibility == DocsVisibility.VISIBLE) {
-                <section id="view-oas" class="section">
+                <section id="endpoints" class="section">
                   <h2 id="endpoints-title" class="govuk-heading-m">
                       Endpoints
                   </h2>
 
-                  <p class="govuk-body">The way we show <a class="govuk-link" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, maybeVersion.get.version).url">@{title} API v@{maybeVersion.get.version} endpoints</a> has changed, which might look different to other Developer Hub APIs.</p>
+                  <a class="govuk-button govuk-button-secondary" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, maybeVersion.get.version).url">
+                    View API endpoints
+                  </a>
 
-                  <p class="govuk-body">The API has not changed. You do not need to make any updates to your application if you already use this API.</p>
-
+                  <details class="govuk-details" data-module="govuk-details">
+                    <summary class="govuk-details__summary">
+                      <span class="govuk-details__summary-text">
+                        Why do these endpoints look different?
+                      </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                      <p class="govuk-body"> The endpoints for this API now use the Open API Specification (OAS).</p>
+                      <p class="govuk-body">The API has not changed. You do not need to make any updates to your application if you already use this API.</p>
+                    </div>
+                  </details>
                 </section>
             } else {
                 @if(visibility == DocsVisibility.OVERVIEW_ONLY) {
-                  <section id="read-more" class="section">
-                    <h2 id="read-more-title" class="govuk-heading-m">
-                        Read more
+                  <section id="endpoints" class="section">
+                    <h2 id="endpoints-title" class="govuk-heading-m">
+                        Endpoints
                     </h2>
                     <p class="govuk-body">To see the complete documentation for this API and join the private trial,
                         <a class="govuk-link" href="@{applicationConfig.developerFrontendUrl}/developer/support">contact support</a>.
