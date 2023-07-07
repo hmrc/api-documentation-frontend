@@ -41,9 +41,23 @@ class IndexViewSpec extends CommonViewSpec {
 
   "htmlView" must {
     "render with no indexing meta tags" in new TestCase {
-      val renderedHtml = new IndexView(main)(pageTitle, navLinks)
+      val renderedHtml = new IndexView(main)(pageTitle, navLinks, false)
       renderedHtml.body shouldNot include("<meta name=\"robots\" content=\"noindex\">")
       renderedHtml.body shouldNot include("<meta name=\"googlebot\" content=\"noindex\">")
+    }
+
+    "render with sign in components if not signed in" in new TestCase {
+      val renderedHtml = new IndexView(main)(pageTitle, navLinks, false)
+      renderedHtml.body should include("Get an account")
+      renderedHtml.body should include("Sign up to use our APIs and get email updates.")
+      renderedHtml.body should include("sign in</a>")
+    }
+    
+    "render without sign in components if signed in" in new TestCase {
+      val renderedHtml = new IndexView(main)(pageTitle, navLinks, true)
+      renderedHtml.body shouldNot include("Get an account")
+      renderedHtml.body shouldNot include("Sign up to use our APIs and get email updates.")
+      renderedHtml.body shouldNot include("sign in</a>")
     }
   }
 }

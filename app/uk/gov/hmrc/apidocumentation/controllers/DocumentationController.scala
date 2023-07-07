@@ -32,6 +32,7 @@ import uk.gov.hmrc.apidocumentation.views.html._
 @Singleton
 class DocumentationController @Inject() (
     val navigationService: NavigationService,
+    loggedInUserService: LoggedInUserService,
     partialsService: PartialsService,
     mcc: MessagesControllerComponents,
     indexView: IndexView,
@@ -55,9 +56,19 @@ class DocumentationController @Inject() (
     with TermsCrumb
     with ApplicationLogger {
 
+
   def indexPage(): Action[AnyContent] = headerNavigation {
+    def extractDeveloperIdentifier(f: Future[Option[Developer]]): Future[Option[DeveloperIdentifier]] = {
+      f.map(o =>
+        o.map(d => UuidIdentifier(d.userId))
+      )
+    }
+
     implicit request => navLinks =>
-      Future.successful(Ok(indexView("Home", navLinks)))
+      for {
+        userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+        isLoggedIn = userId.isDefined
+      } yield Ok(indexView("Home", navLinks, isLoggedIn))
   }
 
   def tutorialsPage(): Action[AnyContent] = headerNavigation {
