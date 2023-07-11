@@ -151,7 +151,7 @@ class OpenApiDocumentationController @Inject() (
             // The OAS specification has been found and parsed by Swagger - return the fully resolved specification to the caller.
             case Some(openApi) => {
               logger.info("Successfully parsed the OAS specification.")
-              logger.info(parserResult.getMessages().asScala.mkString)
+              logger.info(Option(parserResult.getMessages()).map(_.asScala.mkString).getOrElse(""))
               handleSuccess(openApi)
             }
             // The OAS specification has been found but there was a parsing problem - return an empty specification to the caller.

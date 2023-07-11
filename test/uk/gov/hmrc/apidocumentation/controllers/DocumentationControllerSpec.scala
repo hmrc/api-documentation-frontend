@@ -35,6 +35,7 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.PartialsService
 import uk.gov.hmrc.apidocumentation.views.html.{TermsOfUseNotMeetingView, TermsOfUseWhatYouCanExpectView, _}
 import uk.gov.hmrc.apidocumentation.{ErrorHandler, controllers}
+import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
 
 class DocumentationControllerSpec
     extends CommonControllerBaseSpec
@@ -72,6 +73,7 @@ class DocumentationControllerSpec
     private lazy val usingTheHubView                = app.injector.instanceOf[UsingTheHubView]
     private lazy val termsOfUseWhatYouCanExpectView = app.injector.instanceOf[TermsOfUseWhatYouCanExpectView]
     private lazy val termsOfUseNotMeetingView       = app.injector.instanceOf[TermsOfUseNotMeetingView]
+    private lazy val loggedInUserService            = app.injector.instanceOf[LoggedInUserService]
 
     lazy val usingTheHubBreadcrumb = Crumb(
       "Using the Developer Hub",
@@ -82,6 +84,7 @@ class DocumentationControllerSpec
 
     val underTest: DocumentationController = new DocumentationController(
       navigationService,
+      loggedInUserService,
       partialsService,
       mcc,
       indexView,
