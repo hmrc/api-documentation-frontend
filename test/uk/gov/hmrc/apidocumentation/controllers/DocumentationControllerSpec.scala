@@ -32,10 +32,9 @@ import uk.gov.hmrc.apidocumentation.controllers.utils._
 import uk.gov.hmrc.apidocumentation.mocks.config._
 import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.services.PartialsService
+import uk.gov.hmrc.apidocumentation.services.{LoggedInUserService, PartialsService}
 import uk.gov.hmrc.apidocumentation.views.html.{TermsOfUseNotMeetingView, TermsOfUseWhatYouCanExpectView, _}
 import uk.gov.hmrc.apidocumentation.{ErrorHandler, controllers}
-import uk.gov.hmrc.apidocumentation.services.LoggedInUserService
 
 class DocumentationControllerSpec
     extends CommonControllerBaseSpec
