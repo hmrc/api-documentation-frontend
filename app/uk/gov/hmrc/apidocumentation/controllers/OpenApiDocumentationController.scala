@@ -22,6 +22,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future.successful
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future, blocking}
+import scala.jdk.CollectionConverters._
 
 import akka.actor.ActorSystem
 import io.swagger.v3.core.util.Yaml
@@ -42,8 +43,6 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService, NavigationService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html._
-
-import scala.jdk.CollectionConverters._
 
 @Singleton
 class OpenApiDocumentationController @Inject() (
@@ -138,7 +137,7 @@ class OpenApiDocumentationController @Inject() (
     parseOptions.setResolve(true)
     parseOptions.setResolveFully(true)
 
-    val emptyAuthList = java.util.Collections.emptyList[io.swagger.v3.parser.core.models.AuthorizationValue]()
+    val emptyAuthList   = java.util.Collections.emptyList[io.swagger.v3.parser.core.models.AuthorizationValue]()
     val fetchUsingHttps = appConfig.oasFetchResolvedUsingHttps
     val oasFileLocation = routes.OpenApiDocumentationController.fetchOas(service, version).absoluteURL(fetchUsingHttps)
 

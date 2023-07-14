@@ -56,7 +56,6 @@ class DocumentationController @Inject() (
     with TermsCrumb
     with ApplicationLogger {
 
-
   def indexPage(): Action[AnyContent] = headerNavigation {
     def extractDeveloperIdentifier(f: Future[Option[Developer]]): Future[Option[DeveloperIdentifier]] = {
       f.map(o =>
@@ -64,11 +63,12 @@ class DocumentationController @Inject() (
       )
     }
 
-    implicit request => navLinks =>
-      for {
-        userId <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
-        isLoggedIn = userId.isDefined
-      } yield Ok(indexView("Home", navLinks, isLoggedIn))
+    implicit request =>
+      navLinks =>
+        for {
+          userId    <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+          isLoggedIn = userId.isDefined
+        } yield Ok(indexView("Home", navLinks, isLoggedIn))
   }
 
   def tutorialsPage(): Action[AnyContent] = headerNavigation {

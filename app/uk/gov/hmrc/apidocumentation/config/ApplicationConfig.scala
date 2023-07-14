@@ -106,7 +106,7 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
 
   val cookieSettingsUrl: String = s"/${getString("tracking-consent-frontend.cookie-settings-path")}"
 
-  val oasFetchResolvedMaxDuration: Long = config.getMillis("oasFetchResolvedMaxDurationMilliseconds")
+  val oasFetchResolvedMaxDuration: Long   = config.getMillis("oasFetchResolvedMaxDurationMilliseconds")
   val oasFetchResolvedUsingHttps: Boolean = getBoolean("oasFetchResolvedUsingHttps")
 
   private def platformBaseUrl(key: String) = {

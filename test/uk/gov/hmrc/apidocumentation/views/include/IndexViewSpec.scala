@@ -52,7 +52,7 @@ class IndexViewSpec extends CommonViewSpec {
       renderedHtml.body should include("Sign up to use our APIs and get email updates.")
       renderedHtml.body should include("sign in</a>")
     }
-    
+
     "render without sign in components if signed in" in new TestCase {
       val renderedHtml = new IndexView(main)(pageTitle, navLinks, true)
       renderedHtml.body shouldNot include("Get an account")

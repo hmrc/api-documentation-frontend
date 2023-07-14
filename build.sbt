@@ -11,17 +11,13 @@ import bloop.integrations.sbt.BloopDefaults
 
 Global / bloopAggregateSourceDependencies := true
 
+scalaVersion := "2.13.8"
+
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 
 ThisBuild / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
-
-inThisBuild(
-  List(
-    scalaVersion := "2.13.8",
-    semanticdbEnabled := true,
-    semanticdbVersion := scalafixSemanticdb.revision
-  )
-)
 
 lazy val plugins: Seq[Plugins] = Seq(PlayScala, SbtDistributablesPlugin)
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
@@ -86,10 +82,16 @@ lazy val microservice = Project(appName, file("."))
 
   .settings(DefaultBuildSettings.integrationTestSettings())
 
-  .settings(scalaVersion := "2.13.8")
   .settings(headerSettings(AcceptanceTest) ++ automateHeaderSettings(AcceptanceTest))
-  .settings(SilencerSettings())
 
+  .settings(
+    scalacOptions ++= Seq(
+      "-Wconf:cat=unused&src=views/.*\\.scala:s",
+      "-Wconf:cat=unused&src=.*RoutesPrefix\\.scala:s",
+      "-Wconf:cat=unused&src=.*Routes\\.scala:s",
+      "-Wconf:cat=unused&src=.*ReverseRoutes\\.scala:s"
+    )
+  )
 lazy val AcceptanceTest = config("acceptance") extend Test
 
 lazy val appName = "api-documentation-frontend"

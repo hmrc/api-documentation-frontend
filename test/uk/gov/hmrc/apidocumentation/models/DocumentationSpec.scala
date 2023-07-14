@@ -393,17 +393,17 @@ class DocumentationSpec extends HmrcSpec {
 
   "nameAsId" should {
     "swap spaces for hyphens and lower case" in {
-      val api1        = anApiDefinition("Hello World")
+      val api1 = anApiDefinition("Hello World")
       api1.nameAsId shouldBe "hello-world"
     }
 
     "remove brackets" in {
-      val api1        = anApiDefinition("Income Tax (MTD) end-to-end service guide")
+      val api1 = anApiDefinition("Income Tax (MTD) end-to-end service guide")
       api1.nameAsId shouldBe "income-tax-mtd-end-to-end-service-guide"
     }
 
     "remove any other chars" in {
-      val api1        = anApiDefinition("Income Tax (MTD):+{}=#@£!& [end-to-end service guide]")
+      val api1 = anApiDefinition("Income Tax (MTD):+{}=#@£!& [end-to-end service guide]")
       api1.nameAsId shouldBe "income-tax-mtd-end-to-end-service-guide"
     }
   }
