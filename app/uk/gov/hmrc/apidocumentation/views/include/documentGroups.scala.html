@@ -35,7 +35,7 @@
                 <tr class="govuk-table__row">
                     @if(index == 0) { <td class="govuk-table__cell api-group">@category.displayName</td> } else { <td class="govuk-table__cell"></td> }
                     <td class="govuk-table__cell">
-                        <a id="@category.filter-@document.nameAsId" class="govuk-link" href="@document.documentationUrl">@document.name</a>
+                        <a id="@category.filter-@document.nameAsId-@document.label.modifier" class="govuk-link" href="@document.documentationUrl">@document.name</a>
                     </td>
                     <td class="govuk-table__cell">
                         <strong class="govuk-tag govuk-tag--@document.label.modifier">@document.label.displayName</strong>
