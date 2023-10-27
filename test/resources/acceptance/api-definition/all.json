@@ -7,19 +7,31 @@
     "context": "individual-income",
     "versions": [
       {
-        "version": "1.0",
-        "status": "STABLE",
+        "version": "1.2",
+        "status": "BETA",
+        "access": {
+          "type": "PUBLIC"
+        },
         "endpoints": [
           {
             "uriPattern": "/sa/{utr}/annual-summary/{taxYear}",
-            "endpointName": "Fetch Annual Income Summary",
+            "endpointName": "Get annual income summary",
             "method": "GET",
             "authType": "USER",
             "throttlingTier": "UNLIMITED",
-            "scope": "read:individual-income"
+            "scope": "read:individual-income",
+            "queryParameters": []
           }
-        ]
+        ],
+        "endpointsEnabled": true,
+        "versionSource": "OAS"
       }
+    ],
+    "requiresTrust": false,
+    "isTestSupport": false,
+    "lastPublishedAt": "2023-08-11T11:22:13.811Z",
+    "categories": [
+      "SELF_ASSESSMENT"
     ]
   },
   {
@@ -30,19 +42,31 @@
     "context": "individual-tax",
     "versions": [
       {
-        "version": "1.0",
-        "status": "STABLE",
+        "version": "1.1",
+        "status": "BETA",
+        "access": {
+          "type": "PUBLIC"
+        },
         "endpoints": [
           {
             "uriPattern": "/sa/{utr}/annual-summary/{taxYear}",
-            "endpointName": "Fetch Annual Tax Summary",
+            "endpointName": "Get tax summary",
             "method": "GET",
             "authType": "USER",
             "throttlingTier": "UNLIMITED",
-            "scope": "read:individual-tax"
+            "scope": "read:individual-tax",
+            "queryParameters": []
           }
-        ]
+        ],
+        "endpointsEnabled": true,
+        "versionSource": "OAS"
       }
+    ],
+    "requiresTrust": false,
+    "isTestSupport": false,
+    "lastPublishedAt": "2023-02-28T10:14:42.995Z",
+    "categories": [
+      "SELF_ASSESSMENT"
     ]
   },
   {
@@ -55,54 +79,80 @@
       {
         "version": "1.0",
         "status": "STABLE",
+        "access": {
+          "type": "PUBLIC"
+        },
         "endpoints": [
           {
             "uriPattern": "/world",
-            "endpointName": "Say Hello World!",
+            "endpointName": "Say hello world",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
             "uriPattern": "/user",
-            "endpointName": "Say Hello User!",
+            "endpointName": "Say hello user",
             "method": "GET",
             "authType": "USER",
             "throttlingTier": "UNLIMITED",
-            "scope": "hello"
+            "scope": "hello",
+            "queryParameters": []
           },
           {
             "uriPattern": "/application",
-            "endpointName": "Say Hello Application!",
+            "endpointName": "Say hello application",
             "method": "GET",
             "authType": "APPLICATION",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           }
-        ]
+        ],
+        "endpointsEnabled": true,
+        "versionSource": "OAS"
       }
+    ],
+    "requiresTrust": false,
+    "isTestSupport": false,
+    "lastPublishedAt": "2023-08-22T10:46:20.735Z",
+    "categories": [
+      "EXAMPLE"
     ]
   },
   {
     "serviceName": "individual-benefits",
-    "serviceBaseUrl": "http://individual-benefits.api",
+    "serviceBaseUrl": "https://individual-benefits.protected.mdtp",
     "name": "Individual Benefits",
-    "description": "The Individual Benefits API provides benefit–based services, such as retrieval of benefits information.",
+    "description": "Benefit–based services, such as retrieval of benefits information.",
     "context": "individual-benefits",
     "versions": [
       {
-        "version": "1.0",
+        "version": "1.1",
         "status": "BETA",
+        "access": {
+          "type": "PUBLIC"
+        },
         "endpoints": [
           {
             "uriPattern": "/sa/{utr}/annual-summary/{taxYear}",
-            "endpointName": "Fetch Annual Benefits Summary",
+            "endpointName": "Get benefits summary",
             "method": "GET",
             "authType": "USER",
             "throttlingTier": "UNLIMITED",
-            "scope": "read:individual-benefits"
+            "scope": "read:individual-benefits",
+            "queryParameters": []
           }
-        ]
+        ],
+        "endpointsEnabled": true,
+        "versionSource": "OAS"
       }
+    ],
+    "requiresTrust": false,
+    "isTestSupport": false,
+    "lastPublishedAt": "2023-02-27T16:03:41.078Z",
+    "categories": [
+      "SELF_ASSESSMENT"
     ]
   },
   {
@@ -113,65 +163,31 @@
     "context": "individual-employment",
     "versions": [
       {
-        "version": "1.0",
-        "status": "STABLE",
-        "endpoints": [
-          {
-            "uriPattern": "/sa/{utr}",
-            "endpointName": "Fetch Employment History 1.0",
-            "method": "GET",
-            "authType": "USER",
-            "throttlingTier": "UNLIMITED",
-            "scope": "read:individual-employment",
-            "queryParameters": [
-              {
-                "name": "taxYear",
-                "required": true
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "version": "2.0",
+        "version": "1.2",
         "status": "BETA",
+        "access": {
+          "type": "PUBLIC"
+        },
         "endpoints": [
           {
-            "uriPattern": "/sa/{utr}",
-            "endpointName": "Fetch Employment History 2.0",
+            "uriPattern": "/sa/{utr}/annual-summary/{taxYear}",
+            "endpointName": "Get employment history",
             "method": "GET",
             "authType": "USER",
             "throttlingTier": "UNLIMITED",
             "scope": "read:individual-employment",
-            "queryParameters": [
-              {
-                "name": "taxYear",
-                "required": true
-              }
-            ]
+            "queryParameters": []
           }
-        ]
-      },
-      {
-        "version": "0.5",
-        "status": "DEPRECATED",
-        "endpoints": [
-          {
-            "uriPattern": "/sa/{utr}",
-            "endpointName": "Fetch Employment History 0.5",
-            "method": "GET",
-            "authType": "USER",
-            "throttlingTier": "UNLIMITED",
-            "scope": "read:individual-employment",
-            "queryParameters": [
-              {
-                "name": "taxYear",
-                "required": true
-              }
-            ]
-          }
-        ]
+        ],
+        "endpointsEnabled": true,
+        "versionSource": "OAS"
       }
+    ],
+    "requiresTrust": false,
+    "isTestSupport": false,
+    "lastPublishedAt": "2023-03-03T13:07:12.372Z",
+    "categories": [
+      "SELF_ASSESSMENT"
     ]
   },
   {
@@ -200,351 +216,321 @@
   },
   {
     "serviceName": "api-documentation-test-service",
-    "serviceBaseUrl": "http://localhost:11111/microservice/api-documentation-test-service",
+    "serviceBaseUrl": "https://api-documentation-test-service.protected.mdtp",
     "name": "API Documentation Test",
-    "description": "A collection of example APIs for the HMRC Developer Hub.",
-    "context": "api-documentation-test-service",
+    "description": "A collection of example APIs for the HMRC API Developer Hub.",
+    "context": "test/api-documentation-test-service",
     "versions": [
       {
-        "version": "0.1",
-        "status": "RETIRED",
+        "version": "0.9",
+        "status": "BETA",
+        "access": {
+          "type": "PUBLIC"
+        },
         "endpoints": [
           {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
-            "method": "GET",
+            "uriPattern": "/users",
+            "endpointName": "post",
+            "method": "POST",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
+            "uriPattern": "/users/{id}",
+            "endpointName": "get",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
+            "uriPattern": "/users/{id}",
+            "endpointName": "put",
             "method": "PUT",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
+            "uriPattern": "/users/{id}",
+            "endpointName": "delete",
             "method": "DELETE",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          }
-        ]
-      },
-      {
-        "version": "0.2",
-        "status": "DEPRECATED",
-        "endpoints": [
-          {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
-            "method": "GET",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
+            "uriPattern": "/posts",
+            "endpointName": "Get posts",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": [
+              {
+                "name": "startDate",
+                "required": true
+              },
+              {
+                "name": "endDate",
+                "required": true
+              },
+              {
+                "name": "status",
+                "required": false
+              }
+            ]
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
+            "uriPattern": "/posts",
+            "endpointName": "post",
+            "method": "POST",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts",
+            "endpointName": "put",
             "method": "PUT",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
-            "method": "DELETE",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          }
-        ]
-      },
-      {
-        "version": "0.3",
-        "status": "DEPRECATED",
-        "endpoints": [
-          {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
+            "uriPattern": "/posts/{id}",
+            "endpointName": "get",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
+            "uriPattern": "/posts/today",
+            "endpointName": "get",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
+            "uriPattern": "/posts/week",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts/user/{userId}",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments",
+            "endpointName": "post",
+            "method": "POST",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments",
+            "endpointName": "put",
             "method": "PUT",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
-            "method": "DELETE",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          }
-        ]
-      },
-      {
-        "version": "0.4",
-        "status": "DEPRECATED",
-        "endpoints": [
-          {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
+            "uriPattern": "/comments/{postId}",
+            "endpointName": "get",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
+            "uriPattern": "/comments/{postId}/{commentId}",
+            "endpointName": "get",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
-            "method": "PUT",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
+            "uriPattern": "/comments/{postId}/{commentId}",
+            "endpointName": "delete",
             "method": "DELETE",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           }
-        ]
+        ],
+        "endpointsEnabled": true,
+        "versionSource": "RAML"
       },
       {
         "version": "1.0",
         "status": "STABLE",
+        "access": {
+          "type": "PUBLIC"
+        },
         "endpoints": [
           {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
-            "method": "GET",
+            "uriPattern": "/users",
+            "endpointName": "post",
+            "method": "POST",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
+            "uriPattern": "/users/{id}",
+            "endpointName": "get",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
+            "uriPattern": "/users/{id}",
+            "endpointName": "put",
             "method": "PUT",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
+            "uriPattern": "/users/{id}",
+            "endpointName": "delete",
             "method": "DELETE",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          }
-        ]
-      },
-      {
-        "version": "1.1",
-        "status": "STABLE",
-        "endpoints": [
-          {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
-            "method": "GET",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
+            "uriPattern": "/posts",
+            "endpointName": "Get posts",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": [
+              {
+                "name": "startDate",
+                "required": true
+              },
+              {
+                "name": "endDate",
+                "required": true
+              },
+              {
+                "name": "status",
+                "required": false
+              }
+            ]
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
+            "uriPattern": "/posts",
+            "endpointName": "post",
+            "method": "POST",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts",
+            "endpointName": "put",
             "method": "PUT",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
-            "method": "DELETE",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          }
-        ]
-      },
-      {
-        "version": "1.2",
-        "status": "BETA",
-        "endpoints": [
-          {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
+            "uriPattern": "/posts/{id}",
+            "endpointName": "get",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
+            "uriPattern": "/posts/today",
+            "endpointName": "get",
             "method": "GET",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
+            "uriPattern": "/posts/week",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts/user/{userId}",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments",
+            "endpointName": "post",
+            "method": "POST",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments",
+            "endpointName": "put",
             "method": "PUT",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           },
           {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
+            "uriPattern": "/comments/{postId}",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments/{postId}/{commentId}",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments/{postId}/{commentId}",
+            "endpointName": "delete",
             "method": "DELETE",
             "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
           }
-        ]
-      },
-      {
-        "version": "1.3",
-        "status": "BETA",
-        "endpoints": [
-          {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
-            "method": "GET",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
-            "method": "GET",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
-            "method": "PUT",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
-            "method": "DELETE",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          }
-        ]
-      },
-      {
-        "version": "1.5",
-        "status": "BETA",
-        "endpoints": [
-          {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
-            "method": "GET",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
-            "method": "GET",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
-            "method": "PUT",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
-            "method": "DELETE",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          }
-        ]
-      },
-      {
-        "version": "2.0",
-        "status": "ALPHA",
-        "endpoints": [
-          {
-            "uriPattern": "/ping/ping",
-            "endpointName": "Healthcheck",
-            "method": "GET",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition",
-            "endpointName": "Return Definition JSON",
-            "method": "GET",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Add App to Whitelist for Version",
-            "method": "PUT",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          },
-          {
-            "uriPattern": "/api/definition/{version}/whitelist/{appId}",
-            "endpointName": "Delete App from Whitelist for Version",
-            "method": "DELETE",
-            "authType": "NONE",
-            "throttlingTier": "UNLIMITED"
-          }
-        ]
+        ],
+        "endpointsEnabled": true,
+        "versionSource": "RAML"
       }
+    ],
+    "requiresTrust": false,
+    "isTestSupport": false,
+    "lastPublishedAt": "2023-07-26T09:26:29.446Z",
+    "categories": [
+      "OTHER"
     ]
   }
 ]
