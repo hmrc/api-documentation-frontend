@@ -66,5 +66,17 @@
   {
     "name": "Import Control System 2 Presentation of Goods service guide",
     "context": "/guides/import-control-presentation-of-goods-end-to-end-service-guide"
+  },
+  {
+    "name": "Excise Movement Control System service guide",
+    "context": "/guides/emcs-api-service-guide"
+  },
+  {
+    "name": "Excise Movement Control System testing guide",
+    "context": "/guides/emcs-api-testing-guide"
+  },
+  {
+    "name": "Excise Movement Control System technical interface specification",
+    "context": "/guides/excise-movement-control-system-api-tis"
   }
 ]
