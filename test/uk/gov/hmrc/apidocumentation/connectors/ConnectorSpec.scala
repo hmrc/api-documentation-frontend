@@ -105,19 +105,10 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |    {
                   |      "version" : "1.0",
                   |      "status" : "STABLE",
-                  |      "endpoints" : [
-                  |        {
-                  |          "uriPattern" : "/hello",
-                  |          "endpointName" : "Say Hello",
-                  |          "method" : "GET",
-                  |          "authType" : "NONE",
-                  |          "throttlingTier" : "UNLIMITED"
-                  |        }
-                  |      ]
-                  |    },
-                  |    {
-                  |      "version" : "2.0",
-                  |      "status" : "STABLE",
+                  |      "access": {
+                  |           "isTrial": false,
+                  |           "type": "PRIVATE"
+                  |         },
                   |      "endpoints" : [
                   |        {
                   |          "uriPattern" : "/hello",
@@ -125,11 +116,35 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |          "method" : "GET",
                   |          "authType" : "NONE",
                   |          "throttlingTier" : "UNLIMITED",
+                  |          "queryParameters": []
+                  |        }
+                  |      ],
+                  |      "endpointsEnabled": true,
+                  |      "versionSource": "OAS"
+                  |    },
+                  |    {
+                  |      "version" : "2.0",
+                  |      "status" : "STABLE",
+                  |      "access": {
+                  |           "isTrial": false,
+                  |           "type": "PRIVATE"
+                  |         },
+                  |      "endpoints" : [
+                  |        {
+                  |          "uriPattern" : "/hello",
+                  |          "endpointName" : "Say Hello",
+                  |          "method" : "GET",
+                  |          "authType" : "NONE",
+                  |          "throttlingTier" : "UNLIMITED",
+                  |          "queryParameters": [],
                   |          "scope": "read:hello"
                   |        }
-                  |      ]
+                  |      ],
+                  |      "endpointsEnabled": true,
+                  |      "versionSource": "OAS"
                   |    }
-                  |  ]
+                  |  ],
+                  |  "categories":[ "AGENTS" ]
                   |}""".stripMargin.replaceAll("\n", " ")).as[ApiDefinition]
   }
   def apiDefinitions(names: String*) = names.map(apiDefinition)

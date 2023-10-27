@@ -19,14 +19,14 @@ package uk.gov.hmrc.apidocumentation.models
 import scala.collection.immutable.ListMap
 import scala.io.Source
 import scala.util.Try
-
 import play.api.Configuration
 import play.api.libs.json._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition, ApiVersion, HttpMethod}
-
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition, ApiStatus, ApiVersion, HttpMethod}
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
 import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
+import uk.gov.hmrc.apidocumentation.models.ExtendedAPIDefinition.versionSorter
+import uk.gov.hmrc.apidocumentation.models.WrappedApiDefinition.{priorityOf, versionOrdering}
 
 trait Documentation {
 
@@ -57,7 +57,7 @@ object Documentation {
       catMap: Map[String, Seq[ApiCategory]] = APICategory.categoryMap
     ): ListMap[ApiCategory, Seq[Documentation]] = {
     val categorised: Map[ApiCategory, Seq[Documentation]] =
-      (apiDefinitions.map(WrappedApiDefinition) ++ xmlDefinitions ++ serviceGuides ++ roadMaps).foldLeft(Map(): Map[ApiCategory, Seq[Documentation]]) {
+      (apiDefinitions.map(defi => WrappedApiDefinition(defi)) ++ xmlDefinitions ++ serviceGuides ++ roadMaps).foldLeft(Map(): Map[ApiCategory, Seq[Documentation]]) {
         (groupings, apiDefinition) =>
           groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
       }.filter(_._2.exists(_.isRestOrXmlApi))
@@ -134,9 +134,30 @@ case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation
   override val context: String                      = definition.context.value
   override val categories: Option[Seq[ApiCategory]] = Some(definition.categories)
   override val label: DocumentationLabel            = if (definition.isTestSupport) TEST_SUPPORT_API else REST_API
-  lazy val defaultVersion: ApiVersion               = definition.versionsAsList.max
+
+  lazy val defaultVersion: ApiVersion = definition
+    .versionsAsList
+    .sorted(versionOrdering)
+    .head
 
   override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName.value, defaultVersion.versionNbr.value, None).url
+}
+
+object WrappedApiDefinition {
+
+  def priorityOf(apiStatus: ApiStatus): Int = {
+    apiStatus match {
+      case ApiStatus.STABLE     => 1
+      case ApiStatus.BETA       => 2
+      case ApiStatus.ALPHA      => 3
+      case ApiStatus.DEPRECATED => 4
+      case ApiStatus.RETIRED    => 5
+    }
+  }
+
+  implicit val statusOrdering: Ordering[ApiStatus]   = Ordering.by[ApiStatus, Int](priorityOf)
+  implicit val versionOrdering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiStatus](_.status).reverse.orElseBy(_.versionNbr).reverse
+
 }
 
 case class DocumentationCategory(apiCategory: ApiCategory) {
@@ -218,11 +239,11 @@ object ExtendedAPIDefinition {
 }
 
 case class ExtendedAPIVersion(
-                               version: String,
-                               status: APIStatus,
-                               endpoints: Seq[ExtendedEndpoint],
-                               productionAvailability: Option[APIAvailability],
-                               sandboxAvailability: Option[APIAvailability]
+    version: String,
+    status: APIStatus,
+    endpoints: Seq[ExtendedEndpoint],
+    productionAvailability: Option[APIAvailability],
+    sandboxAvailability: Option[APIAvailability]
   ) {
 
   def visibility: Option[VersionVisibility] = {
@@ -283,7 +304,6 @@ case class ExtendedEndpoint(
   }
 
 }
-
 
 case class Parameter(name: String, required: Boolean = false)
 

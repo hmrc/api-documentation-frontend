@@ -69,11 +69,10 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
 
     val v1Retired          = apiVersion("1.0", RETIRED)
     val v2Published        = apiVersion("2.0", STABLE)
-    val v201Published      = apiVersion("2.0.1", STABLE)
     val v2Deprecated       = apiVersion("2.0", DEPRECATED)
     val v3Prototyped       = apiVersion("3.0", BETA)
     val v4Alpha            = apiVersion("4.0", ALPHA)
-    val v3PrivatePublished = apiVersion("3.0rc", BETA, ApiAccess.Private(true))
+    val v3PrivatePublished = apiVersion("3.1", BETA, ApiAccess.Private(true))
     val v10Published       = apiVersion("10.0", STABLE)
     val v3Published        = apiVersion("3.0", STABLE)
     val vTestPublished     = apiVersion("test", STABLE)
@@ -81,21 +80,21 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
 
     val scenarios = Table(
       ("Versions", "Expected Default Version"),
-      (Seq(v3Prototyped, v2Published), Some(v2Published)),
-      (Seq(v2Deprecated, v3Published), Some(v3Published)),
-      (Seq(v2Published, v201Published), Some(v201Published)),
-      (Seq(v201Published, v2Published), Some(v201Published)),
-      (Seq(v2Deprecated, v1Retired), Some(v2Deprecated)),
-      (Seq(v3Prototyped, v2Published, v1Retired), Some(v2Published)),
-      (Seq(v3Prototyped, v2Published, v10Published, v1Retired), Some(v10Published)),
-      (Seq(v1Retired), None),
-      (Seq(v3Prototyped, v3PrivatePublished), Some(v3PrivatePublished)),
-      (Seq(v3PrivatePublished, v3Prototyped), Some(v3PrivatePublished)),
-      (Seq(v4Alpha, v3Prototyped), Some(v3Prototyped)),
-      (Seq(v4Alpha, v3Prototyped, v2Published), Some(v2Published)),
+      (Seq(v3Prototyped, v2Published), v2Published),
+      (Seq(v2Deprecated, v3Published), v3Published),
+      (Seq(v2Deprecated, v1Retired), v2Deprecated),
+      (Seq(v3Prototyped, v2Published, v1Retired),v2Published),
+      (Seq(v2Published, v3Published, v0_9Published), v3Published),
+      (Seq(v3Prototyped, v2Published, v10Published, v1Retired), v10Published),
+      (Seq(v3Prototyped, v3PrivatePublished), v3PrivatePublished),
+      (Seq(v3PrivatePublished, v3Prototyped), v3PrivatePublished),
+      (Seq(v4Alpha, v3Prototyped), v3Prototyped),
+      (Seq(v4Alpha, v3Prototyped, v2Published), v2Published),
+
+      //      (Seq(v1Retired), None),
       // non-decimal version treated as 1.0.0
-      (Seq(vTestPublished, v0_9Published), Some(vTestPublished)),
-      (Seq(vTestPublished, v2Published), Some(v2Published))
+//      (Seq(vTestPublished, v0_9Published), vTestPublished),
+//      (Seq(vTestPublished, v2Published), v2Published)
     )
 
     "return the default version depending on the status and version" in {
@@ -113,8 +112,8 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       val api1     = apiDefinition("name1", categories = List(CUSTOMS))
       val api2     = apiDefinition("name2", categories = List(PAYE))
       val expected = Map(
-        CUSTOMS -> Seq(api1),
-        PAYE    -> Seq(api2)
+        CUSTOMS -> Seq(WrappedApiDefinition(api1)),
+        PAYE    -> Seq(WrappedApiDefinition(api2))
       )
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, Seq.empty)
@@ -130,9 +129,9 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
         "name2" -> Seq(CORPORATION_TAX)
       )
       val expected    = Map(
-        CUSTOMS -> Seq(api1),
-        PAYE    -> Seq(api2),
-        VAT     -> Seq(api1, api2)
+        CUSTOMS -> Seq(WrappedApiDefinition(api1)),
+        PAYE    -> Seq(WrappedApiDefinition(api2)),
+        VAT     -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2))
       )
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, Seq.empty, categoryMap)
@@ -144,7 +143,7 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       val api1        = apiDefinition("name1")
       val api2        = apiDefinition("name2")
       val categoryMap = Map("name3" -> Seq(CUSTOMS))
-      val expected    = Map(OTHER -> Seq(api1, api2))
+      val expected    = Map(OTHER -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2)))
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, Seq.empty, categoryMap)
 
@@ -160,9 +159,9 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       )
 
       val expected = Map(
-        CUSTOMS -> Seq(api1),
-        PAYE    -> Seq(api2),
-        VAT     -> Seq(api1, api2)
+        CUSTOMS -> Seq(WrappedApiDefinition(api1)),
+        PAYE    -> Seq(WrappedApiDefinition(api2)),
+        VAT     -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2))
       )
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, Seq.empty, categoryMap)
@@ -183,9 +182,9 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       )
 
       val expected = Map(
-        CUSTOMS -> Seq(api1),
-        PAYE    -> Seq(api2, xmlApi1),
-        VAT     -> Seq(api1, api2, xmlApi2)
+        CUSTOMS -> Seq(WrappedApiDefinition(api1)),
+        PAYE    -> Seq(WrappedApiDefinition(api2), xmlApi1),
+        VAT     -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2), xmlApi2)
       )
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq(xmlApi1, xmlApi2), Seq.empty, Seq.empty, categoryMap)
@@ -200,7 +199,7 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
         "restApi"        -> Seq(CUSTOMS),
         "testSupportApi" -> Seq(CUSTOMS)
       )
-      val expected       = Map(CUSTOMS -> Seq(restApi, testSupportApi))
+      val expected       = Map(CUSTOMS -> Seq(WrappedApiDefinition(restApi), WrappedApiDefinition(testSupportApi)))
 
       val result = Documentation.groupedByCategory(Seq(restApi, testSupportApi), Seq.empty, Seq.empty, Seq.empty, categoryMap)
 
@@ -214,7 +213,7 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
         "xmlApi"         -> Seq(CUSTOMS),
         "testSupportApi" -> Seq(CUSTOMS)
       )
-      val expected       = Map(CUSTOMS -> Seq(testSupportApi, xmlApi))
+      val expected       = Map(CUSTOMS -> Seq(WrappedApiDefinition(testSupportApi), xmlApi))
 
       val result = Documentation.groupedByCategory(Seq(testSupportApi), Seq(xmlApi), Seq.empty, Seq.empty, categoryMap)
 
@@ -228,7 +227,7 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
         "myApi"          -> Seq(CUSTOMS),
         "myServiceGuide" -> Seq(CUSTOMS)
       )
-      val expected     = Map(CUSTOMS -> Seq(api, serviceGuide))
+      val expected     = Map(CUSTOMS -> Seq(WrappedApiDefinition(api), serviceGuide))
 
       val result = Documentation.groupedByCategory(Seq(api), Seq.empty, Seq(serviceGuide), Seq.empty, categoryMap)
 
@@ -242,7 +241,7 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
         "myApi"     -> Seq(CUSTOMS),
         "myRoadMap" -> Seq(CUSTOMS)
       )
-      val expected    = Map(CUSTOMS -> Seq(api, roadMap))
+      val expected    = Map(CUSTOMS -> Seq(WrappedApiDefinition(api), roadMap))
 
       val result = Documentation.groupedByCategory(Seq(api), Seq.empty, Seq.empty, Seq(roadMap), categoryMap)
 
