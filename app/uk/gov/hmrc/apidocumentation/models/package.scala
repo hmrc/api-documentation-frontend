@@ -19,7 +19,6 @@ package uk.gov.hmrc.apidocumentation.models
 import play.api.libs.json._
 
 package object jsonFormatters {
-  implicit val formatHttpMethod    = enumJson.enumFormat(HttpMethod)
   implicit val formatAPICategory   = enumJson.enumFormat(APICategory)
   implicit val formatAPIStatus     = enumJson.enumFormat(APIStatus)
   implicit val formatAPIAccessType = enumJson.enumFormat(APIAccessType)

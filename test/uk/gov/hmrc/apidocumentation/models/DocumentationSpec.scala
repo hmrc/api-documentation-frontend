@@ -21,7 +21,7 @@ import org.scalatest.prop.Tables.Table
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiStatus._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccess, ApiCategory}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper

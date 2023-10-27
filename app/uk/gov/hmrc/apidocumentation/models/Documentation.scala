@@ -22,7 +22,7 @@ import scala.util.Try
 
 import play.api.Configuration
 import play.api.libs.json._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition, ApiVersion,HttpMethod}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition, ApiVersion, HttpMethod}
 
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
@@ -283,6 +283,7 @@ case class ExtendedEndpoint(
   }
 
 }
+
 
 case class Parameter(name: String, required: Boolean = false)
 

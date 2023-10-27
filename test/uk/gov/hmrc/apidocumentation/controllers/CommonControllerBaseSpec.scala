@@ -31,7 +31,7 @@ import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
-
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.HttpMethod
 class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataHelper with GuiceOneAppPerSuite {
 
   override def fakeApplication(): Application =
