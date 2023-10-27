@@ -21,10 +21,11 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.{Application, Configuration}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiDefinition
 
 import uk.gov.hmrc.apidocumentation.common.utils._
+import uk.gov.hmrc.apidocumentation.models.ExtendedAPIDefinition
 import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 
 trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarExtensions with GuiceOneAppPerSuite {
 
@@ -129,7 +130,7 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |      ]
                   |    }
                   |  ]
-                  |}""".stripMargin.replaceAll("\n", " ")).as[APIDefinition]
+                  |}""".stripMargin.replaceAll("\n", " ")).as[ApiDefinition]
   }
   def apiDefinitions(names: String*) = names.map(apiDefinition)
 }

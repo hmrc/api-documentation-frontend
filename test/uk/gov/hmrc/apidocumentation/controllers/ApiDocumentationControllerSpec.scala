@@ -25,6 +25,7 @@ import controllers.Assets
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SEE_OTHER}
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiDefinition
 import uk.gov.hmrc.http.NotFoundException
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
@@ -62,6 +63,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     private lazy val assets                   = app.injector.instanceOf[Assets]
     val downloadConnector                     = mock[DownloadConnector]
     private implicit val materializer         = app.injector.instanceOf[Materializer]
+    val definitionList: List[ApiDefinition]   = List(apiDefinition("service1"), apiDefinition("service2"))
 
     val underTest = new ApiDocumentationController(
       documentationService,
@@ -103,7 +105,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     "routing to the apiIndexPage" should {
       "render the API List" in new Setup {
         theUserIsLoggedIn()
-        theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+        theDefinitionServiceWillReturnApiDefinitions(definitionList)
         fetchAllXmlApisReturnsApis()
 
         val result = underTest.apiIndexPage(None, None, None)(request)
@@ -112,7 +114,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
       "render the filtered API list" in new Setup {
         theUserIsLoggedIn()
-        theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+        theDefinitionServiceWillReturnApiDefinitions(definitionList)
         fetchAllXmlApisReturnsVatApi()
 
         val result = underTest.apiIndexPage(None, None, Some("vat"))(request)
@@ -131,7 +133,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
       "display the error page when the xmlServicesService throws an exception" in new Setup {
         theUserIsLoggedIn()
-        theDefinitionServiceWillReturnApiDefinitions(List(anApiDefinition("service1", "1.0"), anApiDefinition("service2", "1.0")))
+        theDefinitionServiceWillReturnApiDefinitions(definitionList)
         fetchAllXmlApisFails(new Exception("Expected unit test failure"))
 
         val result = underTest.apiIndexPage(None, None, None)(request)

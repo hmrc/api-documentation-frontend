@@ -48,10 +48,6 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
   val serviceName  = "hello-world"
   val endpointName = "Say Hello World!"
 
-  def anApiDefinition(serviceName: String, version: String): APIDefinition = {
-    APIDefinition(serviceName, "Hello World", "Say Hello World", "hello", None, None, Seq(APIVersion(version, None, APIStatus.STABLE, Seq(endpoint()))))
-  }
-
   def anXmlApiDefinition(name: String) = XmlApiDocumentation(name, "description", "context")
 
   def extendedApiDefinition(
@@ -75,7 +71,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
         ExtendedAPIVersion(
           version,
           APIStatus.STABLE,
-          Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
+          Seq(ExtendedEndpoint(endpointName, "/world", HttpMethod.GET, None)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(access, whitelistedApplicationIds = Some(Seq.empty), isTrial = isTrial), loggedIn, authorised)),
           None
         )
@@ -92,7 +88,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       requiresTrust = false,
       isTestSupport = false,
       Seq(
-        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)), None, None)
+        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(ExtendedEndpoint(endpointName, "/world", HttpMethod.GET, None)), None, None)
       )
     )
   }
@@ -111,7 +107,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       requiresTrust = false,
       isTestSupport = false,
       Seq(
-        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)), principalApiAvailability, subordinateApiAvailability)
+        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(ExtendedEndpoint(endpointName, "/world", HttpMethod.GET, None)), principalApiAvailability, subordinateApiAvailability)
       )
     )
   }

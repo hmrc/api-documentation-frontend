@@ -29,6 +29,7 @@ import org.joda.time.{DateTime, DateTimeZone}
 import play.api.i18n.MessagesProvider
 import play.api.libs.json.Json
 import play.api.mvc._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -36,7 +37,7 @@ import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.{DownloadConnector, RamlPreviewConnector}
 import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
-import uk.gov.hmrc.apidocumentation.models.APICategory.{APICategory, categoryMap}
+import uk.gov.hmrc.apidocumentation.models.APICategory.categoryMap
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
 import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
@@ -95,7 +96,7 @@ class ApiDocumentationController @Inject() (
           val apisByCategory = Documentation.groupedByCategory(apis, xmlApis, ServiceGuide.serviceGuides, RoadMap.roadMaps)
 
           filter match {
-            case Some(f) => Ok(apisFilteredView(pageAttributes("Filtered API Documentation"), apisByCategory, APICategory.fromFilter(f)))
+            case Some(f) => Ok(apisFilteredView(pageAttributes("Filtered API Documentation"), apisByCategory, DocumentationCategory.fromFilter(f)))
             case _       => Ok(apiIndexView(pageAttributes(), apisByCategory))
           }
 
@@ -220,10 +221,10 @@ class ApiDocumentationController @Inject() (
           .flatMap(_.fold(findLocally)(resultToDocumentationItem))
       }
 
-      def renderOas(categories: Seq[APICategory]): Future[Result] = {
+      def renderOas(categories: Seq[ApiCategory]): Future[Result] = {
         val withDefaultForService = withDefault(service) _
 
-        val requiredFraudPrevention = (categories.contains(APICategory.VAT_MTD) || categories.contains(APICategory.INCOME_TAX_MTD)) && !api.isTestSupport
+        val requiredFraudPrevention = (categories.contains(ApiCategory.VAT_MTD) || categories.contains(ApiCategory.INCOME_TAX_MTD)) && !api.isTestSupport
 
         for {
           overview        <- withDefaultForService("overview.md", "Overview")

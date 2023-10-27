@@ -19,10 +19,11 @@ package uk.gov.hmrc.apidocumentation.utils
 import com.github.tomakehurst.wiremock.client.WireMock._
 
 import play.api.test.Helpers._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiDefinition
 
 import uk.gov.hmrc.apidocumentation.common.utils._
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl}
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition, UuidIdentifier}
+import uk.gov.hmrc.apidocumentation.models.{ExtendedAPIDefinition, UuidIdentifier}
 
 trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
 
@@ -30,7 +31,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
 
   import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 
-  def whenGetAllDefinitionsByUserId(userId: UuidIdentifier)(definitions: APIDefinition*): Unit = {
+  def whenGetAllDefinitionsByUserId(userId: UuidIdentifier)(definitions: ApiDefinition*): Unit = {
     val url = definitionsUrl("")
     stubFor(
       get(
@@ -40,12 +41,12 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
         .willReturn(
           aResponse()
             .withStatus(OK)
-            .withJsonBody(definitions.toSeq)
+            .withJsonBody(definitions.toList)
         )
     )
   }
 
-  def whenGetAllDefinitionsByUserId(definitions: APIDefinition*): Unit = {
+  def whenGetAllDefinitionsByUserId(definitions: ApiDefinition*): Unit = {
     val url = definitionsUrl("")
     stubFor(
       get(
@@ -54,7 +55,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
         .willReturn(
           aResponse()
             .withStatus(OK)
-            .withJsonBody(definitions.toSeq)
+            .withJsonBody(definitions.toList)
         )
     )
   }

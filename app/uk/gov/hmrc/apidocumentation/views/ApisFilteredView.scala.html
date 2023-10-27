@@ -17,12 +17,12 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.models.APICategory._
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
 @this(apiMain: apiMain)
 
-@(pageAttributes: PageAttributes, documentsByCategory: Map[APICategory, Seq[Documentation]], filter: Option[APICategory])(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, documentsByCategory: Map[ApiCategory, Seq[Documentation]], filter: Option[ApiCategory])(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
 
@@ -30,12 +30,12 @@
 
     <a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">View the full API list </a>
 
-    @documentFilter(documentsByCategory, filter)
+    @documentFilter(documentsByCategory.keys.toList, filter)
 
     @filter.map { f =>
-        @defining(documentsByCategory.filterKeys(_.filter == f.filter).toMap) { filteredDocuments =>
+        @defining(documentsByCategory.view.filterKeys(DocumentationCategory(_).filter == DocumentationCategory(f).filter).toMap) { filteredDocuments =>
             @defining(filteredDocuments.values.toSeq.flatten.length) { numDocuments =>
-                <p class="govuk-body">@numDocuments document@if(numDocuments != 1){s} found in <strong class="bold-small">@f.displayName</strong></p>
+                <p class="govuk-body">@numDocuments document@if(numDocuments != 1){s} found in <strong class="bold-small">@f.displayText</strong></p>
 
                 @documentGroups(filteredDocuments)
             }

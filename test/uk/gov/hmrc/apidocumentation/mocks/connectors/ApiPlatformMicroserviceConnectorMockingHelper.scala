@@ -20,21 +20,22 @@ import scala.concurrent.Future
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiDefinition
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition, UuidIdentifier}
+import uk.gov.hmrc.apidocumentation.models.{ExtendedAPIDefinition, UuidIdentifier}
 
 trait ApiPlatformMicroserviceConnectorMockingHelper extends MockitoSugar with ArgumentMatchersSugar {
 
-  def whenFetchAllDefinitions[T <: ApiPlatformMicroserviceConnector](base: T)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
+  def whenFetchAllDefinitions[T <: ApiPlatformMicroserviceConnector](base: T)(apis: ApiDefinition*)(implicit hc: HeaderCarrier) = {
     when(base.fetchApiDefinitionsByCollaborator(*)(eqTo(hc)))
-      .thenReturn(Future.successful(apis.toSeq))
+      .thenReturn(Future.successful(apis.toList))
   }
 
-  def whenFetchAllDefinitionsWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)(userId: UuidIdentifier)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
+  def whenFetchAllDefinitionsWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)(userId: UuidIdentifier)(apis: ApiDefinition*)(implicit hc: HeaderCarrier) = {
     when(base.fetchApiDefinitionsByCollaborator(*)(eqTo(hc)))
-      .thenReturn(Future.successful(apis.toSeq))
+      .thenReturn(Future.successful(apis.toList))
   }
 
   def whenFetchExtendedDefinition[T <: ApiPlatformMicroserviceConnector](base: T)(serviceName: String)(api: ExtendedAPIDefinition)(implicit hc: HeaderCarrier) = {

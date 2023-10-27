@@ -24,13 +24,14 @@ import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.Application
 import play.api.cache.AsyncCacheApi
 import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiDefinition
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
+import uk.gov.hmrc.apidocumentation.models.TestEndpoint
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, Method, Resource, ResourceGroup}
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, TestEndpoint}
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest with ApiDefinitionTestDataHelper {
@@ -40,7 +41,7 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
   val html               = "<b>Today is 01 January 2001</b>"
   val serviceName        = "calendar"
   val serviceUrl         = "http://localhost:1234"
-  val api: APIDefinition = apiDefinition("gregorian-calendar")
+  val api: ApiDefinition = apiDefinition("gregorian-calendar")
 
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()

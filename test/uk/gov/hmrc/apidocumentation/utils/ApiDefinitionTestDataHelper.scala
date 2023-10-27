@@ -16,21 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.utils
 
-import uk.gov.hmrc.apidocumentation.models.APIStatus.{APIStatus, STABLE}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+
 import uk.gov.hmrc.apidocumentation.models._
 
 trait ApiDefinitionTestDataHelper {
 
-  def apiDefinition(name: String, versions: Seq[APIVersion] = Seq(apiVersion("1.0", STABLE))) = {
-    APIDefinition(name, name, name, name, None, None, versions)
-  }
-
-  def apiAccess() = {
-    APIAccess(
-      `type` = APIAccessType.PUBLIC,
-      whitelistedApplicationIds = Some(Seq.empty),
-      isTrial = Some(false)
-    )
+  def apiDefinition(name: String, versions: Seq[ApiVersion] = Seq(apiVersion("1.0", ApiStatus.STABLE)), categories: List[ApiCategory] = List.empty) = {
+    ApiDefinition(ServiceName(name), name, name, name, ApiContext("hello"), versions.map(version => version.versionNbr -> version).toMap, categories = categories)
   }
 
   implicit class ApiAccessModifier(val inner: APIAccess) {
@@ -137,62 +131,57 @@ trait ApiDefinitionTestDataHelper {
       inner.map(_.endpointsDisabled)
   }
 
-  def endpoint(endpointName: String = "Hello World", url: String = "/world"): Endpoint = {
-    Endpoint(endpointName, url, HttpMethod.GET, None)
+  def endpoint(endpointName: String = "Hello World", url: String = "/world"): ExtendedEndpoint = {
+    ExtendedEndpoint(endpointName, url, HttpMethod.GET, None)
   }
 
-  implicit class EndpointModifier(val inner: Endpoint) {
+  implicit class EndpointModifier(val inner: ExtendedEndpoint) {
 
-    def asPost: Endpoint =
+    def asPost: ExtendedEndpoint =
       inner.copy(method = HttpMethod.POST)
   }
 
-  def apiVersion(version: String = "1.0", status: APIStatus = STABLE, access: Option[APIAccess] = None): APIVersion = {
-    APIVersion(
-      version,
-      access,
+  def apiVersion(version: String = "1.0", status: ApiStatus = ApiStatus.STABLE, access: ApiAccess = ApiAccess.PUBLIC): ApiVersion = {
+    ApiVersion(
+      ApiVersionNbr(version),
       status,
-      Seq(
-        endpoint("Today's Date", "/today"),
-        endpoint("Yesterday's Date", "/yesterday")
-      )
+      access,
+      List()
     )
   }
 
-  implicit class ApiVersionModifier(val inner: APIVersion) {
+  implicit class ApiVersionModifier(val inner: ApiVersion) {
 
-    def asAlpha: APIVersion =
-      inner.copy(status = APIStatus.ALPHA)
+    def asAlpha: ApiVersion =
+      inner.copy(status = ApiStatus.ALPHA)
 
-    def asBeta: APIVersion =
-      inner.copy(status = APIStatus.BETA)
+    def asBeta: ApiVersion =
+      inner.copy(status = ApiStatus.BETA)
 
-    def asStable: APIVersion =
-      inner.copy(status = APIStatus.STABLE)
+    def asStable: ApiVersion =
+      inner.copy(status = ApiStatus.STABLE)
 
-    def asDeprecated: APIVersion =
-      inner.copy(status = APIStatus.DEPRECATED)
+    def asDeprecated: ApiVersion =
+      inner.copy(status = ApiStatus.DEPRECATED)
 
-    def asRETIRED: APIVersion =
-      inner.copy(status = APIStatus.RETIRED)
+    def asRETIRED: ApiVersion =
+      inner.copy(status = ApiStatus.RETIRED)
 
-    def asPublic: APIVersion =
-      inner.copy(access = inner.access.map(_.asPublic))
+    def asPublic: ApiVersion =
+      inner.copy(access = inner.access)
 
-    def asPrivate: APIVersion =
-      inner.copy(access = inner.access.map(_.asPrivate))
+    def asPrivate: ApiVersion =
+      inner.copy(access = ApiAccess.Private(false))
 
-    def asTrial: APIVersion =
-      inner.copy(access = inner.access.map(_.asTrial))
+    def asTrial: ApiVersion =
+      inner.copy(access = ApiAccess.Private(true))
 
-    def notTrial: APIVersion =
-      inner.copy(access = inner.access.map(_.notTrial))
+    def notTrial: ApiVersion =
+      inner.copy(access = ApiAccess.Private(false))
 
-    def withAccess(altAccess: Option[APIAccess]): APIVersion =
+    def withAccess(altAccess: ApiAccess): ApiVersion =
       inner.copy(access = altAccess)
 
-    def withNoAccess: APIVersion =
-      inner.copy(access = None)
   }
 
   def extendedApiDefinition(name: String) = {
@@ -208,8 +197,8 @@ trait ApiDefinitionTestDataHelper {
           version = "1.0",
           status = APIStatus.STABLE,
           endpoints = Seq(
-            Endpoint("Today's Date", "/today", HttpMethod.GET, None),
-            Endpoint("Yesterday's Date", "/yesterday", HttpMethod.GET, None)
+            ExtendedEndpoint("Today's Date", "/today", HttpMethod.GET, None),
+            ExtendedEndpoint("Yesterday's Date", "/yesterday", HttpMethod.GET, None)
           ),
           productionAvailability = someApiAvailability(),
           sandboxAvailability = None

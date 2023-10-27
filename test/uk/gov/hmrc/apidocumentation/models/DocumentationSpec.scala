@@ -19,21 +19,24 @@ package uk.gov.hmrc.apidocumentation.models
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 
-import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
-import uk.gov.hmrc.apidocumentation.models.APICategory._
-import uk.gov.hmrc.apidocumentation.models.APIStatus._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiStatus._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccess, ApiCategory}
 
-class DocumentationSpec extends HmrcSpec {
+import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
+
+class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
 
   "APIVersion.displayedStatus for PUBLIC apis" should {
 
     val scenarios = Table(
       ("API Status", "Expected Displayed Status"),
-      (ALPHA, "Alpha"),
-      (BETA, "Beta"),
-      (STABLE, "Stable"),
-      (DEPRECATED, "Deprecated"),
-      (RETIRED, "Retired")
+      (APIStatus.ALPHA, "Alpha"),
+      (APIStatus.BETA, "Beta"),
+      (APIStatus.STABLE, "Stable"),
+      (APIStatus.DEPRECATED, "Deprecated"),
+      (APIStatus.RETIRED, "Retired")
     )
 
     "return the status to display" in {
@@ -48,10 +51,10 @@ class DocumentationSpec extends HmrcSpec {
 
     val scenarios = Table(
       ("API Status", "Expected Displayed Status"),
-      (BETA, "Private Beta"),
-      (STABLE, "Private Stable"),
-      (DEPRECATED, "Private Deprecated"),
-      (RETIRED, "Private Retired")
+      (APIStatus.BETA, "Private Beta"),
+      (APIStatus.STABLE, "Private Stable"),
+      (APIStatus.DEPRECATED, "Private Deprecated"),
+      (APIStatus.RETIRED, "Private Retired")
     )
 
     "return the status to display" in {
@@ -62,19 +65,19 @@ class DocumentationSpec extends HmrcSpec {
     }
   }
 
-  "APIDefinition.defaultVersion" should {
+  "ApiDefinition.defaultVersion" should {
 
-    val v1Retired          = APIVersion("1.0", None, RETIRED, Seq.empty)
-    val v2Published        = APIVersion("2.0", None, STABLE, Seq.empty)
-    val v201Published      = APIVersion("2.0.1", None, STABLE, Seq.empty)
-    val v2Deprecated       = APIVersion("2.0", None, DEPRECATED, Seq.empty)
-    val v3Prototyped       = APIVersion("3.0", None, BETA, Seq.empty)
-    val v4Alpha            = APIVersion("4.0", None, ALPHA, Seq.empty)
-    val v3PrivatePublished = APIVersion("3.0rc", Some(APIAccess(APIAccessType.PRIVATE)), BETA, Seq.empty)
-    val v10Published       = APIVersion("10.0", None, STABLE, Seq.empty)
-    val v3Published        = APIVersion("3.0", None, STABLE, Seq.empty)
-    val vTestPublished     = APIVersion("test", None, STABLE, Seq.empty)
-    val v0_9Published      = APIVersion("0.9", None, STABLE, Seq.empty)
+    val v1Retired          = apiVersion("1.0", RETIRED)
+    val v2Published        = apiVersion("2.0", STABLE)
+    val v201Published      = apiVersion("2.0.1", STABLE)
+    val v2Deprecated       = apiVersion("2.0", DEPRECATED)
+    val v3Prototyped       = apiVersion("3.0", BETA)
+    val v4Alpha            = apiVersion("4.0", ALPHA)
+    val v3PrivatePublished = apiVersion("3.0rc", BETA, ApiAccess.Private(true))
+    val v10Published       = apiVersion("10.0", STABLE)
+    val v3Published        = apiVersion("3.0", STABLE)
+    val vTestPublished     = apiVersion("test", STABLE)
+    val v0_9Published      = apiVersion("0.9", STABLE)
 
     val scenarios = Table(
       ("Versions", "Expected Default Version"),
@@ -98,125 +101,17 @@ class DocumentationSpec extends HmrcSpec {
     "return the default version depending on the status and version" in {
 
       forAll(scenarios) { (versions, expectedDefaultVersion) =>
-        val api = APIDefinition("serviceName", "name", "description", "context", None, None, versions)
+        val api = WrappedApiDefinition(apiDefinition("serviceName", versions))
 
         api.defaultVersion shouldEqual expectedDefaultVersion
       }
     }
   }
 
-  "APIDefinition.reverseSortedVersions" should {
-
-    val v1Retired          = APIVersion("1.0", None, RETIRED, Seq.empty)
-    val v2Deprecated       = APIVersion("2.0", None, DEPRECATED, Seq.empty)
-    val v3Prototyped       = APIVersion("3.0", None, BETA, Seq.empty)
-    val v3PrivatePublished = APIVersion("3.0rc", Some(APIAccess(APIAccessType.PRIVATE)), BETA, Seq.empty)
-    val v3Published        = APIVersion("3.0", None, STABLE, Seq.empty)
-    val v4Prototyped       = APIVersion("4.0", None, BETA, Seq.empty)
-
-    val scenarios = Table(
-      ("Versions", "Expected Default Version"),
-      (Seq(v3Prototyped, v2Deprecated), Seq(v3Prototyped, v2Deprecated)),
-      (Seq(v2Deprecated, v3Published), Seq(v3Published, v2Deprecated)),
-      (Seq(v2Deprecated, v1Retired), Seq(v2Deprecated, v1Retired)),
-      (Seq(v3Prototyped, v2Deprecated, v1Retired), Seq(v3Prototyped, v2Deprecated, v1Retired)),
-      (Seq(v2Deprecated, v4Prototyped, v3Published, v1Retired), Seq(v4Prototyped, v3Published, v2Deprecated, v1Retired)),
-      (Seq(v3Prototyped, v3PrivatePublished), Seq(v3PrivatePublished, v3Prototyped)),
-      (Seq(v3PrivatePublished, v3Prototyped), Seq(v3PrivatePublished, v3Prototyped))
-    )
-
-    "return the versions sorted by the status and version" in {
-
-      forAll(scenarios) { (versions, expectedVersions) =>
-        val api = APIDefinition("serviceName", "name", "description", "context", None, None, versions)
-
-        api.sortedVersions shouldEqual expectedVersions
-      }
-    }
-  }
-
-  "APIDefinition.statusSortedVersions" should {
-
-    val v1Retired    = APIVersion("1.0", None, RETIRED, Seq.empty)
-    val v2Published  = APIVersion("2.0", None, STABLE, Seq.empty)
-    val v2Deprecated = APIVersion("2.0", None, DEPRECATED, Seq.empty)
-    val v3Prototyped = APIVersion("3.0", None, BETA, Seq.empty)
-    val v3Published  = APIVersion("3.0", None, STABLE, Seq.empty)
-    val v4Prototyped = APIVersion("4.0", None, BETA, Seq.empty)
-
-    val scenarios = Table(
-      ("Versions", "Expected Default Version"),
-      (Seq(v3Prototyped, v2Published), Seq(v2Published, v3Prototyped)),
-      (Seq(v2Deprecated, v3Published), Seq(v3Published, v2Deprecated)),
-      (Seq(v2Deprecated, v1Retired), Seq(v2Deprecated, v1Retired)),
-      (Seq(v3Prototyped, v2Published, v1Retired), Seq(v2Published, v3Prototyped, v1Retired)),
-      (Seq(v2Deprecated, v4Prototyped, v3Published, v1Retired), Seq(v3Published, v4Prototyped, v2Deprecated, v1Retired))
-    )
-
-    "return the versions sorted by the status and version" in {
-
-      forAll(scenarios) { (versions, expectedVersions) =>
-        val api = APIDefinition("serviceName", "name", "description", "context", None, None, versions)
-
-        api.statusSortedVersions shouldEqual expectedVersions
-      }
-    }
-  }
-
-  "APIDefinition.statusSortedNoRetiredVersions" should {
-    val v01Retired    = APIVersion("0.1", None, RETIRED, Seq.empty)
-    val v1Retired     = APIVersion("1.0", None, RETIRED, Seq.empty)
-    val v2Deprecated  = APIVersion("2.0", None, DEPRECATED, Seq.empty)
-    val v21Deprecated = APIVersion("2.1", None, DEPRECATED, Seq.empty)
-    val v3Published   = APIVersion("3.0", None, STABLE, Seq.empty)
-    val v4Prototyped  = APIVersion("4.0", None, BETA, Seq.empty)
-
-    val scenarios = Table(
-      ("Versions", "Expected Default Version", "Has non retired versions?"),
-      (Seq(v2Deprecated, v1Retired), Seq(v2Deprecated), true),
-      (Seq(v2Deprecated, v1Retired, v21Deprecated), Seq(v21Deprecated, v2Deprecated), true),
-      (Seq(v01Retired, v1Retired), Seq.empty, false),
-      (Seq(v2Deprecated, v01Retired, v4Prototyped, v3Published, v1Retired), Seq(v3Published, v4Prototyped, v2Deprecated), true)
-    )
-
-    "return the versions sorted by the status and version" in {
-
-      forAll(scenarios) { (versions, expectedVersions, nonRetiredVersionsAvailable) =>
-        val api = APIDefinition("serviceName", "name", "description", "context", None, None, versions)
-
-        api.hasActiveVersions shouldBe nonRetiredVersionsAvailable
-        api.statusSortedActiveVersions shouldEqual expectedVersions
-      }
-    }
-  }
-
-  "APIDefinition.retiredVersions" should {
-
-    val v01Retired   = APIVersion("0.1", None, RETIRED, Seq.empty)
-    val v1Retired    = APIVersion("1.0", None, RETIRED, Seq.empty)
-    val v2Deprecated = APIVersion("2.0", None, DEPRECATED, Seq.empty)
-    val v3Published  = APIVersion("3.0", None, STABLE, Seq.empty)
-    val v4Prototyped = APIVersion("4.0", None, BETA, Seq.empty)
-
-    val scenarios = Table(
-      ("Versions", "Expected retired versions"),
-      (Seq(v01Retired, v1Retired, v2Deprecated, v3Published, v4Prototyped), Seq(v01Retired, v1Retired)),
-      (Seq(v01Retired, v3Published), Seq(v01Retired)),
-      (Seq(v2Deprecated, v3Published, v4Prototyped), Nil)
-    )
-
-    "return the retired versions" in {
-      forAll(scenarios) { (versions, expectedRetiredVersions) =>
-        val api = APIDefinition("serviceName", "name", "description", "context", None, None, versions)
-        api.retiredVersions shouldBe expectedRetiredVersions
-      }
-    }
-  }
-
-  "APIDefinition.groupedByCategory" should {
+  "ApiDefinition.groupedByCategory" should {
     "group definitions by category when each definition has a single category" in {
-      val api1     = anApiDefinition("name1", categories = Some(Seq(CUSTOMS)))
-      val api2     = anApiDefinition("name2", categories = Some(Seq(PAYE)))
+      val api1     = apiDefinition("name1", categories = List(CUSTOMS))
+      val api2     = apiDefinition("name2", categories = List(PAYE))
       val expected = Map(
         CUSTOMS -> Seq(api1),
         PAYE    -> Seq(api2)
@@ -228,8 +123,8 @@ class DocumentationSpec extends HmrcSpec {
     }
 
     "group definitions by the categories in the API definition into each specified category when a definition has defined categories" in {
-      val api1        = anApiDefinition("name1", categories = Some(Seq(CUSTOMS, VAT)))
-      val api2        = anApiDefinition("name2", categories = Some(Seq(PAYE, VAT)))
+      val api1        = apiDefinition("name1", categories = List(CUSTOMS, VAT))
+      val api2        = apiDefinition("name2", categories = List(PAYE, VAT))
       val categoryMap = Map(
         "name1" -> Seq(INCOME_TAX_MTD),
         "name2" -> Seq(CORPORATION_TAX)
@@ -246,8 +141,8 @@ class DocumentationSpec extends HmrcSpec {
     }
 
     "group definitions into 'Other' when the definition has no categories and no matching context in the category map" in {
-      val api1        = anApiDefinition("name1")
-      val api2        = anApiDefinition("name2")
+      val api1        = apiDefinition("name1")
+      val api2        = apiDefinition("name2")
       val categoryMap = Map("name3" -> Seq(CUSTOMS))
       val expected    = Map(OTHER -> Seq(api1, api2))
 
@@ -257,8 +152,8 @@ class DocumentationSpec extends HmrcSpec {
     }
 
     "group definitions by the category map when no categories specified in the definition and there are matching contexts in the category map" in {
-      val api1        = anApiDefinition("name1")
-      val api2        = anApiDefinition("name2")
+      val api1        = apiDefinition("name1")
+      val api2        = apiDefinition("name2")
       val categoryMap = Map(
         "name1" -> Seq(CUSTOMS, VAT),
         "name2" -> Seq(PAYE, VAT)
@@ -276,8 +171,8 @@ class DocumentationSpec extends HmrcSpec {
     }
 
     "include XML API definitions" in {
-      val api1        = anApiDefinition("name1")
-      val api2        = anApiDefinition("name2")
+      val api1        = apiDefinition("name1")
+      val api2        = apiDefinition("name2")
       val xmlApi1     = anXmlApiDefinition("xmlName1")
       val xmlApi2     = anXmlApiDefinition("xmlName2")
       val categoryMap = Map(
@@ -299,8 +194,8 @@ class DocumentationSpec extends HmrcSpec {
     }
 
     "include REST and Test Support APIS" in {
-      val restApi        = anApiDefinition("restApi")
-      val testSupportApi = anApiDefinition("testSupportApi", isTestSupport = Some(true))
+      val restApi        = apiDefinition("restApi")
+      val testSupportApi = apiDefinition("testSupportApi").copy(isTestSupport = true)
       val categoryMap    = Map(
         "restApi"        -> Seq(CUSTOMS),
         "testSupportApi" -> Seq(CUSTOMS)
@@ -314,7 +209,7 @@ class DocumentationSpec extends HmrcSpec {
 
     "include XML and Test Support APIS" in {
       val xmlApi         = anXmlApiDefinition("xmlApi")
-      val testSupportApi = anApiDefinition("testSupportApi", isTestSupport = Some(true))
+      val testSupportApi = apiDefinition("testSupportApi").copy(isTestSupport = true)
       val categoryMap    = Map(
         "xmlApi"         -> Seq(CUSTOMS),
         "testSupportApi" -> Seq(CUSTOMS)
@@ -327,7 +222,7 @@ class DocumentationSpec extends HmrcSpec {
     }
 
     "include APIs and Service guides" in {
-      val api          = anApiDefinition("myApi")
+      val api          = apiDefinition("myApi")
       val serviceGuide = aServiceGuide("myServiceGuide")
       val categoryMap  = Map(
         "myApi"          -> Seq(CUSTOMS),
@@ -341,7 +236,7 @@ class DocumentationSpec extends HmrcSpec {
     }
 
     "include APIs and Road maps" in {
-      val api         = anApiDefinition("myApi")
+      val api         = apiDefinition("myApi")
       val roadMap     = aRoadMap("myRoadMap")
       val categoryMap = Map(
         "myApi"     -> Seq(CUSTOMS),
@@ -355,7 +250,7 @@ class DocumentationSpec extends HmrcSpec {
     }
 
     "filter out categories without REST or XML APIs" in {
-      val testSupportApi = anApiDefinition("testSupportApi", isTestSupport = Some(true))
+      val testSupportApi = apiDefinition("testSupportApi").copy(isTestSupport = true)
       val serviceGuide   = aServiceGuide("serviceGuide")
       val categoryMap    = Map("name1" -> Seq(CUSTOMS, VAT))
 
@@ -387,36 +282,33 @@ class DocumentationSpec extends HmrcSpec {
     })
 
     def anEndpoint(uriPattern: String, parameters: Option[Seq[Parameter]]) = {
-      Endpoint("Get Today's Date", uriPattern, HttpMethod.GET, parameters)
+      ExtendedEndpoint("Get Today's Date", uriPattern, HttpMethod.GET, parameters)
     }
   }
 
   "nameAsId" should {
     "swap spaces for hyphens and lower case" in {
-      val api1 = anApiDefinition("Hello World")
+      val api1 = WrappedApiDefinition(apiDefinition("Hello World"))
       api1.nameAsId shouldBe "hello-world"
     }
 
     "remove brackets" in {
-      val api1 = anApiDefinition("Income Tax (MTD) end-to-end service guide")
+      val api1 = WrappedApiDefinition(apiDefinition("Income Tax (MTD) end-to-end service guide"))
       api1.nameAsId shouldBe "income-tax-mtd-end-to-end-service-guide"
     }
 
     "remove any other chars" in {
-      val api1 = anApiDefinition("Income Tax (MTD):+{}=#@£!& [end-to-end service guide]")
+      val api1 = WrappedApiDefinition(apiDefinition("Income Tax (MTD):+{}=#@£!& [end-to-end service guide]"))
       api1.nameAsId shouldBe "income-tax-mtd-end-to-end-service-guide"
     }
   }
 
-  def anApiDefinition(name: String, categories: Option[Seq[APICategory]] = None, isTestSupport: Option[Boolean] = None) =
-    APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), categories)
-
-  def anXmlApiDefinition(name: String, categories: Option[Seq[APICategory]] = None) =
+  def anXmlApiDefinition(name: String, categories: Option[Seq[ApiCategory]] = None) =
     XmlApiDocumentation(name, "description", "context", categories)
 
-  def aServiceGuide(name: String, categories: Option[Seq[APICategory]] = None) =
+  def aServiceGuide(name: String, categories: Option[Seq[ApiCategory]] = None) =
     ServiceGuide(name, "context", categories)
 
-  def aRoadMap(name: String, categories: Option[Seq[APICategory]] = None) =
+  def aRoadMap(name: String, categories: Option[Seq[ApiCategory]] = None) =
     RoadMap(name, "context", categories)
 }

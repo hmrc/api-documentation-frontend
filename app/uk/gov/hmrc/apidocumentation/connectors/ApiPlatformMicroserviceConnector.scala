@@ -19,6 +19,7 @@ package uk.gov.hmrc.apidocumentation.connectors
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
@@ -26,7 +27,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, DeveloperIdentifier, ExtendedAPIDefinition}
+import uk.gov.hmrc.apidocumentation.models.{DeveloperIdentifier, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
@@ -40,9 +41,9 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
     http.GET[Option[ApiSpecification]](url)
   }
 
-  def fetchApiDefinitionsByCollaborator(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] = {
+  def fetchApiDefinitionsByCollaborator(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[ApiDefinition]] = {
     logger.info(s"${getClass.getSimpleName} - fetchApiDefinitionsByCollaborator")
-    val r = http.GET[Seq[APIDefinition]](definitionsUrl(serviceBaseUrl), queryParams(developerId))
+    val r = http.GET[Seq[ApiDefinition]](definitionsUrl(serviceBaseUrl), queryParams(developerId))
 
     r.map(defns => defns.foreach(defn => logger.info(s"Found ${defn.name}")))
 

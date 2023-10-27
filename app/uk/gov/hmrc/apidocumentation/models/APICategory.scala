@@ -19,8 +19,7 @@ package uk.gov.hmrc.apidocumentation.models
 import scala.io.Source
 
 import play.api.libs.json._
-
-import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
 
 object APICategory extends Enumeration {
   type APICategory = Value
@@ -55,6 +54,6 @@ object APICategory extends Enumeration {
 
   def fromFilter(filter: String) = values.find(_.filter == filter)
 
-  lazy val categoryMap: Map[String, Seq[APICategory]] =
-    Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/categories.json")).mkString).as[Map[String, Seq[APICategory]]]
+  lazy val categoryMap: Map[String, Seq[ApiCategory]] =
+    Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/categories.json")).mkString).as[Map[String, Seq[ApiCategory]]]
 }
