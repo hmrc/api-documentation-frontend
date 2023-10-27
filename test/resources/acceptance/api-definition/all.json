@@ -535,6 +535,158 @@
         ],
         "endpointsEnabled": true,
         "versionSource": "RAML"
+      },
+      {
+        "version": "1.1",
+        "status": "STABLE",
+        "access": {
+          "type": "PUBLIC"
+        },
+        "endpoints": [
+          {
+            "uriPattern": "/users",
+            "endpointName": "post",
+            "method": "POST",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/users/{id}",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/users/{id}",
+            "endpointName": "put",
+            "method": "PUT",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/users/{id}",
+            "endpointName": "delete",
+            "method": "DELETE",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts",
+            "endpointName": "Get posts",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": [
+              {
+                "name": "startDate",
+                "required": true
+              },
+              {
+                "name": "endDate",
+                "required": true
+              },
+              {
+                "name": "status",
+                "required": false
+              }
+            ]
+          },
+          {
+            "uriPattern": "/posts",
+            "endpointName": "post",
+            "method": "POST",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts",
+            "endpointName": "put",
+            "method": "PUT",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts/{id}",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts/today",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts/week",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/posts/user/{userId}",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments",
+            "endpointName": "post",
+            "method": "POST",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments",
+            "endpointName": "put",
+            "method": "PUT",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments/{postId}",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments/{postId}/{commentId}",
+            "endpointName": "get",
+            "method": "GET",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          },
+          {
+            "uriPattern": "/comments/{postId}/{commentId}",
+            "endpointName": "delete",
+            "method": "DELETE",
+            "authType": "NONE",
+            "throttlingTier": "UNLIMITED",
+            "queryParameters": []
+          }
+        ],
+        "endpointsEnabled": true,
+        "versionSource": "RAML"
       }
     ],
     "requiresTrust": false,
