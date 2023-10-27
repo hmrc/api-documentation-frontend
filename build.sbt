@@ -95,3 +95,12 @@ lazy val microservice = Project(appName, file("."))
 lazy val AcceptanceTest = config("acceptance") extend Test
 
 lazy val appName = "api-documentation-frontend"
+
+  commands ++= Seq(
+    Command.command("run-all-tests") { state => "test" :: "acceptance:test" :: state },
+
+    Command.command("clean-and-test") { state => "clean" :: "compile" :: "run-all-tests" :: state },
+
+    // Coverage does not need compile !
+    Command.command("pre-commit") { state => "clean" :: "scalafmtAll" :: "scalafixAll" :: "coverage" :: "run-all-tests" :: "coverageReport" :: state }
+  )

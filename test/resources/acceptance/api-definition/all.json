@@ -196,11 +196,13 @@
     "name": "Trusted API",
     "description": "Trusted API.",
     "context": "trusted-api",
-    "requiresTrust": true,
     "versions": [
       {
         "version": "1.0",
         "status": "BETA",
+        "access": {
+          "type": "PUBLIC"
+        },
         "endpoints": [
           {
             "uriPattern": "/sa/{utr}/annual-summary/{taxYear}",
@@ -208,10 +210,19 @@
             "method": "GET",
             "authType": "USER",
             "throttlingTier": "UNLIMITED",
-            "scope": "read:individual-benefits"
+            "scope": "read:individual-benefits",
+            "queryParameters": []
           }
-        ]
+        ],
+          "endpointsEnabled": true,
+          "versionSource": "OAS"
       }
+    ],
+    "requiresTrust": false,
+    "isTestSupport": false,
+    "lastPublishedAt": "2023-03-03T13:07:12.372Z",
+    "categories": [
+      "OTHER"
     ]
   },
   {
