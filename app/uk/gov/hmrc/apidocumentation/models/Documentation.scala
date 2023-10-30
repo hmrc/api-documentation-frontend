@@ -19,14 +19,15 @@ package uk.gov.hmrc.apidocumentation.models
 import scala.collection.immutable.ListMap
 import scala.io.Source
 import scala.util.Try
+
 import play.api.Configuration
 import play.api.libs.json._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition, ApiStatus, ApiVersion, HttpMethod}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
 import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
-import uk.gov.hmrc.apidocumentation.models.ExtendedAPIDefinition.versionSorter
-import uk.gov.hmrc.apidocumentation.models.WrappedApiDefinition.{priorityOf, versionOrdering}
+import uk.gov.hmrc.apidocumentation.models.WrappedApiDefinition.statusVersionOrdering
 
 trait Documentation {
 
@@ -137,7 +138,7 @@ case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation
 
   lazy val defaultVersion: ApiVersion = definition
     .versionsAsList
-    .sorted(versionOrdering)
+    .sorted(statusVersionOrdering)
     .head
 
   override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName.value, defaultVersion.versionNbr.value, None).url
@@ -155,8 +156,8 @@ object WrappedApiDefinition {
     }
   }
 
-  implicit val statusOrdering: Ordering[ApiStatus]   = Ordering.by[ApiStatus, Int](priorityOf)
-  implicit val versionOrdering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiStatus](_.status).reverse.orElseBy(_.versionNbr).reverse
+  implicit val statusOrdering: Ordering[ApiStatus]         = Ordering.by[ApiStatus, Int](priorityOf)
+  implicit val statusVersionOrdering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiStatus](_.status).reverse.orElseBy(_.versionNbr).reverse
 
 }
 
@@ -283,7 +284,7 @@ case class ExtendedEndpoint(
     endpointName: String,
     uriPattern: String,
     method: HttpMethod,
-    queryParameters: Option[Seq[Parameter]] = None
+    queryParameters: Option[Seq[QueryParameter]] = None
   ) {
 
   def decoratedUriPattern = {
@@ -304,8 +305,6 @@ case class ExtendedEndpoint(
   }
 
 }
-
-case class Parameter(name: String, required: Boolean = false)
 
 object APIStatus extends Enumeration {
 

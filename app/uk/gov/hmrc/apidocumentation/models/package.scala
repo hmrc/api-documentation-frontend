@@ -26,7 +26,6 @@ package object jsonFormatters {
 
   implicit val formatAPIAccess          = Json.format[APIAccess]
   implicit val formatVersionVisibility  = Json.format[VersionVisibility]
-  implicit val formatParameter          = Json.format[Parameter]
   implicit val formatEndpoint           = Json.format[ExtendedEndpoint]
   implicit val formatAPIVersion         = Json.format[APIVersion]
   implicit val formatExtAPIAvailability = Json.format[APIAvailability]

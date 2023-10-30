@@ -83,13 +83,13 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       (Seq(v3Prototyped, v2Published), v2Published),
       (Seq(v2Deprecated, v3Published), v3Published),
       (Seq(v2Deprecated, v1Retired), v2Deprecated),
-      (Seq(v3Prototyped, v2Published, v1Retired),v2Published),
+      (Seq(v3Prototyped, v2Published, v1Retired), v2Published),
       (Seq(v2Published, v3Published, v0_9Published), v3Published),
       (Seq(v3Prototyped, v2Published, v10Published, v1Retired), v10Published),
       (Seq(v3Prototyped, v3PrivatePublished), v3PrivatePublished),
       (Seq(v3PrivatePublished, v3Prototyped), v3PrivatePublished),
       (Seq(v4Alpha, v3Prototyped), v3Prototyped),
-      (Seq(v4Alpha, v3Prototyped, v2Published), v2Published),
+      (Seq(v4Alpha, v3Prototyped, v2Published), v2Published)
 
       //      (Seq(v1Retired), None),
       // non-decimal version treated as 1.0.0
@@ -260,11 +260,11 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
   }
 
   "decoratedUriPattern" should {
-    case class Scenario(outputUriPattern: String, inputUriPattern: String, inputParameters: Option[Seq[Parameter]] = None)
+    case class Scenario(outputUriPattern: String, inputUriPattern: String, inputParameters: Option[Seq[QueryParameter]] = None)
 
-    val mandatory        = Parameter("mandatory", required = true)
-    val optional         = Parameter("optional", required = false)
-    val anotherMandatory = Parameter("anotherMandatory", required = true)
+    val mandatory        = QueryParameter("mandatory", required = true)
+    val optional         = QueryParameter("optional", required = false)
+    val anotherMandatory = QueryParameter("anotherMandatory", required = true)
 
     val scenarios = Seq(
       Scenario("/sa/{utr}", "/sa/{utr}"),
@@ -280,7 +280,7 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       }
     })
 
-    def anEndpoint(uriPattern: String, parameters: Option[Seq[Parameter]]) = {
+    def anEndpoint(uriPattern: String, parameters: Option[Seq[QueryParameter]]) = {
       ExtendedEndpoint("Get Today's Date", uriPattern, HttpMethod.GET, parameters)
     }
   }

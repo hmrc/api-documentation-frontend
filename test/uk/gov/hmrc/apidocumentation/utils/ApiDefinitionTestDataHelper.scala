@@ -16,16 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.utils
 
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{
-  ApiAccess,
-  ApiCategory,
-  ApiDefinition,
-  ApiStatus,
-  ApiVersion,
-  ExtendedAPIDefinition => NotUsedExtendedApiDef,
-  HttpMethod,
-  ServiceName
-}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 
 import uk.gov.hmrc.apidocumentation.models._
