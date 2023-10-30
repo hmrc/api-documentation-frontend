@@ -119,7 +119,7 @@ class NavigationService @Inject() (
     }
 
     val resources =
-      if (VersionDocsVisible(version.visibility) == DocsVisibility.OVERVIEW_ONLY) {
+      if (VersionDocsVisible(version) == DocsVisibility.OVERVIEW_ONLY) {
         SidebarLink(
           label = "Read more",
           href = "#read-more"

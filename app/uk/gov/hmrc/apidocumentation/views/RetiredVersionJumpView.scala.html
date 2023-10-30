@@ -39,7 +39,7 @@
                             <p class="alert__message">
                             This version of the {api.name} API has been retired and is no longer supported.
                             Please update to
-                            <a href={controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version, None).url}>
+                            <a href={controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, api.defaultVersion.get.version.toString, None).url}>
                             version {defaultVersion.version} ({defaultVersion.displayedStatus})</a>.
                             </p>
                         }

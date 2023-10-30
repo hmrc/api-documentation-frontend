@@ -146,4 +146,11 @@ object VersionDocsVisible {
     case Some(VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
     case _                                                                    => DocsVisibility.NOT_VISIBLE
   }
+
+  def apply(version: ExtendedAPIVersion): DocsVisibility = VersionVisibility(version) match {
+    case Some(VersionVisibility(APIAccessType.PUBLIC, _, _, _))               => DocsVisibility.VISIBLE       // PUBLIC
+    case Some(VersionVisibility(APIAccessType.PRIVATE, true, true, _))        => DocsVisibility.VISIBLE       // PRIVATE, logged in, whitelisted (authorised)
+    case Some(VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
+    case _                                                                    => DocsVisibility.NOT_VISIBLE
+  }
 }

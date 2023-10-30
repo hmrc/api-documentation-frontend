@@ -29,7 +29,7 @@ import org.joda.time.{DateTime, DateTimeZone}
 import play.api.i18n.MessagesProvider
 import play.api.libs.json.Json
 import play.api.mvc._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiStatus}
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -126,7 +126,7 @@ class ApiDocumentationController @Inject() (
       extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, userId)
     } yield {
       extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(NotFound(errorHandler.notFoundTemplate)) { version =>
-        Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version, cacheBuster))
+        Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version.value, cacheBuster))
       }
     }) recover {
       case _: NotFoundException => NotFound(errorHandler.notFoundTemplate)
@@ -245,12 +245,12 @@ class ApiDocumentationController @Inject() (
     def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
       for {
         api        <- apiOption
-        apiVersion <- api.versions.find(v => v.version == version)
-        visibility <- apiVersion.visibility
+        apiVersion <- api.versions.find(v => v.version.value == version)
+        visibility <- VersionVisibility(apiVersion)
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED => renderRetiredVersionJumpPage(api, selectedVersion)
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == ApiStatus.RETIRED => renderRetiredVersionJumpPage(api, selectedVersion)
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                => renderDocumentationPage(api, selectedVersion)
       case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))))                  => renderDocumentationPage(api, selectedVersion)
       case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _)))                                           => redirectToLoginPage

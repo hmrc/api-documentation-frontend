@@ -64,8 +64,8 @@ class DownloadController @Inject() (
     def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
       for {
         api        <- apiOption
-        apiVersion <- api.versions.find(v => v.version == version)
-        visibility <- apiVersion.visibility
+        apiVersion <- api.versions.find(v => version == v.version.value)
+        visibility <- VersionVisibility(apiVersion)
       } yield (api, apiVersion, visibility)
 
     def renderNotFoundPage =
@@ -81,7 +81,7 @@ class DownloadController @Inject() (
         redirectToLoginPage(api.serviceName)
 
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
-        downloadConnector.fetch(api.serviceName, selectedVersion.version, validResource)
+        downloadConnector.fetch(api.serviceName, selectedVersion.version.toString, validResource)
           .map(_.getOrElse(renderNotFoundPage))
 
       case _ =>

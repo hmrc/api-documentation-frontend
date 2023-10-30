@@ -25,7 +25,8 @@ import controllers.Assets
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SEE_OTHER}
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiDefinition
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 import uk.gov.hmrc.http.NotFoundException
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
@@ -217,15 +218,15 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
               isTestSupport = false,
               Seq(
                 ExtendedAPIVersion(
-                  "1.0",
-                  APIStatus.BETA,
+                  ApiVersionNbr("1.0"),
+                  ApiStatus.BETA,
                   Seq(endpoint(endpointName, "/world")),
                   Some(apiAvailability().asAuthorised),
                   None
                 ),
                 ExtendedAPIVersion(
-                  "1.1",
-                  APIStatus.STABLE,
+                  ApiVersionNbr("1.1"),
+                  ApiStatus.STABLE,
                   Seq(endpoint(endpointName, "/world")),
                   Some(apiAvailability().asPrivate),
                   None
@@ -343,7 +344,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
         "display the not found page when Principal and Subordinate APIAvailability's are None" in new DocumentationRenderVersionSetup {
           theUserIsLoggedIn()
-          val apiDefinition = extendedApiDefinitionWithNoAPIAvailability(serviceName, "1.0")
+          val apiDefinition = extendedApiDefinitionWithNoAPIAvailability(serviceName, ApiVersionNbr("1.0"))
 
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
@@ -359,7 +360,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           val subordinateApiAvailability = APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)
           val apiDefinition              = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
-            "1.0",
+            ApiVersionNbr("1.0"),
             None,
             Some(subordinateApiAvailability)
           )
@@ -380,7 +381,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
-            "1.0",
+            ApiVersionNbr("1.0"),
             Some(principalApiAvailability),
             Some(subordinateApiAvailability)
           )
@@ -401,7 +402,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
-            "1.0",
+            ApiVersionNbr("1.0"),
             Some(principalApiAvailability),
             Some(subordinateApiAvailability)
           )
@@ -422,7 +423,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
-            "1.0",
+            ApiVersionNbr("1.0"),
             Some(principalApiAvailability),
             Some(subordinateApiAvailability)
           )
@@ -443,7 +444,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
-            "1.0",
+            ApiVersionNbr("1.0"),
             Some(principalApiAvailability),
             Some(subordinateApiAvailability)
           )
@@ -464,7 +465,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           val apiDefinition = extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
-            "1.0",
+            ApiVersionNbr("1.0"),
             Some(principalApiAvailability),
             Some(subordinateApiAvailability)
           )
@@ -532,7 +533,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       "display the retired version page when the API version is marked as retired" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnAnApiDefinition(
-          extendedApiDefinitionWithRetiredVersion(serviceName, "1.0", "1.1")
+          extendedApiDefinitionWithRetiredVersion(serviceName, ApiVersionNbr("1.0"), ApiVersionNbr("1.1"))
         )
 
         val result = underTest.renderApiDocumentation(serviceName, "1.0", Option(true))(request)
@@ -544,7 +545,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       "display the not found page when invalid version specified" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnAnApiDefinition(
-          extendedApiDefinitionWithRetiredVersion(serviceName, "1.0", "1.1")
+          extendedApiDefinitionWithRetiredVersion(serviceName, ApiVersionNbr("1.0"), ApiVersionNbr("1.1"))
         )
 
         val result = underTest.renderApiDocumentation(serviceName, "2.0", Option(true))(request)

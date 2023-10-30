@@ -23,7 +23,7 @@ import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 package object services {
 
   def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
-    case Some(v) => VersionDocsVisible(v.visibility)
+    case Some(v) => VersionDocsVisible(v)
     case _       => DocsVisibility.VISIBLE
   }
 

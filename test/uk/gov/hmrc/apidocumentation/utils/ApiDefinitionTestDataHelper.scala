@@ -131,13 +131,13 @@ trait ApiDefinitionTestDataHelper {
       inner.map(_.endpointsDisabled)
   }
 
-  def endpoint(endpointName: String = "Hello World", url: String = "/world"): ExtendedEndpoint = {
-    ExtendedEndpoint(endpointName, url, HttpMethod.GET, None)
+  def endpoint(endpointName: String = "Hello World", url: String = "/world"): Endpoint = {
+    Endpoint(endpointName, url, HttpMethod.GET, AuthType.APPLICATION)
   }
 
-  implicit class EndpointModifier(val inner: ExtendedEndpoint) {
+  implicit class EndpointModifier(val inner: Endpoint) {
 
-    def asPost: ExtendedEndpoint =
+    def asPost: Endpoint =
       inner.copy(method = HttpMethod.POST)
   }
 
@@ -194,11 +194,11 @@ trait ApiDefinitionTestDataHelper {
       isTestSupport = false,
       Seq(
         ExtendedAPIVersion(
-          version = "1.0",
-          status = APIStatus.STABLE,
+          version = ApiVersionNbr("1.0"),
+          status = ApiStatus.STABLE,
           endpoints = Seq(
-            ExtendedEndpoint("Today's Date", "/today", HttpMethod.GET, None),
-            ExtendedEndpoint("Yesterday's Date", "/yesterday", HttpMethod.GET, None)
+            Endpoint(endpointName = "Today's Date", uriPattern = "/today", method = HttpMethod.GET, authType = AuthType.APPLICATION),
+            Endpoint(endpointName = "Yesterday's Date", uriPattern = "/yesterday", method = HttpMethod.GET, authType = AuthType.NONE)
           ),
           productionAvailability = someApiAvailability(),
           sandboxAvailability = None

@@ -18,16 +18,14 @@ package uk.gov.hmrc.apidocumentation.models
 
 import scala.collection.immutable.ListMap
 import scala.io.Source
-import scala.util.Try
 
 import play.api.Configuration
 import play.api.libs.json._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
-import uk.gov.hmrc.apidocumentation.models.APIStatus.APIStatus
-import uk.gov.hmrc.apidocumentation.models.WrappedApiDefinition.statusVersionOrdering
 
 trait Documentation {
 
@@ -138,13 +136,13 @@ case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation
 
   lazy val defaultVersion: ApiVersion = definition
     .versionsAsList
-    .sorted(statusVersionOrdering)
+    .sorted(ApiVersionSorting.statusVersionOrdering)
     .head
 
   override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName.value, defaultVersion.versionNbr.value, None).url
 }
 
-object WrappedApiDefinition {
+object ApiVersionSorting {
 
   def priorityOf(apiStatus: ApiStatus): Int = {
     apiStatus match {
@@ -156,8 +154,9 @@ object WrappedApiDefinition {
     }
   }
 
-  implicit val statusOrdering: Ordering[ApiStatus]         = Ordering.by[ApiStatus, Int](priorityOf)
-  implicit val statusVersionOrdering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiStatus](_.status).reverse.orElseBy(_.versionNbr).reverse
+  implicit val statusOrdering: Ordering[ApiStatus]                         = Ordering.by[ApiStatus, Int](priorityOf)
+  implicit val statusVersionOrdering: Ordering[ApiVersion]                 = Ordering.by[ApiVersion, ApiStatus](_.status).reverse.orElseBy(_.versionNbr).reverse
+  implicit val statusExtendedVersionOrdering: Ordering[ExtendedAPIVersion] = Ordering.by[ExtendedAPIVersion, ApiStatus](_.status).reverse.orElseBy(_.version).reverse
 
 }
 
@@ -169,23 +168,6 @@ object DocumentationCategory {
 
   def fromFilter(filter: String): Option[ApiCategory] = {
     ApiCategory.values.map(cat => DocumentationCategory(cat)).find(cat => cat.filter == filter).map(_.apiCategory)
-  }
-}
-
-case class APIVersion(
-    version: String,
-    access: Option[APIAccess],
-    status: APIStatus,
-    endpoints: Seq[ExtendedEndpoint]
-  ) {
-  val accessType = access.fold(APIAccessType.PUBLIC)(_.`type`)
-
-  val displayedStatus = {
-    val accessIndicator = accessType match {
-      case APIAccessType.PRIVATE => "Private "
-      case _                     => ""
-    }
-    s"${accessIndicator}${APIStatus.description(status)}"
   }
 }
 
@@ -206,48 +188,37 @@ case class ExtendedAPIDefinition(
     copy(versions = versions.filter(v => isAccessible(v.productionAvailability) || isAccessible(v.sandboxAvailability)))
   }
 
-  lazy val retiredVersions            = versions.filter(_.status == APIStatus.RETIRED)
-  lazy val sortedVersions             = versions.sortWith(ExtendedAPIDefinition.versionSorter)
-  lazy val sortedActiveVersions       = sortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
-  lazy val statusSortedVersions       = versions.sortWith(ExtendedAPIDefinition.statusAndVersionSorter)
-  lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(v => v.status == APIStatus.RETIRED)
+  lazy val sortedVersions             = versions.sortBy(_.version).reverse
+  lazy val sortedActiveVersions       = sortedVersions.filterNot(_.status == ApiStatus.RETIRED)
+  lazy val statusSortedVersions       = versions.sorted(ApiVersionSorting.statusExtendedVersionOrdering)
+  lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(_.status == ApiStatus.RETIRED)
   lazy val defaultVersion             = statusSortedActiveVersions.headOption
-  lazy val hasActiveVersions          = statusSortedActiveVersions.nonEmpty
-}
-
-object ExtendedAPIDefinition {
-
-  private def versionSorter(v1: ExtendedAPIVersion, v2: ExtendedAPIVersion) = {
-    val v1Parts = Try(v1.version.replaceAll(nonNumericOrPeriodRegex, "").split("\\.").map(_.toInt)).getOrElse(fallback)
-    val v2Parts = Try(v2.version.replaceAll(nonNumericOrPeriodRegex, "").split("\\.").map(_.toInt)).getOrElse(fallback)
-    val pairs   = v1Parts.zip(v2Parts)
-
-    val firstUnequalPair = pairs.find { case (one, two) => one != two }
-    firstUnequalPair.fold(v1.version.length > v2.version.length) { case (a, b) => a > b }
-  }
-
-  def statusAndVersionSorter(v1: ExtendedAPIVersion, v2: ExtendedAPIVersion) = {
-    val v1Status = APIStatus.priorityOf(v1.status)
-    val v2Status = APIStatus.priorityOf(v2.status)
-    v1Status match {
-      case `v2Status` => versionSorter(v1, v2)
-      case _          => v1Status > v2Status
-    }
-  }
-
-  private val nonNumericOrPeriodRegex = "[^\\d^.]*"
-  private val fallback                = Array(1, 0, 0)
 }
 
 case class ExtendedAPIVersion(
-    version: String,
-    status: APIStatus,
-    endpoints: Seq[ExtendedEndpoint],
+    version: ApiVersionNbr,
+    status: ApiStatus,
+    endpoints: Seq[Endpoint],
     productionAvailability: Option[APIAvailability],
     sandboxAvailability: Option[APIAvailability]
   ) {
 
-  def visibility: Option[VersionVisibility] = {
+  val displayedStatus = {
+    val accessIndicator = VersionVisibility(this) match {
+      case Some(VersionVisibility(APIAccessType.PRIVATE, _, _, _)) => "Private "
+      case _                                                       => ""
+    }
+    s"${accessIndicator}${status.displayText}"
+  }
+}
+
+case class APIAvailability(endpointsEnabled: Boolean, access: APIAccess, loggedIn: Boolean, authorised: Boolean)
+
+case class VersionVisibility(privacy: APIAccessType.APIAccessType, loggedIn: Boolean, authorised: Boolean, isTrial: Option[Boolean] = None)
+
+object VersionVisibility {
+
+  def apply(extendedApiVersion: ExtendedAPIVersion): Option[VersionVisibility] = {
 
     def isLoggedIn(production: APIAvailability, sandbox: APIAvailability) = {
       production.loggedIn || sandbox.loggedIn
@@ -258,7 +229,7 @@ case class ExtendedAPIVersion(
       case _                                 => None
     }
 
-    (productionAvailability, sandboxAvailability) match {
+    (extendedApiVersion.productionAvailability, extendedApiVersion.sandboxAvailability) match {
       case (Some(prod), None)          => Some(VersionVisibility(prod.access.`type`, prod.loggedIn, prod.authorised, prod.access.isTrial))
       case (None, Some(sandbox))       => Some(VersionVisibility(sandbox.access.`type`, sandbox.loggedIn, sandbox.authorised, sandbox.access.isTrial))
       case (Some(prod), Some(sandbox)) =>
@@ -266,44 +237,6 @@ case class ExtendedAPIVersion(
       case _                           => None
     }
   }
-
-  val displayedStatus = {
-    val accessIndicator = visibility match {
-      case Some(VersionVisibility(APIAccessType.PRIVATE, _, _, _)) => "Private "
-      case _                                                       => ""
-    }
-    s"${accessIndicator}${APIStatus.description(status)}"
-  }
-}
-
-case class APIAvailability(endpointsEnabled: Boolean, access: APIAccess, loggedIn: Boolean, authorised: Boolean)
-
-case class VersionVisibility(privacy: APIAccessType.APIAccessType, loggedIn: Boolean, authorised: Boolean, isTrial: Option[Boolean] = None)
-
-case class ExtendedEndpoint(
-    endpointName: String,
-    uriPattern: String,
-    method: HttpMethod,
-    queryParameters: Option[Seq[QueryParameter]] = None
-  ) {
-
-  def decoratedUriPattern = {
-    queryParameters.getOrElse(Seq()).isEmpty match {
-      case true  => uriPattern
-      case false => {
-        val queryString = queryParameters
-          .getOrElse(Seq())
-          .filter(_.required)
-          .map(parameter => s"${parameter.name}={${parameter.name}}")
-          .mkString("&")
-        queryString.isEmpty match {
-          case true  => uriPattern
-          case false => s"$uriPattern?$queryString"
-        }
-      }
-    }
-  }
-
 }
 
 object APIStatus extends Enumeration {
@@ -320,22 +253,9 @@ object APIStatus extends Enumeration {
       case RETIRED            => 1
     }
   }
-
-  def description(apiStatus: APIStatus) = {
-    apiStatus match {
-      case APIStatus.ALPHA                        => "Alpha"
-      case APIStatus.BETA | APIStatus.PROTOTYPED  => "Beta"
-      case APIStatus.STABLE | APIStatus.PUBLISHED => "Stable"
-      case APIStatus.DEPRECATED                   => "Deprecated"
-      case APIStatus.RETIRED                      => "Retired"
-    }
-  }
-
 }
 
 case class ServiceDetails(serviceName: String, serviceUrl: String)
-
-case class RawDocumentationContent(contentType: String, content: String)
 
 case class ErrorResponse(code: Option[String] = None, message: Option[String] = None)
 

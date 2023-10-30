@@ -28,43 +28,6 @@ import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
 
-  "APIVersion.displayedStatus for PUBLIC apis" should {
-
-    val scenarios = Table(
-      ("API Status", "Expected Displayed Status"),
-      (APIStatus.ALPHA, "Alpha"),
-      (APIStatus.BETA, "Beta"),
-      (APIStatus.STABLE, "Stable"),
-      (APIStatus.DEPRECATED, "Deprecated"),
-      (APIStatus.RETIRED, "Retired")
-    )
-
-    "return the status to display" in {
-      forAll(scenarios) { (status, expectedDisplayedStatus) =>
-        val v = APIVersion("version", None, status, Seq.empty)
-        v.displayedStatus shouldEqual expectedDisplayedStatus
-      }
-    }
-  }
-
-  "APIVersion.displayedStatus for PRIVATE Apis" should {
-
-    val scenarios = Table(
-      ("API Status", "Expected Displayed Status"),
-      (APIStatus.BETA, "Private Beta"),
-      (APIStatus.STABLE, "Private Stable"),
-      (APIStatus.DEPRECATED, "Private Deprecated"),
-      (APIStatus.RETIRED, "Private Retired")
-    )
-
-    "return the status to display" in {
-      forAll(scenarios) { (status, expectedDisplayedStatus) =>
-        val v = APIVersion("version", Some(APIAccess(APIAccessType.PRIVATE)), status, Seq.empty)
-        v.displayedStatus shouldEqual expectedDisplayedStatus
-      }
-    }
-  }
-
   "ApiDefinition.defaultVersion" should {
 
     val v1Retired          = apiVersion("1.0", RETIRED)
@@ -75,7 +38,6 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
     val v3PrivatePublished = apiVersion("3.1", BETA, ApiAccess.Private(true))
     val v10Published       = apiVersion("10.0", STABLE)
     val v3Published        = apiVersion("3.0", STABLE)
-    val vTestPublished     = apiVersion("test", STABLE)
     val v0_9Published      = apiVersion("0.9", STABLE)
 
     val scenarios = Table(
@@ -90,11 +52,6 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       (Seq(v3PrivatePublished, v3Prototyped), v3PrivatePublished),
       (Seq(v4Alpha, v3Prototyped), v3Prototyped),
       (Seq(v4Alpha, v3Prototyped, v2Published), v2Published)
-
-      //      (Seq(v1Retired), None),
-      // non-decimal version treated as 1.0.0
-//      (Seq(vTestPublished, v0_9Published), vTestPublished),
-//      (Seq(vTestPublished, v2Published), v2Published)
     )
 
     "return the default version depending on the status and version" in {
@@ -256,32 +213,6 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       val result = Documentation.groupedByCategory(Seq(testSupportApi), Seq.empty, Seq(serviceGuide), Seq.empty, categoryMap)
 
       result shouldBe Map.empty
-    }
-  }
-
-  "decoratedUriPattern" should {
-    case class Scenario(outputUriPattern: String, inputUriPattern: String, inputParameters: Option[Seq[QueryParameter]] = None)
-
-    val mandatory        = QueryParameter("mandatory", required = true)
-    val optional         = QueryParameter("optional", required = false)
-    val anotherMandatory = QueryParameter("anotherMandatory", required = true)
-
-    val scenarios = Seq(
-      Scenario("/sa/{utr}", "/sa/{utr}"),
-      Scenario("/sa/{utr}?mandatory={mandatory}", "/sa/{utr}", Some(Seq(mandatory))),
-      Scenario("/sa/{utr}", "/sa/{utr}", Some(Seq(optional))),
-      Scenario("/sa/{utr}?mandatory={mandatory}", "/sa/{utr}", Some(Seq(optional, mandatory))),
-      Scenario("/sa/{utr}?mandatory={mandatory}&anotherMandatory={anotherMandatory}", "/sa/{utr}", Some(Seq(optional, mandatory, anotherMandatory)))
-    )
-
-    scenarios.foreach(scenario => {
-      s"return ${scenario.outputUriPattern} when given ${scenario.inputUriPattern} with parameters: ${scenario.inputParameters}" in {
-        anEndpoint(scenario.inputUriPattern, scenario.inputParameters).decoratedUriPattern shouldBe scenario.outputUriPattern
-      }
-    })
-
-    def anEndpoint(uriPattern: String, parameters: Option[Seq[QueryParameter]]) = {
-      ExtendedEndpoint("Get Today's Date", uriPattern, HttpMethod.GET, parameters)
     }
   }
 

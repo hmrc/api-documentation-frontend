@@ -25,7 +25,8 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.HttpMethod
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
@@ -54,7 +55,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
   def extendedApiDefinition(
       serviceName: String,
       name: String = "Hello World",
-      version: String = "1.0",
+      version: ApiVersionNbr = ApiVersionNbr("1.0"),
       access: APIAccessType = APIAccessType.PUBLIC,
       loggedIn: Boolean = false,
       authorised: Boolean = true,
@@ -71,8 +72,8 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       Seq(
         ExtendedAPIVersion(
           version,
-          APIStatus.STABLE,
-          Seq(ExtendedEndpoint(endpointName, "/world", HttpMethod.GET, None)),
+          ApiStatus.STABLE,
+          Seq(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(access, whitelistedApplicationIds = Some(Seq.empty), isTrial = isTrial), loggedIn, authorised)),
           None
         )
@@ -80,7 +81,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
     )
   }
 
-  def extendedApiDefinitionWithNoAPIAvailability(serviceName: String, version: String): ExtendedAPIDefinition = {
+  def extendedApiDefinitionWithNoAPIAvailability(serviceName: String, version: ApiVersionNbr): ExtendedAPIDefinition = {
     ExtendedAPIDefinition(
       serviceName,
       "Hello World",
@@ -89,14 +90,14 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       requiresTrust = false,
       isTestSupport = false,
       Seq(
-        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(ExtendedEndpoint(endpointName, "/world", HttpMethod.GET, None)), None, None)
+        ExtendedAPIVersion(version, ApiStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)), None, None)
       )
     )
   }
 
   def extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
       serviceName: String,
-      version: String,
+      version: ApiVersionNbr,
       principalApiAvailability: Option[APIAvailability],
       subordinateApiAvailability: Option[APIAvailability]
     ): ExtendedAPIDefinition = {
@@ -108,12 +109,12 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       requiresTrust = false,
       isTestSupport = false,
       Seq(
-        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(ExtendedEndpoint(endpointName, "/world", HttpMethod.GET, None)), principalApiAvailability, subordinateApiAvailability)
+        ExtendedAPIVersion(version, ApiStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)), principalApiAvailability, subordinateApiAvailability)
       )
     )
   }
 
-  def extendedApiDefinitionWithRetiredVersion(serviceName: String, retiredVersion: String, nonRetiredVersion: String) = {
+  def extendedApiDefinitionWithRetiredVersion(serviceName: String, retiredVersion: ApiVersionNbr, nonRetiredVersion: ApiVersionNbr) = {
     ExtendedAPIDefinition(
       serviceName,
       "Hello World",
@@ -124,14 +125,14 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       Seq(
         ExtendedAPIVersion(
           retiredVersion,
-          APIStatus.RETIRED,
+          ApiStatus.RETIRED,
           Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
           None
         ),
         ExtendedAPIVersion(
           nonRetiredVersion,
-          APIStatus.STABLE,
+          ApiStatus.STABLE,
           Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC, Some(Seq.empty)), loggedIn = false, authorised = true)),
           None
@@ -150,22 +151,22 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       isTestSupport = false,
       Seq(
         ExtendedAPIVersion(
-          "1.0",
-          APIStatus.RETIRED,
+          ApiVersionNbr("1.0"),
+          ApiStatus.RETIRED,
           Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
           None
         ),
         ExtendedAPIVersion(
-          "1.1",
-          APIStatus.BETA,
+          ApiVersionNbr("1.1"),
+          ApiStatus.BETA,
           Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
           None
         ),
         ExtendedAPIVersion(
-          "1.2",
-          APIStatus.STABLE,
+          ApiVersionNbr("1.2"),
+          ApiStatus.STABLE,
           Seq(endpoint(endpointName)),
           Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
           None

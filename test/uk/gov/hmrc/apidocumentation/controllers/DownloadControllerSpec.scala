@@ -21,6 +21,7 @@ import scala.concurrent.Future
 
 import play.api.http.Status._
 import play.api.mvc._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
@@ -40,7 +41,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
 
     val errorHandler = app.injector.instanceOf[ErrorHandler]
 
-    val version      = "2.0"
+    val version      = ApiVersionNbr("2.0")
     val resourceName = "some/resource"
 
     val underTest = new DownloadController(documentationService, apiDefinitionService, downloadConnector, loggedInUserService, errorHandler, appConfig, mcc)
@@ -62,7 +63,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
       )
       theDownloadConnectorWillReturnTheResult(Results.Ok)
 
-      await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe OK
+      await(underTest.downloadResource(serviceName, version.toString, resourceName)(request)).header.status shouldBe OK
     }
 
     "return 404 code when the resource not found" in new Setup {
@@ -74,7 +75,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
       )
       theDownloadConnectorWillReturnTheResult(Results.NotFound)
 
-      await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe NOT_FOUND
+      await(underTest.downloadResource(serviceName, version.toString, resourceName)(request)).header.status shouldBe NOT_FOUND
     }
 
     "error when the resource name contains '..'" in new Setup {
@@ -85,7 +86,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
         )
       )
 
-      await(underTest.downloadResource(serviceName, version, "../secret")(request)).header.status shouldBe INTERNAL_SERVER_ERROR
+      await(underTest.downloadResource(serviceName, version.toString, "../secret")(request)).header.status shouldBe INTERNAL_SERVER_ERROR
     }
 
     "redirect to the login page when the API is private and the user is not logged in" in new Setup {
@@ -95,14 +96,13 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
           serviceName = serviceName,
           version = version,
           access = APIAccessType.PRIVATE,
-          loggedIn = false,
           authorised = false
         )
       )
 
-      val result = underTest.downloadResource(serviceName, version, resourceName)(request)
+      val result = underTest.downloadResource(serviceName, version.toString, resourceName)(request)
 
-      verifyRedirectToLoginPage(result, serviceName, version)
+      verifyRedirectToLoginPage(result, serviceName, version.toString)
     }
   }
 }

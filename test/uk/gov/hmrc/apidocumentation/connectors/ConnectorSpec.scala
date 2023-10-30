@@ -55,9 +55,12 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |          "endpointName" : "Say Hello",
                   |          "method" : "GET",
                   |          "authType" : "NONE",
-                  |          "throttlingTier" : "UNLIMITED"
+                  |          "throttlingTier" : "UNLIMITED",
+                  |          "queryParameters": []
                   |        }
                   |      ],
+                  |      "endpointsEnabled": true,
+                  |      "versionSource": "OAS",
                   |      "productionAvailability": {
                   |        "endpointsEnabled": true,
                   |        "access": {
@@ -77,9 +80,12 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |          "method" : "GET",
                   |          "authType" : "NONE",
                   |          "throttlingTier" : "UNLIMITED",
-                  |          "scope": "read:hello"
+                  |          "scope": "read:hello",
+                  |          "queryParameters": []
                   |        }
                   |      ],
+                  |      "endpointsEnabled": true,
+                  |      "versionSource": "OAS",
                   |      "productionAvailability": {
                   |        "endpointsEnabled": true,
                   |        "access": {
@@ -106,9 +112,9 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |      "version" : "1.0",
                   |      "status" : "STABLE",
                   |      "access": {
-                  |           "isTrial": false,
-                  |           "type": "PRIVATE"
-                  |         },
+                  |         "isTrial": false,
+                  |         "type": "PRIVATE"
+                  |       },
                   |      "endpoints" : [
                   |        {
                   |          "uriPattern" : "/hello",

@@ -85,7 +85,7 @@ class OpenApiDocumentationController @Inject() (
       for {
         api        <- apiOption
         apiVersion <- api.versions.find(v => v.version == version)
-        visibility <- apiVersion.visibility
+        visibility <- VersionVisibility(apiVersion)
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
