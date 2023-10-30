@@ -21,13 +21,13 @@ import scala.concurrent.Future
 
 import play.api.http.Status._
 import play.api.mvc._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiAccess
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.apidocumentation.mocks.config._
 import uk.gov.hmrc.apidocumentation.mocks.services._
-import uk.gov.hmrc.apidocumentation.models.APIAccessType
 
 class DownloadControllerSpec extends CommonControllerBaseSpec {
 
@@ -56,10 +56,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
   "DownloadController" should {
     "download the resource when found" in new Setup {
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(
-          serviceName = serviceName,
-          version = version
-        )
+        extendedApiDefinition(serviceName = serviceName, version = version)
       )
       theDownloadConnectorWillReturnTheResult(Results.Ok)
 
@@ -68,10 +65,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
 
     "return 404 code when the resource not found" in new Setup {
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(
-          serviceName = serviceName,
-          version = version
-        )
+        extendedApiDefinition(serviceName = serviceName, version = version)
       )
       theDownloadConnectorWillReturnTheResult(Results.NotFound)
 
@@ -80,10 +74,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
 
     "error when the resource name contains '..'" in new Setup {
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(
-          serviceName = serviceName,
-          version = version
-        )
+        extendedApiDefinition(serviceName = serviceName, version = version)
       )
 
       await(underTest.downloadResource(serviceName, version.toString, "../secret")(request)).header.status shouldBe INTERNAL_SERVER_ERROR
@@ -92,12 +83,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
     "redirect to the login page when the API is private and the user is not logged in" in new Setup {
       theUserIsNotLoggedIn()
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(
-          serviceName = serviceName,
-          version = version,
-          access = APIAccessType.PRIVATE,
-          authorised = false
-        )
+        extendedApiDefinition(serviceName = serviceName, version = version, access = ApiAccess.Private(), authorised = false)
       )
 
       val result = underTest.downloadResource(serviceName, version.toString, resourceName)(request)

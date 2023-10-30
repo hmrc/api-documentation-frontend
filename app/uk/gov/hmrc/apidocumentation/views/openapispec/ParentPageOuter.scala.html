@@ -18,44 +18,46 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 @import uk.gov.hmrc.apidocumentation.views.apispecification.helpers._
 @import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 @import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ExtendedApiVersion
 
 @this(apiMain: apiMain, parentPageView: ParentPageView)
 
-@(pageAttributes: PageAttributes, markdownBlocks: List[DocumentationItem], title: String, api: ExtendedAPIDefinition, currentVersion: ExtendedAPIVersion, loggedIn: Boolean = false, deprecationMessage: Option[String] = None)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, markdownBlocks: List[DocumentationItem], title: String, api: ExtendedApiDefinition, currentVersion: ExtendedApiVersion, loggedIn: Boolean = false, deprecationMessage: Option[String] = None)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @topContent = {
     <div class="form-group">
         <select class="form-control form-control-version"
                 id="version"
                 name="version"
-                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version.toString, None).url"
+                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName.toString, currentVersion.version.toString, None).url"
                 onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
             @for(v <- api.sortedActiveVersions;
                 if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
-                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version.toString, None).url" aria-label="Select to view documentation for v@v.version.toString (@v.displayedStatus)">v@v.version.toString (@v.displayedStatus)</option>
+                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName.toString, v.version.toString, None).url" aria-label="Select to view documentation for v@v.version.toString (@v.displayedStatus)">v@v.version.toString (@v.displayedStatus)</option>
             }
         </select>
     </div>
 }
 
 @apiMain(pageAttributes, topContent) {
-    @if(currentVersion.status == APIStatus.ALPHA) {
+    @if(currentVersion.status == ApiStatus.ALPHA) {
         <div class="govuk-inset-text">
             This version is in alpha - You will not be able to subscribe to this API.
         </div>
     }
 
-    @if(currentVersion.status == APIStatus.BETA || currentVersion.status == APIStatus.PROTOTYPED) {
+    @if(currentVersion.status == ApiStatus.BETA) {
         <div class="govuk-inset-text">
             This version is in beta - expect some breaking changes.
         </div>
     }
 
-    @if(currentVersion.status == APIStatus.DEPRECATED) {
+    @if(currentVersion.status == ApiStatus.DEPRECATED) {
         <div class="govuk-warning-text">
             <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
             <strong class="govuk-warning-text__text">

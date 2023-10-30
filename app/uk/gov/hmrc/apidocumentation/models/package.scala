@@ -20,22 +20,17 @@ import play.api.libs.json._
 
 package object jsonFormatters {
   implicit val formatAPICategory   = enumJson.enumFormat(APICategory)
-  implicit val formatAPIStatus     = enumJson.enumFormat(APIStatus)
-  implicit val formatAPIAccessType = enumJson.enumFormat(APIAccessType)
   implicit val formatLoggedInState = enumJson.enumFormat(LoggedInState)
 
-  implicit val formatAPIAccess          = Json.format[APIAccess]
-  implicit val formatVersionVisibility  = Json.format[VersionVisibility]
-  implicit val formatExtAPIAvailability = Json.format[APIAvailability]
-  implicit val formatExtAPIVersion      = Json.format[ExtendedAPIVersion]
-  implicit val formatExtAPIDefinition   = Json.format[ExtendedAPIDefinition]
-  implicit val formatServiceDetails     = Json.format[ServiceDetails]
-  implicit val formatTestEndpoint       = Json.format[TestEndpoint]
-  implicit val formatDeveloper          = Json.format[Developer]
-  implicit val formatSession            = Json.format[Session]
-  implicit val formatSidebarLink        = Json.format[SidebarLink]
-  implicit val formatNavLink            = Json.format[NavLink]
-  implicit val formatErrorResponse      = Json.format[ErrorResponse]
+  implicit val formatAPIAccess         = Json.format[APIAccess]
+  implicit val formatVersionVisibility = Json.format[VersionVisibility]
+  implicit val formatServiceDetails    = Json.format[ServiceDetails]
+  implicit val formatTestEndpoint      = Json.format[TestEndpoint]
+  implicit val formatDeveloper         = Json.format[Developer]
+  implicit val formatSession           = Json.format[Session]
+  implicit val formatSidebarLink       = Json.format[SidebarLink]
+  implicit val formatNavLink           = Json.format[NavLink]
+  implicit val formatErrorResponse     = Json.format[ErrorResponse]
 }
 
 package object enumJson       {

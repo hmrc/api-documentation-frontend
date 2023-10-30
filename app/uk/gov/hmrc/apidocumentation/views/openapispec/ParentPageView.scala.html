@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models.DocsVisibility
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
@@ -26,14 +27,14 @@
 
 @this(applicationConfig: ApplicationConfig)
 
-@(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false
+@(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false
 )(implicit requestHeader: RequestHeader)
 
 @renderGetApiVersionForm = {
     @for(api <- maybeApi) {
         @for(version <- maybeVersion) {
             @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
-            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
+            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName.toString, None, None).url">
                 <label class="visually-hidden" for="version">
                     Select version and status
                 </label>
@@ -108,7 +109,7 @@
                       Endpoints
                   </h2>
 
-                  <a class="govuk-button govuk-button-secondary" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, maybeVersion.get.version.toString).url">
+                  <a class="govuk-button govuk-button-secondary" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName.toString, maybeVersion.get.version.toString).url">
                     View API endpoints
                   </a>
 

@@ -21,6 +21,7 @@ import scala.language.reflectiveCalls
 import akka.http.scaladsl.model.{StatusCode, StatusCodes}
 
 import play.twirl.api.Html
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 import uk.gov.hmrc.apidocumentation.models.DocsVisibility.DocsVisibility
 import uk.gov.hmrc.apidocumentation.models._
@@ -118,13 +119,13 @@ object AvailabilityPhrase {
 
 object EndpointsAvailable {
 
-  def apply(availability: Option[APIAvailability]): String = availability match {
-    case Some(APIAvailability(endpointsEnabled, access, _, authorised)) if endpointsEnabled =>
-      access.`type` match {
-        case APIAccessType.PUBLIC                                     => AvailabilityPhrase.yes
-        case APIAccessType.PRIVATE if access.isTrial.getOrElse(false) => AvailabilityPhrase.yesPrivateTrial
-        case APIAccessType.PRIVATE if authorised                      => AvailabilityPhrase.yes
-        case _                                                        => AvailabilityPhrase.no
+  def apply(availability: Option[ApiAvailability]): String = availability match {
+    case Some(ApiAvailability(endpointsEnabled, access, _, authorised)) if endpointsEnabled =>
+      access match {
+        case ApiAccess.PUBLIC                       => AvailabilityPhrase.yes
+        case ApiAccess.Private(true)                => AvailabilityPhrase.yesPrivateTrial
+        case ApiAccess.Private(false) if authorised => AvailabilityPhrase.yes
+        case _                                      => AvailabilityPhrase.no
       }
     case _                                                                                  => AvailabilityPhrase.no
   }
@@ -132,7 +133,7 @@ object EndpointsAvailable {
 
 object ShowBaseURL {
 
-  def apply(availability: Option[APIAvailability]) = EndpointsAvailable(availability) match {
+  def apply(availability: Option[ApiAvailability]) = EndpointsAvailable(availability) match {
     case AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial => true
     case _                                                           => false
   }
@@ -141,16 +142,16 @@ object ShowBaseURL {
 object VersionDocsVisible {
 
   def apply(availability: Option[VersionVisibility]): DocsVisibility = availability match {
-    case Some(VersionVisibility(APIAccessType.PUBLIC, _, _, _))               => DocsVisibility.VISIBLE       // PUBLIC
-    case Some(VersionVisibility(APIAccessType.PRIVATE, true, true, _))        => DocsVisibility.VISIBLE       // PRIVATE, logged in, whitelisted (authorised)
-    case Some(VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
-    case _                                                                    => DocsVisibility.NOT_VISIBLE
+    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _, _))         => DocsVisibility.VISIBLE       // PUBLIC
+    case Some(VersionVisibility(ApiAccessType.PRIVATE, true, true, _))  => DocsVisibility.VISIBLE       // PRIVATE, logged in, whitelisted (authorised)
+    case Some(VersionVisibility(ApiAccessType.PRIVATE, _, false, true)) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
+    case _                                                              => DocsVisibility.NOT_VISIBLE
   }
 
-  def apply(version: ExtendedAPIVersion): DocsVisibility = VersionVisibility(version) match {
-    case Some(VersionVisibility(APIAccessType.PUBLIC, _, _, _))               => DocsVisibility.VISIBLE       // PUBLIC
-    case Some(VersionVisibility(APIAccessType.PRIVATE, true, true, _))        => DocsVisibility.VISIBLE       // PRIVATE, logged in, whitelisted (authorised)
-    case Some(VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
-    case _                                                                    => DocsVisibility.NOT_VISIBLE
+  def apply(version: ExtendedApiVersion): DocsVisibility = VersionVisibility(version) match {
+    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _, _))         => DocsVisibility.VISIBLE       // PUBLIC
+    case Some(VersionVisibility(ApiAccessType.PRIVATE, true, true, _))  => DocsVisibility.VISIBLE       // PRIVATE, logged in, whitelisted (authorised)
+    case Some(VersionVisibility(ApiAccessType.PRIVATE, _, false, true)) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
+    case _                                                              => DocsVisibility.NOT_VISIBLE
   }
 }

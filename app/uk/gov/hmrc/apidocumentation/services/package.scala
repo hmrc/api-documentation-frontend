@@ -16,18 +16,20 @@
 
 package uk.gov.hmrc.apidocumentation
 
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ExtendedApiVersion
+
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
-import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, ViewModel}
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ViewModel}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 
 package object services {
 
-  def versionVisibility(version: Option[ExtendedAPIVersion]): DocsVisibility.Value = version match {
+  def versionVisibility(version: Option[ExtendedApiVersion]): DocsVisibility.Value = version match {
     case Some(v) => VersionDocsVisible(v)
     case _       => DocsVisibility.VISIBLE
   }
 
-  def filterForVisibility(version: Option[ExtendedAPIVersion]): (List[DocumentationItem]) => List[DocumentationItem] = (input) => {
+  def filterForVisibility(version: Option[ExtendedApiVersion]): (List[DocumentationItem]) => List[DocumentationItem] = (input) => {
     versionVisibility(version) match {
       case DocsVisibility.VISIBLE       => input
       case DocsVisibility.OVERVIEW_ONLY => input.filter(_.title == "Overview")
@@ -36,11 +38,11 @@ package object services {
   }
 
   implicit class RicherApiSpecification(val x: ApiSpecification) {
-    def documentationForVersionFilteredByVisibility(version: ExtendedAPIVersion): List[DocumentationItem] = filterForVisibility(Some(version))(x.documentationItems)
+    def documentationForVersionFilteredByVisibility(version: ExtendedApiVersion): List[DocumentationItem] = filterForVisibility(Some(version))(x.documentationItems)
   }
 
   implicit class RicherViewModel(val x: ViewModel) {
-    def documentationForVersion(version: Option[ExtendedAPIVersion]): List[DocumentationItem] = filterForVisibility(version)(x.documentationItems)
+    def documentationForVersion(version: Option[ExtendedApiVersion]): List[DocumentationItem] = filterForVisibility(version)(x.documentationItems)
   }
 
 }

@@ -22,5 +22,6 @@
       "endpointsEnabled": true,
       "versionSource": "OAS"
     }
-  ]
+  ],
+  "categories":[ "OTHER" ]
 }

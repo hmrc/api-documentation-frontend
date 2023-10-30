@@ -29,7 +29,7 @@ import org.joda.time.{DateTime, DateTimeZone}
 import play.api.i18n.MessagesProvider
 import play.api.libs.json.Json
 import play.api.mvc._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiStatus}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -108,7 +108,7 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  private def makeBreadcrumbName(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion) = {
+  private def makeBreadcrumbName(api: ExtendedApiDefinition, selectedVersion: ExtendedApiVersion) = {
     val suffix = if (api.name.endsWith("API")) "" else " API"
     s"${api.name}$suffix v${selectedVersion.version} (${selectedVersion.displayedStatus})"
   }
@@ -160,13 +160,13 @@ class ApiDocumentationController @Inject() (
       service: String,
       version: String,
       cacheBuster: Boolean,
-      apiOption: Option[ExtendedAPIDefinition],
+      apiOption: Option[ExtendedApiDefinition],
       navLinks: Seq[NavLink],
       developerId: Option[DeveloperIdentifier]
     )(implicit request: Request[AnyContent],
       messagesProvider: MessagesProvider
     ): Future[Result] = {
-    def makePageAttributes(apiDefinition: ExtendedAPIDefinition, sidebarLinks: Seq[SidebarLink]) = {
+    def makePageAttributes(apiDefinition: ExtendedApiDefinition, sidebarLinks: Seq[SidebarLink]) = {
       val breadcrumbs = Breadcrumbs(
         apiDocCrumb,
         homeCrumb
@@ -185,7 +185,7 @@ class ApiDocumentationController @Inject() (
       ))
     }
 
-    def renderRetiredVersionJumpPage(api: ExtendedAPIDefinition, selectedVersion: ExtendedAPIVersion)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) = {
+    def renderRetiredVersionJumpPage(api: ExtendedApiDefinition)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) = {
       val apiDefinition = api.userAccessibleApiDefinition
 
       Future.successful(Ok(retiredVersionJumpView(
@@ -195,8 +195,8 @@ class ApiDocumentationController @Inject() (
     }
 
     def renderDocumentationPage(
-        api: ExtendedAPIDefinition,
-        selectedVersion: ExtendedAPIVersion
+        api: ExtendedApiDefinition,
+        selectedVersion: ExtendedApiVersion
       )(implicit request: Request[AnyContent],
         messagesProvider: MessagesProvider
       ): Future[Result] = {
@@ -242,7 +242,7 @@ class ApiDocumentationController @Inject() (
       documentationService.fetchApiSpecification(service, version, cacheBuster).flatMap(_.fold(renderOas(categories))(renderRamlSpec))
     }
 
-    def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
+    def findVersion(apiOption: Option[ExtendedApiDefinition]) =
       for {
         api        <- apiOption
         apiVersion <- api.versions.find(v => v.version.value == version)
@@ -250,10 +250,10 @@ class ApiDocumentationController @Inject() (
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == ApiStatus.RETIRED => renderRetiredVersionJumpPage(api, selectedVersion)
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == ApiStatus.RETIRED => renderRetiredVersionJumpPage(api)
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                => renderDocumentationPage(api, selectedVersion)
-      case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))))                  => renderDocumentationPage(api, selectedVersion)
-      case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _)))                                           => redirectToLoginPage
+      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.PRIVATE, _, false, true)))                        => renderDocumentationPage(api, selectedVersion)
+      case Some((_, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _)))                                           => redirectToLoginPage
       case _                                                                                                             => renderNotFoundPage
     }
   }

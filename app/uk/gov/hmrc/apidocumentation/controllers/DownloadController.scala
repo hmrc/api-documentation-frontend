@@ -20,6 +20,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.mvc._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccessType, ExtendedApiDefinition}
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -60,8 +61,8 @@ class DownloadController @Inject() (
     }
   }
 
-  private def fetchResourceForApi(apiOption: Option[ExtendedAPIDefinition], version: String, validResource: String)(implicit request: Request[_]): Future[Result] = {
-    def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
+  private def fetchResourceForApi(apiOption: Option[ExtendedApiDefinition], version: String, validResource: String)(implicit request: Request[_]): Future[Result] = {
+    def findVersion(apiOption: Option[ExtendedApiDefinition]) =
       for {
         api        <- apiOption
         apiVersion <- api.versions.find(v => version == v.version.value)
@@ -77,11 +78,11 @@ class DownloadController @Inject() (
       ))
 
     findVersion(apiOption) match {
-      case Some((api, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _))) =>
-        redirectToLoginPage(api.serviceName)
+      case Some((api, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _))) =>
+        redirectToLoginPage(api.serviceName.toString)
 
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
-        downloadConnector.fetch(api.serviceName, selectedVersion.version.toString, validResource)
+        downloadConnector.fetch(api.serviceName.toString, selectedVersion.version.toString, validResource)
           .map(_.getOrElse(renderNotFoundPage))
 
       case _ =>

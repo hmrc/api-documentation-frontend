@@ -22,7 +22,6 @@ import scala.io.Source
 import play.api.Configuration
 import play.api.libs.json._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
@@ -108,21 +107,16 @@ object RoadMap {
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/roadmap.json")).mkString).as[Seq[RoadMap]]
 }
 
-object APIAccessType extends Enumeration {
-  type APIAccessType = Value
-  val PRIVATE, PUBLIC = Value
-}
-
-case class APIAccess(`type`: APIAccessType.Value, whitelistedApplicationIds: Option[Seq[String]], isTrial: Option[Boolean] = None)
+case class APIAccess(`type`: ApiAccessType, whitelistedApplicationIds: Option[Seq[String]], isTrial: Option[Boolean] = None)
 
 object APIAccess {
 
-  def apply(accessType: APIAccessType.Value): APIAccess = {
+  def apply(accessType: ApiAccessType): APIAccess = {
     APIAccess(accessType, Some(Seq.empty), Some(false))
   }
 
   def build(config: Option[Configuration]): APIAccess = APIAccess(
-    `type` = APIAccessType.PRIVATE,
+    `type` = ApiAccessType.PRIVATE,
     whitelistedApplicationIds = config.flatMap(_.getOptional[Seq[String]]("whitelistedApplicationIds")).orElse(Some(Seq.empty)),
     isTrial = None
   )
@@ -156,7 +150,7 @@ object ApiVersionSorting {
 
   implicit val statusOrdering: Ordering[ApiStatus]                         = Ordering.by[ApiStatus, Int](priorityOf)
   implicit val statusVersionOrdering: Ordering[ApiVersion]                 = Ordering.by[ApiVersion, ApiStatus](_.status).reverse.orElseBy(_.versionNbr).reverse
-  implicit val statusExtendedVersionOrdering: Ordering[ExtendedAPIVersion] = Ordering.by[ExtendedAPIVersion, ApiStatus](_.status).reverse.orElseBy(_.version).reverse
+  implicit val statusExtendedVersionOrdering: Ordering[ExtendedApiVersion] = Ordering.by[ExtendedApiVersion, ApiStatus](_.status).reverse.orElseBy(_.version).reverse
 
 }
 
@@ -171,86 +165,31 @@ object DocumentationCategory {
   }
 }
 
-case class ExtendedAPIDefinition(
-    serviceName: String,
-    name: String,
-    description: String,
-    context: String,
-    requiresTrust: Boolean,
-    isTestSupport: Boolean,
-    versions: Seq[ExtendedAPIVersion]
-  ) {
-
-  def userAccessibleApiDefinition = {
-    def isAccessible(availability: Option[APIAvailability]) =
-      availability.fold(false)(avail => avail.authorised || avail.access.isTrial.contains(true)) // scalastyle:ignore
-
-    copy(versions = versions.filter(v => isAccessible(v.productionAvailability) || isAccessible(v.sandboxAvailability)))
-  }
-
-  lazy val sortedVersions             = versions.sortBy(_.version).reverse
-  lazy val sortedActiveVersions       = sortedVersions.filterNot(_.status == ApiStatus.RETIRED)
-  lazy val statusSortedVersions       = versions.sorted(ApiVersionSorting.statusExtendedVersionOrdering)
-  lazy val statusSortedActiveVersions = statusSortedVersions.filterNot(_.status == ApiStatus.RETIRED)
-  lazy val defaultVersion             = statusSortedActiveVersions.headOption
-}
-
-case class ExtendedAPIVersion(
-    version: ApiVersionNbr,
-    status: ApiStatus,
-    endpoints: Seq[Endpoint],
-    productionAvailability: Option[APIAvailability],
-    sandboxAvailability: Option[APIAvailability]
-  ) {
-
-  val displayedStatus = {
-    val accessIndicator = VersionVisibility(this) match {
-      case Some(VersionVisibility(APIAccessType.PRIVATE, _, _, _)) => "Private "
-      case _                                                       => ""
-    }
-    s"${accessIndicator}${status.displayText}"
-  }
-}
-
-case class APIAvailability(endpointsEnabled: Boolean, access: APIAccess, loggedIn: Boolean, authorised: Boolean)
-
-case class VersionVisibility(privacy: APIAccessType.APIAccessType, loggedIn: Boolean, authorised: Boolean, isTrial: Option[Boolean] = None)
+case class VersionVisibility(privacy: ApiAccessType, loggedIn: Boolean, authorised: Boolean, isTrial: Boolean = false)
 
 object VersionVisibility {
 
-  def apply(extendedApiVersion: ExtendedAPIVersion): Option[VersionVisibility] = {
+  def apply(extendedApiVersion: ExtendedApiVersion): Option[VersionVisibility] = {
 
-    def isLoggedIn(production: APIAvailability, sandbox: APIAvailability) = {
+    def isLoggedIn(production: ApiAvailability, sandbox: ApiAvailability) = {
       production.loggedIn || sandbox.loggedIn
     }
 
-    def isInTrial(production: APIAvailability, sandbox: APIAvailability) = (production.access.isTrial, sandbox.access.isTrial) match {
-      case (Some(true), _) | (_, Some(true)) => Some(true)
-      case _                                 => None
+    def isTrial(access: ApiAccess): Boolean = {
+      access == ApiAccess.Private(true)
+    }
+
+    def isInTrial(production: ApiAvailability, sandbox: ApiAvailability): Boolean = (production.access, sandbox.access) match {
+      case (ApiAccess.Private(true), _) | (_, ApiAccess.Private(true)) => true
+      case _                                                           => false
     }
 
     (extendedApiVersion.productionAvailability, extendedApiVersion.sandboxAvailability) match {
-      case (Some(prod), None)          => Some(VersionVisibility(prod.access.`type`, prod.loggedIn, prod.authorised, prod.access.isTrial))
-      case (None, Some(sandbox))       => Some(VersionVisibility(sandbox.access.`type`, sandbox.loggedIn, sandbox.authorised, sandbox.access.isTrial))
+      case (Some(prod), None)          => Some(VersionVisibility(prod.access.accessType, prod.loggedIn, prod.authorised, isTrial(prod.access)))
+      case (None, Some(sandbox))       => Some(VersionVisibility(sandbox.access.accessType, sandbox.loggedIn, sandbox.authorised, isTrial(sandbox.access)))
       case (Some(prod), Some(sandbox)) =>
-        Some(VersionVisibility(sandbox.access.`type`, isLoggedIn(prod, sandbox), sandbox.authorised, isInTrial(prod, sandbox)))
+        Some(VersionVisibility(sandbox.access.accessType, isLoggedIn(prod, sandbox), sandbox.authorised, isInTrial(prod, sandbox)))
       case _                           => None
-    }
-  }
-}
-
-object APIStatus extends Enumeration {
-
-  type APIStatus = Value
-  val ALPHA, BETA, PROTOTYPED, PUBLISHED, STABLE, DEPRECATED, RETIRED = Value
-
-  def priorityOf(apiStatus: APIStatus): Int = {
-    apiStatus match {
-      case STABLE | PUBLISHED => 5
-      case BETA | PROTOTYPED  => 4
-      case ALPHA              => 3
-      case DEPRECATED         => 2
-      case RETIRED            => 1
     }
   }
 }

@@ -20,10 +20,10 @@ import scala.concurrent.Future
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiDefinition
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.http.HeaderCarrier
 
-import uk.gov.hmrc.apidocumentation.models.{ExtendedAPIDefinition, UuidIdentifier}
+import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
 import uk.gov.hmrc.apidocumentation.services.BaseApiDefinitionService
 
 trait BaseApiDefinitionServiceMockingHelper extends MockitoSugar with ArgumentMatchersSugar {
@@ -38,7 +38,7 @@ trait BaseApiDefinitionServiceMockingHelper extends MockitoSugar with ArgumentMa
       .thenReturn(Future.successful(apis.toList))
   }
 
-  def whenFetchExtendedDefinition[T <: BaseApiDefinitionService](base: T)(serviceName: String)(api: ExtendedAPIDefinition)(implicit hc: HeaderCarrier) = {
+  def whenFetchExtendedDefinition[T <: BaseApiDefinitionService](base: T)(serviceName: String)(api: ExtendedApiDefinition)(implicit hc: HeaderCarrier) = {
     when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
@@ -49,7 +49,7 @@ trait BaseApiDefinitionServiceMockingHelper extends MockitoSugar with ArgumentMa
       serviceName: String,
       userId: UuidIdentifier
     )(
-      api: ExtendedAPIDefinition
+      api: ExtendedApiDefinition
     )(implicit hc: HeaderCarrier
     ) = {
     when(base.fetchExtendedDefinition(eqTo(serviceName), *)(eqTo(hc)))

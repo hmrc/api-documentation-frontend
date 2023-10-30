@@ -487,5 +487,6 @@
         "authorised": true
       }
     }
-  ]
+  ],
+  "categories":[ "AGENTS" ]
 }

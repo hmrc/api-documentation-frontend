@@ -20,15 +20,14 @@ import scala.concurrent.Future.{failed, successful}
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiDefinition
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
-import uk.gov.hmrc.apidocumentation.models.ExtendedAPIDefinition
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 
 trait ApiDefinitionServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   val apiDefinitionService = mock[ApiDefinitionService]
 
-  def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
+  def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedApiDefinition) = {
     when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(successful(Some(apiDefinition)))
   }
 

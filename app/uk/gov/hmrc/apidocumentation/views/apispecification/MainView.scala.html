@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models.DocsVisibility
 @import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services._
@@ -25,13 +26,13 @@
 
 @this(applicationConfig: ApplicationConfig)
 
-@(viewModel: ViewModel, maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)(implicit requestHeader: RequestHeader)
+@(viewModel: ViewModel, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false)(implicit requestHeader: RequestHeader)
 
 @renderGetApiVersionForm = {
     @for(api <- maybeApi) {
         @for(version <- maybeVersion) {
             @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
-            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
+            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName.toString, None, None).url">
                 <label class="visually-hidden" for="version">
                     Select version and status
                 </label>

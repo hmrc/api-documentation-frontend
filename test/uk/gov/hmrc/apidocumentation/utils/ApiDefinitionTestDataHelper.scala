@@ -30,11 +30,11 @@ trait ApiDefinitionTestDataHelper {
   implicit class ApiAccessModifier(val inner: APIAccess) {
 
     def asPublic: APIAccess = {
-      inner.copy(`type` = APIAccessType.PUBLIC)
+      inner.copy(`type` = ApiAccessType.PUBLIC)
     }
 
     def asPrivate: APIAccess = {
-      inner.copy(`type` = APIAccessType.PRIVATE)
+      inner.copy(`type` = ApiAccessType.PRIVATE)
     }
 
     def asTrial: APIAccess = {
@@ -47,48 +47,44 @@ trait ApiDefinitionTestDataHelper {
   }
 
   def apiAvailability() = {
-    APIAvailability(
+    ApiAvailability(
       endpointsEnabled = true,
-      access = APIAccess(
-        `type` = APIAccessType.PUBLIC,
-        whitelistedApplicationIds = Some(Seq.empty),
-        isTrial = Some(false)
-      ),
+      access = ApiAccess.PUBLIC,
       loggedIn = false,
       authorised = false
     )
   }
 
-  implicit class ApiAvailabilityModifier(val inner: APIAvailability) {
+  implicit class ApiAvailabilityModifier(val inner: ApiAvailability) {
 
-    def asPublic: APIAvailability =
-      inner.copy(access = inner.access.asPublic)
+    def asPublic: ApiAvailability =
+      inner.copy(access = ApiAccess.PUBLIC)
 
-    def asPrivate: APIAvailability =
-      inner.copy(access = inner.access.asPrivate)
+    def asPrivate: ApiAvailability =
+      inner.copy(access = ApiAccess.Private(false))
 
-    def asTrial: APIAvailability =
-      inner.copy(access = inner.access.asTrial)
+    def asTrial: ApiAvailability =
+      inner.copy(access = ApiAccess.Private(true))
 
-    def notTrial: APIAvailability =
-      inner.copy(access = inner.access.notTrial)
+    def notTrial: ApiAvailability =
+      inner.copy(access = ApiAccess.Private(false))
 
-    def asAuthorised: APIAvailability =
+    def asAuthorised: ApiAvailability =
       inner.copy(authorised = true)
 
-    def notAuthorised: APIAvailability =
+    def notAuthorised: ApiAvailability =
       inner.copy(authorised = false)
 
-    def asLoggedIn: APIAvailability =
+    def asLoggedIn: ApiAvailability =
       inner.copy(loggedIn = true)
 
-    def notLoggedIn: APIAvailability =
+    def notLoggedIn: ApiAvailability =
       inner.copy(loggedIn = false)
 
-    def withAccess(altAccess: APIAccess): APIAvailability =
+    def withAccess(altAccess: ApiAccess): ApiAvailability =
       inner.copy(access = altAccess)
 
-    def endpointsDisabled: APIAvailability =
+    def endpointsDisabled: ApiAvailability =
       inner.copy(endpointsEnabled = false)
   }
 
@@ -98,36 +94,36 @@ trait ApiDefinitionTestDataHelper {
     )
   }
 
-  implicit class SomeApiAvailabilityModifier(val inner: Option[APIAvailability]) {
+  implicit class SomeApiAvailabilityModifier(val inner: Option[ApiAvailability]) {
 
-    def asPublic: Option[APIAvailability] =
+    def asPublic: Option[ApiAvailability] =
       inner.map(_.asPublic)
 
-    def asPrivate: Option[APIAvailability] =
+    def asPrivate: Option[ApiAvailability] =
       inner.map(_.asPrivate)
 
-    def asTrial: Option[APIAvailability] =
+    def asTrial: Option[ApiAvailability] =
       inner.map(_.asTrial)
 
-    def notTrial: Option[APIAvailability] =
+    def notTrial: Option[ApiAvailability] =
       inner.map(_.notTrial)
 
-    def asAuthorised: Option[APIAvailability] =
+    def asAuthorised: Option[ApiAvailability] =
       inner.map(_.asAuthorised)
 
-    def notAuthorised: Option[APIAvailability] =
+    def notAuthorised: Option[ApiAvailability] =
       inner.map(_.notAuthorised)
 
-    def asLoggedIn: Option[APIAvailability] =
+    def asLoggedIn: Option[ApiAvailability] =
       inner.map(_.asLoggedIn)
 
-    def notLoggedIn: Option[APIAvailability] =
+    def notLoggedIn: Option[ApiAvailability] =
       inner.map(_.notLoggedIn)
 
-    def withAccess(altAccess: APIAccess): Option[APIAvailability] =
+    def withAccess(altAccess: ApiAccess): Option[ApiAvailability] =
       inner.map(_.withAccess(altAccess))
 
-    def endpointsDisabled: Option[APIAvailability] =
+    def endpointsDisabled: Option[ApiAvailability] =
       inner.map(_.endpointsDisabled)
   }
 
@@ -185,25 +181,28 @@ trait ApiDefinitionTestDataHelper {
   }
 
   def extendedApiDefinition(name: String) = {
-    ExtendedAPIDefinition(
-      name,
-      name,
-      name,
-      name,
-      requiresTrust = false,
-      isTestSupport = false,
-      Seq(
-        ExtendedAPIVersion(
+    ExtendedApiDefinition(
+      ServiceName(name),
+      serviceBaseUrl = name,
+      name = name,
+      description = name,
+      context = ApiContext(name),
+      versions = List(
+        ExtendedApiVersion(
           version = ApiVersionNbr("1.0"),
           status = ApiStatus.STABLE,
-          endpoints = Seq(
+          endpoints = List(
             Endpoint(endpointName = "Today's Date", uriPattern = "/today", method = HttpMethod.GET, authType = AuthType.APPLICATION),
             Endpoint(endpointName = "Yesterday's Date", uriPattern = "/yesterday", method = HttpMethod.GET, authType = AuthType.NONE)
           ),
           productionAvailability = someApiAvailability(),
           sandboxAvailability = None
         )
-      )
+      ),
+      requiresTrust = false,
+      isTestSupport = false,
+      lastPublishedAt = None,
+      categories = List(ApiCategory.OTHER)
     )
   }
 

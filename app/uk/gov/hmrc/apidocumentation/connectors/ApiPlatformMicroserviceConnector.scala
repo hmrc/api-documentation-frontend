@@ -25,9 +25,8 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
+import uk.gov.hmrc.apidocumentation.models.DeveloperIdentifier
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
-import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
-import uk.gov.hmrc.apidocumentation.models.{DeveloperIdentifier, ExtendedAPIDefinition}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
@@ -50,10 +49,10 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
     r.map(e => e.sortBy(_.name))
   }
 
-  def fetchApiDefinition(serviceName: String, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
+  def fetchApiDefinition(serviceName: String, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedApiDefinition]] = {
     logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
 
-    val r = http.GET[Option[ExtendedAPIDefinition]](definitionUrl(serviceBaseUrl, serviceName), queryParams(developerId))
+    val r = http.GET[Option[ExtendedApiDefinition]](definitionUrl(serviceBaseUrl, serviceName), queryParams(developerId))
 
     r.map(_.map(defn => logger.info(s"Found ${defn.name}")))
 
