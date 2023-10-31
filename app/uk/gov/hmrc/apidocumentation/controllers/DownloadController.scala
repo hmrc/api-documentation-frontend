@@ -21,6 +21,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.mvc._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccessType, ExtendedApiDefinition, ServiceName}
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -28,7 +29,7 @@ import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, LoggedInUserService}
+import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
@@ -42,7 +43,7 @@ class DownloadController @Inject() (
   )(implicit val ec: ExecutionContext
   ) extends FrontendController(cc) with ApplicationLogger {
 
-  def downloadResource(service: ServiceName, version: String, resource: String) = Action.async { implicit request =>
+  def downloadResource(service: ServiceName, version: ApiVersionNbr, resource: String) = Action.async { implicit request =>
     (for {
       userId       <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
       api          <- apiDefinitionService.fetchExtendedDefinition(service, userId)
@@ -60,11 +61,11 @@ class DownloadController @Inject() (
     }
   }
 
-  private def fetchResourceForApi(apiOption: Option[ExtendedApiDefinition], version: String, validResource: String)(implicit request: Request[_]): Future[Result] = {
+  private def fetchResourceForApi(apiOption: Option[ExtendedApiDefinition], version: ApiVersionNbr, validResource: String)(implicit request: Request[_]): Future[Result] = {
     def findVersion(apiOption: Option[ExtendedApiDefinition]) =
       for {
         api        <- apiOption
-        apiVersion <- api.versions.find(v => version == v.version.value)
+        apiVersion <- api.versions.find(v => version == v.version)
         visibility <- VersionVisibility(apiVersion)
       } yield (api, apiVersion, visibility)
 
@@ -81,7 +82,7 @@ class DownloadController @Inject() (
         redirectToLoginPage(api.serviceName)
 
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
-        downloadConnector.fetch(api.serviceName, selectedVersion.version.toString, validResource)
+        downloadConnector.fetch(api.serviceName, selectedVersion.version, validResource)
           .map(_.getOrElse(renderNotFoundPage))
 
       case _ =>

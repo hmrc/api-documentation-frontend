@@ -30,6 +30,7 @@ import play.api.i18n.MessagesProvider
 import play.api.libs.json.Json
 import play.api.mvc._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -77,7 +78,7 @@ class ApiDocumentationController @Inject() (
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
   private lazy val apiDocCrumb         = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
 
-  def apiIndexPage(service: Option[ServiceName], version: Option[String], filter: Option[String]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
+  def apiIndexPage(service: Option[ServiceName], version: Option[ApiVersionNbr], filter: Option[String]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def pageAttributes(title: String = "API Documentation") =
       PageAttributes(title, breadcrumbs = Breadcrumbs(documentationCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
 
@@ -108,7 +109,7 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  def redirectToApiDocumentation(service: ServiceName, version: Option[String], cacheBuster: Option[Boolean]): Action[AnyContent] = version match {
+  def redirectToApiDocumentation(service: ServiceName, version: Option[ApiVersionNbr], cacheBuster: Option[Boolean]): Action[AnyContent] = version match {
     case Some(version) => Action.async {
         Future.successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version, cacheBuster)))
       }
@@ -121,7 +122,7 @@ class ApiDocumentationController @Inject() (
       extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, userId)
     } yield {
       extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(NotFound(errorHandler.notFoundTemplate)) { version =>
-        Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version.value, cacheBuster))
+        Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version, cacheBuster))
       }
     }) recover {
       case _: NotFoundException => NotFound(errorHandler.notFoundTemplate)
@@ -131,7 +132,7 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  def renderApiDocumentation(service: ServiceName, version: String, cacheBuster: Option[Boolean]): Action[AnyContent] =
+  def renderApiDocumentation(service: ServiceName, version: ApiVersionNbr, cacheBuster: Option[Boolean]): Action[AnyContent] =
     headerNavigation { implicit request => navLinks =>
       (for {
         userId           <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
@@ -153,7 +154,7 @@ class ApiDocumentationController @Inject() (
   // scalastyle:off method.length
   private def doRenderApiDocumentation(
       service: ServiceName,
-      version: String,
+      version: ApiVersionNbr,
       cacheBuster: Boolean,
       apiOption: Option[ExtendedApiDefinition],
       navLinks: Seq[NavLink],
@@ -212,7 +213,7 @@ class ApiDocumentationController @Inject() (
           assets.at("/public/common/docs", file, false)(request).flatMap(resultToDocumentationItem)
         }
 
-        downloadConnector.fetch(service, "common", file)
+        downloadConnector.fetch(service, ApiVersionNbr("common"), file)
           .flatMap(_.fold(findLocally)(resultToDocumentationItem))
       }
 
@@ -240,7 +241,7 @@ class ApiDocumentationController @Inject() (
     def findVersion(apiOption: Option[ExtendedApiDefinition]) =
       for {
         api        <- apiOption
-        apiVersion <- api.versions.find(v => v.version.value == version)
+        apiVersion <- api.versions.find(v => v.version == version)
         visibility <- VersionVisibility(apiVersion)
       } yield (api, apiVersion, visibility)
 
@@ -287,7 +288,7 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  def fetchTestEndpointJson(service: ServiceName, version: String): Action[AnyContent] = Action.async { implicit request =>
+  def fetchTestEndpointJson(service: ServiceName, version: ApiVersionNbr): Action[AnyContent] = Action.async { implicit request =>
     if (appConfig.ramlPreviewEnabled) {
       documentationService.buildTestEndpoints(service, version) map { endpoints =>
         Ok(Json.toJson(endpoints.sortWith((x, y) => x.url < y.url)))

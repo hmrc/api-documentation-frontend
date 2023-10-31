@@ -133,7 +133,7 @@ case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation
     .sorted(WrappedApiDefinition.statusVersionOrdering)
     .head
 
-  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr.value, None).url
+  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr, None).url
 }
 
 object WrappedApiDefinition {

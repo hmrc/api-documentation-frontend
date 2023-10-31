@@ -26,6 +26,7 @@ import play.api.test.Helpers.status
 import play.api.test.WsTestClient
 import play.core.server.Server
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException}
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -34,7 +35,7 @@ class DownloadConnectorSpec extends ConnectorSpec {
   val apiDocumentationUrl = "https://api-documentation.example.com"
 
   val serviceName = ServiceName("hello-world")
-  val version     = "1.0"
+  val version     = ApiVersionNbr("1.0")
 
   val stubConfig = Configuration(
     "metrics.jvm" -> false

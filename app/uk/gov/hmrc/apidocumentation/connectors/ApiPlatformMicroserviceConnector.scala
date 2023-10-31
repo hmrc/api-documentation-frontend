@@ -20,6 +20,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
@@ -34,7 +35,7 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
-  def fetchApiSpecification(serviceName: ServiceName, version: String)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
+  def fetchApiSpecification(serviceName: ServiceName, version: ApiVersionNbr)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
     val url = s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/specification"
     http.GET[Option[ApiSpecification]](url)

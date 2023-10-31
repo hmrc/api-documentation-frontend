@@ -26,6 +26,7 @@ import play.api.libs.ws._
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.InternalServerException
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -37,11 +38,11 @@ class DownloadConnector @Inject() (ws: WSClient, appConfig: ApplicationConfig)(i
 
   private def buildRequest(resourceUrl: String): WSRequest = ws.url(resourceUrl).withRequestTimeout(10.seconds)
 
-  private def makeRequest(serviceName: ServiceName, version: String, resource: String): Future[WSResponse] = {
+  private def makeRequest(serviceName: ServiceName, version: ApiVersionNbr, resource: String): Future[WSResponse] = {
     buildRequest(s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/documentation/$resource").withMethod("GET").stream()
   }
 
-  def fetch(serviceName: ServiceName, version: String, resource: String): Future[Option[Result]] = {
+  def fetch(serviceName: ServiceName, version: ApiVersionNbr, resource: String): Future[Option[Result]] = {
     makeRequest(serviceName, version, resource).map { response =>
       if (response.status == OK) {
         val contentType = response.headers.get("Content-Type").flatMap(_.headOption)

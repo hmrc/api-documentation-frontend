@@ -28,6 +28,7 @@ import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.mocks.config._
@@ -48,14 +49,14 @@ class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec {
     val openApiSwaggerParseResult = new SwaggerParseResult()
     openApiSwaggerParseResult.setOpenAPI(new OpenAPI())
 
-    lazy val openApiViewRedoc       = app.injector.instanceOf[OpenApiViewRedoc]
-    lazy val openApiPreviewRedoc    = app.injector.instanceOf[OpenApiPreviewRedoc]
-    lazy val openApiPreviewView     = app.injector.instanceOf[OpenApiPreviewView]
-    lazy val mcc                    = app.injector.instanceOf[MessagesControllerComponents]
-    lazy val errorHandler           = app.injector.instanceOf[ErrorHandler]
-    lazy val openAPIV3ParserMock    = mock[SwaggerParserExtension]
-    val serviceName                 = ServiceName("Test-Service")
-    implicit lazy val system        = app.injector.instanceOf[ActorSystem]
+    lazy val openApiViewRedoc    = app.injector.instanceOf[OpenApiViewRedoc]
+    lazy val openApiPreviewRedoc = app.injector.instanceOf[OpenApiPreviewRedoc]
+    lazy val openApiPreviewView  = app.injector.instanceOf[OpenApiPreviewView]
+    lazy val mcc                 = app.injector.instanceOf[MessagesControllerComponents]
+    lazy val errorHandler        = app.injector.instanceOf[ErrorHandler]
+    lazy val openAPIV3ParserMock = mock[SwaggerParserExtension]
+    val serviceName              = ServiceName("Test-Service")
+    implicit lazy val system     = app.injector.instanceOf[ActorSystem]
 
     val underTest = new OpenApiDocumentationController(
       openApiViewRedoc,
@@ -76,7 +77,7 @@ class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec {
       when(appConfig.oasFetchResolvedMaxDuration).thenReturn(1000)
       when(openAPIV3ParserMock.readLocation(*, *, *)).thenReturn(openApiSwaggerParseResult)
 
-      val result = underTest.fetchOasResolved(serviceName, "Test-Version")(request)
+      val result = underTest.fetchOasResolved(serviceName, ApiVersionNbr("Test-Version"))(request)
 
       status(result) shouldBe OK
     }
@@ -85,7 +86,7 @@ class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec {
       when(appConfig.oasFetchResolvedMaxDuration).thenReturn(1000)
       when(openAPIV3ParserMock.readLocation(*, *, *)).thenReturn(emptySwaggerParseResult)
 
-      val result = underTest.fetchOasResolved(serviceName, "Test-Version")(request)
+      val result = underTest.fetchOasResolved(serviceName, ApiVersionNbr("Test-Version"))(request)
 
       status(result) shouldBe NOT_FOUND
     }
@@ -94,7 +95,7 @@ class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec {
       when(appConfig.oasFetchResolvedMaxDuration).thenReturn(1000)
       when(openAPIV3ParserMock.readLocation(*, *, *)).thenThrow(new FileNotFoundException())
 
-      val result = underTest.fetchOasResolved(serviceName, "Test-Version")(request)
+      val result = underTest.fetchOasResolved(serviceName, ApiVersionNbr("Test-Version"))(request)
 
       status(result) shouldBe NOT_FOUND
     }

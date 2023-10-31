@@ -22,6 +22,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.cache._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -35,7 +36,7 @@ class DocumentationService @Inject() (appConfig: ApplicationConfig, cache: Async
     extends ApplicationLogger {
   val defaultExpiration = 1.hour
 
-  def fetchApiSpecification(serviceName: ServiceName, version: String, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
+  def fetchApiSpecification(serviceName: ServiceName, version: ApiVersionNbr, cacheBuster: Boolean)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
     def removeEntry(key: String): Unit = {
       cache.remove(key)
     }
@@ -52,7 +53,7 @@ class DocumentationService @Inject() (appConfig: ApplicationConfig, cache: Async
     spec
   }
 
-  def buildTestEndpoints(service: ServiceName, version: String)(implicit hc: HeaderCarrier): Future[List[TestEndpoint]] = {
+  def buildTestEndpoints(service: ServiceName, version: ApiVersionNbr)(implicit hc: HeaderCarrier): Future[List[TestEndpoint]] = {
     fetchApiSpecification(service, version, cacheBuster = true).map(_.fold(List.empty[TestEndpoint])(buildResources))
   }
 

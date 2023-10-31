@@ -47,7 +47,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
     val underTest = new DownloadController(apiDefinitionService, downloadConnector, loggedInUserService, errorHandler, appConfig, mcc)
 
     def theDownloadConnectorWillReturnTheResult(result: Results.Status) = {
-      when(downloadConnector.fetch(any[ServiceName], any[String], any[String])).thenReturn(Future.successful(Some(result)))
+      when(downloadConnector.fetch(*[ServiceName], *[ApiVersionNbr], *[String])).thenReturn(Future.successful(Some(result)))
     }
 
     theUserIsNotLoggedIn()
@@ -60,7 +60,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
       )
       theDownloadConnectorWillReturnTheResult(Results.Ok)
 
-      await(underTest.downloadResource(serviceName, version.toString, resourceName)(request)).header.status shouldBe OK
+      await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe OK
     }
 
     "return 404 code when the resource not found" in new Setup {
@@ -69,7 +69,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
       )
       theDownloadConnectorWillReturnTheResult(Results.NotFound)
 
-      await(underTest.downloadResource(serviceName, version.toString, resourceName)(request)).header.status shouldBe NOT_FOUND
+      await(underTest.downloadResource(serviceName, version, resourceName)(request)).header.status shouldBe NOT_FOUND
     }
 
     "error when the resource name contains '..'" in new Setup {
@@ -77,7 +77,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
         extendedApiDefinition(serviceName = serviceName.value, version = version)
       )
 
-      await(underTest.downloadResource(serviceName, version.toString, "../secret")(request)).header.status shouldBe INTERNAL_SERVER_ERROR
+      await(underTest.downloadResource(serviceName, version, "../secret")(request)).header.status shouldBe INTERNAL_SERVER_ERROR
     }
 
     "redirect to the login page when the API is private and the user is not logged in" in new Setup {
@@ -86,9 +86,9 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
         extendedApiDefinition(serviceName = serviceName.value, version = version, access = ApiAccess.Private(), authorised = false)
       )
 
-      val result = underTest.downloadResource(serviceName, version.toString, resourceName)(request)
+      val result = underTest.downloadResource(serviceName, version, resourceName)(request)
 
-      verifyRedirectToLoginPage(result, serviceName, version.toString)
+      verifyRedirectToLoginPage(result, serviceName, version)
     }
   }
 }

@@ -23,6 +23,7 @@ import akka.stream.testkit.NoMaterializer
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.controllers.{CommonControllerBaseSpec, routes}
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
@@ -99,7 +100,7 @@ trait PageRenderVerification {
     verifyPageRendered(pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))(actualPage)
   }
 
-  def verifyLinkToStableDocumentationRendered(actualPage: Future[Result], service: ServiceName, version: String) = {
+  def verifyLinkToStableDocumentationRendered(actualPage: Future[Result], service: ServiceName, version: ApiVersionNbr) = {
     contentAsString(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
   }
 }

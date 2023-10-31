@@ -25,6 +25,7 @@ import play.api.Application
 import play.api.cache.AsyncCacheApi
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
@@ -98,8 +99,8 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
 
     "create a simple testers URL output file with just endpoint information" in new Setup {
       val specification = defaultApiSpecification
-      when(apm.fetchApiSpecification(*[ServiceName], *)(*)).thenReturn(successful(Some(specification)))
-      await(underTest.buildTestEndpoints(ServiceName("minimal"), "1.0")) shouldBe Seq.empty
+      when(apm.fetchApiSpecification(*[ServiceName], *[ApiVersionNbr])(*)).thenReturn(successful(Some(specification)))
+      await(underTest.buildTestEndpoints(ServiceName("minimal"), ApiVersionNbr("1.0"))) shouldBe Seq.empty
     }
 
     "create a simple testers URL output file with just endpoint information for a single endpoint" in new Setup {
@@ -119,10 +120,10 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
           )
         )
       )
-      when(apm.fetchApiSpecification(*[ServiceName], *)(*)).thenReturn(successful(Some(specification)))
+      when(apm.fetchApiSpecification(*[ServiceName], *[ApiVersionNbr])(*)).thenReturn(successful(Some(specification)))
 
       val expected = Seq(TestEndpoint("{service-url}/hello/world", "GET"))
-      await(underTest.buildTestEndpoints(ServiceName("single-endpoint"), "1.0")) shouldBe expected
+      await(underTest.buildTestEndpoints(ServiceName("single-endpoint"), ApiVersionNbr("1.0"))) shouldBe expected
     }
 
     "create a complex testers URL output file with just endpoint information for a multiple endpoints" in new Setup {
@@ -150,14 +151,14 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
           )
         )
       )
-      when(apm.fetchApiSpecification(*[ServiceName], *)(*)).thenReturn(successful(Some(specification)))
+      when(apm.fetchApiSpecification(*[ServiceName], *[ApiVersionNbr])(*)).thenReturn(successful(Some(specification)))
 
       val expected = Seq(
         TestEndpoint("{service-url}/hello/there", "GET", "OPTIONS", "PUT"),
         TestEndpoint("{service-url}/hello/there/{empref}", "DELETE"),
         TestEndpoint("{service-url}/hello/there/{empref}/year", "POST")
       )
-      await(underTest.buildTestEndpoints(ServiceName("multiple-endpoints"), "1.0")) shouldBe expected
+      await(underTest.buildTestEndpoints(ServiceName("multiple-endpoints"), ApiVersionNbr("1.0"))) shouldBe expected
     }
   }
 }

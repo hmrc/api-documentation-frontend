@@ -21,6 +21,7 @@ import scala.concurrent.Future.successful
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.services.DocumentationService
@@ -29,11 +30,11 @@ trait ApiDocumentationServiceMock extends MockitoSugar with ArgumentMatchersSuga
   val documentationService = mock[DocumentationService]
 
   def theDocumentationServiceWillFetchApiSpecification(apiSpecification: ApiSpecification) = {
-    when(documentationService.fetchApiSpecification(*[ServiceName], *, *)(*)).thenReturn(successful(Some(apiSpecification)))
+    when(documentationService.fetchApiSpecification(*[ServiceName], *[ApiVersionNbr], *)(*)).thenReturn(successful(Some(apiSpecification)))
   }
 
   def theDocumentationServiceWillFetchNoSpecification() = {
-    when(documentationService.fetchApiSpecification(*[ServiceName], *, *)(*)).thenReturn(successful(None))
+    when(documentationService.fetchApiSpecification(*[ServiceName], *[ApiVersionNbr], *)(*)).thenReturn(successful(None))
   }
 
 }
