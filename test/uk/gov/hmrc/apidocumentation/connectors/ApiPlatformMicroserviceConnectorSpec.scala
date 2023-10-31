@@ -20,6 +20,7 @@ import java.util.UUID
 
 import play.api.Configuration
 import play.api.http.Status.INTERNAL_SERVER_ERROR
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -34,7 +35,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
   val bearer     = "TestBearerToken"
   val apiKeyTest = UUID.randomUUID().toString
 
-  val serviceName = "someService"
+  val serviceName = ServiceName("someService")
   val userId      = UuidIdentifier(UserId.random)
 
   val apiName1 = "Calendar"
@@ -86,7 +87,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
     "call the underlying http client with the email argument" in new LocalSetup {
       whenGetDefinitionByEmail(serviceName, userId)(extendedApiDefinition(apiName1))
 
-      val result = await(underTest.fetchApiDefinition(serviceName, Some(userId)))
+      val result = await(underTest.fetchExtendedApiDefinition(serviceName, Some(userId)))
 
       result shouldBe defined
       result.head.name shouldBe apiName1
@@ -95,7 +96,7 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
     "call the underlying http client without an email argument" in new LocalSetup {
       whenGetDefinition(serviceName)(extendedApiDefinition(apiName1))
 
-      val result = await(underTest.fetchApiDefinition(serviceName, None))
+      val result = await(underTest.fetchExtendedApiDefinition(serviceName, None))
 
       result shouldBe defined
       result.head.name shouldBe apiName1
@@ -105,14 +106,14 @@ class ApiPlatformMicroserviceConnectorSpec extends ConnectorSpec {
       whenGetDefinitionFails(serviceName)(400)
 
       intercept[UpstreamException.type] {
-        await(underTest.fetchApiDefinition(serviceName, None))
+        await(underTest.fetchExtendedApiDefinition(serviceName, None))
       }
     }
 
     "handle the get returning None" in new LocalSetup {
       whenGetDefinitionFindsNothing(serviceName)
 
-      val result = await(underTest.fetchApiDefinition(serviceName, None))
+      val result = await(underTest.fetchExtendedApiDefinition(serviceName, None))
       result should not be defined
     }
   }

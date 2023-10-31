@@ -34,7 +34,7 @@
     @for(api <- maybeApi) {
         @for(version <- maybeVersion) {
             @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
-            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName.toString, None, None).url">
+            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
                 <label class="visually-hidden" for="version">
                     Select version and status
                 </label>
@@ -109,7 +109,7 @@
                       Endpoints
                   </h2>
 
-                  <a class="govuk-button govuk-button-secondary" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName.toString, maybeVersion.get.version.toString).url">
+                  <a class="govuk-button govuk-button-secondary" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, maybeVersion.get.version.toString).url">
                     View API endpoints
                   </a>
 

@@ -46,7 +46,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
 
   implicit val hc = HeaderCarrier()
 
-  val serviceName  = "hello-world"
+  val serviceName  = ServiceName("hello-world")
   val endpointName = "Say Hello World!"
 
   def anXmlApiDefinition(name: String) = XmlApiDocumentation(name, "description", "context")
@@ -82,9 +82,9 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
     )
   }
 
-  def extendedApiDefinitionWithNoAPIAvailability(serviceName: String, version: ApiVersionNbr): ExtendedApiDefinition = {
+  def extendedApiDefinitionWithNoAPIAvailability(serviceName: ServiceName, version: ApiVersionNbr): ExtendedApiDefinition = {
     ExtendedApiDefinition(
-      ServiceName(serviceName),
+      serviceName,
       "/world",
       "Hello World",
       "Say Hello World",
@@ -98,13 +98,13 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
   }
 
   def extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
-      serviceName: String,
+      serviceName: ServiceName,
       version: ApiVersionNbr,
       principalApiAvailability: Option[ApiAvailability],
       subordinateApiAvailability: Option[ApiAvailability]
     ): ExtendedApiDefinition = {
     ExtendedApiDefinition(
-      ServiceName(serviceName),
+      serviceName,
       "hello",
       "Hello World",
       "Say Hello World",
@@ -119,9 +119,9 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
     )
   }
 
-  def extendedApiDefinitionWithRetiredVersion(serviceName: String, retiredVersion: ApiVersionNbr, nonRetiredVersion: ApiVersionNbr) = {
+  def extendedApiDefinitionWithRetiredVersion(serviceName: ServiceName, retiredVersion: ApiVersionNbr, nonRetiredVersion: ApiVersionNbr) = {
     ExtendedApiDefinition(
-      ServiceName(serviceName),
+      serviceName,
       serviceBaseUrl = "/world",
       name = "Hello World",
       description = "Say Hello World",
@@ -188,7 +188,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
 
   def aServiceGuide(name: String) = ServiceGuide(name, "context")
 
-  def verifyRedirectToLoginPage(actualPage: Future[Result], service: String, version: String): Unit = {
+  def verifyRedirectToLoginPage(actualPage: Future[Result], service: ServiceName, version: String): Unit = {
     status(actualPage) shouldBe 303
 
     headers(actualPage).get("Location") shouldBe Some("/developer/login")

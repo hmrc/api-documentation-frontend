@@ -108,7 +108,7 @@ class NavigationService @Inject() (
 
   def sidebarNavigation() = sidebarNavigationLinks
 
-  def apiSidebarNavigation2(service: String, version: ExtendedApiVersion, apiSpecification: ApiSpecification): Seq[SidebarLink] = {
+  def apiSidebarNavigation2(version: ExtendedApiVersion, apiSpecification: ApiSpecification): Seq[SidebarLink] = {
     val subLinks = apiSpecification.resourceGroups
       .map(group => group.name)
       .filter(_.nonEmpty)
@@ -137,7 +137,7 @@ class NavigationService @Inject() (
     sections :+ resources
   }
 
-  def openApiSidebarNavigation(service: String, version: ExtendedApiVersion, markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
+  def openApiSidebarNavigation(markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
     val variableSidebar = markdownBlocks.map(mb => SidebarLink(label = mb.title, href = s"#${Slugify(mb.title)}"))
     val fixedSidebar    = SidebarLink(label = "Endpoints", href = s"#endpoints-title")
 

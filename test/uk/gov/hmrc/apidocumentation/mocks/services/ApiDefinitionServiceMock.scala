@@ -28,15 +28,15 @@ trait ApiDefinitionServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   val apiDefinitionService = mock[ApiDefinitionService]
 
   def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedApiDefinition) = {
-    when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(successful(Some(apiDefinition)))
+    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(*)).thenReturn(successful(Some(apiDefinition)))
   }
 
   def theDefinitionServiceWillReturnNoApiDefinition() = {
-    when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(successful(None))
+    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(*)).thenReturn(successful(None))
   }
 
   def theDefinitionServiceWillFail(exception: Throwable) = {
-    when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(failed(exception))
+    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(*)).thenReturn(failed(exception))
 
     when(apiDefinitionService.fetchAllDefinitions(*)(*))
       .thenReturn(failed(exception))

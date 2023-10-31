@@ -38,26 +38,26 @@ trait ApiPlatformMicroserviceConnectorMockingHelper extends MockitoSugar with Ar
       .thenReturn(Future.successful(apis.toList))
   }
 
-  def whenFetchExtendedDefinition[T <: ApiPlatformMicroserviceConnector](base: T)(serviceName: String)(api: ExtendedApiDefinition)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
+  def whenFetchExtendedDefinition[T <: ApiPlatformMicroserviceConnector](base: T)(serviceName: ServiceName)(api: ExtendedApiDefinition)(implicit hc: HeaderCarrier) = {
+    when(base.fetchExtendedApiDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
   def whenFetchExtendedDefinitionWithEmail[T <: ApiPlatformMicroserviceConnector](
       base: T
     )(
-      serviceName: String,
+      serviceName: ServiceName,
       userId: UuidIdentifier
     )(
       api: ExtendedApiDefinition
     )(implicit hc: HeaderCarrier
     ) = {
-    when(base.fetchApiDefinition(eqTo(serviceName), *)(eqTo(hc)))
+    when(base.fetchExtendedApiDefinition(eqTo(serviceName), *)(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
   def whenFetchExtendedDefinitionFails[T <: ApiPlatformMicroserviceConnector](base: T)(exception: Throwable)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinition(*, *)(eqTo(hc)))
+    when(base.fetchExtendedApiDefinition(*[ServiceName], *)(eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 }

@@ -20,6 +20,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 @Singleton
@@ -34,7 +35,7 @@ class RedirectController @Inject() (cc: MessagesControllerComponents)
     }
   }
 
-  def redirectToApiDocumentationPage(service: String, version: String, endpoint: String): Action[AnyContent] = {
+  def redirectToApiDocumentationPage(service: ServiceName, version: String, endpoint: String): Action[AnyContent] = {
     val redirectTo = routes.ApiDocumentationController
       .renderApiDocumentation(service, version, None)
       .url

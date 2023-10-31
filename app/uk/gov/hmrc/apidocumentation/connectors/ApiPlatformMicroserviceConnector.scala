@@ -34,7 +34,7 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
-  def fetchApiSpecification(serviceName: String, version: String)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
+  def fetchApiSpecification(serviceName: ServiceName, version: String)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
     val url = s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/specification"
     http.GET[Option[ApiSpecification]](url)
@@ -49,7 +49,7 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
     r.map(e => e.sortBy(_.name))
   }
 
-  def fetchApiDefinition(serviceName: String, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedApiDefinition]] = {
+  def fetchExtendedApiDefinition(serviceName: ServiceName, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedApiDefinition]] = {
     logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
 
     val r = http.GET[Option[ExtendedApiDefinition]](definitionUrl(serviceBaseUrl, serviceName), queryParams(developerId))
@@ -70,6 +70,6 @@ object ApiPlatformMicroserviceConnector {
   def queryParams(developerIdOpt: Option[DeveloperIdentifier]): Params =
     developerIdOpt.fold(noParams)(developerId => Seq("developerId" -> developerId.asText))
 
-  def definitionsUrl(serviceBaseUrl: String)                     = s"$serviceBaseUrl/combined-api-definitions"
-  def definitionUrl(serviceBaseUrl: String, serviceName: String) = s"$serviceBaseUrl/combined-api-definitions/$serviceName"
+  def definitionsUrl(serviceBaseUrl: String)                          = s"$serviceBaseUrl/combined-api-definitions"
+  def definitionUrl(serviceBaseUrl: String, serviceName: ServiceName) = s"$serviceBaseUrl/combined-api-definitions/$serviceName"
 }

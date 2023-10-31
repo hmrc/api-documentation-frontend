@@ -20,6 +20,7 @@ import scala.concurrent.Future
 
 import play.api.mvc._
 import play.api.test.Helpers._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 
 class RedirectControllerSpec extends CommonControllerBaseSpec {
 
@@ -44,7 +45,7 @@ class RedirectControllerSpec extends CommonControllerBaseSpec {
     "redirect to the service resource page" in new Setup {
       verifyPageRedirected(
         underTest.redirectToApiDocumentationPage(
-          "my-service",
+          ServiceName("my-service"),
           "1.0",
           "my-endpoint"
         )(request),
@@ -53,7 +54,7 @@ class RedirectControllerSpec extends CommonControllerBaseSpec {
 
       verifyPageRedirected(
         underTest.redirectToApiDocumentationPage(
-          "my-other-service",
+          ServiceName("my-other-service"),
           "7.3",
           "my-other-endpoint"
         )(request),

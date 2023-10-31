@@ -38,7 +38,7 @@ trait BaseApiDefinitionServiceMockingHelper extends MockitoSugar with ArgumentMa
       .thenReturn(Future.successful(apis.toList))
   }
 
-  def whenFetchExtendedDefinition[T <: BaseApiDefinitionService](base: T)(serviceName: String)(api: ExtendedApiDefinition)(implicit hc: HeaderCarrier) = {
+  def whenFetchExtendedDefinition[T <: BaseApiDefinitionService](base: T)(serviceName: ServiceName)(api: ExtendedApiDefinition)(implicit hc: HeaderCarrier) = {
     when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
@@ -46,7 +46,7 @@ trait BaseApiDefinitionServiceMockingHelper extends MockitoSugar with ArgumentMa
   def whenFetchExtendedDefinitionWithEmail[T <: BaseApiDefinitionService](
       base: T
     )(
-      serviceName: String,
+      serviceName: ServiceName,
       userId: UuidIdentifier
     )(
       api: ExtendedApiDefinition
@@ -57,14 +57,14 @@ trait BaseApiDefinitionServiceMockingHelper extends MockitoSugar with ArgumentMa
   }
 
   def whenApiDefinitionFails[T <: BaseApiDefinitionService](base: T)(exception: Throwable)(implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(any[String], *)(eqTo(hc)))
+    when(base.fetchExtendedDefinition(any[ServiceName], *)(eqTo(hc)))
       .thenReturn(Future.failed(exception))
     when(base.fetchAllDefinitions(*)(eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 
   def whenNoApiDefinitions[T <: BaseApiDefinitionService](base: T) = {
-    when(base.fetchExtendedDefinition(any[String], *)(*))
+    when(base.fetchExtendedDefinition(any[ServiceName], *)(*))
       .thenReturn(Future.successful(None))
     when(base.fetchAllDefinitions(*)(*))
       .thenReturn(Future.successful(Seq.empty))

@@ -77,7 +77,7 @@ class ApiDocumentationController @Inject() (
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
   private lazy val apiDocCrumb         = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
 
-  def apiIndexPage(service: Option[String], version: Option[String], filter: Option[String]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
+  def apiIndexPage(service: Option[ServiceName], version: Option[String], filter: Option[String]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def pageAttributes(title: String = "API Documentation") =
       PageAttributes(title, breadcrumbs = Breadcrumbs(documentationCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
 
@@ -108,19 +108,14 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  private def makeBreadcrumbName(api: ExtendedApiDefinition, selectedVersion: ExtendedApiVersion) = {
-    val suffix = if (api.name.endsWith("API")) "" else " API"
-    s"${api.name}$suffix v${selectedVersion.version} (${selectedVersion.displayedStatus})"
-  }
-
-  def redirectToApiDocumentation(service: String, version: Option[String], cacheBuster: Option[Boolean]): Action[AnyContent] = version match {
+  def redirectToApiDocumentation(service: ServiceName, version: Option[String], cacheBuster: Option[Boolean]): Action[AnyContent] = version match {
     case Some(version) => Action.async {
         Future.successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version, cacheBuster)))
       }
     case _             => redirectToCurrentApiDocumentation(service, cacheBuster)
   }
 
-  private def redirectToCurrentApiDocumentation(service: String, cacheBuster: Option[Boolean]) = Action.async { implicit request =>
+  private def redirectToCurrentApiDocumentation(service: ServiceName, cacheBuster: Option[Boolean]) = Action.async { implicit request =>
     (for {
       userId       <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
       extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, userId)
@@ -136,7 +131,7 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  def renderApiDocumentation(service: String, version: String, cacheBuster: Option[Boolean]): Action[AnyContent] =
+  def renderApiDocumentation(service: ServiceName, version: String, cacheBuster: Option[Boolean]): Action[AnyContent] =
     headerNavigation { implicit request => navLinks =>
       (for {
         userId           <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
@@ -157,7 +152,7 @@ class ApiDocumentationController @Inject() (
 
   // scalastyle:off method.length
   private def doRenderApiDocumentation(
-      service: String,
+      service: ServiceName,
       version: String,
       cacheBuster: Boolean,
       apiOption: Option[ExtendedApiDefinition],
@@ -201,12 +196,12 @@ class ApiDocumentationController @Inject() (
         messagesProvider: MessagesProvider
       ): Future[Result] = {
       def renderRamlSpec(apiSpecification: ApiSpecification): Future[Result] = {
-        val attrs     = makePageAttributes(api, navigationService.apiSidebarNavigation2(service, selectedVersion, apiSpecification))
+        val attrs     = makePageAttributes(api, navigationService.apiSidebarNavigation2(selectedVersion, apiSpecification))
         val viewModel = ViewModel(apiSpecification)
         successful(Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, developerId.isDefined)).withHeaders(cacheControlHeaders))
       }
 
-      def withDefault(service: String)(file: String, label: String): Future[DocumentationItem] = {
+      def withDefault(service: ServiceName)(file: String, label: String): Future[DocumentationItem] = {
         def resultToDocumentationItem(result: Result): Future[DocumentationItem] = {
           result.body.consumeData
             .map(bs => bs.utf8String)
@@ -233,7 +228,7 @@ class ApiDocumentationController @Inject() (
           fraudPrevention <- withDefaultForService("fraud-prevention.md", "Fraud Prevention")
           versioning      <- withDefaultForService("versioning.md", "Versioning")
           markdownBlocks   = List(overview, errors, testing) ++ (if (requiredFraudPrevention) List(fraudPrevention) else List()) ++ List(versioning)
-          attrs            = makePageAttributes(api, navigationService.openApiSidebarNavigation(service, selectedVersion, markdownBlocks))
+          attrs            = makePageAttributes(api, navigationService.openApiSidebarNavigation(markdownBlocks))
 
         } yield Ok(parentPage(attrs, markdownBlocks, api.name, api, selectedVersion, developerId.isDefined)).withHeaders(cacheControlHeaders)
       }
@@ -292,7 +287,7 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  def fetchTestEndpointJson(service: String, version: String): Action[AnyContent] = Action.async { implicit request =>
+  def fetchTestEndpointJson(service: ServiceName, version: String): Action[AnyContent] = Action.async { implicit request =>
     if (appConfig.ramlPreviewEnabled) {
       documentationService.buildTestEndpoints(service, version) map { endpoints =>
         Ok(Json.toJson(endpoints.sortWith((x, y) => x.url < y.url)))

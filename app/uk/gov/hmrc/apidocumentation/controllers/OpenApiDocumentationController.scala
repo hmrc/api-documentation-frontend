@@ -50,7 +50,6 @@ class OpenApiDocumentationController @Inject() (
     openApiViewRedoc: OpenApiViewRedoc,
     openApiPreviewRedoc: OpenApiPreviewRedoc,
     openApiPreviewView: OpenApiPreviewView,
-    retiredVersionJumpView: RetiredVersionJumpView,
     downloadConnector: DownloadConnector,
     mcc: MessagesControllerComponents,
     apiDefinitionService: ApiDefinitionService,
@@ -74,7 +73,7 @@ class OpenApiDocumentationController @Inject() (
       sidebarLinks = navigationService.sidebarNavigation()
     )
 
-  private def doRenderApiDocumentation(service: String, version: String, apiOption: Option[ExtendedApiDefinition])(implicit request: Request[AnyContent]): Future[Result] = {
+  private def doRenderApiDocumentation(service: ServiceName, version: String, apiOption: Option[ExtendedApiDefinition])(implicit request: Request[AnyContent]): Future[Result] = {
     def renderDocumentationPage(apiName: String): Future[Result] = {
       successful(Ok(openApiViewRedoc(service, version, apiName)))
     }
@@ -105,7 +104,7 @@ class OpenApiDocumentationController @Inject() (
     )
   }
 
-  def renderApiDocumentation(service: String, version: String) =
+  def renderApiDocumentation(service: ServiceName, version: String) =
     headerNavigation { implicit request => navLinks =>
       (for {
         userId           <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
@@ -121,7 +120,7 @@ class OpenApiDocumentationController @Inject() (
       }
     }
 
-  def fetchOas(service: String, version: String) = Action.async { implicit request =>
+  def fetchOas(service: ServiceName, version: String) = Action.async { implicit request =>
     downloadConnector.fetch(service, version, "application.yaml")
       .map {
         case Some(result) => result.withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
@@ -129,7 +128,7 @@ class OpenApiDocumentationController @Inject() (
       }
   }
 
-  def fetchOasResolved(service: String, version: String) = Action.async { implicit request =>
+  def fetchOasResolved(service: ServiceName, version: String) = Action.async { implicit request =>
     def handleSuccess(openApi: OpenAPI): Result =
       Ok(Yaml.pretty.writeValueAsString(openApi)).withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
     val handleFailure: Result                   = NotFound

@@ -130,28 +130,14 @@ case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation
 
   lazy val defaultVersion: ApiVersion = definition
     .versionsAsList
-    .sorted(ApiVersionSorting.statusVersionOrdering)
+    .sorted(WrappedApiDefinition.statusVersionOrdering)
     .head
 
-  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName.value, defaultVersion.versionNbr.value, None).url
+  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr.value, None).url
 }
 
-object ApiVersionSorting {
-
-  def priorityOf(apiStatus: ApiStatus): Int = {
-    apiStatus match {
-      case ApiStatus.STABLE     => 1
-      case ApiStatus.BETA       => 2
-      case ApiStatus.ALPHA      => 3
-      case ApiStatus.DEPRECATED => 4
-      case ApiStatus.RETIRED    => 5
-    }
-  }
-
-  implicit val statusOrdering: Ordering[ApiStatus]                         = Ordering.by[ApiStatus, Int](priorityOf)
-  implicit val statusVersionOrdering: Ordering[ApiVersion]                 = Ordering.by[ApiVersion, ApiStatus](_.status).reverse.orElseBy(_.versionNbr).reverse
-  implicit val statusExtendedVersionOrdering: Ordering[ExtendedApiVersion] = Ordering.by[ExtendedApiVersion, ApiStatus](_.status).reverse.orElseBy(_.version).reverse
-
+object WrappedApiDefinition {
+  val statusVersionOrdering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiStatus](_.status)(ApiStatus.orderingByPriority).reverse.orElseBy(_.versionNbr).reverse
 }
 
 case class DocumentationCategory(apiCategory: ApiCategory) {

@@ -34,11 +34,11 @@
         <select class="form-control form-control-version"
                 id="version"
                 name="version"
-                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName.toString, currentVersion.version.toString, None).url"
+                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version.toString, None).url"
                 onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
             @for(v <- api.sortedActiveVersions;
                 if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
-                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName.toString, v.version.toString, None).url">v@v.version (@v.displayedStatus)</option>
+                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version.toString, None).url">v@v.version (@v.displayedStatus)</option>
             }
         </select>
     </div>

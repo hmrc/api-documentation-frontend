@@ -15,10 +15,11 @@
  *@
 
 @import views.html.helper.CSPNonce
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 @this()
 
-@(serviceName: String, version: String, apiName: String)(implicit requestHeader: RequestHeader)
+@(serviceName: ServiceName, version: String, apiName: String)(implicit requestHeader: RequestHeader)
 
 <head>
   <title>@apiName - HMRC Developer Hub - GOV.UK</title>

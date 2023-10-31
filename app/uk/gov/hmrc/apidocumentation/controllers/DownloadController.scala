@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.mvc._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccessType, ExtendedApiDefinition}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccessType, ExtendedApiDefinition, ServiceName}
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -33,7 +33,6 @@ import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
 class DownloadController @Inject() (
-    documentationService: DocumentationService,
     apiDefinitionService: ApiDefinitionService,
     downloadConnector: DownloadConnector,
     loggedInUserService: LoggedInUserService,
@@ -43,7 +42,7 @@ class DownloadController @Inject() (
   )(implicit val ec: ExecutionContext
   ) extends FrontendController(cc) with ApplicationLogger {
 
-  def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
+  def downloadResource(service: ServiceName, version: String, resource: String) = Action.async { implicit request =>
     (for {
       userId       <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
       api          <- apiDefinitionService.fetchExtendedDefinition(service, userId)
@@ -72,17 +71,17 @@ class DownloadController @Inject() (
     def renderNotFoundPage =
       NotFound(errorHandler.notFoundTemplate)
 
-    def redirectToLoginPage(service: String) =
+    def redirectToLoginPage(service: ServiceName) =
       Future.successful(Redirect("/developer/login").withSession(
         "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url
       ))
 
     findVersion(apiOption) match {
       case Some((api, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _))) =>
-        redirectToLoginPage(api.serviceName.toString)
+        redirectToLoginPage(api.serviceName)
 
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
-        downloadConnector.fetch(api.serviceName.toString, selectedVersion.version.toString, validResource)
+        downloadConnector.fetch(api.serviceName, selectedVersion.version.toString, validResource)
           .map(_.getOrElse(renderNotFoundPage))
 
       case _ =>
