@@ -20,6 +20,9 @@ import scala.concurrent.Future.successful
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
+
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 
 trait DownloadConnectorMockModule extends MockitoSugar with ArgumentMatchersSugar {
@@ -30,7 +33,7 @@ trait DownloadConnectorMockModule extends MockitoSugar with ArgumentMatchersSuga
     object Fetch {
 
       def returnsNoneIfNotFound() = {
-        when(aMock.fetch(*, *, *)).thenReturn(successful(None))
+        when(aMock.fetch(*[ServiceName], *[ApiVersionNbr], *)).thenReturn(successful(None))
       }
     }
   }

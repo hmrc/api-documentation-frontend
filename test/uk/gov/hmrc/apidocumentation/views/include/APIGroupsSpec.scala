@@ -22,11 +22,13 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
 import play.twirl.api.HtmlFormat.Appendable
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.models.APICategory._
-import uk.gov.hmrc.apidocumentation.models.APIStatus._
 import uk.gov.hmrc.apidocumentation.models.{APICategory => _, _}
+import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.apidocumentation.views
 
 class APIGroupsSpec extends AsyncHmrcSpec {
@@ -38,35 +40,32 @@ class APIGroupsSpec extends AsyncHmrcSpec {
     lazy val serviceTags   = dom.getElementsByClass("govuk-tag")
   }
 
-  private def anApiDefinition(name: String, isTestSupport: Option[Boolean] = None) =
-    APIDefinition("serviceName", name, "description", "context", None, isTestSupport, Seq(APIVersion("1.0", None, STABLE, Seq.empty)), None)
-
   def anXmlApiDefinition(name: String) =
     XmlApiDocumentation(name, "description", "context")
 
   def aServiceGuide(name: String) =
     ServiceGuide(name, "context")
 
-  trait Setup {
+  trait Setup extends ApiDefinitionTestDataHelper {
 
     val customsApis = Seq(
-      anApiDefinition("customsTestSupport1", isTestSupport = Some(true)),
+      WrappedApiDefinition(apiDefinition("customsTestSupport1").copy(isTestSupport = true)),
       anXmlApiDefinition("customsXmlApi2"),
-      anApiDefinition("customsRestApi2"),
-      anApiDefinition("customsRestApi1"),
+      WrappedApiDefinition(apiDefinition("customsRestApi2")),
+      WrappedApiDefinition(apiDefinition("customsRestApi1")),
       anXmlApiDefinition("customsXmlApi1"),
-      anApiDefinition("customsTestSupport2", isTestSupport = Some(true))
+      WrappedApiDefinition(apiDefinition("customsTestSupport2").copy(isTestSupport = true))
     )
 
     val vatApis = Seq(
-      anApiDefinition("vatTestSupport1", isTestSupport = Some(true)),
+      WrappedApiDefinition(apiDefinition("vatTestSupport1").copy(isTestSupport = true)),
       anXmlApiDefinition("vatXmlApi1"),
-      anApiDefinition("vatRestApi2"),
-      anApiDefinition("vatRestApi1"),
-      anApiDefinition("vatTestSupport2", isTestSupport = Some(true))
+      WrappedApiDefinition(apiDefinition("vatRestApi2")),
+      WrappedApiDefinition(apiDefinition("vatRestApi1")),
+      WrappedApiDefinition(apiDefinition("vatTestSupport2").copy(isTestSupport = true))
     )
 
-    val apisByCategory: Map[APICategory, Seq[Documentation]] = Map(CUSTOMS -> customsApis, VAT -> vatApis)
+    val apisByCategory: Map[ApiCategory, Seq[Documentation]] = Map(ApiCategory.CUSTOMS -> customsApis, ApiCategory.VAT -> vatApis)
     val page                                                 = Page(views.html.include.documentGroups(apisByCategory))
   }
 

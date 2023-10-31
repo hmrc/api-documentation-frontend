@@ -20,28 +20,29 @@ import scala.concurrent.Future.{failed, successful}
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 
 trait ApiDefinitionServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   val apiDefinitionService = mock[ApiDefinitionService]
 
-  def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedAPIDefinition) = {
-    when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(successful(Some(apiDefinition)))
+  def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedApiDefinition) = {
+    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(*)).thenReturn(successful(Some(apiDefinition)))
   }
 
   def theDefinitionServiceWillReturnNoApiDefinition() = {
-    when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(successful(None))
+    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(*)).thenReturn(successful(None))
   }
 
   def theDefinitionServiceWillFail(exception: Throwable) = {
-    when(apiDefinitionService.fetchExtendedDefinition(*, *)(*)).thenReturn(failed(exception))
+    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(*)).thenReturn(failed(exception))
 
     when(apiDefinitionService.fetchAllDefinitions(*)(*))
       .thenReturn(failed(exception))
   }
 
-  def theDefinitionServiceWillReturnApiDefinitions(apis: Seq[APIDefinition]) = {
+  def theDefinitionServiceWillReturnApiDefinitions(apis: Seq[ApiDefinition]) = {
     when(apiDefinitionService.fetchAllDefinitions(*)(*))
       .thenReturn(successful(apis))
   }

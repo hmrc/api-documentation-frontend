@@ -15,9 +15,13 @@
           "method": "GET",
           "authType": "USER",
           "throttlingTier": "UNLIMITED",
-          "scope": "read:individual-benefits"
+          "scope": "read:individual-benefits",
+          "queryParameters": []
         }
-      ]
+      ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS"
     }
-  ]
+  ],
+  "categories":[ "OTHER" ]
 }

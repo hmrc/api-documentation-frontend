@@ -21,12 +21,13 @@ import scala.concurrent.Future
 
 import play.api.http.Status._
 import play.api.mvc._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccess, ServiceName}
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.apidocumentation.mocks.config._
 import uk.gov.hmrc.apidocumentation.mocks.services._
-import uk.gov.hmrc.apidocumentation.models.APIAccessType
 
 class DownloadControllerSpec extends CommonControllerBaseSpec {
 
@@ -40,13 +41,13 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
 
     val errorHandler = app.injector.instanceOf[ErrorHandler]
 
-    val version      = "2.0"
+    val version      = ApiVersionNbr("2.0")
     val resourceName = "some/resource"
 
-    val underTest = new DownloadController(documentationService, apiDefinitionService, downloadConnector, loggedInUserService, errorHandler, appConfig, mcc)
+    val underTest = new DownloadController(apiDefinitionService, downloadConnector, loggedInUserService, errorHandler, appConfig, mcc)
 
     def theDownloadConnectorWillReturnTheResult(result: Results.Status) = {
-      when(downloadConnector.fetch(any[String], any[String], any[String])).thenReturn(Future.successful(Some(result)))
+      when(downloadConnector.fetch(*[ServiceName], *[ApiVersionNbr], *[String])).thenReturn(Future.successful(Some(result)))
     }
 
     theUserIsNotLoggedIn()
@@ -55,10 +56,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
   "DownloadController" should {
     "download the resource when found" in new Setup {
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(
-          serviceName = serviceName,
-          version = version
-        )
+        extendedApiDefinition(serviceName = serviceName.value, version = version)
       )
       theDownloadConnectorWillReturnTheResult(Results.Ok)
 
@@ -67,10 +65,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
 
     "return 404 code when the resource not found" in new Setup {
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(
-          serviceName = serviceName,
-          version = version
-        )
+        extendedApiDefinition(serviceName = serviceName.value, version = version)
       )
       theDownloadConnectorWillReturnTheResult(Results.NotFound)
 
@@ -79,10 +74,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
 
     "error when the resource name contains '..'" in new Setup {
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(
-          serviceName = serviceName,
-          version = version
-        )
+        extendedApiDefinition(serviceName = serviceName.value, version = version)
       )
 
       await(underTest.downloadResource(serviceName, version, "../secret")(request)).header.status shouldBe INTERNAL_SERVER_ERROR
@@ -91,13 +83,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
     "redirect to the login page when the API is private and the user is not logged in" in new Setup {
       theUserIsNotLoggedIn()
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(
-          serviceName = serviceName,
-          version = version,
-          access = APIAccessType.PRIVATE,
-          loggedIn = false,
-          authorised = false
-        )
+        extendedApiDefinition(serviceName = serviceName.value, version = version, access = ApiAccess.Private(), authorised = false)
       )
 
       val result = underTest.downloadResource(serviceName, version, resourceName)(request)

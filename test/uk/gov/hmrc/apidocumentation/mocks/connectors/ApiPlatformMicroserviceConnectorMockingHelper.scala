@@ -20,43 +20,44 @@ import scala.concurrent.Future
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition, UuidIdentifier}
+import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
 
 trait ApiPlatformMicroserviceConnectorMockingHelper extends MockitoSugar with ArgumentMatchersSugar {
 
-  def whenFetchAllDefinitions[T <: ApiPlatformMicroserviceConnector](base: T)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
+  def whenFetchAllDefinitions[T <: ApiPlatformMicroserviceConnector](base: T)(apis: ApiDefinition*)(implicit hc: HeaderCarrier) = {
     when(base.fetchApiDefinitionsByCollaborator(*)(eqTo(hc)))
-      .thenReturn(Future.successful(apis.toSeq))
+      .thenReturn(Future.successful(apis.toList))
   }
 
-  def whenFetchAllDefinitionsWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)(userId: UuidIdentifier)(apis: APIDefinition*)(implicit hc: HeaderCarrier) = {
+  def whenFetchAllDefinitionsWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)(userId: UuidIdentifier)(apis: ApiDefinition*)(implicit hc: HeaderCarrier) = {
     when(base.fetchApiDefinitionsByCollaborator(*)(eqTo(hc)))
-      .thenReturn(Future.successful(apis.toSeq))
+      .thenReturn(Future.successful(apis.toList))
   }
 
-  def whenFetchExtendedDefinition[T <: ApiPlatformMicroserviceConnector](base: T)(serviceName: String)(api: ExtendedAPIDefinition)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
+  def whenFetchExtendedDefinition[T <: ApiPlatformMicroserviceConnector](base: T)(serviceName: ServiceName)(api: ExtendedApiDefinition)(implicit hc: HeaderCarrier) = {
+    when(base.fetchExtendedApiDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
   def whenFetchExtendedDefinitionWithEmail[T <: ApiPlatformMicroserviceConnector](
       base: T
     )(
-      serviceName: String,
+      serviceName: ServiceName,
       userId: UuidIdentifier
     )(
-      api: ExtendedAPIDefinition
+      api: ExtendedApiDefinition
     )(implicit hc: HeaderCarrier
     ) = {
-    when(base.fetchApiDefinition(eqTo(serviceName), *)(eqTo(hc)))
+    when(base.fetchExtendedApiDefinition(eqTo(serviceName), *)(eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
   def whenFetchExtendedDefinitionFails[T <: ApiPlatformMicroserviceConnector](base: T)(exception: Throwable)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinition(*, *)(eqTo(hc)))
+    when(base.fetchExtendedApiDefinition(*[ServiceName], *)(eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 }

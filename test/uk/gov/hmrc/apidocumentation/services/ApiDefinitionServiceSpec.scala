@@ -24,6 +24,7 @@ import scala.reflect.ClassTag
 import akka.Done
 
 import play.api.cache._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 import uk.gov.hmrc.play.http.metrics.common.NoopApiMetrics
 
@@ -51,6 +52,7 @@ class ApiDefinitionServiceSpec extends AsyncHmrcSpec
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val loggedInUserEmail          = "3rdparty@example.com"
     val loggedInUserId             = UuidIdentifier(UserId.random)
+    val serviceName                = ServiceName("buddist-calendar")
 
     val apiPlatformMicroserviceConnector = mock[ApiPlatformMicroserviceConnector]
     val underTest                        = new ApiDefinitionService(doNothingCache, apiPlatformMicroserviceConnector, new NoopApiMetrics)
@@ -81,28 +83,28 @@ class ApiDefinitionServiceSpec extends AsyncHmrcSpec
   "fetchExtendedDefinition with user session handling" should {
 
     "fetch a single API if there is no user logged in" in new LocalSetup {
-      whenFetchExtendedDefinition(apiPlatformMicroserviceConnector)("buddist-calendar")(extendedApiDefinition("buddist-calendar"))
+      whenFetchExtendedDefinition(apiPlatformMicroserviceConnector)(serviceName)(extendedApiDefinition(serviceName.value))
 
-      val result = await(underTest.fetchExtendedDefinition("buddist-calendar", None))
+      val result = await(underTest.fetchExtendedDefinition(serviceName, None))
 
       result shouldBe defined
-      result.get.name shouldBe "buddist-calendar"
+      result.get.serviceName shouldBe serviceName
     }
 
     "fetch a single API for user email if a user is logged in" in new LocalSetup {
-      whenFetchExtendedDefinitionWithEmail(apiPlatformMicroserviceConnector)("buddist-calendar", loggedInUserId)(extendedApiDefinition("buddist-calendar"))
+      whenFetchExtendedDefinitionWithEmail(apiPlatformMicroserviceConnector)(serviceName, loggedInUserId)(extendedApiDefinition("buddist-calendar"))
 
-      val result = await(underTest.fetchExtendedDefinition("buddist-calendar", Some(loggedInUserId)))
+      val result = await(underTest.fetchExtendedDefinition(serviceName, Some(loggedInUserId)))
 
       result shouldBe defined
-      result.get.name shouldBe "buddist-calendar"
+      result.get.serviceName shouldBe serviceName
     }
 
     "reject for an unsubscribed API for user email if a user is logged in" in new LocalSetup {
       whenFetchExtendedDefinitionFails(apiPlatformMicroserviceConnector)(new NotFoundException("Expected unit test exception"))
 
       intercept[NotFoundException] {
-        await(underTest.fetchExtendedDefinition("buddist-calendar", Some(loggedInUserId)))
+        await(underTest.fetchExtendedDefinition(serviceName, Some(loggedInUserId)))
       }
     }
   }

@@ -15,18 +15,18 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.models.APICategory._
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
-@(documentsByCategory: Map[APICategory, Seq[Documentation]], filter: Option[APICategory] = None)
+@(categories: List[ApiCategory], filter: Option[ApiCategory] = None)
 
 <div class="filter-container">
     <form method="GET" action="">
         <div class="govuk-form-group">
             <label class="govuk-label" for="service-filter">Service</label>
             <select class="govuk-select" id="service-filter" name="filter">
-                <option disabled selected>Select a service</option>
-                @for(service <- documentsByCategory.keys.toSeq.sorted) {
-                    <option @if(filter.map(_.displayName) == Some(service.displayName)) { selected } value="@service.filter">@service.displayName</option>
+                <option disabled @if(filter.isEmpty){ selected }>Select a service</option>
+                @for(service <- categories) {
+                    <option @if(filter.map(_.displayText).contains(service.displayText)) { selected } value="@DocumentationCategory(service).filter">@service.displayText</option>
                 }
             </select>
         </div>

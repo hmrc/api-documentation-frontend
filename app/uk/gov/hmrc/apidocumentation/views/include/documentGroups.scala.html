@@ -15,10 +15,10 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.models.APICategory._
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 @import uk.gov.hmrc.apidocumentation.models.Documentation
 
-@(documentsByCategory: Map[APICategory, Seq[Documentation]])
+@(documentsByCategory: Map[ApiCategory, Seq[Documentation]])
 
 <table class="govuk-table">
     <caption class="govuk-table__caption govuk-heading-m">Full list of API documentation</caption>
@@ -33,9 +33,9 @@
         <tbody class="govuk-table__body">
             @for((document, index) <- documents.sortBy(_.label).zipWithIndex) {
                 <tr class="govuk-table__row">
-                    @if(index == 0) { <td class="govuk-table__cell api-group">@category.displayName</td> } else { <td class="govuk-table__cell"></td> }
+                    @if(index == 0) { <td class="govuk-table__cell api-group">@category.displayText</td> } else { <td class="govuk-table__cell"></td> }
                     <td class="govuk-table__cell">
-                        <a id="@category.filter-@document.nameAsId-@document.label.modifier" class="govuk-link" href="@document.documentationUrl">@document.name</a>
+                        <a id="@DocumentationCategory(category).filter-@document.nameAsId-@document.label.modifier" class="govuk-link" href="@document.documentationUrl">@document.name</a>
                     </td>
                     <td class="govuk-table__cell">
                         <strong class="govuk-tag govuk-tag--@document.label.modifier">@document.label.displayName</strong>

@@ -22,6 +22,8 @@ import akka.stream.testkit.NoMaterializer
 
 import play.api.mvc._
 import play.api.test.Helpers._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.controllers.{CommonControllerBaseSpec, routes}
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
@@ -56,7 +58,7 @@ trait PageRenderVerification {
     contentAsString(result).contains(navLink.href) && contentAsString(result).contains(navLink.label)
   }
 
-  def versionOptionIsRendered(result: Future[Result], service: String, version: String, displayedStatus: String) = {
+  def versionOptionIsRendered(result: Future[Result], version: String, displayedStatus: String): Boolean = {
     contentAsString(result).contains(s"""<option selected value="$version" aria-label="Select to view documentation for v$version ($displayedStatus)">""")
   }
 
@@ -94,11 +96,11 @@ trait PageRenderVerification {
     contentAsString(actualPage) should include(expectedError)
   }
 
-  def verifyApiDocumentationPageRendered(actualPage: Future[Result], version: String, apiStatus: String) = {
+  def verifyApiDocumentationPageRendered(actualPage: Future[Result]): Unit = {
     verifyPageRendered(pageTitle("Hello World"), breadcrumbs = List(homeBreadcrumb, apiDocsBreadcrumb))(actualPage)
   }
 
-  def verifyLinkToStableDocumentationRendered(actualPage: Future[Result], service: String, version: String) = {
+  def verifyLinkToStableDocumentationRendered(actualPage: Future[Result], service: ServiceName, version: ApiVersionNbr) = {
     contentAsString(actualPage) should include(s"""<a href="/api-documentation/docs/api/service/$service/$version">""")
   }
 }

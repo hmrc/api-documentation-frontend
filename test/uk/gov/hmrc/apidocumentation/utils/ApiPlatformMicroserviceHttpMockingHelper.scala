@@ -19,18 +19,17 @@ package uk.gov.hmrc.apidocumentation.utils
 import com.github.tomakehurst.wiremock.client.WireMock._
 
 import play.api.test.Helpers._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 import uk.gov.hmrc.apidocumentation.common.utils._
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl}
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition, UuidIdentifier}
+import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
 
 trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
 
   def apiPlatformMicroserviceBaseUrl: String
 
-  import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
-
-  def whenGetAllDefinitionsByUserId(userId: UuidIdentifier)(definitions: APIDefinition*): Unit = {
+  def whenGetAllDefinitionsByUserId(userId: UuidIdentifier)(definitions: ApiDefinition*): Unit = {
     val url = definitionsUrl("")
     stubFor(
       get(
@@ -40,12 +39,12 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
         .willReturn(
           aResponse()
             .withStatus(OK)
-            .withJsonBody(definitions.toSeq)
+            .withJsonBody(definitions.toList)
         )
     )
   }
 
-  def whenGetAllDefinitionsByUserId(definitions: APIDefinition*): Unit = {
+  def whenGetAllDefinitionsByUserId(definitions: ApiDefinition*): Unit = {
     val url = definitionsUrl("")
     stubFor(
       get(
@@ -54,7 +53,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
         .willReturn(
           aResponse()
             .withStatus(OK)
-            .withJsonBody(definitions.toSeq)
+            .withJsonBody(definitions.toList)
         )
     )
   }
@@ -72,7 +71,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
     )
   }
 
-  def whenGetDefinitionByEmail(serviceName: String, userId: UuidIdentifier)(definition: ExtendedAPIDefinition): Unit = {
+  def whenGetDefinitionByEmail(serviceName: ServiceName, userId: UuidIdentifier)(definition: ExtendedApiDefinition): Unit = {
     val url = definitionUrl("", serviceName)
     stubFor(
       get(
@@ -87,7 +86,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
     )
   }
 
-  def whenGetDefinition(serviceName: String)(definition: ExtendedAPIDefinition): Unit = {
+  def whenGetDefinition(serviceName: ServiceName)(definition: ExtendedApiDefinition): Unit = {
     val url = definitionUrl("", serviceName)
     stubFor(
       get(
@@ -101,7 +100,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
     )
   }
 
-  def whenGetDefinitionFindsNothing(serviceName: String): Unit = {
+  def whenGetDefinitionFindsNothing(serviceName: ServiceName): Unit = {
     val url = definitionUrl("", serviceName)
     stubFor(
       get(
@@ -114,7 +113,7 @@ trait ApiPlatformMicroserviceHttpMockingHelper extends WireMockSugarExtensions {
     )
   }
 
-  def whenGetDefinitionFails(serviceName: String)(status: Int): Unit = {
+  def whenGetDefinitionFails(serviceName: ServiceName)(status: Int): Unit = {
     val url = definitionUrl("", serviceName)
     stubFor(
       get(

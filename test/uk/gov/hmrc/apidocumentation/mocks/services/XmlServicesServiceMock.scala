@@ -20,7 +20,9 @@ import scala.concurrent.Future.{failed, successful}
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
-import uk.gov.hmrc.apidocumentation.models.{APICategory, XmlApiDocumentation}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
+
+import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
 import uk.gov.hmrc.apidocumentation.services.XmlServicesService
 
 trait XmlServicesServiceMock extends MockitoSugar with ArgumentMatchersSugar {
@@ -40,7 +42,7 @@ trait XmlServicesServiceMock extends MockitoSugar with ArgumentMatchersSugar {
     context = "/government/collections/vat-and-ec-sales-list-online-support-for-software-developers",
     description =
       "Technical specifications for software developers working with the VAT and EC Sales List Online service. This API is not part of the Making Tax Digital initiative.",
-    categories = Some(Seq(APICategory.VAT, APICategory.CUSTOMS))
+    categories = Some(Seq(ApiCategory.VAT, ApiCategory.CUSTOMS))
   )
 
   lazy val xmlServicesService: XmlServicesService = mock[XmlServicesService]

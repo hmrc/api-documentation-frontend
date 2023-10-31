@@ -25,10 +25,11 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-import uk.gov.hmrc.apidocumentation.models.APIAccessType.APIAccessType
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
@@ -45,141 +46,149 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
 
   implicit val hc = HeaderCarrier()
 
-  val serviceName  = "hello-world"
+  val serviceName  = ServiceName("hello-world")
   val endpointName = "Say Hello World!"
-
-  def anApiDefinition(serviceName: String, version: String): APIDefinition = {
-    APIDefinition(serviceName, "Hello World", "Say Hello World", "hello", None, None, Seq(APIVersion(version, None, APIStatus.STABLE, Seq(endpoint()))))
-  }
 
   def anXmlApiDefinition(name: String) = XmlApiDocumentation(name, "description", "context")
 
   def extendedApiDefinition(
       serviceName: String,
       name: String = "Hello World",
-      version: String = "1.0",
-      access: APIAccessType = APIAccessType.PUBLIC,
+      version: ApiVersionNbr = ApiVersionNbr("1.0"),
+      access: ApiAccess = ApiAccess.PUBLIC,
       loggedIn: Boolean = false,
       authorised: Boolean = true,
-      isTrial: Option[Boolean] = None,
       isTestSupport: Boolean = false
-    ): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(
-      serviceName,
+    ): ExtendedApiDefinition = {
+    ExtendedApiDefinition(
+      ServiceName(serviceName),
+      "/world",
       name,
       "Say Hello World",
-      "hello",
-      requiresTrust = false,
-      isTestSupport,
-      Seq(
-        ExtendedAPIVersion(
+      ApiContext("hello"),
+      versions = List(
+        ExtendedApiVersion(
           version,
-          APIStatus.STABLE,
-          Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)),
-          Some(APIAvailability(endpointsEnabled = true, APIAccess(access, whitelistedApplicationIds = Some(Seq.empty), isTrial = isTrial), loggedIn, authorised)),
+          ApiStatus.STABLE,
+          List(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)),
+          Some(ApiAvailability(endpointsEnabled = true, access, loggedIn, authorised)),
           None
         )
-      )
+      ),
+      requiresTrust = false,
+      isTestSupport = isTestSupport,
+      lastPublishedAt = None,
+      categories = List(ApiCategory.OTHER)
     )
   }
 
-  def extendedApiDefinitionWithNoAPIAvailability(serviceName: String, version: String): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(
+  def extendedApiDefinitionWithNoAPIAvailability(serviceName: ServiceName, version: ApiVersionNbr): ExtendedApiDefinition = {
+    ExtendedApiDefinition(
       serviceName,
+      "/world",
       "Hello World",
       "Say Hello World",
-      "hello",
+      ApiContext("hello"),
+      List(ExtendedApiVersion(version, ApiStatus.STABLE, List(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)), None, None)),
       requiresTrust = false,
       isTestSupport = false,
-      Seq(
-        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)), None, None)
-      )
+      lastPublishedAt = None,
+      categories = List(ApiCategory.OTHER)
     )
   }
 
   def extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
-      serviceName: String,
-      version: String,
-      principalApiAvailability: Option[APIAvailability],
-      subordinateApiAvailability: Option[APIAvailability]
-    ): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(
+      serviceName: ServiceName,
+      version: ApiVersionNbr,
+      principalApiAvailability: Option[ApiAvailability],
+      subordinateApiAvailability: Option[ApiAvailability]
+    ): ExtendedApiDefinition = {
+    ExtendedApiDefinition(
       serviceName,
+      "hello",
       "Hello World",
       "Say Hello World",
-      "hello",
+      ApiContext("hello"),
+      versions = List(
+        ExtendedApiVersion(version, ApiStatus.STABLE, List(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)), principalApiAvailability, subordinateApiAvailability)
+      ),
       requiresTrust = false,
       isTestSupport = false,
-      Seq(
-        ExtendedAPIVersion(version, APIStatus.STABLE, Seq(Endpoint(endpointName, "/world", HttpMethod.GET, None)), principalApiAvailability, subordinateApiAvailability)
-      )
+      lastPublishedAt = None,
+      categories = List(ApiCategory.OTHER)
     )
   }
 
-  def extendedApiDefinitionWithRetiredVersion(serviceName: String, retiredVersion: String, nonRetiredVersion: String) = {
-    ExtendedAPIDefinition(
+  def extendedApiDefinitionWithRetiredVersion(serviceName: ServiceName, retiredVersion: ApiVersionNbr, nonRetiredVersion: ApiVersionNbr) = {
+    ExtendedApiDefinition(
       serviceName,
-      "Hello World",
-      "Say Hello World",
-      "hello",
-      requiresTrust = false,
-      isTestSupport = false,
-      Seq(
-        ExtendedAPIVersion(
+      serviceBaseUrl = "/world",
+      name = "Hello World",
+      description = "Say Hello World",
+      context = ApiContext("hello"),
+      versions = List(
+        ExtendedApiVersion(
           retiredVersion,
-          APIStatus.RETIRED,
-          Seq(endpoint(endpointName)),
-          Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
+          ApiStatus.RETIRED,
+          List(endpoint(endpointName)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = false, authorised = true)),
           None
         ),
-        ExtendedAPIVersion(
+        ExtendedApiVersion(
           nonRetiredVersion,
-          APIStatus.STABLE,
-          Seq(endpoint(endpointName)),
-          Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC, Some(Seq.empty)), loggedIn = false, authorised = true)),
+          ApiStatus.STABLE,
+          List(endpoint(endpointName)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = false, authorised = true)),
           None
         )
-      )
+      ),
+      requiresTrust = false,
+      isTestSupport = false,
+      lastPublishedAt = None,
+      categories = List(ApiCategory.OTHER)
     )
   }
 
-  def extendedApiDefinitionWithRetiredVersionAndInaccessibleLatest(serviceName: String): ExtendedAPIDefinition = {
-    ExtendedAPIDefinition(
-      serviceName,
-      "Hello World",
-      "Say Hello World",
-      "hello",
-      requiresTrust = false,
-      isTestSupport = false,
-      Seq(
-        ExtendedAPIVersion(
-          "1.0",
-          APIStatus.RETIRED,
-          Seq(endpoint(endpointName)),
-          Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
+  def extendedApiDefinitionWithRetiredVersionAndInaccessibleLatest(serviceName: String): ExtendedApiDefinition = {
+    ExtendedApiDefinition(
+      ServiceName(serviceName),
+      serviceBaseUrl = "/world",
+      name = "Hello World",
+      description = "Say Hello World",
+      context = ApiContext("hello"),
+      versions = List(
+        ExtendedApiVersion(
+          ApiVersionNbr("1.0"),
+          ApiStatus.RETIRED,
+          List(endpoint(endpointName)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = false, authorised = true)),
           None
         ),
-        ExtendedAPIVersion(
-          "1.1",
-          APIStatus.BETA,
-          Seq(endpoint(endpointName)),
-          Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PUBLIC), loggedIn = false, authorised = true)),
+        ExtendedApiVersion(
+          ApiVersionNbr("1.1"),
+          ApiStatus.BETA,
+          List(endpoint(endpointName)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = false, authorised = true)),
           None
         ),
-        ExtendedAPIVersion(
-          "1.2",
-          APIStatus.STABLE,
-          Seq(endpoint(endpointName)),
-          Some(APIAvailability(endpointsEnabled = true, APIAccess(APIAccessType.PRIVATE), loggedIn = false, authorised = false)),
+        ExtendedApiVersion(
+          ApiVersionNbr("1.2"),
+          ApiStatus.STABLE,
+          List(endpoint(endpointName)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.Private(false), loggedIn = false, authorised = false)),
           None
         )
-      )
+      ),
+      requiresTrust = false,
+      isTestSupport = false,
+      lastPublishedAt = None,
+      categories = List(ApiCategory.OTHER)
     )
   }
 
   def aServiceGuide(name: String) = ServiceGuide(name, "context")
 
-  def verifyRedirectToLoginPage(actualPage: Future[Result], service: String, version: String): Unit = {
+  def verifyRedirectToLoginPage(actualPage: Future[Result], service: ServiceName, version: ApiVersionNbr): Unit = {
     status(actualPage) shouldBe 303
 
     headers(actualPage).get("Location") shouldBe Some("/developer/login")

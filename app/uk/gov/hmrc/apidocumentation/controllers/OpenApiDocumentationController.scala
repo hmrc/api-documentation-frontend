@@ -33,6 +33,8 @@ import io.swagger.v3.parser.exception.ReadContentException
 
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -49,7 +51,6 @@ class OpenApiDocumentationController @Inject() (
     openApiViewRedoc: OpenApiViewRedoc,
     openApiPreviewRedoc: OpenApiPreviewRedoc,
     openApiPreviewView: OpenApiPreviewView,
-    retiredVersionJumpView: RetiredVersionJumpView,
     downloadConnector: DownloadConnector,
     mcc: MessagesControllerComponents,
     apiDefinitionService: ApiDefinitionService,
@@ -73,7 +74,7 @@ class OpenApiDocumentationController @Inject() (
       sidebarLinks = navigationService.sidebarNavigation()
     )
 
-  private def doRenderApiDocumentation(service: String, version: String, apiOption: Option[ExtendedAPIDefinition])(implicit request: Request[AnyContent]): Future[Result] = {
+  private def doRenderApiDocumentation(service: ServiceName, version: ApiVersionNbr, apiOption: Option[ExtendedApiDefinition])(implicit request: Request[AnyContent]): Future[Result] = {
     def renderDocumentationPage(apiName: String): Future[Result] = {
       successful(Ok(openApiViewRedoc(service, version, apiName)))
     }
@@ -81,18 +82,18 @@ class OpenApiDocumentationController @Inject() (
     def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
     def badRequestPage     = Future.successful(BadRequest(errorHandler.badRequestTemplate))
 
-    def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
+    def findVersion(apiOption: Option[ExtendedApiDefinition]) =
       for {
         api        <- apiOption
         apiVersion <- api.versions.find(v => v.version == version)
-        visibility <- apiVersion.visibility
+        visibility <- VersionVisibility(apiVersion)
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == APIStatus.RETIRED => badRequestPage
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == ApiStatus.RETIRED => badRequestPage
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                => renderDocumentationPage(api.name)
-      case Some((api, selectedVersion, VersionVisibility(APIAccessType.PRIVATE, _, false, Some(true))))                  => renderDocumentationPage(api.name) // TODO - makes no sense for oas/page
-      case Some((_, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _)))                                           => badRequestPage
+      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.PRIVATE, _, false, true)))                        => renderDocumentationPage(api.name) // TODO - makes no sense for oas/page
+      case Some((_, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _)))                                           => badRequestPage
       case _                                                                                                             => renderNotFoundPage
     }
 
@@ -104,7 +105,7 @@ class OpenApiDocumentationController @Inject() (
     )
   }
 
-  def renderApiDocumentation(service: String, version: String) =
+  def renderApiDocumentation(service: ServiceName, version: ApiVersionNbr) =
     headerNavigation { implicit request => navLinks =>
       (for {
         userId           <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
@@ -120,7 +121,7 @@ class OpenApiDocumentationController @Inject() (
       }
     }
 
-  def fetchOas(service: String, version: String) = Action.async { implicit request =>
+  def fetchOas(service: ServiceName, version: ApiVersionNbr) = Action.async { implicit request =>
     downloadConnector.fetch(service, version, "application.yaml")
       .map {
         case Some(result) => result.withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
@@ -128,7 +129,7 @@ class OpenApiDocumentationController @Inject() (
       }
   }
 
-  def fetchOasResolved(service: String, version: String) = Action.async { implicit request =>
+  def fetchOasResolved(service: ServiceName, version: ApiVersionNbr) = Action.async { implicit request =>
     def handleSuccess(openApi: OpenAPI): Result =
       Ok(Yaml.pretty.writeValueAsString(openApi)).withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
     val handleFailure: Result                   = NotFound

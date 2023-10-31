@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models.DocsVisibility
 @import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services._
@@ -25,7 +26,7 @@
 
 @this(applicationConfig: ApplicationConfig)
 
-@(viewModel: ViewModel, maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false)(implicit requestHeader: RequestHeader)
+@(viewModel: ViewModel, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false)(implicit requestHeader: RequestHeader)
 
 @renderGetApiVersionForm = {
     @for(api <- maybeApi) {
@@ -37,7 +38,7 @@
                 </label>
                 <select class="govuk-select version-select" id="version" name="version">
                     @for(v <- api.sortedActiveVersions;
-                    if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
+                    if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
                     <option @if(v == version) {selected} value="@v.version" aria-label="Select to view documentation for v@v.version (@v.displayedStatus)">v@v.version (@v.displayedStatus)</option>
                     }
                 </select>
@@ -112,7 +113,7 @@
             </a>
         </p>
 
-        @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.flatMap(_.visibility)))) { case (isPreview, visibility) =>
+        @defining((maybeVersion.isEmpty, VersionDocsVisible(maybeVersion.flatMap(VersionVisibility(_))))) { case (isPreview, visibility) =>
             @if(isPreview || visibility == DocsVisibility.VISIBLE) {
                 <section id="endpoints" class="section">
                     <h2 id="endpoints-title" class="govuk-heading-m">

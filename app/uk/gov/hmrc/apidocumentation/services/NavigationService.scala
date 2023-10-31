@@ -19,13 +19,14 @@ package uk.gov.hmrc.apidocumentation.services
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ExtendedApiVersion
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
-import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ExtendedAPIVersion, NavLink, SidebarLink}
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, NavLink, SidebarLink}
 import uk.gov.hmrc.apidocumentation.views.helpers._
 
 @Singleton
@@ -107,7 +108,7 @@ class NavigationService @Inject() (
 
   def sidebarNavigation() = sidebarNavigationLinks
 
-  def apiSidebarNavigation2(service: String, version: ExtendedAPIVersion, apiSpecification: ApiSpecification): Seq[SidebarLink] = {
+  def apiSidebarNavigation2(version: ExtendedApiVersion, apiSpecification: ApiSpecification): Seq[SidebarLink] = {
     val subLinks = apiSpecification.resourceGroups
       .map(group => group.name)
       .filter(_.nonEmpty)
@@ -119,7 +120,7 @@ class NavigationService @Inject() (
     }
 
     val resources =
-      if (VersionDocsVisible(version.visibility) == DocsVisibility.OVERVIEW_ONLY) {
+      if (VersionDocsVisible(version) == DocsVisibility.OVERVIEW_ONLY) {
         SidebarLink(
           label = "Read more",
           href = "#read-more"
@@ -136,7 +137,7 @@ class NavigationService @Inject() (
     sections :+ resources
   }
 
-  def openApiSidebarNavigation(service: String, version: ExtendedAPIVersion, markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
+  def openApiSidebarNavigation(markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
     val variableSidebar = markdownBlocks.map(mb => SidebarLink(label = mb.title, href = s"#${Slugify(mb.title)}"))
     val fixedSidebar    = SidebarLink(label = "Endpoints", href = s"#endpoints-title")
 

@@ -20,6 +20,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.mvc._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccessType, ExtendedApiDefinition, ServiceName}
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -27,12 +29,11 @@ import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, DocumentationService, LoggedInUserService}
+import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
 class DownloadController @Inject() (
-    documentationService: DocumentationService,
     apiDefinitionService: ApiDefinitionService,
     downloadConnector: DownloadConnector,
     loggedInUserService: LoggedInUserService,
@@ -42,7 +43,7 @@ class DownloadController @Inject() (
   )(implicit val ec: ExecutionContext
   ) extends FrontendController(cc) with ApplicationLogger {
 
-  def downloadResource(service: String, version: String, resource: String) = Action.async { implicit request =>
+  def downloadResource(service: ServiceName, version: ApiVersionNbr, resource: String) = Action.async { implicit request =>
     (for {
       userId       <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
       api          <- apiDefinitionService.fetchExtendedDefinition(service, userId)
@@ -60,24 +61,24 @@ class DownloadController @Inject() (
     }
   }
 
-  private def fetchResourceForApi(apiOption: Option[ExtendedAPIDefinition], version: String, validResource: String)(implicit request: Request[_]): Future[Result] = {
-    def findVersion(apiOption: Option[ExtendedAPIDefinition]) =
+  private def fetchResourceForApi(apiOption: Option[ExtendedApiDefinition], version: ApiVersionNbr, validResource: String)(implicit request: Request[_]): Future[Result] = {
+    def findVersion(apiOption: Option[ExtendedApiDefinition]) =
       for {
         api        <- apiOption
-        apiVersion <- api.versions.find(v => v.version == version)
-        visibility <- apiVersion.visibility
+        apiVersion <- api.versions.find(v => version == v.version)
+        visibility <- VersionVisibility(apiVersion)
       } yield (api, apiVersion, visibility)
 
     def renderNotFoundPage =
       NotFound(errorHandler.notFoundTemplate)
 
-    def redirectToLoginPage(service: String) =
+    def redirectToLoginPage(service: ServiceName) =
       Future.successful(Redirect("/developer/login").withSession(
         "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url
       ))
 
     findVersion(apiOption) match {
-      case Some((api, _, VersionVisibility(APIAccessType.PRIVATE, false, _, _))) =>
+      case Some((api, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _))) =>
         redirectToLoginPage(api.serviceName)
 
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>

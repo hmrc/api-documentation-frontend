@@ -20,10 +20,9 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
 import play.twirl.api.HtmlFormat.Appendable
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-import uk.gov.hmrc.apidocumentation.models.APICategory._
-import uk.gov.hmrc.apidocumentation.models.APIDefinition
 import uk.gov.hmrc.apidocumentation.views
 
 class APIFilterSpec extends AsyncHmrcSpec {
@@ -35,19 +34,16 @@ class APIFilterSpec extends AsyncHmrcSpec {
     lazy val selectedVersion = dropdown.getElementsByAttribute("selected").last
   }
 
-  class Setup(filter: Option[APICategory] = None) {
+  class Setup(filter: Option[ApiCategory] = None) {
 
-    val apisByCategory: Map[APICategory, Seq[APIDefinition]] = Map(
-      CUSTOMS -> Seq.empty,
-      VAT     -> Seq.empty
-    )
-    val page                                                 = Page(views.html.include.documentFilter(apisByCategory, filter))
+    val apisByCategory = List(ApiCategory.CUSTOMS, ApiCategory.VAT)
+    val page           = Page(views.html.include.documentFilter(apisByCategory, filter))
   }
 
   "api filter" when {
     "no filter provided" should {
       "render the dropdown based on the provided categories" in new Setup {
-        page.options.size shouldBe apisByCategory.keys.size + 1
+        page.options.size shouldBe apisByCategory.size + 1
       }
 
       "select the default disabled option" in new Setup {
@@ -56,11 +52,11 @@ class APIFilterSpec extends AsyncHmrcSpec {
     }
 
     "filter is provided" should {
-      "render the dropdown based on the provided categories" in new Setup(filter = Some(CUSTOMS)) {
-        page.options.size shouldBe apisByCategory.keys.size + 1
+      "render the dropdown based on the provided categories" in new Setup(filter = Some(ApiCategory.CUSTOMS)) {
+        page.options.size shouldBe apisByCategory.size + 1
       }
 
-      "select the provided category" in new Setup(filter = Some(CUSTOMS)) {
+      "select the provided category" in new Setup(filter = Some(ApiCategory.CUSTOMS)) {
         page.selectedVersion.attr("value") shouldBe "customs"
       }
     }

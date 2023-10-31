@@ -16,30 +16,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -58,30 +64,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -100,30 +112,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -142,30 +160,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -184,30 +208,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -226,30 +256,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -268,30 +304,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -310,30 +352,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -352,30 +400,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -394,30 +448,36 @@
           "endpointName": "Healthcheck",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition",
           "endpointName": "Return Definition JSON",
           "method": "GET",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Add App to Whitelist for Version",
           "method": "PUT",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         },
         {
           "uriPattern": "/api/definition/{version}/whitelist/{appId}",
           "endpointName": "Delete App from Whitelist for Version",
           "method": "DELETE",
           "authType": "NONE",
-          "throttlingTier": "UNLIMITED"
+          "throttlingTier": "UNLIMITED",
+          "queryParameters": []
         }
       ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS",
       "productionAvailability": {
         "endpointsEnabled": true,
         "access": {
@@ -427,5 +487,6 @@
         "authorised": true
       }
     }
-  ]
+  ],
+  "categories":[ "AGENTS" ]
 }

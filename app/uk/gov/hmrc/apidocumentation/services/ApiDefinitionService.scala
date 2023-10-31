@@ -21,6 +21,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.cache._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiDefinition, ExtendedApiDefinition, ServiceName}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.metrics.common._
 
@@ -29,9 +30,9 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 trait BaseApiDefinitionService {
-  def fetchExtendedDefinition(serviceName: String, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]]
+  def fetchExtendedDefinition(serviceName: ServiceName, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedApiDefinition]]
 
-  def fetchAllDefinitions(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]]
+  def fetchAllDefinitions(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[ApiDefinition]]
 }
 
 @Singleton
@@ -45,18 +46,18 @@ class ApiDefinitionService @Inject() (
 
   val cacheExpiry: FiniteDuration = 5 seconds
 
-  def fetchExtendedDefinition(serviceName: String, developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Option[ExtendedAPIDefinition]] = {
+  def fetchExtendedDefinition(serviceName: ServiceName, developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Option[ExtendedApiDefinition]] = {
     val key = s"${serviceName}---${developerId.map(_.asText).getOrElse("NONE")}"
 
     cache.getOrElseUpdate(key, cacheExpiry) {
       logger.info(s"Extended definition for $serviceName for $developerId not found in cache")
       record {
-        apiPlatformMicroserviceConnector.fetchApiDefinition(serviceName, developerId)(hc)
+        apiPlatformMicroserviceConnector.fetchExtendedApiDefinition(serviceName, developerId)(hc)
       }
     }
   }
 
-  def fetchAllDefinitions(developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Seq[APIDefinition]] =
+  def fetchAllDefinitions(developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Seq[ApiDefinition]] =
     record {
       apiPlatformMicroserviceConnector.fetchApiDefinitionsByCollaborator(developerId)
     }

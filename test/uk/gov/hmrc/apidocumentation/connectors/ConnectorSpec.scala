@@ -21,10 +21,9 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.{Application, Configuration}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 import uk.gov.hmrc.apidocumentation.common.utils._
-import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
-import uk.gov.hmrc.apidocumentation.models.{APIDefinition, ExtendedAPIDefinition}
 
 trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarExtensions with GuiceOneAppPerSuite {
 
@@ -54,9 +53,12 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |          "endpointName" : "Say Hello",
                   |          "method" : "GET",
                   |          "authType" : "NONE",
-                  |          "throttlingTier" : "UNLIMITED"
+                  |          "throttlingTier" : "UNLIMITED",
+                  |          "queryParameters": []
                   |        }
                   |      ],
+                  |      "endpointsEnabled": true,
+                  |      "versionSource": "OAS",
                   |      "productionAvailability": {
                   |        "endpointsEnabled": true,
                   |        "access": {
@@ -76,21 +78,26 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |          "method" : "GET",
                   |          "authType" : "NONE",
                   |          "throttlingTier" : "UNLIMITED",
-                  |          "scope": "read:hello"
+                  |          "scope": "read:hello",
+                  |          "queryParameters": []
                   |        }
                   |      ],
+                  |      "endpointsEnabled": true,
+                  |      "versionSource": "OAS",
                   |      "productionAvailability": {
                   |        "endpointsEnabled": true,
                   |        "access": {
-                  |          "type": "PRIVATE"
+                  |          "type": "PRIVATE",
+                  |          "isTrial": false
                   |        },
                   |        "loggedIn": false,
                   |        "authorised": false
                   |      }
                   |    }
-                  |  ]
+                  |  ],
+                  |  "categories":[ "AGENTS" ]
                   |}
-     """.stripMargin).as[ExtendedAPIDefinition]
+     """.stripMargin).as[ExtendedApiDefinition]
   }
 
   def apiDefinition(name: String)    = {
@@ -104,19 +111,10 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |    {
                   |      "version" : "1.0",
                   |      "status" : "STABLE",
-                  |      "endpoints" : [
-                  |        {
-                  |          "uriPattern" : "/hello",
-                  |          "endpointName" : "Say Hello",
-                  |          "method" : "GET",
-                  |          "authType" : "NONE",
-                  |          "throttlingTier" : "UNLIMITED"
-                  |        }
-                  |      ]
-                  |    },
-                  |    {
-                  |      "version" : "2.0",
-                  |      "status" : "STABLE",
+                  |      "access": {
+                  |         "isTrial": false,
+                  |         "type": "PRIVATE"
+                  |       },
                   |      "endpoints" : [
                   |        {
                   |          "uriPattern" : "/hello",
@@ -124,12 +122,36 @@ trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarE
                   |          "method" : "GET",
                   |          "authType" : "NONE",
                   |          "throttlingTier" : "UNLIMITED",
+                  |          "queryParameters": []
+                  |        }
+                  |      ],
+                  |      "endpointsEnabled": true,
+                  |      "versionSource": "OAS"
+                  |    },
+                  |    {
+                  |      "version" : "2.0",
+                  |      "status" : "STABLE",
+                  |      "access": {
+                  |           "isTrial": false,
+                  |           "type": "PRIVATE"
+                  |         },
+                  |      "endpoints" : [
+                  |        {
+                  |          "uriPattern" : "/hello",
+                  |          "endpointName" : "Say Hello",
+                  |          "method" : "GET",
+                  |          "authType" : "NONE",
+                  |          "throttlingTier" : "UNLIMITED",
+                  |          "queryParameters": [],
                   |          "scope": "read:hello"
                   |        }
-                  |      ]
+                  |      ],
+                  |      "endpointsEnabled": true,
+                  |      "versionSource": "OAS"
                   |    }
-                  |  ]
-                  |}""".stripMargin.replaceAll("\n", " ")).as[APIDefinition]
+                  |  ],
+                  |  "categories":[ "AGENTS" ]
+                  |}""".stripMargin.replaceAll("\n", " ")).as[ApiDefinition]
   }
   def apiDefinitions(names: String*) = names.map(apiDefinition)
 }

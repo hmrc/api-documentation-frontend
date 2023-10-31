@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models.DocsVisibility
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.helpers._
@@ -26,7 +27,7 @@
 
 @this(applicationConfig: ApplicationConfig)
 
-@(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedAPIVersion], maybeApi: Option[ExtendedAPIDefinition], loggedIn: Boolean = false
+@(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false
 )(implicit requestHeader: RequestHeader)
 
 @renderGetApiVersionForm = {
@@ -39,8 +40,8 @@
                 </label>
                 <select class="govuk-select version-select" id="version" name="version">
                     @for(v <- api.sortedActiveVersions;
-                    if VersionDocsVisible(v.visibility) != DocsVisibility.NOT_VISIBLE) {
-                    <option @if(v == version) {selected} value="@v.version" aria-label="Select to view documentation for v@v.version (@v.displayedStatus)">v@v.version (@v.displayedStatus)</option>
+                    if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
+                    <option @if(v == version) {selected} value="@v.version.toString" aria-label="Select to view documentation for v@v.version.toString (@v.displayedStatus)">v@v.version.toString (@v.displayedStatus)</option>
                     }
                 </select>
                 <button type="submit" class="govuk-button margin-bottom-0" data-module="govuk-button">View</button>
@@ -101,7 +102,7 @@
             </section>
         }
 
-        @defining(VersionDocsVisible(maybeVersion.flatMap(_.visibility))) { case visibility =>
+        @defining(VersionDocsVisible(maybeVersion.flatMap(VersionVisibility(_)))) { case visibility =>
             @if(visibility == DocsVisibility.VISIBLE) {
                 <section id="endpoints" class="section">
                   <h2 id="endpoints-title" class="govuk-heading-m">

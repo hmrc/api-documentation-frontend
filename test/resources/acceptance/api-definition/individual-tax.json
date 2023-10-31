@@ -15,9 +15,13 @@
           "method": "GET",
           "authType": "USER",
           "throttlingTier": "UNLIMITED",
-          "scope": "read:individual-tax"
+          "scope": "read:individual-tax",
+          "queryParameters": []
         }
-      ]
+      ],
+      "endpointsEnabled": true,
+      "versionSource": "OAS"
     }
-  ]
+  ],
+  "categories":[ "OTHER" ]
 }
