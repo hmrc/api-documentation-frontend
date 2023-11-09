@@ -30,35 +30,13 @@
 @(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false
 )(implicit requestHeader: RequestHeader)
 
-@renderGetApiVersionForm = {
-    @for(api <- maybeApi) {
-        @for(version <- maybeVersion) {
-            @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
-            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
-                <label class="visually-hidden" for="version">
-                    Select version and status
-                </label>
-                <select class="govuk-select version-select" id="version" name="version">
-                    @for(v <- api.sortedActiveVersions;
-                    if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
-                    <option @if(v == version) {selected} value="@v.version.toString" aria-label="Select to view documentation for v@v.version.toString (@v.displayedStatus)">v@v.version.toString (@v.displayedStatus)</option>
-                    }
-                </select>
-                <button type="submit" class="govuk-button margin-bottom-0" data-module="govuk-button">View</button>
-            </form>
-        }
-    }
-}
-
-
 @renderEndpointsRows = {
 @for(api <- maybeApi) {
     @for(version <- maybeVersion) {
-        @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
         @for(v <- api.sortedActiveVersions;
           if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
                 <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">@v.version.toString (@v.displayedStatus)</th>
+                    <th scope="row" class="govuk-table__header">Version @v.version.toString (@v.displayedStatus)</th>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
                         @if(v.sandboxAvailability.nonEmpty) { Sandbox }
                         @if(v.sandboxAvailability.nonEmpty & v.productionAvailability.nonEmpty) { and }
@@ -68,7 +46,7 @@
                         <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, v.version).url">
                     @v.version endpoints
                         </a>
-@*                        <a href="#">@v.version endpoints</a>*@
+
                     </td>
                 </tr>
          }
@@ -85,10 +63,6 @@
         @for(version <- maybeVersion) {
             <table class="govuk-table">
                 <tbody class="govuk-table__body">
-@*                    <tr class="govuk-table__row">*@
-@*                        <th scope="row" class="govuk-table__header"> <label for="version">Version and status</label></th>*@
-@*                        <td class="govuk-table__cell govuk-!-font-size-16">@renderGetApiVersionForm</td>*@
-@*                    </tr>*@
                     @if(applicationConfig.showSandboxAvailability) {
                         <tr class="govuk-table__row">
                             <th scope="row" class="govuk-table__header">Available in @applicationConfig.nameOfSubordinateEnvironment</th>
@@ -135,7 +109,7 @@
                   <h2 id="endpoints-title" class="govuk-heading-m">
                       Endpoints
                   </h2>
-                    <table>
+                    <table class="govuk-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
                                 <th scope="col" class="govuk-table__header govuk-!-width-one-half">Version</th>
@@ -147,14 +121,7 @@
                              @renderEndpointsRows
                         </tbody>
 
-@*                                        <tr class="govuk-table__row">*@
-@*                                            <th scope="row" class="govuk-table__header"> <label for="version">Version and status</label></th>*@
-@*                                            <td class="govuk-table__cell govuk-!-font-size-16"</td>*@
-@*                                        </tr>*@
                     </table>
-                  <a class="govuk-button govuk-button-secondary" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, maybeVersion.get.version).url">
-                    View API endpoints
-                  </a>
 
                   <details class="govuk-details" data-module="govuk-details">
                     <summary class="govuk-details__summary">
