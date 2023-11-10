@@ -30,29 +30,35 @@
 @(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false
 )(implicit requestHeader: RequestHeader)
 
-@renderEndpointsRows = {
-@for(api <- maybeApi) {
-    @for(version <- maybeVersion) {
-        @for(v <- api.sortedActiveVersions;
-          if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">Version @v.version.toString (@v.displayedStatus)</th>
-                    <td class="govuk-table__cell govuk-table__cell--numeric">
-                        @if(v.sandboxAvailability.nonEmpty) { Sandbox }
-                        @if(v.sandboxAvailability.nonEmpty & v.productionAvailability.nonEmpty) { and }
-                        @if(v.productionAvailability.nonEmpty) { Production }
-                    </td>
-                    <td class="govuk-table__cell govuk-table__cell--numeric">
-                        <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, v.version).url">
-                    @v.version endpoints
-                        </a>
-
-                    </td>
-                </tr>
-         }
-
+@buildEnvironmentsLabel(version: ExtendedApiVersion) = {
+    @(version.sandboxAvailability.nonEmpty, version.productionAvailability.nonEmpty) match {
+        case (true, true) => { Sandbox and production }
+        case (true, false) => { Sandbox }
+        case (false, true) => { Production }
     }
 }
+
+@renderEndpointsRows = {
+    @for(api <- maybeApi) {
+        @for(version <- maybeVersion) {
+            @for(v <- api.sortedActiveVersions;
+            if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Version @v.version.toString (@v.displayedStatus)</th>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                            @buildEnvironmentsLabel(v)
+                        </td>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                            <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, v.version).url">
+                        @v.version endpoints
+                            </a>
+
+                        </td>
+                    </tr>
+            }
+
+        }
+    }
 }
 
 <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section raml" aria-busy="false">
