@@ -20,7 +20,7 @@ import java.util.UUID
 import scala.util.Try
 import scala.util.matching.Regex
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 trait DeveloperIdentifier {
   def asText: String = DeveloperIdentifier.asText(this)
@@ -34,7 +34,7 @@ object EmailIdentifier {
   def parse(text: String): Option[EmailIdentifier] =
     simplestEmailRegex.findFirstIn(text).map(EmailIdentifier(_))
 
-  implicit val format = Json.format[EmailIdentifier]
+  implicit val format: OFormat[EmailIdentifier] = Json.format[EmailIdentifier]
 }
 
 object UuidIdentifier {

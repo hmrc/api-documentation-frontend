@@ -21,7 +21,7 @@ import org.mockito.MockitoSugar
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 
 trait AppConfigMock extends MockitoSugar {
-  implicit val appConfig = mock[ApplicationConfig]
+  implicit val appConfig: ApplicationConfig = mock[ApplicationConfig]
 
   when(appConfig.title).thenReturn("HMRC Developer Hub")
   when(appConfig.documentationRenderVersion).thenReturn("raml")

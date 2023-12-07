@@ -32,9 +32,9 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
 
   "Fetching logged in user" should {
 
-    val mockApplicationConfig = mock[ApplicationConfig]
-    val mockSessionService    = mock[SessionService]
-    val mockCookieSigner      = mock[CookieSigner]
+    val mockApplicationConfig: ApplicationConfig = mock[ApplicationConfig]
+    val mockSessionService                       = mock[SessionService]
+    val mockCookieSigner                         = mock[CookieSigner]
 
     val developer = Developer("email", "John", "Smith", UserId.random)
     val session   = Session("sessionId", LoggedInState.LOGGED_IN, developer)

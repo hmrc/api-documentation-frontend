@@ -18,6 +18,7 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import scala.concurrent.Future
 
+import akka.stream.Materializer
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import play.api.Application
@@ -41,10 +42,9 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       .build()
 
   implicit lazy val request: Request[AnyContent] = FakeRequest()
-  implicit lazy val materializer                 = app.materializer
+  implicit lazy val materializer: Materializer   = app.materializer
   lazy val mcc                                   = app.injector.instanceOf[MessagesControllerComponents]
-
-  implicit val hc = HeaderCarrier()
+  implicit val hc: HeaderCarrier                 = HeaderCarrier()
 
   val serviceName  = ServiceName("hello-world")
   val endpointName = "Say Hello World!"

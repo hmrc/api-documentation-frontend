@@ -56,18 +56,18 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc          = app.injector.instanceOf[MessagesControllerComponents]
 
-    private lazy val apiIndexView             = app.injector.instanceOf[ApiIndexView]
-    lazy val ramlPreviewConnector             = mock[RamlPreviewConnector]
-    private lazy val retiredVersionJumpView   = app.injector.instanceOf[RetiredVersionJumpView]
-    private lazy val apisFilteredView         = app.injector.instanceOf[ApisFilteredView]
-    private lazy val previewDocumentationView = app.injector.instanceOf[PreviewDocumentationView2]
-    private lazy val xmlDocumentationView     = app.injector.instanceOf[XmlDocumentationView]
-    private lazy val serviceDocumentationView = app.injector.instanceOf[ServiceDocumentationView2]
-    private lazy val parentPage               = app.injector.instanceOf[ParentPageOuter]
-    private lazy val assets                   = app.injector.instanceOf[Assets]
-    val downloadConnector                     = mock[DownloadConnector]
-    private implicit val materializer         = app.injector.instanceOf[Materializer]
-    val definitionList: List[ApiDefinition]   = List(apiDefinition("service1"), apiDefinition("service2"))
+    private lazy val apiIndexView                   = app.injector.instanceOf[ApiIndexView]
+    lazy val ramlPreviewConnector                   = mock[RamlPreviewConnector]
+    private lazy val retiredVersionJumpView         = app.injector.instanceOf[RetiredVersionJumpView]
+    private lazy val apisFilteredView               = app.injector.instanceOf[ApisFilteredView]
+    private lazy val previewDocumentationView       = app.injector.instanceOf[PreviewDocumentationView2]
+    private lazy val xmlDocumentationView           = app.injector.instanceOf[XmlDocumentationView]
+    private lazy val serviceDocumentationView       = app.injector.instanceOf[ServiceDocumentationView2]
+    private lazy val parentPage                     = app.injector.instanceOf[ParentPageOuter]
+    private lazy val assets                         = app.injector.instanceOf[Assets]
+    val downloadConnector                           = mock[DownloadConnector]
+    private implicit val materializer: Materializer = app.injector.instanceOf[Materializer]
+    val definitionList: List[ApiDefinition]         = List(apiDefinition("service1"), apiDefinition("service2"))
 
     val underTest = new ApiDocumentationController(
       documentationService,

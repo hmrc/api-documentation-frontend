@@ -73,7 +73,7 @@ case class XmlApiDocumentation(name: String, context: String, description: Strin
 }
 
 object XmlApiDocumentation {
-  implicit val format = Json.format[XmlApiDocumentation]
+  implicit val format: OFormat[XmlApiDocumentation] = Json.format[XmlApiDocumentation]
 
 }
 
@@ -86,7 +86,7 @@ case class ServiceGuide(name: String, context: String, categories: Option[Seq[Ap
 }
 
 object ServiceGuide {
-  implicit val format = Json.format[ServiceGuide]
+  implicit val format: OFormat[ServiceGuide] = Json.format[ServiceGuide]
 
   def serviceGuides: Seq[ServiceGuide] =
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/service_guides.json")).mkString).as[Seq[ServiceGuide]]
@@ -101,7 +101,7 @@ case class RoadMap(name: String, context: String, categories: Option[Seq[ApiCate
 }
 
 object RoadMap {
-  implicit val format = Json.format[RoadMap]
+  implicit val format: OFormat[RoadMap] = Json.format[RoadMap]
 
   def roadMaps: Seq[RoadMap] =
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/roadmap.json")).mkString).as[Seq[RoadMap]]

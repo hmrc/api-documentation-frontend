@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import java.time.{Clock, Instant}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
@@ -24,7 +25,6 @@ import scala.util.{Failure, Success, Try}
 
 import akka.stream.Materializer
 import controllers.Assets
-import org.joda.time.{DateTime, DateTimeZone}
 
 import play.api.i18n.MessagesProvider
 import play.api.libs.json.Json
@@ -177,7 +177,7 @@ class ApiDocumentationController @Inject() (
       logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url}")
       Future.successful(Redirect("/developer/login").withSession(
         "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url,
-        "ts"         -> DateTime.now(DateTimeZone.UTC).getMillis.toString
+        "ts"         -> Instant.now(Clock.systemUTC).toEpochMilli.toString
       ))
     }
 

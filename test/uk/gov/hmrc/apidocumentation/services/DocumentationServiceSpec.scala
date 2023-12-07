@@ -50,10 +50,10 @@ class DocumentationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest wit
       .build()
 
   trait Setup {
-    implicit val hc = HeaderCarrier()
-    val cache       = app.injector.instanceOf[AsyncCacheApi]
-    val appConfig   = mock[ApplicationConfig]
-    val apm         = mock[ApiPlatformMicroserviceConnector]
+    implicit val hc: HeaderCarrier   = HeaderCarrier()
+    val cache                        = app.injector.instanceOf[AsyncCacheApi]
+    val appConfig: ApplicationConfig = mock[ApplicationConfig]
+    val apm                          = mock[ApiPlatformMicroserviceConnector]
     when(appConfig.apiPlatformMicroserviceBaseUrl).thenReturn(serviceUrl)
 
     val underTest = new DocumentationService(appConfig, cache, apm)

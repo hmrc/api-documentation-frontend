@@ -37,8 +37,8 @@ class UserSessionConnectorSpec extends ConnectorSpec {
   )
 
   trait Setup {
-    implicit val hc = HeaderCarrier()
-    val connector   = app.injector.instanceOf[UserSessionConnector]
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    val connector                  = app.injector.instanceOf[UserSessionConnector]
   }
 
   "api" should {

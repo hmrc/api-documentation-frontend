@@ -28,9 +28,9 @@ import uk.gov.hmrc.apidocumentation.views.html._
 class TestingPagesControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 
   trait Setup extends NavigationServiceMock {
-    implicit val appConfig                 = app.injector.instanceOf[ApplicationConfig]
-    val testingView                        = app.injector.instanceOf[TestingView]
-    val testUsersDataStatefulBehaviourView = app.injector.instanceOf[TestUsersDataStatefulBehaviourView]
+    implicit val appConfig: ApplicationConfig = app.injector.instanceOf[ApplicationConfig]
+    val testingView                           = app.injector.instanceOf[TestingView]
+    val testUsersDataStatefulBehaviourView    = app.injector.instanceOf[TestUsersDataStatefulBehaviourView]
 
     val testingPages = new TestingPagesController(navigationService, mcc, testingView, testUsersDataStatefulBehaviourView)
   }

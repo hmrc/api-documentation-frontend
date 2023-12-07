@@ -24,11 +24,12 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import play.api.i18n._
 import play.api.mvc.request.RequestAttrKey
+import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 
 trait CommonViewSpec extends AsyncHmrcSpec with OptionValues with WsScalaTestClient with GuiceOneAppPerSuite {
-  implicit val messagesProvider: MessagesProvider = MessagesImpl(Lang(Locale.ENGLISH), new DefaultMessagesApi())
-  implicit val request                            = FakeRequest("GET", "/fake/uri").addAttr(RequestAttrKey.CSPNonce, "fake-nonce")
+  implicit val messagesProvider: MessagesProvider       = MessagesImpl(Lang(Locale.ENGLISH), new DefaultMessagesApi())
+  implicit val request: Request[AnyContentAsEmpty.type] = FakeRequest("GET", "/fake/uri").addAttr(RequestAttrKey.CSPNonce, "fake-nonce")
 }

@@ -19,18 +19,18 @@ package uk.gov.hmrc.apidocumentation.models
 import play.api.libs.json._
 
 package object jsonFormatters {
-  implicit val formatAPICategory   = enumJson.enumFormat(APICategory)
-  implicit val formatLoggedInState = enumJson.enumFormat(LoggedInState)
+  implicit val formatAPICategory: Format[APICategory.Value]     = enumJson.enumFormat(APICategory)
+  implicit val formatLoggedInState: Format[LoggedInState.Value] = enumJson.enumFormat(LoggedInState)
 
-  implicit val formatAPIAccess         = Json.format[APIAccess]
-  implicit val formatVersionVisibility = Json.format[VersionVisibility]
-  implicit val formatServiceDetails    = Json.format[ServiceDetails]
-  implicit val formatTestEndpoint      = Json.format[TestEndpoint]
-  implicit val formatDeveloper         = Json.format[Developer]
-  implicit val formatSession           = Json.format[Session]
-  implicit val formatSidebarLink       = Json.format[SidebarLink]
-  implicit val formatNavLink           = Json.format[NavLink]
-  implicit val formatErrorResponse     = Json.format[ErrorResponse]
+  implicit val formatAPIAccess: OFormat[APIAccess]                 = Json.format[APIAccess]
+  implicit val formatVersionVisibility: OFormat[VersionVisibility] = Json.format[VersionVisibility]
+  implicit val formatServiceDetails: OFormat[ServiceDetails]       = Json.format[ServiceDetails]
+  implicit val formatTestEndpoint: OFormat[TestEndpoint]           = Json.format[TestEndpoint]
+  implicit val formatDeveloper: OFormat[Developer]                 = Json.format[Developer]
+  implicit val formatSession: OFormat[Session]                     = Json.format[Session]
+  implicit val formatSidebarLink: OFormat[SidebarLink]             = Json.format[SidebarLink]
+  implicit val formatNavLink: OFormat[NavLink]                     = Json.format[NavLink]
+  implicit val formatErrorResponse: OFormat[ErrorResponse]         = Json.format[ErrorResponse]
 }
 
 package object enumJson       {

@@ -20,7 +20,7 @@ object ApiSpecificationFormatters {
   import play.api.libs.json._
   import play.api.libs.functional.syntax._
 
-  implicit val hmrcExampleSpecJF = Json.format[ExampleSpec]
+  implicit val hmrcExampleSpecJF: Format[ExampleSpec] = Json.format[ExampleSpec]
 
   implicit val typeDeclarationWrites: OWrites[TypeDeclaration] = (
     (__ \ "name").write[String] and
@@ -44,9 +44,9 @@ object ApiSpecificationFormatters {
       (__ \ "pattern").readNullable[String]
   )(TypeDeclaration.apply _)
 
-  implicit val securitySchemeJF = Json.format[SecurityScheme]
+  implicit val securitySchemeJ: OFormat[SecurityScheme] = Json.format[SecurityScheme]
 
-  implicit val groupJF = Json.format[Group]
+  implicit val groupJF: OFormat[Group] = Json.format[Group]
 
   implicit val responseWrites: OWrites[Response] = (
     (__ \ "code").write[String] and
@@ -62,13 +62,13 @@ object ApiSpecificationFormatters {
       (__ \ "description").readNullable[String]
   )(Response.apply _)
 
-  implicit val hmrcMethodJF   = Json.format[Method]
-  implicit val hmrcResourceJF = Json.format[Resource]
+  implicit val hmrcMethodJF: OFormat[Method]     = Json.format[Method]
+  implicit val hmrcResourceJF: OFormat[Resource] = Json.format[Resource]
 
-  implicit val documentationItemJF = Json.format[DocumentationItem]
-  implicit val hmrcResourceGroupJF = Json.format[ResourceGroup]
+  implicit val documentationItemJF: OFormat[DocumentationItem] = Json.format[DocumentationItem]
+  implicit val hmrcResourceGroupJ: OFormat[ResourceGroup]      = Json.format[ResourceGroup]
 
-  implicit val apiSpecificationJF = Json.format[ApiSpecification]
+  implicit val apiSpecificationJF: OFormat[ApiSpecification] = Json.format[ApiSpecification]
 
   def notIfEmpty[A](seq: Seq[A]): Option[Seq[A]] = if (seq.isEmpty) None else Some(seq)
 

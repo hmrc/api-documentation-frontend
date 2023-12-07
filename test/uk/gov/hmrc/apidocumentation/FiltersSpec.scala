@@ -21,7 +21,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import akka.stream.Materializer
 import akka.stream.testkit.NoMaterializer
 
-import play.api.mvc.{RequestHeader, Result, Session}
+import play.api.mvc.{AnyContentAsEmpty, Request, RequestHeader, Result, Session}
 import play.api.routing.{HandlerDef, Router}
 import play.api.test.FakeRequest
 
@@ -60,7 +60,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
 
       val handlerDef = makeHandlerDef(controller, path)
 
-      implicit val requestHeader = FakeRequest("GET", path)
+      implicit val requestHeader: Request[AnyContentAsEmpty.type] = FakeRequest("GET", path)
         .withSession(defaultSession: _*)
         .addAttr(Router.Attrs.HandlerDef, handlerDef)
 
@@ -75,7 +75,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
 
       val handlerDef = makeHandlerDef(controller, path)
 
-      implicit val requestHeader = FakeRequest("GET", path)
+      implicit val requestHeader: Request[AnyContentAsEmpty.type] = FakeRequest("GET", path)
         .withSession(defaultSession ++ Seq("access_uri" -> path): _*)
         .addAttr(Router.Attrs.HandlerDef, handlerDef)
 
@@ -89,7 +89,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
       val path       = s"$rootPath/assets/main.js"
       val handlerDef = makeHandlerDef(controller, path)
 
-      implicit val requestHeader = FakeRequest("GET", path)
+      implicit val requestHeader: Request[AnyContentAsEmpty.type] = FakeRequest("GET", path)
         .withSession(defaultSession: _*)
         .addAttr(Router.Attrs.HandlerDef, handlerDef)
 
@@ -99,8 +99,8 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
     }
 
     "not add the current uri to the session when the request is not tagged with the ROUTE_CONTROLLER or ROUTE_PATTERN" in new Setup {
-      val path                   = s"$rootPath/assets/main.js"
-      implicit val requestHeader = FakeRequest("OPTIONS", path).withSession(defaultSession: _*)
+      val path                                                    = s"$rootPath/assets/main.js"
+      implicit val requestHeader: Request[AnyContentAsEmpty.type] = FakeRequest("OPTIONS", path).withSession(defaultSession: _*)
 
       await(filter.apply(nextFilter)(requestHeader))
 

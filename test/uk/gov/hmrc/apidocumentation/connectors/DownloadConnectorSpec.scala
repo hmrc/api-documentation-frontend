@@ -43,8 +43,8 @@ class DownloadConnectorSpec extends ConnectorSpec {
 
   trait Setup {
 
-    implicit val hc   = HeaderCarrier()
-    val mockAppConfig = mock[ApplicationConfig]
+    implicit val hc: HeaderCarrier       = HeaderCarrier()
+    val mockAppConfig: ApplicationConfig = mock[ApplicationConfig]
     when(mockAppConfig.apiPlatformMicroserviceBaseUrl).thenReturn("")
   }
 

@@ -20,6 +20,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
+import akka.stream.Materializer
+
 import play.api.http.HeaderNames.LOCATION
 import play.api.http.Status.MOVED_PERMANENTLY
 import play.api.mvc._
@@ -50,7 +52,7 @@ class DocumentationControllerSpec
     val errorHandler               = app.injector.instanceOf[ErrorHandler]
     val mcc                        = app.injector.instanceOf[MessagesControllerComponents]
 
-    implicit lazy val materializer = app.materializer
+    implicit lazy val materializer: Materializer = app.materializer
 
     private lazy val indexView = app.injector.instanceOf[IndexView]
 
