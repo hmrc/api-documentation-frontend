@@ -16,6 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import uk.gov.hmrc.apidocumentation.models.LoggedInState.LoggedInState
+import uk.gov.hmrc.apidocumentation.models.LoggedInState
 
 case class Session(sessionId: String, loggedInState: LoggedInState, developer: Developer)

@@ -166,7 +166,7 @@ class DocumentationController @Inject() (
   }
 
   def nameGuidelinesRedirect(): Action[AnyContent] = headerNavigation {
-    implicit request => navLinks =>
+    _ => navLinks =>
       Future.successful(
         Redirect(
           routes.DocumentationController.nameGuidelinesPage().url

@@ -26,8 +26,7 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-import uk.gov.hmrc.apidocumentation.models.APICategory._
-import uk.gov.hmrc.apidocumentation.models.{APICategory => _, _}
+import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 import uk.gov.hmrc.apidocumentation.views
 
@@ -72,8 +71,8 @@ class APIGroupsSpec extends AsyncHmrcSpec {
   "API Groups view" should {
     "display each category as a group" in new Setup {
       page.tableBodies.size shouldBe 2
-      page.tableHeadings.first.text shouldBe CUSTOMS.displayName
-      page.tableHeadings.last.text shouldBe VAT.displayName
+      page.tableHeadings.first.text shouldBe ApiCategory.CUSTOMS.displayText
+      page.tableHeadings.last.text shouldBe ApiCategory.VAT.displayText
     }
 
     "sort the definitions by their label" in new Setup {

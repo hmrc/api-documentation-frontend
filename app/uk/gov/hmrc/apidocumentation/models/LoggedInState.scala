@@ -16,7 +16,26 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-object LoggedInState extends Enumeration {
-  type LoggedInState = Value
-  val LOGGED_IN, PART_LOGGED_IN_ENABLING_MFA = Value
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
+
+sealed trait LoggedInState
+
+object LoggedInState {
+  import play.api.libs.json.{Format, Json}
+
+  case object LOGGED_IN                   extends LoggedInState
+  case object PART_LOGGED_IN_ENABLING_MFA extends LoggedInState
+
+  val values: Set[LoggedInState] = Set(LOGGED_IN, PART_LOGGED_IN_ENABLING_MFA)
+
+  def apply(text: String): Option[LoggedInState] = LoggedInState.values.find(_.toString == text.toUpperCase)
+
+  def unsafeApply(text: String): LoggedInState = {
+    apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Logged In State"))
+  }
+
+  val formatLoggedIn     = Json.format[LOGGED_IN.type]
+  val formatPartLoggedIn = Json.format[PART_LOGGED_IN_ENABLING_MFA.type]
+
+  implicit val format: Format[LoggedInState] = SealedTraitJsonFormatting.createFormatFor[LoggedInState]("Logged In State", apply(_))
 }

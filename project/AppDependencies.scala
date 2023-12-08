@@ -18,7 +18,7 @@ object AppDependencies {
     "uk.gov.hmrc"                           %% "http-metrics"                 % "2.7.0",
     "uk.gov.hmrc"                           %% "play-partials"                % "8.4.0-play-28",
     "uk.gov.hmrc"                           %% "play-frontend-hmrc"           % "7.14.0-play-28",
-    "uk.gov.hmrc"                           %% "api-platform-api-domain"      % "0.9.0",
+    "uk.gov.hmrc"                           %% "api-platform-api-domain"      % "0.10.0",
     "org.typelevel"                         %% "cats-core"                    % "2.10.0",
     "org.commonjava.googlecode.markdown4j"  %  "markdown4j"                   % "2.2-cj-1.1",
     "com.typesafe.play"                     %% "play-json"                    % playJsonVersion,
@@ -51,6 +51,7 @@ object AppDependencies {
     "org.scalatest"                         %% "scalatest"                    % "3.2.17",
     "com.vladsch.flexmark"                  %  "flexmark-all"                 % "0.62.2",
     "org.jsoup"                             %  "jsoup"                        % "1.12.1",
-    "uk.gov.hmrc"                           %% "webdriver-factory"            % "0.41.0"
+    "uk.gov.hmrc"                           %% "webdriver-factory"            % "0.41.0",
+    "uk.gov.hmrc"                           %% "api-platform-test-common-domain"      % "0.8.0-SNAPSHOT",
   ).map(_ % Test)
 }

@@ -23,8 +23,7 @@ import akka.http.scaladsl.model.{StatusCode, StatusCodes}
 import play.twirl.api.Html
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
-import uk.gov.hmrc.apidocumentation.models.DocsVisibility.DocsVisibility
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, _}
 
 object Slugify {
   def apply(text: String): String = makeSlug(text)

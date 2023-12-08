@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import uk.gov.hmrc.apidocumentation.common.utils.HmrcSpec
+import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
 
 class NavLinkSpec extends HmrcSpec {
 

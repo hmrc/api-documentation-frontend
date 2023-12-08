@@ -34,7 +34,7 @@ class HelpPagesController @Inject() (
   )(implicit applicationConfig: ApplicationConfig
   ) extends FrontendController(mcc) {
 
-  def cookiesPage(): Action[AnyContent] = Action { implicit request =>
+  def cookiesPage(): Action[AnyContent] = Action { _ =>
     Redirect(appConfig.cookieSettingsUrl)
   }
 

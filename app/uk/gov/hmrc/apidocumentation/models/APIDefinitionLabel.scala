@@ -16,15 +16,33 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-object APIDefinitionLabel extends Enumeration {
-  type DocumentationLabel = Value
+sealed trait DocumentationLabel {
+  lazy val displayName: String = DocumentationLabel.displayName(this)
+  lazy val modifier: String    = DocumentationLabel.modifier(this)
+}
 
-  protected case class Val(displayName: String, modifier: String) extends super.Val
-  implicit def valueToAPIDefinitionLabelVal(x: Value): Val = x.asInstanceOf[Val]
+object DocumentationLabel {
+  case object ROADMAP          extends DocumentationLabel
+  case object SERVICE_GUIDE    extends DocumentationLabel
+  case object REST_API         extends DocumentationLabel
+  case object TEST_SUPPORT_API extends DocumentationLabel
+  case object XML_API          extends DocumentationLabel
 
-  val ROADMAP          = Val("Roadmap", "roadmap")
-  val SERVICE_GUIDE    = Val("Service Guide", "service-guide")
-  val REST_API         = Val("REST API", "rest")
-  val TEST_SUPPORT_API = Val("Test Support API", "test")
-  val XML_API          = Val("XML API", "xml")
+  def displayName(label: DocumentationLabel): String = label match {
+    case ROADMAP          => "Roadmap"
+    case SERVICE_GUIDE    => "Service Guide"
+    case REST_API         => "REST API"
+    case TEST_SUPPORT_API => "Test Support API"
+    case XML_API          => "XML API"
+  }
+
+  def modifier(label: DocumentationLabel): String = label match {
+    case ROADMAP          => "roadmap"
+    case SERVICE_GUIDE    => "service-guide"
+    case REST_API         => "rest"
+    case TEST_SUPPORT_API => "test"
+    case XML_API          => "xml"
+  }
+
+  implicit val ordering: Ordering[DocumentationLabel] = Ordering.by(_.toString)
 }
