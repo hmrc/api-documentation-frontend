@@ -24,7 +24,7 @@ import play.api.libs.json._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 import uk.gov.hmrc.apidocumentation.controllers.routes
-import uk.gov.hmrc.apidocumentation.models.APIDefinitionLabel._
+import uk.gov.hmrc.apidocumentation.models.DocumentationLabel
 
 trait Documentation {
 
@@ -35,12 +35,12 @@ trait Documentation {
 
   def documentationUrl: String
 
-  def mappedCategories(catMap: Map[String, Seq[ApiCategory]] = APICategory.categoryMap): Seq[ApiCategory] = categories match {
+  def mappedCategories(catMap: Map[String, Seq[ApiCategory]] = APICategoryFilters.categoryMap): Seq[ApiCategory] = categories match {
     case Some(x) if (x.nonEmpty) => x
     case _                       => catMap.getOrElse(name, Seq(ApiCategory.OTHER))
   }
 
-  lazy val isRestOrXmlApi = label == REST_API || label == XML_API
+  lazy val isRestOrXmlApi = label == DocumentationLabel.REST_API || label == DocumentationLabel.XML_API
 
   lazy val nameAsId = name.toLowerCase().replaceAll(" ", "-").replaceAll("[^a-z0-9-]", "")
 }
@@ -52,7 +52,7 @@ object Documentation {
       xmlDefinitions: Seq[XmlApiDocumentation],
       serviceGuides: Seq[ServiceGuide],
       roadMaps: Seq[RoadMap],
-      catMap: Map[String, Seq[ApiCategory]] = APICategory.categoryMap
+      catMap: Map[String, Seq[ApiCategory]] = APICategoryFilters.categoryMap
     ): ListMap[ApiCategory, Seq[Documentation]] = {
     val categorised: Map[ApiCategory, Seq[Documentation]] =
       (apiDefinitions.map(defi => WrappedApiDefinition(defi)) ++ xmlDefinitions ++ serviceGuides ++ roadMaps).foldLeft(Map(): Map[ApiCategory, Seq[Documentation]]) {
@@ -67,26 +67,26 @@ object Documentation {
 case class XmlApiDocumentation(name: String, context: String, description: String, categories: Option[Seq[ApiCategory]] = None)
     extends Documentation {
 
-  val label: DocumentationLabel = XML_API
+  val label: DocumentationLabel = DocumentationLabel.XML_API
 
   def documentationUrl: String = routes.ApiDocumentationController.renderXmlApiDocumentation(name).url
 }
 
 object XmlApiDocumentation {
-  implicit val format = Json.format[XmlApiDocumentation]
+  implicit val format: OFormat[XmlApiDocumentation] = Json.format[XmlApiDocumentation]
 
 }
 
 case class ServiceGuide(name: String, context: String, categories: Option[Seq[ApiCategory]] = None)
     extends Documentation {
 
-  val label: DocumentationLabel = SERVICE_GUIDE
+  val label: DocumentationLabel = DocumentationLabel.SERVICE_GUIDE
 
   def documentationUrl: String = context
 }
 
 object ServiceGuide {
-  implicit val format = Json.format[ServiceGuide]
+  implicit val format: OFormat[ServiceGuide] = Json.format[ServiceGuide]
 
   def serviceGuides: Seq[ServiceGuide] =
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/service_guides.json")).mkString).as[Seq[ServiceGuide]]
@@ -95,13 +95,13 @@ object ServiceGuide {
 case class RoadMap(name: String, context: String, categories: Option[Seq[ApiCategory]] = None)
     extends Documentation {
 
-  val label: DocumentationLabel = ROADMAP
+  val label: DocumentationLabel = DocumentationLabel.ROADMAP
 
   def documentationUrl: String = context
 }
 
 object RoadMap {
-  implicit val format = Json.format[RoadMap]
+  implicit val format: OFormat[RoadMap] = Json.format[RoadMap]
 
   def roadMaps: Seq[RoadMap] =
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/roadmap.json")).mkString).as[Seq[RoadMap]]
@@ -126,7 +126,7 @@ case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation
   override val name: String                         = definition.name
   override val context: String                      = definition.context.value
   override val categories: Option[Seq[ApiCategory]] = Some(definition.categories)
-  override val label: DocumentationLabel            = if (definition.isTestSupport) TEST_SUPPORT_API else REST_API
+  override val label: DocumentationLabel            = if (definition.isTestSupport) DocumentationLabel.TEST_SUPPORT_API else DocumentationLabel.REST_API
 
   lazy val defaultVersion: ApiVersion = definition
     .versionsAsList
@@ -184,8 +184,10 @@ case class ServiceDetails(serviceName: String, serviceUrl: String)
 
 case class ErrorResponse(code: Option[String] = None, message: Option[String] = None)
 
-object DocsVisibility extends Enumeration {
+sealed trait DocsVisibility
 
-  type DocsVisibility = Value
-  val VISIBLE, OVERVIEW_ONLY, NOT_VISIBLE = Value
+object DocsVisibility {
+  case object VISIBLE       extends DocsVisibility
+  case object OVERVIEW_ONLY extends DocsVisibility
+  case object NOT_VISIBLE   extends DocsVisibility
 }

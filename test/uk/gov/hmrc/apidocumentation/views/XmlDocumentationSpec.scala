@@ -45,8 +45,8 @@ class XmlDocumentationSpec extends CommonViewSpec {
     val description = "An XML API for testing with embedded <b>HTML</b>"
     val name        = "Test Online Service"
 
-    implicit val appConfig = mock[ApplicationConfig]
-    val messages: Messages = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
+    implicit val appConfig: ApplicationConfig = mock[ApplicationConfig]
+    val messages: Messages                    = (new DefaultMessagesApi()).preferred(Seq(Lang(Locale.ENGLISH)))
 
     val pageAttributes: PageAttributes = mock[PageAttributes]
 

@@ -32,7 +32,7 @@ import uk.gov.hmrc.apidocumentation.models._
 class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
 
   class Setup {
-    implicit val hc                           = HeaderCarrier()
+    implicit val hc: HeaderCarrier            = HeaderCarrier()
     val connector: DeveloperFrontendConnector = mock[DeveloperFrontendConnector]
     val config                                = mock[ApplicationConfig]
     when(config.title).thenReturn("Unit Test Title")

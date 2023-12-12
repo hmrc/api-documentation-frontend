@@ -29,8 +29,8 @@ import uk.gov.hmrc.apidocumentation.views.html.UsingTheHubView
 class apiMainSpec extends CommonViewSpec {
 
   trait Setup {
-    val usingTheHubView                = app.injector.instanceOf[UsingTheHubView]
-    implicit val mockApplicationConfig = mock[ApplicationConfig]
+    val usingTheHubView                                   = app.injector.instanceOf[UsingTheHubView]
+    implicit val mockApplicationConfig: ApplicationConfig = mock[ApplicationConfig]
 
     def elementExistsById(doc: Document, id: String): Boolean = doc.select(s"#$id").asScala.nonEmpty
   }

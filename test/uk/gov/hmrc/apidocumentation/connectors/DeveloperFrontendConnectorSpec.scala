@@ -51,7 +51,7 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
   "fetchNav links" should {
 
     "return fetched nav links and pass headers by" in new Setup {
-      implicit val hc = HeaderCarrier(extraHeaders = Seq("possibleAuthHeader" -> "possibleAuthHeaderVal"))
+      implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = Seq("possibleAuthHeader" -> "possibleAuthHeaderVal"))
 
       stubFor(
         get(
@@ -71,8 +71,8 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
 
   "fetchTermsOfUsePartial" should {
     "return the terms of use as a partial" in new Setup {
-      implicit val hc = HeaderCarrier()
-      val response    = HtmlPartial.Success(None, Html("<p>some terms of use</p>"))
+      implicit val hc: HeaderCarrier = HeaderCarrier()
+      val response                   = HtmlPartial.Success(None, Html("<p>some terms of use</p>"))
 
       stubFor(
         get(urlPathEqualTo("/developer/partials/terms-of-use"))

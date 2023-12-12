@@ -26,10 +26,10 @@ class HelpPagesControllerSpec extends CommonControllerBaseSpec {
 
   trait Setup extends ApiDocumentationServiceMock {
 
-    implicit val appConfig     = app.injector.instanceOf[ApplicationConfig]
-    val cookiesView            = app.injector.instanceOf[CookiesView]
-    val privacyView            = app.injector.instanceOf[PrivacyView]
-    val termsAndConditionsView = app.injector.instanceOf[TermsAndConditionsView]
+    implicit val appConfig: ApplicationConfig = app.injector.instanceOf[ApplicationConfig]
+    val cookiesView                           = app.injector.instanceOf[CookiesView]
+    val privacyView                           = app.injector.instanceOf[PrivacyView]
+    val termsAndConditionsView                = app.injector.instanceOf[TermsAndConditionsView]
 
     val helpPages = new HelpPagesController(appConfig, mcc, cookiesView, privacyView, termsAndConditionsView)
   }

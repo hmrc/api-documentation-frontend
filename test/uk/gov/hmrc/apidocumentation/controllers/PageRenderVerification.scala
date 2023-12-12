@@ -18,8 +18,6 @@ package uk.gov.hmrc.apidocumentation.controllers.utils
 
 import scala.concurrent.Future
 
-import akka.stream.testkit.NoMaterializer
-
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
@@ -33,8 +31,6 @@ trait PageRenderVerification {
   self: CommonControllerBaseSpec =>
 
   import NavigationServiceMock.sidebarLink
-
-  private implicit val materializer = NoMaterializer
 
   lazy val homeBreadcrumb    = Crumb("Home", routes.DocumentationController.indexPage().url)
   lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)

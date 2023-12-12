@@ -85,7 +85,7 @@ object RequestResponseField2 {
     }
 
     val currentField = fieldName match {
-      case Some(name) if schema.`type` != "array" => {
+      case Some(name) if schema.`type` != Some("array") => {
         val fieldOrTitle = if (isPatternproperty) schema.title.getOrElse(name) else name
         Some(RequestResponseField2(
           fieldOrTitle,
@@ -100,28 +100,28 @@ object RequestResponseField2 {
           extractEnumValues(schema)
         ))
       }
-      case _                                      => None
+      case _                                            => None
     }
 
     schema.`type` match {
       case Some("object") => {
         val propertyFields = for {
           (fieldName, definition) <- schema.properties
-          field                   <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth + 1)
+          field                   <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth + 1, Nil, false, false)
         } yield {
           field
         }
 
         val patternFields = for {
           (fieldName, definition) <- schema.patternProperties
-          field                   <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth + 1, isPatternproperty = true)
+          field                   <- extractFields(definition, Some(fieldName), None, schema.required.contains(fieldName), depth + 1, Nil, false, isPatternproperty = true)
         } yield {
           field
         }
         currentField.fold(acc)(acc :+ _) ++ propertyFields ++ patternFields
       }
       case Some("array")  => {
-        extractFields(schema.items.get, fieldName, schema.description, required, depth, acc, true)
+        extractFields(schema.items.get, fieldName, schema.description, required, depth, acc, true, false)
       }
       case _              => {
         currentField.fold(acc)(acc :+ _)

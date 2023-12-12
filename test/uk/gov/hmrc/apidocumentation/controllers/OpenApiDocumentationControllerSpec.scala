@@ -49,14 +49,14 @@ class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec {
     val openApiSwaggerParseResult = new SwaggerParseResult()
     openApiSwaggerParseResult.setOpenAPI(new OpenAPI())
 
-    lazy val openApiViewRedoc    = app.injector.instanceOf[OpenApiViewRedoc]
-    lazy val openApiPreviewRedoc = app.injector.instanceOf[OpenApiPreviewRedoc]
-    lazy val openApiPreviewView  = app.injector.instanceOf[OpenApiPreviewView]
-    lazy val mcc                 = app.injector.instanceOf[MessagesControllerComponents]
-    lazy val errorHandler        = app.injector.instanceOf[ErrorHandler]
-    lazy val openAPIV3ParserMock = mock[SwaggerParserExtension]
-    val serviceName              = ServiceName("Test-Service")
-    implicit lazy val system     = app.injector.instanceOf[ActorSystem]
+    lazy val openApiViewRedoc             = app.injector.instanceOf[OpenApiViewRedoc]
+    lazy val openApiPreviewRedoc          = app.injector.instanceOf[OpenApiPreviewRedoc]
+    lazy val openApiPreviewView           = app.injector.instanceOf[OpenApiPreviewView]
+    lazy val mcc                          = app.injector.instanceOf[MessagesControllerComponents]
+    lazy val errorHandler                 = app.injector.instanceOf[ErrorHandler]
+    lazy val openAPIV3ParserMock          = mock[SwaggerParserExtension]
+    val serviceName                       = ServiceName("Test-Service")
+    implicit lazy val system: ActorSystem = app.injector.instanceOf[ActorSystem]
 
     val underTest = new OpenApiDocumentationController(
       openApiViewRedoc,
