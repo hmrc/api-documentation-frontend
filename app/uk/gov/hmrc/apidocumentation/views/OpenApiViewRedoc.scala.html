@@ -17,10 +17,20 @@
 @import views.html.helper.CSPNonce
 @import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 @import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+@import uk.gov.hmrc.apidocumentation.config._
 
 @this()
 
-@(serviceName: ServiceName, version: ApiVersionNbr, apiName: String)(implicit requestHeader: RequestHeader)
+@(serviceName: ServiceName, version: ApiVersionNbr, apiName: String)(implicit requestHeader: RequestHeader, appConfig: ApplicationConfig, messages: Messages)
+
+<!--[if !IE]>-->
+<script
+  src="@appConfig.trackingConsentUrl"
+  id="tracking-consent-script-tag"
+  data-gtm-container="@appConfig.gtmContainer"
+  data-language="@messages.lang.code"
+></script>
+<!--<![endif]-->
 
 <head>
   <title>@apiName - HMRC Developer Hub - GOV.UK</title>

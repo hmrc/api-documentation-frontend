@@ -58,6 +58,9 @@ trait ApplicationConfig {
 
   def oasFetchResolvedMaxDuration: Long
   def oasFetchResolvedUsingHttps: Boolean
+
+  def trackingConsentUrl: String
+  def gtmContainer: String
 }
 
 @Singleton
@@ -117,4 +120,9 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
     }
   }
 
+  // Needed for GTM on the redoc rendered page
+  val trackingConsentUrl: String =
+    config.get[String]("tracking-consent-frontend.url")
+ 
+  val gtmContainer: String = config.get[String]("tracking-consent-frontend.gtm.container")
 }
