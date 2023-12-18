@@ -75,7 +75,6 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
           None
         )
       ),
-      requiresTrust = false,
       isTestSupport = isTestSupport,
       lastPublishedAt = None,
       categories = List(ApiCategory.OTHER)
@@ -90,7 +89,6 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       "Say Hello World",
       ApiContext("hello"),
       List(ExtendedApiVersion(version, ApiStatus.STABLE, List(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)), None, None)),
-      requiresTrust = false,
       isTestSupport = false,
       lastPublishedAt = None,
       categories = List(ApiCategory.OTHER)
@@ -112,7 +110,6 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       versions = List(
         ExtendedApiVersion(version, ApiStatus.STABLE, List(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)), principalApiAvailability, subordinateApiAvailability)
       ),
-      requiresTrust = false,
       isTestSupport = false,
       lastPublishedAt = None,
       categories = List(ApiCategory.OTHER)
@@ -142,7 +139,6 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
           None
         )
       ),
-      requiresTrust = false,
       isTestSupport = false,
       lastPublishedAt = None,
       categories = List(ApiCategory.OTHER)
@@ -179,7 +175,6 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
           None
         )
       ),
-      requiresTrust = false,
       isTestSupport = false,
       lastPublishedAt = None,
       categories = List(ApiCategory.OTHER)

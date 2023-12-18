@@ -223,7 +223,6 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
                   None
                 )
               ),
-              requiresTrust = false,
               isTestSupport = false,
               lastPublishedAt = None,
               categories = List(ApiCategory.OTHER)
