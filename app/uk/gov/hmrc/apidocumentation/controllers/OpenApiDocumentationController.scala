@@ -31,6 +31,7 @@ import io.swagger.v3.parser.core.extensions.SwaggerParserExtension
 import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.exception.ReadContentException
 
+import play.api.i18n.MessagesProvider
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
@@ -45,7 +46,6 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService, NavigationService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html._
-import play.api.i18n.MessagesProvider
 
 @Singleton
 class OpenApiDocumentationController @Inject() (
@@ -75,7 +75,13 @@ class OpenApiDocumentationController @Inject() (
       sidebarLinks = navigationService.sidebarNavigation()
     )
 
-  private def doRenderApiDocumentation(service: ServiceName, version: ApiVersionNbr, apiOption: Option[ExtendedApiDefinition])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider): Future[Result] = {
+  private def doRenderApiDocumentation(
+      service: ServiceName,
+      version: ApiVersionNbr,
+      apiOption: Option[ExtendedApiDefinition]
+    )(implicit request: Request[AnyContent],
+      messagesProvider: MessagesProvider
+    ): Future[Result] = {
     def renderDocumentationPage(apiName: String): Future[Result] = {
       successful(Ok(openApiViewRedoc(service, version, apiName)))
     }

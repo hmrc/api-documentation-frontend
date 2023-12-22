@@ -199,7 +199,6 @@ trait ApiDefinitionTestDataHelper {
           sandboxAvailability = None
         )
       ),
-      requiresTrust = false,
       isTestSupport = false,
       lastPublishedAt = None,
       categories = List(ApiCategory.OTHER)
