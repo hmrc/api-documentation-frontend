@@ -23,17 +23,17 @@
 
 @(serviceName: ServiceName, version: ApiVersionNbr, apiName: String)(implicit requestHeader: RequestHeader, appConfig: ApplicationConfig, messages: Messages)
 
-<!--[if !IE]>-->
-<script
-  src="@appConfig.trackingConsentUrl"
-  id="tracking-consent-script-tag"
-  data-gtm-container="@appConfig.gtmContainer"
-  data-language="@messages.lang.code"
-></script>
-<!--<![endif]-->
-
 <head>
   <title>@apiName - HMRC Developer Hub - GOV.UK</title>
+  <!--[if !IE]>-->
+  <script
+    @CSPNonce.attr
+    src="@appConfig.trackingConsentUrl"
+    id="tracking-consent-script-tag"
+    data-gtm-container="@appConfig.gtmContainer"
+    data-language="@messages.lang.code"
+  ></script>
+  <!--<![endif]-->
 </head>
 
 <div id="redoc"></div>
