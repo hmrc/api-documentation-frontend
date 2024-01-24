@@ -78,5 +78,9 @@
   {
     "name": "Excise Movement Control System technical interface specification",
     "context": "/guides/excise-movement-control-system-api-tis"
+  },
+  {
+    "name": "Post and Parcels Service Guide",
+    "context": "/guides/post-and-parcels-service-guide"
   }
 ]

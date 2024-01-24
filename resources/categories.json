@@ -77,5 +77,6 @@
   "Import Control System 2 Presentation of Goods service guide": ["CUSTOMS"],
   "Excise Movement Control System service guide": ["CUSTOMS"],
   "Excise Movement Control System testing guide": ["CUSTOMS"],
-  "Excise Movement Control System technical interface specification": ["CUSTOMS"]
+  "Excise Movement Control System technical interface specification": ["CUSTOMS"],
+  "Post and Parcels Service Guide": ["CUSTOMS"]
 }
