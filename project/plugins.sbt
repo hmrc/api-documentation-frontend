@@ -14,3 +14,5 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 addSbtPlugin("org.scalameta"   % "sbt-scalafmt"          % "2.5.2")
 addSbtPlugin("ch.epfl.scala"   % "sbt-bloop"             % "1.5.11")
 addSbtPlugin("ch.epfl.scala"  %% "sbt-scalafix"          % "0.11.1")
+
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always

@@ -13,8 +13,9 @@ Global / bloopAggregateSourceDependencies := true
 
 scalaVersion := "2.13.12"
 
-ThisBuild / semanticdbEnabled := true
-ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+ThisBuild / semanticdbEnabled                                    := true
+ThisBuild / semanticdbVersion                                    := scalafixSemanticdb.revision
 
 ThisBuild / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
 
