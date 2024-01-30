@@ -23,8 +23,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 
-import akka.stream.Materializer
 import controllers.Assets
+import org.apache.pekko.stream.Materializer
 
 import play.api.i18n.MessagesProvider
 import play.api.libs.json.Json

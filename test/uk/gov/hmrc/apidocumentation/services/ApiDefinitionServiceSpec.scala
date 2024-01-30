@@ -21,7 +21,7 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.reflect.ClassTag
 
-import akka.Done
+import org.apache.pekko.Done
 
 import play.api.cache._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName

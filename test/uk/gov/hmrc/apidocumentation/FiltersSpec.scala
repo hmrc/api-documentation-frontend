@@ -18,8 +18,8 @@ package unit.uk.gov.hmrc.apidocumentation
 
 import scala.concurrent.{ExecutionContext, Future}
 
-import akka.stream.Materializer
-import akka.stream.testkit.NoMaterializer
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.testkit.NoMaterializer
 
 import play.api.mvc.{AnyContentAsEmpty, Request, RequestHeader, Result, Session}
 import play.api.routing.{HandlerDef, Router}

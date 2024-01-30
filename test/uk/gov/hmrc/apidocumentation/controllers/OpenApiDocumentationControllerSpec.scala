@@ -19,10 +19,10 @@ package uk.gov.hmrc.apidocumentation.controllers
 import java.io.FileNotFoundException
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import akka.actor.ActorSystem
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.parser.core.extensions.SwaggerParserExtension
 import io.swagger.v3.parser.core.models.SwaggerParseResult
+import org.apache.pekko.actor.ActorSystem
 
 import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.mvc.MessagesControllerComponents

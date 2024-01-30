@@ -19,8 +19,8 @@ package uk.gov.hmrc.apidocumentation.controllers
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
 
-import akka.stream.Materializer
 import controllers.Assets
+import org.apache.pekko.stream.Materializer
 
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SEE_OTHER}
 import play.api.mvc.MessagesControllerComponents

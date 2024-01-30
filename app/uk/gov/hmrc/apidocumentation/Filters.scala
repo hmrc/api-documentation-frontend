@@ -19,7 +19,7 @@ package uk.gov.hmrc.apidocumentation
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 
 import play.api.mvc._
 import play.api.routing.Router

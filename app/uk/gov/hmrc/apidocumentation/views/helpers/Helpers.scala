@@ -18,7 +18,7 @@ package uk.gov.hmrc.apidocumentation.views.helpers
 
 import scala.language.reflectiveCalls
 
-import akka.http.scaladsl.model.{StatusCode, StatusCodes}
+import org.apache.pekko.http.scaladsl.model.{StatusCode, StatusCodes}
 
 import play.twirl.api.Html
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._

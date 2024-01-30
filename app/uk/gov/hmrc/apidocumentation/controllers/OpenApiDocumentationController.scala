@@ -24,12 +24,12 @@ import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future, blocking}
 import scala.jdk.CollectionConverters._
 
-import akka.actor.ActorSystem
 import io.swagger.v3.core.util.Yaml
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.parser.core.extensions.SwaggerParserExtension
 import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.exception.ReadContentException
+import org.apache.pekko.actor.ActorSystem
 
 import play.api.i18n.MessagesProvider
 import play.api.mvc._
@@ -182,7 +182,7 @@ class OpenApiDocumentationController @Inject() (
       }
     }
 
-    val futureTimer: Future[Result] = akka.pattern.after(FiniteDuration(appConfig.oasFetchResolvedMaxDuration, TimeUnit.MILLISECONDS), using = system.scheduler)(
+    val futureTimer: Future[Result] = org.apache.pekko.pattern.after(FiniteDuration(appConfig.oasFetchResolvedMaxDuration, TimeUnit.MILLISECONDS), using = system.scheduler)(
       Future.failed(new IllegalStateException("Exceeded OAS parse time"))
     )
 
