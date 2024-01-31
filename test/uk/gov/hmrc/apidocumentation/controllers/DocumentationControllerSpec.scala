@@ -20,7 +20,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 
 import play.api.http.HeaderNames.LOCATION
 import play.api.http.Status.MOVED_PERMANENTLY
