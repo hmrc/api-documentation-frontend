@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.{HmrcFooter, HmrcHeader}
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet
 @import uk.gov.hmrc.apidocumentation.views.html.include
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -24,13 +25,18 @@
 @import uk.gov.hmrc.apidocumentation.views.html.templates._
 @import uk.gov.hmrc.apidocumentation.views.html.partials.breadcrumbs
 @import uk.gov.hmrc.apidocumentation.views.templates.FooterLinks
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.footer.{Footer, FooterItem, Meta}
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.header.Header
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.header.NavigationItem
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.En
 
 @import play.twirl.api.HtmlFormat
 @import views.html.helper.CSPNonce
 
 @this(
-      govukTemplate: GovukTemplate,
-      footerLinks: FooterLinks,
+      govukLayout: GovukLayout,
+      hmrcHeader: HmrcHeader,
+      hmrcFooter: HmrcFooter,
       siteFooter: SiteFooter,
       siteHeader: SiteHeader,
       siteHelper: SiteHelper,
@@ -69,18 +75,40 @@
   <script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/apis-app.min.js")' type="text/javascript"></script>
 }
 
-@footerBlock = {
-    @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
+@siteFooter = {
+  @hmrcFooter(new Footer(meta = Some(
+    Meta(
+      items = Some(
+        Seq(
+          FooterItem(text = Some("Cookies"), href = Some(s"/api-documentation/docs/help/cookies")),
+          FooterItem(text = Some("Accessibility statement"), href = Some(s"/accessibility-statement/hmrc-developer-hub?referrerUrl=${helper.urlEncode(request.uri)}")),
+          FooterItem(text = Some("Privacy Policy"), href = Some(s"/api-documentation/docs/help/privacy")),
+          FooterItem(text = Some("Terms and conditions"), href = Some(s"/api-documentation/docs/help/terms-and-conditions")),
+          FooterItem(text = Some("Help using GOV.UK "), href = Some("https://www.gov.uk/help"))
+        )
+      )
+    )
+  ), language = En))
 }
 
 @bodyEndDefault = {
     @bodyEndBlock
     @scripts
 }
+
 @banner = {
     @breadcrumbs.map {crumbs =>
         @partials.breadcrumbs(crumbs.crumbs)
     }
+}
+
+@navigation = @{
+  Seq(
+      NavigationItem(content = Text("Documentation"), href = Some(s"/api-documentation/docs/using-the-hub")),
+      NavigationItem(content = Text("Applications"), href = Some(s"/developer/applications")),
+      NavigationItem(content = Text("Support"), href = Some(s"/developer/support")),
+      NavigationItem(content = Text("Service Availability"), href = Some("https://api-platform-status.production.tax.service.gov.uk/"))
+  )
 }
 
 @content = {
@@ -116,12 +144,22 @@
     </main>
 }
 
-@govukTemplate(
-    htmlLang = Some(messages.lang.code),
-    pageTitle = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
-    headBlock = Some(head),
-    headerBlock = siteHeader(),
-    beforeContentBlock = Some(beforeContentBlock),
-    footerBlock = footerBlock,
-    bodyEndBlock = Some(bodyEndDefault)
-)(bodyContent)
+@govukLayout(
+  pageTitle = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
+  headBlock = Some(head),
+  headerBlock = Some(hmrcHeader(Header(
+        homepageUrl = "https://www.gov.uk",
+        serviceName = Some(applicationConfig.title),
+        navigation = Some(navigation),
+        serviceUrl = "/api-documentation",
+        displayHmrcBanner = false,
+        containerClasses = "govuk-width-container",
+        signOutHref = None,
+        language = En
+  ))),
+  beforeContentBlock = Some(beforeContentBlock),
+  mainContentLayout = None,
+  footerBlock = Some(siteFooter),
+  bodyEndBlock = Some(bodyEndDefault),
+  scriptsBlock = None
+)(mainContent)
