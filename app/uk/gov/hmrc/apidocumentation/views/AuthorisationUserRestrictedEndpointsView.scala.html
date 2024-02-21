@@ -51,7 +51,7 @@
     <p class="govuk-body">We use the open standard <a class="govuk-link" href="https://oauth.net/2/">OAuth 2.0</a>
         with the <a class="govuk-link" href="https://oauth.net/2/grant-types/authorization-code/">Authorization Code
         Grant</a>. This lets the end user grant authority to your application to interact with
-        HMRC on their behalf, without sharing their access credentials.
+        HMRC on their behalf, without sharing their access credentials. We are able to support  <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> for this grant-type, though you are not required to use it.
     </p>
 
     <p class="govuk-body">The end user authenticates directly with us using their Government Gateway account, and grants authority for specific <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</p>
@@ -168,6 +168,10 @@ response_type=code\
                         This must match one of the redirect URIs you specified when you created your application.<br><br>
                         For more details see our <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#redirect-uris">reference guide</a>.
                     </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">code_challenge</code> (optional)</td>
+                    <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> <code class="code--slim">code_challenge</code> used to ensure that the subsequently-issued access token is not intercepted.</td>
                 </tr>
                 </tbody>
             </table>
@@ -481,6 +485,30 @@ curl -X POST -H "content-type:application/x-www-form-urlencoded" --data \
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">code is invalid</code></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">PKCE code_verifier wasn't expected as no code_challenge was provided when requesting an authorization code</td>
+                        <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                        <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">code_verifier is not expected</code></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">PKCE code_verifier was expected but none was supplied</td>
+                        <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                        <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">code_verifier is expected when code_challenge was supplied</code></td>
+                    </tr>
+                     <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">PKCE code_verifier is made up of fewer than 43, more than 128, or invalid characters</td>
+                        <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                        <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">code_verifier must contain valid characters of length between 43 and 128</code></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">PKCE code_verifier does not correlate to code_challenge</td>
+                        <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                        <td class="govuk-table__cell"><code class="code--slim">invalid_grant</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">code_verifier is invalid</code></td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">Unexpected error occurred</td>
