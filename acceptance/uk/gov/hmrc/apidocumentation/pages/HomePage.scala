@@ -25,7 +25,7 @@ object HomePage extends WebPage {
 
   override def isCurrentPage: Boolean = find("RESTful-APIs-Title").fold(false)(_.text == "Create tax software and apps using HMRC APIs")
 
-  def applicationName = WebBrowser.id("HMRC-Developer-Hub").element.text
+  def applicationName = WebBrowser.className("hmrc-header__service-name").element.text
 
   def selectApidoc(): Unit = {
     val apiDocLInk = find(linkText("API documentation")).get

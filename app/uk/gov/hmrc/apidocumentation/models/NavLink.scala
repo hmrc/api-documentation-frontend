@@ -16,7 +16,26 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.hmrcfrontend.views.viewmodels.header.NavigationItem
+
 case class NavLink(label: String, href: String, truncate: Boolean = false, openInNewWindow: Boolean = false, isSensitive: Boolean = false)
+
+case object NavLink {
+
+  implicit class NavLinkSyntax(navLink: NavLink) {
+
+    def asNavigationItem: NavigationItem = NavigationItem(
+      content = Text(navLink.label),
+      href = Some(navLink.href),
+      attributes = if (navLink.openInNewWindow) Map("target" -> "_blank") else Map.empty // Note: not handling `truncate` or `isSensitive` fields
+    )
+  }
+
+  implicit class NavLinksSyntax(navLinks: Seq[NavLink]) {
+    def asNavigationItems: Seq[NavigationItem] = navLinks.map(_.asNavigationItem)
+  }
+}
 
 case class SidebarLink(label: String, href: String, subLinks: Seq[SidebarLink] = Seq.empty, showSubLinks: Boolean = false)
 
@@ -28,7 +47,7 @@ case object StaticNavLinks {
       NavLink("Documentation", "/api-documentation/docs/using-the-hub"),
       NavLink("Applications", "/developer/applications"),
       NavLink("Support", "/developer/support"),
-      NavLink("Service availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)
+      NavLink("Service Availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)
     )
   }
 }

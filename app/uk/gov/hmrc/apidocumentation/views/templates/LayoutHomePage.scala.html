@@ -25,7 +25,7 @@
 @import views.html.helper.CSPNonce
 
 @this(
-    govukTemplate: GovukTemplate,
+    govukLayout: GovukLayout,
     footer: GovukFooter,
     siteHeader: HomePageHeader,
     siteFooter: SiteFooter,
@@ -55,17 +55,13 @@
     @scripts
 }
 
-@footerBlock = {
-    @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
-}
-
-@govukTemplate(
+@govukLayout(
     pageTitle = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = siteHeader(headerNavLinks, navLinks),
-    mainClasses = None,
-    footerBlock = footerBlock,
+    headerBlock = Some(siteHeader(headerNavLinks, navLinks)),
+    footerBlock = Some(siteFooter(footerLinks)),
     beforeContentBlock = None,
+    mainContentLayout = None,
     bodyEndBlock = Some(bodyEndDefault),
     pageLayout = Some(fullWidthContent(_))
 )(contentBlock)
