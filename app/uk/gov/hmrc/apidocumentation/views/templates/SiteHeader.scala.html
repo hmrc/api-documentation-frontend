@@ -23,18 +23,13 @@
 
 @this(hmrcHeader: HmrcHeader)
 
+@* TODO: The navLinks parameter is no longer used; removal requires refactoring up to Controller level *@
 @(navLinks: Seq[NavLink] = Seq.empty)(implicit applicationConfig: ApplicationConfig)
-
-@navigation = @{
-    StaticNavLinks().asNavigationItems ++
-        // TODO: Fix this; auth-links is not being added
-        navLinks.asNavigationItems.map(navigationItem => navigationItem.copy(attributes = navigationItem.attributes + ("class" -> "auth-links")))
-}
 
 @hmrcHeader(Header(
     homepageUrl = "https://www.gov.uk",
     serviceName = Some(applicationConfig.title),
-    navigation = Some(navigation),
+    navigation = Some(StaticNavLinks().asNavigationItems),
     serviceUrl = "/api-documentation",
     displayHmrcBanner = false,
     containerClasses = "govuk-width-container",

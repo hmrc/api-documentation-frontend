@@ -20,25 +20,21 @@
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.templates.FooterLinks
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.pagelayout.PageLayout
 @import uk.gov.hmrc.apidocumentation.views.html.FullWidthContent
 @import views.html.helper.CSPNonce
 
 @this(
     govukLayout: GovukLayout,
-    footer: GovukFooter,
-    siteHeader: HomePageHeader,
+    homePageHeader: HomePageHeader,
     siteFooter: SiteFooter,
     footerLinks: FooterLinks,
-    applicationConfig: ApplicationConfig,
     hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
     fullWidthContent: FullWidthContent
 )
 
 @(title: Option[String] = None,
   navLinks: Seq[NavLink] = Seq.empty,
-  navTitle: Option[String] = None,
-  headerNavLinks: Option[Html] = None
+  navTitle: Option[String] = None
 )(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, request: Request[_], messages: Messages)
 
 @head = {
@@ -58,7 +54,7 @@
 @govukLayout(
     pageTitle = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = Some(siteHeader(headerNavLinks, navLinks)),
+    headerBlock = Some(homePageHeader(navLinks)),
     footerBlock = Some(siteFooter(footerLinks)),
     beforeContentBlock = None,
     mainContentLayout = None,
