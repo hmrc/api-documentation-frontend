@@ -113,7 +113,9 @@ response_type=code\
 &amp;client_id=[YOUR-CLIENT-ID]\
 &amp;scope=[REQUESTED-SCOPE]\
 &amp;state=[STATE]\
-&amp;redirect_uri=[YOUR-REDIRECT-URI]"</pre>
+&amp;redirect_uri=[YOUR-REDIRECT-URI]\
+&code_challenge=[CODE-CHALLENGE]\
+&code_challenge_method=[CODE-CHALLENGE-METHOD]"</pre>
             <br />
 
             <h5 id="auth-endpoint-example" class="govuk-heading-s">Example</h5>
@@ -124,7 +126,9 @@ response_type=code\
 &amp;client_id=Hf8sfkiUkYp9I3_R10qSnZ2ZUvoa\
 &amp;scope=scope_1+scope_2+scope_3\
 &amp;state=30de877c-ee2f-15db-8314-0800200c9a66\
-&amp;redirect_uri=https://www.example.com/auth-redirect"</pre>
+&amp;redirect_uri=https://www.example.com/auth-redirect\
+&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM\
+&code_challenge_method=S256"</pre>
 
             <br>
 
@@ -172,6 +176,10 @@ response_type=code\
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell"><code class="code--slim">code_challenge</code> (optional)</td>
                     <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> <code class="code--slim">code_challenge</code> used to ensure that the subsequently-issued access token is not intercepted.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">code_challenge_method</code> (optional)</td>
+                    <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> <code class="code--slim">code_challenge_method</code> used to transform the code_verifier to the code_challenge. This must have a value of <code class="code--slim">S256</code>.</td>
                 </tr>
                 </tbody>
             </table>
@@ -250,6 +258,30 @@ response_type=code\
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">client_secret should NOT be present</code></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">code_challenge cannot be empty</td>
+                        <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                        <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">code_challenge if present, cannot be empty</code></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">code_challenge_method, must be S256</td>
+                        <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                        <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">code_challenge_method, if present, must be S256</code></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">code_challenge_method should be present when code_challenge is present</td>
+                        <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                        <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">code_challenge_method should be present when code_challenge is present</code></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">code_challenge should be present when code_challenge_method is present</td>
+                        <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                        <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                        <td class="govuk-table__cell"><code class="code--slim">code_challenge should be present when code_challenge_method is present</code></td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">Unexpected error occurred</td>
@@ -350,6 +382,7 @@ curl -X POST -H "content-type:application/x-www-form-urlencoded" --data \
 &amp;grant_type=authorization_code\
 &amp;redirect_uri=[YOUR-REDIRECT-URI]\
 &amp;code=[AUTHORIZATION-CODE]" \
+&amp;code_verifier=[CODE-VERIFIER]" \
 @{applicationConfig.sandboxApiBaseUrl}/oauth/token
 </pre>
 
@@ -385,6 +418,10 @@ curl -X POST -H "content-type:application/x-www-form-urlencoded" --data \
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell"><code class="code--slim">code</code></td>
                     <td class="govuk-table__cell">The authorisation code you received from us in the previous step.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">code_verifier</code> (optional)</td>
+                    <td class="govuk-table__cell">This is mandatory if <code class="code--slim">code_challenge</code> was provided in the call to <code class="code--slim">/authorize.</code></td>
                 </tr>
                 </tbody>
             </table>
