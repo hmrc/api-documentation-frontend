@@ -175,11 +175,11 @@ response_type=code\
                 </tr>
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell"><code class="code--slim">code_challenge</code> (optional)</td>
-                    <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> <code class="code--slim">code_challenge</code> used to ensure that the subsequently-issued access token is not intercepted.</td>
+                    <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> <code class="code--slim">code_challenge</code> is used to ensure that the subsequently-issued access token is not intercepted. This is mandatory if <code class="code--slim">code_challenge_method</code> is provided.</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell"><code class="code--slim">code_challenge_method</code> (optional)</td>
-                    <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> <code class="code--slim">code_challenge_method</code> used to transform the code_verifier to the code_challenge. This must have a value of <code class="code--slim">S256</code>.</td>
+                    <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> <code class="code--slim">code_challenge_method</code> is used to transform the code_verifier to the code_challenge. This must have a value of <code class="code--slim">S256</code>. This is mandatory if <code class="code--slim">code_challenge</code> is provided.</td>
                 </tr>
                 </tbody>
             </table>
@@ -260,25 +260,25 @@ response_type=code\
                         <td class="govuk-table__cell"><code class="code--slim">client_secret should NOT be present</code></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">code_challenge cannot be empty</td>
+                        <td class="govuk-table__cell">PKCE Code Challenge cannot be empty</td>
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">code_challenge if present, cannot be empty</code></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">code_challenge_method, must be S256</td>
+                        <td class="govuk-table__cell">PKCE Code Challenge Method, must be S256</td>
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">code_challenge_method, if present, must be S256</code></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">code_challenge_method should be present when code_challenge is present</td>
+                        <td class="govuk-table__cell">PKCE Code Challenge Method should be present when Code Challenge is present</td>
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">code_challenge_method should be present when code_challenge is present</code></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">code_challenge should be present when code_challenge_method is present</td>
+                        <td class="govuk-table__cell">PKCE Code Challenge should be present when Code Challenge Method is present</td>
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">code_challenge should be present when code_challenge_method is present</code></td>
@@ -421,7 +421,7 @@ curl -X POST -H "content-type:application/x-www-form-urlencoded" --data \
                 </tr>
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell"><code class="code--slim">code_verifier</code> (optional)</td>
-                    <td class="govuk-table__cell">This is mandatory if <code class="code--slim">code_challenge</code> was provided in the call to <code class="code--slim">/authorize.</code></td>
+                    <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> <code class="code--slim">code_verifier</code> is mandatory if <code class="code--slim">code_challenge</code> was provided in the call to <code class="code--slim">/authorize</code>.</td>
                 </tr>
                 </tbody>
             </table>
@@ -524,25 +524,25 @@ curl -X POST -H "content-type:application/x-www-form-urlencoded" --data \
                         <td class="govuk-table__cell"><code class="code--slim">code is invalid</code></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">PKCE code_verifier wasn't expected as no code_challenge was provided when requesting an authorization code</td>
+                        <td class="govuk-table__cell">PKCE Code Verifier wasn't expected as no Code Challenge was provided when requesting an authorization code</td>
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">code_verifier is not expected</code></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">PKCE code_verifier was expected but none was supplied</td>
+                        <td class="govuk-table__cell">PKCE Code Verifier was expected but none was supplied</td>
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">code_verifier is expected when code_challenge was supplied</code></td>
                     </tr>
                      <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">PKCE code_verifier is made up of fewer than 43, more than 128, or invalid characters</td>
+                        <td class="govuk-table__cell">PKCE Code Verifier is made up of fewer than 43, more than 128, or invalid characters</td>
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">code_verifier must contain valid characters of length between 43 and 128</code></td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">PKCE code_verifier does not correlate to code_challenge</td>
+                        <td class="govuk-table__cell">PKCE Code Verifier does not correlate to Code Challenge</td>
                         <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
                         <td class="govuk-table__cell"><code class="code--slim">invalid_grant</code></td>
                         <td class="govuk-table__cell"><code class="code--slim">code_verifier is invalid</code></td>
