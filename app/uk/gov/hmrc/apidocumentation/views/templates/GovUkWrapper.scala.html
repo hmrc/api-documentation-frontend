@@ -26,7 +26,7 @@
 @import views.html.helper.CSPNonce
 
 @this(
-        govukTemplate: GovukTemplate,
+        govukLayout: GovukLayout,
         footerLinks: FooterLinks,
         siteFooter: SiteFooter,
         siteHeader: SiteHeader,
@@ -42,7 +42,7 @@
         breadcrumbs: Option[Breadcrumbs] = None,
         navLinks: Seq[NavLink] = Seq.empty,
         leftNav: Option[Html] = None
-)(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any], requestHeader: RequestHeader)
+)(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any])
 
 @head = {
     @hmrcTrackingConsentSnippet()
@@ -74,10 +74,6 @@
     </div>
 }
 
-@footerBlock = {
-    @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
-}
-
 @bodyEndDefault = {
     @bodyEndBlock
     @scripts
@@ -104,12 +100,12 @@
     </div>
 }
 
-@govukTemplate(
-    htmlLang = Some(messages.lang.code),
+@govukLayout(
     pageTitle = Some(s"${pageTitle.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = siteHeader(navLinks),
+    headerBlock = Some(siteHeader(navLinks)),
     beforeContentBlock = Some(beforeContentBlock),
-    footerBlock = footerBlock,
+    mainContentLayout = None,
+    footerBlock = Some(siteFooter(footerLinks)),
     bodyEndBlock = Some(bodyEndDefault)
 )(mainContentDefault)

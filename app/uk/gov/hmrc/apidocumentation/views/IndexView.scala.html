@@ -21,12 +21,9 @@
 
 @this(layoutHomePage: LayoutHomePage)
 
-@(pageTitle: String, navLinks: Seq[NavLink], loggedIn: Boolean)(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
+@(pageTitle: String, navLinks: Seq[NavLink], loggedIn: Boolean)(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: Request[Any])
 
-@layoutHomePage(
-    headerNavLinks = Some(partials.headerNavLinks(navLinks)),
-    navLinks = navLinks
-) {
+@layoutHomePage(navLinks = navLinks) {
 <!-- Index blue banner -->
 <div class="hero">
     <div class="govuk-width-container">

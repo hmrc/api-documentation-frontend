@@ -16,13 +16,11 @@
 
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.views.html.templates.SiteHeader
-@import uk.gov.hmrc.apidocumentation.views.html.partials
-@import uk.gov.hmrc.apidocumentation.views.html.include
 @import uk.gov.hmrc.apidocumentation.models._
 
 @this(siteHeader: SiteHeader)
 
-@(headerNavLinks: Option[Html] = None, navLinks: Seq[NavLink] = Seq.empty)(implicit messages: Messages, applicationConfig: ApplicationConfig)
+@(navLinks: Seq[NavLink] = Seq.empty)(implicit messages: Messages, applicationConfig: ApplicationConfig)
 
 @siteHeader(navLinks)
 <!-- Notification Banner -->

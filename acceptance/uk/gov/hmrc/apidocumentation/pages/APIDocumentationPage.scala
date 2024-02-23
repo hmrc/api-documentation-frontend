@@ -41,7 +41,7 @@ object APIDocumentationPage extends WebPage {
     waitForPageToStopMoving()
   }
 
-  def applicationName = WebBrowser.id("HMRC-Developer-Hub").element.text
+  def applicationName = WebBrowser.className("hmrc-header__service-name").element.text
 
   def waitForPageToStopMoving() = {
     new WebDriverWait(webDriver, Duration.ofSeconds(5)).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))

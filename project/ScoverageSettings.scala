@@ -16,7 +16,6 @@ object ScoverageSettings {
       "app.Routes",
       "app.RoutesPrefix",
       "controllers.javascript",
-      "com\\.kenshoo\\.play\\.metrics.*",
       ".*Reverse.*",
       "uk\\.gov\\.hmrc\\.controllers\\.Reverse.*",
     ).mkString(";")

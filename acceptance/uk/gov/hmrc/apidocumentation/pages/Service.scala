@@ -38,7 +38,7 @@ object HelloWorldPage extends WebPage with TableDrivenPropertyChecks {
 
   def endpointsBackToTop = find(id("middle-skip-to-main")).get
 
-  def applicationName = WebBrowser.id("HMRC-Developer-Hub").element.text
+  def applicationName = WebBrowser.className("hmrc-header__service-name").element.text
 
   def selectErrorsBackToTop(): Unit = {
     click on errorsBackToTop

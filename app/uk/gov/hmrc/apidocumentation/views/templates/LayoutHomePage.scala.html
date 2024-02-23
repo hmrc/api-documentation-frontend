@@ -20,25 +20,21 @@
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.templates.FooterLinks
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.pagelayout.PageLayout
 @import uk.gov.hmrc.apidocumentation.views.html.FullWidthContent
 @import views.html.helper.CSPNonce
 
 @this(
-    govukTemplate: GovukTemplate,
-    footer: GovukFooter,
-    siteHeader: HomePageHeader,
+    govukLayout: GovukLayout,
+    homePageHeader: HomePageHeader,
     siteFooter: SiteFooter,
     footerLinks: FooterLinks,
-    applicationConfig: ApplicationConfig,
     hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
     fullWidthContent: FullWidthContent
 )
 
 @(title: Option[String] = None,
   navLinks: Seq[NavLink] = Seq.empty,
-  navTitle: Option[String] = None,
-  headerNavLinks: Option[Html] = None
+  navTitle: Option[String] = None
 )(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, request: Request[_], messages: Messages)
 
 @head = {
@@ -55,17 +51,13 @@
     @scripts
 }
 
-@footerBlock = {
-    @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
-}
-
-@govukTemplate(
+@govukLayout(
     pageTitle = Some(s"${title.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = siteHeader(headerNavLinks, navLinks),
-    mainClasses = None,
-    footerBlock = footerBlock,
+    headerBlock = Some(homePageHeader(navLinks)),
+    footerBlock = Some(siteFooter(footerLinks)),
     beforeContentBlock = None,
+    mainContentLayout = None,
     bodyEndBlock = Some(bodyEndDefault),
     pageLayout = Some(fullWidthContent(_))
 )(contentBlock)
