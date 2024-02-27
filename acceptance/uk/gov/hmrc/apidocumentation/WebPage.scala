@@ -16,38 +16,22 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import org.openqa.selenium._
-import org.scalatest.concurrent.Eventually
-import org.scalatestplus.selenium.{Page, WebBrowser}
-import org.scalatest.matchers.should.Matchers
 
-trait WebPage extends Page with WebBrowser with Matchers with Eventually with Wait {
+import org.openqa.selenium.By
 
-  implicit lazy val webDriver: WebDriver = Env.driver
+trait WebPage extends PageObject {
 
-  def isCurrentPage: Boolean = false
+  def url(): String
 
-  def heading = tagName("h1").element.text
+  def goTo(): Unit = get(url())
 
-  def bodyText = tagName("body").element.text
-
-  def containsFragment(fragment: String) =
-    webDriver.getPageSource.contains(fragment)
-
-  def clickElement(elementId: String): Unit = {
-    click on id(elementId)
+  def pageHeading(): String
+    
+  def heading() = getText(By.tagName("h1"))
+  def bodyText() = getText(By.tagName("body"))
+  
+  def isCurrentPage(): Boolean = {
+    this.heading() == this.pageHeading()
   }
 
-  def on(page: WebPage)(implicit webDriver: WebDriver) = {
-    eventually {
-      webDriver.findElement(By.tagName("body"))
-    }
-    withClue(s"Currently in page: $currentUrl " + find(tagName("h1")).map(_.text).fold(" - ")(h1 => s", with title '$h1' - ")) {
-      assert(page.isCurrentPage, s"Page was not loaded: ${page.url}")
-    }
-  }
-
-  def clickOnLink(expectedLink:String): Unit = {
-    click on waitForElement(By.linkText(expectedLink))
-  }
 }

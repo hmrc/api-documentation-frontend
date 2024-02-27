@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.pages
 
-import uk.gov.hmrc.apidocumentation.{Env, WebPage}
+import uk.gov.hmrc.apidocumentation.WebPage
 import org.openqa.selenium.By
 
-object HomePage extends WebPage with HasApplicationName {
+trait HasApplicationName {
+  self: WebPage => 
 
-  val pageHeading = "Create tax software and apps using HMRC APIs"
+  private val devHubAppName = By.className("hmrc-header__service-name")
 
-  private val aHeading = By.id("RESTful-APIs-Title")
-  private val apiDocsLink = By.linkText("API documentation")
-
-  override val url = s"http://localhost:${Env.port}/api-documentation"
-
-  override def isCurrentPage(): Boolean = getText(aHeading) == "Create tax software and apps using HMRC APIs"
-
-  def selectApidoc(): Unit = {
-   click(apiDocsLink)
-  }
-
+  def applicationName() = getText(devHubAppName)
 }

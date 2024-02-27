@@ -20,8 +20,9 @@ import uk.gov.hmrc.apidocumentation.BaseSpec
 import uk.gov.hmrc.apidocumentation.pages.{APIDocumentationPage, _}
 import org.scalatest.prop.TableDrivenPropertyChecks
 import uk.gov.hmrc.apidocumentation.TableDrivenPropertyMocks
+import spec.NavigationSugar
 
-class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPropertyChecks with TableDrivenPropertyMocks {
+class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPropertyChecks with TableDrivenPropertyMocks with NavigationSugar {
 
   Feature("API Documentation") {
 
@@ -29,7 +30,6 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       Given("I have navigated to the API documentation page")
       Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
       Given.helloWorldIsDeployed("api-example-microservice", "1.0")
@@ -44,7 +44,6 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       Given("I have navigated to the API documentation page")
       Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
       Given.helloWorldIsDeployed("api-example-microservice", "1.0")
@@ -59,7 +58,6 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       Given("I have navigated to the API documentation page")
       Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
       Given.helloWorldIsDeployed("api-example-microservice", "1.0")
@@ -77,13 +75,11 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       Given("I have navigated to the API documentation page")
       Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
       Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
-      loadPage()
 
       Then("I can see the details of the following end points when a HTTP verb button is clicked on")
       HelloWorldPage.assertEndpointsDetails()
@@ -95,7 +91,6 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the API  Documentation Test documentation")
       APIDocumentationPage.selectAPIDocumentationTestService()
@@ -110,7 +105,6 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the API  Documentation Test documentation")
       APIDocumentationPage.selectAPIDocumentationTestService()
@@ -125,12 +119,11 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the API  Documentation Test documentation")
       APIDocumentationPage.selectAPIDocumentationTestService()
 
-      And("I select version 'v1.5 (Beta)")
+      And("I select version v1.5 (Beta)")
       CommonPage.selectVersion("v1.5 (Beta)")
 
       Then("location field is optional")
@@ -142,7 +135,6 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       Given("I have navigated to the API documentation page")
       Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
       helloWorldVersionsIsDeployed()
@@ -162,7 +154,6 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
 
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the API  Documentation Test documentation")
       APIDocumentationPage.selectAPIDocumentationTestService()
