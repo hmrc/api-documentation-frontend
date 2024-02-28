@@ -20,9 +20,15 @@ import uk.gov.hmrc.apidocumentation.BaseSpec
 import uk.gov.hmrc.apidocumentation.pages._
 import org.scalatest.prop.TableDrivenPropertyChecks
 import uk.gov.hmrc.apidocumentation.TableDrivenPropertyMocks
+import spec.NavigationSugar
+import uk.gov.hmrc.selenium.webdriver.Driver
+import org.openqa.selenium.WebDriver
+import org.scalatestplus.selenium.WebBrowser
 
-class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPropertyChecks with TableDrivenPropertyMocks {
+class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPropertyChecks with TableDrivenPropertyMocks with NavigationSugar with WebBrowser {
 
+  implicit lazy val webDriver: WebDriver = Driver.instance
+  
   def getPageYOffset(): Int = {
     executeScript("return window.pageYOffset;").toString.toInt
   }
@@ -33,13 +39,11 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       Given("I have navigated to the API documentation page")
       Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
       Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
-      loadPage()
 
       Then("user is navigated to the Top of the page when skip to main content link is clicked from the section below")
       val topLinkClickedFromSection =
@@ -67,13 +71,11 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       Given("I have navigated to the API documentation page")
       Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
       Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
-      loadPage()
 
       Then("left menus are displayed")
       HelloWorldPage.assertLeftMenuIsDisplayed()
@@ -83,13 +85,11 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       Given("I have navigated to the API documentation page")
       Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
       Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
-      loadPage()
 
       Then("user is navigated to the appropriate section on the page when clicked on the left Menu option")
       HelloWorldPage.waitUntilLinksGetToTheTopOfThePage()
@@ -97,41 +97,37 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
     Scenario("Dev Hub Name") {
       val expectedApplicationName = "HMRC Developer Hub"
+
       Given("I have navigated to the Home page")
       Given.apiServicesIsDeployed()
       goOn(HomePage)
-      on(HomePage)
 
       Then("the application name is HMRC Developer Hub")
-      HomePage.applicationName shouldBe expectedApplicationName
+      HomePage.applicationName() shouldBe expectedApplicationName
 
       Given("I have navigated to the API Documentation Page")
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       Then("the application name is HMRC Developer Hub")
-      APIDocumentationPage.applicationName shouldBe expectedApplicationName
+      APIDocumentationPage.applicationName() shouldBe expectedApplicationName
 
       Given("I have navigated to the Hello World Page")
       Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       goOn(HelloWorldPage)
-      on(HelloWorldPage)
 
       Then("the application name is HMRC Developer Hub")
-      HelloWorldPage.applicationName shouldBe expectedApplicationName
+      HelloWorldPage.applicationName() shouldBe expectedApplicationName
     }
 
     Scenario("Ensure back to the top link only exists after Errors section") {
       Given("I have navigated to the API documentation page")
       Given.apiServicesIsDeployed()
       goOn(APIDocumentationPage)
-      on(APIDocumentationPage)
 
       When("I select to view the Hello World documentation")
       Given.helloWorldIsDeployed("api-example-microservice", "1.0")
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
-      loadPage()
 
       Then("back to the top link only appears after Errors section")
       HelloWorldPage.checkBackToTopLinkAfterErrorsSection()

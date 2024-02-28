@@ -14,64 +14,31 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation
+package spec
 
-import org.openqa.selenium.support.ui.{ExpectedCondition, WebDriverWait}
-import org.openqa.selenium.{By, WebDriver, WebElement}
-import org.scalatest.concurrent.{Eventually, IntegrationPatience}
-import org.scalatestplus.selenium.WebBrowser
-import org.scalatestplus.selenium.WebBrowser.{go => goo}
-import org.scalatest.Assertions
+import org.mockito.MockitoSugar
+import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
-import java.time.Duration
+import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalatest.{Assertion, Assertions}
 
+import uk.gov.hmrc.apidocumentation.WebPage
+import uk.gov.hmrc.selenium.webdriver.Driver
 
-trait NavigationSugar extends WebBrowser with Eventually with Assertions with Matchers with IntegrationPatience with Wait {
+trait NavigationSugar extends Assertions with Matchers with Eventually with MockitoSugar {
 
-  def goOn(page: WebPage)(implicit webDriver: WebDriver): Unit = {
-    go(page)
+  implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = scaled(Span(5, Seconds)), interval = scaled(Span(100, Millis)))
+
+  def goOn(page: WebPage): Assertion = {
+    page.goTo()
     on(page)
   }
 
-  def go(page: WebPage)(implicit webDriver: WebDriver): Unit = {
-    goo to page
-  }
-
-  def goToUrl(url: String)(implicit webDriver: WebDriver): Unit = {
-    goo to url
-  }
-
-  def on(page: WebPage)(implicit webDriver: WebDriver) = {
+  def on(page: WebPage): Assertion = {
     eventually {
-      find(tagName("body"))
-    }
-    withClue(s"Currently in page: $currentUrl " + find(tagName("h1")).map(_.text).fold(" - ")(h1 => s", with title '$h1' - ")) {
-      assert(page.isCurrentPage, s"Page was not loaded: ${page.url}")
-    }
-  }
-
-  def loadPage(timeout: Int = 30)(implicit webDriver: WebDriver) = {
-    val wait = new WebDriverWait(webDriver, Duration.ofSeconds(timeout))
-    wait.until(
-      new ExpectedCondition[WebElement] {
-        override def apply(d: WebDriver) = d.findElement(By.tagName("body"))
+      withClue(s"Currently in page: ${Driver.instance.getCurrentUrl()}, with title '${page.heading()}' - ") {
+        assert(page.isCurrentPage(), s"Page was not loaded: ${page.url()}")
       }
-    )
-  }
-
-  def anotherTabIsOpened()(implicit webDriver: WebDriver): Unit = {
-    webDriver.getWindowHandles.size() should be(2)
-  }
-
-  def browserGoBack()(implicit webDriver: WebDriver): Unit = {
-    webDriver.navigate().back()
-  }
-
-  def browserGoForward()(implicit webDriver: WebDriver): Unit = {
-    webDriver.navigate().forward()
-  }
-
-  def checkPageTitle(expectedPageTitle : String)(implicit webDriver: WebDriver): Unit = {
-    webDriver.getTitle shouldBe expectedPageTitle
+    }
   }
 }

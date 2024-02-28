@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-sbt pre-commit
+
+sbt -Dbrowser=chrome pre-commit

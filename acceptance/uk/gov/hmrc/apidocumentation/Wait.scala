@@ -16,29 +16,17 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import org.openqa.selenium.support.ui.{ExpectedConditions, FluentWait}
 import org.openqa.selenium._
 import org.scalatest.concurrent.Eventually
-import org.scalatest.concurrent.PatienceConfiguration.Timeout
 
 import scala.concurrent.duration._
 
 trait Wait extends Eventually {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 2 seconds)
-  val timeout = Timeout(patienceConfig.timeout)
-  val fluentWaitPollingMilliseconds = 500
-
-  def waitForElement(by: By, timeout: Int = 5): WebElement = {
-    val wait = new FluentWait[WebDriver](Env.driver)
-      .withTimeout(java.time.Duration.ofSeconds(timeout))
-      .pollingEvery(java.time.Duration.ofMillis(fluentWaitPollingMilliseconds))
-      .ignoring(classOf[NoSuchElementException], classOf[StaleElementReferenceException])
-    wait.until(ExpectedConditions.visibilityOfElementLocated(by))
-  }
 
   def waitForPageToReload(oldPageElement: WebElement): Unit = {
-    eventually(timeout) {
+    eventually {
       try {
         oldPageElement.getText
         throw new RuntimeException("Old element still present")

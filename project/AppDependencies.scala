@@ -42,17 +42,10 @@ object AppDependencies {
   lazy val test = Seq(
     "uk.gov.hmrc"            %% "bootstrap-test-play-30"          % bootstrapVersion,
     "io.cucumber"            %% "cucumber-scala"                  % "5.7.0",
-    "io.cucumber"             % "cucumber-junit"                  % "5.7.0",
-    "org.scalatestplus"      %% "selenium-4-2"                    % "3.2.13.0",
-    "org.seleniumhq.selenium" % "selenium-remote-driver"          % seleniumVersion,
-    "org.seleniumhq.selenium" % "selenium-firefox-driver"         % seleniumVersion,
-    "org.seleniumhq.selenium" % "selenium-chrome-driver"          % seleniumVersion,
-    "org.seleniumhq.selenium" % "selenium-remote-driver"          % seleniumVersion,
-    "com.github.tomakehurst"  % "wiremock-jre8-standalone"        % "2.35.0",
     "org.mockito"            %% "mockito-scala-scalatest"         % "1.17.29",
     "com.vladsch.flexmark"    % "flexmark-all"                    % "0.62.2",
     "org.jsoup"               % "jsoup"                           % "1.12.1",
-    "uk.gov.hmrc"            %% "webdriver-factory"               % "0.41.0",
+    "uk.gov.hmrc"            %% "ui-test-runner"                   % "0.19.0",
     "uk.gov.hmrc"            %% "api-platform-test-common-domain" % commonDomainVersion
   ).map(_ % Test)
 }

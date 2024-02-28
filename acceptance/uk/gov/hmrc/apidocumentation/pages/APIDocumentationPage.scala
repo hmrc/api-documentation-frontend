@@ -17,34 +17,29 @@
 package uk.gov.hmrc.apidocumentation.pages
 
 import uk.gov.hmrc.apidocumentation.{Env, WebPage}
-import org.openqa.selenium.support.ui.WebDriverWait
-import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.By
-import org.scalatestplus.selenium.WebBrowser
-import java.time.Duration
 
-object APIDocumentationPage extends WebPage {
+
+object APIDocumentationPage extends WebPage with HasApplicationName {
 
   override val url = s"http://localhost:${Env.port}/api-documentation/docs/api"
 
-  override def isCurrentPage: Boolean = find(className("govuk-heading-l")).fold(false)(_.text == "API documentation")
+  val pageHeading = "API documentation"
+
+  private val helloWorldLink = By.linkText("Hello World")
+  private val docTestLink = By.linkText("API Documentation Test")
+  private val detailsSection = By.cssSelector("""main:not([style*="margin-top"])""")
 
   def selectHelloWorld(): Unit = {
-    val helloWorldLink = find(linkText("Hello World")).get
-    click on helloWorldLink
+    click(helloWorldLink)
     waitForPageToStopMoving()
   }
 
   def selectAPIDocumentationTestService(): Unit = {
-    val apiDocumentationTestService = find(linkText("API Documentation Test")).get
-    click on apiDocumentationTestService
+    click(docTestLink)
     waitForPageToStopMoving()
   }
 
-  def applicationName = WebBrowser.className("hmrc-header__service-name").element.text
-
-  def waitForPageToStopMoving() = {
-    new WebDriverWait(webDriver, Duration.ofSeconds(5)).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
-  }
+  def waitForPageToStopMoving() = waitForElementToBePresent(detailsSection)
 
 }

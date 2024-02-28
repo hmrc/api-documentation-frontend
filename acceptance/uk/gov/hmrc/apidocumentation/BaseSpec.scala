@@ -19,27 +19,30 @@ package uk.gov.hmrc.apidocumentation
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
-import org.openqa.selenium.WebDriver
 
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.{Application, Mode}
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.featurespec.AnyFeatureSpec
-import play.api.test.RunningServer
 import uk.gov.hmrc.apidocumentation.common.MyTestServerFactory
-import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import org.scalatestplus.play.guice.GuiceOneServerPerTest
+import org.scalatest.concurrent.Eventually
+import uk.gov.hmrc.selenium.webdriver.{Browser, Driver, ScreenshotOnFailure}
+import play.api.test.TestServerFactory
 
-trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterEach with BeforeAndAfterAll with Matchers with NavigationSugar
-  with GuiceOneServerPerSuite {
+trait BaseSpec extends AnyFeatureSpec
+  with BeforeAndAfterAll
+  with BeforeAndAfterEach
+  with GuiceOneServerPerTest
+  with Eventually
+  with Browser
+  with ScreenshotOnFailure {
 
   val stubPort = 11111
   val stubHost = "localhost"
 
-  override protected implicit lazy val runningServer: RunningServer = MyTestServerFactory.start(app)
-
-  implicit lazy val webDriver: WebDriver = Env.driver
+  override protected def testServerFactory: TestServerFactory = MyTestServerFactory
 
   var wireMockServer = new WireMockServer(wireMockConfig().port(stubPort))
 
@@ -60,16 +63,25 @@ trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterEach with BeforeAndAfte
   }
 
   override def beforeAll() = {
+    super.beforeAll()
     wireMockServer.start()
     WireMock.configureFor(stubHost, stubPort)
   }
 
   override def afterAll() = {
     wireMockServer.stop()
+    super.afterAll()
   }
 
   override def beforeEach() = {
-    webDriver.manage().deleteAllCookies()
+    super.beforeEach()
+    startBrowser()
+    Driver.instance.manage().deleteAllCookies()
     WireMock.reset()
+  }
+
+  override def afterEach() = {
+    quitBrowser()
+    super.afterEach()
   }
 }
