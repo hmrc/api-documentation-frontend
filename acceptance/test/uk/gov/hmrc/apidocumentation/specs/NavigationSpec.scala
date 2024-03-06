@@ -16,19 +16,19 @@
 
 package uk.gov.hmrc.apidocumentation.specs
 
-import uk.gov.hmrc.apidocumentation.BaseSpec
-import uk.gov.hmrc.apidocumentation.pages._
-import org.scalatest.prop.TableDrivenPropertyChecks
-import uk.gov.hmrc.apidocumentation.TableDrivenPropertyMocks
-import spec.NavigationSugar
-import uk.gov.hmrc.selenium.webdriver.Driver
 import org.openqa.selenium.WebDriver
+import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.selenium.WebBrowser
+
+import uk.gov.hmrc.selenium.webdriver.Driver
+
+import uk.gov.hmrc.apidocumentation.pages._
+import uk.gov.hmrc.apidocumentation.{BaseSpec, NavigationSugar, TableDrivenPropertyMocks}
 
 class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPropertyChecks with TableDrivenPropertyMocks with NavigationSugar with WebBrowser {
 
   implicit lazy val webDriver: WebDriver = Driver.instance
-  
+
   def getPageYOffset(): Int = {
     executeScript("return window.pageYOffset;").toString.toInt
   }
@@ -53,10 +53,10 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
           "Endpoints"
         )
       executeScript("window.scrollTo(0, document.body.scrollHeight)")
-      val bottomY = getPageYOffset()
+      val bottomY                   = getPageYOffset()
 
       forAll(topLinkClickedFromSection) {
-        case "Errors" =>
+        case "Errors"    =>
           HelloWorldPage.selectErrorsBackToTop()
           val nowY = getPageYOffset()
           assert(nowY < bottomY)

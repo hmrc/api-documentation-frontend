@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation
+package uk.gov.hmrc.apidocumentation.pages
 
-import uk.gov.hmrc.apidocumentation.specs.ComponentTestsSpec
-import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1}
+import org.openqa.selenium.By
 
-trait TableDrivenPropertyMocks extends TableDrivenPropertyChecks { cs: ComponentTestsSpec =>
-  def helloWorldVersionsIsDeployed(versionTable:TableFor1[String]=Table("Versions", "1.0", "1.2")): Unit = {
-    forAll(versionTable) { version =>
-      And.helloWorldIsDeployed("api-example-microservice", version)
-    }
+import uk.gov.hmrc.apidocumentation.{Env, WebPage}
+
+object HomePage extends WebPage with HasApplicationName {
+
+  val pageHeading = "Create tax software and apps using HMRC APIs"
+
+  private val aHeading    = By.id("RESTful-APIs-Title")
+  private val apiDocsLink = By.linkText("API documentation")
+
+  override val url = s"http://localhost:${Env.port}/api-documentation"
+
+  override def isCurrentPage(): Boolean = getText(aHeading) == "Create tax software and apps using HMRC APIs"
+
+  def selectApidoc(): Unit = {
+    click(apiDocsLink)
   }
+
 }

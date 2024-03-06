@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.common
+package uk.gov.hmrc.apidocumentation
 
-import play.api.Mode
-import play.api.Application
-import play.api.test.DefaultTestServerFactory
-import play.core.server.ServerConfig
+import org.openqa.selenium.By
 
-object MyTestServerFactory extends MyTestServerFactory
+trait WebPage extends PageObject {
 
-class MyTestServerFactory extends DefaultTestServerFactory {
-  override protected def serverConfig(app: Application): ServerConfig = {
-    val sc = ServerConfig(port = Some(6001), sslPort = Some(6002), mode = Mode.Test, rootDir = app.path)
-    sc.copy(configuration = sc.configuration withFallback overrideServerConfiguration(app))
+  def url(): String
+
+  def goTo(): Unit = get(url())
+
+  def pageHeading(): String
+
+  def heading()  = getText(By.tagName("h1"))
+  def bodyText() = getText(By.tagName("body"))
+
+  def isCurrentPage(): Boolean = {
+    this.heading() == this.pageHeading()
   }
+
 }

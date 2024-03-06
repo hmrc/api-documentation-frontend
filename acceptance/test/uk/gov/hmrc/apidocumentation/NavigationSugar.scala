@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package spec
+package uk.gov.hmrc.apidocumentation
 
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.Eventually
@@ -22,8 +22,9 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{Assertion, Assertions}
 
-import uk.gov.hmrc.apidocumentation.WebPage
 import uk.gov.hmrc.selenium.webdriver.Driver
+
+import uk.gov.hmrc.apidocumentation.WebPage
 
 trait NavigationSugar extends Assertions with Matchers with Eventually with MockitoSugar {
 

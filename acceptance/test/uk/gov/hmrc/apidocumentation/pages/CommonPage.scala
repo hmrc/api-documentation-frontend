@@ -16,20 +16,20 @@
 
 package uk.gov.hmrc.apidocumentation.pages
 
-import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.Select
 import org.scalatest.prop.TableDrivenPropertyChecks
-import uk.gov.hmrc.apidocumentation.Wait
+
+import uk.gov.hmrc.apidocumentation.{Env, Wait, WebPage}
 
 object CommonPage extends WebPage with TableDrivenPropertyChecks with Wait {
-  
+
   val pageHeading = "???"
 
   override val url = s"http://localhost:${Env.port}/api-documentation/docs/api/service/api-documentation-test-service/1.0"
 
   def selectVersion(expectedVersion: String): Unit = {
-    val versionDropDown = new Select(waitForElementToBePresent(By.id("version")))
+    val versionDropDown     = new Select(waitForElementToBePresent(By.id("version")))
     versionDropDown.selectByVisibleText(expectedVersion)
     val firstSelectedOption = versionDropDown.getFirstSelectedOption
     firstSelectedOption.submit()
