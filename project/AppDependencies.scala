@@ -10,7 +10,7 @@ object AppDependencies {
   lazy val jacksonDatabindVersion = "2.10.5.1"
   lazy val jacksonVersion         = "2.10.5"
   lazy val commonDomainVersion    = "0.13.0"
-  lazy val apiDomainVersion       = "0.15.0"
+  lazy val apiDomainVersion       = "0.14.0" // TODO The ApiPlatformMicroserviceConnector fails when viewing API Documentation with version 0.15.0
 
   lazy val compile = Seq(
     ws,
