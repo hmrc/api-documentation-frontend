@@ -14,24 +14,32 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation
+package uk.gov.hmrc.apidocumentation.specs
 
+import org.scalatest._
 
-import org.openqa.selenium.By
+import uk.gov.hmrc.apidocumentation.{BaseSpec, DescriptiveMocks}
 
-trait WebPage extends PageObject {
+trait ComponentTestsSpec extends GivenWhenThen { baseSpec: BaseSpec =>
 
-  def url(): String
+  object Given extends DescriptiveMocks {
 
-  def goTo(): Unit = get(url())
-
-  def pageHeading(): String
-    
-  def heading() = getText(By.tagName("h1"))
-  def bodyText() = getText(By.tagName("body"))
-  
-  def isCurrentPage(): Boolean = {
-    this.heading() == this.pageHeading()
+    override def condition(message: String): Unit = {
+      Given(message: String)
+    }
   }
 
+  object When extends DescriptiveMocks {
+
+    override def condition(message: String): Unit = {
+      When(message: String)
+    }
+  }
+
+  object And extends DescriptiveMocks {
+
+    override def condition(message: String): Unit = {
+      And(message: String)
+    }
+  }
 }

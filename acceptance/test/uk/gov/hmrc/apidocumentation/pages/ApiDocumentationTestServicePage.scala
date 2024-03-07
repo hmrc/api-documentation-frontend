@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.apidocumentation.pages
 
-import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.Select
-import org.scalatest.prop.TableDrivenPropertyChecks
-import uk.gov.hmrc.apidocumentation.pages.APIDocumentationPage.waitForPageToStopMoving
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.Eventually
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.prop.TableDrivenPropertyChecks
+
+import uk.gov.hmrc.apidocumentation.pages.APIDocumentationPage.waitForPageToStopMoving
+import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 
 object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyChecks with Matchers with Eventually {
 
@@ -31,7 +32,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
   val pageHeading = "Developer Forum API"
 
   private val locationFieldOptional = By.className("parameter-optional")
-  private val createUser =  By.className("govuk-details__summary")
+  private val createUser            = By.className("govuk-details__summary")
 
   def selectCreateUser(): Unit = {
     click(createUser)
@@ -69,7 +70,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
   }
 
   def checkLocationFieldIsOptional(): Unit = {
-    getText(locationFieldOptional) should include ("optional")
+    getText(locationFieldOptional) should include("optional")
   }
 
   def checkAPIVersionInRequestHeader(): Unit = {

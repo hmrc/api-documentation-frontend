@@ -16,15 +16,19 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import com.github.tomakehurst.wiremock.client.WireMock._
-import play.utils.UriEncoding
 import scala.io.Source
+
+import com.github.tomakehurst.wiremock.client.WireMock._
+
 import play.api.libs.json.Json
+import play.utils.UriEncoding
+
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 trait Stubs extends ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice with XmlServices
 
 trait XmlServices {
+
   def fetchAllXmlApis(): Unit = {
     val allXmlApisJson = Source.fromURL(getClass.getResource("/acceptance/api-platform-xml-services/xml_apis.json")).mkString
 
@@ -38,7 +42,8 @@ trait XmlServices {
   }
 }
 
-trait ApiPlatformMicroservice{
+trait ApiPlatformMicroservice {
+
   def fetchAll(): Unit = {
     val allDefinitionJson = Source.fromURL(getClass.getResource(s"/acceptance/api-definition/all.json")).mkString
 
@@ -63,7 +68,7 @@ trait ApiPlatformMicroservice{
   }
 
   def fetchApiSpec(serviceName: String, version: String): Unit = {
-    val url = getClass.getResource(s"/services/$serviceName/spec_${version}.json")
+    val url  = getClass.getResource(s"/services/$serviceName/spec_${version}.json")
     val file = Source.fromURL(url).mkString
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
     Json.fromJson[ApiSpecification](Json.parse(file))
@@ -71,11 +76,10 @@ trait ApiPlatformMicroservice{
     stubFor(get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/$version/specification"))
       .willReturn(
         aResponse()
-        .withStatus(200)
-        .withHeader("Content-Type", "application/json")
-        .withBody(file)
-      )
-    )
+          .withStatus(200)
+          .withHeader("Content-Type", "application/json")
+          .withBody(file)
+      ))
   }
 
   def failToFetch(serviceName: String): Unit = {
@@ -112,7 +116,8 @@ trait DeveloperFrontend {
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody("""[{"label": "John Doe", "href": "/developer/profile", "truncate" : false, "openInNewWindow": false, "isSensitive": false}, {"label":"Sign out", "href":"/developer/logout", "truncate" : false, "openInNewWindow": false, "isSensitive": false}]"""))
+            .withBody("""[{"label": "John Doe", "href": "/developer/profile", "truncate" : false, "openInNewWindow": false, "isSensitive": false}, {"label":"Sign out", "href":"/developer/logout", "truncate" : false, "openInNewWindow": false, "isSensitive": false}]""")
+        )
     )
   }
 
@@ -122,17 +127,16 @@ trait DeveloperFrontend {
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody("""[{"label": "Sign in", "href": "/developer/login", "truncate" : false, "openInNewWindow": false, "isSensitive": false}, {"label":"Register", "href":"/developer/registration", "truncate" : false, "openInNewWindow": false, "isSensitive": false}]"""))
+            .withBody("""[{"label": "Sign in", "href": "/developer/login", "truncate" : false, "openInNewWindow": false, "isSensitive": false}, {"label":"Register", "href":"/developer/registration", "truncate" : false, "openInNewWindow": false, "isSensitive": false}]""")
+        )
     )
   }
 }
 
-
-
 object ExternalServicesConfig {
 
-  val stubPort = sys.env.getOrElse("WIREMOCK_PORT", "11111").toInt
-  val stubHost = "localhost"
+  val stubPort    = sys.env.getOrElse("WIREMOCK_PORT", "11111").toInt
+  val stubHost    = "localhost"
   val wireMockUrl = s"http://$stubHost:$stubPort"
 
 }

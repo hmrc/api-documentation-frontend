@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.apidocumentation.pages
 
-import uk.gov.hmrc.apidocumentation.WebPage
 import org.openqa.selenium.By
 
+import uk.gov.hmrc.apidocumentation.WebPage
+
 trait HasApplicationName {
-  self: WebPage => 
+  self: WebPage =>
 
   private val devHubAppName = By.className("hmrc-header__service-name")
 

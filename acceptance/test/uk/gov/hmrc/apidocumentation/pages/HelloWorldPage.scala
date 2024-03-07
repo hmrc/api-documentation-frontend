@@ -16,15 +16,17 @@
 
 package uk.gov.hmrc.apidocumentation.pages
 
-import uk.gov.hmrc.apidocumentation.{Env, WebPage}
-import org.openqa.selenium.By
-import org.scalatest.prop.TableDrivenPropertyChecks
-import org.openqa.selenium.support.ui.WebDriverWait
-import org.openqa.selenium.support.ui.ExpectedConditions
 import java.time.Duration
+
+import org.openqa.selenium.By
+import org.openqa.selenium.support.ui.{ExpectedConditions, WebDriverWait}
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.selenium.WebBrowser
+
 import uk.gov.hmrc.selenium.webdriver.Driver
+
+import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 
 object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPropertyChecks with Matchers with WebBrowser {
 
@@ -32,7 +34,7 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
 
   override val url = s"http://localhost:${Env.port}/api-documentation/docs/api/service/api-example-microservice/1.0"
 
-  private val breadcrumbs = By.cssSelector(".govuk-breadcrumbs__list")
+  private val breadcrumbs     = By.cssSelector(".govuk-breadcrumbs__list")
   private val errorsBackToTop = By.id("bottom-skip-to-main")
 
   def breadCrumbText = getText(breadcrumbs)
@@ -108,7 +110,7 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
       click(locator)
 
       val backgroundColorAfterClick = findElement(locator).get.getCssValue("background-color")
-      val colorAfterClick = findElement(locator).get.getCssValue("color")
+      val colorAfterClick           = findElement(locator).get.getCssValue("color")
 
       backgroundColorAfterClick.replace(" ", "") shouldBe "rgba(255, 255, 255, 1)".replace(" ", "")
       assert(!colorAfterClick.equalsIgnoreCase(backgroundColorAfterClick))
@@ -137,11 +139,12 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
         "Overview",
         "Versioning",
         "Errors",
-        "Endpoints")
+        "Endpoints"
+      )
     forAll(navigationItems) { (navigationLink: String) =>
-      val links = By.linkText(navigationLink)
+      val links    = By.linkText(navigationLink)
       click(links)
-      val id = navigationLink.toLowerCase
+      val id       = navigationLink.toLowerCase
       var position = 0
 
       waitForPageToStopMoving()
@@ -161,4 +164,3 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
     getText(endpointsBackToTop) shouldBe "Skip to main content"
   }
 }
-

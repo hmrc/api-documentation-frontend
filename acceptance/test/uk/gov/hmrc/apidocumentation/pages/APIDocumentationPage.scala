@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.apidocumentation.pages
 
-import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 import org.openqa.selenium.By
 
+import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 
 object APIDocumentationPage extends WebPage with HasApplicationName {
 
@@ -27,7 +27,7 @@ object APIDocumentationPage extends WebPage with HasApplicationName {
   val pageHeading = "API documentation"
 
   private val helloWorldLink = By.linkText("Hello World")
-  private val docTestLink = By.linkText("API Documentation Test")
+  private val docTestLink    = By.linkText("API Documentation Test")
   private val detailsSection = By.cssSelector("""main:not([style*="margin-top"])""")
 
   def selectHelloWorld(): Unit = {

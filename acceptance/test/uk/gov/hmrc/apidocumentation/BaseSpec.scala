@@ -19,25 +19,25 @@ package uk.gov.hmrc.apidocumentation
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import org.scalatest.concurrent.Eventually
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatestplus.play.guice.GuiceOneServerPerTest
 
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.{Application, Mode}
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.BeforeAndAfterEach
-import org.scalatest.featurespec.AnyFeatureSpec
-import uk.gov.hmrc.apidocumentation.common.MyTestServerFactory
-import org.scalatestplus.play.guice.GuiceOneServerPerTest
-import org.scalatest.concurrent.Eventually
-import uk.gov.hmrc.selenium.webdriver.{Browser, Driver, ScreenshotOnFailure}
 import play.api.test.TestServerFactory
+import play.api.{Application, Mode}
+import uk.gov.hmrc.selenium.webdriver.{Browser, Driver, ScreenshotOnFailure}
+
+import uk.gov.hmrc.apidocumentation.common.MyTestServerFactory
 
 trait BaseSpec extends AnyFeatureSpec
-  with BeforeAndAfterAll
-  with BeforeAndAfterEach
-  with GuiceOneServerPerTest
-  with Eventually
-  with Browser
-  with ScreenshotOnFailure {
+    with BeforeAndAfterAll
+    with BeforeAndAfterEach
+    with GuiceOneServerPerTest
+    with Eventually
+    with Browser
+    with ScreenshotOnFailure {
 
   val stubPort = 11111
   val stubHost = "localhost"
@@ -49,12 +49,12 @@ trait BaseSpec extends AnyFeatureSpec
   override def fakeApplication(): Application = {
     GuiceApplicationBuilder()
       .configure(
-        "microservice.services.developer-frontend.host" -> stubHost,
-        "microservice.services.developer-frontend.port" -> stubPort,
+        "microservice.services.developer-frontend.host"        -> stubHost,
+        "microservice.services.developer-frontend.port"        -> stubPort,
         "microservice.services.api-platform-microservice.host" -> stubHost,
         "microservice.services.api-platform-microservice.port" -> stubPort,
-        "microservice.services.third-party-developer.host" -> stubHost,
-        "microservice.services.third-party-developer.port" -> stubPort,
+        "microservice.services.third-party-developer.host"     -> stubHost,
+        "microservice.services.third-party-developer.port"     -> stubPort,
         "microservice.services.api-platform-xml-services.host" -> stubHost,
         "microservice.services.api-platform-xml-services.port" -> stubPort
       )

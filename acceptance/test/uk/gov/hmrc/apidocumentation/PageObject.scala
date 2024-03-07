@@ -16,11 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import org.openqa.selenium.{By, Keys, WebDriver, WebElement}
-import org.openqa.selenium.support.ui.{ExpectedConditions, FluentWait, Select, Wait}
-import uk.gov.hmrc.selenium.webdriver.Driver
 import java.time.Duration
 import scala.jdk.CollectionConverters._
+
+import org.openqa.selenium.support.ui.{ExpectedConditions, FluentWait, Select, Wait}
+import org.openqa.selenium.{By, Keys, WebDriver, WebElement}
+
+import uk.gov.hmrc.selenium.webdriver.Driver
 
 trait PageObject {
 
@@ -59,7 +61,7 @@ trait PageObject {
 
   protected def findElements(locator: By): List[WebElement] =
     Driver.instance.findElements(locator).asScala.toList
-    
+
   protected def waitForElementToBePresent(locator: By): WebElement =
     fluentWait.until(ExpectedConditions.presenceOfElementLocated(locator))
 
@@ -73,7 +75,7 @@ trait PageObject {
 
 trait TextInput {
   self: PageObject =>
-  
+
   private def clear(locator: By): Unit = {
     waitForElementToBePresent(locator)
     findElement(locator).get.clear()
@@ -92,7 +94,7 @@ trait TextInput {
 }
 
 trait CheckBox {
-  self : PageObject =>
+  self: PageObject =>
 
   protected def isSelected(locator: By): Boolean =
     findElement(locator).get.isSelected()
@@ -108,14 +110,14 @@ trait CheckBox {
 }
 
 trait SelectChoice {
-  self : PageObject =>
+  self: PageObject =>
 
   private def withSelect(locator: By)(action: Select => Unit): Unit = {
     waitForElementToBePresent(locator)
     val select = new Select(findElement(locator).get)
     action(select)
-  } 
-  
+  }
+
   protected def selectByValue(locator: By, value: String): Unit =
     withSelect(locator)(_.selectByValue(value))
 

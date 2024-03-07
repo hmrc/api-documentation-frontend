@@ -1,4 +1,3 @@
-import play.core.PlayVersion
 import play.sbt.PlayImport._
 import sbt._
 
@@ -10,8 +9,8 @@ object AppDependencies {
   lazy val seleniumVersion        = "4.2.0"
   lazy val jacksonDatabindVersion = "2.10.5.1"
   lazy val jacksonVersion         = "2.10.5"
-  lazy val commonDomainVersion    = "0.10.0"
-  lazy val apiDomainVersion       = "0.11.0"
+  lazy val commonDomainVersion    = "0.13.0"
+  lazy val apiDomainVersion       = "0.15.0"
 
   lazy val compile = Seq(
     ws,
@@ -42,10 +41,9 @@ object AppDependencies {
   lazy val test = Seq(
     "uk.gov.hmrc"            %% "bootstrap-test-play-30"          % bootstrapVersion,
     "io.cucumber"            %% "cucumber-scala"                  % "5.7.0",
-    "org.mockito"            %% "mockito-scala-scalatest"         % "1.17.29",
-    "com.vladsch.flexmark"    % "flexmark-all"                    % "0.62.2",
+    "org.mockito"            %% "mockito-scala-scalatest"         % "1.17.30",
     "org.jsoup"               % "jsoup"                           % "1.12.1",
-    "uk.gov.hmrc"            %% "ui-test-runner"                   % "0.19.0",
+    "uk.gov.hmrc"            %% "ui-test-runner"                  % "0.19.0",
     "uk.gov.hmrc"            %% "api-platform-test-common-domain" % commonDomainVersion
   ).map(_ % Test)
 }

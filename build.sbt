@@ -2,31 +2,25 @@ import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.uglify.Import.{uglifyCompressOptions, _}
 import com.typesafe.sbt.web.Import._
 import net.ground5hark.sbt.concat.Import._
-import sbt.Keys._
-import sbt._
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
-import bloop.integrations.sbt.BloopDefaults
+
+lazy val appName = "api-documentation-frontend"
 
 Global / bloopAggregateSourceDependencies := true
+Global / bloopExportJarClassifiers := Some(Set("sources"))
 
-scalaVersion := "2.13.12"
-
+ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / majorVersion := 0
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
-ThisBuild / semanticdbEnabled                                    := true
-ThisBuild / semanticdbVersion                                    := scalafixSemanticdb.revision
+ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 
 ThisBuild / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
-
-lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
-  .settings(
-    name := appName
-  )
   .settings(
     Concat.groups           := Seq(
       "javascripts/apis-app.js" -> group(
@@ -44,59 +38,48 @@ lazy val microservice = Project(appName, file("."))
       uglify
     )
   )
-  .settings(
-    resolvers ++= Seq(
-      Resolver.typesafeRepo("releases")
-    )
-  )
-  .settings(playSettings: _*)
-  .settings(scalaSettings: _*)
-  .settings(ScoverageSettings(): _*)
-  .settings(defaultSettings(): _*)
+  .settings(ScoverageSettings())
   .settings(
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    majorVersion    := 0,
     scalacOptions += "-language:postfixOps"
   )
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(
-    Test / testOptions       := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
-    Test / unmanagedSourceDirectories += baseDirectory.value / "test",
+    Test / testOptions       += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
     Test / unmanagedSourceDirectories += baseDirectory.value / "testcommon",
     Test / fork              := false,
     Test / parallelExecution := false
   )
-  .configs(AcceptanceTest)
-  .settings(inConfig(AcceptanceTest)(Defaults.testSettings ++ BloopDefaults.configSettings))
-  .settings(
-    AcceptanceTest / testOptions                  := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-eT")),
-    AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "acceptance",
-    AcceptanceTest / unmanagedSourceDirectories += baseDirectory.value / "testcommon",
-    AcceptanceTest / unmanagedResourceDirectories := Seq((AcceptanceTest / baseDirectory).value / "test", (AcceptanceTest / baseDirectory).value / "target/web/public/test"),
-    AcceptanceTest / fork                         := false,
-    AcceptanceTest / parallelExecution            := false,
-    addTestReportOption(AcceptanceTest, "acceptance-test-reports")
-  )
-  .settings(DefaultBuildSettings.integrationTestSettings())
-  .settings(headerSettings(AcceptanceTest) ++ automateHeaderSettings(AcceptanceTest))
   .settings(
     scalacOptions ++= Seq(
       "-Wconf:cat=unused&src=views/.*\\.scala:s",
-      "-Wconf:cat=unused&src=.*RoutesPrefix\\.scala:s",
-      "-Wconf:cat=unused&src=.*Routes\\.scala:s",
-      "-Wconf:cat=unused&src=.*ReverseRoutes\\.scala:s"
+      // https://www.scala-lang.org/2021/01/12/configuring-and-suppressing-warnings.html
+      // suppress warnings in generated routes files
+      "-Wconf:src=routes/.*:s"
     )
   )
-lazy val AcceptanceTest                = config("acceptance") extend Test
 
-lazy val appName = "api-documentation-frontend"
+lazy val acceptance = (project in file("acceptance"))
+  .enablePlugins(PlayScala)
+  .dependsOn(microservice % "test->test")
+  .settings(
+    name := "acceptance-tests",
+    scalacOptions += "-language:postfixOps",
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
+    Test / unmanagedResourceDirectories += baseDirectory.value / "target/web/public/test",
+    DefaultBuildSettings.itSettings(),
+    addTestReportOption(Test, "acceptance-test-reports")
+  )
+
 
 commands ++= Seq(
-  Command.command("run-all-tests") { state => "test" :: "acceptance:test" :: state },
+  Command.command("cleanAll") { state => "clean" :: "acceptance/test" :: state },
+  Command.command("fmtAll") { state => "scalafmtAll" :: "acceptance/scalafmtAll" :: state },
+  Command.command("fixAll") { state => "scalafixAll" :: "acceptance/scalafixAll" :: state },
+  Command.command("testAll") { state => "test" :: "acceptance/test" :: state },
 
-  Command.command("clean-and-test") { state => "clean" :: "compile" :: "run-all-tests" :: state },
-
-  // Coverage does not need compile !
-  Command.command("pre-commit") { state => "clean" :: "scalafmtAll" :: "scalafixAll" :: "coverage" :: "run-all-tests" :: "coverageOff" :: "coverageAggregate" :: state }
+  Command.command("run-all-tests") { state => "testAll" :: state },
+  Command.command("clean-and-test") { state => "cleanAll" :: "compile" :: "run-all-tests" :: state },
+  Command.command("pre-commit") { state => "cleanAll" :: "fmtAll" :: "fixAll" :: "coverage" :: "testAll" :: "coverageOff" :: "coverageAggregate" :: state }
 )

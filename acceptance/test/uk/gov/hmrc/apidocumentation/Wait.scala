@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.apidocumentation
 
+import scala.concurrent.duration._
+
 import org.openqa.selenium._
 import org.scalatest.concurrent.Eventually
-
-import scala.concurrent.duration._
 
 trait Wait extends Eventually {
 
@@ -30,8 +30,7 @@ trait Wait extends Eventually {
       try {
         oldPageElement.getText
         throw new RuntimeException("Old element still present")
-      }
-      catch {
+      } catch {
         case _: StaleElementReferenceException => ()
       }
     }
