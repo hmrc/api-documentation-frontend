@@ -4,13 +4,12 @@ import sbt._
 object AppDependencies {
   def apply(): Seq[ModuleID] = compile ++ test
 
-  lazy val playJsonVersion        = "2.9.2"
   lazy val bootstrapVersion       = "8.4.0"
   lazy val seleniumVersion        = "4.2.0"
   lazy val jacksonDatabindVersion = "2.10.5.1"
   lazy val jacksonVersion         = "2.10.5"
   lazy val commonDomainVersion    = "0.13.0"
-  lazy val apiDomainVersion       = "0.14.0" // TODO The ApiPlatformMicroserviceConnector fails when viewing API Documentation with version 0.15.0
+  lazy val apiDomainVersion       = "0.15.0"
 
   lazy val compile = Seq(
     ws,
@@ -22,7 +21,6 @@ object AppDependencies {
     "uk.gov.hmrc"                         %% "api-platform-api-domain"    % apiDomainVersion,
     "org.typelevel"                       %% "cats-core"                  % "2.10.0",
     "org.commonjava.googlecode.markdown4j" % "markdown4j"                 % "2.2-cj-1.1",
-    "com.typesafe.play"                   %% "play-json"                  % playJsonVersion,
     "io.swagger.parser.v3"                 % "swagger-parser"             % "2.1.9"
       excludeAll (
         ExclusionRule("com.fasterxml.jackson.core", "jackson-databind"),
