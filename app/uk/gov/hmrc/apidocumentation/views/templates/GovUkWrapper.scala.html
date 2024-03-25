@@ -50,9 +50,11 @@
 }
 
 @scripts = {
-    <script @CSPNonce.attr src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script @CSPNonce.attr type="module">
+        import { initAll } from '@controllers.routes.Assets.versioned("lib/govuk-frontend/dist/govuk/govuk-frontend.min.js")'
+        initAll()
+    </script>    
     <script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/feedback.js")' type="text/javascript"></script>
-    <script @CSPNonce.attr>window.GOVUKFrontend.initAll();</script>
 }
 
 
