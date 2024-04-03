@@ -59,7 +59,7 @@
 
   "VAT (MTD) end-to-end service guide": ["VAT_MTD"],
   "Income Tax (MTD) end-to-end service guide": ["INCOME_TAX_MTD"],
-  "MTD ITSA Vendors Roadmap": ["INCOME_TAX_MTD"],
+  "Income Tax (MTD) roadmap": ["INCOME_TAX_MTD"],
   "Self Assessment end-to-end service guide": ["SELF_ASSESSMENT"],
   "Safety and security import declarations service guide": ["CUSTOMS"],
   "CTC Traders phase 4 service guide": ["CUSTOMS"],
