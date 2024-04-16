@@ -54,11 +54,11 @@
         HMRC on their behalf, without sharing their access credentials. We are able to support <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> for this grant-type, though you are not required to use it.
     </p>
 
-    <p class="govuk-body">The end user authenticates directly with us using their Government Gateway account, and grants authority for specific <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</p>
+    <p class="govuk-body">The end user authenticates directly with us using their HMRC sign in details, and grants authority for specific <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</p>
 
     <p class="govuk-body">We then issue an OAuth 2.0 <a class="govuk-link" href="https://tools.ietf.org/html/rfc6749#section-1.4" rel="noopener noreferrer">access token</a> that’s specific to the end user. Your application passes the access token in subsequent API requests to user-restricted endpoints.</p>
 
-    <p class="govuk-body">There are separate Government Gateway accounts for individuals, agents and organisations. For individuals and organisations, the access token only gives access to the end user’s own data. For agents the access token gives access to their clients’ data.</p>
+    <p class="govuk-body">There are separate HMRC sign in details for individuals, agents and organisations. For individuals and organisations, the access token only gives access to the end user’s own data. For agents the access token gives access to their clients’ data.</p>
 
     <p class="govuk-body">Authorisation rules for specific API endpoints are given in the <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None)">API documentation</a>.</p>
 
@@ -88,7 +88,7 @@
             <ol class="govuk-list govuk-list--number">
                 <li>Send your user to our <a class="govuk-link" href="#auth-endpoint-syntax">authorisation endpoint<span class="govuk-visually-hidden"> in-page link</span></a>.</li>
                 <li>We display a start page that explains the authorisation process.</li>
-                <li>We prompt the user to sign in using their Government Gateway account.</li>
+                <li>We prompt the user to sign in using their HMRC sign in details.</li>
                 <li>The user is taken through <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisation2SVPage().url">2-Step Verification (2SV)</a>.</li>
                 <li>The user may be asked to confirm their identity. This depends on the user type, the specific API scopes being requested and whether or not the user has previously confirmed their identity.</li>
                 <li>The user is asked to grant your application the authority to access certain <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</li>
@@ -706,10 +706,10 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
         <h3 class="govuk-heading-s">Agents with multiple accounts</h3>
 
-        <p class="govuk-body">Some agent organisations have more than one Government Gateway account, and their client relationships are spread across those accounts. There are a few ways to handle this:</p>
+        <p class="govuk-body">Some agent organisations have more than one set of HMRC sign in details, and their client relationships are spread across those accounts. There are a few ways to handle this:</p>
 
         <ul class="govuk-list govuk-list--bullet">
-            <li>If the accounts belong to the same organisation in <a class="govuk-link" href="http://www.gateway.gov.uk/">Government Gateway</a>, the agent can manage client relationships themselves using the Government Gateway.</li>
+            <li>If the accounts belong to the same organisation, the agent can manage client relationships themselves using the <a class="govuk-link" href="http://www.gov.uk/">HMRC online service</a>.</li>
             <li>If the accounts belong to different organisations (for example due to a merger), in some cases the agent can <a class="govuk-link" href="https://www.gov.uk/guidance/client-authorisation-an-overview">ask us to merge their accounts</a>.</li>
             <li>Your application may hold multiple OAuth 2.0 access tokens for the agent, but you must take care to use the correct token for each client when calling our APIs. Using the wrong access token results in an HTTP status code of 401 (Unauthorized).</li>
         </ul>
