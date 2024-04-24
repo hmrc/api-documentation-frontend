@@ -78,5 +78,7 @@
   "Excise Movement Control System service guide": ["CUSTOMS"],
   "Excise Movement Control System testing guide": ["CUSTOMS"],
   "Excise Movement Control System technical interface specification": ["CUSTOMS"],
-  "Post and Parcels Service Guide": ["CUSTOMS"]
+  "Post and Parcels Service Guide": ["CUSTOMS"],
+  "UK Internal Market Authorisation Checker Service Guide": ["CUSTOMS"],
+  "UK Internal Market Authorisation Checker roadmap": ["CUSTOMS"]
 }

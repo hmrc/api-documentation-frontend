@@ -1,3 +1,4 @@
+
 [
   {
     "name": "VAT (MTD) end-to-end service guide",
@@ -82,5 +83,9 @@
   {
     "name": "Post and Parcels Service Guide",
     "context": "/guides/post-and-parcels-service-guide"
+  },
+  {
+    "name": "UK Internal Market Authorisation Checker Service Guide",
+    "context": "/guides/ukim-auth-checker-api-service-guide"
   }
 ]
