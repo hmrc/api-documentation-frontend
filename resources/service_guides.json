@@ -82,5 +82,9 @@
   {
     "name": "Post and Parcels Service Guide",
     "context": "/guides/post-and-parcels-service-guide"
+  },
+  {
+    "name": "Trader Goods Profile Service Guide",
+    "context": "/guides/trader-goods-profile-service-guide"
   }
 ]
