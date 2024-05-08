@@ -17,15 +17,14 @@
 package uk.gov.hmrc.apidocumentation.v2.models
 
 import scala.io.Source
+
 import play.api.libs.json.{Format, Json, OFormat}
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition, ApiVersion}
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.play.json.Union
+
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.{DocumentationLabel, WrappedApiDefinition, XmlApiDocumentation}
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
-
-import scala.collection.immutable.ListSet
 
 case class DocumentIdentifier(value: String) extends AnyVal
 
@@ -67,8 +66,15 @@ case class RestDocumentation(identifier: DocumentIdentifier, name: String, descr
 
 object RestDocumentation {
 
-  case class TestSupportApiDocumentation(identifier: DocumentIdentifier, name: String, description: String, context: String, version: ApiVersionNbr, url: String, categories: Seq[ApiCategory])
-    extends ApiDocumentation {
+  case class TestSupportApiDocumentation(
+      identifier: DocumentIdentifier,
+      name: String,
+      description: String,
+      context: String,
+      version: ApiVersionNbr,
+      url: String,
+      categories: Seq[ApiCategory]
+    ) extends ApiDocumentation {
 
     val label: DocumentationLabel = DocumentationLabel.TEST_SUPPORT_API
 
@@ -87,7 +93,7 @@ object RestDocumentation {
       .head
 
     val documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr, None).url
-    if(definition.isTestSupport){
+    if (definition.isTestSupport) {
       TestSupportApiDocumentation(
         DocumentIdentifier(definition.serviceName.value),
         definition.name,
@@ -97,7 +103,7 @@ object RestDocumentation {
         documentationUrl,
         definition.categories
       )
-    }else {
+    } else {
       RestDocumentation(
         DocumentIdentifier(definition.serviceName.value),
         definition.name,
@@ -112,9 +118,6 @@ object RestDocumentation {
 
   implicit val restDocumentFormats: OFormat[RestDocumentation] = Json.format[RestDocumentation]
 }
-
-
-
 
 case class XmlDocumentation(identifier: DocumentIdentifier, name: String, description: String, context: String, categories: Seq[ApiCategory]) extends ApiDocumentation {
 

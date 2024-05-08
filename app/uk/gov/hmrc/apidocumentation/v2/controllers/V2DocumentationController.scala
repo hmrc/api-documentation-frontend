@@ -49,41 +49,41 @@ class V2DocumentationController @Inject() (
     restApiDescriptionOverrides.find(x => x.identifier.value == identifier)
   }
 
-  private def filterApiDocumentation(documents: Seq[ApiDocumentation], categoryFilters: List[ApiCategory], documentationTypeFilter: List[DocumentationTypeFilter]) : Seq[ApiDocumentation] = {
-   def filterByCategory(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
-     categoryFilters.flatMap(filter => documents.filter(api => api.categories.contains(filter))).distinct
-   }
+  private def filterApiDocumentation(documents: Seq[ApiDocumentation], categoryFilters: List[ApiCategory], documentationTypeFilter: List[DocumentationTypeFilter])
+      : Seq[ApiDocumentation] = {
+    def filterByCategory(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
+      categoryFilters.flatMap(filter => documents.filter(api => api.categories.contains(filter))).distinct
+    }
 
     def filterByDocType(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
       documentationTypeFilter.flatMap(filter => documents.filter(api => filter == DocumentationTypeFilter.byLabel(api.label))).distinct
     }
     (documents, categoryFilters, documentationTypeFilter) match {
-      case (Nil , Nil, Nil) => Nil
-      case (_, Nil, Nil) => documents
-      case (_, _, Nil) => filterByCategory(documents).sortBy(_.name)
-      case (_, Nil, _) => filterByDocType(documents).sortBy(_.name)
-      case (_, _, _) => filterByDocType(filterByCategory(documents)).sortBy(_.name)
+      case (Nil, Nil, Nil) => Nil
+      case (_, Nil, Nil)   => documents
+      case (_, _, Nil)     => filterByCategory(documents).sortBy(_.name)
+      case (_, Nil, _)     => filterByDocType(documents).sortBy(_.name)
+      case (_, _, _)       => filterByDocType(filterByCategory(documents)).sortBy(_.name)
     }
 
   }
 
-  def start(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory]): Action[AnyContent] = headerNavigation { implicit request =>navLinks =>
-
+  def start(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def pageAttributes(title: String = "API Documentation") =
       PageAttributes(title, breadcrumbs = Breadcrumbs(documentationCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
 
     val documentsF: Future[Seq[ApiDocumentation]] = for {
-      apis          <- apiDefinitionService.fetchAllDefinitions()
-      xmlApis       <- xmlServicesService.fetchAllXmlApis()
-      roadMaps       = RoadMapDocumentation.roadMaps
-      serviceGuides  = ServiceGuideDocumentation.serviceGuides
-      apiDocuments   = apis.map(api => RestDocumentation.fromApiDefinition(api, getRestApiDescriptionOverride(api.serviceName.value)))
-      xmlDocuments   = xmlApis.map(x => XmlDocumentation.fromXmlDocumentation(x))
+      apis         <- apiDefinitionService.fetchAllDefinitions()
+      xmlApis      <- xmlServicesService.fetchAllXmlApis()
+      roadMaps      = RoadMapDocumentation.roadMaps
+      serviceGuides = ServiceGuideDocumentation.serviceGuides
+      apiDocuments  = apis.map(api => RestDocumentation.fromApiDefinition(api, getRestApiDescriptionOverride(api.serviceName.value)))
+      xmlDocuments  = xmlApis.map(x => XmlDocumentation.fromXmlDocumentation(x))
     } yield (apiDocuments ++ xmlDocuments ++ roadMaps ++ serviceGuides).sortBy(_.name)
 
     documentsF.map(apiDocumentations => {
       val filteredApiDocumentations = filterApiDocumentation(apiDocumentations, categoryFilters, docTypeFilters)
-       Ok(indexView(pageAttributes(), filteredApiDocumentations, docTypeFilters, categoryFilters))
+      Ok(indexView(pageAttributes(), filteredApiDocumentations, docTypeFilters, categoryFilters))
     })
   }
 

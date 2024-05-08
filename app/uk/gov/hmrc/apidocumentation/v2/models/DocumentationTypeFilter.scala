@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.v2.models
 
-import play.api.libs.json.Format
-import uk.gov.hmrc.apidocumentation.models.DocumentationLabel
-import uk.gov.hmrc.apidocumentation.models.DocumentationLabel._
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
-
 import scala.collection.immutable.ListSet
 
+import play.api.libs.json.Format
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
+
+import uk.gov.hmrc.apidocumentation.models.DocumentationLabel
+import uk.gov.hmrc.apidocumentation.models.DocumentationLabel._
 
 sealed trait DocumentationTypeFilter {
   lazy val displayName: String = DocumentationTypeFilter.displayName(this)
@@ -30,27 +30,27 @@ sealed trait DocumentationTypeFilter {
 }
 
 object DocumentationTypeFilter {
-  case object ROADMAPANDSERVICEGUIDE          extends DocumentationTypeFilter
-  case object API         extends DocumentationTypeFilter
-  case object TEST_SUPPORT_API extends DocumentationTypeFilter
+  case object ROADMAPANDSERVICEGUIDE extends DocumentationTypeFilter
+  case object API                    extends DocumentationTypeFilter
+  case object TEST_SUPPORT_API       extends DocumentationTypeFilter
 
   def displayName(label: DocumentationTypeFilter): String = label match {
-    case ROADMAPANDSERVICEGUIDE          => " Service guides and roadmaps"
-    case API    => "APIs"
-    case TEST_SUPPORT_API => "Test Support API"
+    case ROADMAPANDSERVICEGUIDE => " Service guides and roadmaps"
+    case API                    => "APIs"
+    case TEST_SUPPORT_API       => "Test Support API"
   }
 
   def modifier(label: DocumentationTypeFilter): String = label match {
-    case ROADMAPANDSERVICEGUIDE          => "roadmap-serviceguides"
-    case API    => "api"
-    case TEST_SUPPORT_API => "test-support-api"
+    case ROADMAPANDSERVICEGUIDE => "roadmap-serviceguides"
+    case API                    => "api"
+    case TEST_SUPPORT_API       => "test-support-api"
   }
 
-  def byLabel(label: DocumentationLabel): DocumentationTypeFilter  = label match{
-    case REST_API => API
-    case XML_API => API
-    case SERVICE_GUIDE => ROADMAPANDSERVICEGUIDE
-    case ROADMAP => ROADMAPANDSERVICEGUIDE
+  def byLabel(label: DocumentationLabel): DocumentationTypeFilter = label match {
+    case REST_API                            => API
+    case XML_API                             => API
+    case SERVICE_GUIDE                       => ROADMAPANDSERVICEGUIDE
+    case ROADMAP                             => ROADMAPANDSERVICEGUIDE
     case DocumentationLabel.TEST_SUPPORT_API => TEST_SUPPORT_API
   }
 
@@ -60,7 +60,8 @@ object DocumentationTypeFilter {
 
   def apply(text: String): Option[DocumentationTypeFilter] = DocumentationTypeFilter.values.find(_.toString.toUpperCase == text.toUpperCase())
 
-  def unsafeApply(text: String): DocumentationTypeFilter = DocumentationTypeFilter.values.find(_.toString.toUpperCase == text.toUpperCase()).getOrElse(throw new RuntimeException(s"$text is not a valid DocumentTypeFilter"))
+  def unsafeApply(text: String): DocumentationTypeFilter =
+    DocumentationTypeFilter.values.find(_.toString.toUpperCase == text.toUpperCase()).getOrElse(throw new RuntimeException(s"$text is not a valid DocumentTypeFilter"))
 
   implicit val ordering: Ordering[DocumentationTypeFilter] = Ordering.by(_.toString)
 
