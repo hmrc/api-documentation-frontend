@@ -1,0 +1,65 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
+@import uk.gov.hmrc.apidocumentation.v2.controllers
+@import uk.gov.hmrc.apidocumentation.v2.models.DocumentationTypeFilter
+
+@(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory])
+
+<div class="govuk-form-group">
+    <form method="GET" action="@controllers.routes.V2DocumentationController.start(List.empty, List.empty)">
+        <fieldset class="govuk-fieldset" aria-describedby="doc-docType-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                Documentation Type
+            </legend>
+            <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+
+                @for((x, index) <- DocumentationTypeFilter.values.zipWithIndex){
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="doc-type-@index" name="docTypeFilters" type="checkbox" value="@x"  @if(docTypeFilters.contains(x)){ checked }>
+                    <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="doc-type-@index">
+                        @x.displayName
+                    </label>
+                </div>
+                }
+
+            </div>
+        </fieldset>
+
+        <fieldset class="govuk-fieldset" aria-describedby="doc-category-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                API Category
+            </legend>
+            <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+            @for((category, index) <- ApiCategory.values.toList.sortBy(_.displayText).zipWithIndex) {
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="doc-category-@index" name="categoryFilters" type="checkbox" value="@category" @if(categoryFilters.contains(category)){ checked }>
+                    <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="doc-category-@index" id="category-filter-@category.displayText-label" >
+                    @category.displayText
+                    </label>
+                </div>
+
+            }
+            </div>
+            <div>
+                <button class="govuk-button" data-module="govuk-button" type="submit">Filter</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+

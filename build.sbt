@@ -44,6 +44,14 @@ lazy val microservice = Project(appName, file("."))
     retrieveManaged := true,
     scalacOptions += "-language:postfixOps"
   )
+  .settings(
+    routesImport ++= Seq(
+      "uk.gov.hmrc.apidocumentation.controllers.binders._",
+      "uk.gov.hmrc.apiplatform.modules.apis.domain.models._",
+      "uk.gov.hmrc.apiplatform.modules.common.domain.models._",
+      "uk.gov.hmrc.apidocumentation.v2.models._"
+    )
+  )
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(
     Test / testOptions       += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),

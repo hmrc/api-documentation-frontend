@@ -1,95 +1,165 @@
 
 [
   {
+    "identifier": "vat-mtd-end-to-end-service-guide",
     "name": "VAT (MTD) end-to-end service guide",
-    "context": "/guides/vat-mtd-end-to-end-service-guide"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/vat-mtd-end-to-end-service-guide",
+    "categories": ["VAT_MTD"]
   },
   {
+    "identifier": "income-tax-mtd-end-to-end-service-guide",
     "name": "Income Tax (MTD) end-to-end service guide",
-    "context": "/guides/income-tax-mtd-end-to-end-service-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/income-tax-mtd-end-to-end-service-guide/",
+    "categories": ["INCOME_TAX_MTD"]
   },
   {
+    "identifier": "self-assessment-end-to-end-service-guide",
     "name": "Self Assessment end-to-end service guide",
-    "context": "/guides/self-assessment-end-to-end-service-guide"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/self-assessment-end-to-end-service-guide",
+    "categories": ["SELF_ASSESSMENT"]
   },
   {
+    "identifier": "safety-and-security-import-declarations-end-to-end-service-guide",
     "name": "Safety and security import declarations service guide",
-    "context": "/guides/safety-and-security-import-declarations-end-to-end-service-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/safety-and-security-import-declarations-end-to-end-service-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-traders-phase4-service-guide",
     "name": "CTC Traders phase 4 service guide",
-    "context": "/guides/ctc-traders-phase4-service-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ctc-traders-phase4-service-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-traders-phase4-testing-guide",
     "name": "CTC Traders phase 4 testing guide",
-    "context": "/guides/ctc-traders-phase4-testing-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ctc-traders-phase4-testing-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-traders-phase5-service-guide",
     "name": "CTC Traders phase 5 service guide",
-    "context": "/guides/ctc-traders-phase5-service-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ctc-traders-phase5-service-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-traders-phase5-testing-guide",
     "name": "CTC Traders phase 5 testing guide",
-    "context": "/guides/ctc-traders-phase5-testing-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ctc-traders-phase5-testing-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-traders-phase5-tis",
     "name": "CTC Traders phase 5 technical interface specification",
-    "context": "/guides/ctc-traders-phase5-tis/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ctc-traders-phase5-tis/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "gvms-end-to-end-service-guide",
     "name": "Goods Vehicle Movements service guide",
-    "context": "/guides/gvms-end-to-end-service-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/gvms-end-to-end-service-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "customs-declarations-end-to-end-service-guide",
     "name": "Customs Declarations end-to-end service guide",
-    "context": "/guides/customs-declarations-end-to-end-service-guide"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/customs-declarations-end-to-end-service-guide",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "irr-api-end-to-end-service-guide",
     "name": "Interest Restriction Return (IRR) service guide",
-    "context": "/guides/irr-api-end-to-end-service-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/irr-api-end-to-end-service-guide/",
+    "categories": ["CORPORATION_TAX"]
   },
   {
+    "identifier": "ctc-guarantee-balance-service-guide",
     "name": "CTC Guarantee Balance phase 4 service guide",
-    "context": "/guides/ctc-guarantee-balance-service-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ctc-guarantee-balance-service-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-guarantee-balance-testing-guide",
     "name": "CTC Guarantee Balance phase 4 testing guide",
-    "context": "/guides/ctc-guarantee-balance-testing-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ctc-guarantee-balance-testing-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-guarantee-balance-phase5-service-guide",
     "name": "CTC Guarantee Balance phase 5 service guide",
-    "context": "/guides/ctc-guarantee-balance-phase5-service-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ctc-guarantee-balance-phase5-service-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-guarantee-balance-phase5-testing-guide",
     "name": "CTC Guarantee Balance phase 5 testing guide",
-    "context": "/guides/ctc-guarantee-balance-phase5-testing-guide/"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ctc-guarantee-balance-phase5-testing-guide/",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "import-control-presentation-of-goods-end-to-end-service-guide",
     "name": "Import Control System 2 Presentation of Goods service guide",
-    "context": "/guides/import-control-presentation-of-goods-end-to-end-service-guide"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/import-control-presentation-of-goods-end-to-end-service-guide",
+    "categories": ["CUSTOMS"]
+
   },
   {
+    "identifier": "emcs-api-service-guide",
     "name": "Excise Movement Control System service guide",
-    "context": "/guides/emcs-api-service-guide"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/emcs-api-service-guide",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "emcs-api-testing-guide",
     "name": "Excise Movement Control System testing guide",
-    "context": "/guides/emcs-api-testing-guide"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/emcs-api-testing-guide",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "excise-movement-control-system-api-tis",
     "name": "Excise Movement Control System technical interface specification",
-    "context": "/guides/excise-movement-control-system-api-tis"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/excise-movement-control-system-api-tis",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "post-and-parcels-service-guide",
     "name": "Post and Parcels Service Guide",
-    "context": "/guides/post-and-parcels-service-guide"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/post-and-parcels-service-guide",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "trader-goods-profile-service-guide",
     "name": "Trader Goods Profile Service Guide",
-    "context": "/guides/trader-goods-profile-service-guide"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/trader-goods-profile-service-guide",
+    "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ukim-auth-checker-api-service-guide",
     "name": "UK Internal Market Authorisation Checker Service Guide",
-    "context": "/guides/ukim-auth-checker-api-service-guide"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/ukim-auth-checker-api-service-guide",
+    "categories": ["CUSTOMS"]
   }
 ]
