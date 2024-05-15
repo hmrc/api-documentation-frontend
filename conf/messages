@@ -1,5 +1,6 @@
 help.cookies.title=Cookies
 help.cookies.metatitle=Cookies - HMRC Developer Hub - GOV.UK
+help.cookies.metaDescription=The Developer Hub gives you access to HMRC APIs, documentation about their functions, and helps you to integrate your applications.
 help.cookies.gov=Find out more about
 help.cookies.link.gov.url=https://www.gov.uk/help/cookies
 help.cookies.link.gov_cookies.text=how cookies are used on GOV.UK
