@@ -100,5 +100,3 @@ footer.links.accessibility.text = Accessibility statement
 terms_of_use.fetch_failed=An error occurred retrieving the current Terms of Use
 
 home_page.metaDescription=The Developer Hub gives you access to HMRC APIs, documentation about their functions, and helps you to integrate your applications.
-
-
