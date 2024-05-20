@@ -6,7 +6,7 @@ Frontend for API documentation - part of the Developer Hub
 
 [**Note**: Acceptance and Unit tests will fail if they are running at the same time as api-documentation-frontend.]
 
-1. Run Assets Frontend using command ```sm --start ASSETS_FRONTEND``` where HMRC projects have been checked out.
+1. Run Assets Frontend using command ```sm --start ASSETS_FRONTEND``` or ```sm2 --start ASSETS_FRONTEND_2``` where HMRC projects have been checked out.
 
 2. Install chrome driver if you have not done already .
 

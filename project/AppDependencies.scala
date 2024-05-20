@@ -41,7 +41,7 @@ object AppDependencies {
     "io.cucumber"            %% "cucumber-scala"                  % "5.7.0",
     "org.mockito"            %% "mockito-scala-scalatest"         % "1.17.30",
     "org.jsoup"               % "jsoup"                           % "1.12.1",
-    "uk.gov.hmrc"            %% "ui-test-runner"                  % "0.22.0",
+    "uk.gov.hmrc"            %% "ui-test-runner"                  % "0.29.0",
     "uk.gov.hmrc"            %% "api-platform-test-common-domain" % commonDomainVersion
   ).map(_ % Test)
 }
