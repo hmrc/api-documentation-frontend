@@ -91,5 +91,9 @@
   {
     "name": "UK Internal Market Scheme Authorisation Checker Service Guide",
     "context": "/guides/ukim-auth-checker-api-service-guide"
+  },
+  {
+    "name": "Notice of Presentation Waiver Checker Service Guide",
+    "context": "/guides/uknw-auth-checker-api-service-guide"
   }
 ]
