@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation.controllers
 
+import scala.util.{Failure, Success, Try}
+
 import play.api.mvc.{PathBindable, QueryStringBindable}
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ServiceName}
 
@@ -37,12 +39,19 @@ package object binders {
   implicit def apiCategoryQueryStringBinder(implicit textBinder: QueryStringBindable[String]): QueryStringBindable[ApiCategory] = new QueryStringBindable[ApiCategory] {
 
     override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, ApiCategory]] = {
+
+      def parseCategory(category: String): Either[String, ApiCategory] =
+        Try { ApiCategory.unsafeApply(category) } match {
+          case Success(apiCategory) => Right(apiCategory)
+          case Failure(exception)   => Left(exception.getMessage())
+        }
+
       for {
-        version <- textBinder.bind("categoryFilters", params)
+        bindResult <- textBinder.bind("categoryFilters", params)
       } yield {
-        version match {
-          case Right(version) => Right(ApiCategory.unsafeApply(version))
-          case _              => Left("Unable to bind an api category")
+        bindResult match {
+          case Right(category) => parseCategory(category)
+          case _               => Left("Unable to bind an api category")
         }
       }
     }
@@ -55,12 +64,18 @@ package object binders {
   implicit def documentationTypeQueryStringBinder(implicit textBinder: QueryStringBindable[String]): QueryStringBindable[DocumentationTypeFilter] =
     new QueryStringBindable[DocumentationTypeFilter] {
 
+      def parseDocumentationTypeFilter(filter: String): Either[String, DocumentationTypeFilter]                         =
+        Try { DocumentationTypeFilter.unsafeApply(filter) } match {
+          case Success(filter)    => Right(filter)
+          case Failure(exception) => Left(exception.getMessage())
+        }
+
       override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, DocumentationTypeFilter]] = {
         for {
           result <- textBinder.bind("docTypeFilters", params)
         } yield {
           result match {
-            case Right(filter) => Right(DocumentationTypeFilter.unsafeApply(filter))
+            case Right(filter) => parseDocumentationTypeFilter(filter)
             case _             => Left("Unable to bind an api version")
           }
         }

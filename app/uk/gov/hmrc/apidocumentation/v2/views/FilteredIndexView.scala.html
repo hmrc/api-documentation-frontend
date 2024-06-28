@@ -21,7 +21,7 @@
 @import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 @import uk.gov.hmrc.apidocumentation.views.html._
-@import uk.gov.hmrc.apidocumentation.views.html.v2._
+@import uk.gov.hmrc.apidocumentation.v2.views.html._
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 
 
@@ -46,7 +46,7 @@
      <ul class="govuk-list">
         @for((document, index) <- documents.zipWithIndex) {
             <li class="govuk-apis-list-item">
-                <h2 class="govuk-heading-m govuk-!-margin-top-3 govuk-!-margin-bottom-3 search-title"><a href=@document.documentationUrl" class="govuk-link--no-underline govuk-link--no-visited-state">@document.name</a></h2>
+                <h2 class="govuk-heading-m govuk-!-margin-top-3 govuk-!-margin-bottom-3 search-title"><a href="@document.documentationUrl" class="govuk-link--no-underline govuk-link--no-visited-state">@document.name</a></h2>
 
                 <p class="govuk-body">@play.twirl.api.HtmlFormat.raw(document.description)</p>
                 <p class="search-category govuk-!-font-size-19">

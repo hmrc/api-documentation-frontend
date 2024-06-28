@@ -20,24 +20,28 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition}
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.controllers.{DocumentationCrumb, HeaderNavigation, HomeCrumb}
-import uk.gov.hmrc.apidocumentation.models.{Breadcrumbs, PageAttributes}
-import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, NavigationService, XmlServicesService}
+import uk.gov.hmrc.apidocumentation.controllers.{DocumentationCrumb, HeaderNavigation, HomeCrumb, routes}
+import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService, NavigationService, XmlServicesService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.v2.models._
-import uk.gov.hmrc.apidocumentation.views.html.v2.IndexViewV2
+import uk.gov.hmrc.apidocumentation.v2.views.html.FilteredIndexView
 
 @Singleton
-class V2DocumentationController @Inject() (
+class FilteredDocumentationIndexController @Inject() (
+    loggedInUserService: LoggedInUserService,
     val navigationService: NavigationService,
     mcc: MessagesControllerComponents,
+    errorHandler: ErrorHandler,
     apiDefinitionService: ApiDefinitionService,
     xmlServicesService: XmlServicesService,
-    indexView: IndexViewV2
+    indexView: FilteredIndexView
   )(implicit val appConfig: ApplicationConfig,
     val ec: ExecutionContext
   ) extends FrontendController(mcc)
@@ -51,6 +55,7 @@ class V2DocumentationController @Inject() (
 
   private def filterApiDocumentation(documents: Seq[ApiDocumentation], categoryFilters: List[ApiCategory], documentationTypeFilter: List[DocumentationTypeFilter])
       : Seq[ApiDocumentation] = {
+
     def filterByCategory(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
       categoryFilters.flatMap(filter => documents.filter(api => api.categories.contains(filter))).distinct
     }
@@ -58,6 +63,7 @@ class V2DocumentationController @Inject() (
     def filterByDocType(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
       documentationTypeFilter.flatMap(filter => documents.filter(api => filter == DocumentationTypeFilter.byLabel(api.label))).distinct
     }
+
     (documents, categoryFilters, documentationTypeFilter) match {
       case (Nil, Nil, Nil) => Nil
       case (_, Nil, Nil)   => documents
@@ -68,23 +74,45 @@ class V2DocumentationController @Inject() (
 
   }
 
-  def start(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
+  def apiListIndexPage(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def pageAttributes(title: String = "API Documentation") =
       PageAttributes(title, breadcrumbs = Breadcrumbs(documentationCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
 
-    val documentsF: Future[Seq[ApiDocumentation]] = for {
-      apis         <- apiDefinitionService.fetchAllDefinitions()
-      xmlApis      <- xmlServicesService.fetchAllXmlApis()
-      roadMaps      = RoadMapDocumentation.roadMaps
-      serviceGuides = ServiceGuideDocumentation.serviceGuides
-      apiDocuments  = apis.map(api => RestDocumentation.fromApiDefinition(api, getRestApiDescriptionOverride(api.serviceName.value)))
-      xmlDocuments  = xmlApis.map(x => XmlDocumentation.fromXmlDocumentation(x))
-    } yield (apiDocuments ++ xmlDocuments ++ roadMaps ++ serviceGuides).sortBy(_.name)
+    (for {
+      userId              <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+      apis                <- apiDefinitionService.fetchAllDefinitions(userId)
+      xmlApis             <- xmlServicesService.fetchAllXmlApis()
+      restDocuments        = apis.map(apiDefinitionToRestDocumentation)
+      xmlDocuments         = xmlApis.map(xmlApiToXmlDocumentation)
+      allApiDocumentations = (restDocuments ++ xmlDocuments ++ RoadMapDocumentation.roadMaps ++ ServiceGuideDocumentation.serviceGuides).sortBy(_.name)
+      filteredDocuments    = filterApiDocumentation(allApiDocumentations, categoryFilters, docTypeFilters)
+    } yield Ok(indexView(pageAttributes(), filteredDocuments, docTypeFilters, categoryFilters))) recover {
+      case e: Throwable =>
+        logger.error("Could not load API Documentation service", e)
+        InternalServerError(errorHandler.internalServerErrorTemplate)
+    }
 
-    documentsF.map(apiDocumentations => {
-      val filteredApiDocumentations = filterApiDocumentation(apiDocumentations, categoryFilters, docTypeFilters)
-      Ok(indexView(pageAttributes(), filteredApiDocumentations, docTypeFilters, categoryFilters))
-    })
+  }
+
+  private def extractDeveloperIdentifier(f: Future[Option[Developer]]): Future[Option[DeveloperIdentifier]] = {
+    f.map(o =>
+      o.map(d => UuidIdentifier(d.userId))
+    )
+  }
+
+  private def xmlApiToXmlDocumentation(api: XmlApiDocumentation) = {
+    val identifier = DocumentIdentifier(api.name)
+    val url        = routes.ApiDocumentationController.renderXmlApiDocumentation(identifier.value).url
+    XmlDocumentation.fromXmlDocumentation(identifier, api, url)
+  }
+
+  private def apiDefinitionToRestDocumentation(api: ApiDefinition) = {
+    val defaultVersionNbr: ApiVersionNbr = api
+      .versionsAsList
+      .sorted(WrappedApiDefinition.statusVersionOrdering)
+      .head.versionNbr
+    val url: String                      = routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersionNbr, None).url
+    RestDocumentation.fromApiDefinition(api, url, defaultVersionNbr, getRestApiDescriptionOverride(api.serviceName.value))
   }
 
 }

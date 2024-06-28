@@ -19,12 +19,11 @@ package uk.gov.hmrc.apidocumentation.v2.models
 import scala.io.Source
 
 import play.api.libs.json.{Format, Json, OFormat}
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition, ApiVersion}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition}
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.play.json.Union
 
-import uk.gov.hmrc.apidocumentation.controllers.routes
-import uk.gov.hmrc.apidocumentation.models.{DocumentationLabel, WrappedApiDefinition, XmlApiDocumentation}
+import uk.gov.hmrc.apidocumentation.models.{DocumentationLabel, XmlApiDocumentation}
 
 case class DocumentIdentifier(value: String) extends AnyVal
 
@@ -85,21 +84,15 @@ object RestDocumentation {
     implicit val testSupportApiDocumentationFormats: OFormat[TestSupportApiDocumentation] = Json.format[TestSupportApiDocumentation]
   }
 
-  def fromApiDefinition(definition: ApiDefinition, descriptionOverride: Option[RestApiDescriptionOverride]) = {
+  def fromApiDefinition(definition: ApiDefinition, documentationUrl: String, defaultVersionNbr: ApiVersionNbr, descriptionOverride: Option[RestApiDescriptionOverride]) = {
 
-    val defaultVersion: ApiVersion = definition
-      .versionsAsList
-      .sorted(WrappedApiDefinition.statusVersionOrdering)
-      .head
-
-    val documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr, None).url
     if (definition.isTestSupport) {
       TestSupportApiDocumentation(
         DocumentIdentifier(definition.serviceName.value),
         definition.name,
         descriptionOverride.map(_.description).getOrElse(definition.description),
         definition.context.value,
-        defaultVersion.versionNbr,
+        defaultVersionNbr,
         documentationUrl,
         definition.categories
       )
@@ -109,7 +102,7 @@ object RestDocumentation {
         definition.name,
         descriptionOverride.map(_.description).getOrElse(definition.description),
         definition.context.value,
-        defaultVersion.versionNbr,
+        defaultVersionNbr,
         documentationUrl,
         definition.categories
       )
@@ -119,17 +112,17 @@ object RestDocumentation {
   implicit val restDocumentFormats: OFormat[RestDocumentation] = Json.format[RestDocumentation]
 }
 
-case class XmlDocumentation(identifier: DocumentIdentifier, name: String, description: String, context: String, categories: Seq[ApiCategory]) extends ApiDocumentation {
+case class XmlDocumentation(identifier: DocumentIdentifier, name: String, description: String, context: String, categories: Seq[ApiCategory], documentationUrl: String)
+    extends ApiDocumentation {
 
   val label: DocumentationLabel = DocumentationLabel.XML_API
 
-  def documentationUrl: String = routes.ApiDocumentationController.renderXmlApiDocumentation(identifier.value).url
 }
 
 object XmlDocumentation {
 
-  def fromXmlDocumentation(api: XmlApiDocumentation) = {
-    XmlDocumentation(DocumentIdentifier(api.name), api.name, api.description, api.context, api.categories.getOrElse(Seq.empty))
+  def fromXmlDocumentation(identifier: DocumentIdentifier, api: XmlApiDocumentation, url: String) = {
+    XmlDocumentation(identifier, api.name, api.description, api.context, api.categories.getOrElse(Seq.empty), url)
   }
 
   implicit val xmlDocumentFormats: OFormat[XmlDocumentation] = Json.format[XmlDocumentation]

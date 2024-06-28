@@ -21,7 +21,7 @@
 @(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory])
 
 <div class="govuk-form-group">
-    <form method="GET" action="@controllers.routes.V2DocumentationController.start(List.empty, List.empty)">
+    <form method="GET" action="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty)">
         <fieldset class="govuk-fieldset" aria-describedby="doc-docType-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                 Documentation Type

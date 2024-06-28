@@ -57,6 +57,6 @@ GET         /docs/api/download/:service/:version/*resource              uk.gov.h
 
 GET         /assets/*file                                               @controllers.Assets.versioned(path="/public", file: Asset)
 
-GET         /docs/v2/start                                              uk.gov.hmrc.apidocumentation.v2.controllers.V2DocumentationController.start(docTypeFilters: List[uk.gov.hmrc.apidocumentation.v2.models.DocumentationTypeFilter], categoryFilters: List[uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory])
+GET         /docs/v2                                                    uk.gov.hmrc.apidocumentation.v2.controllers.FilteredDocumentationIndexController.apiListIndexPage(docTypeFilters: List[uk.gov.hmrc.apidocumentation.v2.models.DocumentationTypeFilter], categoryFilters: List[uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory])
 
 ->          /hmrc-frontend                                              hmrcfrontend.Routes
