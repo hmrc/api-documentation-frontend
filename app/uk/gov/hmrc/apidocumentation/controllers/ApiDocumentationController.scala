@@ -77,6 +77,11 @@ class ApiDocumentationController @Inject() (
   private lazy val cacheControlHeaders = "cache-control" -> "no-cache,no-store,max-age=0"
   private lazy val apiDocCrumb         = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
 
+  private lazy val v2ApiDocCrumb = Crumb(
+    "API Documentation",
+    uk.gov.hmrc.apidocumentation.v2.controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
+  )
+
   def apiIndexPage(service: Option[ServiceName], version: Option[ApiVersionNbr], filter: Option[String]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def pageAttributes(title: String = "API Documentation") =
       PageAttributes(title, breadcrumbs = Breadcrumbs(documentationCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
@@ -85,7 +90,7 @@ class ApiDocumentationController @Inject() (
 
     params match {
       case Some((service, version)) =>
-        val url = routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url
+        val url = routes.ApiDocumentationController.renderApiDocumentation(service, version, None, None).url
         Future.successful(Redirect(url))
       case None                     =>
         (for {
@@ -110,7 +115,7 @@ class ApiDocumentationController @Inject() (
 
   def redirectToApiDocumentation(service: ServiceName, version: Option[ApiVersionNbr], cacheBuster: Option[Boolean]): Action[AnyContent] = version match {
     case Some(version) => Action.async {
-        Future.successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version, cacheBuster)))
+        Future.successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version, cacheBuster, None)))
       }
     case _             => redirectToCurrentApiDocumentation(service, cacheBuster)
   }
@@ -121,7 +126,7 @@ class ApiDocumentationController @Inject() (
       extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, userId)
     } yield {
       extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(NotFound(errorHandler.notFoundTemplate)) { version =>
-        Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version, cacheBuster))
+        Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version, cacheBuster, None))
       }
     }) recover {
       case _: NotFoundException => NotFound(errorHandler.notFoundTemplate)
@@ -131,13 +136,13 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  def renderApiDocumentation(service: ServiceName, version: ApiVersionNbr, cacheBuster: Option[Boolean]): Action[AnyContent] =
+  def renderApiDocumentation(service: ServiceName, version: ApiVersionNbr, cacheBuster: Option[Boolean], useV2: Option[Boolean]): Action[AnyContent] =
     headerNavigation { implicit request => navLinks =>
       (for {
         userId           <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
         api              <- apiDefinitionService.fetchExtendedDefinition(service, userId)
         cacheBust         = bustCache(cacheBuster)
-        apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, userId)
+        apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, userId, useV2)
       } yield apiDocumentation) recover {
         case e: NotFoundException =>
           logger.info(s"Upstream request not found: ${e.getMessage}")
@@ -157,12 +162,18 @@ class ApiDocumentationController @Inject() (
       cacheBuster: Boolean,
       apiOption: Option[ExtendedApiDefinition],
       navLinks: Seq[NavLink],
-      developerId: Option[DeveloperIdentifier]
+      developerId: Option[DeveloperIdentifier],
+      useV2IndexPage: Option[Boolean]
     )(implicit request: Request[AnyContent],
       messagesProvider: MessagesProvider
     ): Future[Result] = {
     def makePageAttributes(apiDefinition: ExtendedApiDefinition, sidebarLinks: Seq[SidebarLink]) = {
-      val breadcrumbs = Breadcrumbs(
+
+      val breadcrumbs = if (useV2IndexPage.getOrElse(false)) Breadcrumbs(
+        v2ApiDocCrumb,
+        homeCrumb
+      )
+      else Breadcrumbs(
         apiDocCrumb,
         homeCrumb
       )
@@ -173,32 +184,34 @@ class ApiDocumentationController @Inject() (
     def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
 
     def redirectToLoginPage = {
-      logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url}")
+      logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version, None, None).url}")
       Future.successful(Redirect("/developer/login").withSession(
-        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url,
+        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None, None).url,
         "ts"         -> Instant.now(Clock.systemUTC).toEpochMilli.toString
       ))
     }
 
-    def renderRetiredVersionJumpPage(api: ExtendedApiDefinition)(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) = {
+    def renderRetiredVersionJumpPage(api: ExtendedApiDefinition, useV2: Option[Boolean])(implicit request: Request[AnyContent], messagesProvider: MessagesProvider) = {
       val apiDefinition = api.userAccessibleApiDefinition
 
       Future.successful(Ok(retiredVersionJumpView(
         makePageAttributes(apiDefinition, navigationService.sidebarNavigation()),
-        apiDefinition
+        apiDefinition,
+        useV2
       )))
     }
 
     def renderDocumentationPage(
         api: ExtendedApiDefinition,
-        selectedVersion: ExtendedApiVersion
+        selectedVersion: ExtendedApiVersion,
+        useV2: Option[Boolean]
       )(implicit request: Request[AnyContent],
         messagesProvider: MessagesProvider
       ): Future[Result] = {
       def renderRamlSpec(apiSpecification: ApiSpecification): Future[Result] = {
         val attrs     = makePageAttributes(api, navigationService.apiSidebarNavigation2(selectedVersion, apiSpecification))
         val viewModel = ViewModel(apiSpecification)
-        successful(Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, developerId.isDefined)).withHeaders(cacheControlHeaders))
+        successful(Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, developerId.isDefined, useV2)).withHeaders(cacheControlHeaders))
       }
 
       def withDefault(service: ServiceName)(file: String, label: String): Future[DocumentationItem] = {
@@ -230,7 +243,7 @@ class ApiDocumentationController @Inject() (
           markdownBlocks   = List(overview, errors, testing) ++ (if (requiredFraudPrevention) List(fraudPrevention) else List()) ++ List(versioning)
           attrs            = makePageAttributes(api, navigationService.openApiSidebarNavigation(markdownBlocks))
 
-        } yield Ok(parentPage(attrs, markdownBlocks, api.name, api, selectedVersion, developerId.isDefined)).withHeaders(cacheControlHeaders)
+        } yield Ok(parentPage(attrs, markdownBlocks, api.name, api, selectedVersion, developerId.isDefined, useV2 = useV2)).withHeaders(cacheControlHeaders)
       }
 
       val categories = APICategoryFilters.categoryMap.getOrElse(api.name, Seq.empty)
@@ -245,9 +258,9 @@ class ApiDocumentationController @Inject() (
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == ApiStatus.RETIRED => renderRetiredVersionJumpPage(api)
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                => renderDocumentationPage(api, selectedVersion)
-      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.PRIVATE, _, false, true)))                        => renderDocumentationPage(api, selectedVersion)
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == ApiStatus.RETIRED => renderRetiredVersionJumpPage(api, useV2IndexPage)
+      case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                => renderDocumentationPage(api, selectedVersion, useV2IndexPage)
+      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.PRIVATE, _, false, true)))                        => renderDocumentationPage(api, selectedVersion, useV2IndexPage)
       case Some((_, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _)))                                           => redirectToLoginPage
       case _                                                                                                             => renderNotFoundPage
     }
@@ -304,13 +317,20 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  def renderXmlApiDocumentation(name: String): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
+  def renderXmlApiDocumentation(name: String, useV2: Option[Boolean]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def makePageAttributes(apiDefinition: Documentation): PageAttributes = {
-      val breadcrumbs = Breadcrumbs(
-        Crumb(
-          apiDefinition.name,
-          routes.ApiDocumentationController.renderXmlApiDocumentation(apiDefinition.context).url
-        ),
+      val xmlCrumb    = Crumb(
+        apiDefinition.name,
+        routes.ApiDocumentationController.renderXmlApiDocumentation(apiDefinition.context, useV2).url
+      )
+      val breadcrumbs = if (useV2.getOrElse(false)) {
+        Breadcrumbs(
+          xmlCrumb,
+          v2ApiDocCrumb,
+          homeCrumb
+        )
+      } else Breadcrumbs(
+        xmlCrumb,
         apiDocCrumb,
         homeCrumb
       )

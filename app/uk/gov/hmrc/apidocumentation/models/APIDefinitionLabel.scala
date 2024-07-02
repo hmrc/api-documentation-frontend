@@ -16,6 +16,11 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
+import scala.collection.immutable.ListSet
+
+import play.api.libs.json.Format
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
+
 sealed trait DocumentationLabel {
   lazy val displayName: String = DocumentationLabel.displayName(this)
   lazy val modifier: String    = DocumentationLabel.modifier(this)
@@ -44,5 +49,13 @@ object DocumentationLabel {
     case XML_API          => "xml"
   }
 
+  /* The order of the following declarations is important since it defines the ordering of the enumeration.
+   * Be very careful when changing this, code may be relying on certain values being larger/smaller than others. */
+  val values: ListSet[DocumentationLabel] = ListSet(REST_API, ROADMAP, SERVICE_GUIDE, TEST_SUPPORT_API, XML_API)
+
+  def apply(text: String): Option[DocumentationLabel] = DocumentationLabel.values.find(_.toString.toUpperCase == text.toUpperCase())
+
   implicit val ordering: Ordering[DocumentationLabel] = Ordering.by(_.toString)
+
+  implicit val formats: Format[DocumentationLabel] = SealedTraitJsonFormatting.createFormatFor[DocumentationLabel]("DocumentationLabel", apply)
 }

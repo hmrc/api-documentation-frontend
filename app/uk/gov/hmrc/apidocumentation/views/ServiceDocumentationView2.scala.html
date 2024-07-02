@@ -27,18 +27,18 @@
 
 @this(apiMain: apiMain, ourMainView: MainView)
 
-@(pageAttributes: PageAttributes, api: ExtendedApiDefinition, currentVersion: ExtendedApiVersion, viewModel: ViewModel, loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, api: ExtendedApiDefinition, currentVersion: ExtendedApiVersion, viewModel: ViewModel, loggedIn: Boolean = false, useV2: Option[Boolean])(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @topContent = {
     <div class="form-group">
         <select class="form-control form-control-version"
                 id="version"
                 name="version"
-                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version, None).url"
+                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version, None, useV2).url"
                 onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
             @for(v <- api.sortedActiveVersions;
                 if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
-                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version, None).url">v@v.version (@v.displayedStatus)</option>
+                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version, None, useV2).url">v@v.version (@v.displayedStatus)</option>
             }
         </select>
     </div>

@@ -43,12 +43,12 @@ class DownloadController @Inject() (
   )(implicit val ec: ExecutionContext
   ) extends FrontendController(cc) with ApplicationLogger {
 
-  def downloadResource(service: ServiceName, version: ApiVersionNbr, resource: String) = Action.async { implicit request =>
+  def downloadResource(service: ServiceName, version: ApiVersionNbr, resource: String, useV2: Option[Boolean]) = Action.async { implicit request =>
     (for {
       userId       <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
       api          <- apiDefinitionService.fetchExtendedDefinition(service, userId)
       validResource = validateResource(resource)
-      result       <- fetchResourceForApi(api, version, validResource)
+      result       <- fetchResourceForApi(api, version, validResource, useV2)
     } yield {
       result
     }) recover {
@@ -61,7 +61,8 @@ class DownloadController @Inject() (
     }
   }
 
-  private def fetchResourceForApi(apiOption: Option[ExtendedApiDefinition], version: ApiVersionNbr, validResource: String)(implicit request: Request[_]): Future[Result] = {
+  private def fetchResourceForApi(apiOption: Option[ExtendedApiDefinition], version: ApiVersionNbr, validResource: String, useV2: Option[Boolean])(implicit request: Request[_])
+      : Future[Result] = {
     def findVersion(apiOption: Option[ExtendedApiDefinition]) =
       for {
         api        <- apiOption
@@ -74,7 +75,7 @@ class DownloadController @Inject() (
 
     def redirectToLoginPage(service: ServiceName) =
       Future.successful(Redirect("/developer/login").withSession(
-        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url
+        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None, useV2).url
       ))
 
     findVersion(apiOption) match {

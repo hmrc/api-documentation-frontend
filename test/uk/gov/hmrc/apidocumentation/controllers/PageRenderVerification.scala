@@ -35,6 +35,11 @@ trait PageRenderVerification {
   lazy val homeBreadcrumb    = Crumb("Home", routes.DocumentationController.indexPage().url)
   lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.ApiDocumentationController.apiIndexPage(None, None, None).url)
 
+  lazy val apiDocsV2Breadcrumb = Crumb(
+    "API Documentation",
+    uk.gov.hmrc.apidocumentation.v2.controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
+  )
+
   def titleOf(result: Future[Result]) = {
     val titleRegEx = """<title[^>]*>(.*)</title>""".r
     val title      = titleRegEx.findFirstMatchIn(contentAsString(result)).map(_.group(1))
