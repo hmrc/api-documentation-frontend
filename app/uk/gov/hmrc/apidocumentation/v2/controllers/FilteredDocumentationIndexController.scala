@@ -47,6 +47,13 @@ class FilteredDocumentationIndexController @Inject() (
   ) extends FrontendController(mcc)
     with HeaderNavigation with ApplicationLogger with DocumentationCrumb with HomeCrumb {
 
+  // lazy val v2HomeCrumb =
+  //    Crumb("Home", uk.gov.hmrc.apidocumentation.v2.controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url)
+  private lazy val apiDocCrumb = Crumb(
+    "API Documentation",
+    uk.gov.hmrc.apidocumentation.v2.controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
+  )
+
   private lazy val restApiDescriptionOverrides: Seq[RestApiDescriptionOverride] = RestApiDescriptionOverride.descriptionOverrides
 
   private def getRestApiDescriptionOverride(identifier: String): Option[RestApiDescriptionOverride] = {
@@ -76,7 +83,7 @@ class FilteredDocumentationIndexController @Inject() (
 
   def apiListIndexPage(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def pageAttributes(title: String = "API Documentation") =
-      PageAttributes(title, breadcrumbs = Breadcrumbs(documentationCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
+      PageAttributes(title, breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
 
     (for {
       userId              <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
@@ -102,7 +109,7 @@ class FilteredDocumentationIndexController @Inject() (
 
   private def xmlApiToXmlDocumentation(api: XmlApiDocumentation) = {
     val identifier = DocumentIdentifier(api.name)
-    val url        = routes.ApiDocumentationController.renderXmlApiDocumentation(identifier.value).url
+    val url        = routes.ApiDocumentationController.renderXmlApiDocumentation(identifier.value, useV2 = Some(true)).url
     XmlDocumentation.fromXmlDocumentation(identifier, api, url)
   }
 
@@ -111,7 +118,7 @@ class FilteredDocumentationIndexController @Inject() (
       .versionsAsList
       .sorted(WrappedApiDefinition.statusVersionOrdering)
       .head.versionNbr
-    val url: String                      = routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersionNbr, None).url
+    val url: String                      = routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersionNbr, None, useV2 = Some(true)).url
     RestDocumentation.fromApiDefinition(api, url, defaultVersionNbr, getRestApiDescriptionOverride(api.serviceName.value))
   }
 

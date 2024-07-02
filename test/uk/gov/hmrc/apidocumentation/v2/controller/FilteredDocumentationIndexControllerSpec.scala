@@ -86,7 +86,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         fetchAllXmlApisReturnsApis()
 
         val result = underTest.apiListIndexPage(Nil, Nil)(request)
-        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, bodyContains = Seq("API documentation"))(result)
+        verifyPageRendered(pageTitle("API Documentation"), breadcrumbs = List(apiDocsV2Breadcrumb), sideNavLinkRendered = false, bodyContains = Seq("API documentation"))(result)
       }
 
       "render the filtered API list when doc type filter is road map and service guides but no category filter" in new Setup {
@@ -96,7 +96,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
 
         val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List.empty)(request)
         // There are currently 23 Service Guides and 4 roadmaps so should be 27 results
-        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, bodyContains = Seq("27 results "))(result)
+        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsV2Breadcrumb), bodyContains = Seq("27 results "))(result)
       }
 
       "render the filtered API list when doc type filter is road map and service guides and customs category filter" in new Setup {
@@ -109,6 +109,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         verifyPageRendered(
           pageTitle("API Documentation"),
           sideNavLinkRendered = false,
+          breadcrumbs = List(apiDocsV2Breadcrumb),
           bodyContains = Seq("2 results ", "Income Tax (MTD) end-to-end service guide", "Income Tax (MTD) roadmap")
         )(result)
       }

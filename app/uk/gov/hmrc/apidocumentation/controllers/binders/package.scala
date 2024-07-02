@@ -64,7 +64,7 @@ package object binders {
   implicit def documentationTypeQueryStringBinder(implicit textBinder: QueryStringBindable[String]): QueryStringBindable[DocumentationTypeFilter] =
     new QueryStringBindable[DocumentationTypeFilter] {
 
-      def parseDocumentationTypeFilter(filter: String): Either[String, DocumentationTypeFilter]                         =
+      def parseDocumentationTypeFilter(filter: String): Either[String, DocumentationTypeFilter] =
         Try { DocumentationTypeFilter.unsafeApply(filter) } match {
           case Success(filter)    => Right(filter)
           case Failure(exception) => Left(exception.getMessage())
