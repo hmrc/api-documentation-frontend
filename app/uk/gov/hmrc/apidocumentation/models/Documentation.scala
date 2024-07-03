@@ -69,7 +69,7 @@ case class XmlApiDocumentation(name: String, context: String, description: Strin
 
   val label: DocumentationLabel = DocumentationLabel.XML_API
 
-  def documentationUrl: String = routes.ApiDocumentationController.renderXmlApiDocumentation(name).url
+  def documentationUrl: String = routes.ApiDocumentationController.renderXmlApiDocumentation(name, None).url
 }
 
 object XmlApiDocumentation {
@@ -133,7 +133,7 @@ case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation
     .sorted(WrappedApiDefinition.statusVersionOrdering)
     .head
 
-  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr, None).url
+  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr, None, None).url
 }
 
 object WrappedApiDefinition {
