@@ -28,6 +28,7 @@
 
 @govUkWrapper(pageTitle = Some(pageAttributes.title),
     leftNav = Some(documentFilter(docTypeFilters, categoryFilters.sorted)),
+    isLeftNavSticky = false,
     breadcrumbs = Some(pageAttributes.breadcrumbs),
     navLinks = pageAttributes.headerLinks
     ){@mainContent}
