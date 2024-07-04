@@ -41,7 +41,8 @@
         bodyEndBlock: Option[Html] = None,
         breadcrumbs: Option[Breadcrumbs] = None,
         navLinks: Seq[NavLink] = Seq.empty,
-        leftNav: Option[Html] = None
+        leftNav: Option[Html] = None,
+        isLeftNavSticky: Boolean = true
 )(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any])
 
 @head = {
@@ -84,13 +85,21 @@
 @mainContentDefault = {
     <div class="govuk-width-container">
         <div class="govuk-grid-row">
-            <div id="navContent" class="govuk-grid-column-one-third left-nav-sticky">
+            @if(isLeftNavSticky){
+             <div id="navContent" class="govuk-grid-column-one-third left-nav-sticky">
+             } else {
+                <div id="navContent" class="govuk-grid-column-one-third">
+             }
             @leftNav.getOrElse(HtmlFormat.empty)
             </div>
             <div id="mainContent" class="govuk-grid-column-two-thirds">
-                <div class="govuk-side-nav-content">
-                @contentBlock
-                </div>
+                @if(isLeftNavSticky){
+                    <div class="govuk-side-nav-content">
+                    @contentBlock
+                    </div>
+                } else {
+                    @contentBlock
+                }    
             </div>
         </div>
         <div class="govuk-grid-row">
