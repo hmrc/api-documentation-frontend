@@ -161,5 +161,12 @@
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
     "context": "/guides/ukim-auth-checker-api-service-guide",
     "categories": ["CUSTOMS"]
+  },
+  {
+    "identifier": "ukim-auth-checker-api-service-guide",
+    "name": "Notification of Presentation Waiver Checker Service Guide",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "context": "/guides/uknw-auth-checker-api-service-guide",
+    "categories": ["CUSTOMS"]
   }
 ]
