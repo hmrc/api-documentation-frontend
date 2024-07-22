@@ -28,17 +28,20 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 class RedirectController @Inject() (cc: MessagesControllerComponents)
     extends FrontendController(cc) {
 
-  def redirectToDocumentationIndexPage(): Action[AnyContent] = {
-    val redirectTo =
-      routes.ApiDocumentationController.apiIndexPage(None, None, None).url
+  def `redirectToDocumentationIndexPage`(useV2: Option[Boolean]): Action[AnyContent] = {
+
+    val redirectTo = if (useV2.getOrElse(false)) {
+      uk.gov.hmrc.apidocumentation.v2.controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
+    } else routes.ApiDocumentationController.apiIndexPage(None, None, None).url
+
     Action.async { _ =>
       Future.successful(MovedPermanently(redirectTo))
     }
   }
 
-  def redirectToApiDocumentationPage(service: ServiceName, version: ApiVersionNbr, endpoint: String): Action[AnyContent] = {
+  def redirectToApiDocumentationPage(service: ServiceName, version: ApiVersionNbr, endpoint: String, useV2: Option[Boolean]): Action[AnyContent] = {
     val redirectTo = routes.ApiDocumentationController
-      .renderApiDocumentation(service, version, None)
+      .renderApiDocumentation(service, version, None, useV2)
       .url
     Action.async { _ =>
       Future.successful(MovedPermanently(redirectTo))

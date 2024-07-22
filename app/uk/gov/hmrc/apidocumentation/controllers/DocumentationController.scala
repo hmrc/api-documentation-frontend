@@ -190,6 +190,7 @@ trait HomeCrumb {
 
   lazy val homeCrumb =
     Crumb("Home", routes.DocumentationController.indexPage().url)
+
 }
 
 trait DocumentationCrumb {

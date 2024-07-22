@@ -254,7 +254,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           verifyApiDocumentationPageRendered(result)
           versionOptionIsRendered(result, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
@@ -268,7 +268,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           versionOptionIsRendered(result, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
         }
@@ -281,7 +281,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           versionOptionIsRendered(result, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
         }
@@ -294,7 +294,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           versionOptionIsRendered(result, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
         }
@@ -307,7 +307,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           versionOptionIsRendered(result, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe false
         }
@@ -319,7 +319,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           )
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           verifyNotFoundPageRendered(result)
         }
@@ -331,7 +331,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           )
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           verifyRedirectToLoginPage(result, serviceName, versionOne)
         }
@@ -343,7 +343,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           verifyNotFoundPageRendered(result)
         }
@@ -362,7 +362,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           versionOptionIsRendered(result, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
         }
@@ -383,7 +383,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           verifyNotFoundPageRendered(result)
         }
@@ -404,7 +404,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           versionOptionIsRendered(result, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
         }
@@ -425,7 +425,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           versionOptionIsRendered(result, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
         }
@@ -446,7 +446,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           versionOptionIsRendered(result, "1.0", apiDefinition.versions.head.displayedStatus) shouldBe true
         }
@@ -467,7 +467,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
           theDocumentationServiceWillFetchApiSpecification(mockApiSpecification)
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           verifyNotFoundPageRendered(result)
         }
@@ -482,7 +482,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDocumentationServiceWillFetchNoSpecification()
           when(downloadConnector.fetch(*[ServiceName], *[ApiVersionNbr], *)).thenReturn(successful(None))
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           status(result) shouldBe OK
           contentAsString(result) should include("Endpoints")
@@ -499,7 +499,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theDocumentationServiceWillFetchNoSpecification()
           when(downloadConnector.fetch(*[ServiceName], *[ApiVersionNbr], *)).thenReturn(successful(None))
 
-          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
           status(result) shouldBe OK
           println(contentAsString(result))
@@ -512,7 +512,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         theUserIsLoggedIn()
         theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
 
-        val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
         verifyNotFoundPageRendered(result)
       }
@@ -523,7 +523,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithRetiredVersion(serviceName, versionOne, ApiVersionNbr("1.1"))
         )
 
-        val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
         verifyApiDocumentationPageRendered(result)
         verifyLinkToStableDocumentationRendered(result, serviceName, ApiVersionNbr("1.1"))
@@ -535,7 +535,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithRetiredVersion(serviceName, versionOne, ApiVersionNbr("1.1"))
         )
 
-        val result = underTest.renderApiDocumentation(serviceName, versionTwo, Option(true))(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionTwo, Option(true), None)(request)
 
         verifyNotFoundPageRendered(result)
       }
@@ -544,7 +544,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnNoApiDefinition()
 
-        val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true))(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
 
         verifyNotFoundPageRendered(result)
       }
@@ -607,7 +607,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       fetchXmlApiReturnsApi()
 
       val existingXmlApiName = xmlApi1.name
-      val result             = underTest.renderXmlApiDocumentation(existingXmlApiName)(request)
+      val result             = underTest.renderXmlApiDocumentation(existingXmlApiName, None)(request)
 
       verifyPageRendered(pageTitle(existingXmlApiName), bodyContains = Seq(existingXmlApiName))(result)
     }
@@ -617,7 +617,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       fetchXmlApiReturnsNone()
 
       val nonExistingXmlApiName = "Fake XML API name"
-      val result                = underTest.renderXmlApiDocumentation(nonExistingXmlApiName)(request)
+      val result                = underTest.renderXmlApiDocumentation(nonExistingXmlApiName, None)(request)
 
       status(result) shouldBe NOT_FOUND
     }
