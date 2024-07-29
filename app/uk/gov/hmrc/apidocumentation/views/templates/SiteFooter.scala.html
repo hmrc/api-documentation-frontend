@@ -22,7 +22,7 @@
 
 @this(hmrcFooter: HmrcFooter)
 
-@(footerLinks: FooterLinks)(implicit messages: Messages, request: Request[_])
+@(footerLinks: FooterLinks)(implicit messages: Messages, requestHeader: RequestHeader)
 
 @hmrcFooter(new Footer(
     meta = Some(Meta(items = Some(footerLinks.items.map(footerLink => FooterItem(text = footerLink.text, href = footerLink.href))))),

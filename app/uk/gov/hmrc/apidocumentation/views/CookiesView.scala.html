@@ -20,7 +20,7 @@
 
 @this(main: main)
 
-@()(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
+@()(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 
 @metaTitle = {
     <meta name="description" content="@Messages("help.cookies.metatitle")">

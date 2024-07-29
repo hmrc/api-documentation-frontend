@@ -93,10 +93,10 @@ class FilteredDocumentationIndexController @Inject() (
       xmlDocuments         = xmlApis.map(xmlApiToXmlDocumentation)
       allApiDocumentations = (restDocuments ++ xmlDocuments ++ RoadMapDocumentation.roadMaps ++ ServiceGuideDocumentation.serviceGuides).sortBy(_.name)
       filteredDocuments    = filterApiDocumentation(allApiDocumentations, categoryFilters, docTypeFilters)
-    } yield Ok(indexView(pageAttributes(), filteredDocuments, docTypeFilters, categoryFilters))) recover {
+    } yield Ok(indexView(pageAttributes(), filteredDocuments, docTypeFilters, categoryFilters))) recoverWith {
       case e: Throwable =>
         logger.error("Could not load API Documentation service", e)
-        InternalServerError(errorHandler.internalServerErrorTemplate)
+        errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
     }
 
   }

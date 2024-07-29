@@ -46,7 +46,7 @@
     additionalTopContent: Option[Html] = None,
     fullWidthContent: Boolean = false,
     bodyEndBlock: Option[Html] = None
-  )(mainContent: Html = HtmlFormat.empty)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: Request[Any])
+  )(mainContent: Html = HtmlFormat.empty)(implicit applicationConfig: ApplicationConfig, messages: Messages, requestHeader: RequestHeader)
 
 @head = {
     <link href='@routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />

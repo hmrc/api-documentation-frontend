@@ -19,7 +19,7 @@
 
 @this(main: main)
 
-@()(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
+@()(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 
 @main(title = Some("Privacy policy")) {
    <h1 class="govuk-heading-l">Privacy policy</h1>

@@ -21,14 +21,15 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.play.http.metrics.common._
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 @Singleton
-class RamlPreviewConnector @Inject() (http: HttpClient, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
+class RamlPreviewConnector @Inject() (http: HttpClientV2, appConfig: ApplicationConfig)(implicit ec: ExecutionContext) {
 
   private lazy val serviceBaseUrl = appConfig.ramlPreviewMicroserviceBaseUrl
 
@@ -36,6 +37,6 @@ class RamlPreviewConnector @Inject() (http: HttpClient, appConfig: ApplicationCo
 
   def fetchPreviewApiSpecification(ramlUrl: String)(implicit hc: HeaderCarrier): Future[ApiSpecification] = {
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
-    http.GET[ApiSpecification](s"$serviceBaseUrl/preview?ramlUrl=${URLEncoder.encode(ramlUrl, "UTF-8")}")
+    http.get(url"$serviceBaseUrl/preview?ramlUrl=${URLEncoder.encode(ramlUrl, "UTF-8")}").execute[ApiSpecification]
   }
 }
