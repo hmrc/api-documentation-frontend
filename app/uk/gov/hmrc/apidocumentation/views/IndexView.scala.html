@@ -21,7 +21,7 @@
 
 @this(layoutHomePage: LayoutHomePage)
 
-@(pageTitle: String, navLinks: Seq[NavLink], loggedIn: Boolean)(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: Request[Any])
+@(pageTitle: String, navLinks: Seq[NavLink], loggedIn: Boolean)(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 
 @layoutHomePage(navLinks = navLinks) {
 <!-- Index blue banner -->

@@ -51,13 +51,13 @@ class DownloadController @Inject() (
       result       <- fetchResourceForApi(api, version, validResource, useV2)
     } yield {
       result
-    }) recover {
+    }) recoverWith {
       case e: NotFoundException =>
         logger.info(s"Resource not found: ${e.getMessage}")
-        NotFound(errorHandler.notFoundTemplate)
+        errorHandler.notFoundTemplate.map(NotFound(_))
       case e: Throwable         =>
         logger.error("Could not load resource", e)
-        InternalServerError(errorHandler.internalServerErrorTemplate)
+        errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
     }
   }
 
@@ -71,7 +71,7 @@ class DownloadController @Inject() (
       } yield (api, apiVersion, visibility)
 
     def renderNotFoundPage =
-      NotFound(errorHandler.notFoundTemplate)
+      errorHandler.notFoundTemplate.map(NotFound(_))
 
     def redirectToLoginPage(service: ServiceName) =
       Future.successful(Redirect("/developer/login").withSession(
@@ -84,10 +84,11 @@ class DownloadController @Inject() (
 
       case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
         downloadConnector.fetch(api.serviceName, selectedVersion.version, validResource)
-          .map(_.getOrElse(renderNotFoundPage))
+          .map(_.fold(renderNotFoundPage)(Future.successful))
+          .flatten
 
       case _ =>
-        Future.successful(renderNotFoundPage)
+        renderNotFoundPage
     }
   }
 

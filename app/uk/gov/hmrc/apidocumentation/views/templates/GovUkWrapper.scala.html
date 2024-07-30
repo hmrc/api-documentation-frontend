@@ -43,7 +43,7 @@
         navLinks: Seq[NavLink] = Seq.empty,
         leftNav: Option[Html] = None,
         isLeftNavSticky: Boolean = true
-)(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, request: play.api.mvc.Request[Any])
+)(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, requestHeader: RequestHeader)
 
 @head = {
     @hmrcTrackingConsentSnippet()

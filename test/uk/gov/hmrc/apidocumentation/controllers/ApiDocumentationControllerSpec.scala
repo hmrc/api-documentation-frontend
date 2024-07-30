@@ -133,7 +133,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
         val result = underTest.apiIndexPage(None, None, None)(request)
 
-        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, we’re experiencing technical difficulties")(result)
+        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, there is a problem with the service")(result)
       }
 
       "display the error page when the xmlServicesService throws an exception" in new Setup {
@@ -143,7 +143,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
         val result = underTest.apiIndexPage(None, None, None)(request)
 
-        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, we’re experiencing technical difficulties")(result)
+        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, there is a problem with the service")(result)
       }
     }
 

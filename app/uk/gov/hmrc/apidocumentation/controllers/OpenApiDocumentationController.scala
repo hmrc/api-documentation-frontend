@@ -86,8 +86,8 @@ class OpenApiDocumentationController @Inject() (
       successful(Ok(openApiViewRedoc(service, version, apiName)))
     }
 
-    def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
-    def badRequestPage     = Future.successful(BadRequest(errorHandler.badRequestTemplate))
+    def renderNotFoundPage = errorHandler.notFoundTemplate.map(NotFound(_))
+    def badRequestPage     = errorHandler.badRequestTemplate.map(BadRequest(_))
 
     def findVersion(apiOption: Option[ExtendedApiDefinition]) =
       for {
@@ -118,21 +118,21 @@ class OpenApiDocumentationController @Inject() (
         userId           <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
         api              <- apiDefinitionService.fetchExtendedDefinition(service, userId)
         apiDocumentation <- doRenderApiDocumentation(service, version, api)
-      } yield apiDocumentation) recover {
+      } yield apiDocumentation) recoverWith {
         case e: NotFoundException =>
           logger.info(s"Upstream request not found: ${e.getMessage}")
-          NotFound(errorHandler.notFoundTemplate)
+          errorHandler.notFoundTemplate.map(NotFound(_))
         case e: Throwable         =>
           logger.error("Could not load API Documentation service", e)
-          InternalServerError(errorHandler.internalServerErrorTemplate)
+          errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
       }
     }
 
   def fetchOas(service: ServiceName, version: ApiVersionNbr) = Action.async { implicit request =>
     downloadConnector.fetch(service, version, "application.yaml")
-      .map {
-        case Some(result) => result.withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\"")
-        case None         => NotFound(errorHandler.notFoundTemplate)
+      .flatMap {
+        case Some(result) => successful(result.withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=\"application.yaml\""))
+        case None         => errorHandler.notFoundTemplate.map(NotFound(_))
       }
   }
 
@@ -195,7 +195,7 @@ class OpenApiDocumentationController @Inject() (
 
       successful(Ok(openApiPreviewView(pageAttributes)))
     } else {
-      successful(NotFound(errorHandler.notFoundTemplate))
+      errorHandler.notFoundTemplate.map(NotFound(_))
     }
   }
 
@@ -208,7 +208,7 @@ class OpenApiDocumentationController @Inject() (
         case Some(location) => successful(Ok(openApiPreviewRedoc(location)))
       }
     } else {
-      successful(NotFound(errorHandler.notFoundTemplate))
+      errorHandler.notFoundTemplate.map(NotFound(_))
     }
   }
 }
