@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views.templates
+package uk.gov.hmrc.apidocumentation.views.templates
 
 import javax.inject.{Inject, Singleton}
 
 import views.html.helper
 
 import play.api.Configuration
-import play.api.mvc.Request
+import play.api.mvc.RequestHeader
 
 @Singleton
 class FooterConfig @Inject() (config: Configuration) {
@@ -33,6 +33,6 @@ class FooterConfig @Inject() (config: Configuration) {
   lazy val termsConditions: String = urlFooterConfig.getString("termsConditions")
   lazy val govukHelp: String       = urlFooterConfig.getString("govukHelp")
 
-  def accessibility(implicit request: Request[_]): String =
-    s"${urlFooterConfig.getString("accessibility")}/hmrc-developer-hub?referrerUrl=${helper.urlEncode(request.uri)}"
+  def accessibility(implicit requestHeader: RequestHeader): String =
+    s"${urlFooterConfig.getString("accessibility")}/hmrc-developer-hub?referrerUrl=${helper.urlEncode(requestHeader.uri)}"
 }

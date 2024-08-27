@@ -95,8 +95,8 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         fetchAllXmlApisReturnsVatApi()
 
         val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List.empty)(request)
-        // There are currently 24 Service Guides and 5 roadmaps so should be 29 results
-        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsV2Breadcrumb), bodyContains = Seq("29 results "))(result)
+        // There are currently 22 Service Guides and 3 roadmaps so should be 25 results
+        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsV2Breadcrumb), bodyContains = Seq("25 results "))(result)
       }
 
       "render the filtered API list when doc type filter is road map and service guides and customs category filter" in new Setup {
@@ -105,7 +105,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         fetchAllXmlApisReturnsVatApi()
 
         val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List(ApiCategory.INCOME_TAX_MTD))(request)
-        // There are currently 23 Service Guides and 4 roadmaps but only 1 roadmap and 1 service guide are in teh INCOME_TAX_MTD category
+        // There are currently 22 Service Guides and 3 roadmaps but only 1 roadmap and 1 service guide are in teh INCOME_TAX_MTD category
         verifyPageRendered(
           pageTitle("API Documentation"),
           sideNavLinkRendered = false,
@@ -121,7 +121,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
 
         val result = underTest.apiListIndexPage(Nil, Nil)(request)
 
-        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, we’re experiencing technical difficulties")(result)
+        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, there is a problem with the service")(result)
       }
       //
       "display the error page when the xmlServicesService throws an exception" in new Setup {
@@ -133,7 +133,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
 
         val result = underTest.apiListIndexPage(Nil, Nil)(request)
 
-        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, we’re experiencing technical difficulties")(result)
+        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, there is a problem with the service")(result)
       }
 
     }

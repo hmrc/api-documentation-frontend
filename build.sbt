@@ -76,13 +76,12 @@ lazy val acceptance = (project in file("acceptance"))
     scalacOptions += "-language:postfixOps",
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
     Test / unmanagedResourceDirectories += baseDirectory.value / "target/web/public/test",
-    DefaultBuildSettings.itSettings(),
-    addTestReportOption(Test, "acceptance-test-reports")
+    DefaultBuildSettings.itSettings()
   )
 
 
 commands ++= Seq(
-  Command.command("cleanAll") { state => "clean" :: "acceptance/test" :: state },
+  Command.command("cleanAll") { state => "clean" :: "acceptance/clean" :: state },
   Command.command("fmtAll") { state => "scalafmtAll" :: "acceptance/scalafmtAll" :: state },
   Command.command("fixAll") { state => "scalafixAll" :: "acceptance/scalafixAll" :: state },
   Command.command("testAll") { state => "test" :: "acceptance/test" :: state },

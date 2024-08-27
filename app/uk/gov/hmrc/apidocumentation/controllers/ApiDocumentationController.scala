@@ -105,10 +105,10 @@ class ApiDocumentationController @Inject() (
             case _       => Ok(apiIndexView(pageAttributes(), apisByCategory))
           }
 
-        }) recover {
+        }) recoverWith {
           case e: Throwable =>
             logger.error("Could not load API Documentation service", e)
-            InternalServerError(errorHandler.internalServerErrorTemplate)
+            errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
         }
     }
   }
@@ -125,14 +125,14 @@ class ApiDocumentationController @Inject() (
       userId       <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
       extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, userId)
     } yield {
-      extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(NotFound(errorHandler.notFoundTemplate)) { version =>
-        Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version, cacheBuster, None))
+      extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(errorHandler.notFoundTemplate.map(NotFound(_))) { version =>
+        successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version, cacheBuster, None)))
       }
-    }) recover {
-      case _: NotFoundException => NotFound(errorHandler.notFoundTemplate)
+    }).flatten recoverWith {
+      case _: NotFoundException => errorHandler.notFoundTemplate.map(NotFound(_))
       case e: Throwable         =>
         logger.error("Could not load API Documentation service", e)
-        InternalServerError(errorHandler.internalServerErrorTemplate)
+        errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
     }
   }
 
@@ -143,13 +143,13 @@ class ApiDocumentationController @Inject() (
         api              <- apiDefinitionService.fetchExtendedDefinition(service, userId)
         cacheBust         = bustCache(cacheBuster)
         apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, userId, useV2)
-      } yield apiDocumentation) recover {
+      } yield apiDocumentation) recoverWith {
         case e: NotFoundException =>
           logger.info(s"Upstream request not found: ${e.getMessage}")
-          NotFound(errorHandler.notFoundTemplate)
+          errorHandler.notFoundTemplate.map(NotFound(_))
         case e: Throwable         =>
           logger.error("Could not load API Documentation service", e)
-          InternalServerError(errorHandler.internalServerErrorTemplate)
+          errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
       }
     }
 
@@ -181,7 +181,7 @@ class ApiDocumentationController @Inject() (
       PageAttributes(apiDefinition.name, breadcrumbs, navLinks, sidebarLinks)
     }
 
-    def renderNotFoundPage = Future.successful(NotFound(errorHandler.notFoundTemplate))
+    def renderNotFoundPage = errorHandler.notFoundTemplate.map(NotFound(_))
 
     def redirectToLoginPage = {
       logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version, None, None).url}")
@@ -296,7 +296,7 @@ class ApiDocumentationController @Inject() (
             }
       }
     } else {
-      Future.successful(NotFound(errorHandler.notFoundTemplate))
+      errorHandler.notFoundTemplate.map(NotFound(_))
     }
   }
 
@@ -338,9 +338,9 @@ class ApiDocumentationController @Inject() (
       PageAttributes(apiDefinition.name, breadcrumbs, navLinks, navigationService.sidebarNavigation())
     }
 
-    xmlServicesService.fetchXmlApi(name) map {
-      case Some(xmlApiDefinition) => Ok(xmlDocumentationView(makePageAttributes(xmlApiDefinition), xmlApiDefinition))
-      case _                      => NotFound(errorHandler.notFoundTemplate)
+    xmlServicesService.fetchXmlApi(name) flatMap {
+      case Some(xmlApiDefinition) => successful(Ok(xmlDocumentationView(makePageAttributes(xmlApiDefinition), xmlApiDefinition)))
+      case _                      => errorHandler.notFoundTemplate.map(NotFound(_))
     }
   }
 

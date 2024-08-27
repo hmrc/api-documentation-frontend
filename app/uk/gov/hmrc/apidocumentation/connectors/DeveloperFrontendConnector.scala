@@ -19,7 +19,8 @@ package uk.gov.hmrc.apidocumentation.connectors
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.play.http.metrics.common._
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.connectionExceptionsAsHtmlPartialFailure
@@ -29,20 +30,23 @@ import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 
 @Singleton
-class DeveloperFrontendConnector @Inject() (http: HttpClient, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
+class DeveloperFrontendConnector @Inject() (http: HttpClientV2, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
 
   val api                         = API("third-party-developer-frontend")
   private lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = record {
     import uk.gov.hmrc.http.HttpReads.Implicits._
-    http.GET[Seq[NavLink]](s"$serviceBaseUrl/developer/user-navlinks")
+    http.get(url"$serviceBaseUrl/developer/user-navlinks").execute[Seq[NavLink]]
   }
 
   def fetchTermsOfUsePartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = record {
     // Copy 'useNewUpliftJourney' header from incoming request to ensure TPDFE does not display the new Terms of Use page before the new ToU journey has been enabled
     val useNewUpliftJourneyHeader = hc.headers(Seq("useNewUpliftJourney"))
 
-    http.GET[HtmlPartial](s"$serviceBaseUrl/developer/partials/terms-of-use", headers = useNewUpliftJourneyHeader) recover connectionExceptionsAsHtmlPartialFailure
+    http.get(url"$serviceBaseUrl/developer/partials/terms-of-use")
+      .setHeader(useNewUpliftJourneyHeader: _*)
+      .execute[HtmlPartial]
+      .recover(connectionExceptionsAsHtmlPartialFailure)
   }
 }

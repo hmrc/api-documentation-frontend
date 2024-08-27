@@ -23,7 +23,7 @@ import uk.gov.hmrc.apidocumentation.WebPage
 trait HasApplicationName {
   self: WebPage =>
 
-  private val devHubAppName = By.className("hmrc-header__service-name")
+  private val devHubAppName = By.className("govuk-header__service-name")
 
   def applicationName() = getText(devHubAppName)
 }

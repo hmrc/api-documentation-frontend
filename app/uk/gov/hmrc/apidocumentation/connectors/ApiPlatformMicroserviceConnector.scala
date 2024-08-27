@@ -22,7 +22,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
@@ -31,19 +32,19 @@ import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
-class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appConfig: ApplicationConfig)(implicit val ec: ExecutionContext) extends ApplicationLogger {
+class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClientV2, val appConfig: ApplicationConfig)(implicit val ec: ExecutionContext) extends ApplicationLogger {
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
   def fetchApiSpecification(serviceName: ServiceName, version: ApiVersionNbr)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
     import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
-    val url = s"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/specification"
-    http.GET[Option[ApiSpecification]](url)
+    val url = url"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/specification"
+    http.get(url).execute[Option[ApiSpecification]]
   }
 
   def fetchApiDefinitionsByCollaborator(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[ApiDefinition]] = {
     logger.info(s"${getClass.getSimpleName} - fetchApiDefinitionsByCollaborator")
-    val r = http.GET[Seq[ApiDefinition]](definitionsUrl(serviceBaseUrl), queryParams(developerId))
+    val r = http.get(url"${definitionsUrl(serviceBaseUrl)}?${queryParams(developerId)}").execute[Seq[ApiDefinition]]
 
     r.map(defns => defns.foreach(defn => logger.info(s"Found ${defn.name}")))
 
@@ -53,7 +54,7 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClient, val appC
   def fetchExtendedApiDefinition(serviceName: ServiceName, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedApiDefinition]] = {
     logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
 
-    val r = http.GET[Option[ExtendedApiDefinition]](definitionUrl(serviceBaseUrl, serviceName), queryParams(developerId))
+    val r = http.get(url"${definitionUrl(serviceBaseUrl, serviceName)}?${queryParams(developerId)}").execute[Option[ExtendedApiDefinition]]
 
     r.map(_.map(defn => logger.info(s"Found ${defn.name}")))
 

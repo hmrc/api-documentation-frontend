@@ -25,23 +25,5 @@
     "categories": [
       "INCOME_TAX_MTD"
     ]
-  },
-  {
-    "identifier": "uk-internal-market-authorisation-checker-roadmap",
-    "name": "UK Internal Market Scheme Authorisation Checker Roadmap",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
-    "context": "/roadmaps/ukim-auth-checker-api-roadmap/",
-    "categories": [
-      "CUSTOMS"
-    ]
-  },
-  {
-    "identifier": "uknw-auth-checker-api-roadmap",
-    "name": "Notification of Presentation Waiver Checker Roadmap",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
-    "context": "/roadmaps/uknw-auth-checker-api-roadmap/",
-    "categories": [
-      "CUSTOMS"
-    ]
   }
 ]

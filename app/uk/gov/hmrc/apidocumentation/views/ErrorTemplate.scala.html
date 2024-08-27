@@ -20,7 +20,7 @@
 
 @this(main: main)
 
-@(title: String, heading: String, message: String)(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, request: play.api.mvc.Request[Any])
+@(title: String, heading: String, message: String)(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 
 @main(navTitle = Some(applicationConfig.title),
     navTitleLink = Some(Call("GET", "/api-documentation")),
