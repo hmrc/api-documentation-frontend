@@ -105,7 +105,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         fetchAllXmlApisReturnsVatApi()
 
         val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List(ApiCategory.INCOME_TAX_MTD))(request)
-        // There are currently 24 Service Guides and 4 roadmaps but only 1 roadmap and 1 service guide are in teh INCOME_TAX_MTD category
+        // There are currently 23 Service Guides and 4 roadmaps but only 1 roadmap and 1 service guide are in teh INCOME_TAX_MTD category
         verifyPageRendered(
           pageTitle("API Documentation"),
           sideNavLinkRendered = false,
