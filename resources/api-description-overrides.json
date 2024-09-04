@@ -1,6 +1,582 @@
 [
   {
-    "identifier": "api-simulator",
-    "description": "API Simulator OVERRRIDE Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+    "description": "Search for postal and BFPO (British Forces Post Office) address details within the UK and retrieve them in a common format",
+    "identifier": "address-lookup"
+  },
+  {
+    "description": "An API allowing MTD-enabled Agents to request authorisation to a service for a client, instead of filling the 64-8 paper form.",
+    "identifier": "agent-authorisation-api"
+  },
+  {
+    "description": "The Agent Authorisation Test Support API provides test-only ability to accept or reject an authorisation request created with Agent Authorisation API POST /agents/:arn/invitations.",
+    "identifier": "agent-authorisation-test-support-api"
+  },
+  {
+    "description": "A 'hello world' example of an API on the HMRC API Developer Hub.",
+    "identifier": "api-example-microservice"
+  },
+  {
+    "description": "Allows for retrieval of notifications",
+    "identifier": "api-notification-pull"
+  },
+  {
+    "description": "The Create Test User API is responsible for creating test users on the external test environment.",
+    "identifier": "api-platform-test-user"
+  },
+  {
+    "description": "Levy declarations for employers",
+    "identifier": "apprenticeship-levy"
+  },
+  {
+    "description": "Determines if a supplied NINO and user details match data according to records stored by HMRC",
+    "identifier": "authenticator"
+  },
+  {
+    "description": "Validation, verification and insights into Bank Accounts - provided by the Customer Insight Platform",
+    "identifier": "bank-account-gateway"
+  },
+  {
+    "description": "Verify that a personal or business bank account exists",
+    "identifier": "bank-account-reputation"
+  },
+  {
+    "description": "An API for the support of the workflow around Basis Period Reform",
+    "identifier": "basis-period-reform-api"
+  },
+  {
+    "description": "Enables setting up test data and simulation of downstream layers for the Breathing Space Program.",
+    "identifier": "breathing-space-if-dynamic-stub"
+  },
+  {
+    "description": "Allows for the administration of Breathing Space Periods for an individual and related activities",
+    "identifier": "breathing-space-if-proxy"
+  },
+  {
+    "description": "An API for providing business details data",
+    "identifier": "business-details-api"
+  },
+  {
+    "description": "VOA Business Rates APIs",
+    "identifier": "business-rates-api"
+  },
+  {
+    "description": "Summary valuation information from the VOA business rates list",
+    "identifier": "business-rates-list"
+  },
+  {
+    "description": "VOA Business Rates Test Support APIs",
+    "identifier": "business-rates-test-support-api"
+  },
+  {
+    "description": "Allows for retrieval of EORI numbers",
+    "identifier": "check-eori-number-api"
+  },
+  {
+    "description": "Get insights for a bank account",
+    "identifier": "cip-bank-account-insights"
+  },
+  {
+    "description": "An API for providing Construction industry scheme data",
+    "identifier": "cis-deductions-api"
+  },
+  {
+    "description": "The public API to allow traders to submit and receive responses to Common Transit Convention guarantee balance enquiries",
+    "identifier": "common-transit-convention-guarantee-balance"
+  },
+  {
+    "description": "The public API to allow traders to submit and receive Common Transit Convention (IE) messages",
+    "identifier": "common-transit-convention-traders"
+  },
+  {
+    "description": "The public API to allow 3rd party testers to inject Common Transit Convention (IE) messages as if they were coming from NCTS",
+    "identifier": "common-transit-convention-traders-test-support"
+  },
+  {
+    "description": "Api to manage compliance cases in CaseFlow",
+    "identifier": "compliance-cases-api"
+  },
+  {
+    "description": "Api to manage vat repayment documents sent to EF",
+    "identifier": "compliance-documents-api"
+  },
+  {
+    "description": "API to verify customer information with HMRC records",
+    "identifier": "customer-api"
+  },
+  {
+    "description": "The API is used to retrieve customer profile information.",
+    "identifier": "customer-profile"
+  },
+  {
+    "description": "Single WCO-compliant Customs Declarations API",
+    "identifier": "customs-declarations"
+  },
+  {
+    "description": "Retrieve declaration information",
+    "identifier": "customs-declarations-information"
+  },
+  {
+    "description": "Notifications API sends requests to customs financials api service to display new statements notifications",
+    "identifier": "customs-financials-api"
+  },
+  {
+    "description": "Customs Inventory Linking Exports",
+    "identifier": "customs-inventory-linking-exports"
+  },
+  {
+    "description": "Single WCO-compliant Customs Inventory Linking Import Declaration API",
+    "identifier": "customs-inventory-linking-imports"
+  },
+  {
+    "description": "A collection of APIs surfaced to support field collections.",
+    "identifier": "debt-management-api"
+  },
+  {
+    "description": "Email events using OpenAPI and published on the HMRC API Developer Hub.",
+    "identifier": "email-events"
+  },
+  {
+    "description": "Manage enrolments and agent-client relationships",
+    "identifier": "enrolment-store-proxy"
+  },
+  {
+    "description": "This API provides information about PAYE for employers.",
+    "identifier": "epaye-api"
+  },
+  {
+    "description": "An API for registering estates.",
+    "identifier": "estate-registration-api"
+  },
+  {
+    "description": "The public API to allow traders to submit excise movements and messages (IE) relating to those movements.",
+    "identifier": "excise-movement-control-system-api"
+  },
+  {
+    "description": "Provides an endpoint for GDS to send HMRC Secure Signals Framework events",
+    "identifier": "gds-signals-receiver"
+  },
+  {
+    "description": "Register NINO information for downstream service",
+    "identifier": "get-nino-api"
+  },
+  {
+    "description": "The Goods Vehicle Movements Carrier API provides endpoints for carriers to interact with the goods movement system and existing goods movement records",
+    "identifier": "goods-movement-system-carrier-api"
+  },
+  {
+    "description": "The Goods Vehicle Movements API provides endpoints for declaring goods movements crossing certain UK ports",
+    "identifier": "goods-movement-system-haulier-api"
+  },
+  {
+    "description": "This API provides resources for ports related to the Goods Vehicle Movement Service.",
+    "identifier": "goods-movement-system-port-api"
+  },
+  {
+    "description": "This API provides the ability to search the Goods Vehicle Movement Service.",
+    "identifier": "goods-movement-system-search-api"
+  },
+  {
+    "description": "Savings scheme for working people on low income",
+    "identifier": "help-to-save-api"
+  },
+  {
+    "description": "The Identity Verification API provides resources to confirm a user's identity",
+    "identifier": "identity-verification"
+  },
+  {
+    "description": "Backend service to provide question data and answer processing by unique user identifier for all verification services in MDTP",
+    "identifier": "identity-verification-questions"
+  },
+  {
+    "description": "API with endpoints for getting notifications about Entry Summary Declarations.",
+    "identifier": "import-control-entry-declaration-intervention"
+  },
+  {
+    "description": "API with endpoints for getting outcomes of Entry Summary Declarations.",
+    "identifier": "import-control-entry-declaration-outcome"
+  },
+  {
+    "description": "API with endpoints for submission of Entry Summary Declarations.",
+    "identifier": "import-control-entry-declaration-store"
+  },
+  {
+    "description": "API for submitting Presentation Of Goods",
+    "identifier": "import-control-presentation-of-goods"
+  },
+  {
+    "description": "Benefit–based services, such as retrieval of benefits information.",
+    "identifier": "individual-benefits"
+  },
+  {
+    "description": "An API for providing individual calculations data",
+    "identifier": "individual-calculations-api"
+  },
+  {
+    "description": "Employment–based services, such as employment history.",
+    "identifier": "individual-employment"
+  },
+  {
+    "description": "Income–based services, such as historic personal income and employment-based income.",
+    "identifier": "individual-income"
+  },
+  {
+    "description": "Allows you to create employment and income test data, for PAYE and for SA. This is only for the Individuals Employments API and the Individuals Income API",
+    "identifier": "individual-income-des-stub"
+  },
+  {
+    "description": "An API for providing individual losses data",
+    "identifier": "individual-losses-api"
+  },
+  {
+    "description": "Tax–based services, such as retrieval of annual personal and employment-related tax liabilities and refunds.",
+    "identifier": "individual-tax"
+  },
+  {
+    "description": "Individuals API for Other Government Departments",
+    "identifier": "individuals-api"
+  },
+  {
+    "description": "Retrieves benefit and credit information for an individual",
+    "identifier": "individuals-benefits-and-credits-api"
+  },
+  {
+    "description": "This is a draft spec for the Individuals Business End of Period Statement API",
+    "identifier": "individuals-business-eops-api"
+  },
+  {
+    "description": "This is a draft spec for the Individuals Charges API",
+    "identifier": "individuals-charges-api"
+  },
+  {
+    "description": "An API for managing child benefit claims",
+    "identifier": "individuals-child-benefit-api"
+  },
+  {
+    "description": "Retrieves details for an individual",
+    "identifier": "individuals-details-api"
+  },
+  {
+    "description": "An API for providing individual disclosures data",
+    "identifier": "individuals-disclosures-api"
+  },
+  {
+    "description": "Retrieves employment information for an individual",
+    "identifier": "individuals-employments-api"
+  },
+  {
+    "description": "An API for retrieving individual expenses data for Self Assessment",
+    "identifier": "individuals-expenses-api"
+  },
+  {
+    "description": "Allows you to create employments, income, tax credits and contact details test data",
+    "identifier": "individuals-if-api-stub"
+  },
+  {
+    "description": "Retrieves income information for an individual",
+    "identifier": "individuals-income-api"
+  },
+  {
+    "description": "An API for providing individual income received data",
+    "identifier": "individuals-income-received-api"
+  },
+  {
+    "description": "Match an individual against HMRC's records",
+    "identifier": "individuals-matching-api"
+  },
+  {
+    "description": "Get Pay As You Earn (PAYE) information for an individual.",
+    "identifier": "individuals-paye"
+  },
+  {
+    "description": "An API for providing individual relief data",
+    "identifier": "individuals-reliefs-api"
+  },
+  {
+    "description": "An API for providing individual state benefit data",
+    "identifier": "individuals-state-benefits-api"
+  },
+  {
+    "description": "An API for providing VAT data for insolvent traders",
+    "identifier": "insolvent-vat-api"
+  },
+  {
+    "description": "An API for Interest Forecasting",
+    "identifier": "interest-forecasting"
+  },
+  {
+    "description": "An API for providing Interest Restriction Return data",
+    "identifier": "interest-restriction-return"
+  },
+  {
+    "description": "This service checks if users are authorised and allowed to retrieve session data",
+    "identifier": "iv-orchestration"
+  },
+  {
+    "description": "The Lifetime ISA (LISA) API allows financial organisations to report information to HM Revenue and Customs (HMRC) and get information about payments made by HMRC.",
+    "identifier": "lisa-api"
+  },
+  {
+    "description": "The Marriage Allowance API provides information about whether someone is claiming Marriage Allowance and checks eligibility to claim Marriage Allowance.",
+    "identifier": "marriage-allowance"
+  },
+  {
+    "description": "Lets you set up test data for the Marriage Allowance API.",
+    "identifier": "marriage-allowance-des-stub"
+  },
+  {
+    "description": "Allow mobile apps to send audit messages to the platform",
+    "identifier": "mobile-audit"
+  },
+  {
+    "description": "Help to Save API specifically for HMRC mobile apps",
+    "identifier": "mobile-help-to-save"
+  },
+  {
+    "description": "The API is used to retrieve messages.",
+    "identifier": "mobile-messages"
+  },
+  {
+    "description": "Mediator API for a private internal mobile app, used to submit data about the office of transit",
+    "identifier": "mobile-office-of-transit"
+  },
+  {
+    "description": "Expose PAYE data in a pre-agreed format for HMRC Mobile App developers.",
+    "identifier": "mobile-paye"
+  },
+  {
+    "description": "This API allows calling systems to be able to send mobile push notifications to the HMRC mobile app",
+    "identifier": "mobile-push-notifications-orchestration"
+  },
+  {
+    "description": "Service to register iOS and Android devices for push notifications. Used by HMRC Mobile App developers.",
+    "identifier": "mobile-push-notifications-registration"
+  },
+  {
+    "description": "Submit and get details for Mobile RDS Vehicle",
+    "identifier": "mobile-rds-vehicle-private"
+  },
+  {
+    "description": "Submit and get details for Mobile RDS Vehicle",
+    "identifier": "mobile-rds-vehicle-public"
+  },
+  {
+    "description": "The API is used to provide data the apps need at the time that they start up.",
+    "identifier": "mobile-startup"
+  },
+  {
+    "description": "The API is used fort tax credits renewal services.",
+    "identifier": "mobile-tax-credits-renewal"
+  },
+  {
+    "description": "The API is used to retrieve Tax Credits summary information.",
+    "identifier": "mobile-tax-credits-summary"
+  },
+  {
+    "description": "Feedback and Support API specifically for HMRC mobile apps",
+    "identifier": "mobile-user-contact"
+  },
+  {
+    "description": "An API providing test support for MTD Self-Assessment APIs",
+    "identifier": "mtd-sa-test-support-api"
+  },
+  {
+    "description": "National Insurance services, such as retrieval of annual summary of Class 1 and Class 2 National Insurance contributions.",
+    "identifier": "national-insurance"
+  },
+  {
+    "description": "Lets you set up data for the National Insurance API.",
+    "identifier": "national-insurance-des-stub"
+  },
+  {
+    "description": "Get a National Insurance Record Summary and Tax year details",
+    "identifier": "national-insurance-record"
+  },
+  {
+    "description": "Expose asynchronous services to the mobile application where the client does not block for a response. The client initiates the request and then polls back to the server to retrieve the response.",
+    "identifier": "native-apps-api-orchestration"
+  },
+  {
+    "description": "Validation, verification and insights into NINO - provided by the Customer Insight Platform",
+    "identifier": "nino-gateway"
+  },
+  {
+    "description": "An API that provides OAuth 2.0 tokens",
+    "identifier": "oauth"
+  },
+  {
+    "description": "An API for providing obligations data",
+    "identifier": "obligations-api"
+  },
+  {
+    "description": "Open Banking Payments",
+    "identifier": "open-banking-external-api"
+  },
+  {
+    "description": "The User Information API allows you to retrieve information about the signed-in user, in an OpenID Connect compliant format",
+    "identifier": "openid-connect-userinfo"
+  },
+  {
+    "description": "Retrieves details information for an organisation",
+    "identifier": "organisations-details-api"
+  },
+  {
+    "description": "Retrieves matching information for an organisation",
+    "identifier": "organisations-matching-api"
+  },
+  {
+    "description": "An API for retrieving, amending and deleting other deductions",
+    "identifier": "other-deductions-api"
+  },
+  {
+    "description": "Collating and auditing outcomes (feedback) from users of insights and payment allocation services",
+    "identifier": "outcome-auditing"
+  },
+  {
+    "description": "Lets you set up test data for the Individual PAYE APIs: Individual PAYE, Individual Benefits, Individual Employment, Individual Income and Individual Tax",
+    "identifier": "paye-des-stub"
+  },
+  {
+    "description": "Provides a way to validate Bin Reference Numbers",
+    "identifier": "payments-bin-check"
+  },
+  {
+    "description": "Provides a way to notify DES/ETMP of Charge Refs",
+    "identifier": "payments-processor"
+  },
+  {
+    "description": "The API is used to retrieve tax-summary information.",
+    "identifier": "personal-income"
+  },
+  {
+    "description": "An API for providing property business data",
+    "identifier": "property-business-api"
+  },
+  {
+    "description": "This API allows notifications to be sent (pushed) to software developers or allows the software developer to get (pull) notifications. Notifications are create by other HMRC services.",
+    "identifier": "push-pull-notifications-api"
+  },
+  {
+    "description": "For pension scheme administrators to identify the residency status for their scheme members.",
+    "identifier": "ras-api"
+  },
+  {
+    "description": "Provides real time income information for an individual",
+    "identifier": "real-time-income-information"
+  },
+  {
+    "description": "An API informing about files available for download from Secure Data Exchange Services.",
+    "identifier": "secure-data-exchange-bulk-download"
+  },
+  {
+    "description": "Notify of changes to secure data exchanges",
+    "identifier": "secure-data-exchange-notifications"
+  },
+  {
+    "description": "Secure data exchange API to generate URL(s) for use to upload one or more files.",
+    "identifier": "secure-data-exchange-service-misc-api"
+  },
+  {
+    "description": "An API for retrieving accounts data for Self Assessment",
+    "identifier": "self-assessment-accounts-api"
+  },
+  {
+    "description": "An API for providing self assessment data and obtaining tax calculations",
+    "identifier": "self-assessment-api"
+  },
+  {
+    "description": "Allows you to read your self assessment report and acknowledge it.",
+    "identifier": "self-assessment-assist"
+  },
+  {
+    "description": "An API for providing Business Income Source Summary data",
+    "identifier": "self-assessment-biss-api"
+  },
+  {
+    "description": "An API for providing business source adjustable summary data",
+    "identifier": "self-assessment-bsas-api"
+  },
+  {
+    "description": "An API for retrieving individual details data for Self Assessment",
+    "identifier": "self-assessment-individual-details-api"
+  },
+  {
+    "description": "An API for providing Annual and Periodic Summary data",
+    "identifier": "self-employment-business-api"
+  },
+  {
+    "description": "Micro service providing SSO backend functionality between the portal and the MDTP platform.",
+    "identifier": "sso"
+  },
+  {
+    "description": "Provides web/browser access to the current API user.",
+    "identifier": "sso-frontend"
+  },
+  {
+    "description": "Provides web/browser access to the current API user.",
+    "identifier": "sso-session-api"
+  },
+  {
+    "description": "Micro service providing SSO backend functionality between the portal and the MDTP platform.",
+    "identifier": "sso-session-link-api"
+  },
+  {
+    "description": "Get a State Pension statement including forecast of the amount",
+    "identifier": "state-pension"
+  },
+  {
+    "description": "Get an Individuals State Pension calculation",
+    "identifier": "state-pension-calculation"
+  },
+  {
+    "description": "An API for statements of liability",
+    "identifier": "statement-of-liability"
+  },
+  {
+    "description": "The API is used to retrieve tracking information.",
+    "identifier": "submission-tracker"
+  },
+  {
+    "description": "Tax-Free Childcare applicant MDTP integration service",
+    "identifier": "tax-free-childcare-parent"
+  },
+  {
+    "description": "The Telephony Identity Verification API",
+    "identifier": "telephony-identity-verification-api"
+  },
+  {
+    "description": "The Telephony Identity Verification Test API",
+    "identifier": "telephony-identity-verification-test-api"
+  },
+  {
+    "description": "A API for Time To Pay Proxy.",
+    "identifier": "time-to-pay-proxy"
+  },
+  {
+    "description": "Submit details of transit movements",
+    "identifier": "transit-movement-api"
+  },
+  {
+    "description": "An API for registering trusts.",
+    "identifier": "trust-registration-api"
+  },
+  {
+    "description": "The Test Fraud Prevention Headers API is responsible for validating fraud prevention headers on the external test environment.",
+    "identifier": "txm-fph-validator-api"
+  },
+  {
+    "description": "Recover a lost user ID",
+    "identifier": "userid-recovery-api"
+  },
+  {
+    "description": "An API for providing VAT data",
+    "identifier": "vat-api"
+  },
+  {
+    "description": "Allows for retrieval VAT registered companies",
+    "identifier": "vat-registered-companies-api"
+  },
+  {
+    "description": "Voice biometrics registration API allows to get registrations for a given taxIdentifier such as nino or sautr. Also allows to modify certain attributes of existing registrations.",
+    "identifier": "voice-biometrics"
   }
 ]
