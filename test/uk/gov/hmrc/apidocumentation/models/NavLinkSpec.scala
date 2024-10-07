@@ -27,8 +27,7 @@ class NavLinkSpec extends HmrcSpec {
         Seq(
           NavLink("Documentation", "/api-documentation/docs/using-the-hub"),
           NavLink("Applications", "/developer/applications"),
-          NavLink("Support", "/developer/support"),
-          NavLink("Service Availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)
+          NavLink("Support", "/developer/support")
         )
     }
   }
