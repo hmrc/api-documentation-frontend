@@ -26,7 +26,7 @@ class FooterLinks @Inject() (appConfig: FooterConfig) {
 
   def serviceAvailabilityLink(implicit messages: Messages): FooterItem = FooterItem(
     Some(Messages("footer.links.service_availability.text")),
-    Some("https://api-platform-status.production.tax.service.gov.uk/")
+    Some(appConfig.serviceAvailability)
   )
 
   def cookieLink(implicit messages: Messages): FooterItem = FooterItem(

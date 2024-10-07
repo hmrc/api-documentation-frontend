@@ -28,10 +28,11 @@ class FooterConfig @Inject() (config: Configuration) {
 
   private lazy val urlFooterConfig = config.underlying.getConfig("urls.footer")
 
-  lazy val cookies: String         = urlFooterConfig.getString("cookies")
-  lazy val privacy: String         = urlFooterConfig.getString("privacy")
-  lazy val termsConditions: String = urlFooterConfig.getString("termsConditions")
-  lazy val govukHelp: String       = urlFooterConfig.getString("govukHelp")
+  lazy val cookies: String             = urlFooterConfig.getString("cookies")
+  lazy val privacy: String             = urlFooterConfig.getString("privacy")
+  lazy val termsConditions: String     = urlFooterConfig.getString("termsConditions")
+  lazy val govukHelp: String           = urlFooterConfig.getString("govukHelp")
+  lazy val serviceAvailability: String = urlFooterConfig.getString("serviceAvailability")
 
   def accessibility(implicit requestHeader: RequestHeader): String =
     s"${urlFooterConfig.getString("accessibility")}/hmrc-developer-hub?referrerUrl=${helper.urlEncode(requestHeader.uri)}"
