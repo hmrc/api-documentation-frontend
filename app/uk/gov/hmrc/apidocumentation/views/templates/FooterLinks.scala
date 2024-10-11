@@ -24,11 +24,6 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.FooterItem
 
 class FooterLinks @Inject() (appConfig: FooterConfig) {
 
-  def serviceAvailabilityLink(implicit messages: Messages): FooterItem = FooterItem(
-    Some(Messages("footer.links.service_availability.text")),
-    Some(appConfig.serviceAvailability)
-  )
-
   def cookieLink(implicit messages: Messages): FooterItem = FooterItem(
     Some(Messages("footer.links.cookies.text")),
     Some(appConfig.cookies)
@@ -55,7 +50,6 @@ class FooterLinks @Inject() (appConfig: FooterConfig) {
   )
 
   def items(implicit messages: Messages, requestHeader: RequestHeader): Seq[FooterItem] = Seq(
-    serviceAvailabilityLink,
     cookieLink,
     accessibilityLink,
     privacyLink,
