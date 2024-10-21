@@ -24,7 +24,7 @@
   {
     "identifier": "safety-and-security-import-declarations-end-to-end-service-guide",
     "name": "Safety and security import declarations service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This guide explains how to use Safety and Security (S&S GB) APIs with your software to submit an Entry Summary Declaration to import food into Great Britain.",
     "context": "/guides/safety-and-security-import-declarations-end-to-end-service-guide/",
     "categories": ["CUSTOMS"]
   },
@@ -59,28 +59,28 @@
   {
     "identifier": "ctc-traders-phase5-tis",
     "name": "CTC Traders phase 5 technical interface specification",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This document explains the processes involved in the message exchange between traders and the New Computerised Transit System (NCTS) at departure and arrival of transit movements.",
     "context": "/guides/ctc-traders-phase5-tis/",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "gvms-end-to-end-service-guide",
     "name": "Goods Vehicle Movements service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This guide explains how to use the Goods Vehicle Movement Service (GVMS) APIs with your software.",
     "context": "/guides/gvms-end-to-end-service-guide/",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "customs-declarations-end-to-end-service-guide",
     "name": "Customs Declarations end-to-end service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This guide explains how to integrate your software with our APIs to complete a customs declaration including various end-to-end user journeys.",
     "context": "/guides/customs-declarations-end-to-end-service-guide",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "irr-api-end-to-end-service-guide",
     "name": "Interest Restriction Return (IRR) service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This guide explains how to use the Interest Restriction Return (IRR) API with your software. It is for all roles involved in creating or integrating software connected to this API.",
     "context": "/guides/irr-api-end-to-end-service-guide/",
     "categories": ["CORPORATION_TAX"]
   },
@@ -115,7 +115,7 @@
   {
     "identifier": "import-control-presentation-of-goods-end-to-end-service-guide",
     "name": "Import Control System 2 Presentation of Goods service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This guide explains how to integrate your software to submit a presentation of goods notification to, and receive a control notification from, HMRC.",
     "context": "/guides/import-control-presentation-of-goods-end-to-end-service-guide",
     "categories": ["CUSTOMS"]
 
@@ -123,28 +123,28 @@
   {
     "identifier": "emcs-api-service-guide",
     "name": "Excise Movement Control System service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "The Excise Movement Control System (EMCS) API is used to submit movement information to the EMCS system, and retrieve information about movements. This guide explains how to use EMCS with your software.",
     "context": "/guides/emcs-api-service-guide",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "emcs-api-testing-guide",
     "name": "Excise Movement Control System testing guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This guide explains how to test your software’s compatibility with the Excise Movement Control System (EMCS) API.",
     "context": "/guides/emcs-api-testing-guide",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "excise-movement-control-system-api-tis",
     "name": "Excise Movement Control System technical interface specification",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This document explains the processes involved in exchanging messages between traders and the Excise Movement and Control System (EMCS). It provides definitions, explains formats and validations.",
     "context": "/guides/excise-movement-control-system-api-tis",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "post-and-parcels-service-guide",
     "name": "Post and Parcels Service Guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This guide explains how to integrate HMRC’s Secure Data Exchange Service (SDES) with your software, key for sharing information about parcel movements to Northern Ireland.",
     "context": "/guides/post-and-parcels-service-guide",
     "categories": ["CUSTOMS"]
   },
