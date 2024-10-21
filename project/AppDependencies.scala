@@ -8,8 +8,8 @@ object AppDependencies {
   lazy val seleniumVersion        = "4.2.0"
   lazy val jacksonDatabindVersion = "2.10.5.1"
   lazy val jacksonVersion         = "2.10.5"
-  lazy val commonDomainVersion    = "0.15.0"
-  lazy val apiDomainVersion       = "0.17.0"
+  lazy val commonDomainVersion    = "0.17.0"
+  lazy val apiDomainVersion       = "0.19.1"
 
   lazy val compile = Seq(
     ws,
@@ -37,11 +37,11 @@ object AppDependencies {
   )
 
   lazy val test = Seq(
-    "uk.gov.hmrc"            %% "bootstrap-test-play-30"          % bootstrapVersion,
-    "io.cucumber"            %% "cucumber-scala"                  % "5.7.0",
-    "org.mockito"            %% "mockito-scala-scalatest"         % "1.17.30",
-    "org.jsoup"               % "jsoup"                           % "1.12.1",
-    "uk.gov.hmrc"            %% "ui-test-runner"                  % "0.31.0",
-    "uk.gov.hmrc"            %% "api-platform-test-common-domain" % commonDomainVersion
+    "uk.gov.hmrc"            %% "bootstrap-test-play-30"              % bootstrapVersion,
+    "io.cucumber"            %% "cucumber-scala"                      % "5.7.0",
+    "org.mockito"            %% "mockito-scala-scalatest"             % "1.17.30",
+    "org.jsoup"               % "jsoup"                               % "1.12.1",
+    "uk.gov.hmrc"            %% "ui-test-runner"                      % "0.31.0",
+    "uk.gov.hmrc"            %% "api-platform-common-domain-fixtures" % commonDomainVersion
   ).map(_ % Test)
 }
