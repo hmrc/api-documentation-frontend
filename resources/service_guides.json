@@ -3,21 +3,21 @@
   {
     "identifier": "vat-mtd-end-to-end-service-guide",
     "name": "VAT (MTD) end-to-end service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This testing guide helps to check your software is compatible with APIs to submit VAT returns.",
     "context": "/guides/vat-mtd-end-to-end-service-guide",
     "categories": ["VAT_MTD"]
   },
   {
     "identifier": "income-tax-mtd-end-to-end-service-guide",
     "name": "Income Tax (MTD) end-to-end service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This service guide explains HMRC's Making Tax Digital (MTD) for Income Tax, including how to connect software to MTD APIs.",
     "context": "/guides/income-tax-mtd-end-to-end-service-guide/",
     "categories": ["INCOME_TAX_MTD"]
   },
   {
     "identifier": "self-assessment-end-to-end-service-guide",
     "name": "Self Assessment end-to-end service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This guide explains how you can integrate your software with our APIs to help complete and submit Self Assessment returns. It shows how the APIs fit into various end-to-end user journeys.",
     "context": "/guides/self-assessment-end-to-end-service-guide",
     "categories": ["SELF_ASSESSMENT"]
   },
@@ -31,28 +31,28 @@
   {
     "identifier": "ctc-traders-phase4-service-guide",
     "name": "CTC Traders phase 4 service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This service guide explains how to use the Phase 4 Common Transit Convention (CTC) API.",
     "context": "/guides/ctc-traders-phase4-service-guide/",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "ctc-traders-phase4-testing-guide",
     "name": "CTC Traders phase 4 testing guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Traders API.",
     "context": "/guides/ctc-traders-phase4-testing-guide/",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "ctc-traders-phase5-service-guide",
     "name": "CTC Traders phase 5 service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This service guide explains how to use the Phase 5 Common Transit Convention (CTC) API.",
     "context": "/guides/ctc-traders-phase5-service-guide/",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "ctc-traders-phase5-testing-guide",
     "name": "CTC Traders phase 5 testing guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Traders API.",
     "context": "/guides/ctc-traders-phase5-testing-guide/",
     "categories": ["CUSTOMS"]
   },
@@ -87,28 +87,28 @@
   {
     "identifier": "ctc-guarantee-balance-service-guide",
     "name": "CTC Guarantee Balance phase 4 service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This Phase 4 guide explains how to use the Common Transit Convention (CTC) Traders Guarantee Balance API with your software.",
     "context": "/guides/ctc-guarantee-balance-service-guide/",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "ctc-guarantee-balance-testing-guide",
     "name": "CTC Guarantee Balance phase 4 testing guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This Phase 4 testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Guarantee Balance API.",
     "context": "/guides/ctc-guarantee-balance-testing-guide/",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "ctc-guarantee-balance-phase5-service-guide",
     "name": "CTC Guarantee Balance phase 5 service guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This Phase 5 guide explains how to use the Common Transit Convention (CTC) Traders Guarantee Balance API with your software.",
     "context": "/guides/ctc-guarantee-balance-phase5-service-guide/",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "ctc-guarantee-balance-phase5-testing-guide",
     "name": "CTC Guarantee Balance phase 5 testing guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This Phase 5 testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Guarantee Balance API.",
     "context": "/guides/ctc-guarantee-balance-phase5-testing-guide/",
     "categories": ["CUSTOMS"]
   },
