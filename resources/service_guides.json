@@ -118,7 +118,6 @@
     "description": "This guide explains how to integrate your software to submit a presentation of goods notification to, and receive a control notification from, HMRC.",
     "context": "/guides/import-control-presentation-of-goods-end-to-end-service-guide",
     "categories": ["CUSTOMS"]
-
   },
   {
     "identifier": "emcs-api-service-guide",
@@ -151,14 +150,14 @@
   {
     "identifier": "trader-goods-profile-service-guide",
     "name": "Trader Goods Profile Service Guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "For traders registered to move goods from Great Britain to Northern Ireland, but not within the European Union. This API creates updated, removes and gets Traders Good Profile (TGP), request advice and maintaining profiles.",
     "context": "/guides/trader-goods-profile-service-guide",
     "categories": ["CUSTOMS"]
   },
   {
     "identifier": "uknw-auth-checker-api-service-guide",
     "name": "Notification of Presentation Waiver Checker Service Guide",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "Learn how, as a Community System Provider (CSP), to use the Notification of Presentation (NOP) waiver checker API.",
     "context": "/guides/uknw-auth-checker-api-service-guide",
     "categories": ["CUSTOMS"]
   }
