@@ -2,7 +2,7 @@
   {
     "identifier": "ctc-traders-roadmap",
     "name": "CTC Traders roadmap",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This document lists the past and planned changes made to the CTC Traders API.",
     "context": "/roadmaps/common-transit-convention-traders-roadmap/",
     "categories": [
       "CUSTOMS"
@@ -11,7 +11,7 @@
   {
     "identifier": "ctc-guarantee-balance-roadmap",
     "name": "CTC Guarantee Balance roadmap",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This document lists the past and planned changes made to the CTC Guarantee Balance API.",
     "context": "/roadmaps/ctc-guarantee-balance-roadmap/",
     "categories": [
       "CUSTOMS"
@@ -20,7 +20,7 @@
   {
     "identifier": "income-tax-mtd-roadmap",
     "name": "Income Tax (MTD) roadmap",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "This document lists the past and planned changes made to the Income Tax (Making Tax Digital) APIs.",
     "context": "/roadmaps/mtd-itsa-vendors-roadmap/",
     "categories": [
       "INCOME_TAX_MTD"
@@ -29,7 +29,7 @@
   {
     "identifier": "uknw-auth-checker-api-roadmap",
     "name": "Notification of Presentation Waiver Checker Roadmap",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+    "description": "A roadmap that shares the key dates for the Notification of Presentation (NOP) waiver checker API.",
     "context": "/roadmaps/uknw-auth-checker-api-roadmap/",
     "categories": [
       "CUSTOMS"
