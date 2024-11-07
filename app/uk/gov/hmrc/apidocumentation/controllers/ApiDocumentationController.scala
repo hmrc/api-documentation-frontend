@@ -246,7 +246,7 @@ class ApiDocumentationController @Inject() (
         } yield Ok(parentPage(attrs, markdownBlocks, api.name, api, selectedVersion, developerId.isDefined, useV2 = useV2)).withHeaders(cacheControlHeaders)
       }
 
-      val categories = APICategoryFilters.categoryMap.getOrElse(api.name, Seq.empty)
+      val categories = APICategoryFilters.categoryMap.getOrElse(api.name, Seq.empty) ++ api.categories
       documentationService.fetchApiSpecification(service, version, cacheBuster).flatMap(_.fold(renderOas(categories))(renderRamlSpec))
     }
 

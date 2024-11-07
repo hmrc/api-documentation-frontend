@@ -25,6 +25,7 @@ import org.apache.pekko.stream.Materializer
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SEE_OTHER}
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory.VAT_MTD
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 import uk.gov.hmrc.http.NotFoundException
@@ -472,11 +473,28 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           verifyNotFoundPageRendered(result)
         }
 
-        "display the OAS when no RAML is found including fraud prevention information" in new Setup {
+        "display the OAS when no RAML is found including fraud prevention information using info from Cat Map" in new Setup {
           theUserIsLoggedIn()
 
           theDefinitionServiceWillReturnAnApiDefinition(
             extendedApiDefinition(serviceName = serviceName.value, name = "VAT (MTD)")
+          )
+
+          theDocumentationServiceWillFetchNoSpecification()
+          when(downloadConnector.fetch(*[ServiceName], *[ApiVersionNbr], *)).thenReturn(successful(None))
+
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
+
+          status(result) shouldBe OK
+          contentAsString(result) should include("Endpoints")
+          contentAsString(result) should include("Fraud Prevention")
+        }
+
+        "display the OAS when no RAML is found including fraud prevention information using info from Api" in new Setup {
+          theUserIsLoggedIn()
+
+          theDefinitionServiceWillReturnAnApiDefinition(
+            extendedApiDefinition(serviceName = serviceName.value).copy(categories = List(VAT_MTD))
           )
 
           theDocumentationServiceWillFetchNoSpecification()
@@ -494,6 +512,24 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           theDefinitionServiceWillReturnAnApiDefinition(
             extendedApiDefinition(serviceName = serviceName.value, name = "Create Test User", isTestSupport = true)
+          )
+
+          theDocumentationServiceWillFetchNoSpecification()
+          when(downloadConnector.fetch(*[ServiceName], *[ApiVersionNbr], *)).thenReturn(successful(None))
+
+          val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
+
+          status(result) shouldBe OK
+          println(contentAsString(result))
+          contentAsString(result) should include("Endpoints")
+          contentAsString(result) should not include ("Fraud Prevention")
+        }
+
+        "display the OAS when no RAML is found not including fraud prevention information" in new Setup {
+          theUserIsLoggedIn()
+
+          theDefinitionServiceWillReturnAnApiDefinition(
+            extendedApiDefinition(serviceName = serviceName.value)
           )
 
           theDocumentationServiceWillFetchNoSpecification()
