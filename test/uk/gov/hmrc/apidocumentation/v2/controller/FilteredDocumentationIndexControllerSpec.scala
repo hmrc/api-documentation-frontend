@@ -39,8 +39,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
   private val versionOne = ApiVersionNbr("1.0")
 
   trait Setup
-      extends ApiDocumentationServiceMock
-      with AppConfigMock
+      extends AppConfigMock
       with ApiDefinitionServiceMock
       with LoggedInUserServiceMock
       with NavigationServiceMock

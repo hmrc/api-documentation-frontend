@@ -38,8 +38,7 @@ class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
     when(config.title).thenReturn("Unit Test Title")
     val underTest                             = new NavigationService(connector, config)
 
-    val cache  = app.injector.instanceOf[AsyncCacheApi]
-    val docSvc = app.injector.instanceOf[DocumentationService]
+    val cache = app.injector.instanceOf[AsyncCacheApi]
   }
 
   "sidebarNavigation" should {

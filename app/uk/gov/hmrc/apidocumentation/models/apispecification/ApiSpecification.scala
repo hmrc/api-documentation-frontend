@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.apidocumentation.models.apispecification
 
-case class DocumentationItem(title: String, content: String)
-
 case class SecurityScheme(`type`: String, scope: Option[String])
 
 case class Response(

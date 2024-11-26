@@ -32,8 +32,7 @@ import uk.gov.hmrc.apidocumentation.mocks.services._
 class DownloadControllerSpec extends CommonControllerBaseSpec {
 
   trait Setup
-      extends ApiDocumentationServiceMock
-      with AppConfigMock
+      extends AppConfigMock
       with ApiDefinitionServiceMock
       with LoggedInUserServiceMock {
 

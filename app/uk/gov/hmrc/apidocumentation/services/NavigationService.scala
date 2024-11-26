@@ -73,7 +73,6 @@ class NavigationService @Inject() (
       href = namingGuidelinesUrl
     )
   ) ++
-    ramlPreviewLink() ++
     openApiPreviewLink() ++
     Seq(
       SidebarLink(
@@ -143,16 +142,6 @@ class NavigationService @Inject() (
 
     variableSidebar :+ fixedSidebar
   }
-
-  private def ramlPreviewLink() =
-    if (appConfig.ramlPreviewEnabled) {
-      Seq(SidebarLink(
-        "Preview RAML",
-        routes.ApiDocumentationController.previewApiDocumentation(None).url
-      ))
-    } else {
-      Seq.empty
-    }
 
   private def openApiPreviewLink() =
     if (appConfig.openApiPreviewEnabled) {

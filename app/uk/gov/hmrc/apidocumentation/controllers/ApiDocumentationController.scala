@@ -20,14 +20,11 @@ import java.time.{Clock, Instant}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
-import scala.util.{Failure, Success, Try}
 
 import controllers.Assets
 import org.apache.pekko.stream.Materializer
 
 import play.api.i18n.MessagesProvider
-import play.api.libs.json.Json
 import play.api.mvc._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
@@ -36,24 +33,16 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.connectors.{DownloadConnector, RamlPreviewConnector}
-import uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.RamlParseException
+import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
-import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
 import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 
-object ApiDocumentationController {
-  case class RamlParseException(msg: String) extends RuntimeException(msg)
-}
-
 @Singleton
 class ApiDocumentationController @Inject() (
-    documentationService: DocumentationService,
-    ramlPreviewConnector: RamlPreviewConnector,
     apiDefinitionService: ApiDefinitionService,
     val navigationService: NavigationService,
     loggedInUserService: LoggedInUserService,
@@ -62,7 +51,6 @@ class ApiDocumentationController @Inject() (
     apiIndexView: ApiIndexView,
     retiredVersionJumpView: RetiredVersionJumpView,
     apisFilteredView: ApisFilteredView,
-    previewDocumentationView: PreviewDocumentationView2,
     serviceDocumentationView: ServiceDocumentationView2,
     xmlDocumentationView: XmlDocumentationView,
     parentPage: ParentPageOuter,
@@ -208,11 +196,6 @@ class ApiDocumentationController @Inject() (
       )(implicit request: Request[AnyContent],
         messagesProvider: MessagesProvider
       ): Future[Result] = {
-      def renderRamlSpec(apiSpecification: ApiSpecification): Future[Result] = {
-        val attrs     = makePageAttributes(api, navigationService.apiSidebarNavigation2(selectedVersion, apiSpecification))
-        val viewModel = ViewModel(apiSpecification)
-        successful(Ok(serviceDocumentationView(attrs, api, selectedVersion, viewModel, developerId.isDefined, useV2)).withHeaders(cacheControlHeaders))
-      }
 
       def withDefault(service: ServiceName)(file: String, label: String): Future[DocumentationItem] = {
         def resultToDocumentationItem(result: Result): Future[DocumentationItem] = {
@@ -247,7 +230,7 @@ class ApiDocumentationController @Inject() (
       }
 
       val categories = APICategoryFilters.categoryMap.getOrElse(api.name, Seq.empty) ++ api.categories
-      documentationService.fetchApiSpecification(service, version, cacheBuster).flatMap(_.fold(renderOas(categories))(renderRamlSpec))
+      renderOas(categories)
     }
 
     def findVersion(apiOption: Option[ExtendedApiDefinition]) =
@@ -266,56 +249,6 @@ class ApiDocumentationController @Inject() (
     }
   }
   // scalastyle:on method.length
-
-  def previewApiDocumentation(url: Option[String]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    if (appConfig.ramlPreviewEnabled) {
-      val pageAttributes = PageAttributes(
-        title = "API Documentation Preview",
-        breadcrumbs = Breadcrumbs(
-          Crumb("Preview RAML", routes.ApiDocumentationController.previewApiDocumentation(None).url),
-          homeCrumb
-        ),
-        headerLinks = navLinks,
-        sidebarLinks = navigationService.sidebarNavigation()
-      )
-
-      val page = (result: Try[Option[ViewModel]]) => previewDocumentationView(pageAttributes, url, result)
-
-      url match {
-        case Some("")  => Future.successful(InternalServerError(page(Failure(RamlParseException("No URL supplied")))))
-        case None      => Future.successful(Ok(page(Success(None))))
-        case Some(url) =>
-          ramlPreviewConnector.fetchPreviewApiSpecification(url)
-            .map { apiSpecification =>
-              Ok(page(Success(Some(ViewModel(apiSpecification)))))
-            }
-            .recover {
-              case NonFatal(e) =>
-                logger.error("Could not load API Documentation service", e)
-                InternalServerError(page(Failure(e)))
-            }
-      }
-    } else {
-      errorHandler.notFoundTemplate.map(NotFound(_))
-    }
-  }
-
-  def fetchTestEndpointJson(service: ServiceName, version: ApiVersionNbr): Action[AnyContent] = Action.async { implicit request =>
-    if (appConfig.ramlPreviewEnabled) {
-      documentationService.buildTestEndpoints(service, version) map { endpoints =>
-        Ok(Json.toJson(endpoints.sortWith((x, y) => x.url < y.url)))
-      } recover {
-        case e: NotFoundException =>
-          logger.info(s"RAML document not found: ${e.getMessage}")
-          NotFound(Json.toJson(s"RAML Doc not found: ${e.getMessage}"))
-        case e: Throwable         =>
-          logger.error("Could not build Endpoint Json for API Documentation service", e)
-          InternalServerError(Json.toJson(s"Could not build Endpoint Json for API Documentation service: ${e.getMessage}"))
-      }
-    } else {
-      Future.successful(NotFound(Json.toJson("Not Found")))
-    }
-  }
 
   def renderXmlApiDocumentation(name: String, useV2: Option[Boolean]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def makePageAttributes(apiDefinition: Documentation): PageAttributes = {
