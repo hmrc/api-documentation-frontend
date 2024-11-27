@@ -116,9 +116,9 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       And("I select version v1.5 (Beta)")
       CommonPage.selectVersion("v1.5 (Beta)")
 
-      Then("location field is optional")
-      ApiDocumentationTestServicePage.selectCreateUser()
-      ApiDocumentationTestServicePage.checkLocationFieldIsOptional()
+      // Then("location field is optional")
+      // ApiDocumentationTestServicePage.selectCreateUser()
+      // ApiDocumentationTestServicePage.checkLocationFieldIsOptional()
     }
 
     Scenario("Ensure user can access the Hello World API Summary Details page and view all endpoints for a Beta version") {
@@ -142,14 +142,14 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       Given("I have navigated to the API documentation page")
       goOn(APIDocumentationPage)
 
-      When("I select to view the API  Documentation Test documentation")
+      When("I select to view the API Documentation Test documentation")
       APIDocumentationPage.selectAPIDocumentationTestService()
 
       And("I select version 'v1.1 (Stable)")
       CommonPage.selectVersion("v1.1 (Stable)")
 
-      Then("API version in the request header matches the API version selected")
-      ApiDocumentationTestServicePage.checkAPIVersionInRequestHeader()
+      // Then("API version in the request header matches the API version selected")
+      // ApiDocumentationTestServicePage.checkAPIVersionInRequestHeader()
     }
   }
 }

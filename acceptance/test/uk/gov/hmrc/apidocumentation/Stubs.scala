@@ -22,7 +22,6 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 
 import play.utils.UriEncoding
 
-
 trait Stubs extends ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice with XmlServices
 
 trait XmlServices {

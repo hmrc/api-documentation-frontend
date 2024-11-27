@@ -18,8 +18,7 @@ package uk.gov.hmrc.apidocumentation
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ExtendedApiVersion
 
-import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
-import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, ViewModel}
+import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, DocumentationItem}
 import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 
 package object services {
@@ -36,13 +35,4 @@ package object services {
       case _                            => List.empty
     }
   }
-
-  implicit class RicherApiSpecification(val x: ApiSpecification) {
-    def documentationForVersionFilteredByVisibility(version: ExtendedApiVersion): List[DocumentationItem] = filterForVisibility(Some(version))(x.documentationItems)
-  }
-
-  implicit class RicherViewModel(val x: ViewModel) {
-    def documentationForVersion(version: Option[ExtendedApiVersion]): List[DocumentationItem] = filterForVisibility(version)(x.documentationItems)
-  }
-
 }

@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
@@ -28,19 +27,12 @@ import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector.{definitionUrl, definitionsUrl, queryParams}
 import uk.gov.hmrc.apidocumentation.models.DeveloperIdentifier
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
 class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClientV2, val appConfig: ApplicationConfig)(implicit val ec: ExecutionContext) extends ApplicationLogger {
 
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
-
-  def fetchApiSpecification(serviceName: ServiceName, version: ApiVersionNbr)(implicit hc: HeaderCarrier): Future[Option[ApiSpecification]] = {
-    import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
-    val url = url"$serviceBaseUrl/combined-api-definitions/$serviceName/$version/specification"
-    http.get(url).execute[Option[ApiSpecification]]
-  }
 
   def fetchApiDefinitionsByCollaborator(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[ApiDefinition]] = {
     logger.info(s"${getClass.getSimpleName} - fetchApiDefinitionsByCollaborator")

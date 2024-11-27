@@ -19,14 +19,12 @@ package uk.gov.hmrc.apidocumentation.services
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ExtendedApiVersion
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers.routes
-import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem}
-import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, NavLink, SidebarLink}
+import uk.gov.hmrc.apidocumentation.models.{DocumentationItem, NavLink, SidebarLink}
 import uk.gov.hmrc.apidocumentation.views.helpers._
 
 @Singleton
@@ -106,35 +104,6 @@ class NavigationService @Inject() (
     )
 
   def sidebarNavigation() = sidebarNavigationLinks
-
-  def apiSidebarNavigation2(version: ExtendedApiVersion, apiSpecification: ApiSpecification): Seq[SidebarLink] = {
-    val subLinks = apiSpecification.resourceGroups
-      .map(group => group.name)
-      .filter(_.nonEmpty)
-      .flatten
-      .map(name => SidebarLink(label = name, href = s"#${Slugify(name)}"))
-
-    val sections = apiSpecification.documentationForVersionFilteredByVisibility(version).map { doc =>
-      SidebarLink(label = doc.title, href = s"#${Slugify(doc.title)}")
-    }
-
-    val resources =
-      if (VersionDocsVisible(version) == DocsVisibility.OVERVIEW_ONLY) {
-        SidebarLink(
-          label = "Read more",
-          href = "#read-more"
-        )
-      } else {
-        SidebarLink(
-          label = "Endpoints",
-          href = "#endpoints",
-          subLinks = subLinks,
-          showSubLinks = true
-        )
-      }
-
-    sections :+ resources
-  }
 
   def openApiSidebarNavigation(markdownBlocks: List[DocumentationItem]): Seq[SidebarLink] = {
     val variableSidebar = markdownBlocks.map(mb => SidebarLink(label = mb.title, href = s"#${Slugify(mb.title)}"))

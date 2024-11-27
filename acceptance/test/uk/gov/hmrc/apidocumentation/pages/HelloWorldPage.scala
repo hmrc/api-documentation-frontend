@@ -78,9 +78,10 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
       Table(
         ("Navigation links", "Number"),
         ("Overview", "1"),
-        ("Versioning", "2"),
-        ("Errors", "3"),
-        ("Endpoints", "4")
+        ("Errors", "2"),
+        ("Testing", "3"),
+        ("Versioning", "4"),
+        ("Endpoints", "5")
       )
     forAll(navigationItems) { (navigationLink: String, number: String) =>
       val expectedCSSSelector = By.cssSelector("nav.side-nav > ul > li:nth-of-type(" + number + ") > a")
@@ -93,8 +94,9 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
       Table(
         "Navigation links",
         "Overview",
-        "Versioning",
         "Errors",
+        "Testing",
+        "Versioning",
         "Endpoints"
       )
     forAll(navigationItems) { (navigationLink: String) =>
@@ -111,12 +113,5 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
 
   def waitForPageToStopMoving() = {
     new WebDriverWait(Driver.instance, Duration.ofSeconds(5)).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
-  }
-
-  def checkBackToTopLinkAfterErrorsSection(): Unit = {
-    isDisplayed(errorsBackToTop) shouldBe true
-    getText(errorsBackToTop) shouldBe "Skip to main content"
-    isDisplayed(endpointsBackToTop) shouldBe true
-    getText(endpointsBackToTop) shouldBe "Skip to main content"
   }
 }

@@ -54,7 +54,6 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     private lazy val retiredVersionJumpView         = app.injector.instanceOf[RetiredVersionJumpView]
     private lazy val apisFilteredView               = app.injector.instanceOf[ApisFilteredView]
     private lazy val xmlDocumentationView           = app.injector.instanceOf[XmlDocumentationView]
-    private lazy val serviceDocumentationView       = app.injector.instanceOf[ServiceDocumentationView2]
     private lazy val parentPage                     = app.injector.instanceOf[ParentPageOuter]
     private lazy val assets                         = app.injector.instanceOf[Assets]
     val downloadConnector                           = mock[DownloadConnector]
@@ -70,7 +69,6 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       apiIndexView,
       retiredVersionJumpView,
       apisFilteredView,
-      serviceDocumentationView,
       xmlDocumentationView,
       parentPage,
       xmlServicesService,

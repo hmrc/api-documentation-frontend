@@ -31,7 +31,6 @@ trait NavigationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   when(navigationService.headerNavigation()(*)).thenReturn(successful(Seq(navLink)))
   when(navigationService.sidebarNavigation()).thenReturn(Seq(sidebarLink))
   when(navigationService.openApiSidebarNavigation(*)).thenReturn(Seq(sidebarLink))
-  when(navigationService.apiSidebarNavigation2(*, *)).thenReturn(Seq(sidebarLink))
 }
 
 object NavigationServiceMock {

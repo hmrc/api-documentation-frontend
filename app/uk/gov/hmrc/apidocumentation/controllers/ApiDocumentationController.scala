@@ -34,8 +34,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
+import uk.gov.hmrc.apidocumentation.models.{DocumentationItem, _}
 import uk.gov.hmrc.apidocumentation.services._
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html._
@@ -51,7 +50,6 @@ class ApiDocumentationController @Inject() (
     apiIndexView: ApiIndexView,
     retiredVersionJumpView: RetiredVersionJumpView,
     apisFilteredView: ApisFilteredView,
-    serviceDocumentationView: ServiceDocumentationView2,
     xmlDocumentationView: XmlDocumentationView,
     parentPage: ParentPageOuter,
     xmlServicesService: XmlServicesService,
