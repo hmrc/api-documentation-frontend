@@ -41,8 +41,6 @@ trait ApplicationConfig {
   def sandboxApiBaseUrl: String
   def sandboxWwwBaseUrl: String
 
-  def documentationRenderVersion: String
-
   def nameOfPrincipalEnvironment: String
   def nameOfSubordinateEnvironment: String
   def principalBaseUrl: String
@@ -90,8 +88,6 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
 
   val sandboxApiBaseUrl = platformBaseUrl("platform.sandbox.api")
   val sandboxWwwBaseUrl = platformBaseUrl("platform.sandbox.www")
-
-  val documentationRenderVersion = getString("features.documentationRenderVersion")
 
   val nameOfPrincipalEnvironment   = getString("features.nameOfPrincipalEnvironment")
   val nameOfSubordinateEnvironment = getString("features.nameOfSubordinateEnvironment")

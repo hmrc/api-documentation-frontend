@@ -77,10 +77,6 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
     )
   }
 
-  trait DocumentationRenderVersionSetup extends Setup {
-    when(appConfig.documentationRenderVersion).thenReturn("specification")
-  }
-
   "ApiDocumentationController" when {
     "routing to the apiIndexPage" should {
       "render the API List" in new Setup {

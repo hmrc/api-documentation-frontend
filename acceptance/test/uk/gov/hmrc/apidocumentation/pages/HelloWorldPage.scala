@@ -107,10 +107,9 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
 
       waitForPageToStopMoving()
       position = executeScript(s"return document.getElementById('$id').getBoundingClientRect().top;")(Driver.instance).toString.toDouble.toInt
-      // assert(position == 0)
     }
   }
-
+git 
   def waitForPageToStopMoving() = {
     new WebDriverWait(Driver.instance, Duration.ofSeconds(5)).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
   }

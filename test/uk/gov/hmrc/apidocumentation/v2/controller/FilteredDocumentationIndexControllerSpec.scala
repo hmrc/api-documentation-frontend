@@ -57,10 +57,6 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
     )
   }
 
-  trait DocumentationRenderVersionSetup extends Setup {
-    when(appConfig.documentationRenderVersion).thenReturn("specification")
-  }
-
   "V2DocumentationController" when {
     "routing to the V2 index page" should {
       "render the API List" in new Setup {
@@ -106,9 +102,8 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
 
         verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, there is a problem with the service")(result)
       }
-      //
+
       "display the error page when the xmlServicesService throws an exception" in new Setup {
-        // val exception = UpstreamErrorResponse("message", 503)
         val exception = new RuntimeException("message")
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnApiDefinitions(definitionList)
