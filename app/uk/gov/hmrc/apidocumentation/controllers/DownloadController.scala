@@ -75,7 +75,7 @@ class DownloadController @Inject() (
 
     def redirectToLoginPage(service: ServiceName) =
       Future.successful(Redirect("/developer/login").withSession(
-        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None, useV2).url
+        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, useV2).url
       ))
 
     findVersion(apiOption) match {

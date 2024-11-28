@@ -125,9 +125,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "redirect to the documentation page for the specified version" in new Setup {
           theUserIsLoggedIn()
           theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName = serviceName.value))
-          val result = underTest.redirectToApiDocumentation(serviceName, Some(version), Option(true))(request)
+          val result = underTest.redirectToApiDocumentation(serviceName, Some(version))(request)
           status(result) shouldBe SEE_OTHER
-          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}?cacheBuster=true")
+          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}")
         }
       }
 
@@ -137,9 +137,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         "redirect to the documentation page" in new Setup {
           theUserIsLoggedIn()
           theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName = serviceName.value))
-          val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
+          val result = underTest.redirectToApiDocumentation(serviceName, version)(request)
           status(result) shouldBe SEE_OTHER
-          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0")
         }
 
         "redirect to the documentation page for api in private trial for user without authorisation" in new Setup {
@@ -150,9 +150,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
 
-          val result = underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request)
+          val result = underTest.redirectToApiDocumentation(serviceName, None)(request)
           status(result) shouldBe SEE_OTHER
-          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0")
         }
 
         "redirect to the documentation page for api in private trial for user with authorisation" in new Setup {
@@ -163,9 +163,9 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
           theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
 
-          val result = underTest.redirectToApiDocumentation(serviceName, None, Option(true))(request)
+          val result = underTest.redirectToApiDocumentation(serviceName, None)(request)
           status(result) shouldBe SEE_OTHER
-          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+          headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0")
         }
 
         "redirect to the documentation page for the latest accessible version" in new Setup {
@@ -200,16 +200,16 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
             )
 
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
-          val result = underTest.redirectToApiDocumentation(ServiceName("hello-world"), version, Option(true))(request)
+          val result = underTest.redirectToApiDocumentation(ServiceName("hello-world"), version)(request)
           status(result) shouldBe SEE_OTHER
-          headers(result).get("location") shouldBe Some("/api-documentation/docs/api/service/hello-world/1.0?cacheBuster=true")
+          headers(result).get("location") shouldBe Some("/api-documentation/docs/api/service/hello-world/1.0")
         }
 
         "display the not found page when invalid service specified" in new Setup {
           theUserIsLoggedIn()
           theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
 
-          val result = underTest.redirectToApiDocumentation(serviceName, version, Option(true))(request)
+          val result = underTest.redirectToApiDocumentation(serviceName, version)(request)
           verifyNotFoundPageRendered(result)
         }
 
@@ -222,7 +222,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         theUserIsLoggedIn()
         theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
 
-        val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne, None)(request)
 
         verifyNotFoundPageRendered(result)
       }
@@ -233,7 +233,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithRetiredVersion(serviceName, versionOne, ApiVersionNbr("1.1"))
         )
 
-        val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne, None)(request)
 
         verifyApiDocumentationPageRendered(result)
         verifyLinkToStableDocumentationRendered(result, serviceName, ApiVersionNbr("1.1"))
@@ -245,7 +245,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithRetiredVersion(serviceName, versionOne, ApiVersionNbr("1.1"))
         )
 
-        val result = underTest.renderApiDocumentation(serviceName, versionTwo, Option(true), None)(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionTwo, None)(request)
 
         verifyNotFoundPageRendered(result)
       }
@@ -254,18 +254,10 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnNoApiDefinition()
 
-        val result = underTest.renderApiDocumentation(serviceName, versionOne, Option(true), None)(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne, None)(request)
 
         verifyNotFoundPageRendered(result)
       }
-    }
-  }
-
-  "bustCache" should {
-    "honour the passed in parameter" in new Setup {
-      underTest.bustCache(Some(true)) shouldBe true
-      underTest.bustCache(Some(false)) shouldBe false
-      underTest.bustCache(None) shouldBe false
     }
   }
 

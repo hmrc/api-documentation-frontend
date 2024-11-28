@@ -76,7 +76,7 @@ class ApiDocumentationController @Inject() (
 
     params match {
       case Some((service, version)) =>
-        val url = routes.ApiDocumentationController.renderApiDocumentation(service, version, None, None).url
+        val url = routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url
         Future.successful(Redirect(url))
       case None                     =>
         (for {
@@ -99,20 +99,20 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  def redirectToApiDocumentation(service: ServiceName, version: Option[ApiVersionNbr], cacheBuster: Option[Boolean]): Action[AnyContent] = version match {
+  def redirectToApiDocumentation(service: ServiceName, version: Option[ApiVersionNbr]): Action[AnyContent] = version match {
     case Some(version) => Action.async {
-        Future.successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version, cacheBuster, None)))
+        Future.successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version, None)))
       }
-    case _             => redirectToCurrentApiDocumentation(service, cacheBuster)
+    case _             => redirectToCurrentApiDocumentation(service)
   }
 
-  private def redirectToCurrentApiDocumentation(service: ServiceName, cacheBuster: Option[Boolean]) = Action.async { implicit request =>
+  private def redirectToCurrentApiDocumentation(service: ServiceName) = Action.async { implicit request =>
     (for {
       userId       <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
       extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, userId)
     } yield {
       extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(errorHandler.notFoundTemplate.map(NotFound(_))) { version =>
-        successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version, cacheBuster, None)))
+        successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version, None)))
       }
     }).flatten recoverWith {
       case _: NotFoundException => errorHandler.notFoundTemplate.map(NotFound(_))
@@ -122,13 +122,12 @@ class ApiDocumentationController @Inject() (
     }
   }
 
-  def renderApiDocumentation(service: ServiceName, version: ApiVersionNbr, cacheBuster: Option[Boolean], useV2: Option[Boolean]): Action[AnyContent] =
+  def renderApiDocumentation(service: ServiceName, version: ApiVersionNbr, useV2: Option[Boolean]): Action[AnyContent] =
     headerNavigation { implicit request => navLinks =>
       (for {
         userId           <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
         api              <- apiDefinitionService.fetchExtendedDefinition(service, userId)
-        cacheBust         = bustCache(cacheBuster)
-        apiDocumentation <- doRenderApiDocumentation(service, version, cacheBust, api, navLinks, userId, useV2)
+        apiDocumentation <- doRenderApiDocumentation(service, version, api, navLinks, userId, useV2)
       } yield apiDocumentation) recoverWith {
         case e: NotFoundException =>
           logger.info(s"Upstream request not found: ${e.getMessage}")
@@ -139,13 +138,10 @@ class ApiDocumentationController @Inject() (
       }
     }
 
-  def bustCache(cacheBuster: Option[Boolean]): Boolean = cacheBuster.getOrElse(false)
-
   // scalastyle:off method.length
   private def doRenderApiDocumentation(
       service: ServiceName,
       version: ApiVersionNbr,
-      cacheBuster: Boolean,
       apiOption: Option[ExtendedApiDefinition],
       navLinks: Seq[NavLink],
       developerId: Option[DeveloperIdentifier],
@@ -170,9 +166,9 @@ class ApiDocumentationController @Inject() (
     def renderNotFoundPage = errorHandler.notFoundTemplate.map(NotFound(_))
 
     def redirectToLoginPage = {
-      logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version, None, None).url}")
+      logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url}")
       Future.successful(Redirect("/developer/login").withSession(
-        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None, None).url,
+        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version, None).url,
         "ts"         -> Instant.now(Clock.systemUTC).toEpochMilli.toString
       ))
     }
