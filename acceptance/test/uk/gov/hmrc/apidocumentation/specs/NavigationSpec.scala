@@ -92,7 +92,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       on(HelloWorldPage)
 
       Then("user is navigated to the appropriate section on the page when clicked on the left Menu option")
-      HelloWorldPage.waitUntilLinksGetToTheTopOfThePage()
+      HelloWorldPage.testClickAllNavLinks()
     }
 
     Scenario("Dev Hub Name") {

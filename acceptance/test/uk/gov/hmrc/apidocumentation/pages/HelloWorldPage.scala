@@ -89,7 +89,7 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
     }
   }
 
-  def waitUntilLinksGetToTheTopOfThePage(): Unit = {
+  def testClickAllNavLinks(): Unit = {
     val navigationItems =
       Table(
         "Navigation links",
@@ -109,7 +109,7 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
       position = executeScript(s"return document.getElementById('$id').getBoundingClientRect().top;")(Driver.instance).toString.toDouble.toInt
     }
   }
-git 
+
   def waitForPageToStopMoving() = {
     new WebDriverWait(Driver.instance, Duration.ofSeconds(5)).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
   }
