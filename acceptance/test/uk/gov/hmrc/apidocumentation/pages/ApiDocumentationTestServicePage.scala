@@ -31,8 +31,7 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
 
   val pageHeading = "Developer Forum API"
 
-  private val locationFieldOptional = By.className("parameter-optional")
-  private val createUser            = By.className("govuk-details__summary")
+  private val createUser = By.className("govuk-details__summary")
 
   def selectCreateUser(): Unit = {
     click(createUser)
@@ -67,16 +66,6 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
     eventually {
       versionDropDown.getFirstSelectedOption.getText shouldBe expectedVersion
     }
-  }
-
-  def checkLocationFieldIsOptional(): Unit = {
-    getText(locationFieldOptional) should include("optional")
-  }
-
-  def checkAPIVersionInRequestHeader(): Unit = {
-    click(By.id("users_post_post_details"))
-    getText(By.id("application/vnd.hmrc.1.1+json")) should include("application/vnd.hmrc.1.1+json")
-
   }
 
 }

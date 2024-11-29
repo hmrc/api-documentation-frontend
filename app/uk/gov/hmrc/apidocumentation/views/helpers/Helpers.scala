@@ -37,31 +37,6 @@ object Slugify {
   }
 }
 
-object Val {
-  def apply(obj: String): String = Option(obj).getOrElse("")
-
-  def apply(obj: Option[String]): String = obj.getOrElse("")
-
-  // scalastyle:off structural.type
-  def apply(obj: { def value(): String }): String = Option(obj).fold("")(_.value())
-  // scalastyle:on structural.type
-}
-
-object HeaderVal {
-
-  def apply(header: uk.gov.hmrc.apidocumentation.models.apispecification.TypeDeclaration, version: String): String = {
-    def replace(example: String) = {
-      example.replace("application/vnd.hmrc.1.0", "application/vnd.hmrc." + version)
-    }
-    val exampleValue             = header.example.fold("")(e => e.value.getOrElse(""))
-    header.displayName match {
-      case "Accept"       => replace(exampleValue)
-      case "Content-Type" => replace(exampleValue)
-      case _              => exampleValue
-    }
-  }
-}
-
 object Markdown {
 
   def apply(text: String): Html = Html(process(text))
@@ -92,22 +67,6 @@ object Markdown {
       .setCodeBlockEmitter(new CodeBlockEmitter)
 
   private def process(text: String) = Processor.process(text, configuration.build)
-}
-
-object HttpStatus {
-  def apply(statusCode: String): String = apply(statusCode.toInt)
-
-  def apply(statusCode: Int): String = {
-
-    val responseStatus: StatusCode =
-      try {
-        StatusCode.int2StatusCode(statusCode)
-      } catch {
-        case _: RuntimeException => StatusCodes.custom(statusCode, "non-standard", "")
-      }
-
-    s"$statusCode (${responseStatus.reason})"
-  }
 }
 
 object AvailabilityPhrase {

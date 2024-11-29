@@ -34,8 +34,8 @@ object LoggedInState {
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Logged In State"))
   }
 
-  val formatLoggedIn     = Json.format[LOGGED_IN.type]
-  val formatPartLoggedIn = Json.format[PART_LOGGED_IN_ENABLING_MFA.type]
+  val formatLoggedIn: Format[LOGGED_IN.type]                       = Json.format[LOGGED_IN.type]
+  val formatPartLoggedIn: Format[PART_LOGGED_IN_ENABLING_MFA.type] = Json.format[PART_LOGGED_IN_ENABLING_MFA.type]
 
   implicit val format: Format[LoggedInState] = SealedTraitJsonFormatting.createFormatFor[LoggedInState]("Logged In State", apply(_))
 }

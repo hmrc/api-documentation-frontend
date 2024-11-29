@@ -28,10 +28,8 @@ trait ApplicationConfig {
   def developerFrontendBaseUrl: String
   def thirdPartyDeveloperUrl: String
   def apiPlatformMicroserviceBaseUrl: String
-  def ramlPreviewMicroserviceBaseUrl: String
 
   def securedCookie: Boolean
-  def ramlPreviewEnabled: Boolean
   def openApiPreviewEnabled: Boolean
 
   def showProductionAvailability: Boolean
@@ -42,8 +40,6 @@ trait ApplicationConfig {
 
   def sandboxApiBaseUrl: String
   def sandboxWwwBaseUrl: String
-
-  def documentationRenderVersion: String
 
   def nameOfPrincipalEnvironment: String
   def nameOfSubordinateEnvironment: String
@@ -81,10 +77,8 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
     * DO NOT REMOVE
     */
   lazy val apiPlatformMicroserviceBaseUrl = baseUrl("api-platform-microservice")
-  lazy val ramlPreviewMicroserviceBaseUrl = baseUrl("raml-preview-microservice")
 
   val securedCookie         = getBoolean("cookie.secure")
-  val ramlPreviewEnabled    = getBoolean("features.ramlPreview")
   val openApiPreviewEnabled = getBoolean("features.openApiPreview")
 
   val showProductionAvailability = getBoolean("features.showProductionAvailability")
@@ -94,8 +88,6 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
 
   val sandboxApiBaseUrl = platformBaseUrl("platform.sandbox.api")
   val sandboxWwwBaseUrl = platformBaseUrl("platform.sandbox.www")
-
-  val documentationRenderVersion = getString("features.documentationRenderVersion")
 
   val nameOfPrincipalEnvironment   = getString("features.nameOfPrincipalEnvironment")
   val nameOfSubordinateEnvironment = getString("features.nameOfSubordinateEnvironment")

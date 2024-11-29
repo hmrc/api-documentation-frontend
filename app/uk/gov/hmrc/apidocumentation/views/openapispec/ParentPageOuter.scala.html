@@ -19,10 +19,9 @@
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-@import uk.gov.hmrc.apidocumentation.views.apispecification.helpers._
 @import uk.gov.hmrc.apidocumentation.views.helpers.VersionDocsVisible
 @import uk.gov.hmrc.apidocumentation.views.html.include._
-@import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
+@import uk.gov.hmrc.apidocumentation.models.DocumentationItem
 @import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ExtendedApiVersion
 
 @this(apiMain: apiMain, parentPageView: ParentPageView)
@@ -34,11 +33,11 @@
         <select class="form-control form-control-version"
                 id="version"
                 name="version"
-                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version, None, useV2).url"
+                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version, useV2).url"
                 onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
             @for(v <- api.sortedActiveVersions;
                 if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
-                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version, None, useV2).url" aria-label="Select to view documentation for v@v.version.toString (@v.displayedStatus)">v@v.version.toString (@v.displayedStatus)</option>
+                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version, useV2).url" aria-label="Select to view documentation for v@v.version.toString (@v.displayedStatus)">v@v.version.toString (@v.displayedStatus)</option>
             }
         </select>
     </div>

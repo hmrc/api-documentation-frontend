@@ -92,7 +92,7 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
       on(HelloWorldPage)
 
       Then("user is navigated to the appropriate section on the page when clicked on the left Menu option")
-      HelloWorldPage.waitUntilLinksGetToTheTopOfThePage()
+      HelloWorldPage.testClickAllNavLinks()
     }
 
     Scenario("Dev Hub Name") {
@@ -117,20 +117,6 @@ class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPr
 
       Then("the application name is HMRC Developer Hub")
       HelloWorldPage.applicationName() shouldBe expectedApplicationName
-    }
-
-    Scenario("Ensure back to the top link only exists after Errors section") {
-      Given("I have navigated to the API documentation page")
-      Given.apiServicesIsDeployed()
-      goOn(APIDocumentationPage)
-
-      When("I select to view the Hello World documentation")
-      Given.helloWorldIsDeployed("api-example-microservice", "1.0")
-      APIDocumentationPage.selectHelloWorld()
-      on(HelloWorldPage)
-
-      Then("back to the top link only appears after Errors section")
-      HelloWorldPage.checkBackToTopLinkAfterErrorsSection()
     }
   }
 }

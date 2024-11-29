@@ -21,7 +21,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
@@ -29,18 +28,14 @@ import uk.gov.hmrc.apidocumentation.controllers.CommonControllerBaseSpec
 import uk.gov.hmrc.apidocumentation.controllers.utils._
 import uk.gov.hmrc.apidocumentation.mocks.config._
 import uk.gov.hmrc.apidocumentation.mocks.services._
-import uk.gov.hmrc.apidocumentation.models.apispecification.{ApiSpecification, DocumentationItem, ResourceGroup, TypeDeclaration}
 import uk.gov.hmrc.apidocumentation.v2.controllers.FilteredDocumentationIndexController
 import uk.gov.hmrc.apidocumentation.v2.models.DocumentationTypeFilter
 import uk.gov.hmrc.apidocumentation.v2.views.html.FilteredIndexView
 
 class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 
-  private val versionOne = ApiVersionNbr("1.0")
-
   trait Setup
-      extends ApiDocumentationServiceMock
-      with AppConfigMock
+      extends AppConfigMock
       with ApiDefinitionServiceMock
       with LoggedInUserServiceMock
       with NavigationServiceMock
@@ -60,22 +55,6 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
       xmlServicesService,
       indexV2View
     )
-  }
-
-  trait DocumentationRenderVersionSetup extends Setup {
-
-    when(appConfig.documentationRenderVersion).thenReturn("specification")
-
-    val mockApiSpecification =
-      ApiSpecification(
-        title = "mockTitle",
-        version = versionOne.value,
-        deprecationMessage = None,
-        documentationItems = List.empty[DocumentationItem],
-        resourceGroups = List.empty[ResourceGroup],
-        types = List.empty[TypeDeclaration],
-        isFieldOptionalityKnown = false
-      )
   }
 
   "V2DocumentationController" when {
@@ -123,9 +102,8 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
 
         verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, there is a problem with the service")(result)
       }
-      //
+
       "display the error page when the xmlServicesService throws an exception" in new Setup {
-        // val exception = UpstreamErrorResponse("message", 503)
         val exception = new RuntimeException("message")
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnApiDefinitions(definitionList)

@@ -51,50 +51,6 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
     waitForPageToStopMoving()
   }
 
-  def assertEndpointsDetails(): Unit = {
-    val ids =
-      Table(
-        ("ID", "id"),
-        ("_say-hello-world_get_details", "_say-hello-world_get_content"),
-        ("_say-hello-user_get_details", "_say-hello-user_get_content"),
-        ("_say-hello-application_get_details", "_say-hello-application_get_content")
-      )
-    forAll(ids) { (ID: String, id: String) =>
-      click(By.id(ID))
-      isDisplayed(By.id(id)) shouldBe true
-    }
-  }
-
-  def assertAPIEndpoints(): Unit = {
-    val endpoints =
-      Table(
-        ("ID", "Endpoint Title", "Endpoint Request Type", "Endpoint URI"),
-        ("_say-hello-world_get_details", "Say hello world", "GET", "/hello/world"),
-        ("_say-hello-user_get_details", "Say hello user", "GET", "/hello/user"),
-        ("_say-hello-application_get_details", "Say hello application", "GET", "/hello/application")
-      )
-
-    forAll(endpoints) { (id: String, endpointTitle: String, endpointRequestType: String, endpointUri: String) =>
-      getText(By.id(id)) should endWith(endpointRequestType)
-      getText(By.id(endpointUri)) shouldBe endpointUri
-    }
-  }
-
-  def assertOptionsEndpointsNotPresent() = {
-    val endpoints =
-      Table(
-        "ID",
-        "#_say-hello-world-supported-http-methods",
-        "#_say-hello-user-supported-http-methods",
-        "#_say-hello-application-supported-http-methods"
-      )
-
-    forAll(endpoints) { (id: String) =>
-      findElement(By.cssSelector(s"${id}_options_accordion .accordion__button")) shouldBe None
-      findElement(By.cssSelector(s"${id}_options_accordion .http-verb.http-verb--options.float--right")) shouldBe None
-    }
-  }
-
   def assertMenuLinkColors(): Unit = {
     val menuLink =
       Table(
@@ -122,9 +78,10 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
       Table(
         ("Navigation links", "Number"),
         ("Overview", "1"),
-        ("Versioning", "2"),
-        ("Errors", "3"),
-        ("Endpoints", "4")
+        ("Errors", "2"),
+        ("Testing", "3"),
+        ("Versioning", "4"),
+        ("Endpoints", "5")
       )
     forAll(navigationItems) { (navigationLink: String, number: String) =>
       val expectedCSSSelector = By.cssSelector("nav.side-nav > ul > li:nth-of-type(" + number + ") > a")
@@ -132,13 +89,14 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
     }
   }
 
-  def waitUntilLinksGetToTheTopOfThePage(): Unit = {
+  def testClickAllNavLinks(): Unit = {
     val navigationItems =
       Table(
         "Navigation links",
         "Overview",
-        "Versioning",
         "Errors",
+        "Testing",
+        "Versioning",
         "Endpoints"
       )
     forAll(navigationItems) { (navigationLink: String) =>
@@ -149,18 +107,10 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
 
       waitForPageToStopMoving()
       position = executeScript(s"return document.getElementById('$id').getBoundingClientRect().top;")(Driver.instance).toString.toDouble.toInt
-      // assert(position == 0)
     }
   }
 
   def waitForPageToStopMoving() = {
     new WebDriverWait(Driver.instance, Duration.ofSeconds(5)).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
-  }
-
-  def checkBackToTopLinkAfterErrorsSection(): Unit = {
-    isDisplayed(errorsBackToTop) shouldBe true
-    getText(errorsBackToTop) shouldBe "Skip to main content"
-    isDisplayed(endpointsBackToTop) shouldBe true
-    getText(endpointsBackToTop) shouldBe "Skip to main content"
   }
 }

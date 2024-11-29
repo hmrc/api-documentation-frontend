@@ -41,7 +41,7 @@ class RedirectController @Inject() (cc: MessagesControllerComponents)
 
   def redirectToApiDocumentationPage(service: ServiceName, version: ApiVersionNbr, endpoint: String, useV2: Option[Boolean]): Action[AnyContent] = {
     val redirectTo = routes.ApiDocumentationController
-      .renderApiDocumentation(service, version, None, useV2)
+      .renderApiDocumentation(service, version, useV2)
       .url
     Action.async { _ =>
       Future.successful(MovedPermanently(redirectTo))

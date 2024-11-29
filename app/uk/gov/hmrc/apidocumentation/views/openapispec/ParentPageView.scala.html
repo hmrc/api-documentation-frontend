@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.apidocumentation.views.helpers._
 @import uk.gov.hmrc.apidocumentation.services._
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-@import uk.gov.hmrc.apidocumentation.models.apispecification.DocumentationItem
+@import uk.gov.hmrc.apidocumentation.models.DocumentationItem
 @import views.html.helper.CSPNonce
 
 @this(applicationConfig: ApplicationConfig)
@@ -34,7 +34,7 @@
     @for(api <- maybeApi) {
         @for(version <- maybeVersion) {
             @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
-            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None, None).url">
+            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None).url">
                 <label class="visually-hidden" for="version">
                     Select version and status
                 </label>
@@ -50,7 +50,7 @@
     }
 }
 
-<div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section raml" aria-busy="false">
+<div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section" aria-busy="false">
     <div id="section">
         <h1 id="title" class="govuk-heading-l">
             @{title} API

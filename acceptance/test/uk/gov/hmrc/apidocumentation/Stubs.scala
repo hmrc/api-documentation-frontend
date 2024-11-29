@@ -20,10 +20,7 @@ import scala.io.Source
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 
-import play.api.libs.json.Json
 import play.utils.UriEncoding
-
-import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecification
 
 trait Stubs extends ApiMicroservice with DeveloperFrontend with ApiPlatformMicroservice with XmlServices
 
@@ -64,29 +61,6 @@ trait ApiPlatformMicroservice {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody(definitionJson))
-    )
-  }
-
-  def fetchApiSpec(serviceName: String, version: String): Unit = {
-    val url  = getClass.getResource(s"/services/$serviceName/spec_${version}.json")
-    val file = Source.fromURL(url).mkString
-    import uk.gov.hmrc.apidocumentation.models.apispecification.ApiSpecificationFormatters._
-    Json.fromJson[ApiSpecification](Json.parse(file))
-
-    stubFor(get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/$version/specification"))
-      .willReturn(
-        aResponse()
-          .withStatus(200)
-          .withHeader("Content-Type", "application/json")
-          .withBody(file)
-      ))
-  }
-
-  def failToFetch(serviceName: String): Unit = {
-    stubFor(
-      get(urlPathEqualTo(s"/combined-api-definitions/$serviceName/definition"))
-        .willReturn(aResponse()
-          .withStatus(404))
     )
   }
 }

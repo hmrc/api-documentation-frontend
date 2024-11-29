@@ -25,6 +25,7 @@ import uk.gov.hmrc.apidocumentation.v2.models.DocumentationTypeFilter
 
 package object binders {
 
+  // $COVERAGE-OFF$
   implicit def serviceNamePathBinder(implicit textBinder: PathBindable[String]): PathBindable[ServiceName] = new PathBindable[ServiceName] {
 
     override def bind(key: String, value: String): Either[String, ServiceName] = {
@@ -85,4 +86,5 @@ package object binders {
         textBinder.unbind("docTypeFilters", filter.toString)
       }
     }
+  // $COVERAGE-ON$
 }

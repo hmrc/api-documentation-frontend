@@ -118,7 +118,7 @@ class FilteredDocumentationIndexController @Inject() (
       .versionsAsList
       .sorted(WrappedApiDefinition.statusVersionOrdering)
       .head.versionNbr
-    val url: String                      = routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersionNbr, None, useV2 = Some(true)).url
+    val url: String                      = routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersionNbr, useV2 = Some(true)).url
     RestDocumentation.fromApiDefinition(api, url, defaultVersionNbr, getRestApiDescriptionOverride(api.serviceName.value))
   }
 

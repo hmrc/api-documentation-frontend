@@ -22,9 +22,9 @@ GET         /docs/authorisation/two-step-verification                   uk.gov.h
 
 
 GET         /docs/api                                                   uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.apiIndexPage(service: Option[ServiceName], version: Option[ApiVersionNbr], filter: Option[String])
-GET         /docs/api/service/:service                                  uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.redirectToApiDocumentation(service: ServiceName, version: Option[ApiVersionNbr], cacheBuster: Option[Boolean])
+GET         /docs/api/service/:service                                  uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.redirectToApiDocumentation(service: ServiceName, version: Option[ApiVersionNbr])
 
-GET         /docs/api/service/:service/:version                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: ServiceName,version: ApiVersionNbr, cacheBuster: Option[Boolean], useV2: Option[Boolean])
+GET         /docs/api/service/:service/:version                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: ServiceName,version: ApiVersionNbr, useV2: Option[Boolean])
 
 # Open API related endpoints    
 GET         /docs/api/service/:service/:version/oas/page                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentation(service: ServiceName,version: ApiVersionNbr)
@@ -34,8 +34,6 @@ GET         /docs/api/service/:service/:version/oas/file                uk.gov.h
 GET         /docs/api/service/:service/:version/oas/resolved            uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOasResolved(service: ServiceName,version: ApiVersionNbr)
 GET         /docs/api/service/:service/:version/oas/*resource           uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: ServiceName, version: ApiVersionNbr, resource: String, useV2: Option[Boolean])
 
-GET         /docs/preview                                               uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.previewApiDocumentation(url: Option[String])
-GET         /docs/api/testdata/:service/:version                        uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.fetchTestEndpointJson(service: ServiceName, version: ApiVersionNbr)
 GET         /docs/api/xml/:name                                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderXmlApiDocumentation(name: String, useV2: Option[Boolean])
 
 GET         /docs/apiIndex                                              uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToDocumentationIndexPage(useV2: Option[Boolean])

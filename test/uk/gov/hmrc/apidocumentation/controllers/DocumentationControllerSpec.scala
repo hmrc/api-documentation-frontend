@@ -18,7 +18,6 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.duration._
 
 import org.apache.pekko.stream.Materializer
 
@@ -43,8 +42,7 @@ class DocumentationControllerSpec
     with PageRenderVerification {
 
   trait Setup
-      extends ApiDocumentationServiceMock
-      with AppConfigMock
+      extends AppConfigMock
       with NavigationServiceMock {
 
     val developerFrontendConnector = mock[DeveloperFrontendConnector]
@@ -80,8 +78,6 @@ class DocumentationControllerSpec
       "Using the Developer Hub",
       controllers.routes.DocumentationController.usingTheHubPage().url
     )
-
-    when(documentationService.defaultExpiration).thenReturn(1.hour)
 
     val underTest: DocumentationController = new DocumentationController(
       navigationService,
