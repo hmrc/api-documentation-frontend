@@ -29,20 +29,6 @@
     "categories": ["CUSTOMS"]
   },
   {
-    "identifier": "ctc-traders-phase4-service-guide",
-    "name": "CTC Traders phase 4 service guide",
-    "description": "This service guide explains how to use the Phase 4 Common Transit Convention (CTC) API.",
-    "context": "/guides/ctc-traders-phase4-service-guide/",
-    "categories": ["CUSTOMS"]
-  },
-  {
-    "identifier": "ctc-traders-phase4-testing-guide",
-    "name": "CTC Traders phase 4 testing guide",
-    "description": "This testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Traders API.",
-    "context": "/guides/ctc-traders-phase4-testing-guide/",
-    "categories": ["CUSTOMS"]
-  },
-  {
     "identifier": "ctc-traders-phase5-service-guide",
     "name": "CTC Traders phase 5 service guide",
     "description": "This service guide explains how to use the Phase 5 Common Transit Convention (CTC) API.",
@@ -83,20 +69,6 @@
     "description": "This guide explains how to use the Interest Restriction Return (IRR) API with your software. It is for all roles involved in creating or integrating software connected to this API.",
     "context": "/guides/irr-api-end-to-end-service-guide/",
     "categories": ["CORPORATION_TAX"]
-  },
-  {
-    "identifier": "ctc-guarantee-balance-service-guide",
-    "name": "CTC Guarantee Balance phase 4 service guide",
-    "description": "This Phase 4 guide explains how to use the Common Transit Convention (CTC) Traders Guarantee Balance API with your software.",
-    "context": "/guides/ctc-guarantee-balance-service-guide/",
-    "categories": ["CUSTOMS"]
-  },
-  {
-    "identifier": "ctc-guarantee-balance-testing-guide",
-    "name": "CTC Guarantee Balance phase 4 testing guide",
-    "description": "This Phase 4 testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Guarantee Balance API.",
-    "context": "/guides/ctc-guarantee-balance-testing-guide/",
-    "categories": ["CUSTOMS"]
   },
   {
     "identifier": "ctc-guarantee-balance-phase5-service-guide",
