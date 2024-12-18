@@ -19,7 +19,6 @@ package uk.gov.hmrc.apidocumentation.models
 import play.api.libs.json._
 
 package object jsonFormatters {
-  implicit val formatAPIAccess: OFormat[APIAccess]                 = Json.format[APIAccess]
   implicit val formatVersionVisibility: OFormat[VersionVisibility] = Json.format[VersionVisibility]
   implicit val formatServiceDetails: OFormat[ServiceDetails]       = Json.format[ServiceDetails]
   implicit val formatTestEndpoint: OFormat[TestEndpoint]           = Json.format[TestEndpoint]

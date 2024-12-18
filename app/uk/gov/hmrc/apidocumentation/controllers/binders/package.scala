@@ -21,7 +21,7 @@ import scala.util.{Failure, Success, Try}
 import play.api.mvc.{PathBindable, QueryStringBindable}
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ServiceName}
 
-import uk.gov.hmrc.apidocumentation.v2.models.DocumentationTypeFilter
+import uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter
 
 package object binders {
 

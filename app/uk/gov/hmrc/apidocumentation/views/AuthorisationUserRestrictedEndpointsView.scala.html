@@ -60,7 +60,7 @@
 
     <p class="govuk-body">There are separate HMRC sign in details for individuals, agents and organisations. For individuals and organisations, the access token only gives access to the end user’s own data. For agents the access token gives access to their clients’ data.</p>
 
-    <p class="govuk-body">Authorisation rules for specific API endpoints are given in the <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None)">API documentation</a>.</p>
+    <p class="govuk-body">Authorisation rules for specific API endpoints are given in the <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty)">API documentation</a>.</p>
 
     <p class="govuk-body">The access token lasts for 4 hours. When it expires, it can be refreshed using a single-use refresh token. After 18 months you can no longer refresh the access token and the end user must grant authority again.</p>
 

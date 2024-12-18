@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.v2.models
+package uk.gov.hmrc.apidocumentation.models
 
 import scala.collection.immutable.ListSet
 
 import play.api.libs.json.Format
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
 
-import uk.gov.hmrc.apidocumentation.models.DocumentationLabel
 import uk.gov.hmrc.apidocumentation.models.DocumentationLabel._
 
 sealed trait DocumentationTypeFilter {

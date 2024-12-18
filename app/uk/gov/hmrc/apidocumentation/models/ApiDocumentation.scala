@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.v2.models
+package uk.gov.hmrc.apidocumentation.models
 
 import scala.io.Source
 
@@ -22,8 +22,6 @@ import play.api.libs.json.{Format, Json, OFormat}
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ApiDefinition}
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.play.json.Union
-
-import uk.gov.hmrc.apidocumentation.models.{DocumentationLabel, XmlApiDocumentation}
 
 case class DocumentIdentifier(value: String) extends AnyVal
 

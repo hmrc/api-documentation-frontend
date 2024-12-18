@@ -21,10 +21,10 @@ GET         /docs/authorisation/user-restricted-endpoints               uk.gov.h
 GET         /docs/authorisation/two-step-verification                   uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisation2SVPage()
 
 
-GET         /docs/api                                                   uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.apiIndexPage(service: Option[ServiceName], version: Option[ApiVersionNbr], filter: Option[String])
+GET         /docs/api                                                   uk.gov.hmrc.apidocumentation.controllers.FilteredDocumentationIndexController.apiListIndexPage(docTypeFilters: List[uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter], categoryFilters: List[uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory])
 GET         /docs/api/service/:service                                  uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.redirectToApiDocumentation(service: ServiceName, version: Option[ApiVersionNbr])
 
-GET         /docs/api/service/:service/:version                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: ServiceName,version: ApiVersionNbr, useV2: Option[Boolean])
+GET         /docs/api/service/:service/:version                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: ServiceName,version: ApiVersionNbr)
 
 # Open API related endpoints    
 GET         /docs/api/service/:service/:version/oas/page                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentation(service: ServiceName,version: ApiVersionNbr)
@@ -32,12 +32,12 @@ GET         /docs/openapi/preview                                       uk.gov.h
 GET         /docs/openapi/preview/action                                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.previewApiDocumentationAction(url: Option[String])
 GET         /docs/api/service/:service/:version/oas/file                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOas(service: ServiceName, version: ApiVersionNbr)
 GET         /docs/api/service/:service/:version/oas/resolved            uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOasResolved(service: ServiceName,version: ApiVersionNbr)
-GET         /docs/api/service/:service/:version/oas/*resource           uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: ServiceName, version: ApiVersionNbr, resource: String, useV2: Option[Boolean])
+GET         /docs/api/service/:service/:version/oas/*resource           uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: ServiceName, version: ApiVersionNbr, resource: String)
 
-GET         /docs/api/xml/:name                                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderXmlApiDocumentation(name: String, useV2: Option[Boolean])
+GET         /docs/api/xml/:name                                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderXmlApiDocumentation(name: String)
 
-GET         /docs/apiIndex                                              uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToDocumentationIndexPage(useV2: Option[Boolean])
-GET         /docs/api/:service/:version/:endpoint                       uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToApiDocumentationPage(service: ServiceName,version: ApiVersionNbr, endpoint: String, useV2: Option[Boolean])
+GET         /docs/apiIndex                                              uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToDocumentationIndexPage()
+GET         /docs/api/:service/:version/:endpoint                       uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToApiDocumentationPage(service: ServiceName,version: ApiVersionNbr, endpoint: String)
 GET         /docs/fraud-prevention                                      uk.gov.hmrc.apidocumentation.controllers.RedirectController.redirectToFraudPreventionGuide()
 
 GET         /docs/api/mtd-income-tax-service-guide                      uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIncomeTaxServiceGuidePage()
@@ -51,10 +51,8 @@ GET         /docs/testing                                               uk.gov.h
 GET         /docs/testing/stateful-behaviour                            uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testingStatefulBehaviourPage()
 GET         /docs/testing/test-users-test-data-stateful-behaviour       uk.gov.hmrc.apidocumentation.controllers.TestingPagesController.testUsersDataStatefulBehaviourPage()
 
-GET         /docs/api/download/:service/:version/*resource              uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: ServiceName,version: ApiVersionNbr, resource: String, useV2: Option[Boolean])
+GET         /docs/api/download/:service/:version/*resource              uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: ServiceName,version: ApiVersionNbr, resource: String)
 
 GET         /assets/*file                                               @controllers.Assets.versioned(path="/public", file: Asset)
-
-GET         /docs/v2                                                    uk.gov.hmrc.apidocumentation.v2.controllers.FilteredDocumentationIndexController.apiListIndexPage(docTypeFilters: List[uk.gov.hmrc.apidocumentation.v2.models.DocumentationTypeFilter], categoryFilters: List[uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory])
 
 ->          /hmrc-frontend                                              hmrcfrontend.Routes

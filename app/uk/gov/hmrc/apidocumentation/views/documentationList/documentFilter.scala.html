@@ -1,0 +1,53 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.Checkboxes
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
+
+@(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory], govukCheckboxes: GovukCheckboxes)
+
+<h2 class="govuk-heading-m govuk-visually-hidden">Filters</h2>
+
+<form method="GET" action="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty)">
+    @govukCheckboxes(
+        Checkboxes(
+            name = "docTypeFilters",
+            fieldset = Some(Fieldset(legend = Some(Legend(content = Text("Documentation Type"), classes="govuk-fieldset__legend--s")))),
+            classes="govuk-checkboxes--small",
+            items = DocumentationTypeFilter.values.map(filter =>
+                CheckboxItem(content =  HtmlContent(s"<span class=\"govuk-!-font-size-16\">${filter.displayName}</span>"), value = filter.toString, checked = docTypeFilters.contains(filter))).toSeq
+        )
+    )
+
+    @govukCheckboxes(
+        Checkboxes(
+            name = "categoryFilters",
+            fieldset = Some(Fieldset(legend = Some(Legend(content = Text("API Category"), classes="govuk-fieldset__legend--s")))),
+            classes="govuk-checkboxes--small",
+            items = ApiCategory.values.toList.sortBy(_.displayText).map(category =>
+                CheckboxItem(content = HtmlContent(s"<span class=\"govuk-!-font-size-16\">${category.displayText}</span>"), value = category.toString, checked = categoryFilters.contains(category)))
+        )
+    )
+
+    <button class="govuk-button" data-module="govuk-button" type="submit">Filter</button>
+
+</form>
+
+

@@ -54,16 +54,10 @@ class DocumentationControllerSpec
 
     private lazy val indexView = app.injector.instanceOf[IndexView]
 
-    private lazy val retiredVersionJumpView =
-      app.injector.instanceOf[RetiredVersionJumpView]
-    private lazy val tutorialsView          = app.injector.instanceOf[TutorialsView]
-    private lazy val credentialsView        = app.injector.instanceOf[CredentialsView]
+    private lazy val tutorialsView = app.injector.instanceOf[TutorialsView]
 
     private lazy val developmentPracticesView =
       app.injector.instanceOf[DevelopmentPracticesView]
-
-    private lazy val mtdIntroductionView =
-      app.injector.instanceOf[MtdIntroductionView]
 
     private lazy val namingGuidelinesView           =
       app.injector.instanceOf[NamingGuidelinesView]
@@ -85,11 +79,8 @@ class DocumentationControllerSpec
       partialsService,
       mcc,
       indexView,
-      retiredVersionJumpView,
       tutorialsView,
-      credentialsView,
       developmentPracticesView,
-      mtdIntroductionView,
       namingGuidelinesView,
       referenceView,
       termsOfUseView,

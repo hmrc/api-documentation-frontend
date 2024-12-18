@@ -44,7 +44,8 @@ case object StaticNavLinks {
   def apply() = {
 
     Seq(
-      NavLink("Documentation", "/api-documentation/docs/using-the-hub"),
+      NavLink("Getting Started", "/api-documentation/docs/using-the-hub"),
+      NavLink("API documentation", "/api-documentation/docs/api"),
       NavLink("Applications", "/developer/applications"),
       NavLink("Support", "/developer/support"),
       NavLink("Service Availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)

@@ -47,7 +47,7 @@
             <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-2">
                 <h1 id="RESTful-APIs-Title" class="govuk-heading-xl hero-title govuk-!-margin-top-3">Create tax software and apps using HMRC APIs</h1>
                 <p class="govuk-body govuk-!-font-size-24 app-inverse">
-                  <a class="govuk-link govuk-link--inverse" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">Explore our APIs, review documentation and check endpoints</a>.
+                  <a class="govuk-link govuk-link--inverse" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty,List.empty).url">Explore our APIs, review documentation and check endpoints</a>.
                 </p>
                 @if(!loggedIn) {
                   <p class="govuk-body govuk-!-font-size-24 app-inverse">
@@ -82,7 +82,7 @@
         <div class="govuk-grid-column-one-third">
             <h2 class="govuk-heading-m">Explore APIs</h2>
             <ul class="govuk-list">
-                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a></li>
+                <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty,List.empty).url">API documentation</a></li>
                 <li><a class="govuk-link govuk-link--no-visited-state" href="https://www.gov.uk/topic/dealing-with-hmrc/software-development">XML APIs</a></li>
                 <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.referenceGuidePage()">Reference guide</a></li>
                 <li><a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.developmentPracticesPage()">Development practices</a></li>

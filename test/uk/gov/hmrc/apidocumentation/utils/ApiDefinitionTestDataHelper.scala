@@ -19,31 +19,10 @@ package uk.gov.hmrc.apidocumentation.utils
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 
-import uk.gov.hmrc.apidocumentation.models._
-
 trait ApiDefinitionTestDataHelper {
 
   def apiDefinition(name: String, versions: Seq[ApiVersion] = Seq(apiVersion("1.0", ApiStatus.STABLE)), categories: List[ApiCategory] = List.empty) = {
     ApiDefinition(ServiceName(name), name, name, name, ApiContext("hello"), versions.map(version => version.versionNbr -> version).toMap, categories = categories)
-  }
-
-  implicit class ApiAccessModifier(val inner: APIAccess) {
-
-    def asPublic: APIAccess = {
-      inner.copy(`type` = ApiAccessType.PUBLIC)
-    }
-
-    def asPrivate: APIAccess = {
-      inner.copy(`type` = ApiAccessType.PRIVATE)
-    }
-
-    def asTrial: APIAccess = {
-      inner.copy(isTrial = Some(true))
-    }
-
-    def notTrial: APIAccess = {
-      inner.copy(isTrial = Some(false))
-    }
   }
 
   def apiAvailability() = {

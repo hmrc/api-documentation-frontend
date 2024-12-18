@@ -38,7 +38,7 @@ class RedirectControllerSpec extends CommonControllerBaseSpec {
   "RedirectController" should {
     "redirect to the index page" in new Setup {
       verifyPageRedirected(
-        underTest.redirectToDocumentationIndexPage(None)(request),
+        underTest.redirectToDocumentationIndexPage()(request),
         "/api-documentation/docs/api"
       )
     }
@@ -48,8 +48,7 @@ class RedirectControllerSpec extends CommonControllerBaseSpec {
         underTest.redirectToApiDocumentationPage(
           ServiceName("my-service"),
           ApiVersionNbr("1.0"),
-          "my-endpoint",
-          None
+          "my-endpoint"
         )(request),
         "/api-documentation/docs/api/service/my-service/1.0"
       )
@@ -58,8 +57,7 @@ class RedirectControllerSpec extends CommonControllerBaseSpec {
         underTest.redirectToApiDocumentationPage(
           ServiceName("my-other-service"),
           ApiVersionNbr("7.3"),
-          "my-other-endpoint",
-          None
+          "my-other-endpoint"
         )(request),
         "/api-documentation/docs/api/service/my-other-service/7.3"
       )

@@ -24,7 +24,7 @@
 
 @this(apiMain: apiMain)
 
-@(pageAttributes: PageAttributes, api: ExtendedApiDefinition, useV2: Option[Boolean])(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, api: ExtendedApiDefinition)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes) {
     <div class="browse-panes section">
@@ -40,7 +40,7 @@
                             <p class="alert__message">
                             This version of the {api.name} API has been retired and is no longer supported.
                             Please update to
-                            <a href={controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersion.version, useV2).url}>
+                            <a href={controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersion.version).url}>
                             version {defaultVersion.version} ({defaultVersion.displayedStatus})</a>.
                             </p>
                         }

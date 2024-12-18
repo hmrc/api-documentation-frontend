@@ -97,11 +97,11 @@ class OpenApiDocumentationController @Inject() (
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == ApiStatus.RETIRED => badRequestPage
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                => renderDocumentationPage(api.name)
-      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.PRIVATE, _, false, true)))                        => renderDocumentationPage(api.name) // TODO - makes no sense for oas/page
-      case Some((_, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _)))                                           => badRequestPage
-      case _                                                                                                             => renderNotFoundPage
+      case Some((_, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == ApiStatus.RETIRED => badRequestPage
+      case Some((api, _, VersionVisibility(_, _, true, _)))                                                            => renderDocumentationPage(api.name)
+      case Some((api, _, VersionVisibility(ApiAccessType.PRIVATE, _, false, true)))                                    => renderDocumentationPage(api.name) // TODO - makes no sense for oas/page
+      case Some((_, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _)))                                         => badRequestPage
+      case _                                                                                                           => renderNotFoundPage
     }
 
   }

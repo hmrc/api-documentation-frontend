@@ -16,20 +16,17 @@
 
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.v2.models._
 
 @import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
-@import uk.gov.hmrc.apidocumentation.views.html._
-@import uk.gov.hmrc.apidocumentation.v2.views.html._
-@import uk.gov.hmrc.apidocumentation.views.html.include._
+@import uk.gov.hmrc.apidocumentation.views.html.documentationList._
 
 
-@this(apiMainV2: apiMainV2)
+@this(apiMain: apiMain)
 
 @(pageAttributes: PageAttributes, documents: Seq[ApiDocumentation], docTypeFilters: List[DocumentationTypeFilter],  categoryFilters: List[ApiCategory])(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
-@apiMainV2(pageAttributes, docTypeFilters, categoryFilters) {
+@apiMain(pageAttributes, docTypeFilters, categoryFilters) {
 
 
 

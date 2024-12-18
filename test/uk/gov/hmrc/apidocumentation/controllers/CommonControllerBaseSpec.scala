@@ -38,7 +38,11 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
 
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()
-      .configure(("metrics.jvm", false))
+      .configure(
+        "metrics.jvm"                         -> false,
+        "features.showProductionAvailability" -> true,
+        "features.showSandboxAvailability"    -> true
+      )
       .build()
 
   implicit lazy val request: Request[AnyContent] = FakeRequest()

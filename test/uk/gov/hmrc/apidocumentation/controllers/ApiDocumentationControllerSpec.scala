@@ -28,9 +28,9 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 import uk.gov.hmrc.http.NotFoundException
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
 import uk.gov.hmrc.apidocumentation.controllers.utils._
 import uk.gov.hmrc.apidocumentation.mocks.config._
+import uk.gov.hmrc.apidocumentation.mocks.connectors.DownloadConnectorMockModule
 import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.views.html._
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
@@ -45,18 +45,16 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       with ApiDefinitionServiceMock
       with LoggedInUserServiceMock
       with NavigationServiceMock
-      with XmlServicesServiceMock {
+      with XmlServicesServiceMock
+      with DownloadConnectorMockModule {
 
     val errorHandler = app.injector.instanceOf[ErrorHandler]
     val mcc          = app.injector.instanceOf[MessagesControllerComponents]
 
-    private lazy val apiIndexView                   = app.injector.instanceOf[ApiIndexView]
     private lazy val retiredVersionJumpView         = app.injector.instanceOf[RetiredVersionJumpView]
-    private lazy val apisFilteredView               = app.injector.instanceOf[ApisFilteredView]
     private lazy val xmlDocumentationView           = app.injector.instanceOf[XmlDocumentationView]
     private lazy val parentPage                     = app.injector.instanceOf[ParentPageOuter]
     private lazy val assets                         = app.injector.instanceOf[Assets]
-    val downloadConnector                           = mock[DownloadConnector]
     private implicit val materializer: Materializer = app.injector.instanceOf[Materializer]
     val definitionList: List[ApiDefinition]         = List(apiDefinition("service1"), apiDefinition("service2"))
 
@@ -66,58 +64,16 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       loggedInUserService,
       errorHandler,
       mcc,
-      apiIndexView,
       retiredVersionJumpView,
-      apisFilteredView,
       xmlDocumentationView,
       parentPage,
       xmlServicesService,
-      downloadConnector,
+      DownloadConnectorMock.aMock,
       assets
     )
   }
 
   "ApiDocumentationController" when {
-    "routing to the apiIndexPage" should {
-      "render the API List" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnApiDefinitions(definitionList)
-        fetchAllXmlApisReturnsApis()
-
-        val result = underTest.apiIndexPage(None, None, None)(request)
-        verifyPageRendered(pageTitle("API Documentation"), bodyContains = Seq("API documentation"))(result)
-      }
-
-      "render the filtered API list" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnApiDefinitions(definitionList)
-        fetchAllXmlApisReturnsVatApi()
-
-        val result = underTest.apiIndexPage(None, None, Some("vat"))(request)
-
-        verifyPageRendered(pageTitle("Filtered API Documentation"), bodyContains = Seq("Filtered API documentation", "1 document found in", "VAT"))(result)
-      }
-
-      "display the error page when the documentationService throws an exception" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillFail(new Exception("Expected unit test failure"))
-
-        val result = underTest.apiIndexPage(None, None, None)(request)
-
-        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, there is a problem with the service")(result)
-      }
-
-      "display the error page when the xmlServicesService throws an exception" in new Setup {
-        theUserIsLoggedIn()
-        theDefinitionServiceWillReturnApiDefinitions(definitionList)
-        fetchAllXmlApisFails(new Exception("Expected unit test failure"))
-
-        val result = underTest.apiIndexPage(None, None, None)(request)
-
-        verifyErrorPageRendered(INTERNAL_SERVER_ERROR, "Sorry, there is a problem with the service")(result)
-      }
-    }
-
     "redirecting to Api Documentation" must {
       "when given a version" should {
         val version = ApiVersionNbr("2.0")
@@ -222,7 +178,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         theUserIsLoggedIn()
         theDefinitionServiceWillFail(new NotFoundException("Expected unit test failure"))
 
-        val result = underTest.renderApiDocumentation(serviceName, versionOne, None)(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
 
         verifyNotFoundPageRendered(result)
       }
@@ -233,10 +189,28 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithRetiredVersion(serviceName, versionOne, ApiVersionNbr("1.1"))
         )
 
-        val result = underTest.renderApiDocumentation(serviceName, versionOne, None)(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
 
         verifyApiDocumentationPageRendered(result)
         verifyLinkToStableDocumentationRendered(result, serviceName, ApiVersionNbr("1.1"))
+      }
+
+      "display the API landing page private trial and private" in new Setup {
+        theUserIsLoggedIn()
+        theDefinitionServiceWillReturnAnApiDefinition(
+          extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName,
+            versionOne,
+            Some(ApiAvailability(true, ApiAccess.Private(true), true, true)),
+            Some(ApiAvailability(true, ApiAccess.Private(false), true, true))
+          )
+        )
+        DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
+
+        val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
+
+        verifyApiDocumentationPageRendered(result)
+        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("Yes - private trial"))(result)
       }
 
       "display the not found page when invalid version specified" in new Setup {
@@ -245,7 +219,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithRetiredVersion(serviceName, versionOne, ApiVersionNbr("1.1"))
         )
 
-        val result = underTest.renderApiDocumentation(serviceName, versionTwo, None)(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionTwo)(request)
 
         verifyNotFoundPageRendered(result)
       }
@@ -254,7 +228,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnNoApiDefinition()
 
-        val result = underTest.renderApiDocumentation(serviceName, versionOne, None)(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
 
         verifyNotFoundPageRendered(result)
       }
@@ -268,7 +242,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       fetchXmlApiReturnsApi()
 
       val existingXmlApiName = xmlApi1.name
-      val result             = underTest.renderXmlApiDocumentation(existingXmlApiName, None)(request)
+      val result             = underTest.renderXmlApiDocumentation(existingXmlApiName)(request)
 
       verifyPageRendered(pageTitle(existingXmlApiName), bodyContains = Seq(existingXmlApiName))(result)
     }
@@ -278,7 +252,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
       fetchXmlApiReturnsNone()
 
       val nonExistingXmlApiName = "Fake XML API name"
-      val result                = underTest.renderXmlApiDocumentation(nonExistingXmlApiName, None)(request)
+      val result                = underTest.renderXmlApiDocumentation(nonExistingXmlApiName)(request)
 
       status(result) shouldBe NOT_FOUND
     }

@@ -49,7 +49,7 @@ lazy val microservice = Project(appName, file("."))
       "uk.gov.hmrc.apidocumentation.controllers.binders._",
       "uk.gov.hmrc.apiplatform.modules.apis.domain.models._",
       "uk.gov.hmrc.apiplatform.modules.common.domain.models._",
-      "uk.gov.hmrc.apidocumentation.v2.models._"
+      "uk.gov.hmrc.apidocumentation.models._"
     )
   )
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
