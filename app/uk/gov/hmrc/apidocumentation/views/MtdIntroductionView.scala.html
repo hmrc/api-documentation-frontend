@@ -19,6 +19,8 @@
 @import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 @import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory.VAT_MTD
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory.INCOME_TAX_MTD
 
 @this(apiMain: apiMain)
 
@@ -28,7 +30,7 @@
   <h1 class="govuk-heading-l">Making Tax Digital guides</h1>
 
   <p class="govuk-body">
-    These guides have now moved to our <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None).url">API documentation</a>.
+    These guides have now moved to our <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty,List.empty).url">API documentation</a>.
   </p>
 
   <h2 class="govuk-heading-m">
@@ -40,7 +42,7 @@
   </p>
 
   <p class="govuk-body">
-    <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("vat")).url">VAT (MTD) API documentation</a>
+    <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List(VAT_MTD)).url">VAT (MTD) API documentation</a>
   </p>
 
   <h2 class="govuk-heading-m">
@@ -52,6 +54,6 @@
   </p>
 
   <p class="govuk-body">
-    <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, Some("income-tax")).url">Income Tax (MTD) API documentation</a>
+    <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List(INCOME_TAX_MTD)).url">Income Tax (MTD) API documentation</a>
   </p>
 }

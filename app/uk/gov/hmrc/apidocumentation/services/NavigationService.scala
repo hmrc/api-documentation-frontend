@@ -38,7 +38,7 @@ class NavigationService @Inject() (
     routes.DocumentationController.usingTheHubPage().url
 
   lazy val apiDocumentationUrl =
-    routes.ApiDocumentationController.apiIndexPage(None, None, None).url
+    routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
 
   lazy val referenceGuideUrl =
     routes.DocumentationController.referenceGuidePage().url

@@ -56,7 +56,7 @@
             If the endpoint requires a <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scope</a>,
             your application must include this scope when creating the access token.
         </p>
-        <p class="govuk-body">Read the <a class="govuk-link" href="@controllers.routes.ApiDocumentationController.apiIndexPage(None, None, None)">API documentation</a> for authorisation rules for specific API endpoints.</p>
+        <p class="govuk-body">Read the <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty)">API documentation</a> for authorisation rules for specific API endpoints.</p>
 
         <div class="govuk-inset-text">
             The access token lasts for 4 hours. When it expires you must generate a new token.
