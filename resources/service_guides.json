@@ -132,5 +132,12 @@
     "description": "Learn how, as a Community System Provider (CSP), to use the Notification of Presentation (NOP) waiver checker API.",
     "context": "/guides/uknw-auth-checker-api-service-guide",
     "categories": ["CUSTOMS"]
+  },
+  {
+    "identifier": "pillar2-service-guide",
+    "name": "Pillar 2 Submission API service guide",
+    "description": "This service guide explains how you can integrate your software with the Pillar 2 Submission API.",
+    "context": "/guides/pillar2-service-guide",
+    "categories": ["CORPORATION_TAX"]
   }
 ]
