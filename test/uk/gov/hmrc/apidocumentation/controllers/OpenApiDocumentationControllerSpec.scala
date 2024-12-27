@@ -31,12 +31,13 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
+import uk.gov.hmrc.apidocumentation.controllers.utils.PageRenderVerification
 import uk.gov.hmrc.apidocumentation.mocks.config._
 import uk.gov.hmrc.apidocumentation.mocks.connectors.DownloadConnectorMockModule
 import uk.gov.hmrc.apidocumentation.mocks.services._
 import uk.gov.hmrc.apidocumentation.views.html._
 
-class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec {
+class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 
   trait Setup
       extends DownloadConnectorMockModule
@@ -97,6 +98,41 @@ class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec {
 
       val result = underTest.fetchOasResolved(serviceName, ApiVersionNbr("Test-Version"))(request)
 
+      status(result) shouldBe NOT_FOUND
+    }
+
+    "should successfully show the open api preview page when flagged on" in new Setup {
+      when(appConfig.openApiPreviewEnabled).thenReturn(true)
+
+      val result = underTest.previewApiDocumentationPage()(request)
+      verifyPageRendered(pageTitle("OpenAPI Documentation Preview"))(result)
+    }
+
+    "should NOT FOUND show the open api preview page when flagged off" in new Setup {
+      when(appConfig.openApiPreviewEnabled).thenReturn(false)
+
+      val result = underTest.previewApiDocumentationPage()(request)
+      status(result) shouldBe NOT_FOUND
+    }
+
+    "should successfully show the open api preview action when flagged on but no URL" in new Setup {
+      when(appConfig.openApiPreviewEnabled).thenReturn(true)
+
+      val result = underTest.previewApiDocumentationAction(None)(request)
+      verifyPageRendered(pageTitle("OpenAPI Documentation Preview"))(result)
+    }
+
+    "should successfully show the open api preview action when flagged on" in new Setup {
+      when(appConfig.openApiPreviewEnabled).thenReturn(true)
+
+      val result = underTest.previewApiDocumentationAction(Some("http://localhost:1234"))(request)
+      status(result) shouldBe OK
+    }
+
+    "should NOT FOUND show the open api preview action when flagged off" in new Setup {
+      when(appConfig.openApiPreviewEnabled).thenReturn(false)
+
+      val result = underTest.previewApiDocumentationAction(None)(request)
       status(result) shouldBe NOT_FOUND
     }
   }

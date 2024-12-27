@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.v2.controllers
+package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -26,12 +26,10 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.controllers.{DocumentationCrumb, HeaderNavigation, HomeCrumb, routes}
 import uk.gov.hmrc.apidocumentation.models._
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService, NavigationService, XmlServicesService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
-import uk.gov.hmrc.apidocumentation.v2.models._
-import uk.gov.hmrc.apidocumentation.v2.views.html.FilteredIndexView
+import uk.gov.hmrc.apidocumentation.views.html.documentationList.FilteredIndexView
 
 @Singleton
 class FilteredDocumentationIndexController @Inject() (
@@ -47,11 +45,9 @@ class FilteredDocumentationIndexController @Inject() (
   ) extends FrontendController(mcc)
     with HeaderNavigation with ApplicationLogger with DocumentationCrumb with HomeCrumb {
 
-  // lazy val v2HomeCrumb =
-  //    Crumb("Home", uk.gov.hmrc.apidocumentation.v2.controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url)
   private lazy val apiDocCrumb = Crumb(
     "API Documentation",
-    uk.gov.hmrc.apidocumentation.v2.controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
+    uk.gov.hmrc.apidocumentation.controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
   )
 
   private lazy val restApiDescriptionOverrides: Seq[RestApiDescriptionOverride] = RestApiDescriptionOverride.descriptionOverrides
@@ -109,7 +105,7 @@ class FilteredDocumentationIndexController @Inject() (
 
   private def xmlApiToXmlDocumentation(api: XmlApiDocumentation) = {
     val identifier = DocumentIdentifier(api.name)
-    val url        = routes.ApiDocumentationController.renderXmlApiDocumentation(identifier.value, useV2 = Some(true)).url
+    val url        = routes.ApiDocumentationController.renderXmlApiDocumentation(identifier.value).url
     XmlDocumentation.fromXmlDocumentation(identifier, api, url)
   }
 
@@ -118,7 +114,7 @@ class FilteredDocumentationIndexController @Inject() (
       .versionsAsList
       .sorted(WrappedApiDefinition.statusVersionOrdering)
       .head.versionNbr
-    val url: String                      = routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersionNbr, useV2 = Some(true)).url
+    val url: String                      = routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersionNbr).url
     RestDocumentation.fromApiDefinition(api, url, defaultVersionNbr, getRestApiDescriptionOverride(api.serviceName.value))
   }
 

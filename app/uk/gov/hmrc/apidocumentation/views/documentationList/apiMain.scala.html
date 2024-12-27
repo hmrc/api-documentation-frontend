@@ -17,17 +17,17 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.html.templates._
-@import uk.gov.hmrc.apidocumentation.v2.views.html.documentFilter
-@import play.twirl.api.HtmlFormat
-@import uk.gov.hmrc.apidocumentation.v2.models.DocumentationTypeFilter
+@import uk.gov.hmrc.apidocumentation.views.html.documentationList.documentFilter
+@import uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter
 @import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukCheckboxes
 
-@this(govUkWrapper: GovUkWrapper)
+@this(govUkWrapper: GovUkWrapper, govukCheckboxes: GovukCheckboxes)
 
 @(pageAttributes: PageAttributes,  docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory])(mainContent: Html)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @govUkWrapper(pageTitle = Some(pageAttributes.title),
-    leftNav = Some(documentFilter(docTypeFilters, categoryFilters.sorted)),
+    leftNav = Some(documentFilter(docTypeFilters, categoryFilters.sorted, govukCheckboxes)),
     isLeftNavSticky = false,
     breadcrumbs = Some(pageAttributes.breadcrumbs),
     navLinks = pageAttributes.headerLinks

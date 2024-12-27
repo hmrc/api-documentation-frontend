@@ -36,11 +36,8 @@ class DocumentationController @Inject() (
     partialsService: PartialsService,
     mcc: MessagesControllerComponents,
     indexView: IndexView,
-    retiredVersionJumpView: RetiredVersionJumpView,
     tutorialsView: TutorialsView,
-    credentialsView: CredentialsView,
     developmentPracticesView: DevelopmentPracticesView,
-    mtdIntroductionView: MtdIntroductionView,
     namingGuidelinesView: NamingGuidelinesView,
     referenceView: ReferenceView,
     termsOfUseView: TermsOfUseView,
@@ -131,7 +128,7 @@ class DocumentationController @Inject() (
     _ => navLinks =>
       Future.successful(
         Redirect(
-          routes.ApiDocumentationController.apiIndexPage(None, None, None).url
+          routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
         )
       )
   }

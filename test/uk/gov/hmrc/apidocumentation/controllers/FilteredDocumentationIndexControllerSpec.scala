@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.v2.controller
+package uk.gov.hmrc.apidocumentation.controllers
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -24,13 +24,11 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.controllers.CommonControllerBaseSpec
 import uk.gov.hmrc.apidocumentation.controllers.utils._
 import uk.gov.hmrc.apidocumentation.mocks.config._
 import uk.gov.hmrc.apidocumentation.mocks.services._
-import uk.gov.hmrc.apidocumentation.v2.controllers.FilteredDocumentationIndexController
-import uk.gov.hmrc.apidocumentation.v2.models.DocumentationTypeFilter
-import uk.gov.hmrc.apidocumentation.v2.views.html.FilteredIndexView
+import uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter
+import uk.gov.hmrc.apidocumentation.views.html.documentationList.FilteredIndexView
 
 class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 
@@ -65,7 +63,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         fetchAllXmlApisReturnsApis()
 
         val result = underTest.apiListIndexPage(Nil, Nil)(request)
-        verifyPageRendered(pageTitle("API Documentation"), breadcrumbs = List(apiDocsV2Breadcrumb), sideNavLinkRendered = false, bodyContains = Seq("API documentation"))(result)
+        verifyPageRendered(pageTitle("API Documentation"), breadcrumbs = List(apiDocsBreadcrumb), sideNavLinkRendered = false, bodyContains = Seq("API documentation"))(result)
       }
 
       "render the filtered API list when doc type filter is road map and service guides but no category filter" in new Setup {
@@ -75,7 +73,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
 
         val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List.empty)(request)
         // There are currently 19 Service Guides and 4 roadmaps so should be 23 results
-        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsV2Breadcrumb), bodyContains = Seq("23 results "))(result)
+        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsBreadcrumb), bodyContains = Seq("23 results "))(result)
       }
 
       "render the filtered API list when doc type filter is road map and service guides and customs category filter" in new Setup {
@@ -88,7 +86,21 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         verifyPageRendered(
           pageTitle("API Documentation"),
           sideNavLinkRendered = false,
-          breadcrumbs = List(apiDocsV2Breadcrumb),
+          breadcrumbs = List(apiDocsBreadcrumb),
+          bodyContains = Seq("2 results ", "Income Tax (MTD) end-to-end service guide", "Income Tax (MTD) roadmap")
+        )(result)
+      }
+
+      "render the filtered API list when only customs category filter" in new Setup {
+        theUserIsLoggedIn()
+        theDefinitionServiceWillReturnApiDefinitions(definitionList)
+        fetchAllXmlApisReturnsVatApi()
+
+        val result = underTest.apiListIndexPage(List.empty, List(ApiCategory.INCOME_TAX_MTD))(request)
+        verifyPageRendered(
+          pageTitle("API Documentation"),
+          sideNavLinkRendered = false,
+          breadcrumbs = List(apiDocsBreadcrumb),
           bodyContains = Seq("2 results ", "Income Tax (MTD) end-to-end service guide", "Income Tax (MTD) roadmap")
         )(result)
       }

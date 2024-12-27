@@ -19,7 +19,6 @@ package uk.gov.hmrc.apidocumentation.models
 import scala.collection.immutable.ListMap
 import scala.io.Source
 
-import play.api.Configuration
 import play.api.libs.json._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
@@ -69,7 +68,7 @@ case class XmlApiDocumentation(name: String, context: String, description: Strin
 
   val label: DocumentationLabel = DocumentationLabel.XML_API
 
-  def documentationUrl: String = routes.ApiDocumentationController.renderXmlApiDocumentation(name, None).url
+  def documentationUrl: String = routes.ApiDocumentationController.renderXmlApiDocumentation(name).url
 }
 
 object XmlApiDocumentation {
@@ -107,21 +106,6 @@ object RoadMap {
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream("/roadmap.json")).mkString).as[Seq[RoadMap]]
 }
 
-case class APIAccess(`type`: ApiAccessType, whitelistedApplicationIds: Option[Seq[String]], isTrial: Option[Boolean] = None)
-
-object APIAccess {
-
-  def apply(accessType: ApiAccessType): APIAccess = {
-    APIAccess(accessType, Some(Seq.empty), Some(false))
-  }
-
-  def build(config: Option[Configuration]): APIAccess = APIAccess(
-    `type` = ApiAccessType.PRIVATE,
-    whitelistedApplicationIds = config.flatMap(_.getOptional[Seq[String]]("whitelistedApplicationIds")).orElse(Some(Seq.empty)),
-    isTrial = None
-  )
-}
-
 case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation {
   override val name: String                         = definition.name
   override val context: String                      = definition.context.value
@@ -133,22 +117,11 @@ case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation
     .sorted(WrappedApiDefinition.statusVersionOrdering)
     .head
 
-  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr, None).url
+  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr).url
 }
 
 object WrappedApiDefinition {
   val statusVersionOrdering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiStatus](_.status)(ApiStatus.orderingByPriority).reverse.orElseBy(_.versionNbr).reverse
-}
-
-case class DocumentationCategory(apiCategory: ApiCategory) {
-  val filter = apiCategory.toString.toLowerCase.replaceAll("_", "-").replaceAll("vat-mtd", "vat")
-}
-
-object DocumentationCategory {
-
-  def fromFilter(filter: String): Option[ApiCategory] = {
-    ApiCategory.values.map(cat => DocumentationCategory(cat)).find(cat => cat.filter == filter).map(_.apiCategory)
-  }
 }
 
 case class VersionVisibility(privacy: ApiAccessType, loggedIn: Boolean, authorised: Boolean, isTrial: Boolean = false)
