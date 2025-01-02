@@ -25,7 +25,7 @@ class NavLinkSpec extends HmrcSpec {
     "return static navlinks for devhub" in {
       StaticNavLinks() shouldBe
         Seq(
-          NavLink("Getting Started", "/api-documentation/docs/using-the-hub"),
+          NavLink("Getting started", "/api-documentation/docs/using-the-hub"),
           NavLink("API documentation", "/api-documentation/docs/api"),
           NavLink("Applications", "/developer/applications"),
           NavLink("Support", "/developer/support"),
