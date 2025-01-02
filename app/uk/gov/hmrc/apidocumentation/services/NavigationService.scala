@@ -59,12 +59,8 @@ class NavigationService @Inject() (
 
   lazy val sidebarNavigationLinks = Seq(
     SidebarLink(
-      label = "Using the Developer Hub",
+      label = "Getting started",
       href = gettingStartedUrl
-    ),
-    SidebarLink(
-      label = "API documentation",
-      href = apiDocumentationUrl
     ),
     SidebarLink(
       label = "Application naming guidelines",
