@@ -29,7 +29,7 @@ class NavLinkSpec extends HmrcSpec {
           NavLink("API documentation", "/api-documentation/docs/api"),
           NavLink("Applications", "/developer/applications"),
           NavLink("Support", "/developer/support"),
-          NavLink("Service Availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)
+          NavLink("Service availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)
         )
     }
   }
