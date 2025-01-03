@@ -1,9 +1,6 @@
 import com.typesafe.sbt.digest.Import._
-import com.typesafe.sbt.uglify.Import.{uglifyCompressOptions, _}
 import com.typesafe.sbt.web.Import._
-import net.ground5hark.sbt.concat.Import._
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.DefaultBuildSettings._
 
 lazy val appName = "api-documentation-frontend"
 
@@ -22,21 +19,7 @@ lazy val microservice = Project(appName, file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
-    Concat.groups           := Seq(
-      "javascripts/apis-app.js" -> group(
-        (baseDirectory.value / "app" / "assets" / "javascripts" / "combine") ** "*.js"
-      )
-    ),
-    uglifyCompressOptions   := Seq(
-      "unused=true",
-      "dead_code=true"
-    ),
-    uglify / includeFilter  := GlobFilter("apis-*.js"),
-    pipelineStages          := Seq(digest),
-    Assets / pipelineStages := Seq(
-      concat,
-      uglify
-    )
+    pipelineStages := Seq(digest)
   )
   .settings(ScoverageSettings())
   .settings(
