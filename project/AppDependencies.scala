@@ -5,14 +5,10 @@ object AppDependencies {
   def apply(): Seq[ModuleID] = compile ++ test
 
   lazy val bootstrapVersion       = "9.1.0"
-  lazy val seleniumVersion        = "4.2.0"
-  lazy val jacksonDatabindVersion = "2.10.5.1"
-  lazy val jacksonVersion         = "2.10.5"
   lazy val commonDomainVersion    = "0.17.0"
   lazy val apiDomainVersion       = "0.19.1"
 
   lazy val compile = Seq(
-    ws,
     caffeine,
     "uk.gov.hmrc"                         %% "bootstrap-frontend-play-30" % bootstrapVersion,
     "uk.gov.hmrc"                         %% "play-partials-play-30"      % "10.0.0",
@@ -21,19 +17,8 @@ object AppDependencies {
     "uk.gov.hmrc"                         %% "api-platform-api-domain"    % apiDomainVersion,
     "org.typelevel"                       %% "cats-core"                  % "2.10.0",
     "org.commonjava.googlecode.markdown4j" % "markdown4j"                 % "2.2-cj-1.1",
-    "io.swagger.parser.v3"                 % "swagger-parser"             % "2.1.9"
-      excludeAll (
-        ExclusionRule("com.fasterxml.jackson.core", "jackson-databind"),
-        ExclusionRule("com.fasterxml.jackson.core", "jackson-core"),
-        ExclusionRule("com.fasterxml.jackson.core", "jackson-annotations"),
-        ExclusionRule("com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml"),
-        ExclusionRule("com.fasterxml.jackson.datatype", "jackson-datatype-jsr310")
-      ),
-    "com.fasterxml.jackson.core"           % "jackson-core"               % jacksonVersion,
-    "com.fasterxml.jackson.core"           % "jackson-databind"           % jacksonDatabindVersion,
-    "com.fasterxml.jackson.core"           % "jackson-annotations"        % jacksonVersion,
-    "com.fasterxml.jackson.dataformat"     % "jackson-dataformat-yaml"    % jacksonVersion,
-    "com.fasterxml.jackson.datatype"       % "jackson-datatype-jsr310"    % jacksonVersion
+    "io.swagger.parser.v3"                 % "swagger-parser"             % "2.1.14",
+    "commons-io"                           % "commons-io"                 % "2.14.0", // to fix CVE-2024-47554 until swagger-parser can be upgraded above 2.1.14
   )
 
   lazy val test = Seq(
