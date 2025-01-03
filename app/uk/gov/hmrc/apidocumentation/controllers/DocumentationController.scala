@@ -118,7 +118,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           usingTheHubView(
-            pageAttributes("Using the Developer Hub", navLinks)
+            pageAttributes("Getting started", navLinks)
           )
         )
       )
