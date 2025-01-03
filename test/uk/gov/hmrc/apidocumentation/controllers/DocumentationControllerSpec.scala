@@ -69,7 +69,7 @@ class DocumentationControllerSpec
     private lazy val loggedInUserService            = app.injector.instanceOf[LoggedInUserService]
 
     lazy val usingTheHubBreadcrumb = Crumb(
-      "Using the Developer Hub",
+      "Getting started",
       controllers.routes.DocumentationController.usingTheHubPage().url
     )
 
@@ -134,8 +134,8 @@ class DocumentationControllerSpec
       )
     }
 
-    "display the using the hub page" in new Setup {
-      verifyPageRendered(pageTitle("Using the Developer Hub"))(
+    "display the getting started page" in new Setup {
+      verifyPageRendered(pageTitle("Getting started"))(
         underTest.usingTheHubPage()(request)
       )
     }
