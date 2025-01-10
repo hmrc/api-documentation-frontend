@@ -132,5 +132,12 @@
     "description": "Learn how, as a Community System Provider (CSP), to use the Notification of Presentation (NOP) waiver checker API.",
     "context": "/guides/uknw-auth-checker-api-service-guide",
     "categories": ["CUSTOMS"]
-  }
+  },
+  {
+    "identifier": "mdtp-example-service-guide",
+    "name": "MDTP Example Service Guide",
+    "description": "An example service guide for the purposes of exercising the documentation",
+    "context": "/guides/mdtp-example-service-guide",
+    "categories": ["OTHER"]
+  }  
 ]
