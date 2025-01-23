@@ -112,18 +112,6 @@
                   <a class="govuk-button govuk-button-secondary" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, maybeVersion.get.version).url">
                     View API endpoints
                   </a>
-
-                  <details class="govuk-details" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                      <span class="govuk-details__summary-text">
-                        Why do these endpoints look different?
-                      </span>
-                    </summary>
-                    <div class="govuk-details__text">
-                      <p class="govuk-body"> The endpoints for this API now use the Open API Specification (OAS).</p>
-                      <p class="govuk-body">The API has not changed. You do not need to make any updates to your application if you already use this API.</p>
-                    </div>
-                  </details>
                 </section>
             } else {
                 @if(visibility == DocsVisibility.OVERVIEW_ONLY) {
