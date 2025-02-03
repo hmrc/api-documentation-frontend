@@ -26,7 +26,7 @@
 
 @this(apiMain: apiMain, parentPageView: ParentPageView)
 
-@(pageAttributes: PageAttributes, markdownBlocks: List[DocumentationItem], title: String, api: ExtendedApiDefinition, currentVersion: ExtendedApiVersion, loggedIn: Boolean = false, deprecationMessage: Option[String] = None)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, markdownBlocks: List[DocumentationItem], title: String, api: ExtendedApiDefinition, currentVersion: ExtendedApiVersion, loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @topContent = {
     <div class="form-group">
@@ -61,7 +61,7 @@
             <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
             <strong class="govuk-warning-text__text">
                 <span class="govuk-warning-text__assistive">Warning</span>
-                @{deprecationMessage.getOrElse("This version is deprecated - it’s going to be removed.")}
+                This version is deprecated - it’s going to be removed.
             </strong>
         </div>
     }
