@@ -135,7 +135,7 @@
   },
   {
     "identifier": "pillar2-service-guide",
-    "name": "Pillar 2 API service guide",
+    "name": "Pillar 2 API Service Guide",
     "description": "This service guide explains how you can integrate your software with the Pillar 2 API.",
     "context": "/guides/pillar2-service-guide",
     "categories": ["CORPORATION_TAX"]
