@@ -34,5 +34,12 @@
     "categories": [
       "CUSTOMS"
     ]
+  },
+  {
+    "identifier": "pillar2-roadmap",
+    "name": "Pillar 2 API Roadmap",
+    "description": "A roadmap that shares the key dates for the Pillar2 API.",
+    "context": "/roadmaps/pillar2-roadmap",
+    "categories": ["CORPORATION_TAX"]
   }
 ]
