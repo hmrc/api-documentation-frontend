@@ -72,8 +72,8 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         fetchAllXmlApisReturnsVatApi()
 
         val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List.empty)(request)
-        // There are currently 19 Service Guides and 4 roadmaps so should be 23 results
-        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsBreadcrumb), bodyContains = Seq("23 results "))(result)
+        // There are currently 20 Service Guides and 5 roadmaps so should be 23 results
+        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsBreadcrumb), bodyContains = Seq("25 results "))(result)
       }
 
       "render the filtered API list when doc type filter is road map and service guides and customs category filter" in new Setup {
