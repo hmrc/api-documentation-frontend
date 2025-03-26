@@ -72,8 +72,8 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         fetchAllXmlApisReturnsVatApi()
 
         val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List.empty)(request)
-        // There are currently 20 Service Guides and 5 roadmaps so should be 23 results
-        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsBreadcrumb), bodyContains = Seq("25 results "))(result)
+        // There are currently 21 Service Guides and 5 roadmaps so should be 26 results
+        verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsBreadcrumb), bodyContains = Seq("26 results "))(result)
       }
 
       "render the filtered API list when doc type filter is road map and service guides and customs category filter" in new Setup {
@@ -82,12 +82,12 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         fetchAllXmlApisReturnsVatApi()
 
         val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List(ApiCategory.INCOME_TAX_MTD))(request)
-        // There are currently 23 Service Guides and 4 roadmaps but only 1 roadmap and 1 service guide are in teh INCOME_TAX_MTD category
+        // There are currently 21 Service Guides and 5 roadmaps but only 1 roadmap and 2 service guide are in the INCOME_TAX_MTD category
         verifyPageRendered(
           pageTitle("API Documentation"),
           sideNavLinkRendered = false,
           breadcrumbs = List(apiDocsBreadcrumb),
-          bodyContains = Seq("2 results ", "Income Tax (MTD) end-to-end service guide", "Income Tax (MTD) roadmap")
+          bodyContains = Seq("3 results ", "Income Tax (MTD) end-to-end service guide", "Tax Logic service guide", "Income Tax (MTD) roadmap")
         )(result)
       }
 
@@ -101,7 +101,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
           pageTitle("API Documentation"),
           sideNavLinkRendered = false,
           breadcrumbs = List(apiDocsBreadcrumb),
-          bodyContains = Seq("2 results ", "Income Tax (MTD) end-to-end service guide", "Income Tax (MTD) roadmap")
+          bodyContains = Seq("3 results ", "Income Tax (MTD) end-to-end service guide", "Tax Logic service guide", "Income Tax (MTD) roadmap")
         )(result)
       }
 
