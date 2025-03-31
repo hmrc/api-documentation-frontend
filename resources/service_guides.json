@@ -15,13 +15,6 @@
     "categories": ["INCOME_TAX_MTD"]
   },
   {
-    "identifier": "tax-logic-service-guide",
-    "name": "Tax Logic service guide",
-    "description": "This service guide outlines the scope and methodology for the calculation of taxes for the 2024-25 tax year, with a specific focus on the end-of-year finalisation process.",
-    "context": "/guides/tax-logic-service-guide",
-    "categories": ["INCOME_TAX_MTD"]
-  },
-  {
     "identifier": "self-assessment-end-to-end-service-guide",
     "name": "Self Assessment end-to-end service guide",
     "description": "This guide explains how you can integrate your software with our APIs to help complete and submit Self Assessment returns. It shows how the APIs fit into various end-to-end user journeys.",
