@@ -146,5 +146,12 @@
     "description": "This service guide explains how you can integrate your software with the Pillar 2 API.",
     "context": "/guides/pillar2-service-guide",
     "categories": ["CORPORATION_TAX"]
+  },
+  {
+    "identifier": "self-assessment-liability-service-guide",
+    "name": "Self Assessment Liability API Service Guide",
+    "description": "This service guide explains how you can integrate your software with the Self Assessment Liability API.",
+    "context": "/guides/self-assessment-liability-service-guide",
+    "categories": ["SELF_ASSESSMENT"]
   }
 ]
