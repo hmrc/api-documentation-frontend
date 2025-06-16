@@ -62,6 +62,7 @@ class DocumentationControllerSpec
     private lazy val namingGuidelinesView           =
       app.injector.instanceOf[NamingGuidelinesView]
     private lazy val referenceView                  = app.injector.instanceOf[ReferenceView]
+    private lazy val apiStatusesView                = app.injector.instanceOf[ApiStatusesView]
     private lazy val termsOfUseView                 = app.injector.instanceOf[TermsOfUseView]
     private lazy val usingTheHubView                = app.injector.instanceOf[UsingTheHubView]
     private lazy val termsOfUseWhatYouCanExpectView = app.injector.instanceOf[TermsOfUseWhatYouCanExpectView]
@@ -86,7 +87,8 @@ class DocumentationControllerSpec
       termsOfUseView,
       termsOfUseWhatYouCanExpectView,
       termsOfUseNotMeetingView,
-      usingTheHubView
+      usingTheHubView,
+      apiStatusesView
     )
 
     def pageTitle(pagePurpose: String) = {
@@ -120,6 +122,24 @@ class DocumentationControllerSpec
           "https://api.service.hmrc.gov.uk"
         )
       )(underTest.referenceGuidePage()(request))
+    }
+
+    "display the API statuses page" in new Setup {
+      when(underTest.appConfig.productionApiBaseUrl)
+        .thenReturn("https://api.service.hmrc.gov.uk")
+      verifyPageRendered(
+        pageTitle("API statuses"),
+        bodyContains = Seq(
+          "We release different versions of APIs as they’re developed and updated.",
+          "Alpha",
+          "This version is being developed.",
+          "Beta",
+          "Stable",
+          "This version is available for use.",
+          "Deprecated",
+          "This version has been replaced and will be removed."
+        )
+      )(underTest.apiStatusesPage()(request))
     }
 
     "display the What you can expect from us page" in new Setup {

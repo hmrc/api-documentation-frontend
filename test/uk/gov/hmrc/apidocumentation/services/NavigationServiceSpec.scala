@@ -44,11 +44,11 @@ class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
   "sidebarNavigation" should {
     "return sidebar navigation links" in new Setup {
       val sidebarNavLinks = underTest.sidebarNavigation()
-      sidebarNavLinks.size shouldBe 9
+      sidebarNavLinks.size shouldBe 10
       sidebarNavLinks.head.href shouldBe "/api-documentation/docs/using-the-hub"
       sidebarNavLinks.head.label shouldBe "Getting started"
-      sidebarNavLinks(8).href shouldBe "/api-documentation/docs/terms-of-use"
-      sidebarNavLinks(8).label shouldBe "Terms of use"
+      sidebarNavLinks(9).href shouldBe "/api-documentation/docs/terms-of-use"
+      sidebarNavLinks(9).label shouldBe "Terms of use"
     }
 
   }
