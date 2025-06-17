@@ -12,6 +12,7 @@ GET         /docs/name-guidelines                                       uk.gov.h
 GET         /docs/reference-guide                                       uk.gov.hmrc.apidocumentation.controllers.DocumentationController.referenceGuidePage()
 GET         /docs/mtd                                                   uk.gov.hmrc.apidocumentation.controllers.DocumentationController.mtdIntroductionPage()
 GET         /docs/development-practices                                 uk.gov.hmrc.apidocumentation.controllers.DocumentationController.developmentPracticesPage()
+GET         /docs/api-statuses                                          uk.gov.hmrc.apidocumentation.controllers.DocumentationController.apiStatusesPage()
 
 GET         /docs/authorisation                                         uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationPage()
 GET         /docs/authorisation/credentials                             uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisationCredentialsPage()

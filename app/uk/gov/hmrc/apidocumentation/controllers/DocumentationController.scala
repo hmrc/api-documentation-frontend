@@ -43,7 +43,8 @@ class DocumentationController @Inject() (
     termsOfUseView: TermsOfUseView,
     termsOfUseWhatYouCanExpectView: TermsOfUseWhatYouCanExpectView,
     termsOfUseNotMeetingView: TermsOfUseNotMeetingView,
-    usingTheHubView: UsingTheHubView
+    usingTheHubView: UsingTheHubView,
+    apiStatusesView: ApiStatusesView
   )(implicit val appConfig: ApplicationConfig,
     val ec: ExecutionContext
   ) extends FrontendController(mcc)
@@ -177,6 +178,17 @@ class DocumentationController @Inject() (
         Ok(
           namingGuidelinesView(
             pageAttributes("Application naming guidelines", navLinks, baseCrumbs)
+          )
+        )
+      )
+  }
+
+  def apiStatusesPage(): Action[AnyContent] = headerNavigation {
+    implicit request => navLinks =>
+      Future.successful(
+        Ok(
+          apiStatusesView(
+            pageAttributes("API statuses", navLinks, baseCrumbs)
           )
         )
       )

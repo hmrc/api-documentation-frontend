@@ -1,0 +1,62 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.views.html.include._
+
+@this(apiMain: apiMain)
+
+@(pageAttributes: PageAttributes)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+
+@apiMain(pageAttributes){
+
+        <h1 class="govuk-heading-l">API statuses</h1>
+
+
+        <p class="govuk-body">We release different versions of APIs as they’re developed and updated.</p>
+
+        <p class="govuk-body">We give each API version a status to explain who can use it, and what you can expect from it.</p>
+
+
+        <h2 class="govuk-heading-m">Status meanings</h2>
+        <h3 id="alpha" class="govuk-heading-s">Alpha</h3>
+
+        <p class="govuk-body">This version is being developed. You cannot subscribe to it yet, but you can read documentation and provide feedback before it’s released.</p>
+
+        <h3 id="beta" class="govuk-heading-s">Beta</h3>
+
+        <p class="govuk-body">This version is available for use. Some versions stay in beta for a long time.</p>
+
+        <p class="govuk-body">Changes might be made that are either:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+            <li>backwards-compatible, meaning they will not break your integration with the API</li>
+            <li>breaking changes that will break your integration with the API</li>
+        </ul>
+        <p class="govuk-body">If breaking changes are made, you’ll need to update your application to integrate with the API again.</p>
+
+        <p class="govuk-body">Subscribe to emails about the API to get information about changes.</p>
+
+        <h3 id="stable" class="govuk-heading-s">Stable</h3>
+
+        <p class="govuk-body">This version is available for use. It may be updated, but any changes should not break your integration with the API.</p>
+
+        <h3 id="deprecated" class="govuk-heading-s">Deprecated</h3>
+
+        <p class="govuk-body">This version has been replaced and will be removed. You should use the latest version of the API instead.</p>
+
+}

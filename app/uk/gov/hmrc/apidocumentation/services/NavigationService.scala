@@ -57,6 +57,9 @@ class NavigationService @Inject() (
   lazy val developmentPracticesUrl =
     routes.DocumentationController.developmentPracticesPage().url
 
+  lazy val apiStatusesUrl =
+    routes.DocumentationController.apiStatusesPage().url
+
   lazy val sidebarNavigationLinks = Seq(
     SidebarLink(
       label = "Getting started",
@@ -65,6 +68,10 @@ class NavigationService @Inject() (
     SidebarLink(
       label = "Application naming guidelines",
       href = namingGuidelinesUrl
+    ),
+    SidebarLink(
+      label = "API statues",
+      href = apiStatusesUrl
     )
   ) ++
     openApiPreviewLink() ++
