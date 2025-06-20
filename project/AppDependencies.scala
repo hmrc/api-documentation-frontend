@@ -11,9 +11,9 @@ object AppDependencies {
   lazy val compile = Seq(
     caffeine,
     "uk.gov.hmrc"                         %% "bootstrap-frontend-play-30" % bootstrapVersion,
-    "uk.gov.hmrc"                         %% "play-partials-play-30"      % "10.0.0",
+    "uk.gov.hmrc"                         %% "play-partials-play-30"      % "10.1.0",
     "uk.gov.hmrc"                         %% "http-metrics"               % "2.9.0",
-    "uk.gov.hmrc"                         %% "play-frontend-hmrc-play-30" % "11.13.0",
+    "uk.gov.hmrc"                         %% "play-frontend-hmrc-play-30" % "12.6.0",
     "uk.gov.hmrc"                         %% "api-platform-api-domain"    % apiDomainVersion,
     "org.typelevel"                       %% "cats-core"                  % "2.10.0",
     "org.commonjava.googlecode.markdown4j" % "markdown4j"                 % "2.2-cj-1.1",
