@@ -70,7 +70,7 @@ class NavigationService @Inject() (
       href = namingGuidelinesUrl
     ),
     SidebarLink(
-      label = "API statues",
+      label = "API statuses",
       href = apiStatusesUrl
     )
   ) ++
