@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.apidocumentation.views.helpers
 
+import java.time.format.DateTimeFormatter
+import java.time.{Instant, ZoneOffset}
 import scala.language.reflectiveCalls
-
-import org.apache.pekko.http.scaladsl.model.{StatusCode, StatusCodes}
 
 import play.twirl.api.Html
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
-import uk.gov.hmrc.apidocumentation.models.{DocsVisibility, _}
+import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.models._
 
 object Slugify {
   def apply(text: String): String = makeSlug(text)
@@ -111,5 +112,30 @@ object VersionDocsVisible {
     case Some(VersionVisibility(ApiAccessType.PRIVATE, true, true, _))  => DocsVisibility.VISIBLE       // PRIVATE, logged in, whitelisted (authorised)
     case Some(VersionVisibility(ApiAccessType.PRIVATE, _, false, true)) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
     case _                                                              => DocsVisibility.NOT_VISIBLE
+  }
+}
+
+object ShowAvailabilityInEnvironment {
+
+  def apply(sandboxAvailability: String, productionAvailability: String, applicationConfig: ApplicationConfig): String =
+    (sandboxAvailability, productionAvailability) match {
+      case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial), (AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial)) =>
+        s"${applicationConfig.nameOfSubordinateEnvironment} and ${applicationConfig.nameOfPrincipalEnvironment}"
+      case (AvailabilityPhrase.no, (AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial))                                         => applicationConfig.nameOfPrincipalEnvironment
+      case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial), AvailabilityPhrase.no)                                         => applicationConfig.nameOfSubordinateEnvironment
+      case (AvailabilityPhrase.no, AvailabilityPhrase.no)                                                                                 => "Not applicable"
+      case (_, _)                                                                                                                         => "Not applicable"
+    }
+}
+
+object DateFormatter {
+
+  val dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
+
+  def getFormattedDate(date: Option[Instant]): String = {
+    date match {
+      case None             => ""
+      case Some(d: Instant) => dateFormatter.format(d.atOffset(ZoneOffset.UTC).toLocalDateTime)
+    }
   }
 }

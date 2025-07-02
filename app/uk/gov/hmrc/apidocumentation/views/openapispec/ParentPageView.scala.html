@@ -14,39 +14,29 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.apidocumentation.config._
-@import uk.gov.hmrc.apidocumentation.models.DocsVisibility
-@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-@import uk.gov.hmrc.apidocumentation.controllers
-@import uk.gov.hmrc.apidocumentation.models._
-@import uk.gov.hmrc.apidocumentation.views.helpers._
-@import uk.gov.hmrc.apidocumentation.services._
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+@import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models.DocumentationItem
+@import uk.gov.hmrc.apidocumentation.views.helpers._
+@import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 @import views.html.helper.CSPNonce
+@import uk.gov.hmrc.apidocumentation.models.DocsVisibility
+@import uk.gov.hmrc.apidocumentation.models.VersionVisibility
+@import scala.util.control.Breaks._
 
 @this(applicationConfig: ApplicationConfig)
+
 
 @(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false
 )(implicit requestHeader: RequestHeader)
 
-@renderGetApiVersionForm = {
-    @for(api <- maybeApi) {
-        @for(version <- maybeVersion) {
-            @* Perform a GET query for ?version=<selected version> rather than POSTing a form *@
-            <form id="version-select" method="get" action="@controllers.routes.ApiDocumentationController.redirectToApiDocumentation(api.serviceName, None).url">
-                <label class="visually-hidden" for="version">
-                    Select version and status
-                </label>
-                <select class="govuk-select version-select" id="version" name="version">
-                    @for(v <- api.sortedActiveVersions;
-                    if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
-                    <option @if(v == version) {selected} value="@v.version.toString" aria-label="Select to view documentation for v@v.version.toString (@v.displayedStatus)">v@v.version.toString (@v.displayedStatus)</option>
-                    }
-                </select>
-                <button type="submit" class="govuk-button margin-bottom-0" data-module="govuk-button">View</button>
-            </form>
-        }
+@showAvailability(sandboxAvailability: String, productionAvailability: String) = {
+    (sandboxAvailability, productionAvailability) match {
+        case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial), (AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial)) => s"{applicationConfig.nameOfSubordinateEnvironment} and {applicationConfig.nameOfPrincipalEnvironment}"
+        case (AvailabilityPhrase.no, (AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial)) => applicationConfig.nameOfPrincipalEnvironment
+        case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial), AvailabilityPhrase.no) => applicationConfig.nameOfSubordinateEnvironment
+        case (AvailabilityPhrase.no, AvailabilityPhrase.no) => ""
+        case (_, _) => ""
     }
 }
 
@@ -55,42 +45,49 @@
         <h1 id="title" class="govuk-heading-l">
             @{title} API
         </h1>
-        @for(version <- maybeVersion) {
-            <table class="govuk-table">
-                <tbody class="govuk-table__body">
-                    <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header"> <label for="version">Version and status</label></th>
-                        <td class="govuk-table__cell govuk-!-font-size-16">@renderGetApiVersionForm</td>
-                    </tr>
-                    @if(applicationConfig.showSandboxAvailability) {
-                        <tr class="govuk-table__row">
-                            <th scope="row" class="govuk-table__header">Available in @applicationConfig.nameOfSubordinateEnvironment</th>
-                            <td class="govuk-table__cell govuk-!-font-size-16 word-break">@EndpointsAvailable(version.sandboxAvailability)</td>
-                        </tr>
-                    }
-                    @if(ShowBaseURL(version.sandboxAvailability)) {
-                        <tr class="govuk-table__row">
-                            <th scope="row" class="govuk-table__header">@applicationConfig.nameOfSubordinateEnvironment base URL</th>
-                            <td class="govuk-table__cell govuk-!-font-size-16 word-break">@applicationConfig.subordinateBaseUrl</td>
-                        </tr>
-                    }
-                    @if(applicationConfig.showProductionAvailability) {
-                        <tr class="govuk-table__row">
-                            <th scope="row" class="govuk-table__header">Available in @applicationConfig.nameOfPrincipalEnvironment</th>
-                            <td class="govuk-table__cell govuk-!-font-size-16 word-break">@EndpointsAvailable(version.productionAvailability)</td>
-                        </tr>
-                    }
-                    @if(ShowBaseURL(version.productionAvailability)){
-                        <tr class="govuk-table__row">
-                            <th scope="row" class="govuk-table__header">@applicationConfig.nameOfPrincipalEnvironment base URL</th>
-                            <td class="govuk-table__cell govuk-!-font-size-16 word-break">@applicationConfig.principalBaseUrl</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        @for(api <- maybeApi) {
+          @for(latestApiVersion <- api.sortedActiveVersions.headOption) {
+              <table class="govuk-table">
+                  <tbody class="govuk-table__body">
+                      <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header"> <label for="version">API type</label></th>
+                          <td class="govuk-table__cell govuk-!-font-size-16" id="apiType">REST</td>
+                      </tr>
+                      <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header"> <label for="version">Latest version</label></th>
+                          <td class="govuk-table__cell govuk-!-font-size-16" id="currentVersion">
+                          @defining(VersionDocsVisible(maybeVersion.flatMap(VersionVisibility(_)))) { case visibility =>
+                              @if(visibility == DocsVisibility.VISIBLE) {
+                                  <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, latestApiVersion.version).url">
+                                      Version @latestApiVersion.version.value
+                                      - @latestApiVersion.displayedStatus.toLowerCase</a>
+                              } else {
+                                  @latestApiVersion.version.value - @latestApiVersion.displayedStatus.toLowerCase
+                              }
+                          }
+                          </td>
+                      </tr>
+                      <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header"> <label for="version">Last updated</label></th>
+                          <td class="govuk-table__cell govuk-!-font-size-16" id="lastUpdated">@DateFormatter.getFormattedDate(api.lastPublishedAt)
+                          </td>
+                      </tr>
+                      <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header" id="subordinateName">@applicationConfig.nameOfSubordinateEnvironment
+                              base URL</th>
+                          <td class="govuk-table__cell govuk-!-font-size-16 word-break" id="subordinateUrl">@applicationConfig.subordinateBaseUrl</td>
+                      </tr>
+                      <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header" id="principalName">@applicationConfig.nameOfPrincipalEnvironment
+                              base URL</th>
+                          <td class="govuk-table__cell govuk-!-font-size-16 word-break" id="principalUrl">@applicationConfig.principalBaseUrl</td>
+                      </tr>
+                  </tbody>
+              </table>
+          }
         }
 
-        @for(doc <- markdownBlocks) {
+         @for(doc <- markdownBlocks) {
             <section id="@Slugify(doc.title)" class="section">
                 <h2 id="@Slugify(doc.title)-title" class="govuk-heading-m">
                     @{doc.title}
@@ -102,35 +99,45 @@
             </section>
         }
 
-        @defining(VersionDocsVisible(maybeVersion.flatMap(VersionVisibility(_)))) { case visibility =>
-            @if(visibility == DocsVisibility.VISIBLE) {
-                <section id="endpoints" class="section">
-                  <h2 id="endpoints-title" class="govuk-heading-m">
-                      Endpoints
-                  </h2>
+        <br><br>
 
-                  <a class="govuk-button govuk-button-secondary" href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(maybeApi.get.serviceName, maybeVersion.get.version).url">
-                    View API endpoints
-                  </a>
-                </section>
-            } else {
-                @if(visibility == DocsVisibility.OVERVIEW_ONLY) {
-                  <section id="endpoints" class="section">
-                    <h2 id="endpoints-title" class="govuk-heading-m">
-                        Endpoints
-                    </h2>
-                    <p class="govuk-body">To see the complete documentation for this API and join the private trial,
-                        <a class="govuk-link" href="@{applicationConfig.developerFrontendUrl}/developer/support">contact support</a>.
-                    </p>
-                    @if(!loggedIn) {
-                        <p class="govuk-body" id="read-more-sign-in">
-                            If you have already joined, <a class="govuk-link" href="/developer/login">sign in</a>.
-                        </p>
-                    }
-                  </section>
+        <h2 id="endpoints-title-new" class="govuk-heading-m">
+            Endpoints
+        </h2>
+        <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-table__caption--m"></caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Version</th>
+                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">Environments</th>
+                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">Endpoints</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            @for(api <- maybeApi) {
+              @for(version <- api.sortedActiveVersions) {
+                  @defining(VersionDocsVisible(Some(version).flatMap(VersionVisibility(_)))) { case visibility =>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-regular" id="version-@version.version.toString()">
+                        Version @version.version.toString() - <a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.apiStatusesPage().url#@version.status.displayText.toLowerCase" target="_blank"> @version.displayedStatus.toLowerCase <br>(opens in new tab)</a></th>
+                    <td class="govuk-table__cell govuk-table__cell--numeric" id="environments">@ShowAvailabilityInEnvironment(EndpointsAvailable(version.sandboxAvailability), EndpointsAvailable(version.productionAvailability), applicationConfig)</td>
+                    <td class="govuk-table__cell govuk-table__cell--numeric" id="endpoints">
+
+                        @if(visibility == DocsVisibility.VISIBLE) {
+                            <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, version.version).url">@version.version.toString()
+                                endpoints</a>
+                        } else {
+                            Not applicable
+                        }
+
+                    </td>
+                </tr>
                 }
             }
-        }
+            }
+            </tbody>
+        </table>
+
     </div>
 </div>
-<script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/expand-endpoint.js")' type="text/javascript"></script> 
+<script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/expand-endpoint.js")' type="text/javascript"></script>

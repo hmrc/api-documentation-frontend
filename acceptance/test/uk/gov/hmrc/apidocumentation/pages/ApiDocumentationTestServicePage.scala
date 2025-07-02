@@ -17,7 +17,6 @@
 package uk.gov.hmrc.apidocumentation.pages
 
 import org.openqa.selenium.By
-import org.openqa.selenium.support.ui.Select
 import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
@@ -38,33 +37,60 @@ object ApiDocumentationTestServicePage extends WebPage with TableDrivenPropertyC
     waitForPageToStopMoving()
   }
 
-  def checkVersionSortOrder(): Unit = {
+  def checkVersionsInTable(): Unit = {
     val versions =
       Table(
-        ("SortNumber", "Version"),
-        ("0", "v2.0 (Alpha)"),
-        ("1", "v1.5 (Beta)"),
-        ("2", "v1.3 (Beta)"),
-        ("3", "v1.2 (Beta)"),
-        ("4", "v1.1 (Stable)"),
-        ("5", "v1.0 (Stable)"),
-        ("6", "v0.4 (Deprecated)"),
-        ("7", "v0.3 (Deprecated)"),
-        ("8", "v0.2 (Deprecated)")
+        ("version-2.0", "Version 2.0 - alpha"),
+        ("version-1.5", "Version 1.5 - beta"),
+        ("version-1.3", "Version 1.3 - beta"),
+        ("version-1.2", "Version 1.2 - beta"),
+        ("version-1.1", "Version 1.1 - stable"),
+        ("version-1.0", "Version 1.0 - stable"),
+        ("version-0.4", "Version 0.4 - deprecated"),
+        ("version-0.3", "Version 0.3 - deprecated"),
+        ("version-0.2", "Version 0.2 - deprecated")
       )
-    forAll(versions) { (sortNumber: String, version: String) =>
-      val indexes = sortNumber.toInt
+    forAll(versions) { (versionId: String, expectedVersionText: String) =>
       eventually {
-        val DropdownList = new Select(waitForElementToBePresent(By.id("version")))
-        DropdownList.getOptions.get(indexes).getText shouldBe version
+        waitForElementToBePresent(By.id(versionId)).getText should include(expectedVersionText)
+        waitForElementToBePresent(By.id(versionId)).getText should include("(opens in new tab)")
       }
     }
   }
 
-  def checkDefaultVersion(expectedVersion: String): Unit = {
-    val versionDropDown = new Select(waitForElementToBePresent(By.id("version")))
+  def checkDefaultVersion(expectedVersionText: String): Unit = {
     eventually {
-      versionDropDown.getFirstSelectedOption.getText shouldBe expectedVersion
+      waitForElementToBePresent(By.id("currentVersion")).getText shouldBe expectedVersionText
+    }
+  }
+
+  def checkApiType(apiType: String): Unit = {
+    eventually {
+      waitForElementToBePresent(By.id("apiType")).getText shouldBe apiType
+    }
+  }
+
+  def checkSubordinateName(subordinateName: String): Unit = {
+    eventually {
+      waitForElementToBePresent(By.id("subordinateName")).getText shouldBe subordinateName
+    }
+  }
+
+  def checkSubordinateUrl(subordinateUrl: String): Unit = {
+    eventually {
+      waitForElementToBePresent(By.id("subordinateUrl")).getText shouldBe subordinateUrl
+    }
+  }
+
+  def checkPrincipalName(principalName: String): Unit = {
+    eventually {
+      waitForElementToBePresent(By.id("principalName")).getText shouldBe principalName
+    }
+  }
+
+  def checkPrincipalUrl(principalUrl: String): Unit = {
+    eventually {
+      waitForElementToBePresent(By.id("principalUrl")).getText shouldBe principalUrl
     }
   }
 

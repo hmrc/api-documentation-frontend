@@ -85,11 +85,26 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       When("I select to view the API  Documentation Test documentation")
       APIDocumentationPage.selectAPIDocumentationTestService()
 
-      Then("the default version 'v1.1 (Stable)' is displayed as selected")
-      ApiDocumentationTestServicePage.checkDefaultVersion("v1.1 (Stable)")
+      Then("the API type 'REST' is displayed")
+      ApiDocumentationTestServicePage.checkApiType("REST")
+
+      And("the Latest version 'Version 2.0 - alpha' is displayed")
+      ApiDocumentationTestServicePage.checkDefaultVersion("Version 2.0 - alpha")
+
+      And("the heading 'Development base URL' is displayed")
+      ApiDocumentationTestServicePage.checkSubordinateName("Development base URL")
+
+      And("the Development base URL 'https://api.development.tax.service.gov.uk' is displayed")
+      ApiDocumentationTestServicePage.checkSubordinateUrl("https://api.development.tax.service.gov.uk")
+
+      And("the heading 'QA base URL' is displayed")
+      ApiDocumentationTestServicePage.checkPrincipalName("QA base URL")
+
+      And("the QA base URL 'https://api.qa.tax.service.gov.uk' is displayed")
+      ApiDocumentationTestServicePage.checkPrincipalUrl("https://api.qa.tax.service.gov.uk")
     }
 
-    Scenario("Ensure all API versions are sorted correctly and can be viewed by the user") {
+    Scenario("Ensure all API versions appear in the table and can be viewed by the user") {
       Given.apiServicesIsDeployed()
       Given.apiDocumentationTestServiceVersionsIsDeployed()
 
@@ -99,8 +114,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       When("I select to view the API  Documentation Test documentation")
       APIDocumentationPage.selectAPIDocumentationTestService()
 
-      Then("all applicable API versions are displayed and sorted in the following order")
-      ApiDocumentationTestServicePage.checkVersionSortOrder()
+      Then("all applicable API versions are displayed in the table")
+      ApiDocumentationTestServicePage.checkVersionsInTable()
     }
 
     Scenario("Optional header displays as 'optional' in API docs") {
@@ -113,8 +128,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       When("I select to view the API  Documentation Test documentation")
       APIDocumentationPage.selectAPIDocumentationTestService()
 
-      And("I select version v1.5 (Beta)")
-      CommonPage.selectVersion("v1.5 (Beta)")
+      Then("the default version 'Version 2.0 - alpha' is displayed")
+      ApiDocumentationTestServicePage.checkDefaultVersion("Version 2.0 - alpha")
     }
 
     Scenario("Ensure user can access the Hello World API Summary Details page and view all endpoints for a Beta version") {
@@ -127,8 +142,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       APIDocumentationPage.selectHelloWorld()
       on(HelloWorldPage)
 
-      And("I select version 'v1.2 (Beta)")
-      CommonPage.selectVersion("v1.2 (Beta)")
+      Then("the default version 'Version 1.2 - beta' is displayed")
+      HelloWorldPage.checkDefaultVersion("Version 1.2 - beta")
     }
 
     Scenario("Update API Version in the request header") {
@@ -141,8 +156,8 @@ class DocumentationSpec extends BaseSpec with ComponentTestsSpec with TableDrive
       When("I select to view the API Documentation Test documentation")
       APIDocumentationPage.selectAPIDocumentationTestService()
 
-      And("I select version 'v1.1 (Stable)")
-      CommonPage.selectVersion("v1.1 (Stable)")
+      Then("the default version 'Version 2.0 - alpha' is displayed")
+      ApiDocumentationTestServicePage.checkDefaultVersion("Version 2.0 - alpha")
     }
   }
 }

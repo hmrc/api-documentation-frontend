@@ -23,8 +23,10 @@
 @import uk.gov.hmrc.apidocumentation.views.html.include._
 @import uk.gov.hmrc.apidocumentation.models.DocumentationItem
 @import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ExtendedApiVersion
+@import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageView
 
 @this(apiMain: apiMain, parentPageView: ParentPageView)
+
 
 @(pageAttributes: PageAttributes, markdownBlocks: List[DocumentationItem], title: String, api: ExtendedApiDefinition, currentVersion: ExtendedApiVersion, loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
@@ -43,27 +45,6 @@
     </div>
 }
 
-@apiMain(pageAttributes, topContent) {
-    @if(currentVersion.status == ApiStatus.ALPHA) {
-        <div class="govuk-inset-text">
-            This version is in alpha - You will not be able to subscribe to this API.
-        </div>
-    }
-
-    @if(currentVersion.status == ApiStatus.BETA) {
-        <div class="govuk-inset-text">
-            This version is in beta - expect some breaking changes.
-        </div>
-    }
-
-    @if(currentVersion.status == ApiStatus.DEPRECATED) {
-        <div class="govuk-warning-text">
-            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-            <strong class="govuk-warning-text__text">
-                <span class="govuk-warning-text__assistive">Warning</span>
-                This version is deprecated - it’s going to be removed.
-            </strong>
-        </div>
-    }
-    @parentPageView(markdownBlocks, title, Some(currentVersion), Some(api), loggedIn)
+@apiMain(pageAttributes, topContent){
+@parentPageView(markdownBlocks, title, Some(currentVersion), Some(api), loggedIn)
 }
