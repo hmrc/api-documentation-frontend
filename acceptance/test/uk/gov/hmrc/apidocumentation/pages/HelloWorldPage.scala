@@ -20,6 +20,7 @@ import java.time.Duration
 
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.{ExpectedConditions, WebDriverWait}
+import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.selenium.WebBrowser
@@ -28,7 +29,7 @@ import uk.gov.hmrc.selenium.webdriver.Driver
 
 import uk.gov.hmrc.apidocumentation.{Env, WebPage}
 
-object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPropertyChecks with Matchers with WebBrowser {
+object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPropertyChecks with Matchers with WebBrowser with Eventually {
 
   val pageHeading = "Hello World API"
 
@@ -112,5 +113,11 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
 
   def waitForPageToStopMoving() = {
     new WebDriverWait(Driver.instance, Duration.ofSeconds(5)).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("""main:not([style*="margin-top"])""")))
+  }
+
+  def checkDefaultVersion(expectedVersionText: String): Unit = {
+    eventually {
+      waitForElementToBePresent(By.id("currentVersion")).getText shouldBe expectedVersionText
+    }
   }
 }

@@ -210,7 +210,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
 
         verifyApiDocumentationPageRendered(result)
-        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("Yes - private trial"))(result)
+        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("private stable"))(result)
       }
 
       "display the not found page when invalid version specified" in new Setup {
