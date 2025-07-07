@@ -100,44 +100,44 @@
         }
 
         <br><br>
+        <section id="endpoints" class="section">
+            <h2 id="endpoints-title" class="govuk-heading-m">
+                Endpoints
+            </h2>
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m"></caption>
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Version</th>
+                        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Environments</th>
+                        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Endpoints</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                @for(api <- maybeApi) {
+                  @for(version <- api.sortedActiveVersions) {
+                      @defining(VersionDocsVisible(Some(version).flatMap(VersionVisibility(_)))) { case visibility =>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header govuk-!-font-weight-regular" id="version-@version.version.toString()">
+                            Version @version.version.toString() - <a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.apiStatusesPage().url#@version.status.displayText.toLowerCase" target="_blank"> @version.displayedStatus.toLowerCase <br>(opens in new tab)</a></th>
+                        <td class="govuk-table__cell govuk-table__cell--numeric" id="environments">@ShowAvailabilityInEnvironment(EndpointsAvailable(version.sandboxAvailability), EndpointsAvailable(version.productionAvailability), applicationConfig)</td>
+                        <td class="govuk-table__cell govuk-table__cell--numeric" id="endpoints">
 
-        <h2 id="endpoints-title-new" class="govuk-heading-m">
-            Endpoints
-        </h2>
-        <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m"></caption>
-            <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Version</th>
-                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">Environments</th>
-                    <th scope="col" class="govuk-table__header govuk-table__header--numeric">Endpoints</th>
-                </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-            @for(api <- maybeApi) {
-              @for(version <- api.sortedActiveVersions) {
-                  @defining(VersionDocsVisible(Some(version).flatMap(VersionVisibility(_)))) { case visibility =>
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header govuk-!-font-weight-regular" id="version-@version.version.toString()">
-                        Version @version.version.toString() - <a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.apiStatusesPage().url#@version.status.displayText.toLowerCase" target="_blank"> @version.displayedStatus.toLowerCase <br>(opens in new tab)</a></th>
-                    <td class="govuk-table__cell govuk-table__cell--numeric" id="environments">@ShowAvailabilityInEnvironment(EndpointsAvailable(version.sandboxAvailability), EndpointsAvailable(version.productionAvailability), applicationConfig)</td>
-                    <td class="govuk-table__cell govuk-table__cell--numeric" id="endpoints">
+                            @if(visibility == DocsVisibility.VISIBLE) {
+                                <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, version.version).url">@version.version.toString()
+                                    endpoints</a>
+                            } else {
+                                Not applicable
+                            }
 
-                        @if(visibility == DocsVisibility.VISIBLE) {
-                            <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, version.version).url">@version.version.toString()
-                                endpoints</a>
-                        } else {
-                            Not applicable
-                        }
-
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                    }
                 }
-            }
-            }
-            </tbody>
-        </table>
-
+                }
+                </tbody>
+            </table>
+        </section>
     </div>
 </div>
 <script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/expand-endpoint.js")' type="text/javascript"></script>
