@@ -26,19 +26,9 @@
 
 @this(applicationConfig: ApplicationConfig)
 
-
 @(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false
 )(implicit requestHeader: RequestHeader)
 
-@showAvailability(sandboxAvailability: String, productionAvailability: String) = {
-    (sandboxAvailability, productionAvailability) match {
-        case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial), (AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial)) => s"{applicationConfig.nameOfSubordinateEnvironment} and {applicationConfig.nameOfPrincipalEnvironment}"
-        case (AvailabilityPhrase.no, (AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial)) => applicationConfig.nameOfPrincipalEnvironment
-        case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial), AvailabilityPhrase.no) => applicationConfig.nameOfSubordinateEnvironment
-        case (AvailabilityPhrase.no, AvailabilityPhrase.no) => ""
-        case (_, _) => ""
-    }
-}
 
 <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section" aria-busy="false">
     <div id="section">
@@ -46,7 +36,7 @@
             @{title} API
         </h1>
         @for(api <- maybeApi) {
-          @for(latestApiVersion <- api.sortedActiveVersions.headOption) {
+          @for(latestApiVersion <- api.sortedActiveVersions.find(v => VersionDocsVisible(VersionVisibility(v)) != DocsVisibility.NOT_VISIBLE)) {
               <table class="govuk-table">
                   <tbody class="govuk-table__body">
                       <tr class="govuk-table__row">
@@ -56,12 +46,12 @@
                       <tr class="govuk-table__row">
                           <th scope="row" class="govuk-table__header"> <label for="version">Latest version</label></th>
                           <td class="govuk-table__cell govuk-!-font-size-16" id="currentVersion">
-                          @defining(VersionDocsVisible(maybeVersion.flatMap(VersionVisibility(_)))) { case visibility =>
+                          @defining(VersionDocsVisible(VersionVisibility(latestApiVersion))) { visibility =>
                               @if(visibility == DocsVisibility.VISIBLE) {
                                   <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, latestApiVersion.version).url">
                                       Version @latestApiVersion.version.value
                                       - @latestApiVersion.displayedStatus.toLowerCase</a>
-                              } else {
+                              } else  {
                                   @latestApiVersion.version.value - @latestApiVersion.displayedStatus.toLowerCase
                               }
                           }
@@ -116,22 +106,30 @@
                 <tbody class="govuk-table__body">
                 @for(api <- maybeApi) {
                   @for(version <- api.sortedActiveVersions) {
-                      @defining(VersionDocsVisible(Some(version).flatMap(VersionVisibility(_)))) { case visibility =>
-                    <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header govuk-!-font-weight-regular" id="version-@version.version.toString()">
-                            Version @version.version.toString() - <a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.apiStatusesPage().url#@version.status.displayText.toLowerCase" target="_blank"> @version.displayedStatus.toLowerCase <br>(opens in new tab)</a></th>
-                        <td class="govuk-table__cell govuk-table__cell--numeric" id="environments">@ShowAvailabilityInEnvironment(EndpointsAvailable(version.sandboxAvailability), EndpointsAvailable(version.productionAvailability), applicationConfig)</td>
-                        <td class="govuk-table__cell govuk-table__cell--numeric" id="endpoints">
+                      @defining(VersionDocsVisible(Some(version).flatMap(VersionVisibility(_)))) { visibility =>
+                        @if(visibility != DocsVisibility.NOT_VISIBLE) {
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"
+                                    id="version-@version.version.toString()">
+                                    Version @version.version.toString() - <a class="govuk-link govuk-link--no-visited-state"
+                                                                             href="@controllers.routes.DocumentationController.apiStatusesPage().url#@version.status.displayText.toLowerCase"
+                                                                             target="_blank"> @version.displayedStatus.toLowerCase
+                                    <br>(opens in new tab)</a></th>
+                                <td class="govuk-table__cell govuk-table__cell--numeric"
+                                    id="environments">@ShowAvailabilityInEnvironment(EndpointsAvailable(version.sandboxAvailability), EndpointsAvailable(version.productionAvailability), applicationConfig)</td>
+                                <td class="govuk-table__cell govuk-table__cell--numeric" id="endpoints">
 
-                            @if(visibility == DocsVisibility.VISIBLE) {
-                                <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, version.version).url">@version.version.toString()
-                                    endpoints</a>
-                            } else {
-                                Not applicable
-                            }
+                                    @if(visibility == DocsVisibility.VISIBLE) {
+                                    <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, version.version).url">
+                                        @version.version.toString()
+                                        endpoints</a>
+                                    } else {
+                                    Not applicable
+                                    }
 
-                        </td>
-                    </tr>
+                                </td>
+                            </tr>
+                        }
                     }
                 }
                 }
