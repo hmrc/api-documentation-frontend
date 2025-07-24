@@ -24,9 +24,9 @@
 
 @this(apiMain: apiMain)
 
-@(pageAttributes: PageAttributes, documents: Seq[ApiDocumentation], docTypeFilters: List[DocumentationTypeFilter],  categoryFilters: List[ApiCategory])(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, documents: Seq[ApiDocumentation], docTypeFilters: List[DocumentationTypeFilter],  categoryFilters: List[ApiCategory], searchTerm: Option[String])(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
-@apiMain(pageAttributes, docTypeFilters, categoryFilters) {
+@apiMain(pageAttributes, docTypeFilters, categoryFilters, searchTerm) {
 
 
 

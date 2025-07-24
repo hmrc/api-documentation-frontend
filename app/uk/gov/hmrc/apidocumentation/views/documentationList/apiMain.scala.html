@@ -21,13 +21,16 @@
 @import uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter
 @import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukCheckboxes
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukInput
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukDetails
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukFieldset
 
-@this(govUkWrapper: GovUkWrapper, govukCheckboxes: GovukCheckboxes)
+@this(govUkWrapper: GovUkWrapper, govukCheckboxes: GovukCheckboxes, govukInput: GovukInput, govukDetails: GovukDetails, govukFieldset: GovukFieldset)
 
-@(pageAttributes: PageAttributes,  docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory])(mainContent: Html)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes,  docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory], searchTerm: Option[String])(mainContent: Html)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @govUkWrapper(pageTitle = Some(pageAttributes.title),
-    leftNav = Some(documentFilter(docTypeFilters, categoryFilters.sorted, govukCheckboxes)),
+    leftNav = Some(documentFilter(docTypeFilters, categoryFilters.sorted, searchTerm, govukCheckboxes, govukInput, govukDetails, govukFieldset)),
     isLeftNavSticky = false,
     breadcrumbs = Some(pageAttributes.breadcrumbs),
     navLinks = pageAttributes.headerLinks

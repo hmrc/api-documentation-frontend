@@ -20,34 +20,85 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.Checkboxes
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
+@import views.html.helper.CSPNonce
 
-@(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory], govukCheckboxes: GovukCheckboxes)
+@(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory], searchTerm: Option[String], govukCheckboxes: GovukCheckboxes, govukInput: GovukInput, govukDetails: GovukDetails, govukFieldset: GovukFieldset)(implicit requestHeader: RequestHeader)
 
 <h2 class="govuk-heading-m govuk-visually-hidden">Filters</h2>
 
-<form method="GET" action="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty)">
-    @govukCheckboxes(
-        Checkboxes(
-            name = "docTypeFilters",
-            fieldset = Some(Fieldset(legend = Some(Legend(content = Text("Documentation Type"), classes="govuk-fieldset__legend--s")))),
-            classes="govuk-checkboxes--small",
-            items = DocumentationTypeFilter.values.map(filter =>
-                CheckboxItem(content =  HtmlContent(s"<span class=\"govuk-!-font-size-16\">${filter.displayName}</span>"), value = filter.toString, checked = docTypeFilters.contains(filter))).toSeq
-        )
-    )
+<form method="GET" action="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty, None)">
 
-    @govukCheckboxes(
-        Checkboxes(
-            name = "categoryFilters",
-            fieldset = Some(Fieldset(legend = Some(Legend(content = Text("API Category"), classes="govuk-fieldset__legend--s")))),
-            classes="govuk-checkboxes--small",
-            items = ApiCategory.values.toList.sortBy(_.displayText).map(category =>
-                CheckboxItem(content = HtmlContent(s"<span class=\"govuk-!-font-size-16\">${category.displayText}</span>"), value = category.toString, checked = categoryFilters.contains(category)))
+    @govukInput(Input(
+      id = "searchTerm",
+      name = "searchTerm",
+        label = Label(content = Text("Search APIs"), classes="govuk-fieldset__legend--s"),
+        classes = "govuk-input--width-15",
+        value = searchTerm,
+        hint = Some(Hint(content = Text("The search will include API name and description")))
+    ))
+    <br>
+
+    <fieldset id="docTypeFilters" class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            <h2 class="govuk-fieldset__heading">
+                Filter by Document Type
+            </h2>
+        </legend>
+        @govukDetails(
+          Details(
+              classes = "govuk-!-margin-bottom-1",
+              content = HtmlContent(
+                govukCheckboxes(
+                    Checkboxes(
+                        name = "docTypeFilters",
+                        classes="govuk-checkboxes--small",
+                        items = DocumentationTypeFilter.values.map(filter =>
+                            CheckboxItem(id = Some("docTypeFilterCheckBox"), content =  HtmlContent(s"<span class=\"govuk-!-font-size-16\">${filter.displayName}</span>"), value = filter.toString, checked = docTypeFilters.contains(filter))).toSeq
+                    )
+                )
+              ),
+              summary = Text("View Document Type Filters"),
+              open = false
+          )
         )
-    )
+        <div class="govuk-body" style="font-size:16px; ">
+            <strong id="docTypeFilterCount">@{docTypeFilters.size}</strong>  Selected
+        </div>
+    </fieldset>
+
+    <br>
+
+    <fieldset id="categoryFilters" class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            <h2 class="govuk-fieldset__heading">
+                Filter by API Category
+            </h2>
+        </legend>
+        @govukDetails(
+          Details(
+            classes = "govuk-!-margin-bottom-1",
+            content = HtmlContent(
+                govukCheckboxes(
+                    Checkboxes(
+                        name = "categoryFilters",
+                        classes="govuk-checkboxes--small",
+                        items = ApiCategory.values.toList.sortBy(_.displayText).map(category =>
+                            CheckboxItem(id = Some("categoryFilterCheckBox"), content = HtmlContent(s"<span class=\"govuk-!-font-size-16\">${category.displayText}</span>"), value = category.toString, checked = categoryFilters.contains(category)))
+                    )
+                )
+            ),
+            summary = Text("View API Category Filters"),
+            open = false
+          )
+        )
+        <div class="govuk-body" style="font-size:16px; ">
+            <strong id="categoryFilterCount">@{categoryFilters.size}</strong>  Selected
+        </div>
+    </fieldset>
 
     <button class="govuk-button" data-module="govuk-button" type="submit">Filter</button>
 
 </form>
 
-
+<script  @CSPNonce.attr src='@routes.Assets.versioned("javascripts/docTypeFilter.js")' type="text/javascript"></script>
+<script  @CSPNonce.attr src='@routes.Assets.versioned("javascripts/categoryFilter.js")' type="text/javascript"></script>

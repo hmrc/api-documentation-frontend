@@ -22,7 +22,7 @@ GET         /docs/authorisation/user-restricted-endpoints               uk.gov.h
 GET         /docs/authorisation/two-step-verification                   uk.gov.hmrc.apidocumentation.controllers.AuthorisationController.authorisation2SVPage()
 
 
-GET         /docs/api                                                   uk.gov.hmrc.apidocumentation.controllers.FilteredDocumentationIndexController.apiListIndexPage(docTypeFilters: List[uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter], categoryFilters: List[uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory])
+GET         /docs/api                                                   uk.gov.hmrc.apidocumentation.controllers.FilteredDocumentationIndexController.apiListIndexPage(docTypeFilters: List[uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter], categoryFilters: List[uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory], searchTerm: Option[String] ?= None)
 GET         /docs/api/service/:service                                  uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.redirectToApiDocumentation(service: ServiceName, version: Option[ApiVersionNbr])
 
 GET         /docs/api/service/:service/:version                         uk.gov.hmrc.apidocumentation.controllers.ApiDocumentationController.renderApiDocumentation(service: ServiceName,version: ApiVersionNbr)

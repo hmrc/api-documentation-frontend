@@ -33,7 +33,7 @@ trait PageRenderVerification {
   import NavigationServiceMock.sidebarLink
 
   lazy val homeBreadcrumb    = Crumb("Home", routes.DocumentationController.indexPage().url)
-  lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url)
+  lazy val apiDocsBreadcrumb = Crumb("API Documentation", routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty, None).url)
 
   def titleOf(result: Future[Result]) = {
     val titleRegEx = """<title[^>]*>(.*)</title>""".r
