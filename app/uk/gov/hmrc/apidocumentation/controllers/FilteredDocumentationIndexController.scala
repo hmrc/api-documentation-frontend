@@ -60,17 +60,14 @@ class FilteredDocumentationIndexController @Inject() (
       : Seq[ApiDocumentation] = {
 
     def filterByCategory(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
-      println(s"******* In filterByCategory categoryFilters:$categoryFilters")
       categoryFilters.flatMap(filter => documents.filter(api => api.categories.contains(filter))).distinct
     }
 
     def filterByDocType(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
-      println(s"******* In filterByDocType documentationTypeFilter:$documentationTypeFilter")
       documentationTypeFilter.flatMap(filter => documents.filter(api => filter == DocumentationTypeFilter.byLabel(api.label))).distinct
     }
 
     def filterBySearchTerm(documents: Seq[ApiDocumentation], searchTerm: String): Seq[ApiDocumentation] = {
-      println(s"******* In filterBySearchTerm searchTerm:$searchTerm")
       documents.filter(api => api.name.toLowerCase.contains(searchTerm.toLowerCase) | api.description.toLowerCase.contains(searchTerm.toLowerCase))
     }
 
