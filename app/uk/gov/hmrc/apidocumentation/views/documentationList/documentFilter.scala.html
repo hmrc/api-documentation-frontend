@@ -34,14 +34,14 @@
         label = Label(content = Text("Search APIs"), classes="govuk-fieldset__legend--s"),
         classes = "govuk-input--width-15",
         value = searchTerm,
-        hint = Some(Hint(content = Text("The search will include API name and description")))
+        hint = Some(Hint(content = Text("Search the API name and description")))
     ))
     <br>
 
     <fieldset id="docTypeFilters" class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
             <h2 class="govuk-fieldset__heading">
-                Filter by Document Type
+                Filter by document type
             </h2>
         </legend>
         @govukDetails(
@@ -57,12 +57,12 @@
                     )
                 )
               ),
-              summary = Text("View Document Type Filters"),
+              summary = Text("View document types"),
               open = false
           )
         )
         <div class="govuk-body" style="font-size:16px; ">
-            <strong id="docTypeFilterCount">@{docTypeFilters.size}</strong>  Selected
+            <strong id="docTypeFilterCount">@{docTypeFilters.size}</strong>  selected
         </div>
     </fieldset>
 
@@ -71,7 +71,7 @@
     <fieldset id="categoryFilters" class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
             <h2 class="govuk-fieldset__heading">
-                Filter by API Category
+                Filter by API category
             </h2>
         </legend>
         @govukDetails(
@@ -87,12 +87,12 @@
                     )
                 )
             ),
-            summary = Text("View API Category Filters"),
+            summary = Text("View API categories"),
             open = false
           )
         )
         <div class="govuk-body" style="font-size:16px; ">
-            <strong id="categoryFilterCount">@{categoryFilters.size}</strong>  Selected
+            <strong id="categoryFilterCount">@{categoryFilters.size}</strong>  selected
         </div>
     </fieldset>
 
