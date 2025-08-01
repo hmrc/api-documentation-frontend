@@ -59,7 +59,7 @@ class FilteredDocumentationIndexController @Inject() (
   private def filterApiDocumentation(
       documents: Seq[ApiDocumentation],
       categoryFilters: List[ApiCategory],
-      documentationTypeFilter: List[DocumentationTypeFilter],
+      documentationTypeFilters: List[DocumentationTypeFilter],
       maybeSearchTerm: Option[String]
     ): Seq[ApiDocumentation] = {
 
@@ -68,14 +68,14 @@ class FilteredDocumentationIndexController @Inject() (
     }
 
     def filterByDocType(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
-      documentationTypeFilter.flatMap(filter => documents.filter(api => filter == DocumentationTypeFilter.byLabel(api.label))).distinct
+      documentationTypeFilters.flatMap(filter => documents.filter(api => filter == DocumentationTypeFilter.byLabel(api.label))).distinct
     }
 
     def filterBySearchTerm(documents: Seq[ApiDocumentation], searchTerm: String): Seq[ApiDocumentation] = {
       documents.filter(api => api.name.toLowerCase.contains(searchTerm.toLowerCase) | api.description.toLowerCase.contains(searchTerm.toLowerCase))
     }
 
-    (documents, categoryFilters, documentationTypeFilter, maybeSearchTerm) match {
+    (documents, categoryFilters, documentationTypeFilters, maybeSearchTerm) match {
       case (Nil, Nil, Nil, None)       => Nil
       case (_, Nil, Nil, None)         => documents
       case (_, _, Nil, None)           => filterByCategory(documents).sortBy(_.name)

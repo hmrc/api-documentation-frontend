@@ -19,10 +19,11 @@
 @import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.Checkboxes
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 @import views.html.helper.CSPNonce
 
-@(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory], searchTerm: Option[String], govukCheckboxes: GovukCheckboxes, govukInput: GovukInput, govukDetails: GovukDetails, govukFieldset: GovukFieldset)(implicit requestHeader: RequestHeader)
+@this(govukCheckboxes: GovukCheckboxes, govukInput: GovukInput, govukDetails: GovukDetails)
+
+@(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory], searchTerm: Option[String])(implicit requestHeader: RequestHeader)
 
 <h2 class="govuk-heading-m govuk-visually-hidden">Filters</h2>
 

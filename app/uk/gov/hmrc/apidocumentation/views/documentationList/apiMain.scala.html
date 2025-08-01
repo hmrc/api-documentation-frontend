@@ -25,12 +25,12 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukDetails
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukFieldset
 
-@this(govUkWrapper: GovUkWrapper, govukCheckboxes: GovukCheckboxes, govukInput: GovukInput, govukDetails: GovukDetails, govukFieldset: GovukFieldset)
+@this(govUkWrapper: GovUkWrapper, documentFilter: documentFilter)
 
 @(pageAttributes: PageAttributes,  docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory], searchTerm: Option[String])(mainContent: Html)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @govUkWrapper(pageTitle = Some(pageAttributes.title),
-    leftNav = Some(documentFilter(docTypeFilters, categoryFilters.sorted, searchTerm, govukCheckboxes, govukInput, govukDetails, govukFieldset)),
+    leftNav = Some(documentFilter(docTypeFilters, categoryFilters.sorted, searchTerm)),
     isLeftNavSticky = false,
     breadcrumbs = Some(pageAttributes.breadcrumbs),
     navLinks = pageAttributes.headerLinks
