@@ -56,46 +56,58 @@ class FilteredDocumentationIndexController @Inject() (
     restApiDescriptionOverrides.find(x => x.identifier.value == identifier)
   }
 
-  private def filterApiDocumentation(documents: Seq[ApiDocumentation], categoryFilters: List[ApiCategory], documentationTypeFilter: List[DocumentationTypeFilter])
-      : Seq[ApiDocumentation] = {
+  private def filterApiDocumentation(
+      documents: Seq[ApiDocumentation],
+      categoryFilters: List[ApiCategory],
+      documentationTypeFilters: List[DocumentationTypeFilter],
+      maybeSearchTerm: Option[String]
+    ): Seq[ApiDocumentation] = {
 
     def filterByCategory(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
       categoryFilters.flatMap(filter => documents.filter(api => api.categories.contains(filter))).distinct
     }
 
     def filterByDocType(documents: Seq[ApiDocumentation]): Seq[ApiDocumentation] = {
-      documentationTypeFilter.flatMap(filter => documents.filter(api => filter == DocumentationTypeFilter.byLabel(api.label))).distinct
+      documentationTypeFilters.flatMap(filter => documents.filter(api => filter == DocumentationTypeFilter.byLabel(api.label))).distinct
     }
 
-    (documents, categoryFilters, documentationTypeFilter) match {
-      case (Nil, Nil, Nil) => Nil
-      case (_, Nil, Nil)   => documents
-      case (_, _, Nil)     => filterByCategory(documents).sortBy(_.name)
-      case (_, Nil, _)     => filterByDocType(documents).sortBy(_.name)
-      case (_, _, _)       => filterByDocType(filterByCategory(documents)).sortBy(_.name)
+    def filterBySearchTerm(documents: Seq[ApiDocumentation], searchTerm: String): Seq[ApiDocumentation] = {
+      documents.filter(api => api.name.toLowerCase.contains(searchTerm.toLowerCase) | api.description.toLowerCase.contains(searchTerm.toLowerCase))
     }
 
-  }
-
-  def apiListIndexPage(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory]): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
-    def pageAttributes(title: String = "API Documentation") =
-      PageAttributes(title, breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
-
-    (for {
-      userId              <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
-      apis                <- apiDefinitionService.fetchAllDefinitions(userId)
-      xmlApis             <- xmlServicesService.fetchAllXmlApis()
-      restDocuments        = apis.map(apiDefinitionToRestDocumentation)
-      xmlDocuments         = xmlApis.map(xmlApiToXmlDocumentation)
-      allApiDocumentations = (restDocuments ++ xmlDocuments ++ RoadMapDocumentation.roadMaps ++ ServiceGuideDocumentation.serviceGuides).sortBy(_.name)
-      filteredDocuments    = filterApiDocumentation(allApiDocumentations, categoryFilters, docTypeFilters)
-    } yield Ok(indexView(pageAttributes(), filteredDocuments, docTypeFilters, categoryFilters))) recoverWith {
-      case e: Throwable =>
-        logger.error("Could not load API Documentation service", e)
-        errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
+    (documents, categoryFilters, documentationTypeFilters, maybeSearchTerm) match {
+      case (Nil, Nil, Nil, None)       => Nil
+      case (_, Nil, Nil, None)         => documents
+      case (_, _, Nil, None)           => filterByCategory(documents).sortBy(_.name)
+      case (_, Nil, _, None)           => filterByDocType(documents).sortBy(_.name)
+      case (_, _, _, None)             => filterByDocType(filterByCategory(documents)).sortBy(_.name)
+      case (_, Nil, Nil, Some(search)) => filterBySearchTerm(documents, search).sortBy(_.name)
+      case (_, _, Nil, Some(search))   => filterBySearchTerm(filterByCategory(documents).sortBy(_.name), search)
+      case (_, Nil, _, Some(search))   => filterBySearchTerm(filterByDocType(documents).sortBy(_.name), search)
+      case (_, _, _, Some(search))     => filterBySearchTerm(filterByDocType(filterByCategory(documents)), search).sortBy(_.name)
     }
 
   }
+
+  def apiListIndexPage(docTypeFilters: List[DocumentationTypeFilter], categoryFilters: List[ApiCategory], searchTerm: Option[String] = None): Action[AnyContent] =
+    headerNavigation { implicit request => navLinks =>
+      def pageAttributes(title: String = "API Documentation") = {
+        PageAttributes(title, breadcrumbs = Breadcrumbs(apiDocCrumb, homeCrumb), headerLinks = navLinks, sidebarLinks = navigationService.sidebarNavigation())
+      }
+      (for {
+        userId              <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
+        apis                <- apiDefinitionService.fetchAllDefinitions(userId)
+        xmlApis             <- xmlServicesService.fetchAllXmlApis()
+        restDocuments        = apis.map(apiDefinitionToRestDocumentation)
+        xmlDocuments         = xmlApis.map(xmlApiToXmlDocumentation)
+        allApiDocumentations = (restDocuments ++ xmlDocuments ++ RoadMapDocumentation.roadMaps ++ ServiceGuideDocumentation.serviceGuides).sortBy(_.name)
+        filteredDocuments    = filterApiDocumentation(allApiDocumentations, categoryFilters, docTypeFilters, searchTerm)
+      } yield Ok(indexView(pageAttributes(), filteredDocuments, docTypeFilters, categoryFilters, searchTerm))) recoverWith {
+        case e: Throwable =>
+          logger.error("Could not load API Documentation service", e)
+          errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
+      }
+    }
 
   private def extractDeveloperIdentifier(f: Future[Option[Developer]]): Future[Option[DeveloperIdentifier]] = {
     f.map(o =>
