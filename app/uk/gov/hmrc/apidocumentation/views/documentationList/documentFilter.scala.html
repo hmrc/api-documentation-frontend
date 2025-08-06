@@ -47,6 +47,7 @@
         </legend>
         @govukDetails(
           Details(
+            id = Some("docTypeFilterDetails"),
               classes = "govuk-!-margin-bottom-1",
               content = HtmlContent(
                 govukCheckboxes(
@@ -54,7 +55,7 @@
                         name = "docTypeFilters",
                         classes="govuk-checkboxes--small",
                         items = DocumentationTypeFilter.values.map(filter =>
-                            CheckboxItem(id = Some("docTypeFilterCheckBox"), content =  HtmlContent(s"<span class=\"govuk-!-font-size-16\">${filter.displayName}</span>"), value = filter.toString, checked = docTypeFilters.contains(filter))).toSeq
+                            CheckboxItem(id = Some(filter.modifier), content =  HtmlContent(s"<span class=\"govuk-!-font-size-16\">${filter.displayName}</span>"), value = filter.toString, checked = docTypeFilters.contains(filter))).toSeq
                     )
                 )
               ),
@@ -77,6 +78,7 @@
         </legend>
         @govukDetails(
           Details(
+              id = Some("categoryFilterDetails"),
             classes = "govuk-!-margin-bottom-1",
             content = HtmlContent(
                 govukCheckboxes(
@@ -84,7 +86,7 @@
                         name = "categoryFilters",
                         classes="govuk-checkboxes--small",
                         items = ApiCategory.values.toList.sortBy(_.displayText).map(category =>
-                            CheckboxItem(id = Some("categoryFilterCheckBox"), content = HtmlContent(s"<span class=\"govuk-!-font-size-16\">${category.displayText}</span>"), value = category.toString, checked = categoryFilters.contains(category)))
+                            CheckboxItem(id = Some(category.displayText.toLowerCase.replaceAll(" ", "-").replaceAll("[\\(\\)]","")), content = HtmlContent(s"<span class=\"govuk-!-font-size-16\">${category.displayText}</span>"), value = category.toString, checked = categoryFilters.contains(category)))
                     )
                 )
             ),
@@ -97,7 +99,7 @@
         </div>
     </fieldset>
 
-    <button class="govuk-button" data-module="govuk-button" type="submit">Filter</button>
+    <button id="filter-button" class="govuk-button" data-module="govuk-button" type="submit">Filter</button>
 
 </form>
 
