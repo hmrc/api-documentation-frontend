@@ -1,3 +1,8 @@
+/* Fixing lack of space before subheadings */
+h2 {
+  padding-top: 20px;
+}
+
 /* Fixing colour-contrast accessibility issues */
 h5 {
   color: rgb(51, 51, 51) ! important;

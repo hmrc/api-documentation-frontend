@@ -4,7 +4,7 @@ import sbt._
 object AppDependencies {
   def apply(): Seq[ModuleID] = compile ++ test
 
-  lazy val bootstrapVersion       = "9.18.0"
+  lazy val bootstrapVersion       = "9.19.0"
   lazy val commonDomainVersion    = "0.18.0"
   lazy val apiDomainVersion       = "0.19.1"
 

@@ -37,6 +37,7 @@ import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 import uk.gov.hmrc.http.NotFoundException
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
@@ -199,13 +200,13 @@ class OpenApiDocumentationController @Inject() (
     }
   }
 
-  def previewApiDocumentationAction(url: Option[String]) = headerNavigation { implicit request => navLinks =>
+  def previewApiDocumentationAction(url: Option[RedirectUrl]) = headerNavigation { implicit request => navLinks =>
     if (appConfig.openApiPreviewEnabled) {
       val pageAttributes = buildPageAttributes(navLinks)
 
       url match {
         case None           => successful(Ok(openApiPreviewView(pageAttributes)))
-        case Some(location) => successful(Ok(openApiPreviewRedoc(location)))
+        case Some(location) => successful(Ok(openApiPreviewRedoc(location.unsafeValue)))
       }
     } else {
       errorHandler.notFoundTemplate.map(NotFound(_))

@@ -30,7 +30,7 @@ GET         /docs/api/service/:service/:version                         uk.gov.h
 # Open API related endpoints    
 GET         /docs/api/service/:service/:version/oas/page                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.renderApiDocumentation(service: ServiceName,version: ApiVersionNbr)
 GET         /docs/openapi/preview                                       uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.previewApiDocumentationPage()
-GET         /docs/openapi/preview/action                                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.previewApiDocumentationAction(url: Option[String])
+GET         /docs/openapi/preview/action                                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.previewApiDocumentationAction(url: Option[RedirectUrl])
 GET         /docs/api/service/:service/:version/oas/file                uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOas(service: ServiceName, version: ApiVersionNbr)
 GET         /docs/api/service/:service/:version/oas/resolved            uk.gov.hmrc.apidocumentation.controllers.OpenApiDocumentationController.fetchOasResolved(service: ServiceName,version: ApiVersionNbr)
 GET         /docs/api/service/:service/:version/oas/*resource           uk.gov.hmrc.apidocumentation.controllers.DownloadController.downloadResource(service: ServiceName, version: ApiVersionNbr, resource: String)
