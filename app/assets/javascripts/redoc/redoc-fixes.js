@@ -1,4 +1,5 @@
 function applyRedocFixes() {
+    // Probably no longer needed
     function makeLeftMenuLinksAccessibleViaKeyboard() {
         document.querySelectorAll('ul[role=menu] li').forEach(li => {
             if (!li.hasAttribute('tabindex')) {
@@ -24,6 +25,7 @@ function applyRedocFixes() {
         });
     }
 
+    // Probably no longer needed
     function removeMenuItemRoleFromLeftHandMenu() {
         document.querySelectorAll('ul[role=menu] label[role=menuitem]').forEach(label => {
             label.removeAttribute('role');
