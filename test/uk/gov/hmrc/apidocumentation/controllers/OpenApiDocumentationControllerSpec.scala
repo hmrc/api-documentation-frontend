@@ -29,6 +29,7 @@ import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.controllers.utils.PageRenderVerification
@@ -125,7 +126,7 @@ class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec with P
     "should successfully show the open api preview action when flagged on" in new Setup {
       when(appConfig.openApiPreviewEnabled).thenReturn(true)
 
-      val result = underTest.previewApiDocumentationAction(Some("http://localhost:1234"))(request)
+      val result = underTest.previewApiDocumentationAction(Some(RedirectUrl("http://localhost:1234")))(request)
       status(result) shouldBe OK
     }
 
