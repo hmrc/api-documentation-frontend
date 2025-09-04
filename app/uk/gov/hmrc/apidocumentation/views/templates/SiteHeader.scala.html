@@ -29,7 +29,7 @@
 @hmrcHeader(Header(
     homepageUrl = "https://www.gov.uk",
     serviceName = Some(applicationConfig.title),
-    navigation = Some(StaticNavLinks(applicationConfig.devhubSupportFrontendUrl).asNavigationItems),
+    navigation = Some(StaticNavLinks().asNavigationItems),
     serviceUrl = "/api-documentation",
     displayHmrcBanner = false,
     containerClasses = "govuk-width-container",
