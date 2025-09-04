@@ -41,13 +41,13 @@ case class SidebarLink(label: String, href: String, subLinks: Seq[SidebarLink] =
 
 case object StaticNavLinks {
 
-  def apply(devhubSupportUrl: String) = {
+  def apply() = {
 
     Seq(
       NavLink("Getting started", "/api-documentation/docs/using-the-hub"),
       NavLink("API documentation", "/api-documentation/docs/api"),
       NavLink("Applications", "/developer/applications"),
-      NavLink("Support", s"$devhubSupportUrl"),
+      NavLink("Support", "/devhub-support"),
       NavLink("Service availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)
     )
   }
