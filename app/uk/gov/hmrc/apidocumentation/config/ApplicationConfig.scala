@@ -25,6 +25,9 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 trait ApplicationConfig {
   def developerFrontendUrl: String
 
+  def devhubSupportFrontendBaseUrl: String
+  def devhubSupportFrontendUrl: String
+
   def developerFrontendBaseUrl: String
   def thirdPartyDeveloperUrl: String
   def apiPlatformMicroserviceBaseUrl: String
@@ -69,7 +72,11 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
   val developerFrontendUrl = getString("developer-frontend-url")
 
   val developerFrontendBaseUrl = baseUrl("developer-frontend")
-  val thirdPartyDeveloperUrl   = baseUrl("third-party-developer")
+
+  val devhubSupportFrontendBaseUrl = baseUrl("devhub-support-frontend")
+  val devhubSupportFrontendUrl     = s"$devhubSupportFrontendBaseUrl/devhub-support"
+
+  val thirdPartyDeveloperUrl = baseUrl("third-party-developer")
 
   /** This value needs to be lazy because it doesn't actually exist in all environments that we deploy to. Specifically, it doesn't exist in Development which really shouldn't need
     * this app deployed but does due to api-publisher needing it.
