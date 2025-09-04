@@ -74,7 +74,7 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
   val developerFrontendBaseUrl = baseUrl("developer-frontend")
 
   val devhubSupportFrontendBaseUrl = baseUrl("devhub-support-frontend")
-  val devhubSupportFrontendUrl     = s"${baseUrl("devhub-support-frontend")}/devhub-support"
+  val devhubSupportFrontendUrl     = s"$devhubSupportFrontendBaseUrl/devhub-support"
 
   val thirdPartyDeveloperUrl = baseUrl("third-party-developer")
 
