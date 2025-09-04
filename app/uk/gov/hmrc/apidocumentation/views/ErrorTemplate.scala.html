@@ -24,7 +24,7 @@
 
 @main(navTitle = Some(applicationConfig.title),
     navTitleLink = Some(Call("GET", "/api-documentation")),
-    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks()))) {
+    headerNavLinks = Some(partials.headerNavLinks(StaticNavLinks(applicationConfig.devhubSupportFrontendUrl)))) {
 
     <h1 class="govuk-heading-l">@heading</h1>
     <p class="govuk-body">@message</p>
