@@ -23,12 +23,12 @@ class NavLinkSpec extends HmrcSpec {
   "NavigationHelper" should {
 
     "return static navlinks for devhub" in {
-      StaticNavLinks() shouldBe
+      StaticNavLinks("http://localhost:9695/devhub-support") shouldBe
         Seq(
           NavLink("Getting started", "/api-documentation/docs/using-the-hub"),
           NavLink("API documentation", "/api-documentation/docs/api"),
           NavLink("Applications", "/developer/applications"),
-          NavLink("Support", "/developer/support"),
+          NavLink("Support", "http://localhost:9695/devhub-support"),
           NavLink("Service availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)
         )
     }
