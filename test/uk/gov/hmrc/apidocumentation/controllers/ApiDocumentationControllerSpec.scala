@@ -213,6 +213,43 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("private stable"))(result)
       }
 
+      "display the API landing page with 'Request access' button for private trial when logged in" in new Setup {
+        theUserIsLoggedIn()
+        theDefinitionServiceWillReturnAnApiDefinition(
+          extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName,
+            versionOne,
+            Some(ApiAvailability(true, ApiAccess.Private(true), true, false)),
+            Some(ApiAvailability(true, ApiAccess.Private(true), true, false))
+          )
+        )
+        DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
+
+        val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
+
+        verifyApiDocumentationPageRendered(result)
+        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("private stable", "Request access"))(result)
+      }
+
+      "display the API landing page with NO 'Request access' button for private trial when not logged in" in new Setup {
+        theUserIsNotLoggedIn()
+        theDefinitionServiceWillReturnAnApiDefinition(
+          extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName,
+            versionOne,
+            Some(ApiAvailability(true, ApiAccess.Private(true), false, false)),
+            Some(ApiAvailability(true, ApiAccess.Private(true), false, false))
+          )
+        )
+        DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
+
+        val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
+
+        verifyApiDocumentationPageRendered(result)
+        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("private stable"))(result)
+        verifyPageDoesNotContain(texts = Seq("Request access"))(result)
+      }
+
       "display the not found page when invalid version specified" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnAnApiDefinition(
