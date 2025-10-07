@@ -24,7 +24,7 @@
 @this(hmrcHeader: HmrcHeader)
 
 @* TODO: The navLinks parameter is no longer used; removal requires refactoring up to Controller level *@
-@(navLinks: Seq[NavLink] = Seq.empty)(implicit applicationConfig: ApplicationConfig)
+@(navLinks: Seq[NavLink] = Seq.empty)(implicit applicationConfig: ApplicationConfig, messages: Messages)
 
 @hmrcHeader(Header(
     homepageUrl = "https://www.gov.uk",
