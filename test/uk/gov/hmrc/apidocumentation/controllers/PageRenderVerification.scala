@@ -83,6 +83,10 @@ trait PageRenderVerification {
     bodyContains.foreach { snippet => contentAsString(actualPage) should include(snippet) }
   }
 
+  def verifyPageDoesNotContain(texts: Seq[String] = Seq.empty)(actualPage: Future[Result]): Unit = {
+    texts.foreach { snippet => contentAsString(actualPage) should not include (snippet) }
+  }
+
   def verifyNotFoundPageRendered(actualPage: Future[Result]): Unit = {
     status(actualPage) shouldBe NOT_FOUND
   }

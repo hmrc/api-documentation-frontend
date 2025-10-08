@@ -123,9 +123,11 @@
                                     <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, version.version).url">
                                         @version.version.toString()
                                         endpoints</a>
+                                    } else { @if(visibility == DocsVisibility.OVERVIEW_ONLY & loggedIn) {
+                                    <a class="govuk-button govuk-button--secondary" href="@{applicationConfig.devhubSupportFrontendBaseUrl}/devhub-support/flow/private-api-documentation">Request access</a>
                                     } else {
                                     Not applicable
-                                    }
+                                    }}
 
                                 </td>
                             </tr>
