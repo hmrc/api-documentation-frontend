@@ -23,6 +23,7 @@
   "Individuals Employments": ["PRIVATE_GOVERNMENT"],
   "Individuals Income": ["PRIVATE_GOVERNMENT"],
   "Individuals Matching": ["PRIVATE_GOVERNMENT"],
+  "ISA Returns": ["LIFETIME_ISA", "OTHER"],
   "Lifetime ISA": ["LIFETIME_ISA"],
   "Marriage Allowance": ["SELF_ASSESSMENT", "PAYE"],
   "Mobile Help To Save": ["PRIVATE_GOVERNMENT"],

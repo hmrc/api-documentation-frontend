@@ -64,6 +64,10 @@
     "identifier": "customs-inventory-linking-imports"
   },
   {
+    "description": "Submit monthly reports of current-year ISA subscription data. Only HMRC-approved ISA managers can use this API. In future, enrolment for digital ISA reporting will also be required.",
+    "identifier": "disa-returns"
+  },
+  {
     "description": "An API to test email events including delivered, bounced, opened and clicked links.",
     "identifier": "email-events"
   },
