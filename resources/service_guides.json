@@ -155,10 +155,10 @@
     "categories": ["SELF_ASSESSMENT"]
   },
   {
-    "identifier": "pillar-two-service-guide",
+    "identifier": "pillar2-sdes-service-guide",
     "name": "Secure Data Exchange Service (SDES) - Pillar 2 Service Guide",
     "description": "This guide explains the taxes applicable under the Pillar 2 agreement and how to use the SDES File Upload API for sharing documentation and ensuring compliance.",
-    "context": "/guides/pillar-two-service-guide",
+    "context": "/guides/pillar2-sdes-service-guide",
     "categories": ["CORPORATION_TAX"]
   }
 ]
