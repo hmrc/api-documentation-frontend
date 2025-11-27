@@ -72,7 +72,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         fetchAllXmlApisReturnsVatApi()
 
         val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List.empty)(request)
-        // There are currently 22 Service Guides and 5 roadmaps so should be 27 results
+        // There are currently 23 Service Guides and 6 roadmaps so should be 29 results
         verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsBreadcrumb), bodyContains = Seq("29 results "))(result)
       }
 
