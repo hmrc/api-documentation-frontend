@@ -65,7 +65,7 @@
   },
   {
     "identifier": "ctc-traders-service-guide",
-    "name": "CTC Traders technical interface specification",
+    "name": "CTC Traders service guide",
     "description": "This service guide explains how to use the Common Transit Convention (CTC) API.",
     "context": "/guides/ctc-traders-service-guide/",
     "categories": ["CUSTOMS"]
