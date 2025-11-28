@@ -57,6 +57,20 @@
     "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-traders-tis",
+    "name": "CTC Traders technical interface specification",
+    "description": "This document explains the processes involved in the message exchange between traders and the New Computerised Transit System (NCTS) at departure and arrival of transit movements.",
+    "context": "/guides/ctc-traders-tis/",
+    "categories": ["CUSTOMS"]
+  },
+  {
+    "identifier": "ctc-traders-service-guide",
+    "name": "CTC Traders service guide",
+    "description": "This service guide explains how to use the Common Transit Convention (CTC) API.",
+    "context": "/guides/ctc-traders-service-guide/",
+    "categories": ["CUSTOMS"]
+  },
+  {
     "identifier": "gvms-end-to-end-service-guide",
     "name": "Goods Vehicle Movements service guide",
     "description": "This guide explains how to use the Goods Vehicle Movement Service (GVMS) APIs with your software.",
