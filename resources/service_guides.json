@@ -167,5 +167,12 @@
     "description": "This service guide explains how you can integrate your software with the View Self Assessment Account API.",
     "context": "/guides/self-assessment-liability-service-guide",
     "categories": ["SELF_ASSESSMENT"]
+  },
+  {
+    "identifier": "disa-service-guide",
+    "name": "ISA Returns API Service Guide",
+    "description": "This guide explains how HMRC-approved ISA managers can use the ISA Returns API to submit monthly reports about current-year ISA subscription data to HMRC.",
+    "context": "/guides/disa-service-guide",
+    "categories": ["OTHER", "LIFETIME_ISA"]
   }
 ]
