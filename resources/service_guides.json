@@ -134,6 +134,27 @@
     "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "emcs-api-service-guide-4-2",
+    "name": "Excise Movement Control System service guide FS 4.2",
+    "description": "The Excise Movement Control System (EMCS) API is used to submit movement information to the EMCS system, and retrieve information about movements. This guide explains how to use EMCS with your software.",
+    "context": "/guides/emcs-api-service-guide-4-2",
+    "categories": ["CUSTOMS"]
+  },
+  {
+    "identifier": "emcs-api-testing-guide-4-2",
+    "name": "Excise Movement Control System testing guide FS 4.2",
+    "description": "This guide explains how to test your software’s compatibility with the Excise Movement Control System (EMCS) API.",
+    "context": "/guides/emcs-api-testing-guide-4-2",
+    "categories": ["CUSTOMS"]
+  },
+  {
+    "identifier": "excise-movement-control-system-api-tis-4-2",
+    "name": "Excise Movement Control System technical interface specification FS 4.2",
+    "description": "This document explains the processes involved in exchanging messages between traders and the Excise Movement and Control System (EMCS). It provides definitions, explains formats and validations.",
+    "context": "/guides/excise-movement-control-system-api-tis-4-2",
+    "categories": ["CUSTOMS"]
+  },
+  {
     "identifier": "post-and-parcels-service-guide",
     "name": "Post and Parcels Service Guide",
     "description": "This guide explains how to integrate HMRC’s Secure Data Exchange Service (SDES) with your software, key for sharing information about parcel movements to Northern Ireland.",
