@@ -41,12 +41,5 @@
     "description": "A roadmap that shares the key dates for the Pillar2 API.",
     "context": "/roadmaps/pillar2-roadmap",
     "categories": ["CORPORATION_TAX"]
-  },
-  {
-    "identifier": "disa-roadmap",
-    "name": "ISA Returns API Roadmap",
-    "description": "This roadmap sets out planned changes to the ISA Returns API.",
-    "context": "/roadmaps/disa-roadmap",
-    "categories": ["OTHER", "LIFETIME_ISA"]
   }
 ]
