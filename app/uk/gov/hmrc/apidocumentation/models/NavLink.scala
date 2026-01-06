@@ -17,38 +17,23 @@
 package uk.gov.hmrc.apidocumentation.models
 
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.header.NavigationItem
+import uk.gov.hmrc.govukfrontend.views.viewmodels.servicenavigation.ServiceNavigationItem
 
 case class NavLink(label: String, href: String, truncate: Boolean = false, openInNewWindow: Boolean = false, isSensitive: Boolean = false)
-
-case object NavLink {
-
-  implicit class NavLinkSyntax(navLink: NavLink) {
-
-    def asNavigationItem: NavigationItem = NavigationItem(
-      content = Text(navLink.label),
-      href = Some(navLink.href),
-      attributes = if (navLink.openInNewWindow) Map("target" -> "_blank") else Map.empty // Note: not handling `truncate` or `isSensitive` fields
-    )
-  }
-
-  implicit class NavLinksSyntax(navLinks: Seq[NavLink]) {
-    def asNavigationItems: Seq[NavigationItem] = navLinks.map(_.asNavigationItem)
-  }
-}
 
 case class SidebarLink(label: String, href: String, subLinks: Seq[SidebarLink] = Seq.empty, showSubLinks: Boolean = false)
 
 case object StaticNavLinks {
 
-  def apply() = {
-
+  def apply(path: String) = {
+    val isGettingStarted = path.contains("/using-the-hub")
+    val isNotIndexPage   = !path.contains("index") && path != "/api-documentation"
     Seq(
-      NavLink("Getting started", "/api-documentation/docs/using-the-hub"),
-      NavLink("API documentation", "/api-documentation/docs/api"),
-      NavLink("Applications", "/developer/applications"),
-      NavLink("Support", "/devhub-support"),
-      NavLink("Service availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)
+      ServiceNavigationItem(Text("Getting started"), "/api-documentation/docs/using-the-hub", active = isGettingStarted),
+      ServiceNavigationItem(Text("API documentation"), "/api-documentation/docs/api", active = (!isGettingStarted && isNotIndexPage)),
+      ServiceNavigationItem(Text("Applications"), "/developer/applications"),
+      ServiceNavigationItem(Text("Support"), "/devhub-support"),
+      ServiceNavigationItem(Text("Service availability"), "https://api-platform-status.production.tax.service.gov.uk/", attributes = Map("target" -> "_blank"))
     )
   }
 }

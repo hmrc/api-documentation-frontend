@@ -14,25 +14,19 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcHeader
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.header.Header
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.En
-
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.servicenavigation.ServiceNavigation
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
 @import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 @import uk.gov.hmrc.apidocumentation.models._
 
-@this(hmrcHeader: HmrcHeader)
+@this(hmrcStandardHeader: HmrcStandardHeader)
 
-@* TODO: The navLinks parameter is no longer used; removal requires refactoring up to Controller level *@
-@(navLinks: Seq[NavLink] = Seq.empty)(implicit applicationConfig: ApplicationConfig, messages: Messages)
+@()(implicit applicationConfig: ApplicationConfig,request: RequestHeader, messages: Messages)
 
-@hmrcHeader(Header(
-    homepageUrl = "https://www.gov.uk",
-    serviceName = Some(applicationConfig.title),
-    navigation = Some(StaticNavLinks().asNavigationItems),
-    serviceUrl = "/api-documentation",
-    displayHmrcBanner = false,
-    containerClasses = "govuk-width-container",
-    signOutHref = None,
-    language = En
-))
+@hmrcStandardHeader(
+    serviceNavigation =  Some(ServiceNavigation(
+        serviceName = Some(applicationConfig.title),
+        navigation = StaticNavLinks(request.path),
+        serviceUrl = Some("/api-documentation")
+    ))
+)
