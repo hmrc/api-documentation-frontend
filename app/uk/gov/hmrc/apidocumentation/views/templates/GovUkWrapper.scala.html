@@ -114,7 +114,7 @@
 @govukLayout(
     pageTitle = Some(s"${pageTitle.fold("")(t => s"$t - ")}${applicationConfig.title} - GOV.UK"),
     headBlock = Some(head),
-    headerBlock = Some(siteHeader(navLinks)),
+    headerBlock = Some(siteHeader()),
     beforeContentBlock = Some(beforeContentBlock),
     mainContentLayout = None,
     footerBlock = Some(siteFooter(footerLinks)),

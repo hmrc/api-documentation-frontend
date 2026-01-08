@@ -20,9 +20,9 @@
 
 @this(siteHeader: SiteHeader)
 
-@(navLinks: Seq[NavLink] = Seq.empty)(implicit messages: Messages, applicationConfig: ApplicationConfig)
+@()(implicit messages: Messages, applicationConfig: ApplicationConfig, request: RequestHeader)
 
-@siteHeader(navLinks)
+@siteHeader()
 <!-- Notification Banner -->
 <div class="govuk-width-container">
     <div id="feedback-banner" class="govuk-phase-banner govuk-phase-banner--no-border">
