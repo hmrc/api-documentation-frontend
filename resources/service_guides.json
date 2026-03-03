@@ -92,17 +92,17 @@
     "categories": ["CORPORATION_TAX"]
   },
   {
-    "identifier": "ctc-guarantee-balance-phase5-service-guide",
-    "name": "CTC Guarantee Balance phase 5 service guide",
-    "description": "This Phase 5 guide explains how to use the Common Transit Convention (CTC) Traders Guarantee Balance API with your software.",
-    "context": "/guides/ctc-guarantee-balance-phase5-service-guide/",
+    "identifier": "ctc-guarantee-balance-service-guide",
+    "name": "CTC Guarantee Balance service guide",
+    "description": "This guide explains how to use the Common Transit Convention (CTC) Traders Guarantee Balance API with your software.",
+    "context": "/guides/ctc-guarantee-balance-service-guide/",
     "categories": ["CUSTOMS"]
   },
   {
-    "identifier": "ctc-guarantee-balance-phase5-testing-guide",
-    "name": "CTC Guarantee Balance phase 5 testing guide",
-    "description": "This Phase 5 testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Guarantee Balance API.",
-    "context": "/guides/ctc-guarantee-balance-phase5-testing-guide/",
+    "identifier": "ctc-guarantee-balance-testing-guide",
+    "name": "CTC Guarantee Balance testing guide",
+    "description": "This testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Guarantee Balance API.",
+    "context": "/guides/ctc-guarantee-balance-testing-guide/",
     "categories": ["CUSTOMS"]
   },
   {
