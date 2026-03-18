@@ -5,8 +5,8 @@ object AppDependencies {
   def apply(): Seq[ModuleID] = compile ++ test
 
   lazy val bootstrapVersion       = "10.7.0"
-  lazy val commonDomainVersion    = "0.19.0"
-  lazy val apiDomainVersion       = "0.20.0"
+  lazy val commonDomainVersion    = "1.0.0"
+  lazy val apiDomainVersion       = "0.22.0"
 
   lazy val compile = Seq(
     caffeine,
