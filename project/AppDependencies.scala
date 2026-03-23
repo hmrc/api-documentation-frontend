@@ -1,12 +1,12 @@
-import play.sbt.PlayImport._
-import sbt._
+import play.sbt.PlayImport.*
+import sbt.*
 
 object AppDependencies {
   def apply(): Seq[ModuleID] = compile ++ test
 
   lazy val bootstrapVersion       = "10.7.0"
   lazy val commonDomainVersion    = "1.0.0"
-  lazy val apiDomainVersion       = "0.22.0"
+  lazy val apiDomainVersion       = "1.0.0"
 
   lazy val compile = Seq(
     caffeine,

@@ -69,7 +69,7 @@ trait CookieEncoding {
 
   def decodeCookie(token: String): Option[String] = {
     Try({
-      val (hmac, value) = token.splitAt(40) // scalastyle:ignore
+      val (hmac, value) = token.splitAt(40)
 
       val signedValue = cookieSigner.sign(value)
 

@@ -104,7 +104,6 @@ class ApiDocumentationController @Inject() (
       }
     }
 
-  // scalastyle:off method.length
   private def doRenderApiDocumentation(
       service: ServiceName,
       version: ApiVersionNbr,
@@ -158,7 +157,7 @@ class ApiDocumentationController @Inject() (
         }
 
         val findLocally: Future[DocumentationItem] = {
-          assets.at("/public/common/docs", file, false)(request).flatMap(resultToDocumentationItem)
+          assets.at("/public/common/docs", file, aggressiveCaching = false)(request).flatMap(resultToDocumentationItem)
         }
 
         downloadConnector.fetch(service, ApiVersionNbr("common"), file)
@@ -201,7 +200,6 @@ class ApiDocumentationController @Inject() (
       case _                                                                                                             => renderNotFoundPage
     }
   }
-  // scalastyle:on method.length
 
   def renderXmlApiDocumentation(name: String): Action[AnyContent] = headerNavigation { implicit request => navLinks =>
     def makePageAttributes(apiDefinition: Documentation): PageAttributes = {

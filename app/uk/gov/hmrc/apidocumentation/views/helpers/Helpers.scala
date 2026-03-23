@@ -29,9 +29,7 @@ import uk.gov.hmrc.apidocumentation.models._
 object Slugify {
   def apply(text: String): String = makeSlug(text)
 
-  // scalastyle:off structural.type
   def apply(obj: { def value(): String }): String = Option(obj).fold("")(obj => makeSlug(obj.value()))
-  // scalastyle:on structural.type
 
   private def makeSlug(text: String) = Option(text).fold("") { obj =>
     obj.replaceAll("[^\\w\\s]", "").replaceAll("\\s+", "-").toLowerCase
@@ -44,9 +42,7 @@ object Markdown {
 
   def apply(text: Option[String]): Html = apply(text.getOrElse(""))
 
-  // scalastyle:off structural.type
   def apply(obj: { def value(): String }): Html = Option(obj).fold(emptyHtml)(node => apply(node.value()))
-  // scalastyle:on structural.type
 
   import com.github.rjeschke.txtmark.{Configuration, Processor}
   import org.markdown4j._
