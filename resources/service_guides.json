@@ -43,6 +43,13 @@
     "categories": ["CUSTOMS"]
   },
   {
+    "identifier": "ctc-traders-testing-guide",
+    "name": "CTC Traders testing guide",
+    "description": "This testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Traders API.",
+    "context": "/guides/ctc-traders-testing-guide/",
+    "categories": ["CUSTOMS"]
+  },
+  {
     "identifier": "ctc-traders-phase5-testing-guide",
     "name": "CTC Traders phase 5 testing guide",
     "description": "This testing guide helps to check your software is compatible with the Common Transit Convention (CTC) Traders API.",
