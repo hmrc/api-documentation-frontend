@@ -124,7 +124,7 @@ object WrappedApiDefinition {
   val statusVersionOrdering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiStatus](_.status)(ApiStatus.orderingByPriority).reverse.orElseBy(_.versionNbr).reverse
 }
 
-case class VersionVisibility(privacy: ApiAccessType, loggedIn: Boolean, authorised: Boolean, isTrial: Boolean = false)
+case class VersionVisibility(privacy: ApiAccessType, loggedIn: Boolean, authorised: Boolean)
 
 object VersionVisibility {
 
@@ -134,20 +134,14 @@ object VersionVisibility {
       production.loggedIn || sandbox.loggedIn
     }
 
-    def isTrial(access: ApiAccess): Boolean = {
-      access == ApiAccess.Private(true)
-    }
-
-    def isInTrial(production: ApiAvailability, sandbox: ApiAvailability): Boolean = (production.access, sandbox.access) match {
-      case (ApiAccess.Private(true), _) | (_, ApiAccess.Private(true)) => true
-      case _                                                           => false
+    def combine(prod: ApiAccessType, sandbox: ApiAccessType): ApiAccessType = {
+      if (sandbox == ApiAccessType.INTERNAL && prod == ApiAccessType.CONTROLLED) ApiAccessType.CONTROLLED else sandbox
     }
 
     (extendedApiVersion.productionAvailability, extendedApiVersion.sandboxAvailability) match {
-      case (Some(prod), None)          => Some(VersionVisibility(prod.access.accessType, prod.loggedIn, prod.authorised, isTrial(prod.access)))
-      case (None, Some(sandbox))       => Some(VersionVisibility(sandbox.access.accessType, sandbox.loggedIn, sandbox.authorised, isTrial(sandbox.access)))
-      case (Some(prod), Some(sandbox)) =>
-        Some(VersionVisibility(sandbox.access.accessType, isLoggedIn(prod, sandbox), sandbox.authorised, isInTrial(prod, sandbox)))
+      case (Some(prod), None)          => Some(VersionVisibility(prod.access, prod.loggedIn, prod.authorised))
+      case (None, Some(sandbox))       => Some(VersionVisibility(sandbox.access, sandbox.loggedIn, sandbox.authorised))
+      case (Some(prod), Some(sandbox)) => Some(VersionVisibility(combine(prod.access, sandbox.access), isLoggedIn(prod, sandbox), sandbox.authorised))
       case _                           => None
     }
   }

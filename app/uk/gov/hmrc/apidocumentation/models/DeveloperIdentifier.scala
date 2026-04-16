@@ -22,7 +22,7 @@ import scala.util.matching.Regex
 
 import play.api.libs.json.{Json, OFormat}
 
-trait DeveloperIdentifier {
+sealed trait DeveloperIdentifier {
   def asText: String = DeveloperIdentifier.asText(this)
 }
 case class EmailIdentifier(val email: String) extends DeveloperIdentifier

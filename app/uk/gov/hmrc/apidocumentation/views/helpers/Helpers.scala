@@ -67,9 +67,9 @@ object Markdown {
 }
 
 object AvailabilityPhrase {
-  val yes             = "Yes"
-  val yesPrivateTrial = "Yes - private trial"
-  val no              = "No"
+  val yes           = "Yes"
+  val yesControlled = "Yes - controlled"
+  val no            = "No"
 }
 
 object EndpointsAvailable {
@@ -77,10 +77,10 @@ object EndpointsAvailable {
   def apply(availability: Option[ApiAvailability]): String = availability match {
     case Some(ApiAvailability(endpointsEnabled, access, _, authorised)) if endpointsEnabled =>
       access match {
-        case ApiAccess.PUBLIC                       => AvailabilityPhrase.yes
-        case ApiAccess.Private(true)                => AvailabilityPhrase.yesPrivateTrial
-        case ApiAccess.Private(false) if authorised => AvailabilityPhrase.yes
-        case _                                      => AvailabilityPhrase.no
+        case ApiAccessType.PUBLIC                 => AvailabilityPhrase.yes
+        case ApiAccessType.CONTROLLED             => AvailabilityPhrase.yesControlled
+        case ApiAccessType.INTERNAL if authorised => AvailabilityPhrase.yes
+        case _                                    => AvailabilityPhrase.no
       }
     case _                                                                                  => AvailabilityPhrase.no
   }
@@ -89,25 +89,25 @@ object EndpointsAvailable {
 object ShowBaseURL {
 
   def apply(availability: Option[ApiAvailability]) = EndpointsAvailable(availability) match {
-    case AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial => true
-    case _                                                           => false
+    case AvailabilityPhrase.yes | AvailabilityPhrase.yesControlled => true
+    case _                                                         => false
   }
 }
 
 object VersionDocsVisible {
 
   def apply(availability: Option[VersionVisibility]): DocsVisibility = availability match {
-    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _, _))         => DocsVisibility.VISIBLE       // PUBLIC
-    case Some(VersionVisibility(ApiAccessType.PRIVATE, true, true, _))  => DocsVisibility.VISIBLE       // PRIVATE, logged in, whitelisted (authorised)
-    case Some(VersionVisibility(ApiAccessType.PRIVATE, _, false, true)) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
-    case _                                                              => DocsVisibility.NOT_VISIBLE
+    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _))         => DocsVisibility.VISIBLE       // PUBLIC
+    case Some(VersionVisibility(_, true, true))                      => DocsVisibility.VISIBLE       // Not Public, logged in, authorised (subscribed)
+    case Some(VersionVisibility(ApiAccessType.CONTROLLED, _, false)) => DocsVisibility.OVERVIEW_ONLY // CONTROLLED but not authorised (not subscribed)
+    case _                                                           => DocsVisibility.NOT_VISIBLE
   }
 
   def apply(version: ExtendedApiVersion): DocsVisibility = VersionVisibility(version) match {
-    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _, _))         => DocsVisibility.VISIBLE       // PUBLIC
-    case Some(VersionVisibility(ApiAccessType.PRIVATE, true, true, _))  => DocsVisibility.VISIBLE       // PRIVATE, logged in, whitelisted (authorised)
-    case Some(VersionVisibility(ApiAccessType.PRIVATE, _, false, true)) => DocsVisibility.OVERVIEW_ONLY // PRIVATE, trial, either not logged in or not whitelisted (authorised)
-    case _                                                              => DocsVisibility.NOT_VISIBLE
+    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _))         => DocsVisibility.VISIBLE       // PUBLIC
+    case Some(VersionVisibility(_, true, true))                      => DocsVisibility.VISIBLE       // Not Public, logged in, authorised (subscribed)
+    case Some(VersionVisibility(ApiAccessType.CONTROLLED, _, false)) => DocsVisibility.OVERVIEW_ONLY // CONTROLLED but not authorised (not subscribed)
+    case _                                                           => DocsVisibility.NOT_VISIBLE
   }
 }
 
@@ -115,12 +115,12 @@ object ShowAvailabilityInEnvironment {
 
   def apply(sandboxAvailability: String, productionAvailability: String, applicationConfig: ApplicationConfig): String =
     (sandboxAvailability, productionAvailability) match {
-      case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial), (AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial)) =>
+      case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesControlled), (AvailabilityPhrase.yes | AvailabilityPhrase.yesControlled)) =>
         s"${applicationConfig.nameOfSubordinateEnvironment} and ${applicationConfig.nameOfPrincipalEnvironment}"
-      case (AvailabilityPhrase.no, (AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial))                                         => applicationConfig.nameOfPrincipalEnvironment
-      case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesPrivateTrial), AvailabilityPhrase.no)                                         => applicationConfig.nameOfSubordinateEnvironment
-      case (AvailabilityPhrase.no, AvailabilityPhrase.no)                                                                                 => "Not applicable"
-      case (_, _)                                                                                                                         => "Not applicable"
+      case (AvailabilityPhrase.no, (AvailabilityPhrase.yes | AvailabilityPhrase.yesControlled))                                       => applicationConfig.nameOfPrincipalEnvironment
+      case ((AvailabilityPhrase.yes | AvailabilityPhrase.yesControlled), AvailabilityPhrase.no)                                       => applicationConfig.nameOfSubordinateEnvironment
+      case (AvailabilityPhrase.no, AvailabilityPhrase.no)                                                                             => "Not applicable"
+      case (_, _)                                                                                                                     => "Not applicable"
     }
 }
 

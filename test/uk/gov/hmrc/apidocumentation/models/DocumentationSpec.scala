@@ -35,7 +35,7 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
     val v2Deprecated       = apiVersion("2.0", DEPRECATED)
     val v3Prototyped       = apiVersion("3.0", BETA)
     val v4Alpha            = apiVersion("4.0", ALPHA)
-    val v3PrivatePublished = apiVersion("3.1", BETA, ApiAccess.Private(true))
+    val v3PrivatePublished = apiVersion("3.1", BETA, ApiAccessType.CONTROLLED)
     val v10Published       = apiVersion("10.0", STABLE)
     val v3Published        = apiVersion("3.0", STABLE)
     val v0_9Published      = apiVersion("0.9", STABLE)

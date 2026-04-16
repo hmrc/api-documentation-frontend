@@ -21,7 +21,7 @@ import scala.concurrent.Future
 
 import play.api.http.Status._
 import play.api.mvc._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccess, ServiceName}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccessType, ServiceName}
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
@@ -82,7 +82,7 @@ class DownloadControllerSpec extends CommonControllerBaseSpec {
     "redirect to the login page when the API is private and the user is not logged in" in new Setup {
       theUserIsNotLoggedIn()
       theDefinitionServiceWillReturnAnApiDefinition(
-        extendedApiDefinition(serviceName = serviceName.value, version = version, access = ApiAccess.Private(), authorised = false)
+        extendedApiDefinition(serviceName = serviceName.value, version = version, access = ApiAccessType.INTERNAL, authorised = false)
       )
 
       val result = underTest.downloadResource(serviceName, version, resourceName)(request)
