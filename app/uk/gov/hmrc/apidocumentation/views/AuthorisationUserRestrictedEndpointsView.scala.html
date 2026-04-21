@@ -46,23 +46,38 @@
 
     <h2 class="govuk-heading-m">User-restricted endpoints</h2>
 
-    <p class="govuk-body">These endpoints require specific authorisation from the end user. They generally give access to secure data.</p>
-
+    <p class="govuk-body">User-restricted endpoints give access to secure, personal data. To use them, your application must get permission from the end user.</p>
+    <h3 class="govuk-heading-s">How authorisation works</h3>
     <p class="govuk-body">We use the open standard <a class="govuk-link" href="https://oauth.net/2/">OAuth 2.0</a>
         with the <a class="govuk-link" href="https://oauth.net/2/grant-types/authorization-code/">Authorization Code
-        Grant</a>. This lets the end user grant authority to your application to interact with
-        HMRC on their behalf, without sharing their access credentials. We are able to support <a class="govuk-link" href="https://oauth.net/2/pkce/">PKCE</a> for this grant-type, though you are not required to use it.
+        Grant</a>. This standard lets you give your application permission to interact with us without sharing your password.
     </p>
-
-    <p class="govuk-body">The end user authenticates directly with us using their HMRC sign in details, and grants authority for specific <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</p>
-
-    <p class="govuk-body">We then issue an OAuth 2.0 <a class="govuk-link" href="https://tools.ietf.org/html/rfc6749#section-1.4" rel="noopener noreferrer">access token</a> that’s specific to the end user. Your application passes the access token in subsequent API requests to user-restricted endpoints.</p>
-
-    <p class="govuk-body">There are separate HMRC sign in details for individuals, agents and organisations. For individuals and organisations, the access token only gives access to the end user’s own data. For agents the access token gives access to their clients’ data.</p>
-
-    <p class="govuk-body">Authorisation rules for specific API endpoints are given in the <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty)">API documentation</a>.</p>
-
-    <p class="govuk-body">The access token lasts for 4 hours. When it expires, it can be refreshed using a single-use refresh token. After 18 months you can no longer refresh the access token and the end user must grant authority again.</p>
+    <p class="govuk-body">We also support <a href="https://oauth.net/2/pkce/">PKCE</a>, but you do not have to use it.</p>
+    <h3 class="govuk-heading-s">How you sign in</h3>
+    <ol class="govuk-list govuk-list--number">
+        <li>Sign in with your <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">HMRC account.</a></li>
+        <li>Choose which <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a> your application can access. We issue an OAuth 2.0 <a class="govuk-link" href="https://tools.ietf.org/html/rfc6749#section-1.4" rel="noopener noreferrer">access token</a></li>
+        <li>Your application sends this token when calling any user-restricted endpoint.</li>
+    </ol>
+    <h3 class="govuk-heading-s">Types of HMRC accounts</h3>
+    <p class="govuk-body">HMRC has different sign-in accounts for:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>Individuals</li>
+        <li>Organisations</li>
+        <li>Agents</li>
+    </ul>
+    <p class="govuk-body">Access works as follows:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>Individuals and organisations can only access their own data.</li>
+        <li>Agents can access their clients’ data.</li>
+    </ul>
+    <p class="govuk-body">Each API lists the scopes and rules it requires in the <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty)">API documentation</a>.</p>
+    <h3 class="govuk-heading-s">Token lifespan</h3>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>An access token lasts 4 hours.</li>
+        <li>When it expires, you can get a new one using a single-use refresh token.</li>
+        <li>After <strong>18 months</strong>, refresh tokens stop working. At this point, you must go through the authorisation process again.</li>
+    </ul>
 
     <div class="govuk-inset-text">
         For a working example, see the <a class="govuk-link" href="@controllers.routes.DocumentationController.tutorialsPage().url#user-restricted">user-restricted endpoint tutorial</a>.
@@ -71,27 +86,25 @@
     <div id="get-access-token">
         <h3 class="govuk-heading-s">Getting an OAuth 2.0 access token</h3>
 
-        <p class="govuk-body">The authorisation user journey is an important part of our security, and may be changed without notice.</p>
+        <p class="govuk-body">The authorisation user journey is an important part of our security and may be changed without notice.</p>
 
         <div class="govuk-warning-text warning-icon-fix">
             <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
             <strong class="govuk-warning-text__text">
               <span class="govuk-warning-text__assistive">Warning</span>
-              You must not alter this journey in any way.
+                You must not change or bypass this journey.
             </strong>
         </div>
 
         <div>
 
             <h4 class="govuk-heading-s">1. Request authorisation</h4>
-
+            <p class="govuk-body">We display a start page that explains the authorisation process.</p>
             <ol class="govuk-list govuk-list--number">
                 <li>Send your user to our <a class="govuk-link" href="#auth-endpoint-syntax">authorisation endpoint<span class="govuk-visually-hidden"> in-page link</span></a>.</li>
-                <li>We display a start page that explains the authorisation process.</li>
-                <li>We prompt the user to sign in using their HMRC sign in details.</li>
                 <li>The user is taken through <a class="govuk-link" href="@controllers.routes.AuthorisationController.authorisation2SVPage().url">2-Step Verification (2SV)</a>.</li>
-                <li>The user may be asked to confirm their identity. This depends on the user type, the specific API scopes being requested and whether or not the user has previously confirmed their identity.</li>
-                <li>The user is asked to grant your application the authority to access certain <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</li>
+                <li>You may be asked to confirm your identity. This depends on the user type; the specific API scopes being requested and whether you have previously confirmed your identity.</li>
+                <li>You’re asked to grant your application the authority to access certain <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</li>
             </ol>
 
             <p class="govuk-body">The following diagram illustrates the process:</p>
@@ -305,9 +318,9 @@ response_type=code\
 
             <h4 class="govuk-heading-s">2. Receive authorisation results</h4>
 
-            <p class="govuk-body">You need to create an endpoint in your application to receive the authorisation results, which needs to support an HTTP GET to the redirect URI you specified in step 1.</p>
+            <p class="govuk-body">You need to create an endpoint in your application to receive the authorisation results. This endpoint must accept an HTTP GET request to the redirect URI you specified in step 1.</p>
 
-            <p class="govuk-body">We’ll redirect the user’s browser back to your endpoint once the user has granted your application the requested authority.</p>
+            <p class="govuk-body">Your browser will be redirected back to your endpoint once you’ve granted your application the requested authority.</p>
 
             <p class="govuk-body">Your endpoint must support the following query parameters:</p>
 
@@ -360,7 +373,7 @@ https://www.example.com/auth-redirect?error=access_denied&amp;error_description=
 
             <h4 class="govuk-heading-s">3. Exchange authorisation code for access token</h4>
 
-            <p class="govuk-body">When you get the authorisation code, you must exchange this for an access token <strong class="bold-small">within 10 minutes</strong>.</p>
+            <p class="govuk-body">When you receive the authorisation code, you must exchange this for an access token <strong class="bold-small">within 10 minutes</strong>.</p>
 
             <p class="govuk-body">Do this via a POST to our token endpoint.</p>
 
@@ -444,9 +457,9 @@ curl -X POST -H "content-type:application/x-www-form-urlencoded" --data \
             <br />
             <h5 class="govuk-heading-s faded-text">Error scenarios</h5>
 
-            <p class="govuk-body">If there are any issues with your call to our token endpoint, we return an HTTP error status.</p>
+            <p class="govuk-body">If something goes wrong with your request to the token endpoint, we return an HTTP error.</p>
 
-            <p class="govuk-body">Errors not listed are probably not from us. One possible cause is a <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#network-access">network access issue</a>, for example your network might allow GET requests but not POST requests.</p>
+            <p class="govuk-body">Errors not listed here are usually caused by something outside of our control. One possible cause is a <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#network-access">network access issue</a>, for example your network might allow GET requests but not POST requests.</p>
 
             <div class="govuk-inset-text">
                 The error codes listed are fixed, but the associated error messages can change without notice.
@@ -577,15 +590,15 @@ curl -X GET @{applicationConfig.sandboxApiBaseUrl}/hello/user \
 
             <h4 class="govuk-heading-s">5. Refreshing an access token</h4>
 
-            <p class="govuk-body">A user's <code class="code--slim">access_token</code> <strong class="bold-small">expires after 4 hours</strong>.</p>
+            <p class="govuk-body">Your access token expires after 4 hours.</p>
 
-            <p class="govuk-body">If the user's <code class="code--slim">access_token</code> has expired, calls from your application to an API will receive a response with an HTTP status code of <code class="code--slim">401 (Unauthorized)</code> and an error code of <code class="code--slim">INVALID_CREDENTIALS</code>.</p>
+            <p class="govuk-body">When the <code class="code--slim">access_token</code> has expired, any API call from your application will return HTTP <code class="code--slim">401 (Unauthorized)</code> and an error code of <code class="code--slim">INVALID_CREDENTIALS</code>.</p>
 
             <p class="govuk-body">To refresh the <code class="code--slim">access_token</code>, submit the expired token’s corresponding <code class="code--slim">refresh_token</code> to our token endpoint using <code class="code--slim">grant_type</code> of <code class="code--slim">refresh_token</code>.</p>
 
             <p class="govuk-body">You can only use a <code class="code--slim">refresh_token</code> once. When you refresh an <code class="code--slim">access_token</code>, it invalidates the original <code class="code--slim">access_token</code> immediately if it has not already expired. </p>
 
-            <p class="govuk-body">Be careful to avoid creating any race conditions when refreshing access tokens if your application supports concurrent API access.</p>
+            <p class="govuk-body">If your application makes several API calls at the same time, take care to avoid race conditions when refreshing tokens.</p>
 
             <h5 class="govuk-heading-s faded-text">Example request</h5>
 
@@ -683,9 +696,9 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
         <h3 class="govuk-heading-s">Requesting a new token</h3>
 
-        <p class="govuk-body">Unless revoked earlier by the user, or tampered with, the authorisation granted to your application expires after <strong class="bold-small">18 months</strong>, and you can no longer refresh the user's <code class="code--slim">access_token</code>.</p>
+        <p class="govuk-body">Unless you revoke access or the token is tampered with, the authorisation you grant lasts for 18 months. After that, you can no longer refresh your access token.</p>
 
-        <p class="govuk-body">If the user's <code class="code--slim">refresh_token</code> has expired, calls from your application to our token endpoint will return a response with an HTTP status code of 400 (Bad Request) and an error code of <code class="code--slim">invalid_grant</code>.</p>
+        <p class="govuk-body">If the <code class="code--slim">refresh_token</code> has expired, any call from your application to the token endpoint will return a HTTP 400 (Bad Request) and an error code of <code class="code--slim">invalid_grant</code>.</p>
 
         <p class="govuk-body">When this happens, your application must send the user back through the full process for <a class="govuk-link" href="#get-access-token">Getting an OAuth 2.0 access token<span class="govuk-visually-hidden"> in-page link</span></a>.</p>
 
@@ -699,7 +712,7 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
         <h3 class="govuk-heading-s">Revoking authority</h3>
 
-        <p class="govuk-body">A user can revoke the authority granted to your application at any time using the <a class="govuk-link" href="https://www.tax.service.gov.uk/applications-manage-authority">Manage authorised applications online service</a>.</p>
+        <p class="govuk-body">You can revoke the authority granted to your application at any time using the <a class="govuk-link" href="https://www.tax.service.gov.uk/applications-manage-authority">Manage authorised applications online service</a>.</p>
 
     </div>
     <div>
@@ -723,9 +736,9 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
         <p class="govuk-body">The Redirect URI determines how the <code class="code--slim">authorization_code</code> is returned to your application.</p>
 
-        <p class="govuk-body">Where your application is running on a remote web server, your Redirect URI returns the <code class="code--slim">authorization_code</code> to that server. You can then centrally manage your authorisation tokens.</p>
+        <p class="govuk-body">If your application runs on a remote web server, the redirect URI sends the authorization_code back to that server, allowing you to manage authorisation tokens centrally.</p>
 
-        <p class="govuk-body">In distributed applications, where your application is installed on a user's device and there's no centralised web server, you have the following options for a Redirect URI:</p>
+        <p class="govuk-body">For distributed applications installed on your device, and where no central web server exists, you have the following options for a redirect URI:</p>
 
         <h4 class="govuk-heading-s">http://localhost:[PORT]</h4>
 
@@ -737,13 +750,13 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
         <h4 class="govuk-heading-s">urn:ietf:wg:oauth:2.0:oob</h4>
 
-        <p class="govuk-body">The <code class="code--slim">authorization_code</code> is rendered in the title of a HTML page where you can parse the DOM to retrieve the code. You can then programmatically close the window before the user sees the rendered web page.</p>
+        <p class="govuk-body">The <code class="code--slim">authorization_code</code> is rendered in the title of an HTML page. Your application can parse the DOM to retrieve the code and then close the window before the user sees the rendered web page.</p>
 
         <p class="govuk-body">If your application can't parse the DOM or close the window, the HTML page renders the <code class="code--slim">authorization_code</code> along with a message asking the user to copy the code and paste it into your application, before closing the window.</p>
 
         <h4 class="govuk-heading-s">urn:ietf:wg:oauth:2.0:oob:auto</h4>
 
-        <p class="govuk-body">The authorisation code is rendered in the title of a HTML page. The user sees a message asking them to close the browser window.</p>
+        <p class="govuk-body">The authorisation code is rendered in the title of an HTML page, and the user sees a message asking them to close the browser window.</p>
 
         <p class="govuk-body">Use this if your application can detect that the page has loaded and parse the DOM to retrieve the code from the title, but can't close the window.</p>
 
