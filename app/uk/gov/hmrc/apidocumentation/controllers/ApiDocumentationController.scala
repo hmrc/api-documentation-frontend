@@ -193,11 +193,11 @@ class ApiDocumentationController @Inject() (
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) if selectedVersion.status == ApiStatus.RETIRED => renderRetiredVersionJumpPage(api)
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _)))                                                => renderDocumentationPage(api, selectedVersion)
-      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.PRIVATE, _, false, true)))                        => renderDocumentationPage(api, selectedVersion)
-      case Some((_, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _)))                                           => redirectToLoginPage
-      case _                                                                                                             => renderNotFoundPage
+      case Some((api, selectedVersion, VersionVisibility(_, _, true))) if selectedVersion.status == ApiStatus.RETIRED => renderRetiredVersionJumpPage(api)
+      case Some((api, selectedVersion, VersionVisibility(_, _, true)))                                                => renderDocumentationPage(api, selectedVersion)
+      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.CONTROLLED, _, false)))                        => renderDocumentationPage(api, selectedVersion)
+      case Some((_, _, VersionVisibility(ApiAccessType.INTERNAL | ApiAccessType.CONTROLLED, false, _)))               => redirectToLoginPage
+      case _                                                                                                          => renderNotFoundPage
     }
   }
 

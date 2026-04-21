@@ -59,7 +59,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       serviceName: String,
       name: String = "Hello World",
       version: ApiVersionNbr = ApiVersionNbr("1.0"),
-      access: ApiAccess = ApiAccess.PUBLIC,
+      access: ApiAccessType = ApiAccessType.PUBLIC,
       loggedIn: Boolean = false,
       authorised: Boolean = true,
       isTestSupport: Boolean = false
@@ -132,14 +132,14 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
           retiredVersion,
           ApiStatus.RETIRED,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = false, authorised = true)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = false, authorised = true)),
           None
         ),
         ExtendedApiVersion(
           nonRetiredVersion,
           ApiStatus.STABLE,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = false, authorised = true)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = false, authorised = true)),
           None
         )
       ),
@@ -161,21 +161,21 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
           ApiVersionNbr("1.0"),
           ApiStatus.RETIRED,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = false, authorised = true)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = false, authorised = true)),
           None
         ),
         ExtendedApiVersion(
           ApiVersionNbr("1.1"),
           ApiStatus.BETA,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.PUBLIC, loggedIn = false, authorised = true)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = false, authorised = true)),
           None
         ),
         ExtendedApiVersion(
           ApiVersionNbr("1.2"),
           ApiStatus.STABLE,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccess.Private(false), loggedIn = false, authorised = false)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.INTERNAL, loggedIn = false, authorised = false)),
           None
         )
       ),

@@ -78,10 +78,10 @@ class DownloadController @Inject() (
       ))
 
     findVersion(apiOption) match {
-      case Some((api, _, VersionVisibility(ApiAccessType.PRIVATE, false, _, _))) =>
+      case Some((api, _, VersionVisibility(ApiAccessType.CONTROLLED | ApiAccessType.INTERNAL, false, _))) =>
         redirectToLoginPage(api.serviceName)
 
-      case Some((api, selectedVersion, VersionVisibility(_, _, true, _))) =>
+      case Some((api, selectedVersion, VersionVisibility(_, _, true))) =>
         downloadConnector.fetch(api.serviceName, selectedVersion.version, validResource)
           .map(_.fold(renderNotFoundPage)(Future.successful))
           .flatten

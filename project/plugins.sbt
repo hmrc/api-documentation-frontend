@@ -10,7 +10,7 @@ addSbtPlugin("io.github.irundaia"  % "sbt-sassify"           % "1.5.2")
 addSbtPlugin("com.github.sbt"      % "sbt-digest"            % "2.1.0")
 addSbtPlugin("org.scoverage"       % "sbt-scoverage"         % "2.4.4")
 addSbtPlugin("org.scalameta"       % "sbt-scalafmt"          % "2.5.2")
-addSbtPlugin("ch.epfl.scala"       % "sbt-bloop"             % "2.0.16")
+addSbtPlugin("ch.epfl.scala"       % "sbt-bloop"             % "2.0.19")
 addSbtPlugin("ch.epfl.scala"       % "sbt-scalafix"          % "0.14.5")
 
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always

@@ -113,7 +113,7 @@
                                     id="version-@version.version.toString()">
                                     Version @version.version.toString() - <a class="govuk-link govuk-link--no-visited-state"
                                                                              href="@controllers.routes.DocumentationController.apiStatusesPage().url#@version.status.displayText.toLowerCase"
-                                                                             target="_blank"> @version.displayedStatus.toLowerCase
+                                                                             target="_blank"> @version.status.displayText.toLowerCase
                                     <br>(opens in new tab)</a></th>
                                 <td class="govuk-table__cell govuk-table__cell--numeric"
                                     id="environments">@ShowAvailabilityInEnvironment(EndpointsAvailable(version.sandboxAvailability), EndpointsAvailable(version.productionAvailability), applicationConfig)</td>

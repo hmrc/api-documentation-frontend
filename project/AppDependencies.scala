@@ -6,7 +6,7 @@ object AppDependencies {
 
   lazy val bootstrapVersion       = "10.7.0"
   lazy val commonDomainVersion    = "1.0.0"
-  lazy val apiDomainVersion       = "1.0.0"
+  lazy val apiDomainVersion       = "1.2.0"
 
   lazy val compile = Seq(
     caffeine,

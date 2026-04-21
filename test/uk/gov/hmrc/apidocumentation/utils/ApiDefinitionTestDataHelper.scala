@@ -28,7 +28,7 @@ trait ApiDefinitionTestDataHelper {
   def apiAvailability() = {
     ApiAvailability(
       endpointsEnabled = true,
-      access = ApiAccess.PUBLIC,
+      access = ApiAccessType.PUBLIC,
       loggedIn = false,
       authorised = false
     )
@@ -37,16 +37,16 @@ trait ApiDefinitionTestDataHelper {
   implicit class ApiAvailabilityModifier(val inner: ApiAvailability) {
 
     def asPublic: ApiAvailability =
-      inner.copy(access = ApiAccess.PUBLIC)
+      inner.copy(access = ApiAccessType.PUBLIC)
 
     def asPrivate: ApiAvailability =
-      inner.copy(access = ApiAccess.Private(false))
+      inner.copy(access = ApiAccessType.INTERNAL)
 
     def asTrial: ApiAvailability =
-      inner.copy(access = ApiAccess.Private(true))
+      inner.copy(access = ApiAccessType.CONTROLLED)
 
     def notTrial: ApiAvailability =
-      inner.copy(access = ApiAccess.Private(false))
+      inner.copy(access = ApiAccessType.INTERNAL)
 
     def asAuthorised: ApiAvailability =
       inner.copy(authorised = true)
@@ -60,7 +60,7 @@ trait ApiDefinitionTestDataHelper {
     def notLoggedIn: ApiAvailability =
       inner.copy(loggedIn = false)
 
-    def withAccess(altAccess: ApiAccess): ApiAvailability =
+    def withAccess(altAccess: ApiAccessType): ApiAvailability =
       inner.copy(access = altAccess)
 
     def endpointsDisabled: ApiAvailability =
@@ -99,7 +99,7 @@ trait ApiDefinitionTestDataHelper {
     def notLoggedIn: Option[ApiAvailability] =
       inner.map(_.notLoggedIn)
 
-    def withAccess(altAccess: ApiAccess): Option[ApiAvailability] =
+    def withAccess(altAccess: ApiAccessType): Option[ApiAvailability] =
       inner.map(_.withAccess(altAccess))
 
     def endpointsDisabled: Option[ApiAvailability] =
@@ -116,7 +116,7 @@ trait ApiDefinitionTestDataHelper {
       inner.copy(method = HttpMethod.POST)
   }
 
-  def apiVersion(version: String = "1.0", status: ApiStatus = ApiStatus.STABLE, access: ApiAccess = ApiAccess.PUBLIC): ApiVersion = {
+  def apiVersion(version: String = "1.0", status: ApiStatus = ApiStatus.STABLE, access: ApiAccessType = ApiAccessType.PUBLIC): ApiVersion = {
     ApiVersion(
       ApiVersionNbr(version),
       status,
@@ -146,15 +146,15 @@ trait ApiDefinitionTestDataHelper {
       inner.copy(access = inner.access)
 
     def asPrivate: ApiVersion =
-      inner.copy(access = ApiAccess.Private(false))
+      inner.copy(access = ApiAccessType.INTERNAL)
 
     def asTrial: ApiVersion =
-      inner.copy(access = ApiAccess.Private(true))
+      inner.copy(access = ApiAccessType.CONTROLLED)
 
     def notTrial: ApiVersion =
-      inner.copy(access = ApiAccess.Private(false))
+      inner.copy(access = ApiAccessType.INTERNAL)
 
-    def withAccess(altAccess: ApiAccess): ApiVersion =
+    def withAccess(altAccess: ApiAccessType): ApiVersion =
       inner.copy(access = altAccess)
 
   }

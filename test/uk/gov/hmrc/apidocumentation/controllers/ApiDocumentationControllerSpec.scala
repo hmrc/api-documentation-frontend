@@ -102,7 +102,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theUserIsLoggedIn()
 
           val privateTrialAPIDefinition =
-            extendedApiDefinition(serviceName = serviceName.value, access = ApiAccess.Private(true), loggedIn = true, authorised = false)
+            extendedApiDefinition(serviceName = serviceName.value, access = ApiAccessType.CONTROLLED, loggedIn = true, authorised = false)
 
           theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
 
@@ -115,7 +115,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theUserIsLoggedIn()
 
           val privateTrialAPIDefinition =
-            extendedApiDefinition(serviceName = serviceName.value, access = ApiAccess.Private(true), loggedIn = true, authorised = true)
+            extendedApiDefinition(serviceName = serviceName.value, access = ApiAccessType.CONTROLLED, loggedIn = true, authorised = true)
 
           theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
 
@@ -195,14 +195,14 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         verifyLinkToStableDocumentationRendered(result, serviceName, ApiVersionNbr("1.1"))
       }
 
-      "display the API landing page private trial and private" in new Setup {
+      "display the API landing page controlled and internal" in new Setup {
         theUserIsLoggedIn()
         theDefinitionServiceWillReturnAnApiDefinition(
           extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
             versionOne,
-            Some(ApiAvailability(true, ApiAccess.Private(true), true, true)),
-            Some(ApiAvailability(true, ApiAccess.Private(false), true, true))
+            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, true)),
+            Some(ApiAvailability(true, ApiAccessType.INTERNAL, true, true))
           )
         )
         DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
@@ -210,7 +210,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
 
         verifyApiDocumentationPageRendered(result)
-        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("private stable"))(result)
+        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("> stable"))(result)
       }
 
       "display the API landing page with 'Request access' button for private trial when logged in" in new Setup {
@@ -219,8 +219,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
             versionOne,
-            Some(ApiAvailability(true, ApiAccess.Private(true), true, false)),
-            Some(ApiAvailability(true, ApiAccess.Private(true), true, false))
+            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, false)),
+            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, false))
           )
         )
         DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
@@ -228,7 +228,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
 
         verifyApiDocumentationPageRendered(result)
-        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("private stable", "Request access"))(result)
+        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("> stable", "Request access"))(result)
       }
 
       "display the API landing page with NO 'Request access' button for private trial when not logged in" in new Setup {
@@ -237,8 +237,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
             versionOne,
-            Some(ApiAvailability(true, ApiAccess.Private(true), false, false)),
-            Some(ApiAvailability(true, ApiAccess.Private(true), false, false))
+            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, false, false)),
+            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, false, false))
           )
         )
         DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
@@ -246,7 +246,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
 
         verifyApiDocumentationPageRendered(result)
-        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("private stable"))(result)
+        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("> stable"))(result)
         verifyPageDoesNotContain(texts = Seq("Request access"))(result)
       }
 
