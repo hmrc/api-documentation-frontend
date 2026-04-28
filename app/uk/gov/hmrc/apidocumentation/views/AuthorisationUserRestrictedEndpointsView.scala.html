@@ -318,7 +318,7 @@ response_type=code\
 
             <h4 class="govuk-heading-s">2. Receive authorisation results</h4>
 
-            <p class="govuk-body">You need to create an endpoint in your application to receive the authorisation results. This endpoint must accept an HTTP GET request to the redirect URI you specified in step 1.</p>
+            <p class="govuk-body">You must create an endpoint in your application to receive the authorisation results. This endpoint must accept an HTTP GET request to the redirect URI you specified in step 1.</p>
 
             <p class="govuk-body">Your browser will be redirected back to your endpoint once you’ve granted your application the requested authority.</p>
 
@@ -750,15 +750,15 @@ curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
 
         <h4 class="govuk-heading-s">urn:ietf:wg:oauth:2.0:oob</h4>
 
-        <p class="govuk-body">The <code class="code--slim">authorization_code</code> is rendered in the title of an HTML page. Your application can parse the DOM to retrieve the code and then close the window before the user sees the rendered web page.</p>
+        <p class="govuk-body">The <code class="code--slim">authorization_code</code> is shown in the title of an HTML page. Your application can parse the DOM to retrieve the code and then close the window before the user sees the rendered web page.</p>
 
         <p class="govuk-body">If your application can't parse the DOM or close the window, the HTML page renders the <code class="code--slim">authorization_code</code> along with a message asking the user to copy the code and paste it into your application, before closing the window.</p>
 
         <h4 class="govuk-heading-s">urn:ietf:wg:oauth:2.0:oob:auto</h4>
 
-        <p class="govuk-body">The authorisation code is rendered in the title of an HTML page, and the user sees a message asking them to close the browser window.</p>
+        <p class="govuk-body">The authorisation code is shown in the title of an HTML page, and the user sees a message asking them to close the browser window.</p>
 
-        <p class="govuk-body">Use this if your application can detect that the page has loaded and parse the DOM to retrieve the code from the title, but can't close the window.</p>
+        <p class="govuk-body">Use this option if your application can detect when the page has loaded and can parse the DOM to read the code from the title, but can't close the window itself.</p>
 
     </section>
 
