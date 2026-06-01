@@ -163,8 +163,8 @@
   },
   {
     "identifier": "post-and-parcels-service-guide",
-    "name": "Post and Parcels Service Guide",
-    "description": "This guide explains how to integrate HMRC’s Secure Data Exchange Service (SDES) with your software, key for sharing information about parcel movements to Northern Ireland.",
+    "name": "Post and Parcels File Transfer Service Guide",
+    "description": "Guidance on how to integrate HMRC’s file transfer API with your software and share information about parcel movements to Northern Ireland. (Part of the service formerly known as Secure Data Exchange Service (SDES))",
     "context": "/guides/post-and-parcels-service-guide",
     "categories": ["CUSTOMS"]
   },
@@ -197,10 +197,10 @@
     "categories": ["SELF_ASSESSMENT"]
   },
   {
-    "identifier": "pillar2-sdes-service-guide",
-    "name": "Secure Data Exchange Service (SDES) - Pillar 2 Service Guide",
-    "description": "This guide explains the taxes applicable under the Pillar 2 agreement and how to use the SDES File Upload API for sharing documentation and ensuring compliance.",
-    "context": "/guides/pillar2-sdes-service-guide",
+    "identifier": "pillar2-file-transfer-service-guide",
+    "name": "Pillar 2 File Transfer Service Guide",
+    "description": "Guidance on how to HMRC’s file transfer API to share documentation and support compliance with the Pillar 2 agreement. (Part of the service formerly known as Secure Data Exchange Service (SDES))",
+    "context": "/guides/pillar2-file-transfer-service-guide",
     "categories": ["CORPORATION_TAX"]
   }
 ]
