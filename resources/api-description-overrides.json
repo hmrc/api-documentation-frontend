@@ -304,7 +304,7 @@
     "identifier": "ras-api"
   },
   {
-    "description": "This API lists the files available for download through the Secure Data Exchange Service (SDES) and provides a download URL.",
+    "description": "View the files available for download when transferring files with HMRC, including the download URLs you will be given. (Part of the service formerly known as Secure Data Exchange Service (SDES))",
     "identifier": "secure-data-exchange-bulk-download"
   },
   {
@@ -312,7 +312,7 @@
     "identifier": "secure-data-exchange-notifications"
   },
   {
-    "description": "This API creates URLs for uploading one or multiple files to HMRC’s Secure Data Exchange Service (SDES). It is designed for use with Web Forms.",
+    "description": "Create URLs to transfer one or more files to HMRC. Designed for use with Web Forms. (Formerly the Secure Data Exchange Service (SDES) File Upload API)",
     "identifier": "secure-data-exchange-service-misc-api"
   },
   {
