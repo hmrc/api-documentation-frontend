@@ -25,6 +25,8 @@
 
 @apiMain(pageAttributes){
 
+  @defining(pageAttributes.headerLinks.find(navLink => navLink.label == "Register").getOrElse(NavLink("Register","https://developer.service.hmrc.gov.uk/developer/registration"))) { registerLink =>
+
 <h1 class="govuk-heading-l">Tutorials</h1>
 
 <nav role="navigation" aria-labelledby="onThisPage">
@@ -155,7 +157,7 @@ String responseBody = EntityUtils.toString(response.getEntity());
         use it to call the Hello Application endpoint of the Hello World API.
     </p>
     <p class="govuk-body">
-        <a class="govuk-link" href="https://developer.service.hmrc.gov.uk/developer/registration">Register with the Developer Hub</a>
+        <a class="govuk-link" href=@registerLink.href>Register with the Developer Hub</a>
         and create a sandbox application. You will need your application's <code class="code--slim">client_id</code>
         and <code class="code--slim">client_secret</code>.
     </p>
@@ -223,7 +225,7 @@ String responseBody = EntityUtils.toString(response.getEntity());
 <section aria-labelledby="user-restricted">
     <h2 class="govuk-heading-m" id="user-restricted">Accessing a user-restricted endpoint</h2>
     <p class="govuk-body">
-        Before you begin, you must <a class="govuk-link" href="https://developer.service.hmrc.gov.uk/developer/registration">register as a developer with HMRC</a> and create an application.
+        Before you begin, you must <a class="govuk-link" href=@registerLink.href>register as a developer with HMRC</a> and create an application.
         You will need your application’s <code class="code--slim">client_id</code> and <code class="code--slim">client_secret</code> for either the production or testing environment.
     </p>
 
@@ -365,5 +367,5 @@ Long expiresIn = response.getExpiresIn();
 <p class="govuk-body">You should now be ready to start integrating with
     <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty,List.empty).url">our APIs</a>.
 </p>
-
+  }
 }
