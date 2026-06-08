@@ -606,9 +606,9 @@
     </section>
 
     <section id="versioning">
-        <h2 class="govuk-heading-m">Versioning</h2>
+        <h2 class="govuk-heading-m">Using the Accept header for versioning</h2>
 
-        <p class="govuk-body">Request the version of the API you want to use by including an <code class="code--slim">Accept</code> header with a media type of:</p>
+        <p class="govuk-body">You choose the version of the API you want to use by sending an <code class="code--slim">Accept</code> header with a media type of:</p>
 
         <pre class="code--block">application/vnd.hmrc.[version]+[content-type]</pre>
         <br />
@@ -616,7 +616,11 @@
 
         <pre class="code--block">application/vnd.hmrc.1.0+json</pre>
         <br />
-        <p class="govuk-body">We release backwards-compatible changes in the same version, so you don't need to change your <code class="code--slim">Accept</code> header. We release backwards-incompatible changes in a new version, and you must change your <code class="code--slim">Accept</code> header to use it.</p>
+        <h3>How version changes affect your Accept header</h3>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>We make backwards‑compatible changes within the same version, so you do not need to update your Accept header.</li>
+            <li>When we release a backwards‑incompatible change, we create a new version of the API. You must update your Accept header or the API will still remain on the same version.</li>
+        </ul>
 
         <p class="govuk-body"> Learn more about <a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.DocumentationController.apiStatusesPage().url">API version statuses</a>.
 
