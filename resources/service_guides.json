@@ -199,7 +199,7 @@
   {
     "identifier": "pillar2-file-transfer-service-guide",
     "name": "Pillar 2 File Transfer Service Guide",
-    "description": "Guidance on how to HMRC’s file transfer API to share documentation and support compliance with the Pillar 2 agreement. (Part of the service formerly known as Secure Data Exchange Service (SDES))",
+    "description": "Guidance on how to use HMRC’s file transfer API to share documentation and support compliance with the Pillar 2 agreement. (Part of the service formerly known as Secure Data Exchange Service (SDES))",
     "context": "/guides/pillar2-file-transfer-service-guide",
     "categories": ["CORPORATION_TAX"]
   }
