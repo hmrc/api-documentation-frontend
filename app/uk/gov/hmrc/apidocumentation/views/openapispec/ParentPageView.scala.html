@@ -33,7 +33,7 @@
 <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section" aria-busy="false">
     <div id="section">
         <h1 id="title" class="govuk-heading-l">
-            @{title} API
+            @{title} @if(!title.toUpperCase.endsWith(" API")) { API }
         </h1>
         @for(api <- maybeApi) {
           @for(latestApiVersion <- api.sortedActiveVersions.find(v => VersionDocsVisible(VersionVisibility(v)) != DocsVisibility.NOT_VISIBLE)) {
