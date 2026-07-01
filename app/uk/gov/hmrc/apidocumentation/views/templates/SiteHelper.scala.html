@@ -14,14 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.hmrcfrontend.views.html.components._
- @import play.twirl.api.HtmlFormat
+@import uk.gov.hmrc.apidocumentation.config._
+@import play.twirl.api.HtmlFormat
 
-@this(hmrcReportTechnicalIssue: HmrcReportTechnicalIssue)
+@this()
 
-@()(implicit messages: Messages)
+@()(implicit applicationConfig: ApplicationConfig, request: RequestHeader, messages: Messages)
 
-@hmrcReportTechnicalIssue(ReportTechnicalIssue(
-   serviceCode = "api-documentation-frontend",
-   language = En
-))
+<a href="/devhub-support/report-technical-problem?service=api-documentation-frontend?referrerUrl=@{helper.urlEncode(request.uri)}" class="govuk-link govuk-link--no-visited-state">
+   Is this page not working properly?
+</a>
