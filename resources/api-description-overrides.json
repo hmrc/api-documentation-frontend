@@ -378,5 +378,77 @@
   {
     "description": "This API checks the registration and company details for UK VAT numbers. It also generates a reference to confirm that a check has been made.",
     "identifier": "vat-registered-companies-api"
+  },
+  {
+    "description": "Use this API to submit monthly reports of ISA subscription data for the current tax year. Only HMRC‑approved ISA managers can use it. In future, digital ISA reporting will also require enrolment.",
+    "identifier": "disa-returns"
+  },
+  {
+    "description": "Use this API to access your capital gains data.",
+    "identifier": "individuals-capital-gains-income-api"
+  },
+  {
+    "description": "Use this API to access your dividends income data. It provides information about your dividend income for each tax year.",
+    "identifier": "individuals-dividends-income-api"
+  },
+  {
+    "description": "Use this API to access your employment income data. It provides information about your employment income for a given tax year.",
+    "identifier": "individuals-employments-income-api"
+  },
+  {
+    "description": "Use this API to access your foreign income data. It provides information about your foreign income for a given tax year.",
+    "identifier": "individuals-foreign-income-api"
+  },
+  {
+    "description": "Use this API to access your insurance policy income data. It provides information about income you receive from insurance policies for a given tax year.",
+    "identifier": "individuals-insurance-policies-income-api"
+  },
+  {
+    "description": "Use this API to access your other income data. It provides information about income that does not fall under the main income categories for a given tax year",
+    "identifier": "individuals-other-income-api"
+  },
+  {
+    "description": "Use this API to access your partner’s income data. It provides information about your partner’s income for a given tax year.",
+    "identifier": "individuals-partner-income-api"
+  },
+  {
+    "description": "Use this API to access your pensions income data. It provides information about the pension income you receive for a given tax year.",
+    "identifier": "individuals-pensions-income-api"
+  },
+  {
+    "description": "Use this API to access your savings income data. It provides information HMRC holds about the savings income you receive for a given tax year.",
+    "identifier": "individuals-savings-income-api"
+  },
+  {
+    "description": "Use this API to access your tax liability adjustments data. It provides information about adjustments made to your tax liability for a given tax year.",
+    "identifier": "individuals-tax-liability-adjustments-api"
+  },
+  {
+    "description": "Use this API to start an HMRC payment journey from your software. It lets you direct users to HMRC’s payment service so you can complete a payment securely.",
+    "identifier": "third-party-payments-external-api"
+  },
+  {
+    "description": "Use this API to let Community System Providers (CSPs) verify a trader’s Notification of Presentation (NOP) waiver using their Economic Operators Registration and Identification (EORI) number.",
+    "identifier": "uknw-auth-checker-api"
+  },
+  {
+    "description": "Use this API to manage and retrieve Pillar 2 data. It lets you access, update and maintain the information you need to support Pillar 2 reporting and compliance.",
+    "identifier": "pillar2-submission-api"
+  },
+  {
+    "description": "Use this API to \"pull\" business event notifications. It lets you access the information you need quickly so you can keep your systems up to date and respond to changes as they happen.",
+    "identifier": "api-notification-pull"
+  },
+  {
+    "description": "Use this API to submit trader goods-profile records to the Trader Goods Profile Service (TGP).",
+    "identifier": "trader-goods-profiles"
+  },
+  {
+    "description": "Use this API to support testing for the Trader Goods Profiles (TGP) service.",
+    "identifier": "trader-goods-profiles-test-support"
+  },
+  {
+    "description": "Use this API to retrieve a breakdown of a customer’s Self Assessment liability. It shows overdue, payable and pending amounts, within HMRC tax account services.",
+    "identifier": "self-assessment-liability-api"
   }
 ]
