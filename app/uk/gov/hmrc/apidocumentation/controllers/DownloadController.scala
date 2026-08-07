@@ -78,7 +78,7 @@ class DownloadController @Inject() (
       ))
 
     findVersion(apiOption) match {
-      case Some((api, _, VersionVisibility(ApiAccessType.CONTROLLED | ApiAccessType.INTERNAL, false, _))) =>
+      case Some((api, _, VersionVisibility(ApiAccessType.INTERNAL, false, _))) =>
         redirectToLoginPage(api.serviceName)
 
       case Some((api, selectedVersion, VersionVisibility(_, _, true))) =>
