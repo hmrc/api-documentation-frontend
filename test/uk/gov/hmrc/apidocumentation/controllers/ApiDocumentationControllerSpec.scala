@@ -213,43 +213,23 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("> stable"))(result)
       }
 
-      // NB: These tests don't make sense in the context of CONTROLLED APIs having public OAS docs - Candidates for removal
-      // "display the API landing page with 'Request access' button for private trial when logged in" in new Setup {
-      //   theUserIsLoggedIn()
-      //   theDefinitionServiceWillReturnAnApiDefinition(
-      //     extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
-      //       serviceName,
-      //       versionOne,
-      //       Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, false)),
-      //       Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, false))
-      //     )
-      //   )
-      //   DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
+      "display the API landing page with 'Request access' button for CONTROLLED APIs" in new Setup {
+        theUserIsLoggedIn()
+        theDefinitionServiceWillReturnAnApiDefinition(
+          extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
+            serviceName,
+            versionOne,
+            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, false)),
+            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, false))
+          )
+        )
+        DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
 
-      //   val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
+        val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
 
-      //   verifyApiDocumentationPageRendered(result)
-      //   verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("> stable", "Request access"))(result)
-      // }
-
-      // "display the API landing page with NO 'Request access' button for private trial when not logged in" in new Setup {
-      //   theUserIsNotLoggedIn()
-      //   theDefinitionServiceWillReturnAnApiDefinition(
-      //     extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
-      //       serviceName,
-      //       versionOne,
-      //       Some(ApiAvailability(true, ApiAccessType.CONTROLLED, false, false)),
-      //       Some(ApiAvailability(true, ApiAccessType.CONTROLLED, false, false))
-      //     )
-      //   )
-      //   DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
-
-      //   val result = underTest.renderApiDocumentation(serviceName, versionOne)(request)
-
-      //   verifyApiDocumentationPageRendered(result)
-      //   verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("> stable"))(result)
-      //   verifyPageDoesNotContain(texts = Seq("Request access"))(result)
-      // }
+        verifyApiDocumentationPageRendered(result)
+        verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("> stable", "Request access"))(result)
+      }
 
       "display the not found page when invalid version specified" in new Setup {
         theUserIsLoggedIn()
