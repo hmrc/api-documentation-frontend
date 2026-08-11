@@ -81,7 +81,9 @@ class DownloadController @Inject() (
       case Some((api, _, VersionVisibility(ApiAccessType.INTERNAL, false, _))) =>
         redirectToLoginPage(api.serviceName)
 
-      case Some((api, selectedVersion, VersionVisibility(_, _, true))) =>
+      // NB - Turning off the check for being logged in when downloading a resource to avoid the need to be logging in when fetching publicly viewable OAS
+      // case Some((api, selectedVersion, VersionVisibility(_, _, true))) =>
+      case Some((api, selectedVersion, VersionVisibility(_, _, _)))            =>
         downloadConnector.fetch(api.serviceName, selectedVersion.version, validResource)
           .map(_.fold(renderNotFoundPage)(Future.successful))
           .flatten
