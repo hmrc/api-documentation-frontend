@@ -29,6 +29,13 @@
 @(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false
 )(implicit requestHeader: RequestHeader)
 
+@requestAccess(version: ExtendedApiVersion) = {
+    @{version.sandboxAvailability.orElse(version.productionAvailability).map(x => x.access)  match {
+        case Some(ApiAccessType.CONTROLLED) => <a id="version-@version.version.toString()-request-access" href="/devhub-support/flow/private-api-documentation">Request access</a>
+        case _ => ""
+    }}
+}
+
 
 <div data-spy="scroll" data-sticky-left-nav data-state="subsection" class="section" aria-busy="false">
     <div id="section">
@@ -118,13 +125,21 @@
                                 <td class="govuk-table__cell govuk-table__cell--numeric"
                                     id="environments">@ShowAvailabilityInEnvironment(EndpointsAvailable(version.sandboxAvailability), EndpointsAvailable(version.productionAvailability), applicationConfig)</td>
                                 <td class="govuk-table__cell govuk-table__cell--numeric" id="endpoints">
-
                                     @if(visibility == DocsVisibility.VISIBLE) {
-                                    <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, version.version).url">
-                                        @version.version.toString()
-                                        endpoints</a>
+                                        <table class="govuk-table">
+                                            <tr class="govuk-table__row">
+                                                <td>
+                                                    <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, version.version).url">View endpoints</a>
+                                                </td>
+                                            </tr>
+                                            <tr class="govuk-table__row">
+                                                <td>
+                                                    @requestAccess(version)
+                                                </td>
+                                            </tr>
+                                        </table>
                                     } else { @if(visibility == DocsVisibility.OVERVIEW_ONLY & loggedIn) {
-                                    <a class="govuk-button govuk-button--secondary" id="version-@version.version.toString()-request-access" href="/devhub-support/flow/private-api-documentation">Request access</a>
+                                        <a class="govuk-button govuk-button--secondary" id="version-@version.version.toString()-request-access" href="/devhub-support/flow/private-api-documentation">Request access</a>
                                     } else {
                                         Sign in to request access
                                     }}
