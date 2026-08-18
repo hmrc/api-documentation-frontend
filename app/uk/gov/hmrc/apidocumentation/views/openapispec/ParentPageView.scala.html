@@ -47,13 +47,9 @@
                           <th scope="row" class="govuk-table__header"> <label for="version">Latest version</label></th>
                           <td class="govuk-table__cell govuk-!-font-size-16" id="currentVersion">
                           @defining(VersionDocsVisible(VersionVisibility(latestApiVersion))) { visibility =>
-                              @if(visibility == DocsVisibility.VISIBLE) {
                                   <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, latestApiVersion.version).url">
                                       Version @latestApiVersion.version.value
                                       - @latestApiVersion.displayedStatus.toLowerCase</a>
-                              } else  {
-                                  @latestApiVersion.version.value - @latestApiVersion.displayedStatus.toLowerCase
-                              }
                           }
                           </td>
                       </tr>
