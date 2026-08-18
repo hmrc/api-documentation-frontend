@@ -97,15 +97,15 @@ object ShowBaseURL {
 object VersionDocsVisible {
 
   def apply(availability: Option[VersionVisibility]): DocsVisibility = availability match {
-    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _))         => DocsVisibility.VISIBLE       // PUBLIC
-    case Some(VersionVisibility(_, true, true))                      => DocsVisibility.VISIBLE       // Not Public, logged in, authorised (subscribed)
+    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _))         => DocsVisibility.VISIBLE        // PUBLIC
+    case Some(VersionVisibility(_, true, true))                      => DocsVisibility.VISIBLE        // Not Public, logged in, authorised (subscribed)
     case Some(VersionVisibility(ApiAccessType.CONTROLLED, _, false)) => DocsVisibility.REQUEST_ACCESS // CONTROLLED but not authorised (not subscribed)
     case _                                                           => DocsVisibility.NOT_VISIBLE
   }
 
   def apply(version: ExtendedApiVersion): DocsVisibility = VersionVisibility(version) match {
-    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _))         => DocsVisibility.VISIBLE       // PUBLIC
-    case Some(VersionVisibility(_, true, true))                      => DocsVisibility.VISIBLE       // Not Public, logged in, authorised (subscribed)
+    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _))         => DocsVisibility.VISIBLE        // PUBLIC
+    case Some(VersionVisibility(_, true, true))                      => DocsVisibility.VISIBLE        // Not Public, logged in, authorised (subscribed)
     case Some(VersionVisibility(ApiAccessType.CONTROLLED, _, false)) => DocsVisibility.REQUEST_ACCESS // CONTROLLED but not authorised (not subscribed)
     case _                                                           => DocsVisibility.NOT_VISIBLE
   }

@@ -231,7 +231,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
         verifyPageRendered(pageTitle("Hello World"), bodyContains = Seq("> stable", "Request access"))(result)
       }
 
-      "display the API landing page with NO 'Request access' button for private trial when not logged in" in new Setup {
+      "display the API landing page with NO 'Request access' button for CONTROLLED APIs when not logged in" in new Setup {
         theUserIsNotLoggedIn()
         theDefinitionServiceWillReturnAnApiDefinition(
           extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
