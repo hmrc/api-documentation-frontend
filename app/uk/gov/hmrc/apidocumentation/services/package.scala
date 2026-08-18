@@ -30,9 +30,9 @@ package object services {
 
   def filterForVisibility(version: Option[ExtendedApiVersion]): (List[DocumentationItem]) => List[DocumentationItem] = (input) => {
     versionVisibility(version) match {
-      case DocsVisibility.VISIBLE       => input
-      case DocsVisibility.OVERVIEW_ONLY => input.filter(_.title == "Overview")
-      case _                            => List.empty
+      case DocsVisibility.VISIBLE        => input
+      case DocsVisibility.REQUEST_ACCESS => input.filter(_.title == "Overview")
+      case _                             => List.empty
     }
   }
 }
