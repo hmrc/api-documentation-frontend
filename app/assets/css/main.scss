@@ -20,5 +20,5 @@ $hmrc-assets-path: "/api-test-user/assets/lib/hmrc-frontend/hmrc/";
 // Ad-hoc fixes
 @import "ad-hoc";
 
-@import "lib/govuk-frontend/dist/govuk/all";
+@import "lib/govuk-frontend/dist/govuk/index";
 @import "lib/hmrc-frontend/hmrc/all";
