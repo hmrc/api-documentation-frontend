@@ -154,7 +154,7 @@ case class ErrorResponse(code: Option[String] = None, message: Option[String] = 
 sealed trait DocsVisibility
 
 object DocsVisibility {
-  case object VISIBLE       extends DocsVisibility
-  case object OVERVIEW_ONLY extends DocsVisibility
-  case object NOT_VISIBLE   extends DocsVisibility
+  case object VISIBLE        extends DocsVisibility
+  case object REQUEST_ACCESS extends DocsVisibility
+  case object NOT_VISIBLE    extends DocsVisibility
 }
