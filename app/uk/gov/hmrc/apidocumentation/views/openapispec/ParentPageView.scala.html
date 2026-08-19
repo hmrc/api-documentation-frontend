@@ -117,12 +117,14 @@
 
                                     <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, version.version).url" id="view-@version.version.toString()-endpoints">View endpoints</a>
 
-                                    @if(visibility == DocsVisibility.VISIBLE) {
-                                    } else { @if(visibility == DocsVisibility.REQUEST_ACCESS & loggedIn) {
-                                        <a id="version-@version.version.toString()-request-access" href="/devhub-support/flow/private-api-documentation">Request access</a>
-                                    } else {
-                                        <div id="version-@version.version.toString()-sign-in-to-request-access">Sign in to request access</div>
-                                    }}
+                                    <div id="version-@version.version.toString()-request-access">
+                                      @if(visibility == DocsVisibility.VISIBLE) {
+                                      } else { @if(visibility == DocsVisibility.REQUEST_ACCESS & loggedIn) {
+                                        <a href="/devhub-support/flow/private-api-documentation">Request access</a>
+                                      } else {
+                                        Sign in to request access
+                                      }}
+                                    </div>
 
                                 </td>
                             </tr>
