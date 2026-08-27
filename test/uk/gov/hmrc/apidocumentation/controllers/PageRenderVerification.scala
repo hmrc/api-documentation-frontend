@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.controllers.utils
+package uk.gov.hmrc.apidocumentation.controllers
 
 import scala.concurrent.Future
 

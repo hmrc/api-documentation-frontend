@@ -49,7 +49,7 @@
                           @defining(VersionDocsVisible(VersionVisibility(latestApiVersion))) { visibility =>
                                   <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, latestApiVersion.version).url">
                                       Version @latestApiVersion.version.value
-                                      - @latestApiVersion.displayedStatus.toLowerCase</a>
+                                      - @latestApiVersion.status.displayText.toLowerCase</a>
                           }
                           </td>
                       </tr>
