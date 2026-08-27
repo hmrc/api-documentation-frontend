@@ -21,7 +21,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.test.Helpers._
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.controllers.utils.PageRenderVerification
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
 import uk.gov.hmrc.apidocumentation.views.html._
 

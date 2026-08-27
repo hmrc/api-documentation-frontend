@@ -41,7 +41,7 @@
                             This version of the {api.name} API has been retired and is no longer supported.
                             Please update to
                             <a href={controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersion.version).url}>
-                            version {defaultVersion.version} ({defaultVersion.displayedStatus})</a>.
+                            version {defaultVersion.version} ({defaultVersion.status.displayText.toLowerCase})</a>.
                             </p>
                         }
                         case _ => {
