@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apidocumentation
+package uk.gov.hmrc.apidocumentation
 
 import scala.concurrent.{ExecutionContext, Future}
 
