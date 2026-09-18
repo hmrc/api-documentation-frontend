@@ -17,14 +17,14 @@
 package uk.gov.hmrc.apidocumentation.connectors
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.http.HttpEntity
-import play.api.http.Status._
-import play.api.libs.ws._
-import play.api.mvc.Results._
-import play.api.mvc._
+import play.api.http.Status.*
+import play.api.libs.ws.*
+import play.api.mvc.Results.*
+import play.api.mvc.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.InternalServerException
@@ -49,7 +49,7 @@ class DownloadConnector @Inject() (ws: WSClient, appConfig: ApplicationConfig)(i
           .getOrElse("application/octet-stream")
 
         response.headers.get("Content-Length") match {
-          case Some(Seq(length)) =>
+          case Some(Seq(length: String)) =>
             Some(Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, Some(length.toLong), Some(contentType))))
           case _                 =>
             Some(Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, None, Some(contentType))))
