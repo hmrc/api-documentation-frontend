@@ -26,17 +26,16 @@ import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
 
-import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.models.{Developer, Session}
 
 @Singleton
-class LoggedInUserService @Inject() (config: ApplicationConfig, sessionService: SessionService, val cookieSigner: CookieSigner)(implicit ec: ExecutionContext)
+class LoggedInUserService @Inject() (sessionService: SessionService, val cookieSigner: CookieSigner)(implicit ec: ExecutionContext)
     extends CookieEncoding
     with FrontendHeaderCarrierProvider {
 
   import LoggedInUserService._
 
-  def fetchLoggedInUser()(implicit request: Request[_]): Future[Option[Developer]] = {
+  def fetchLoggedInUser()(implicit request: Request[?]): Future[Option[Developer]] = {
     loadSession
       .map(_.map(_.developer))
   }

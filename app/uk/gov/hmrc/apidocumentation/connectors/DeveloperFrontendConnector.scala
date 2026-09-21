@@ -21,11 +21,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
-import uk.gov.hmrc.apidocumentation.connectors.*
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.connectionExceptionsAsHtmlPartialFailure
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
+import uk.gov.hmrc.apidocumentation.connectors.*
 import uk.gov.hmrc.apidocumentation.models.*
 import uk.gov.hmrc.apidocumentation.models.jsonFormatters.*
 

@@ -21,10 +21,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import org.apache.pekko.stream.Materializer
 
-import play.api.mvc._
+import play.api.mvc.*
 import play.api.routing.Router
 
-import uk.gov.hmrc.apidocumentation.controllers._
+import uk.gov.hmrc.apidocumentation.controllers.*
 
 @Singleton
 class SessionRedirectFilter @Inject() (implicit override val mat: Materializer, exec: ExecutionContext) extends Filter {

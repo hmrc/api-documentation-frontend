@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import java.{util => ju}
+import java.util as ju
 
 case class UserId(value: ju.UUID) extends AnyVal
 

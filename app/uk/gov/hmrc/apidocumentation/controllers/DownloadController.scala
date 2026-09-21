@@ -19,7 +19,7 @@ package uk.gov.hmrc.apidocumentation.controllers
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccessType, ExtendedApiDefinition, ServiceName}
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.NotFoundException
@@ -28,7 +28,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
@@ -61,7 +61,7 @@ class DownloadController @Inject() (
     }
   }
 
-  private def fetchResourceForApi(apiOption: Option[ExtendedApiDefinition], version: ApiVersionNbr, validResource: String)(implicit request: Request[_]): Future[Result] = {
+  private def fetchResourceForApi(apiOption: Option[ExtendedApiDefinition], version: ApiVersionNbr, validResource: String)(implicit request: Request[?]): Future[Result] = {
     def findVersion(apiOption: Option[ExtendedApiDefinition]) =
       for {
         api        <- apiOption
@@ -74,11 +74,11 @@ class DownloadController @Inject() (
 
     def redirectToLoginPage(service: ServiceName) =
       Future.successful(Redirect("/developer/login").withSession(
-        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version).url
+        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version.toString).url
       ))
 
     findVersion(apiOption) match {
-      case Some((api, _, VersionVisibility(ApiAccessType.INTERNAL, false, _))) =>
+      case Some((api, _, VersionVisibility(ApiAccessType.Internal, false, _))) =>
         redirectToLoginPage(api.serviceName)
 
       case Some((api, selectedVersion, VersionVisibility(_, _, _))) =>

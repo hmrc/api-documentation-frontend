@@ -19,15 +19,15 @@ package uk.gov.hmrc.apidocumentation.controllers
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.apidocumentation
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.services._
+import uk.gov.hmrc.apidocumentation.models.*
+import uk.gov.hmrc.apidocumentation.services.*
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
-import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.*
 
 @Singleton
 class DocumentationController @Inject() (
@@ -126,7 +126,7 @@ class DocumentationController @Inject() (
   }
 
   def mtdIntroductionPage(): Action[AnyContent] = headerNavigation {
-    _ => navLinks =>
+    _ => _ =>
       Future.successful(
         Redirect(
           routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
@@ -135,7 +135,7 @@ class DocumentationController @Inject() (
   }
 
   def mtdIncomeTaxServiceGuidePage(): Action[AnyContent] = headerNavigation {
-    _ => navLinks =>
+    _ => _ =>
       Future.successful(
         MovedPermanently("/guides/income-tax-mtd-end-to-end-service-guide/")
       )
@@ -164,7 +164,7 @@ class DocumentationController @Inject() (
   }
 
   def nameGuidelinesRedirect(): Action[AnyContent] = headerNavigation {
-    _ => navLinks =>
+    _ => _ =>
       Future.successful(
         Redirect(
           routes.DocumentationController.nameGuidelinesPage().url
@@ -222,7 +222,7 @@ trait BaseCrumbs extends HomeCrumb with DocumentationCrumb {
 }
 
 trait PageAttributesHelper {
-  self: FrontendController with HomeCrumb =>
+  self: FrontendController & HomeCrumb =>
 
   def navigationService: NavigationService
 
@@ -238,7 +238,7 @@ trait PageAttributesHelper {
 }
 
 trait HeaderNavigation {
-  self: FrontendController with ApplicationLogger =>
+  self: FrontendController & ApplicationLogger =>
 
   def navigationService: NavigationService
 
@@ -251,7 +251,7 @@ trait HeaderNavigation {
       val newHc = request.headers.get(COOKIE).fold(hc) { cookie =>
         hc.withExtraHeaders(COOKIE -> cookie)
       }
-      navigationService.headerNavigation()(newHc) flatMap { navLinks =>
+      navigationService.headerNavigation()(using newHc) flatMap { navLinks =>
         f(request)(navLinks)
       } recoverWith {
         case ex =>

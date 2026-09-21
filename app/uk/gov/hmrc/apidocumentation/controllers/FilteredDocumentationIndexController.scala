@@ -26,7 +26,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService, NavigationService, XmlServicesService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 import uk.gov.hmrc.apidocumentation.views.html.documentationList.FilteredIndexView
@@ -124,10 +124,10 @@ class FilteredDocumentationIndexController @Inject() (
   private def apiDefinitionToRestDocumentation(api: ApiDefinition) = {
     val defaultVersionNbr: ApiVersionNbr = api
       .versionsAsList
-      .sorted(WrappedApiDefinition.statusVersionOrdering)
+      .sorted(using WrappedApiDefinition.statusVersionOrdering)
       .head.versionNbr
-    val url: String                      = routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersionNbr).url
-    RestDocumentation.fromApiDefinition(api, url, defaultVersionNbr, getRestApiDescriptionOverride(api.serviceName.value))
+    val url: String                      = routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, defaultVersionNbr.toString).url
+    RestDocumentation.fromApiDefinition(api, url, defaultVersionNbr, getRestApiDescriptionOverride(api.serviceName))
   }
 
 }

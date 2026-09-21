@@ -42,20 +42,21 @@ sealed trait ApiDocumentation {
 }
 
 object ApiDocumentation {
+  import uk.gov.hmrc.apiplatform.modules.common.domain.services.EnumJsonHelper.asScreamingSnakeCase
 
   implicit val apiDocumentationFormats: OFormat[ApiDocumentation] = Union.from[ApiDocumentation]("label")
-    .and[RestDocumentation](DocumentationLabel.REST_API.toString)
-    .and[XmlDocumentation](DocumentationLabel.XML_API.toString)
-    .and[ServiceGuideDocumentation](DocumentationLabel.SERVICE_GUIDE.toString)
-    .and[RoadMapDocumentation](DocumentationLabel.ROADMAP.toString)
-    .and[RestDocumentation.TestSupportApiDocumentation](DocumentationLabel.TEST_SUPPORT_API.toString)
+    .and[RestDocumentation](DocumentationLabel.RestApi.asScreamingSnakeCase)
+    .and[XmlDocumentation](DocumentationLabel.XmlApi.asScreamingSnakeCase)
+    .and[ServiceGuideDocumentation](DocumentationLabel.ServiceGuide.asScreamingSnakeCase)
+    .and[RoadMapDocumentation](DocumentationLabel.Roadmap.asScreamingSnakeCase)
+    .and[RestDocumentation.TestSupportApiDocumentation](DocumentationLabel.TestSupportApi.asScreamingSnakeCase)
     .format
 }
 
 case class RestDocumentation(identifier: DocumentIdentifier, name: String, description: String, context: String, version: ApiVersionNbr, url: String, categories: Seq[ApiCategory])
     extends ApiDocumentation {
 
-  val label: DocumentationLabel = DocumentationLabel.REST_API
+  val label: DocumentationLabel = DocumentationLabel.RestApi
 
   def documentationUrl: String = url
 
@@ -73,7 +74,7 @@ object RestDocumentation {
       categories: Seq[ApiCategory]
     ) extends ApiDocumentation {
 
-    val label: DocumentationLabel = DocumentationLabel.TEST_SUPPORT_API
+    val label: DocumentationLabel = DocumentationLabel.TestSupportApi
 
     def documentationUrl: String = url
   }
@@ -86,7 +87,7 @@ object RestDocumentation {
 
     if (definition.isTestSupport) {
       TestSupportApiDocumentation(
-        DocumentIdentifier(definition.serviceName.value),
+        DocumentIdentifier(definition.serviceName),
         definition.name,
         descriptionOverride.map(_.description).getOrElse(definition.description),
         definition.context.value,
@@ -96,7 +97,7 @@ object RestDocumentation {
       )
     } else {
       RestDocumentation(
-        DocumentIdentifier(definition.serviceName.value),
+        DocumentIdentifier(definition.serviceName),
         definition.name,
         descriptionOverride.map(_.description).getOrElse(definition.description),
         definition.context.value,
@@ -113,7 +114,7 @@ object RestDocumentation {
 case class XmlDocumentation(identifier: DocumentIdentifier, name: String, description: String, context: String, categories: Seq[ApiCategory], documentationUrl: String)
     extends ApiDocumentation {
 
-  val label: DocumentationLabel = DocumentationLabel.XML_API
+  val label: DocumentationLabel = DocumentationLabel.XmlApi
 
 }
 
@@ -128,7 +129,7 @@ object XmlDocumentation {
 
 case class ServiceGuideDocumentation(identifier: DocumentIdentifier, name: String, description: String, context: String, categories: Seq[ApiCategory]) extends ApiDocumentation {
 
-  val label: DocumentationLabel = DocumentationLabel.SERVICE_GUIDE
+  val label: DocumentationLabel = DocumentationLabel.ServiceGuide
 
   def documentationUrl: String = context
 }
@@ -144,7 +145,7 @@ object ServiceGuideDocumentation {
 
 case class RoadMapDocumentation(identifier: DocumentIdentifier, name: String, description: String, context: String, categories: Seq[ApiCategory]) extends ApiDocumentation {
 
-  val label: DocumentationLabel = DocumentationLabel.ROADMAP
+  val label: DocumentationLabel = DocumentationLabel.Roadmap
 
   def documentationUrl: String = context
 }

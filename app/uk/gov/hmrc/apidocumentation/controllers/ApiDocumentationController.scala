@@ -25,8 +25,8 @@ import controllers.Assets
 import org.apache.pekko.stream.Materializer
 
 import play.api.i18n.MessagesProvider
-import play.api.mvc._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import play.api.mvc.*
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -34,10 +34,10 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
-import uk.gov.hmrc.apidocumentation.models.{DocumentationItem, _}
-import uk.gov.hmrc.apidocumentation.services._
+import uk.gov.hmrc.apidocumentation.models.{DocumentationItem, *}
+import uk.gov.hmrc.apidocumentation.services.*
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
-import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.*
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 
 @Singleton
@@ -65,11 +65,11 @@ class ApiDocumentationController @Inject() (
     routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url
   )
 
-  def redirectToApiDocumentation(service: ServiceName, version: Option[ApiVersionNbr]): Action[AnyContent] = version match {
-    case Some(version) => Action.async {
-        Future.successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version)))
+  def redirectToApiDocumentation(service: ServiceName, versionNbr: Option[ApiVersionNbr]): Action[AnyContent] = versionNbr match {
+    case Some(versionNbr) => Action.async {
+        Future.successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, versionNbr.toString)))
       }
-    case _             => redirectToCurrentApiDocumentation(service)
+    case _                => redirectToCurrentApiDocumentation(service)
   }
 
   private def redirectToCurrentApiDocumentation(service: ServiceName) = Action.async { implicit request =>
@@ -78,7 +78,7 @@ class ApiDocumentationController @Inject() (
       extendedDefn <- apiDefinitionService.fetchExtendedDefinition(service, userId)
     } yield {
       extendedDefn.flatMap(_.userAccessibleApiDefinition.defaultVersion).fold(errorHandler.notFoundTemplate.map(NotFound(_))) { version =>
-        successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version)))
+        successful(Redirect(routes.ApiDocumentationController.renderApiDocumentation(service, version.version.toString)))
       }
     }).flatten recoverWith {
       case _: NotFoundException => errorHandler.notFoundTemplate.map(NotFound(_))
@@ -126,9 +126,9 @@ class ApiDocumentationController @Inject() (
     def renderNotFoundPage = errorHandler.notFoundTemplate.map(NotFound(_))
 
     def redirectToLoginPage = {
-      logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version).url}")
+      logger.info(s"redirectToLogin - access_uri ${routes.ApiDocumentationController.renderApiDocumentation(service, version.toString()).url}")
       Future.successful(Redirect("/developer/login").withSession(
-        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version).url,
+        "access_uri" -> routes.ApiDocumentationController.renderApiDocumentation(service, version.toString()).url,
         "ts"         -> Instant.now(Clock.systemUTC).toEpochMilli.toString
       ))
     }
@@ -165,9 +165,9 @@ class ApiDocumentationController @Inject() (
       }
 
       def renderOas(categories: Seq[ApiCategory]): Future[Result] = {
-        val withDefaultForService = withDefault(service) _
+        val withDefaultForService = withDefault(service)
 
-        val requiredFraudPrevention = (categories.contains(ApiCategory.VAT_MTD) || categories.contains(ApiCategory.INCOME_TAX_MTD)) && !api.isTestSupport
+        val requiredFraudPrevention = (categories.contains(ApiCategory.VatMtd) || categories.contains(ApiCategory.IncomeTaxMtd)) && !api.isTestSupport
 
         for {
           overview        <- withDefaultForService("overview.md", "Overview")
@@ -193,10 +193,10 @@ class ApiDocumentationController @Inject() (
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
-      case Some((api, selectedVersion, VersionVisibility(_, _, true))) if selectedVersion.status == ApiStatus.RETIRED => renderRetiredVersionJumpPage(api)
+      case Some((api, selectedVersion, VersionVisibility(_, _, true))) if selectedVersion.status == ApiStatus.Retired => renderRetiredVersionJumpPage(api)
       case Some((api, selectedVersion, VersionVisibility(_, _, true)))                                                => renderDocumentationPage(api, selectedVersion)
-      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.CONTROLLED, _, false)))                        => renderDocumentationPage(api, selectedVersion)
-      case Some((_, _, VersionVisibility(ApiAccessType.INTERNAL | ApiAccessType.CONTROLLED, false, _)))               => redirectToLoginPage
+      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.Controlled, _, false)))                        => renderDocumentationPage(api, selectedVersion)
+      case Some((_, _, VersionVisibility(ApiAccessType.Internal | ApiAccessType.Controlled, false, _)))               => redirectToLoginPage
       case _                                                                                                          => renderNotFoundPage
     }
   }

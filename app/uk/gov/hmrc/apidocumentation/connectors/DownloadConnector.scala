@@ -23,8 +23,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import play.api.http.HttpEntity
 import play.api.http.Status.*
 import play.api.libs.ws.*
-import play.api.mvc.Results.*
 import play.api.mvc.*
+import play.api.mvc.Results.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.http.InternalServerException
@@ -51,7 +51,7 @@ class DownloadConnector @Inject() (ws: WSClient, appConfig: ApplicationConfig)(i
         response.headers.get("Content-Length") match {
           case Some(Seq(length: String)) =>
             Some(Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, Some(length.toLong), Some(contentType))))
-          case _                 =>
+          case _                         =>
             Some(Ok.sendEntity(HttpEntity.Streamed(response.bodyAsSource, None, Some(contentType))))
         }
       } else if (response.status == NOT_FOUND) {

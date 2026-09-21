@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future.successful
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future, blocking}
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 import io.swagger.v3.core.util.Yaml
 import io.swagger.v3.oas.models.OpenAPI
@@ -32,10 +32,10 @@ import io.swagger.v3.parser.exception.ReadContentException
 import org.apache.pekko.actor.ActorSystem
 
 import play.api.i18n.MessagesProvider
-import play.api.mvc._
+import play.api.mvc.*
 import play.mvc.Http.HeaderNames
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.*
 import uk.gov.hmrc.http.NotFoundException
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -43,10 +43,10 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 import uk.gov.hmrc.apidocumentation.services.{ApiDefinitionService, LoggedInUserService, NavigationService}
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
-import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.*
 
 @Singleton
 class OpenApiDocumentationController @Inject() (
@@ -98,10 +98,10 @@ class OpenApiDocumentationController @Inject() (
       } yield (api, apiVersion, visibility)
 
     findVersion(apiOption) match {
-      case Some((_, selectedVersion, VersionVisibility(_, _, true))) if selectedVersion.status == ApiStatus.RETIRED => badRequestPage
+      case Some((_, selectedVersion, VersionVisibility(_, _, true))) if selectedVersion.status == ApiStatus.Retired => badRequestPage
       case Some((api, _, VersionVisibility(_, _, true)))                                                            => renderDocumentationPage(api.name)
-      case Some((api, _, VersionVisibility(ApiAccessType.CONTROLLED, _, false)))                                    => renderDocumentationPage(api.name) // TODO - makes no sense for oas/page
-      case Some((_, _, VersionVisibility(ApiAccessType.CONTROLLED | ApiAccessType.INTERNAL, false, _)))             => badRequestPage
+      case Some((api, _, VersionVisibility(ApiAccessType.Controlled, _, false)))                                    => renderDocumentationPage(api.name) // TODO - makes no sense for oas/page
+      case Some((_, _, VersionVisibility(ApiAccessType.Controlled | ApiAccessType.Internal, false, _)))             => badRequestPage
       case _                                                                                                        => renderNotFoundPage
     }
 
@@ -114,7 +114,7 @@ class OpenApiDocumentationController @Inject() (
   }
 
   def renderApiDocumentation(service: ServiceName, version: ApiVersionNbr) =
-    headerNavigation { implicit request => navLinks =>
+    headerNavigation { implicit request => _ =>
       (for {
         userId           <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
         api              <- apiDefinitionService.fetchExtendedDefinition(service, userId)
@@ -148,7 +148,7 @@ class OpenApiDocumentationController @Inject() (
 
     val emptyAuthList   = java.util.Collections.emptyList[io.swagger.v3.parser.core.models.AuthorizationValue]()
     val fetchUsingHttps = appConfig.oasFetchResolvedUsingHttps
-    val oasFileLocation = routes.OpenApiDocumentationController.fetchOas(service, version).absoluteURL(fetchUsingHttps)
+    val oasFileLocation = routes.OpenApiDocumentationController.fetchOas(service, version.toString).absoluteURL(fetchUsingHttps)
 
     val futureParsing = Future {
       blocking {
@@ -171,11 +171,11 @@ class OpenApiDocumentationController @Inject() (
           }
         } catch {
           // The OAS specification has not been found.
-          case e: FileNotFoundException => {
+          case _: FileNotFoundException => {
             logger.info("The OAS specification could not be found.")
             handleFailure
           }
-          case e: ReadContentException  => {
+          case _: ReadContentException  => {
             logger.info("The OAS specification could not be found.")
             handleFailure
           }

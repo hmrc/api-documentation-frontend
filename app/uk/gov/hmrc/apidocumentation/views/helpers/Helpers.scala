@@ -21,10 +21,10 @@ import java.time.{Instant, ZoneOffset}
 import scala.language.reflectiveCalls
 
 import play.twirl.api.Html
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 
 object Slugify {
   def apply(text: String): String = makeSlug(text)
@@ -77,9 +77,9 @@ object EndpointsAvailable {
   def apply(availability: Option[ApiAvailability]): String = availability match {
     case Some(ApiAvailability(endpointsEnabled, access, _, authorised)) if endpointsEnabled =>
       access match {
-        case ApiAccessType.PUBLIC                 => AvailabilityPhrase.yes
-        case ApiAccessType.CONTROLLED             => AvailabilityPhrase.yesControlled
-        case ApiAccessType.INTERNAL if authorised => AvailabilityPhrase.yes
+        case ApiAccessType.Public                 => AvailabilityPhrase.yes
+        case ApiAccessType.Controlled             => AvailabilityPhrase.yesControlled
+        case ApiAccessType.Internal if authorised => AvailabilityPhrase.yes
         case _                                    => AvailabilityPhrase.no
       }
     case _                                                                                  => AvailabilityPhrase.no
@@ -97,16 +97,16 @@ object ShowBaseURL {
 object VersionDocsVisible {
 
   def apply(availability: Option[VersionVisibility]): DocsVisibility = availability match {
-    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _))         => DocsVisibility.VISIBLE        // PUBLIC
+    case Some(VersionVisibility(ApiAccessType.Public, _, _))         => DocsVisibility.VISIBLE        // PUBLIC
     case Some(VersionVisibility(_, true, true))                      => DocsVisibility.VISIBLE        // Not Public, logged in, authorised (subscribed)
-    case Some(VersionVisibility(ApiAccessType.CONTROLLED, _, false)) => DocsVisibility.REQUEST_ACCESS // CONTROLLED but not authorised (not subscribed)
+    case Some(VersionVisibility(ApiAccessType.Controlled, _, false)) => DocsVisibility.REQUEST_ACCESS // CONTROLLED but not authorised (not subscribed)
     case _                                                           => DocsVisibility.NOT_VISIBLE
   }
 
   def apply(version: ExtendedApiVersion): DocsVisibility = VersionVisibility(version) match {
-    case Some(VersionVisibility(ApiAccessType.PUBLIC, _, _))         => DocsVisibility.VISIBLE        // PUBLIC
+    case Some(VersionVisibility(ApiAccessType.Public, _, _))         => DocsVisibility.VISIBLE        // PUBLIC
     case Some(VersionVisibility(_, true, true))                      => DocsVisibility.VISIBLE        // Not Public, logged in, authorised (subscribed)
-    case Some(VersionVisibility(ApiAccessType.CONTROLLED, _, false)) => DocsVisibility.REQUEST_ACCESS // CONTROLLED but not authorised (not subscribed)
+    case Some(VersionVisibility(ApiAccessType.Controlled, _, false)) => DocsVisibility.REQUEST_ACCESS // CONTROLLED but not authorised (not subscribed)
     case _                                                           => DocsVisibility.NOT_VISIBLE
   }
 }

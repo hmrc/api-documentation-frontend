@@ -26,7 +26,7 @@
 
 @this(applicationConfig: ApplicationConfig)
 
-@(markdownBlocks: List[DocumentationItem], title: String, maybeVersion: Option[ExtendedApiVersion], maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false
+@(markdownBlocks: List[DocumentationItem], title: String, maybeApi: Option[ExtendedApiDefinition], loggedIn: Boolean = false
 )(implicit requestHeader: RequestHeader)
 
 
@@ -46,10 +46,10 @@
                       <tr class="govuk-table__row">
                           <th scope="row" class="govuk-table__header"> <label for="version">Latest version</label></th>
                           <td class="govuk-table__cell govuk-!-font-size-16" id="currentVersion">
-                          @defining(VersionDocsVisible(VersionVisibility(latestApiVersion))) { visibility =>
+                          @defining(VersionDocsVisible(VersionVisibility(latestApiVersion))) { _ =>
                                   <a href="@controllers.routes.OpenApiDocumentationController.renderApiDocumentation(api.serviceName, latestApiVersion.version).url">
                                       Version @latestApiVersion.version.value
-                                      - @latestApiVersion.status.displayText.toLowerCase</a>
+                                      - @latestApiVersion.status.toString.toLowerCase</a>
                           }
                           </td>
                       </tr>
@@ -108,8 +108,8 @@
                                 <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"
                                     id="version-@version.version.toString()">
                                     Version @version.version.toString() - <a class="govuk-link govuk-link--no-visited-state"
-                                                                             href="@controllers.routes.DocumentationController.apiStatusesPage().url#@version.status.displayText.toLowerCase"
-                                                                             target="_blank"> @version.status.displayText.toLowerCase
+                                                                             href="@controllers.routes.DocumentationController.apiStatusesPage().url#@version.status.toString.toLowerCase"
+                                                                             target="_blank"> @version.status.toString.toLowerCase
                                     <br>(opens in new tab)</a></th>
                                 <td class="govuk-table__cell govuk-table__cell--numeric"
                                     id="environments">@ShowAvailabilityInEnvironment(EndpointsAvailable(version.sandboxAvailability), EndpointsAvailable(version.productionAvailability), applicationConfig)</td>

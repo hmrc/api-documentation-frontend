@@ -17,6 +17,7 @@ object ScoverageSettings {
       "app.RoutesPrefix",
       "controllers.javascript",
       ".*Reverse.*",
+      "uk\\.gov\\.hmrc\\.apidocumentation\\.controllers\\.binders\\.*",
       "uk\\.gov\\.hmrc\\.controllers\\.Reverse.*",
     ).mkString(";")
   )

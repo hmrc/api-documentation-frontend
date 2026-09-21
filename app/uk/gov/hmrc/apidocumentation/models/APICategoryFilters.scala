@@ -18,36 +18,35 @@ package uk.gov.hmrc.apidocumentation.models
 
 import scala.io.Source
 
-import play.api.libs.json._
+import play.api.libs.json.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory
 
 object APICategoryFilters {
-  import ApiCategory._
 
   val filterMap = Map[String, ApiCategory](
-    ("example"                      -> EXAMPLE),
-    ("agents"                       -> AGENTS),
-    ("business-rates"               -> BUSINESS_RATES),
-    ("charities"                    -> CHARITIES),
-    ("construction-industry-scheme" -> CONSTRUCTION_INDUSTRY_SCHEME),
-    ("corporation-tax"              -> CORPORATION_TAX),
-    ("customs"                      -> CUSTOMS),
-    ("estates"                      -> ESTATES),
-    ("help-to-save"                 -> HELP_TO_SAVE),
-    ("income-tax"                   -> INCOME_TAX_MTD),
-    ("lifetime-isa"                 -> LIFETIME_ISA),
-    ("marriage-allowance"           -> MARRIAGE_ALLOWANCE),
-    ("national-insurance"           -> NATIONAL_INSURANCE),
-    ("paye"                         -> PAYE),
-    ("pensions"                     -> PENSIONS),
-    ("private-government"           -> PRIVATE_GOVERNMENT),
-    ("relief-at-source"             -> RELIEF_AT_SOURCE),
-    ("self-assessment"              -> SELF_ASSESSMENT),
-    ("stamp-duty"                   -> STAMP_DUTY),
-    ("trusts"                       -> TRUSTS),
-    ("vat"                          -> VAT_MTD),
-    ("vat"                          -> VAT),
-    ("other"                        -> OTHER)
+    ("example"                      -> ApiCategory.Example),
+    ("agents"                       -> ApiCategory.Agents),
+    ("business-rates"               -> ApiCategory.BusinessRates),
+    ("charities"                    -> ApiCategory.Charities),
+    ("construction-industry-scheme" -> ApiCategory.ConstructionIndustryScheme),
+    ("corporation-tax"              -> ApiCategory.CorporationTax),
+    ("customs"                      -> ApiCategory.Customs),
+    ("estates"                      -> ApiCategory.Estates),
+    ("help-to-save"                 -> ApiCategory.HelpToSave),
+    ("income-tax"                   -> ApiCategory.IncomeTaxMtd),
+    ("lifetime-isa"                 -> ApiCategory.LifetimeIsa),
+    ("marriage-allowance"           -> ApiCategory.MarriageAllowance),
+    ("national-insurance"           -> ApiCategory.NationalInsurance),
+    ("paye"                         -> ApiCategory.Paye),
+    ("pensions"                     -> ApiCategory.Pensions),
+    ("private-government"           -> ApiCategory.PrivateGovernment),
+    ("relief-at-source"             -> ApiCategory.ReliefAtSource),
+    ("self-assessment"              -> ApiCategory.SelfAssessment),
+    ("stamp-duty"                   -> ApiCategory.StampDuty),
+    ("trusts"                       -> ApiCategory.Trusts),
+    ("vat"                          -> ApiCategory.VatMtd),
+    ("vat"                          -> ApiCategory.Vat),
+    ("other"                        -> ApiCategory.Other)
   )
 
   def fromFilter(filter: String): Option[ApiCategory] = filterMap.get(filter)

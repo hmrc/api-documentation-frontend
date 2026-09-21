@@ -30,11 +30,16 @@ import uk.gov.hmrc.apidocumentation.models.DeveloperIdentifier
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 @Singleton
-class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClientV2, val appConfig: ApplicationConfig)(implicit val ec: ExecutionContext) extends ApplicationLogger {
-
+class ApiPlatformMicroserviceConnector @Inject() (
+    val http: HttpClientV2,
+    val appConfig: ApplicationConfig,
+    val metrics: ConnectorMetrics
+  )(implicit val ec: ExecutionContext
+  ) extends ApplicationLogger {
+  val api                         = ApiName("api-platform-microservice")
   private lazy val serviceBaseUrl = appConfig.apiPlatformMicroserviceBaseUrl
 
-  def fetchApiDefinitionsByCollaborator(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[ApiDefinition]] = {
+  def fetchApiDefinitionsByCollaborator(developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Seq[ApiDefinition]] = metrics.record(api) {
     logger.info(s"${getClass.getSimpleName} - fetchApiDefinitionsByCollaborator")
     val r = http.get(url"${definitionsUrl(serviceBaseUrl)}?${queryParams(developerId)}").execute[Seq[ApiDefinition]]
 
@@ -43,17 +48,18 @@ class ApiPlatformMicroserviceConnector @Inject() (val http: HttpClientV2, val ap
     r.map(e => e.sortBy(_.name))
   }
 
-  def fetchExtendedApiDefinition(serviceName: ServiceName, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedApiDefinition]] = {
-    logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
+  def fetchExtendedApiDefinition(serviceName: ServiceName, developerId: Option[DeveloperIdentifier])(implicit hc: HeaderCarrier): Future[Option[ExtendedApiDefinition]] =
+    metrics.record(api) {
+      logger.info(s"${getClass.getSimpleName} - fetchApiDefinition")
 
-    val r = http.get(url"${definitionUrl(serviceBaseUrl, serviceName)}?${queryParams(developerId)}").execute[Option[ExtendedApiDefinition]]
+      val r = http.get(url"${definitionUrl(serviceBaseUrl, serviceName)}?${queryParams(developerId)}").execute[Option[ExtendedApiDefinition]]
 
-    r.map(_.map(defn => logger.info(s"Found ${defn.name}")))
+      r.map(_.map(defn => logger.info(s"Found ${defn.name}")))
 
-    r.recover {
-      case e => logger.error(s"Failed $e"); throw e
+      r.recover {
+        case e => logger.error(s"Failed $e"); throw e
+      }
     }
-  }
 }
 
 object ApiPlatformMicroserviceConnector {
