@@ -17,13 +17,12 @@ object AppDependencies {
     "uk.gov.hmrc"                         %% "api-platform-api-domain"    % apiDomainVersion,
     "org.typelevel"                       %% "cats-core"                  % "2.10.0",
     "org.commonjava.googlecode.markdown4j" % "markdown4j"                 % "2.2-cj-1.1",
-    "io.swagger.parser.v3"                 % "swagger-parser"             % "2.1.48",
-    "commons-io"                           % "commons-io"                 % "2.14.0", // to fix CVE-2024-47554 until swagger-parser can be upgraded above 2.1.14
-    "org.mozilla"                          % "rhino"                      % "1.9.1"  // to fix CVE-2025-66453 until swagger-parser can be upgraded above 2.1.14
+    "io.swagger.parser.v3"                 % "swagger-parser"             % "2.1.48"
   )
 
   lazy val test = Seq(
     "uk.gov.hmrc"            %% "bootstrap-test-play-30"              % bootstrapVersion,
+    "org.mockito"            %% "mockito-scala-scalatest"             % "2.2.1",
     "org.jsoup"               % "jsoup"                               % "1.12.1",
     "uk.gov.hmrc"            %% "ui-test-runner"                      % "0.54.0",
     "uk.gov.hmrc"            %% "api-platform-common-domain-fixtures" % commonDomainVersion

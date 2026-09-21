@@ -41,7 +41,7 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
      <ul class="govuk-list">
-        @for((document, index) <- documents.zipWithIndex) {
+        @for(document <- documents) {
             <li class="govuk-apis-list-item">
                 <h2 class="govuk-heading-m govuk-!-margin-top-3 govuk-!-margin-bottom-3 search-title"><a href="@document.documentationUrl" class="govuk-link--no-underline govuk-link--no-visited-state">@document.name</a></h2>
 
