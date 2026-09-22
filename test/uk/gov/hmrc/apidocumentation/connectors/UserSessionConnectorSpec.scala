@@ -21,7 +21,6 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.Configuration
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.common.API
 
 import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, SessionInvalid, UserId}
@@ -43,7 +42,7 @@ class UserSessionConnectorSpec extends ConnectorSpec {
 
   "api" should {
     "be third-party-developer" in new Setup {
-      connector.api shouldBe API("third-party-developer")
+      connector.api shouldBe ApiName("third-party-developer")
     }
   }
 

@@ -144,7 +144,6 @@ class ApiDocumentationController @Inject() (
 
     def renderDocumentationPage(
         api: ExtendedApiDefinition,
-        selectedVersion: ExtendedApiVersion
       )(implicit request: Request[AnyContent],
         messagesProvider: MessagesProvider
       ): Future[Result] = {
@@ -178,7 +177,7 @@ class ApiDocumentationController @Inject() (
           markdownBlocks   = List(overview, errors, testing) ++ (if (requiredFraudPrevention) List(fraudPrevention) else List()) ++ List(versioning)
           attrs            = makePageAttributes(api, navigationService.openApiSidebarNavigation(markdownBlocks))
 
-        } yield Ok(parentPage(attrs, markdownBlocks, api.name, api, selectedVersion, developerId.isDefined)).withHeaders(cacheControlHeaders)
+        } yield Ok(parentPage(attrs, markdownBlocks, api.name, api, developerId.isDefined)).withHeaders(cacheControlHeaders)
       }
 
       val categories = APICategoryFilters.categoryMap.getOrElse(api.name, Seq.empty) ++ api.categories
@@ -194,8 +193,8 @@ class ApiDocumentationController @Inject() (
 
     findVersion(apiOption) match {
       case Some((api, selectedVersion, VersionVisibility(_, _, true))) if selectedVersion.status == ApiStatus.Retired => renderRetiredVersionJumpPage(api)
-      case Some((api, selectedVersion, VersionVisibility(_, _, true)))                                                => renderDocumentationPage(api, selectedVersion)
-      case Some((api, selectedVersion, VersionVisibility(ApiAccessType.Controlled, _, false)))                        => renderDocumentationPage(api, selectedVersion)
+      case Some((api, _, VersionVisibility(_, _, true)))                                                              => renderDocumentationPage(api)
+      case Some((api, _, VersionVisibility(ApiAccessType.Controlled, _, false)))                                      => renderDocumentationPage(api)
       case Some((_, _, VersionVisibility(ApiAccessType.Internal | ApiAccessType.Controlled, false, _)))               => redirectToLoginPage
       case _                                                                                                          => renderNotFoundPage
     }

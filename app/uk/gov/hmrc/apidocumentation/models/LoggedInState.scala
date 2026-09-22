@@ -37,5 +37,5 @@ object LoggedInState {
   val formatLoggedIn: Format[LOGGED_IN.type]                       = Json.format[LOGGED_IN.type]
   val formatPartLoggedIn: Format[PART_LOGGED_IN_ENABLING_MFA.type] = Json.format[PART_LOGGED_IN_ENABLING_MFA.type]
 
-  implicit val format: Format[LoggedInState] = SimpleEnumJsonFormatting.screamingSnakeCaseFormatFor[LoggedInState]("Logged In State", apply(_))
+  implicit val format: Format[LoggedInState] = SimpleEnumJsonFormatting.createStringFormatFor[LoggedInState]("Logged In State", apply(_))
 }

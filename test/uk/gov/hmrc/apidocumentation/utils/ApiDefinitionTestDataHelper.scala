@@ -21,14 +21,24 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.models._
 
 trait ApiDefinitionTestDataHelper {
 
-  def apiDefinition(name: String, versions: Seq[ApiVersion] = Seq(apiVersion("1.0", ApiStatus.STABLE)), categories: List[ApiCategory] = List.empty) = {
-    ApiDefinition(ServiceName(name), name, name, name, ApiContext("hello"), versions.map(version => version.versionNbr -> version).toMap, categories = categories)
+  def apiDefinition(name: String, versions: Seq[ApiVersion] = Seq(apiVersion("1.0", ApiStatus.Stable)), categories: List[ApiCategory] = List.empty) = {
+    ApiDefinition(
+      ServiceName(name),
+      ApiDefinition.ServiceBaseUrl(s"/name"),
+      ApiDefinition.Name(name),
+      ApiDefinition.Description(name),
+      ApiContext("hello"),
+      versions.map(version => (version.versionNbr -> version)).toMap,
+      false,
+      None,
+      categories = categories
+    )
   }
 
   def apiAvailability() = {
     ApiAvailability(
       endpointsEnabled = true,
-      access = ApiAccessType.PUBLIC,
+      access = ApiAccessType.Public,
       loggedIn = false,
       authorised = false
     )
@@ -37,16 +47,16 @@ trait ApiDefinitionTestDataHelper {
   implicit class ApiAvailabilityModifier(val inner: ApiAvailability) {
 
     def asPublic: ApiAvailability =
-      inner.copy(access = ApiAccessType.PUBLIC)
+      inner.copy(access = ApiAccessType.Public)
 
     def asPrivate: ApiAvailability =
-      inner.copy(access = ApiAccessType.INTERNAL)
+      inner.copy(access = ApiAccessType.Internal)
 
     def asTrial: ApiAvailability =
-      inner.copy(access = ApiAccessType.CONTROLLED)
+      inner.copy(access = ApiAccessType.Controlled)
 
     def notTrial: ApiAvailability =
-      inner.copy(access = ApiAccessType.INTERNAL)
+      inner.copy(access = ApiAccessType.Internal)
 
     def asAuthorised: ApiAvailability =
       inner.copy(authorised = true)
@@ -107,52 +117,55 @@ trait ApiDefinitionTestDataHelper {
   }
 
   def endpoint(endpointName: String = "Hello World", url: String = "/world"): Endpoint = {
-    Endpoint(endpointName, url, HttpMethod.GET, AuthType.APPLICATION)
+    Endpoint(Endpoint.UriPattern(url), Endpoint.Name(endpointName), HttpMethod.Get, AuthType.Application, ResourceThrottlingTier.Unlimited, None, Nil)
   }
 
   implicit class EndpointModifier(val inner: Endpoint) {
 
     def asPost: Endpoint =
-      inner.copy(method = HttpMethod.POST)
+      inner.copy(method = HttpMethod.Post)
   }
 
-  def apiVersion(version: String = "1.0", status: ApiStatus = ApiStatus.STABLE, access: ApiAccessType = ApiAccessType.PUBLIC): ApiVersion = {
+  def apiVersion(version: String = "1.0", status: ApiStatus = ApiStatus.Stable, access: ApiAccessType = ApiAccessType.Public): ApiVersion = {
     ApiVersion(
       ApiVersionNbr(version),
       status,
       access,
-      List()
+      List(),
+      true,
+      None,
+      ApiVersionSource.OAS
     )
   }
 
   implicit class ApiVersionModifier(val inner: ApiVersion) {
 
     def asAlpha: ApiVersion =
-      inner.copy(status = ApiStatus.ALPHA)
+      inner.copy(status = ApiStatus.Alpha)
 
     def asBeta: ApiVersion =
-      inner.copy(status = ApiStatus.BETA)
+      inner.copy(status = ApiStatus.Beta)
 
     def asStable: ApiVersion =
-      inner.copy(status = ApiStatus.STABLE)
+      inner.copy(status = ApiStatus.Stable)
 
     def asDeprecated: ApiVersion =
-      inner.copy(status = ApiStatus.DEPRECATED)
+      inner.copy(status = ApiStatus.Deprecated)
 
     def asRETIRED: ApiVersion =
-      inner.copy(status = ApiStatus.RETIRED)
+      inner.copy(status = ApiStatus.Retired)
 
     def asPublic: ApiVersion =
       inner.copy(access = inner.access)
 
     def asPrivate: ApiVersion =
-      inner.copy(access = ApiAccessType.INTERNAL)
+      inner.copy(access = ApiAccessType.Internal)
 
     def asTrial: ApiVersion =
-      inner.copy(access = ApiAccessType.CONTROLLED)
+      inner.copy(access = ApiAccessType.Controlled)
 
     def notTrial: ApiVersion =
-      inner.copy(access = ApiAccessType.INTERNAL)
+      inner.copy(access = ApiAccessType.Internal)
 
     def withAccess(altAccess: ApiAccessType): ApiVersion =
       inner.copy(access = altAccess)
@@ -162,17 +175,17 @@ trait ApiDefinitionTestDataHelper {
   def extendedApiDefinition(name: String) = {
     ExtendedApiDefinition(
       ServiceName(name),
-      serviceBaseUrl = name,
-      name = name,
-      description = name,
+      serviceBaseUrl = ApiDefinition.ServiceBaseUrl(name),
+      name = ApiDefinition.Name(name),
+      description = ApiDefinition.Description(name),
       context = ApiContext(name),
       versions = List(
         ExtendedApiVersion(
           version = ApiVersionNbr("1.0"),
-          status = ApiStatus.STABLE,
+          status = ApiStatus.Stable,
           endpoints = List(
-            Endpoint(endpointName = "Today's Date", uriPattern = "/today", method = HttpMethod.GET, authType = AuthType.APPLICATION),
-            Endpoint(endpointName = "Yesterday's Date", uriPattern = "/yesterday", method = HttpMethod.GET, authType = AuthType.NONE)
+            Endpoint(endpointName = Endpoint.Name("Today's Date"), uriPattern = Endpoint.UriPattern("/today"), method = HttpMethod.Get, authType = AuthType.Application, ResourceThrottlingTier.Unlimited, None, Nil),
+            Endpoint(endpointName = Endpoint.Name("Yesterday's Date"), uriPattern = Endpoint.UriPattern("/yesterday"), method = HttpMethod.Get, authType = AuthType.None, ResourceThrottlingTier.Unlimited, None, Nil)
           ),
           productionAvailability = someApiAvailability(),
           sandboxAvailability = None
@@ -180,7 +193,7 @@ trait ApiDefinitionTestDataHelper {
       ),
       isTestSupport = false,
       lastPublishedAt = None,
-      categories = List(ApiCategory.OTHER)
+      categories = List(ApiCategory.Other)
     )
   }
 

@@ -42,32 +42,32 @@ trait XmlServicesServiceMock extends MockitoSugar with ArgumentMatchersSugar {
     context = "/government/collections/vat-and-ec-sales-list-online-support-for-software-developers",
     description =
       "Technical specifications for software developers working with the VAT and EC Sales List Online service. This API is not part of the Making Tax Digital initiative.",
-    categories = Some(Seq(ApiCategory.VAT, ApiCategory.CUSTOMS))
+    categories = Some(Seq(ApiCategory.Vat, ApiCategory.Customs))
   )
 
   lazy val xmlServicesService: XmlServicesService = mock[XmlServicesService]
 
   def fetchXmlApiReturnsApi() = {
-    when(xmlServicesService.fetchXmlApi(*)(*)).thenReturn(successful(Some(xmlApi1)))
+    when(xmlServicesService.fetchXmlApi(*)(using *)).thenReturn(successful(Some(xmlApi1)))
   }
 
   def fetchXmlApiReturnsNone() = {
-    when(xmlServicesService.fetchXmlApi(*)(*)).thenReturn(successful(None))
+    when(xmlServicesService.fetchXmlApi(*)(using *)).thenReturn(successful(None))
   }
 
   def fetchAllXmlApisReturnsApis() = {
-    when(xmlServicesService.fetchAllXmlApis()(*)).thenReturn(successful(xmlApis))
+    when(xmlServicesService.fetchAllXmlApis()(using *)).thenReturn(successful(xmlApis))
   }
 
   def fetchAllXmlApisReturnsVatApi() = {
-    when(xmlServicesService.fetchAllXmlApis()(*)).thenReturn(successful(Seq(vatXmlApi)))
+    when(xmlServicesService.fetchAllXmlApis()(using *)).thenReturn(successful(Seq(vatXmlApi)))
   }
 
   def fetchAllXmlApisReturnsEmptySeq() = {
-    when(xmlServicesService.fetchAllXmlApis()(*)).thenReturn(successful(Seq.empty))
+    when(xmlServicesService.fetchAllXmlApis()(using *)).thenReturn(successful(Seq.empty))
   }
 
   def fetchAllXmlApisFails(exception: Throwable) = {
-    when(xmlServicesService.fetchAllXmlApis()(*)).thenReturn(failed(exception))
+    when(xmlServicesService.fetchAllXmlApis()(using *)).thenReturn(failed(exception))
   }
 }

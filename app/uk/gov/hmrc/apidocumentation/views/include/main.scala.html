@@ -36,14 +36,9 @@
       siteHelper: SiteHelper,
       hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet)
 @(title: Option[String] = None,
-    navTitle: Option[String] = None,
-    navTitleLink: Option[play.api.mvc.Call] = None,
     serviceInfoContent : Option[Html] = None,
     fullWidthBanner: Option[Html] = None,
-    metaTitle: Option[Html] = None,
     breadcrumbs: Option[Breadcrumbs] = None,
-    additionalTopContent: Option[Html] = None,
-    fullWidthContent: Boolean = false,
     bodyEndBlock: Option[Html] = None
   )(mainContent: Html = HtmlFormat.empty)(implicit applicationConfig: ApplicationConfig, messages: Messages, requestHeader: RequestHeader)
 
@@ -64,10 +59,6 @@
      @breadcrumbs.map {crumbs =>
      @partials.breadcrumbs(crumbs.crumbs)
     }
-}
-
-@scriptElem = {
-  <script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/apis-app.min.js")' type="text/javascript"></script>
 }
 
 @bodyEndDefault = {

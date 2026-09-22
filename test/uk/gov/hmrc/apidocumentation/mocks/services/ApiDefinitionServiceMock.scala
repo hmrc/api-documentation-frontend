@@ -28,22 +28,22 @@ trait ApiDefinitionServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   val apiDefinitionService = mock[ApiDefinitionService]
 
   def theDefinitionServiceWillReturnAnApiDefinition(apiDefinition: ExtendedApiDefinition) = {
-    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(*)).thenReturn(successful(Some(apiDefinition)))
+    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(using *)).thenReturn(successful(Some(apiDefinition)))
   }
 
   def theDefinitionServiceWillReturnNoApiDefinition() = {
-    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(*)).thenReturn(successful(None))
+    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(using *)).thenReturn(successful(None))
   }
 
   def theDefinitionServiceWillFail(exception: Throwable) = {
-    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(*)).thenReturn(failed(exception))
+    when(apiDefinitionService.fetchExtendedDefinition(*[ServiceName], *)(using *)).thenReturn(failed(exception))
 
-    when(apiDefinitionService.fetchAllDefinitions(*)(*))
+    when(apiDefinitionService.fetchAllDefinitions(*)(using *))
       .thenReturn(failed(exception))
   }
 
   def theDefinitionServiceWillReturnApiDefinitions(apis: Seq[ApiDefinition]) = {
-    when(apiDefinitionService.fetchAllDefinitions(*)(*))
+    when(apiDefinitionService.fetchAllDefinitions(*)(using *))
       .thenReturn(successful(apis))
   }
 }

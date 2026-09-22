@@ -66,7 +66,7 @@ class DocumentationController @Inject() (
         for {
           userId    <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
           isLoggedIn = userId.isDefined
-        } yield Ok(indexView("Home", navLinks, isLoggedIn))
+        } yield Ok(indexView(navLinks, isLoggedIn))
   }
 
   def tutorialsPage(): Action[AnyContent] = headerNavigation {

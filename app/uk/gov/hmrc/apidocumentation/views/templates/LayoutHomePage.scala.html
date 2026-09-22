@@ -32,10 +32,7 @@
     fullWidthContent: FullWidthContent
 )
 
-@(title: Option[String] = None,
-  navLinks: Seq[NavLink] = Seq.empty,
-  navTitle: Option[String] = None
-)(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, requestHeader: RequestHeader, messages: Messages)
+@(title: Option[String] = None)(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, requestHeader: RequestHeader, messages: Messages)
 
 @head = {
     <link href='@controllers.routes.Assets.versioned("css/main.css")' media="screen" rel="stylesheet" type="text/css" />

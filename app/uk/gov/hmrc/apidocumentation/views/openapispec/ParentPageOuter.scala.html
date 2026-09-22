@@ -28,7 +28,7 @@
 @this(apiMain: apiMain, parentPageView: ParentPageView)
 
 
-@(pageAttributes: PageAttributes, markdownBlocks: List[DocumentationItem], title: String, api: ExtendedApiDefinition, currentVersion: ExtendedApiVersion, loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, markdownBlocks: List[DocumentationItem], title: String, api: ExtendedApiDefinition, loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
 @apiMain(pageAttributes){
 @parentPageView(markdownBlocks, title, Some(api), loggedIn)

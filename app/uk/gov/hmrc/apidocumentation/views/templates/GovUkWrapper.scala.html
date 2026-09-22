@@ -26,23 +26,20 @@
 @import views.html.helper.CSPNonce
 
 @this(
-        govukLayout: GovukLayout,
-        footerLinks: FooterLinks,
-        siteFooter: SiteFooter,
-        siteHeader: SiteHeader,
-        siteHelper: SiteHelper,
-        hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet
+    govukLayout: GovukLayout,
+    footerLinks: FooterLinks,
+    siteFooter: SiteFooter,
+    siteHeader: SiteHeader,
+    siteHelper: SiteHelper,
+    hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet
 )
 @(
-        pageTitle: Option[String] = None,
-        headerBlock: Option[Html] = None,
-        beforeContentBlock: Option[Html] = None,
-        footerItems: Seq[FooterItem] = Seq.empty,
-        bodyEndBlock: Option[Html] = None,
-        breadcrumbs: Option[Breadcrumbs] = None,
-        navLinks: Seq[NavLink] = Seq.empty,
-        leftNav: Option[Html] = None,
-        isLeftNavSticky: Boolean = true
+    pageTitle: Option[String] = None,
+    bodyEndBlock: Option[Html] = None,
+    breadcrumbs: Option[Breadcrumbs] = None,
+    navLinks: Seq[NavLink] = Seq.empty,
+    leftNav: Option[Html] = None,
+    isLeftNavSticky: Boolean = true
 )(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, requestHeader: RequestHeader)
 
 @head = {

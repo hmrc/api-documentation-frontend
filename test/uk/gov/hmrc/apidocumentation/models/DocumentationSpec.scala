@@ -20,7 +20,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiStatus._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiStatus
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
 
@@ -30,15 +30,15 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
 
   "ApiDefinition.defaultVersion" should {
 
-    val v1Retired          = apiVersion("1.0", RETIRED)
-    val v2Published        = apiVersion("2.0", STABLE)
-    val v2Deprecated       = apiVersion("2.0", DEPRECATED)
-    val v3Prototyped       = apiVersion("3.0", BETA)
-    val v4Alpha            = apiVersion("4.0", ALPHA)
-    val v3PrivatePublished = apiVersion("3.1", BETA, ApiAccessType.CONTROLLED)
-    val v10Published       = apiVersion("10.0", STABLE)
-    val v3Published        = apiVersion("3.0", STABLE)
-    val v0_9Published      = apiVersion("0.9", STABLE)
+    val v1Retired          = apiVersion("1.0", ApiStatus.Retired)
+    val v2Published        = apiVersion("2.0", ApiStatus.Stable)
+    val v2Deprecated       = apiVersion("2.0", ApiStatus.Deprecated)
+    val v3Prototyped       = apiVersion("3.0", ApiStatus.Beta)
+    val v4Alpha            = apiVersion("4.0", ApiStatus.Alpha)
+    val v3PrivatePublished = apiVersion("3.1", ApiStatus.Beta, ApiAccessType.Controlled)
+    val v10Published       = apiVersion("10.0", ApiStatus.Stable)
+    val v3Published        = apiVersion("3.0", ApiStatus.Stable)
+    val v0_9Published      = apiVersion("0.9", ApiStatus.Stable)
 
     val scenarios = Table(
       ("Versions", "Expected Default Version"),
@@ -59,18 +59,18 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       forAll(scenarios) { (versions, expectedDefaultVersion) =>
         val api = WrappedApiDefinition(apiDefinition("serviceName", versions))
 
-        api.defaultVersion shouldEqual expectedDefaultVersion
+        api.defaultVersion `shouldEqual` expectedDefaultVersion
       }
     }
   }
 
   "ApiDefinition.groupedByCategory" should {
     "group definitions by category when each definition has a single category" in {
-      val api1     = apiDefinition("name1", categories = List(CUSTOMS))
-      val api2     = apiDefinition("name2", categories = List(PAYE))
+      val api1     = apiDefinition("name1", categories = List(Customs))
+      val api2     = apiDefinition("name2", categories = List(Paye))
       val expected = Map(
-        CUSTOMS -> Seq(WrappedApiDefinition(api1)),
-        PAYE    -> Seq(WrappedApiDefinition(api2))
+        Customs -> Seq(WrappedApiDefinition(api1)),
+        Paye    -> Seq(WrappedApiDefinition(api2))
       )
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, Seq.empty)
@@ -79,16 +79,16 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
     }
 
     "group definitions by the categories in the API definition into each specified category when a definition has defined categories" in {
-      val api1        = apiDefinition("name1", categories = List(CUSTOMS, VAT))
-      val api2        = apiDefinition("name2", categories = List(PAYE, VAT))
+      val api1        = apiDefinition("name1", categories = List(Customs, Vat))
+      val api2        = apiDefinition("name2", categories = List(Paye, Vat))
       val categoryMap = Map(
-        "name1" -> Seq(INCOME_TAX_MTD),
-        "name2" -> Seq(CORPORATION_TAX)
+        "name1" -> Seq(IncomeTaxMtd),
+        "name2" -> Seq(CorporationTax)
       )
       val expected    = Map(
-        CUSTOMS -> Seq(WrappedApiDefinition(api1)),
-        PAYE    -> Seq(WrappedApiDefinition(api2)),
-        VAT     -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2))
+        Customs -> Seq(WrappedApiDefinition(api1)),
+        Paye    -> Seq(WrappedApiDefinition(api2)),
+        Vat     -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2))
       )
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, Seq.empty, categoryMap)
@@ -99,8 +99,8 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
     "group definitions into 'Other' when the definition has no categories and no matching context in the category map" in {
       val api1        = apiDefinition("name1")
       val api2        = apiDefinition("name2")
-      val categoryMap = Map("name3" -> Seq(CUSTOMS))
-      val expected    = Map(OTHER -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2)))
+      val categoryMap = Map("name3" -> Seq(Customs))
+      val expected    = Map(Other -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2)))
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, Seq.empty, categoryMap)
 
@@ -111,14 +111,14 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       val api1        = apiDefinition("name1")
       val api2        = apiDefinition("name2")
       val categoryMap = Map(
-        "name1" -> Seq(CUSTOMS, VAT),
-        "name2" -> Seq(PAYE, VAT)
+        "name1" -> Seq(Customs, Vat),
+        "name2" -> Seq(Paye, Vat)
       )
 
       val expected = Map(
-        CUSTOMS -> Seq(WrappedApiDefinition(api1)),
-        PAYE    -> Seq(WrappedApiDefinition(api2)),
-        VAT     -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2))
+        Customs -> Seq(WrappedApiDefinition(api1)),
+        Paye    -> Seq(WrappedApiDefinition(api2)),
+        Vat     -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2))
       )
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq.empty, Seq.empty, Seq.empty, categoryMap)
@@ -132,16 +132,16 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       val xmlApi1     = anXmlApiDefinition("xmlName1")
       val xmlApi2     = anXmlApiDefinition("xmlName2")
       val categoryMap = Map(
-        "name1"    -> Seq(CUSTOMS, VAT),
-        "name2"    -> Seq(PAYE, VAT),
-        "xmlName1" -> Seq(PAYE),
-        "xmlName2" -> Seq(VAT)
+        "name1"    -> Seq(Customs, Vat),
+        "name2"    -> Seq(Paye, Vat),
+        "xmlName1" -> Seq(Paye),
+        "xmlName2" -> Seq(Vat)
       )
 
       val expected = Map(
-        CUSTOMS -> Seq(WrappedApiDefinition(api1)),
-        PAYE    -> Seq(WrappedApiDefinition(api2), xmlApi1),
-        VAT     -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2), xmlApi2)
+        Customs -> Seq(WrappedApiDefinition(api1)),
+        Paye    -> Seq(WrappedApiDefinition(api2), xmlApi1),
+        Vat     -> Seq(WrappedApiDefinition(api1), WrappedApiDefinition(api2), xmlApi2)
       )
 
       val result = Documentation.groupedByCategory(Seq(api1, api2), Seq(xmlApi1, xmlApi2), Seq.empty, Seq.empty, categoryMap)
@@ -153,10 +153,10 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       val restApi        = apiDefinition("restApi")
       val testSupportApi = apiDefinition("testSupportApi").copy(isTestSupport = true)
       val categoryMap    = Map(
-        "restApi"        -> Seq(CUSTOMS),
-        "testSupportApi" -> Seq(CUSTOMS)
+        "restApi"        -> Seq(Customs),
+        "testSupportApi" -> Seq(Customs)
       )
-      val expected       = Map(CUSTOMS -> Seq(WrappedApiDefinition(restApi), WrappedApiDefinition(testSupportApi)))
+      val expected       = Map(Customs -> Seq(WrappedApiDefinition(restApi), WrappedApiDefinition(testSupportApi)))
 
       val result = Documentation.groupedByCategory(Seq(restApi, testSupportApi), Seq.empty, Seq.empty, Seq.empty, categoryMap)
 
@@ -167,10 +167,10 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       val xmlApi         = anXmlApiDefinition("xmlApi")
       val testSupportApi = apiDefinition("testSupportApi").copy(isTestSupport = true)
       val categoryMap    = Map(
-        "xmlApi"         -> Seq(CUSTOMS),
-        "testSupportApi" -> Seq(CUSTOMS)
+        "xmlApi"         -> Seq(Customs),
+        "testSupportApi" -> Seq(Customs)
       )
-      val expected       = Map(CUSTOMS -> Seq(WrappedApiDefinition(testSupportApi), xmlApi))
+      val expected       = Map(Customs -> Seq(WrappedApiDefinition(testSupportApi), xmlApi))
 
       val result = Documentation.groupedByCategory(Seq(testSupportApi), Seq(xmlApi), Seq.empty, Seq.empty, categoryMap)
 
@@ -181,10 +181,10 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       val api          = apiDefinition("myApi")
       val serviceGuide = aServiceGuide("myServiceGuide")
       val categoryMap  = Map(
-        "myApi"          -> Seq(CUSTOMS),
-        "myServiceGuide" -> Seq(CUSTOMS)
+        "myApi"          -> Seq(Customs),
+        "myServiceGuide" -> Seq(Customs)
       )
-      val expected     = Map(CUSTOMS -> Seq(WrappedApiDefinition(api), serviceGuide))
+      val expected     = Map(Customs -> Seq(WrappedApiDefinition(api), serviceGuide))
 
       val result = Documentation.groupedByCategory(Seq(api), Seq.empty, Seq(serviceGuide), Seq.empty, categoryMap)
 
@@ -195,10 +195,10 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
       val api         = apiDefinition("myApi")
       val roadMap     = aRoadMap("myRoadMap")
       val categoryMap = Map(
-        "myApi"     -> Seq(CUSTOMS),
-        "myRoadMap" -> Seq(CUSTOMS)
+        "myApi"     -> Seq(Customs),
+        "myRoadMap" -> Seq(Customs)
       )
-      val expected    = Map(CUSTOMS -> Seq(WrappedApiDefinition(api), roadMap))
+      val expected    = Map(Customs -> Seq(WrappedApiDefinition(api), roadMap))
 
       val result = Documentation.groupedByCategory(Seq(api), Seq.empty, Seq.empty, Seq(roadMap), categoryMap)
 
@@ -208,7 +208,7 @@ class DocumentationSpec extends HmrcSpec with ApiDefinitionTestDataHelper {
     "filter out categories without REST or XML APIs" in {
       val testSupportApi = apiDefinition("testSupportApi").copy(isTestSupport = true)
       val serviceGuide   = aServiceGuide("serviceGuide")
-      val categoryMap    = Map("name1" -> Seq(CUSTOMS, VAT))
+      val categoryMap    = Map("name1" -> Seq(Customs, Vat))
 
       val result = Documentation.groupedByCategory(Seq(testSupportApi), Seq.empty, Seq(serviceGuide), Seq.empty, categoryMap)
 

@@ -29,17 +29,17 @@ import uk.gov.hmrc.apidocumentation.services.BaseApiDefinitionService
 trait BaseApiDefinitionServiceMockingHelper extends MockitoSugar with ArgumentMatchersSugar {
 
   def whenFetchAllDefinitions[T <: BaseApiDefinitionService](base: T)(apis: ApiDefinition*)(implicit hc: HeaderCarrier) = {
-    when(base.fetchAllDefinitions(*)(eqTo(hc)))
+    when(base.fetchAllDefinitions(*)(using eqTo(hc)))
       .thenReturn(Future.successful(apis.toList))
   }
 
   def whenFetchAllDefinitionsWithEmail[T <: BaseApiDefinitionService](base: T)(userId: UuidIdentifier)(apis: ApiDefinition*)(implicit hc: HeaderCarrier) = {
-    when(base.fetchAllDefinitions(*)(eqTo(hc)))
+    when(base.fetchAllDefinitions(*)(using eqTo(hc)))
       .thenReturn(Future.successful(apis.toList))
   }
 
   def whenFetchExtendedDefinition[T <: BaseApiDefinitionService](base: T)(serviceName: ServiceName)(api: ExtendedApiDefinition)(implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
+    when(base.fetchExtendedDefinition(eqTo(serviceName), eqTo(None))(using eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
@@ -52,21 +52,21 @@ trait BaseApiDefinitionServiceMockingHelper extends MockitoSugar with ArgumentMa
       api: ExtendedApiDefinition
     )(implicit hc: HeaderCarrier
     ) = {
-    when(base.fetchExtendedDefinition(eqTo(serviceName), *)(eqTo(hc)))
+    when(base.fetchExtendedDefinition(eqTo(serviceName), *)(using eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
   def whenApiDefinitionFails[T <: BaseApiDefinitionService](base: T)(exception: Throwable)(implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedDefinition(any[ServiceName], *)(eqTo(hc)))
+    when(base.fetchExtendedDefinition(any[ServiceName], *)(using eqTo(hc)))
       .thenReturn(Future.failed(exception))
-    when(base.fetchAllDefinitions(*)(eqTo(hc)))
+    when(base.fetchAllDefinitions(*)(using eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 
   def whenNoApiDefinitions[T <: BaseApiDefinitionService](base: T) = {
-    when(base.fetchExtendedDefinition(any[ServiceName], *)(*))
+    when(base.fetchExtendedDefinition(any[ServiceName], *)(using *))
       .thenReturn(Future.successful(None))
-    when(base.fetchAllDefinitions(*)(*))
+    when(base.fetchAllDefinitions(*)(using *))
       .thenReturn(Future.successful(Seq.empty))
   }
 }

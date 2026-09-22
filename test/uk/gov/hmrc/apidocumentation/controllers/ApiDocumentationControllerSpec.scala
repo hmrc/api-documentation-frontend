@@ -79,7 +79,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
         "redirect to the documentation page for the specified version" in new Setup {
           theUserIsLoggedIn()
-          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName = serviceName.value))
+          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName = serviceName))
           val result = underTest.redirectToApiDocumentation(serviceName, Some(version))(request)
           status(result) shouldBe SEE_OTHER
           headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/${version}")
@@ -91,7 +91,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
 
         "redirect to the documentation page" in new Setup {
           theUserIsLoggedIn()
-          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName = serviceName.value))
+          theDefinitionServiceWillReturnAnApiDefinition(extendedApiDefinition(serviceName = serviceName))
           val result = underTest.redirectToApiDocumentation(serviceName, version)(request)
           status(result) shouldBe SEE_OTHER
           headers(result).get("location") shouldBe Some(s"/api-documentation/docs/api/service/hello-world/1.0")
@@ -101,7 +101,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theUserIsLoggedIn()
 
           val privateTrialAPIDefinition =
-            extendedApiDefinition(serviceName = serviceName.value, access = ApiAccessType.CONTROLLED, loggedIn = true, authorised = false)
+            extendedApiDefinition(serviceName = serviceName, access = ApiAccessType.Controlled, loggedIn = true, authorised = false)
 
           theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
 
@@ -114,7 +114,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           theUserIsLoggedIn()
 
           val privateTrialAPIDefinition =
-            extendedApiDefinition(serviceName = serviceName.value, access = ApiAccessType.CONTROLLED, loggedIn = true, authorised = true)
+            extendedApiDefinition(serviceName = serviceName, access = ApiAccessType.Controlled, loggedIn = true, authorised = true)
 
           theDefinitionServiceWillReturnAnApiDefinition(privateTrialAPIDefinition)
 
@@ -129,21 +129,21 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           val apiDefinition =
             ExtendedApiDefinition(
               serviceName,
-              serviceBaseUrl = "/world",
-              name = "Hello World",
-              description = "Say Hello World",
+              serviceBaseUrl = ApiDefinition.ServiceBaseUrl("/world"),
+              name = ApiDefinition.Name("Hello World"),
+              description = ApiDefinition.Description("Say Hello World"),
               context = ApiContext("hello"),
               List(
                 ExtendedApiVersion(
                   versionOne,
-                  ApiStatus.BETA,
+                  ApiStatus.Beta,
                   List(endpoint(endpointName, "/world")),
                   Some(apiAvailability().asAuthorised),
                   None
                 ),
                 ExtendedApiVersion(
                   ApiVersionNbr("1.1"),
-                  ApiStatus.STABLE,
+                  ApiStatus.Stable,
                   List(endpoint(endpointName, "/world")),
                   Some(apiAvailability().asPrivate),
                   None
@@ -151,7 +151,7 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
               ),
               isTestSupport = false,
               lastPublishedAt = None,
-              categories = List(ApiCategory.OTHER)
+              categories = List(ApiCategory.Other)
             )
 
           theDefinitionServiceWillReturnAnApiDefinition(apiDefinition)
@@ -200,8 +200,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
             versionOne,
-            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, true)),
-            Some(ApiAvailability(true, ApiAccessType.INTERNAL, true, true))
+            Some(ApiAvailability(true, ApiAccessType.Controlled, true, true)),
+            Some(ApiAvailability(true, ApiAccessType.Internal, true, true))
           )
         )
         DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
@@ -218,8 +218,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
             versionOne,
-            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, false)),
-            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, true, false))
+            Some(ApiAvailability(true, ApiAccessType.Controlled, true, false)),
+            Some(ApiAvailability(true, ApiAccessType.Controlled, true, false))
           )
         )
         DownloadConnectorMock.Fetch.returnsNoneIfNotFound()
@@ -236,8 +236,8 @@ class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageR
           extendedApiDefinitionWithPrincipalAndSubordinateAPIAvailability(
             serviceName,
             versionOne,
-            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, false, false)),
-            Some(ApiAvailability(true, ApiAccessType.CONTROLLED, false, false))
+            Some(ApiAvailability(true, ApiAccessType.Controlled, false, false)),
+            Some(ApiAvailability(true, ApiAccessType.Controlled, false, false))
           )
         )
         DownloadConnectorMock.Fetch.returnsNoneIfNotFound()

@@ -19,6 +19,7 @@ package uk.gov.hmrc.apidocumentation.config
 import com.google.inject.AbstractModule
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.extensions.SwaggerParserExtension
+import uk.gov.hmrc.apidocumentation.connectors.{ConnectorMetrics, ConnectorMetricsImpl}
 
 import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
 
@@ -27,5 +28,6 @@ class ConfigurationModule extends AbstractModule {
   override def configure(): Unit = {
     bind(classOf[XmlServicesConnector.Config]).toProvider(classOf[XmlServicesConnectorConfigProvider])
     bind(classOf[SwaggerParserExtension]).toInstance(new OpenAPIV3Parser)
+    bind(classOf[ConnectorMetrics]).to(classOf[ConnectorMetricsImpl])
   }
 }

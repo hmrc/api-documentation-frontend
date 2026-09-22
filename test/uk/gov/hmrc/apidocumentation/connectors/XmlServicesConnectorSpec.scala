@@ -22,7 +22,6 @@ import play.api.Configuration
 import play.api.test.Helpers._
 import play.utils.UriEncoding
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
-import uk.gov.hmrc.play.http.metrics.common.API
 
 import uk.gov.hmrc.apidocumentation.models.XmlApiDocumentation
 
@@ -63,7 +62,7 @@ class XmlServicesConnectorSpec extends ConnectorSpec {
 
   "api" should {
     "be api-platform-xml-services" in new Setup {
-      connector.api shouldBe API("api-platform-xml-services")
+      connector.api shouldBe ApiName("api-platform-xml-services")
     }
   }
 

@@ -28,7 +28,7 @@ trait NavigationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
 
   val navigationService = mock[NavigationService]
 
-  when(navigationService.headerNavigation()(*)).thenReturn(successful(Seq(navLink)))
+  when(navigationService.headerNavigation()(using *)).thenReturn(successful(Seq(navLink)))
   when(navigationService.sidebarNavigation()).thenReturn(Seq(sidebarLink))
   when(navigationService.openApiSidebarNavigation(*)).thenReturn(Seq(sidebarLink))
 }

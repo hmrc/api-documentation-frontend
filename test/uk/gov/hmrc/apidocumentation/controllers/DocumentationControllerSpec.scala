@@ -98,7 +98,7 @@ class DocumentationControllerSpec
   "DocumentationController" should {
     "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
       when(
-        developerFrontendConnector.fetchTermsOfUsePartial()(*)
+        developerFrontendConnector.fetchTermsOfUsePartial()(using *)
       ).thenReturn(
         Future.successful(
           HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))

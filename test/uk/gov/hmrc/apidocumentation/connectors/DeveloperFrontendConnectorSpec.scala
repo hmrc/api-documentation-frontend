@@ -22,7 +22,6 @@ import play.api.Configuration
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.common.API
 import uk.gov.hmrc.play.partials.HtmlPartial
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
@@ -44,7 +43,7 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
 
   "api" should {
     "be third-party-developer-frontend" in new Setup {
-      connector.api shouldBe API("third-party-developer-frontend")
+      connector.api shouldBe ApiName("third-party-developer-frontend")
     }
   }
 
@@ -100,7 +99,7 @@ class DeveloperFrontendConnectorSpec extends ConnectorSpec {
           )
       )
 
-      val result = await(connector.fetchTermsOfUsePartial()(HeaderCarrier(extraHeaders = Seq(("useNewUpliftJourney" -> "true")))))
+      val result = await(connector.fetchTermsOfUsePartial()(using HeaderCarrier(extraHeaders = Seq(("useNewUpliftJourney" -> "true")))))
       result shouldBe response
     }
   }

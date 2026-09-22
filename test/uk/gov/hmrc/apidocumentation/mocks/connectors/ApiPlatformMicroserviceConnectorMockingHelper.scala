@@ -29,17 +29,17 @@ import uk.gov.hmrc.apidocumentation.models.UuidIdentifier
 trait ApiPlatformMicroserviceConnectorMockingHelper extends MockitoSugar with ArgumentMatchersSugar {
 
   def whenFetchAllDefinitions[T <: ApiPlatformMicroserviceConnector](base: T)(apis: ApiDefinition*)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinitionsByCollaborator(*)(eqTo(hc)))
+    when(base.fetchApiDefinitionsByCollaborator(*)(using eqTo(hc)))
       .thenReturn(Future.successful(apis.toList))
   }
 
   def whenFetchAllDefinitionsWithEmail[T <: ApiPlatformMicroserviceConnector](base: T)(userId: UuidIdentifier)(apis: ApiDefinition*)(implicit hc: HeaderCarrier) = {
-    when(base.fetchApiDefinitionsByCollaborator(*)(eqTo(hc)))
+    when(base.fetchApiDefinitionsByCollaborator(*)(using eqTo(hc)))
       .thenReturn(Future.successful(apis.toList))
   }
 
   def whenFetchExtendedDefinition[T <: ApiPlatformMicroserviceConnector](base: T)(serviceName: ServiceName)(api: ExtendedApiDefinition)(implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedApiDefinition(eqTo(serviceName), eqTo(None))(eqTo(hc)))
+    when(base.fetchExtendedApiDefinition(eqTo(serviceName), eqTo(None))(using eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
@@ -52,12 +52,12 @@ trait ApiPlatformMicroserviceConnectorMockingHelper extends MockitoSugar with Ar
       api: ExtendedApiDefinition
     )(implicit hc: HeaderCarrier
     ) = {
-    when(base.fetchExtendedApiDefinition(eqTo(serviceName), *)(eqTo(hc)))
+    when(base.fetchExtendedApiDefinition(eqTo(serviceName), *)(using eqTo(hc)))
       .thenReturn(Future.successful(Some(api)))
   }
 
   def whenFetchExtendedDefinitionFails[T <: ApiPlatformMicroserviceConnector](base: T)(exception: Throwable)(implicit hc: HeaderCarrier) = {
-    when(base.fetchExtendedApiDefinition(*[ServiceName], *)(eqTo(hc)))
+    when(base.fetchExtendedApiDefinition(*[ServiceName], *)(using eqTo(hc)))
       .thenReturn(Future.failed(exception))
   }
 }
