@@ -32,11 +32,11 @@ class LoggedInUserServiceSpec extends AsyncHmrcSpec {
 
   "Fetching logged in user" should {
 
-    val mockSessionService                       = mock[SessionService]
-    val mockCookieSigner                         = mock[CookieSigner]
+    val mockSessionService = mock[SessionService]
+    val mockCookieSigner   = mock[CookieSigner]
 
     val developer = Developer("email", "John", "Smith", UserId.random)
-    val session   = Session("sessionId", LoggedInState.LOGGED_IN, developer)
+    val session   = Session("sessionId", LoggedInState.LoggedIn, developer)
 
     val cookie                   = play.api.mvc.Cookie(cookieName, "bobbins")
     val fakeRequestWithoutCookie = FakeRequest()

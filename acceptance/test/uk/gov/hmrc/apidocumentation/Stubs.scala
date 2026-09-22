@@ -18,7 +18,7 @@ package uk.gov.hmrc.apidocumentation
 
 import scala.io.Source
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 
 import play.utils.UriEncoding
 

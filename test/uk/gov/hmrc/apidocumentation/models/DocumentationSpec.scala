@@ -16,12 +16,11 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.TableDrivenPropertyChecks.*
 import org.scalatest.prop.Tables.Table
 
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiStatus
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ApiCategory.*
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiStatus, *}
 import uk.gov.hmrc.apiplatform.modules.common.utils.HmrcSpec
 
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper

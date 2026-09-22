@@ -19,15 +19,15 @@ package uk.gov.hmrc.apidocumentation.controllers
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-import play.api.http.Status._
-import play.api.mvc._
+import play.api.http.Status.*
+import play.api.mvc.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiAccessType, ServiceName}
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
 import uk.gov.hmrc.apidocumentation.connectors.DownloadConnector
-import uk.gov.hmrc.apidocumentation.mocks.config._
-import uk.gov.hmrc.apidocumentation.mocks.services._
+import uk.gov.hmrc.apidocumentation.mocks.config.*
+import uk.gov.hmrc.apidocumentation.mocks.services.*
 
 class DownloadControllerSpec extends CommonControllerBaseSpec {
 

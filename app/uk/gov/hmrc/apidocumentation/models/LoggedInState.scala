@@ -16,26 +16,20 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
+import play.api.libs.json.Format
 import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
-sealed trait LoggedInState
+enum LoggedInState {
+  case LoggedIn, PartLoggedInEnablingMfa
+}
 
 object LoggedInState {
-  import play.api.libs.json.{Format, Json}
 
-  case object LOGGED_IN                   extends LoggedInState
-  case object PART_LOGGED_IN_ENABLING_MFA extends LoggedInState
-
-  val values: Set[LoggedInState] = Set(LOGGED_IN, PART_LOGGED_IN_ENABLING_MFA)
-
-  def apply(text: String): Option[LoggedInState] = LoggedInState.values.find(_.toString == text.toUpperCase)
+  def apply(text: String): Option[LoggedInState] = LoggedInState.values.find(_.toString.equalsIgnoreCase(text))
 
   def unsafeApply(text: String): LoggedInState = {
     apply(text).getOrElse(throw new RuntimeException(s"$text is not a valid Logged In State"))
   }
 
-  val formatLoggedIn: Format[LOGGED_IN.type]                       = Json.format[LOGGED_IN.type]
-  val formatPartLoggedIn: Format[PART_LOGGED_IN_ENABLING_MFA.type] = Json.format[PART_LOGGED_IN_ENABLING_MFA.type]
-
-  implicit val format: Format[LoggedInState] = SimpleEnumJsonFormatting.createStringFormatFor[LoggedInState]("Logged In State", apply(_))
+  implicit val format: Format[LoggedInState] = SimpleEnumJsonFormatting.screamingSnakeCaseFormatFor[LoggedInState]("Logged In State", apply(_))
 }

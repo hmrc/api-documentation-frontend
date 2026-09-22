@@ -20,7 +20,7 @@ import scala.concurrent.Future.{failed, successful}
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
 
 import uk.gov.hmrc.apidocumentation.services.ApiDefinitionService
 

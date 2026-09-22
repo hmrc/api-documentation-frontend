@@ -33,7 +33,7 @@ class SessionServiceSpec extends AsyncHmrcSpec {
     val developer = Developer("email", "John", "Smith", UserId.random)
 
     "Return session if the session is logged in" in {
-      val session = Session("sessionId", LoggedInState.LOGGED_IN, developer)
+      val session = Session("sessionId", LoggedInState.LoggedIn, developer)
 
       when(userSessionConnectorMock.fetchSession(*)(using *))
         .thenReturn(Future.successful(session))
@@ -44,7 +44,7 @@ class SessionServiceSpec extends AsyncHmrcSpec {
     }
 
     "Return None when the session is part logged in" in {
-      val session = Session("sessionId", LoggedInState.PART_LOGGED_IN_ENABLING_MFA, developer)
+      val session = Session("sessionId", LoggedInState.PartLoggedInEnablingMfa, developer)
 
       when(userSessionConnectorMock.fetchSession(*)(using *))
         .thenReturn(Future.successful(session))

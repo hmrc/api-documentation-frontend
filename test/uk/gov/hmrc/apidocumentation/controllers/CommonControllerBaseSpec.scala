@@ -23,15 +23,15 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc._
+import play.api.mvc.*
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+import play.api.test.Helpers.*
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.*
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataHelper with GuiceOneAppPerSuite {
@@ -92,7 +92,13 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       ApiDefinition.Name("Hello World"),
       ApiDefinition.Description("Say Hello World"),
       ApiContext("hello"),
-      List(ExtendedApiVersion(version, ApiStatus.Stable, List(Endpoint(Endpoint.UriPattern("/world"), endpointName, HttpMethod.Get, AuthType.None, ResourceThrottlingTier.Unlimited, scope = None, List.empty)), None, None)),
+      List(ExtendedApiVersion(
+        version,
+        ApiStatus.Stable,
+        List(Endpoint(Endpoint.UriPattern("/world"), endpointName, HttpMethod.Get, AuthType.None, ResourceThrottlingTier.Unlimited, scope = None, List.empty)),
+        None,
+        None
+      )),
       isTestSupport = false,
       lastPublishedAt = None,
       categories = List(ApiCategory.Other)
@@ -112,7 +118,13 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       ApiDefinition.Description("Say Hello World"),
       ApiContext("hello"),
       versions = List(
-        ExtendedApiVersion(version, ApiStatus.Stable, List(Endpoint(Endpoint.UriPattern("/world"), endpointName, HttpMethod.Get, AuthType.None, ResourceThrottlingTier.Unlimited, scope = None, List.empty)),  principalApiAvailability, subordinateApiAvailability)
+        ExtendedApiVersion(
+          version,
+          ApiStatus.Stable,
+          List(Endpoint(Endpoint.UriPattern("/world"), endpointName, HttpMethod.Get, AuthType.None, ResourceThrottlingTier.Unlimited, scope = None, List.empty)),
+          principalApiAvailability,
+          subordinateApiAvailability
+        )
       ),
       isTestSupport = false,
       lastPublishedAt = None,

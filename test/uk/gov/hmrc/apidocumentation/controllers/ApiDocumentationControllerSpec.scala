@@ -22,16 +22,16 @@ import controllers.Assets
 import org.apache.pekko.stream.Materializer
 
 import play.api.mvc.MessagesControllerComponents
-import play.api.test.Helpers._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+import play.api.test.Helpers.*
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.*
 import uk.gov.hmrc.http.NotFoundException
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.mocks.config._
+import uk.gov.hmrc.apidocumentation.mocks.config.*
 import uk.gov.hmrc.apidocumentation.mocks.connectors.DownloadConnectorMockModule
-import uk.gov.hmrc.apidocumentation.mocks.services._
-import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.mocks.services.*
+import uk.gov.hmrc.apidocumentation.views.html.*
 import uk.gov.hmrc.apidocumentation.views.html.openapispec.ParentPageOuter
 
 class ApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {

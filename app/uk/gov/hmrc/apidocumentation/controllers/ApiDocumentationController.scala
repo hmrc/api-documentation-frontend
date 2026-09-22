@@ -143,7 +143,7 @@ class ApiDocumentationController @Inject() (
     }
 
     def renderDocumentationPage(
-        api: ExtendedApiDefinition,
+        api: ExtendedApiDefinition
       )(implicit request: Request[AnyContent],
         messagesProvider: MessagesProvider
       ): Future[Result] = {

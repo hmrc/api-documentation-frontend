@@ -20,10 +20,10 @@ import scala.concurrent.Future.successful
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 
 trait NavigationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
-  import NavigationServiceMock._
+  import NavigationServiceMock.*
   import uk.gov.hmrc.apidocumentation.services.NavigationService
 
   val navigationService = mock[NavigationService]

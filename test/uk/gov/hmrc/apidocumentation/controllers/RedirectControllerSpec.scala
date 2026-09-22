@@ -18,8 +18,8 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import scala.concurrent.Future
 
-import play.api.mvc._
-import play.api.test.Helpers._
+import play.api.mvc.*
+import play.api.test.Helpers.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 

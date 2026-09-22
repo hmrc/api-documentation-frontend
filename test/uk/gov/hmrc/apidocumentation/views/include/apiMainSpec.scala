@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.views.include
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

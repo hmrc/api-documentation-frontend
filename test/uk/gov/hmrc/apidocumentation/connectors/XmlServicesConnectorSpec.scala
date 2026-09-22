@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 
 import play.api.Configuration
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.utils.UriEncoding
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 

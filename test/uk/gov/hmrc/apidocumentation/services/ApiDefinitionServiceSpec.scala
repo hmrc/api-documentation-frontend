@@ -18,12 +18,12 @@ package uk.gov.hmrc.apidocumentation.services
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.reflect.ClassTag
 
 import org.apache.pekko.Done
 
-import play.api.cache._
+import play.api.cache.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
 

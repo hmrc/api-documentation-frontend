@@ -17,8 +17,8 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.duration.*
 import scala.concurrent.Future
+import scala.concurrent.duration.*
 
 import play.api.cache.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiDefinition, ExtendedApiDefinition, ServiceName}

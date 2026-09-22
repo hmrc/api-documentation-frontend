@@ -22,7 +22,7 @@ import org.scalatest.OptionValues
 import org.scalatestplus.play.WsScalaTestClient
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-import play.api.i18n._
+import play.api.i18n.*
 import play.api.mvc.request.RequestAttrKey
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest

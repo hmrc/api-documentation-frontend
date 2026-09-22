@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.apidocumentation.connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 
 import play.api.Configuration
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.http.HeaderCarrier
 
-import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters.*
 import uk.gov.hmrc.apidocumentation.models.{Developer, LoggedInState, Session, SessionInvalid, UserId}
 
 class UserSessionConnectorSpec extends ConnectorSpec {
@@ -48,7 +48,7 @@ class UserSessionConnectorSpec extends ConnectorSpec {
 
   "fetchSession" should {
     "return the session when found" in new Setup {
-      val session = Session(sessionId, LoggedInState.LOGGED_IN, Developer("developer@example.com", "Firstname", "Lastname", UserId.random))
+      val session = Session(sessionId, LoggedInState.LoggedIn, Developer("developer@example.com", "Firstname", "Lastname", UserId.random))
 
       stubFor(
         get(

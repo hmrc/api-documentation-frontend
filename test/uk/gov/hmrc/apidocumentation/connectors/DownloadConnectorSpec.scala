@@ -19,9 +19,9 @@ package uk.gov.hmrc.apidocumentation.connectors
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import play.api.Configuration
-import play.api.http.Status._
-import play.api.mvc.Results._
-import play.api.routing.sird._
+import play.api.http.Status.*
+import play.api.mvc.Results.*
+import play.api.routing.sird.*
 import play.api.test.Helpers.status
 import play.api.test.WsTestClient
 import play.core.server.Server

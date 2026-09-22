@@ -20,17 +20,17 @@ import org.openqa.selenium.By
 
 trait WebPage extends PageObject {
 
-  def url(): String
+  def url: String
 
-  def goTo(): Unit = get(url())
+  def goTo(): Unit = get(url)
 
-  def pageHeading(): String
+  def pageHeading: String
 
   def heading()  = getText(By.tagName("h1"))
   def bodyText() = getText(By.tagName("body"))
 
   def isCurrentPage(): Boolean = {
-    this.heading() == this.pageHeading()
+    this.heading() == this.pageHeading
   }
 
 }

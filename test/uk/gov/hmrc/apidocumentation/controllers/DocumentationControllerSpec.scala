@@ -23,17 +23,17 @@ import org.apache.pekko.stream.Materializer
 
 import play.api.http.HeaderNames.LOCATION
 import play.api.http.Status.MOVED_PERMANENTLY
-import play.api.mvc._
-import play.api.test.Helpers._
+import play.api.mvc.*
+import play.api.test.Helpers.*
 import play.twirl.api.Html
 import uk.gov.hmrc.play.partials.HtmlPartial
 
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
-import uk.gov.hmrc.apidocumentation.mocks.config._
-import uk.gov.hmrc.apidocumentation.mocks.services._
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.mocks.config.*
+import uk.gov.hmrc.apidocumentation.mocks.services.*
+import uk.gov.hmrc.apidocumentation.models.*
 import uk.gov.hmrc.apidocumentation.services.{LoggedInUserService, PartialsService}
-import uk.gov.hmrc.apidocumentation.views.html.{TermsOfUseNotMeetingView, TermsOfUseWhatYouCanExpectView, _}
+import uk.gov.hmrc.apidocumentation.views.html.{TermsOfUseNotMeetingView, TermsOfUseWhatYouCanExpectView, *}
 import uk.gov.hmrc.apidocumentation.{ErrorHandler, controllers}
 
 class DocumentationControllerSpec

@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.apidocumentation.utils
 
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.*
 
 trait ApiDefinitionTestDataHelper {
 
@@ -184,8 +184,24 @@ trait ApiDefinitionTestDataHelper {
           version = ApiVersionNbr("1.0"),
           status = ApiStatus.Stable,
           endpoints = List(
-            Endpoint(endpointName = Endpoint.Name("Today's Date"), uriPattern = Endpoint.UriPattern("/today"), method = HttpMethod.Get, authType = AuthType.Application, ResourceThrottlingTier.Unlimited, None, Nil),
-            Endpoint(endpointName = Endpoint.Name("Yesterday's Date"), uriPattern = Endpoint.UriPattern("/yesterday"), method = HttpMethod.Get, authType = AuthType.None, ResourceThrottlingTier.Unlimited, None, Nil)
+            Endpoint(
+              endpointName = Endpoint.Name("Today's Date"),
+              uriPattern = Endpoint.UriPattern("/today"),
+              method = HttpMethod.Get,
+              authType = AuthType.Application,
+              ResourceThrottlingTier.Unlimited,
+              None,
+              Nil
+            ),
+            Endpoint(
+              endpointName = Endpoint.Name("Yesterday's Date"),
+              uriPattern = Endpoint.UriPattern("/yesterday"),
+              method = HttpMethod.Get,
+              authType = AuthType.None,
+              ResourceThrottlingTier.Unlimited,
+              None,
+              Nil
+            )
           ),
           productionAvailability = someApiAvailability(),
           sandboxAvailability = None

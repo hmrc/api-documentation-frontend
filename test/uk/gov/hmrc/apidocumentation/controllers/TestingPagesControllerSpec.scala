@@ -18,11 +18,11 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
-import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.*
 
 class TestingPagesControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 

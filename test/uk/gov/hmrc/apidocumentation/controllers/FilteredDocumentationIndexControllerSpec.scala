@@ -20,12 +20,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.mocks.config._
-import uk.gov.hmrc.apidocumentation.mocks.services._
+import uk.gov.hmrc.apidocumentation.mocks.config.*
+import uk.gov.hmrc.apidocumentation.mocks.services.*
 import uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter
 import uk.gov.hmrc.apidocumentation.views.html.documentationList.FilteredIndexView
 
