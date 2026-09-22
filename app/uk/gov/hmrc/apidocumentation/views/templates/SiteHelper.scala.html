@@ -18,7 +18,7 @@
 
 @this()
 
-@()(request: RequestHeader)
+@()(implicit request: RequestHeader)
 
 <a href="/devhub-support/report-technical-problem?service=api-documentation-frontend?referrerUrl=@{helper.urlEncode(request.uri)}" class="govuk-link govuk-link--no-visited-state">
    Is this page not working properly?
