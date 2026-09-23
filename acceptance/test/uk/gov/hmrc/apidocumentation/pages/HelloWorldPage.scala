@@ -101,13 +101,12 @@ object HelloWorldPage extends WebPage with HasApplicationName with TableDrivenPr
         "Endpoints"
       )
     forAll(navigationItems) { (navigationLink: String) =>
-      val links    = By.linkText(navigationLink)
+      val links = By.linkText(navigationLink)
       click(links)
-      val id       = navigationLink.toLowerCase
-      var position = 0
+      val id    = navigationLink.toLowerCase
 
       waitForPageToStopMoving()
-      position = executeScript(s"return document.getElementById('$id').getBoundingClientRect().top;")(Driver.instance).toString.toDouble.toInt
+      executeScript(s"return document.getElementById('$id').getBoundingClientRect().top;")(using Driver.instance).toString.toDouble.toInt
     }
   }
 

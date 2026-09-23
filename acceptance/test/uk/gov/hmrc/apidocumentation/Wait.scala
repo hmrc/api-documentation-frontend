@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.apidocumentation
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
-import org.openqa.selenium._
+import org.openqa.selenium.*
 import org.scalatest.concurrent.Eventually
 
 trait Wait extends Eventually {

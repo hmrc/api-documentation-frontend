@@ -21,31 +21,31 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
-import uk.gov.hmrc.play.http.metrics.common._
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.connectionExceptionsAsHtmlPartialFailure
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models._
-import uk.gov.hmrc.apidocumentation.models.jsonFormatters._
+import uk.gov.hmrc.apidocumentation.connectors.*
+import uk.gov.hmrc.apidocumentation.models.*
+import uk.gov.hmrc.apidocumentation.models.jsonFormatters.*
 
 @Singleton
-class DeveloperFrontendConnector @Inject() (http: HttpClientV2, appConfig: ApplicationConfig, val apiMetrics: ApiMetrics)(implicit ec: ExecutionContext) extends RecordMetrics {
+class DeveloperFrontendConnector @Inject() (http: HttpClientV2, appConfig: ApplicationConfig, val metrics: ConnectorMetrics)(implicit ec: ExecutionContext) {
 
-  val api                         = API("third-party-developer-frontend")
+  val api                         = ApiName("third-party-developer-frontend")
   private lazy val serviceBaseUrl = appConfig.developerFrontendBaseUrl
 
-  def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = record {
+  def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = metrics.record(api) {
     import uk.gov.hmrc.http.HttpReads.Implicits._
     http.get(url"$serviceBaseUrl/developer/user-navlinks").execute[Seq[NavLink]]
   }
 
-  def fetchTermsOfUsePartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = record {
+  def fetchTermsOfUsePartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = metrics.record(api) {
     // Copy 'useNewUpliftJourney' header from incoming request to ensure TPDFE does not display the new Terms of Use page before the new ToU journey has been enabled
     val useNewUpliftJourneyHeader = hc.headers(Seq("useNewUpliftJourney"))
 
     http.get(url"$serviceBaseUrl/developer/partials/terms-of-use")
-      .setHeader(useNewUpliftJourneyHeader: _*)
+      .setHeader(useNewUpliftJourneyHeader*)
       .execute[HtmlPartial]
       .recover(connectionExceptionsAsHtmlPartialFailure)
   }

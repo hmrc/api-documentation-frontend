@@ -20,15 +20,15 @@ import scala.concurrent.Future.successful
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 
 trait NavigationServiceMock extends MockitoSugar with ArgumentMatchersSugar {
-  import NavigationServiceMock._
+  import NavigationServiceMock.*
   import uk.gov.hmrc.apidocumentation.services.NavigationService
 
   val navigationService = mock[NavigationService]
 
-  when(navigationService.headerNavigation()(*)).thenReturn(successful(Seq(navLink)))
+  when(navigationService.headerNavigation()(using *)).thenReturn(successful(Seq(navLink)))
   when(navigationService.sidebarNavigation()).thenReturn(Seq(sidebarLink))
   when(navigationService.openApiSidebarNavigation(*)).thenReturn(Seq(sidebarLink))
 }

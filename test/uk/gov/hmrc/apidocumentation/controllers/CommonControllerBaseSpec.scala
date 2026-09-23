@@ -23,15 +23,15 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc._
+import play.api.mvc.*
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
-import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+import play.api.test.Helpers.*
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
+import uk.gov.hmrc.apiplatform.modules.common.domain.models.*
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 import uk.gov.hmrc.apidocumentation.utils.ApiDefinitionTestDataHelper
 
 class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataHelper with GuiceOneAppPerSuite {
@@ -51,7 +51,7 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
   implicit val hc: HeaderCarrier                 = HeaderCarrier()
 
   val serviceName  = ServiceName("hello-world")
-  val endpointName = "Say Hello World!"
+  val endpointName = Endpoint.Name("Say Hello World!")
 
   def anXmlApiDefinition(name: String) = XmlApiDocumentation(name, "description", "context")
 
@@ -59,43 +59,49 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
       serviceName: String,
       name: String = "Hello World",
       version: ApiVersionNbr = ApiVersionNbr("1.0"),
-      access: ApiAccessType = ApiAccessType.PUBLIC,
+      access: ApiAccessType = ApiAccessType.Public,
       loggedIn: Boolean = false,
       authorised: Boolean = true,
       isTestSupport: Boolean = false
     ): ExtendedApiDefinition = {
     ExtendedApiDefinition(
       ServiceName(serviceName),
-      "/world",
-      name,
-      "Say Hello World",
+      ApiDefinition.ServiceBaseUrl("/world"),
+      ApiDefinition.Name(name),
+      ApiDefinition.Description("Say Hello World"),
       ApiContext("hello"),
       versions = List(
         ExtendedApiVersion(
           version,
-          ApiStatus.STABLE,
-          List(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)),
+          ApiStatus.Stable,
+          List(Endpoint(Endpoint.UriPattern("/world"), endpointName, HttpMethod.Get, AuthType.None, ResourceThrottlingTier.Unlimited, scope = None, List.empty)),
           Some(ApiAvailability(endpointsEnabled = true, access, loggedIn, authorised)),
           None
         )
       ),
       isTestSupport = isTestSupport,
       lastPublishedAt = None,
-      categories = List(ApiCategory.OTHER)
+      categories = List(ApiCategory.Other)
     )
   }
 
   def extendedApiDefinitionWithNoAPIAvailability(serviceName: ServiceName, version: ApiVersionNbr): ExtendedApiDefinition = {
     ExtendedApiDefinition(
       serviceName,
-      "/world",
-      "Hello World",
-      "Say Hello World",
+      ApiDefinition.ServiceBaseUrl("/world"),
+      ApiDefinition.Name("Hello World"),
+      ApiDefinition.Description("Say Hello World"),
       ApiContext("hello"),
-      List(ExtendedApiVersion(version, ApiStatus.STABLE, List(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)), None, None)),
+      List(ExtendedApiVersion(
+        version,
+        ApiStatus.Stable,
+        List(Endpoint(Endpoint.UriPattern("/world"), endpointName, HttpMethod.Get, AuthType.None, ResourceThrottlingTier.Unlimited, scope = None, List.empty)),
+        None,
+        None
+      )),
       isTestSupport = false,
       lastPublishedAt = None,
-      categories = List(ApiCategory.OTHER)
+      categories = List(ApiCategory.Other)
     )
   }
 
@@ -107,81 +113,87 @@ class CommonControllerBaseSpec extends AsyncHmrcSpec with ApiDefinitionTestDataH
     ): ExtendedApiDefinition = {
     ExtendedApiDefinition(
       serviceName,
-      "hello",
-      "Hello World",
-      "Say Hello World",
+      ApiDefinition.ServiceBaseUrl("/world"),
+      ApiDefinition.Name("Hello World"),
+      ApiDefinition.Description("Say Hello World"),
       ApiContext("hello"),
       versions = List(
-        ExtendedApiVersion(version, ApiStatus.STABLE, List(Endpoint(endpointName, "/world", HttpMethod.GET, AuthType.NONE)), principalApiAvailability, subordinateApiAvailability)
+        ExtendedApiVersion(
+          version,
+          ApiStatus.Stable,
+          List(Endpoint(Endpoint.UriPattern("/world"), endpointName, HttpMethod.Get, AuthType.None, ResourceThrottlingTier.Unlimited, scope = None, List.empty)),
+          principalApiAvailability,
+          subordinateApiAvailability
+        )
       ),
       isTestSupport = false,
       lastPublishedAt = None,
-      categories = List(ApiCategory.OTHER)
+      categories = List(ApiCategory.Other)
     )
   }
 
   def extendedApiDefinitionWithRetiredVersion(serviceName: ServiceName, retiredVersion: ApiVersionNbr, nonRetiredVersion: ApiVersionNbr) = {
     ExtendedApiDefinition(
       serviceName,
-      serviceBaseUrl = "/world",
-      name = "Hello World",
-      description = "Say Hello World",
+      ApiDefinition.ServiceBaseUrl("/world"),
+      ApiDefinition.Name("Hello World"),
+      ApiDefinition.Description("Say Hello World"),
       context = ApiContext("hello"),
       versions = List(
         ExtendedApiVersion(
           retiredVersion,
-          ApiStatus.RETIRED,
+          ApiStatus.Retired,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = false, authorised = true)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Public, loggedIn = false, authorised = true)),
           None
         ),
         ExtendedApiVersion(
           nonRetiredVersion,
-          ApiStatus.STABLE,
+          ApiStatus.Stable,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = false, authorised = true)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Public, loggedIn = false, authorised = true)),
           None
         )
       ),
       isTestSupport = false,
       lastPublishedAt = None,
-      categories = List(ApiCategory.OTHER)
+      categories = List(ApiCategory.Other)
     )
   }
 
   def extendedApiDefinitionWithRetiredVersionAndInaccessibleLatest(serviceName: String): ExtendedApiDefinition = {
     ExtendedApiDefinition(
       ServiceName(serviceName),
-      serviceBaseUrl = "/world",
-      name = "Hello World",
-      description = "Say Hello World",
+      ApiDefinition.ServiceBaseUrl("/world"),
+      ApiDefinition.Name("Hello World"),
+      ApiDefinition.Description("Say Hello World"),
       context = ApiContext("hello"),
       versions = List(
         ExtendedApiVersion(
           ApiVersionNbr("1.0"),
-          ApiStatus.RETIRED,
+          ApiStatus.Retired,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = false, authorised = true)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Public, loggedIn = false, authorised = true)),
           None
         ),
         ExtendedApiVersion(
           ApiVersionNbr("1.1"),
-          ApiStatus.BETA,
+          ApiStatus.Beta,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.PUBLIC, loggedIn = false, authorised = true)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Public, loggedIn = false, authorised = true)),
           None
         ),
         ExtendedApiVersion(
           ApiVersionNbr("1.2"),
-          ApiStatus.STABLE,
+          ApiStatus.Stable,
           List(endpoint(endpointName)),
-          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.INTERNAL, loggedIn = false, authorised = false)),
+          Some(ApiAvailability(endpointsEnabled = true, access = ApiAccessType.Internal, loggedIn = false, authorised = false)),
           None
         )
       ),
       isTestSupport = false,
       lastPublishedAt = None,
-      categories = List(ApiCategory.OTHER)
+      categories = List(ApiCategory.Other)
     )
   }
 

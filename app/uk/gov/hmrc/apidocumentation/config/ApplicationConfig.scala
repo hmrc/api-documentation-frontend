@@ -64,7 +64,7 @@ class ApplicationConfigImpl @Inject() (config: Configuration)
     extends ServicesConfig(config)
     with ApplicationConfig {
 
-  def getConfigDefaulted[A](key: String, default: A)(implicit loader: ConfigLoader[A]) = config.getOptional[A](key)(loader).getOrElse(default)
+  def getConfigDefaulted[A](key: String, default: A)(implicit loader: ConfigLoader[A]) = config.getOptional[A](key)(using loader).getOrElse(default)
 
   val developerFrontendUrl = getString("developer-frontend-url")
 

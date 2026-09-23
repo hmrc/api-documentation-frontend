@@ -18,14 +18,14 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import scala.concurrent.Future
 
-import play.api.mvc._
-import play.api.test.Helpers._
+import play.api.mvc.*
+import play.api.test.Helpers.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 
 import uk.gov.hmrc.apidocumentation.controllers.{CommonControllerBaseSpec, routes}
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 
 trait PageRenderVerification {
   self: CommonControllerBaseSpec =>

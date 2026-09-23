@@ -25,7 +25,7 @@ import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.{DocumentationItem, NavLink, SidebarLink}
-import uk.gov.hmrc.apidocumentation.views.helpers._
+import uk.gov.hmrc.apidocumentation.views.helpers.*
 
 @Singleton
 class NavigationService @Inject() (

@@ -31,10 +31,10 @@ trait LoggedInUserServiceMock extends MockitoSugar with ArgumentMatchersSugar {
   lazy val loggedInUserService: LoggedInUserService = mock[LoggedInUserService]
 
   def theUserIsLoggedIn() = {
-    when(loggedInUserService.fetchLoggedInUser()(*)).thenReturn(successful(userLoggedIn))
+    when(loggedInUserService.fetchLoggedInUser()(using *)).thenReturn(successful(userLoggedIn))
   }
 
   def theUserIsNotLoggedIn() = {
-    when(loggedInUserService.fetchLoggedInUser()(*)).thenReturn(successful(noUserLoggedIn))
+    when(loggedInUserService.fetchLoggedInUser()(using *)).thenReturn(successful(noUserLoggedIn))
   }
 }

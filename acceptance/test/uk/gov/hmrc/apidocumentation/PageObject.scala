@@ -17,7 +17,7 @@
 package uk.gov.hmrc.apidocumentation
 
 import java.time.Duration
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 import org.openqa.selenium.support.ui.{ExpectedConditions, FluentWait, Select, Wait}
 import org.openqa.selenium.{By, Keys, WebDriver, WebElement}
@@ -52,9 +52,6 @@ trait PageObject {
 
   protected def getTitle: String =
     Driver.instance.getTitle
-
-  protected def waitForInvisibilityOfElementWithText(locator: By, value: String): Boolean =
-    fluentWait.until(ExpectedConditions.invisibilityOfElementWithText(locator, value))
 
   protected def findElement(locator: By): Option[WebElement] =
     findElements(locator).headOption

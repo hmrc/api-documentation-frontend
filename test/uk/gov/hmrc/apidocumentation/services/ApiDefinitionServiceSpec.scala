@@ -18,15 +18,14 @@ package uk.gov.hmrc.apidocumentation.services
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.reflect.ClassTag
 
 import org.apache.pekko.Done
 
-import play.api.cache._
+import play.api.cache.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
-import uk.gov.hmrc.play.http.metrics.common.NoopApiMetrics
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
@@ -55,7 +54,7 @@ class ApiDefinitionServiceSpec extends AsyncHmrcSpec
     val serviceName                = ServiceName("buddist-calendar")
 
     val apiPlatformMicroserviceConnector = mock[ApiPlatformMicroserviceConnector]
-    val underTest                        = new ApiDefinitionService(doNothingCache, apiPlatformMicroserviceConnector, new NoopApiMetrics)
+    val underTest                        = new ApiDefinitionService(doNothingCache, apiPlatformMicroserviceConnector)
 
   }
 
@@ -83,7 +82,7 @@ class ApiDefinitionServiceSpec extends AsyncHmrcSpec
   "fetchExtendedDefinition with user session handling" should {
 
     "fetch a single API if there is no user logged in" in new LocalSetup {
-      whenFetchExtendedDefinition(apiPlatformMicroserviceConnector)(serviceName)(extendedApiDefinition(serviceName.value))
+      whenFetchExtendedDefinition(apiPlatformMicroserviceConnector)(serviceName)(extendedApiDefinition(serviceName))
 
       val result = await(underTest.fetchExtendedDefinition(serviceName, None))
 

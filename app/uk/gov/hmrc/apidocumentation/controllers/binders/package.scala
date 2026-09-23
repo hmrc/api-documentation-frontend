@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.controllers
+package uk.gov.hmrc.apidocumentation.controllers.binders
+
+// Retaining this in the hope that play supports opaque types in the routes
 
 import scala.util.{Failure, Success, Try}
 
@@ -23,68 +25,63 @@ import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiCategory, ServiceN
 
 import uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter
 
-package object binders {
+implicit def serviceNamePathBinder(implicit textBinder: PathBindable[String]): PathBindable[ServiceName] = new PathBindable[ServiceName] {
 
-  // $COVERAGE-OFF$
-  implicit def serviceNamePathBinder(implicit textBinder: PathBindable[String]): PathBindable[ServiceName] = new PathBindable[ServiceName] {
-
-    override def bind(key: String, value: String): Either[String, ServiceName] = {
-      textBinder.bind(key, value).map(ServiceName(_))
-    }
-
-    override def unbind(key: String, serviceName: ServiceName): String = {
-      serviceName.value
-    }
+  override def bind(key: String, value: String): Either[String, ServiceName] = {
+    textBinder.bind(key, value).map(ServiceName(_))
   }
 
-  implicit def apiCategoryQueryStringBinder(implicit textBinder: QueryStringBindable[String]): QueryStringBindable[ApiCategory] = new QueryStringBindable[ApiCategory] {
-
-    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, ApiCategory]] = {
-
-      def parseCategory(category: String): Either[String, ApiCategory] =
-        Try { ApiCategory.unsafeApply(category) } match {
-          case Success(apiCategory) => Right(apiCategory)
-          case Failure(exception)   => Left(exception.getMessage())
-        }
-
-      for {
-        bindResult <- textBinder.bind("categoryFilters", params)
-      } yield {
-        bindResult match {
-          case Right(category) => parseCategory(category)
-          case _               => Left("Unable to bind an api category")
-        }
-      }
-    }
-
-    override def unbind(key: String, category: ApiCategory): String = {
-      textBinder.unbind("categoryFilters", category.toString)
-    }
+  override def unbind(key: String, serviceName: ServiceName): String = {
+    serviceName
   }
-
-  implicit def documentationTypeQueryStringBinder(implicit textBinder: QueryStringBindable[String]): QueryStringBindable[DocumentationTypeFilter] =
-    new QueryStringBindable[DocumentationTypeFilter] {
-
-      def parseDocumentationTypeFilter(filter: String): Either[String, DocumentationTypeFilter] =
-        Try { DocumentationTypeFilter.unsafeApply(filter) } match {
-          case Success(filter)    => Right(filter)
-          case Failure(exception) => Left(exception.getMessage())
-        }
-
-      override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, DocumentationTypeFilter]] = {
-        for {
-          result <- textBinder.bind("docTypeFilters", params)
-        } yield {
-          result match {
-            case Right(filter) => parseDocumentationTypeFilter(filter)
-            case _             => Left("Unable to bind an api version")
-          }
-        }
-      }
-
-      override def unbind(key: String, filter: DocumentationTypeFilter): String = {
-        textBinder.unbind("docTypeFilters", filter.toString)
-      }
-    }
-  // $COVERAGE-ON$
 }
+
+implicit def apiCategoryQueryStringBinder(implicit textBinder: QueryStringBindable[String]): QueryStringBindable[ApiCategory] = new QueryStringBindable[ApiCategory] {
+
+  override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, ApiCategory]] = {
+
+    def parseCategory(category: String): Either[String, ApiCategory] =
+      Try { ApiCategory.unsafeApply(category) } match {
+        case Success(apiCategory) => Right(apiCategory)
+        case Failure(exception)   => Left(exception.getMessage())
+      }
+
+    for {
+      bindResult <- textBinder.bind("categoryFilters", params)
+    } yield {
+      bindResult match {
+        case Right(category) => parseCategory(category)
+        case _               => Left("Unable to bind an api category")
+      }
+    }
+  }
+
+  override def unbind(key: String, category: ApiCategory): String = {
+    textBinder.unbind("categoryFilters", category.toString)
+  }
+}
+
+implicit def documentationTypeQueryStringBinder(implicit textBinder: QueryStringBindable[String]): QueryStringBindable[DocumentationTypeFilter] =
+  new QueryStringBindable[DocumentationTypeFilter] {
+
+    def parseDocumentationTypeFilter(filter: String): Either[String, DocumentationTypeFilter] =
+      Try { DocumentationTypeFilter.unsafeApply(filter) } match {
+        case Success(filter)    => Right(filter)
+        case Failure(exception) => Left(exception.getMessage())
+      }
+
+    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, DocumentationTypeFilter]] = {
+      for {
+        result <- textBinder.bind("docTypeFilters", params)
+      } yield {
+        result match {
+          case Right(filter) => parseDocumentationTypeFilter(filter)
+          case _             => Left("Unable to bind an api version")
+        }
+      }
+    }
+
+    override def unbind(key: String, filter: DocumentationTypeFilter): String = {
+      textBinder.unbind("docTypeFilters", filter.toString)
+    }
+  }

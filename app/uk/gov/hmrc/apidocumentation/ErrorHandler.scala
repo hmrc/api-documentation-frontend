@@ -38,5 +38,5 @@ class ErrorHandler @Inject() (
   ) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit requestHeader: RequestHeader): Future[Html] =
-    Future.successful(errorTemplate(pageTitle, heading, message))
+    Future.successful(errorTemplate(heading, message))
 }

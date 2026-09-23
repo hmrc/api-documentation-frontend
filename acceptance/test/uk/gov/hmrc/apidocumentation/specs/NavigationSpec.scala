@@ -22,7 +22,7 @@ import org.scalatestplus.selenium.WebBrowser
 
 import uk.gov.hmrc.selenium.webdriver.Driver
 
-import uk.gov.hmrc.apidocumentation.pages._
+import uk.gov.hmrc.apidocumentation.pages.*
 import uk.gov.hmrc.apidocumentation.{BaseSpec, NavigationSugar, TableDrivenPropertyMocks}
 
 class NavigationSpec extends BaseSpec with ComponentTestsSpec with TableDrivenPropertyChecks with TableDrivenPropertyMocks with NavigationSugar with WebBrowser {

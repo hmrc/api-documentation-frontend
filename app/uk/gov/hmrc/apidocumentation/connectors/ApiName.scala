@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apidocumentation.models
+package uk.gov.hmrc.apidocumentation.connectors
 
-import java.util as ju
+opaque type ApiName <: String = String
 
-case class UserId(value: ju.UUID) extends AnyVal
-
-object UserId {
-  import play.api.libs.json._
-  implicit val userIdFormat: Format[UserId] = Json.valueFormat[UserId]
-
-  def random: UserId = UserId(ju.UUID.randomUUID())
+object ApiName {
+  def apply(text: String): ApiName = text
 }

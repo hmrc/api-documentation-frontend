@@ -22,11 +22,7 @@
 
 @()(implicit applicationConfig: ApplicationConfig, messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 
-@metaTitle = {
-    <meta name="description" content="@Messages("help.cookies.metatitle")">
-}
-
-@main(title = Some(Messages("help.cookies.title")), metaTitle=Some(metaTitle)) {
+@main(title = Some(Messages("help.cookies.title"))) {
    <h1 class="govuk-heading-l">Cookies</h1>
 
    <p class="govuk-body">Find out more about <a class="govuk-link" href="https://www.gov.uk/help/cookies">how cookies are used on GOV.UK</a> and how to manage

@@ -20,13 +20,13 @@ import java.util.Locale
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Mockito.{when => When}
+import org.mockito.Mockito.when as When
 
 import play.api.i18n.{DefaultMessagesApi, Lang, Messages}
 import play.twirl.api.HtmlFormat.Appendable
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 import uk.gov.hmrc.apidocumentation.views.html.XmlDocumentationView
 import uk.gov.hmrc.apidocumentation.views.html.include.apiMain
 

@@ -30,8 +30,8 @@ class SessionService @Inject() (connector: UserSessionConnector)(implicit ec: Ex
 
     def convertSession(session: Session): Option[Session] = {
       session.loggedInState match {
-        case LoggedInState.LOGGED_IN => Some(session)
-        case _                       => None
+        case LoggedInState.LoggedIn => Some(session)
+        case _                      => None
       }
     }
 

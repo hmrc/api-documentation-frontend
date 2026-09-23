@@ -21,9 +21,9 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.{Application, Configuration}
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
 
-import uk.gov.hmrc.apidocumentation.common.utils._
+import uk.gov.hmrc.apidocumentation.common.utils.*
 
 trait ConnectorSpec extends AsyncHmrcSpec with WireMockSugar with WireMockSugarExtensions with GuiceOneAppPerSuite {
 

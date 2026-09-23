@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class EnumerationValue(value: String)
 

@@ -19,8 +19,8 @@ package uk.gov.hmrc.apidocumentation.models
 import scala.collection.immutable.ListMap
 import scala.io.Source
 
-import play.api.libs.json._
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import play.api.libs.json.*
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
 
 import uk.gov.hmrc.apidocumentation.controllers.routes
 import uk.gov.hmrc.apidocumentation.models.DocumentationLabel
@@ -36,12 +36,12 @@ trait Documentation {
 
   def mappedCategories(catMap: Map[String, Seq[ApiCategory]] = APICategoryFilters.categoryMap): Seq[ApiCategory] = categories match {
     case Some(x) if (x.nonEmpty) => x
-    case _                       => catMap.getOrElse(name, Seq(ApiCategory.OTHER))
+    case _                       => catMap.getOrElse(name, Seq(ApiCategory.Other))
   }
 
-  lazy val isRestOrXmlApi = label == DocumentationLabel.REST_API || label == DocumentationLabel.XML_API
+  lazy val isRestOrXmlApi = label == DocumentationLabel.RestApi || label == DocumentationLabel.XmlApi
 
-  lazy val nameAsId = name.toLowerCase().replaceAll(" ", "-").replaceAll("[^a-z0-9-]", "")
+  lazy val nameAsId: String = name.toLowerCase().replaceAll(" ", "-").replaceAll("[^a-z0-9-]", "")
 }
 
 object Documentation {
@@ -59,14 +59,14 @@ object Documentation {
           groupings ++ apiDefinition.mappedCategories(catMap).map(cat => (cat, groupings.getOrElse(cat, Nil) :+ apiDefinition)).toMap
       }.filter(_._2.exists(_.isRestOrXmlApi))
 
-    ListMap(categorised.toSeq.sortBy(_._1): _*)
+    ListMap(categorised.toSeq.sortBy(_._1)*)
   }
 }
 
 case class XmlApiDocumentation(name: String, context: String, description: String, categories: Option[Seq[ApiCategory]] = None)
     extends Documentation {
 
-  val label: DocumentationLabel = DocumentationLabel.XML_API
+  val label: DocumentationLabel = DocumentationLabel.XmlApi
 
   def documentationUrl: String = routes.ApiDocumentationController.renderXmlApiDocumentation(name).url
 }
@@ -79,7 +79,7 @@ object XmlApiDocumentation {
 case class ServiceGuide(name: String, context: String, categories: Option[Seq[ApiCategory]] = None)
     extends Documentation {
 
-  val label: DocumentationLabel = DocumentationLabel.SERVICE_GUIDE
+  val label: DocumentationLabel = DocumentationLabel.ServiceGuide
 
   def documentationUrl: String = context
 }
@@ -94,7 +94,7 @@ object ServiceGuide {
 case class RoadMap(name: String, context: String, categories: Option[Seq[ApiCategory]] = None)
     extends Documentation {
 
-  val label: DocumentationLabel = DocumentationLabel.ROADMAP
+  val label: DocumentationLabel = DocumentationLabel.Roadmap
 
   def documentationUrl: String = context
 }
@@ -110,18 +110,18 @@ case class WrappedApiDefinition(definition: ApiDefinition) extends Documentation
   override val name: String                         = definition.name
   override val context: String                      = definition.context.value
   override val categories: Option[Seq[ApiCategory]] = Some(definition.categories)
-  override val label: DocumentationLabel            = if (definition.isTestSupport) DocumentationLabel.TEST_SUPPORT_API else DocumentationLabel.REST_API
+  override val label: DocumentationLabel            = if (definition.isTestSupport) DocumentationLabel.TestSupportApi else DocumentationLabel.RestApi
 
   lazy val defaultVersion: ApiVersion = definition
     .versionsAsList
-    .sorted(WrappedApiDefinition.statusVersionOrdering)
+    .sorted(using WrappedApiDefinition.statusVersionOrdering)
     .head
 
-  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr).url
+  override def documentationUrl: String = routes.ApiDocumentationController.renderApiDocumentation(definition.serviceName, defaultVersion.versionNbr.toString).url
 }
 
 object WrappedApiDefinition {
-  val statusVersionOrdering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiStatus](_.status)(ApiStatus.orderingByPriority).reverse.orElseBy(_.versionNbr).reverse
+  val statusVersionOrdering: Ordering[ApiVersion] = Ordering.by[ApiVersion, ApiStatus](_.status)(using ApiStatus.orderingByPriority).reverse.orElseBy(_.versionNbr).reverse
 }
 
 case class VersionVisibility(privacy: ApiAccessType, loggedIn: Boolean, authorised: Boolean)
@@ -135,7 +135,7 @@ object VersionVisibility {
     }
 
     def combine(prod: ApiAccessType, sandbox: ApiAccessType): ApiAccessType = {
-      if (sandbox == ApiAccessType.INTERNAL && prod == ApiAccessType.CONTROLLED) ApiAccessType.CONTROLLED else sandbox
+      if (sandbox == ApiAccessType.Internal && prod == ApiAccessType.Controlled) ApiAccessType.Controlled else sandbox
     }
 
     (extendedApiVersion.productionAvailability, extendedApiVersion.sandboxAvailability) match {

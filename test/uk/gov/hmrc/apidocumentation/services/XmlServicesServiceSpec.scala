@@ -20,7 +20,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.common.NoopApiMetrics
 
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.connectors.XmlServicesConnector
@@ -32,8 +31,7 @@ class XmlServicesServiceSpec extends AsyncHmrcSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val xmlServicesConnector = mock[XmlServicesConnector]
-    val underTest            = new XmlServicesService(xmlServicesConnector, new NoopApiMetrics)
-
+    val underTest            = new XmlServicesService(xmlServicesConnector)
   }
 
   "fetchAllXmlApis" should {
@@ -48,16 +46,16 @@ class XmlServicesServiceSpec extends AsyncHmrcSpec {
   "fetchXmlApi" should {
 
     "fetch an API should return api from deprecated endpoint if it exists" in new LocalSetup {
-      when(xmlServicesConnector.fetchXmlApi(*)(*)).thenReturn(Future.successful(Right(None)))
-      val result: Option[XmlApiDocumentation] = await(underTest.fetchXmlApi(eqTo("Invalid"))(*))
+      when(xmlServicesConnector.fetchXmlApi(*)(using *)).thenReturn(Future.successful(Right(None)))
+      val result: Option[XmlApiDocumentation] = await(underTest.fetchXmlApi(eqTo("Invalid"))(using *))
 
       result shouldBe None
     }
 
     "fetch an API should return api from from new endpoint if deprecated endpoint is missing" in new LocalSetup {
-      when(xmlServicesConnector.fetchXmlApi(*)(*)).thenReturn(Future.successful(Left(new RuntimeException(""))))
-      when(xmlServicesConnector.fetchXmlApiByServiceName(*)(*)).thenReturn(Future.successful(None))
-      val result: Option[XmlApiDocumentation] = await(underTest.fetchXmlApi(eqTo("Invalid"))(*))
+      when(xmlServicesConnector.fetchXmlApi(*)(using *)).thenReturn(Future.successful(Left(new RuntimeException(""))))
+      when(xmlServicesConnector.fetchXmlApiByServiceName(*)(using *)).thenReturn(Future.successful(None))
+      val result: Option[XmlApiDocumentation] = await(underTest.fetchXmlApi(eqTo("Invalid"))(using *))
 
       result shouldBe None
     }

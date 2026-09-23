@@ -61,7 +61,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
       val handlerDef = makeHandlerDef(controller, path)
 
       implicit val requestHeader: Request[AnyContentAsEmpty.type] = FakeRequest("GET", path)
-        .withSession(defaultSession: _*)
+        .withSession(defaultSession*)
         .addAttr(Router.Attrs.HandlerDef, handlerDef)
 
       await(filter.apply(nextFilter)(requestHeader))
@@ -76,7 +76,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
       val handlerDef = makeHandlerDef(controller, path)
 
       implicit val requestHeader: Request[AnyContentAsEmpty.type] = FakeRequest("GET", path)
-        .withSession(defaultSession ++ Seq("access_uri" -> path): _*)
+        .withSession(defaultSession ++ Seq("access_uri" -> path)*)
         .addAttr(Router.Attrs.HandlerDef, handlerDef)
 
       await(filter.apply(nextFilter)(requestHeader))
@@ -90,7 +90,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
       val handlerDef = makeHandlerDef(controller, path)
 
       implicit val requestHeader: Request[AnyContentAsEmpty.type] = FakeRequest("GET", path)
-        .withSession(defaultSession: _*)
+        .withSession(defaultSession*)
         .addAttr(Router.Attrs.HandlerDef, handlerDef)
 
       await(filter.apply(nextFilter)(requestHeader))
@@ -100,7 +100,7 @@ class FiltersSpec(implicit ec: ExecutionContext) extends AsyncHmrcSpec {
 
     "not add the current uri to the session when the request is not tagged with the ROUTE_CONTROLLER or ROUTE_PATTERN" in new Setup {
       val path                                                    = s"$rootPath/assets/main.js"
-      implicit val requestHeader: Request[AnyContentAsEmpty.type] = FakeRequest("OPTIONS", path).withSession(defaultSession: _*)
+      implicit val requestHeader: Request[AnyContentAsEmpty.type] = FakeRequest("OPTIONS", path).withSession(defaultSession*)
 
       await(filter.apply(nextFilter)(requestHeader))
 

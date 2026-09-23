@@ -20,12 +20,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models.*
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.mocks.config._
-import uk.gov.hmrc.apidocumentation.mocks.services._
+import uk.gov.hmrc.apidocumentation.mocks.config.*
+import uk.gov.hmrc.apidocumentation.mocks.services.*
 import uk.gov.hmrc.apidocumentation.models.DocumentationTypeFilter
 import uk.gov.hmrc.apidocumentation.views.html.documentationList.FilteredIndexView
 
@@ -70,7 +70,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         theDefinitionServiceWillReturnApiDefinitions(definitionList)
         fetchAllXmlApisReturnsVatApi()
 
-        val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List.empty)(request)
+        val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.RoadmapAndServiceGuide), List.empty)(request)
         // There are currently 28 Service Guides and 5 roadmaps so should be 33 results
         verifyPageRendered(pageTitle("API Documentation"), sideNavLinkRendered = false, breadcrumbs = List(apiDocsBreadcrumb), bodyContains = Seq("31 results "))(result)
       }
@@ -80,7 +80,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         theDefinitionServiceWillReturnApiDefinitions(definitionList)
         fetchAllXmlApisReturnsVatApi()
 
-        val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.ROADMAPANDSERVICEGUIDE), List(ApiCategory.INCOME_TAX_MTD))(request)
+        val result = underTest.apiListIndexPage(List(DocumentationTypeFilter.RoadmapAndServiceGuide), List(ApiCategory.IncomeTaxMtd))(request)
         // There are currently 21 Service Guides and 5 roadmaps but only 1 roadmap and 2 service guide are in the INCOME_TAX_MTD category
         verifyPageRendered(
           pageTitle("API Documentation"),
@@ -95,7 +95,7 @@ class FilteredDocumentationIndexControllerSpec extends CommonControllerBaseSpec 
         theDefinitionServiceWillReturnApiDefinitions(definitionList)
         fetchAllXmlApisReturnsVatApi()
 
-        val result = underTest.apiListIndexPage(List.empty, List(ApiCategory.INCOME_TAX_MTD))(request)
+        val result = underTest.apiListIndexPage(List.empty, List(ApiCategory.IncomeTaxMtd))(request)
         verifyPageRendered(
           pageTitle("API Documentation"),
           sideNavLinkRendered = false,

@@ -26,16 +26,16 @@ import org.apache.pekko.actor.ActorSystem
 
 import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.mvc.MessagesControllerComponents
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.ServiceName
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ApiVersionNbr
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import uk.gov.hmrc.apidocumentation.ErrorHandler
-import uk.gov.hmrc.apidocumentation.mocks.config._
+import uk.gov.hmrc.apidocumentation.mocks.config.*
 import uk.gov.hmrc.apidocumentation.mocks.connectors.DownloadConnectorMockModule
-import uk.gov.hmrc.apidocumentation.mocks.services._
-import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.mocks.services.*
+import uk.gov.hmrc.apidocumentation.views.html.*
 
 class OpenApiDocumentationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 

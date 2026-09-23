@@ -27,7 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.apidocumentation.common.utils.AsyncHmrcSpec
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 
 class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
 
@@ -56,13 +56,13 @@ class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
   "headerNavigation" should {
     "fetch and return header navigation links" in new Setup {
       when(config.developerFrontendUrl).thenReturn("http://localhost:9865")
-      when(connector.fetchNavLinks()(*)).thenReturn(Future.successful(Seq(
+      when(connector.fetchNavLinks()(using *)).thenReturn(Future.successful(Seq(
         NavLink("Register", "/developer/registration"),
         NavLink("Sign in", "/developer/login")
       )))
 
       val headerNavLinks = await(underTest.headerNavigation())
-      verify(connector, times(1)).fetchNavLinks()(*)
+      verify(connector, times(1)).fetchNavLinks()(using *)
       headerNavLinks.size shouldBe 2
       headerNavLinks.head.href shouldBe "http://localhost:9865/developer/registration"
       headerNavLinks.head.label shouldBe "Register"
@@ -71,9 +71,9 @@ class NavigationServiceSpec extends AsyncHmrcSpec with GuiceOneAppPerTest {
     }
 
     "return empty header navigation links" in new Setup {
-      when(connector.fetchNavLinks()(*)).thenReturn(Future.successful(Seq.empty[NavLink]))
+      when(connector.fetchNavLinks()(using *)).thenReturn(Future.successful(Seq.empty[NavLink]))
       val headerNavLinks = await(underTest.headerNavigation())
-      verify(connector, times(1)).fetchNavLinks()(*)
+      verify(connector, times(1)).fetchNavLinks()(using *)
       headerNavLinks.size shouldBe 0
     }
   }

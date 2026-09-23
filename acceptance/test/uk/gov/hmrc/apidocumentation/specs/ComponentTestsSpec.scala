@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.apidocumentation.specs
 
-import org.scalatest._
+import org.scalatest.*
 
 import uk.gov.hmrc.apidocumentation.{BaseSpec, DescriptiveMocks}
 

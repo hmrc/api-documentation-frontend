@@ -16,46 +16,41 @@
 
 package uk.gov.hmrc.apidocumentation.models
 
-import scala.collection.immutable.ListSet
-
 import play.api.libs.json.Format
-import uk.gov.hmrc.apiplatform.modules.common.domain.services.SealedTraitJsonFormatting
+import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
-import uk.gov.hmrc.apidocumentation.models.DocumentationLabel._
+import uk.gov.hmrc.apidocumentation.models.DocumentationLabel
 
-sealed trait DocumentationTypeFilter {
-  lazy val displayName: String = DocumentationTypeFilter.displayName(this)
-  lazy val modifier: String    = DocumentationTypeFilter.modifier(this)
+enum DocumentationTypeFilter {
+  /* The order of the following declarations is important since it defines the ordering of the enumeration.
+   * Be very careful when changing this, code may be relying on certain values being larger/smaller than others. */
+  case Api, RoadmapAndServiceGuide, TestSupportApi
+
+  def displayName: String = DocumentationTypeFilter.displayName(this)
+  def modifier: String    = DocumentationTypeFilter.modifier(this)
 }
 
 object DocumentationTypeFilter {
-  case object ROADMAPANDSERVICEGUIDE extends DocumentationTypeFilter
-  case object API                    extends DocumentationTypeFilter
-  case object TEST_SUPPORT_API       extends DocumentationTypeFilter
 
   def displayName(label: DocumentationTypeFilter): String = label match {
-    case ROADMAPANDSERVICEGUIDE => " Service guides and roadmaps"
-    case API                    => "APIs"
-    case TEST_SUPPORT_API       => "Test Support API"
+    case RoadmapAndServiceGuide => " Service guides and roadmaps"
+    case Api                    => "APIs"
+    case TestSupportApi         => "Test Support API"
   }
 
   def modifier(label: DocumentationTypeFilter): String = label match {
-    case ROADMAPANDSERVICEGUIDE => "roadmap-serviceguides"
-    case API                    => "api"
-    case TEST_SUPPORT_API       => "test-support-api"
+    case RoadmapAndServiceGuide => "roadmap-serviceguides"
+    case Api                    => "api"
+    case TestSupportApi         => "test-support-api"
   }
 
   def byLabel(label: DocumentationLabel): DocumentationTypeFilter = label match {
-    case REST_API                            => API
-    case XML_API                             => API
-    case SERVICE_GUIDE                       => ROADMAPANDSERVICEGUIDE
-    case ROADMAP                             => ROADMAPANDSERVICEGUIDE
-    case DocumentationLabel.TEST_SUPPORT_API => TEST_SUPPORT_API
+    case DocumentationLabel.RestApi        => DocumentationTypeFilter.Api
+    case DocumentationLabel.XmlApi         => DocumentationTypeFilter.Api
+    case DocumentationLabel.ServiceGuide   => DocumentationTypeFilter.RoadmapAndServiceGuide
+    case DocumentationLabel.Roadmap        => DocumentationTypeFilter.RoadmapAndServiceGuide
+    case DocumentationLabel.TestSupportApi => DocumentationTypeFilter.TestSupportApi
   }
-
-  /* The order of the following declarations is important since it defines the ordering of the enumeration.
-   * Be very careful when changing this, code may be relying on certain values being larger/smaller than others. */
-  val values: ListSet[DocumentationTypeFilter] = ListSet(API, ROADMAPANDSERVICEGUIDE, TEST_SUPPORT_API)
 
   def apply(text: String): Option[DocumentationTypeFilter] = DocumentationTypeFilter.values.find(_.toString.toUpperCase == text.toUpperCase())
 
@@ -64,5 +59,5 @@ object DocumentationTypeFilter {
 
   implicit val ordering: Ordering[DocumentationTypeFilter] = Ordering.by(_.toString)
 
-  implicit val formats: Format[DocumentationTypeFilter] = SealedTraitJsonFormatting.createFormatFor[DocumentationTypeFilter]("DocumentationTypeFilter", apply)
+  implicit val formats: Format[DocumentationTypeFilter] = SimpleEnumJsonFormatting.screamingSnakeCaseFormatFor[DocumentationTypeFilter]("DocumentationTypeFilter", apply)
 }

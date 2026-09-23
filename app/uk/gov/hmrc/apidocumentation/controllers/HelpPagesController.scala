@@ -18,11 +18,11 @@ package uk.gov.hmrc.apidocumentation.controllers
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
-import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.*
 
 @Singleton
 class HelpPagesController @Inject() (

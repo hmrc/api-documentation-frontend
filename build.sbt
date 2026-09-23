@@ -7,7 +7,7 @@ lazy val appName = "api-documentation-frontend"
 Global / bloopAggregateSourceDependencies := true
 Global / bloopExportJarClassifiers := Some(Set("sources"))
 
-ThisBuild / scalaVersion := "2.13.18"
+ThisBuild / scalaVersion := "3.7.4"
 ThisBuild / majorVersion := 0
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 ThisBuild / semanticdbEnabled := true
@@ -29,11 +29,15 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(
     routesImport ++= Seq(
-      "uk.gov.hmrc.apidocumentation.controllers.binders._",
       "uk.gov.hmrc.play.bootstrap.binders.RedirectUrl",
-      "uk.gov.hmrc.apiplatform.modules.apis.domain.models._",
-      "uk.gov.hmrc.apiplatform.modules.common.domain.models._",
-      "uk.gov.hmrc.apidocumentation.models._"
+      // "uk.gov.hmrc.apiplatform.modules.apis.domain.models._",
+      // "uk.gov.hmrc.apiplatform.modules.common.domain.models._",
+      "uk.gov.hmrc.apidocumentation.models._",
+      "uk.gov.hmrc.apidocumentation.controllers.binders.RouteModels.*",
+      "uk.gov.hmrc.apidocumentation.controllers.binders.RouteModels.Conversions.given"
+    ),
+    TwirlKeys.templateImports ++= Seq(
+      "uk.gov.hmrc.apidocumentation.controllers.binders.RouteModels.ViewConversions.given"
     )
   )
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
@@ -45,10 +49,9 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(
     scalacOptions ++= Seq(
-      "-Wconf:cat=unused&src=views/.*\\.scala:s",
-      // https://www.scala-lang.org/2021/01/12/configuring-and-suppressing-warnings.html
-      // suppress warnings in generated routes files
-      "-Wconf:src=routes/.*:s"
+      "-Wconf:src=routes/.*:s",
+      // "-Wconf:msg=Implicit parameters should be provided with a `using` clause:s", // TODO - remove once Play is really Scala 3
+      "-Wconf:msg=unused import&src=html/.*:s",
     )
   )
 

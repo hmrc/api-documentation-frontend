@@ -20,7 +20,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import uk.gov.hmrc.apidocumentation.config.ApplicationConfig
 import uk.gov.hmrc.apidocumentation.mocks.services.NavigationServiceMock
-import uk.gov.hmrc.apidocumentation.views.html._
+import uk.gov.hmrc.apidocumentation.views.html.*
 
 class AuthorisationControllerSpec extends CommonControllerBaseSpec with PageRenderVerification {
 

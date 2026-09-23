@@ -14,12 +14,11 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.apidocumentation.config._
 @import play.twirl.api.HtmlFormat
 
 @this()
 
-@()(implicit applicationConfig: ApplicationConfig, request: RequestHeader, messages: Messages)
+@()(implicit request: RequestHeader)
 
 <a href="/devhub-support/report-technical-problem?service=api-documentation-frontend?referrerUrl=@{helper.urlEncode(request.uri)}" class="govuk-link govuk-link--no-visited-state">
    Is this page not working properly?

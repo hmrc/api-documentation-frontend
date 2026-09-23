@@ -28,23 +28,8 @@
 @this(apiMain: apiMain, parentPageView: ParentPageView)
 
 
-@(pageAttributes: PageAttributes, markdownBlocks: List[DocumentationItem], title: String, api: ExtendedApiDefinition, currentVersion: ExtendedApiVersion, loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+@(pageAttributes: PageAttributes, markdownBlocks: List[DocumentationItem], title: String, api: ExtendedApiDefinition, loggedIn: Boolean = false)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
-@topContent = {
-    <div class="form-group">
-        <select class="form-control form-control-version"
-                id="version"
-                name="version"
-                value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, currentVersion.version).url"
-                onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-            @for(v <- api.sortedActiveVersions;
-                if VersionDocsVisible(v) != DocsVisibility.NOT_VISIBLE) {
-                <option @if(v == currentVersion) {selected} value="@controllers.routes.ApiDocumentationController.renderApiDocumentation(api.serviceName, v.version).url" aria-label="Select to view documentation for v@v.version.toString (@v.displayedStatus)">v@v.version.toString (@v.status.displayText.toLowerCase)</option>
-            }
-        </select>
-    </div>
-}
-
-@apiMain(pageAttributes, topContent){
-@parentPageView(markdownBlocks, title, Some(currentVersion), Some(api), loggedIn)
+@apiMain(pageAttributes){
+@parentPageView(markdownBlocks, title, Some(api), loggedIn)
 }

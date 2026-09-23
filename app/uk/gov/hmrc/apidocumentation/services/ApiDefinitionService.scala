@@ -17,16 +17,15 @@
 package uk.gov.hmrc.apidocumentation.services
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
+import scala.concurrent.duration.*
 
-import play.api.cache._
+import play.api.cache.*
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models.{ApiDefinition, ExtendedApiDefinition, ServiceName}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.metrics.common._
 
 import uk.gov.hmrc.apidocumentation.connectors.ApiPlatformMicroserviceConnector
-import uk.gov.hmrc.apidocumentation.models._
+import uk.gov.hmrc.apidocumentation.models.*
 import uk.gov.hmrc.apidocumentation.util.ApplicationLogger
 
 trait BaseApiDefinitionService {
@@ -38,12 +37,8 @@ trait BaseApiDefinitionService {
 @Singleton
 class ApiDefinitionService @Inject() (
     cache: AsyncCacheApi,
-    apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector,
-    val apiMetrics: ApiMetrics
-  )(implicit ec: ExecutionContext
-  ) extends BaseApiDefinitionService with RecordMetrics with ApplicationLogger {
-  val api: API = API("api-definition")
-
+    apiPlatformMicroserviceConnector: ApiPlatformMicroserviceConnector
+  ) extends BaseApiDefinitionService with ApplicationLogger {
   val cacheExpiry: FiniteDuration = 5 seconds
 
   def fetchExtendedDefinition(serviceName: ServiceName, developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Option[ExtendedApiDefinition]] = {
@@ -51,14 +46,10 @@ class ApiDefinitionService @Inject() (
 
     cache.getOrElseUpdate(key, cacheExpiry) {
       logger.info(s"Extended definition for $serviceName for $developerId not found in cache")
-      record {
-        apiPlatformMicroserviceConnector.fetchExtendedApiDefinition(serviceName, developerId)(hc)
-      }
+      apiPlatformMicroserviceConnector.fetchExtendedApiDefinition(serviceName, developerId)(using hc)
     }
   }
 
   def fetchAllDefinitions(developerId: Option[DeveloperIdentifier] = None)(implicit hc: HeaderCarrier): Future[Seq[ApiDefinition]] =
-    record {
-      apiPlatformMicroserviceConnector.fetchApiDefinitionsByCollaborator(developerId)
-    }
+    apiPlatformMicroserviceConnector.fetchApiDefinitionsByCollaborator(developerId)
 }
