@@ -181,5 +181,19 @@
     "description": "Guidance on how to use HMRC’s file transfer API to share documentation and support compliance with the Pillar 2 agreement. (Part of the service formerly known as Secure Data Exchange Service (SDES))",
     "context": "/guides/pillar2-sdes-service-guide",
     "categories": ["CORPORATION_TAX"]
+  },
+  {
+    "identifier": "disa-service-guide",
+    "name": "ISA Returns API Service Guide",
+    "description": "This guide explains how HMRC-approved ISA managers can use the ISA Returns API to submit monthly reports about current-year ISA subscription data to HMRC.",
+    "context": "/guides/disa-service-guide",
+    "categories": ["OTHER", "LIFETIME_ISA"]
+  },
+  {
+    "identifier": "disa-returns-test-support-api-service-guide",
+    "name": "ISA Returns Test Support API Service Guide",
+    "description": "This guide explains how HMRC-approved ISA managers can use the ISA Returns Test Support API to configure scenarios for the ISA Returns API, including test reconciliation reports and reporting-window overrides.",
+    "context": "/disa-returns-test-support-api-service-guide",
+    "categories": ["OTHER", "LIFETIME_ISA"]
   }
 ]
