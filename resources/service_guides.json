@@ -193,7 +193,7 @@
     "identifier": "disa-returns-test-support-api-service-guide",
     "name": "ISA Returns Test Support API Service Guide",
     "description": "This guide explains how HMRC-approved ISA managers can use the ISA Returns Test Support API to configure scenarios for the ISA Returns API, including test reconciliation reports and reporting-window overrides.",
-    "context": "/disa-returns-test-support-api-service-guide",
+    "context": "/guides/disa-returns-test-support-api-service-guide",
     "categories": ["OTHER", "LIFETIME_ISA"]
   }
 ]
