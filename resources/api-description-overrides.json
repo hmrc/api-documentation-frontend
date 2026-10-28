@@ -268,7 +268,7 @@
     "identifier": "nino-gateway"
   },
   {
-    "description": "Use this API to retrieve obligations for business income sources, final declaration and the End of Period Statement.",
+    "description": "Use this API to retrieve obligations for business income sources and final declaration.",
     "identifier": "obligations-api"
   },
   {
