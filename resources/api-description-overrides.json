@@ -268,7 +268,7 @@
     "identifier": "nino-gateway"
   },
   {
-    "description": "Use this API to retrieve obligations for business income sources and final declaration.",
+    "description": "Use this API to retrieve obligations for business income sources and the tax return.",
     "identifier": "obligations-api"
   },
   {
