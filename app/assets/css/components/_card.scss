@@ -10,12 +10,20 @@
 }
 
 .app-card__heading {
-  color: #005ea5;
+  color: govuk-functional-colour(link);
 }
 
 .app-card:hover {
-  background-color: #005ea5;
+  background-color: govuk-functional-colour(link);
   color: white;
+
+  & > * {
+    color: inherit;
+  }
+}
+
+.app-card:focus {
+  @include govuk-focused-text;
 
   & > * {
     color: inherit;

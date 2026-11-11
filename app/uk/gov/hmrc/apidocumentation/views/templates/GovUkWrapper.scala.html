@@ -85,7 +85,9 @@
         <div class="govuk-grid-row">
             @if(fullWidth){
                 <div id="mainContent" class="govuk-grid-column-full">
-                    @contentBlock
+                    <div class="govuk-side-nav-content">
+                        @contentBlock
+                    </div>
                 </div>
             } else {
                 @if(isLeftNavSticky){
