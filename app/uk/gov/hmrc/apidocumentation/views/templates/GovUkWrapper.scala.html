@@ -39,7 +39,8 @@
     breadcrumbs: Option[Breadcrumbs] = None,
     navLinks: Seq[NavLink] = Seq.empty,
     leftNav: Option[Html] = None,
-    isLeftNavSticky: Boolean = true
+    isLeftNavSticky: Boolean = true,
+    fullWidth: Boolean = false
 )(contentBlock: Html)(implicit applicationConfig: ApplicationConfig, messages: Messages, requestHeader: RequestHeader)
 
 @head = {
@@ -82,22 +83,28 @@
 @mainContentDefault = {
     <div class="govuk-width-container">
         <div class="govuk-grid-row">
-            @if(isLeftNavSticky){
-             <div id="navContent" class="govuk-grid-column-one-third left-nav-sticky">
-             } else {
-                <div id="navContent" class="govuk-grid-column-one-third">
-             }
-            @leftNav.getOrElse(HtmlFormat.empty)
-            </div>
-            <div id="mainContent" class="govuk-grid-column-two-thirds">
+            @if(fullWidth){
+                <div id="mainContent" class="govuk-grid-column-full">
+                    @contentBlock
+                </div>
+            } else {
                 @if(isLeftNavSticky){
-                    <div class="govuk-side-nav-content">
-                    @contentBlock
-                    </div>
-                } else {
-                    @contentBlock
-                }    
-            </div>
+                 <div id="navContent" class="govuk-grid-column-one-third left-nav-sticky">
+                 } else {
+                    <div id="navContent" class="govuk-grid-column-one-third">
+                 }
+                @leftNav.getOrElse(HtmlFormat.empty)
+                </div>
+                <div id="mainContent" class="govuk-grid-column-two-thirds">
+                    @if(isLeftNavSticky){
+                        <div class="govuk-side-nav-content">
+                        @contentBlock
+                        </div>
+                    } else {
+                        @contentBlock
+                    }
+                </div>
+            }
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-get-help-container">
