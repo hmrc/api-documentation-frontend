@@ -32,8 +32,7 @@ case object StaticNavLinks {
       ServiceNavigationItem(Text("Getting started"), "/api-documentation/docs/using-the-hub", active = isGettingStarted),
       ServiceNavigationItem(Text("API documentation"), "/api-documentation/docs/api", active = (!isGettingStarted && isNotIndexPage)),
       ServiceNavigationItem(Text("Applications"), "/developer/applications"),
-      ServiceNavigationItem(Text("Support"), "/devhub-support"),
-      ServiceNavigationItem(Text("Service availability"), "https://api-platform-status.production.tax.service.gov.uk/", attributes = Map("target" -> "_blank"))
+      ServiceNavigationItem(Text("Support"), "/devhub-support")
     )
   }
 }

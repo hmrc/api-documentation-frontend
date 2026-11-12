@@ -15,17 +15,31 @@
  *@
 
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcFooter
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.footer.{Footer, FooterItem, Meta}
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.footer.{Footer, FooterItem, FooterNavigation}
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.En
 
-@import uk.gov.hmrc.apidocumentation.views.templates.FooterLinks
+@import uk.gov.hmrc.apidocumentation.views.templates.{FooterConfig, FooterLinks}
 
-@this(hmrcFooter: HmrcFooter)
+@this(hmrcFooter: HmrcFooter, appConfig: FooterConfig)
 
 @(footerLinks: FooterLinks)(implicit messages: Messages, requestHeader: RequestHeader)
 
-@hmrcFooter(new Footer(
-    meta = Some(Meta(items = Some(footerLinks.items.map(footerLink => FooterItem(text = footerLink.text, href = footerLink.href))))),
-    language = En
+@hmrcFooter(new Footer(navigation = Seq(
+    FooterNavigation(
+      title = Some("Help and service status"),
+      columns = Some(1),
+      width = Some("one-third"),
+      items = Seq(
+        FooterItem(text = Some("Service availability"), href = Some("https://api-platform-status.production.tax.service.gov.uk/")),
+        FooterItem(text = Some("Help using GOV.UK"), href = Some(appConfig.govukHelp))
+      )
+    ),
+    FooterNavigation(
+      title = Some("About this service"),
+      columns = Some(2),
+      width = Some("two-thirds"),
+      items = footerLinks.items.map(footerLink => FooterItem(text = footerLink.text, href = footerLink.href))
+    )
+  ), language = En
 ))
 

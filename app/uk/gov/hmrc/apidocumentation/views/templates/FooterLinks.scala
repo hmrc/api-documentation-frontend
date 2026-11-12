@@ -39,11 +39,6 @@ class FooterLinks @Inject() (appConfig: FooterConfig) {
     Some(appConfig.termsConditions)
   )
 
-  def govukHelpLink(implicit messages: Messages): FooterItem = FooterItem(
-    Some(Messages("footer.links.help_page.text")),
-    Some(appConfig.govukHelp)
-  )
-
   def accessibilityLink(implicit messages: Messages, requestHeader: RequestHeader): FooterItem = FooterItem(
     Some(Messages("footer.links.accessibility.text")),
     Some(appConfig.accessibility)
@@ -53,7 +48,6 @@ class FooterLinks @Inject() (appConfig: FooterConfig) {
     cookieLink,
     accessibilityLink,
     privacyLink,
-    termsConditionsLink,
-    govukHelpLink
+    termsConditionsLink
   )
 }
