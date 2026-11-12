@@ -87,7 +87,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           tutorialsView(
-            pageAttributes("Tutorials", navLinks, baseCrumbs)
+            pageAttributes("Tutorials", navLinks, Some(Breadcrumbs(guidesAndTutorialsCrumb, homeCrumb)))
           )
         )
       )

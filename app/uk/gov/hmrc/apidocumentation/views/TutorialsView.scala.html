@@ -17,46 +17,30 @@
 @import uk.gov.hmrc.apidocumentation.config._
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.controllers
-@import uk.gov.hmrc.apidocumentation.views.html.include._
+@import uk.gov.hmrc.apidocumentation.views.html.partials
+@import uk.gov.hmrc.apidocumentation.views.html.templates._
 
-@this(apiMain: apiMain)
+@this(govUkWrapper: GovUkWrapper)
 
 @(pageAttributes: PageAttributes)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
 
-@apiMain(pageAttributes){
+@govUkWrapper(
+    pageTitle = Some(pageAttributes.title),
+    leftNav = Some(partials.sectionNavigation("Tutorials", Seq(
+        SidebarLink("Before you start", "#before-you-start"),
+        SidebarLink("Accessing an open endpoint", "#open-endpoint"),
+        SidebarLink("Accessing an application-restricted endpoint", "#app-restricted"),
+        SidebarLink("Accessing a user-restricted endpoint", "#user-restricted")
+    ))),
+    breadcrumbs = Some(pageAttributes.breadcrumbs),
+    navLinks = pageAttributes.headerLinks
+){
 
   @defining(pageAttributes.headerLinks.find(navLink => navLink.label == "Register")) { registerLink =>
 <h1 class="govuk-heading-l">Tutorials</h1>
 
-<nav role="navigation" aria-labelledby="onThisPage">
-    <h2 id="onThisPage" class="visually-hidden">on this page</h2>
-
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half">
-            <ul class="govuk-list">
-                <li>
-                    <a class="govuk-link" href="#before-you-start">Before you start<span class="govuk-visually-hidden"> in-page link</span></a>
-                </li>
-                <li>
-                    <a class="govuk-link" href="#open-endpoint">Accessing an open endpoint<span class="govuk-visually-hidden"> in-page link</span></a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="govuk-grid-column-one-half">
-            <ul class="govuk-list">
-                <li>
-                    <a class="govuk-link" href="#app-restricted">Accessing an application-restricted endpoint<span class="govuk-visually-hidden"> in-page link</span></a>
-                </li>
-                <li>
-                    <a class="govuk-link" href="#user-restricted">Accessing a user-restricted endpoint<span class="govuk-visually-hidden"> in-page link</span></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true">
+<p class="govuk-body-l">Tutorials to help you integrate with our REST APIs.</p>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
 
 <section aria-labelledby="before-you-start">
     <h2 class="govuk-heading-m" id="before-you-start">Before you start</h2>
@@ -150,6 +134,8 @@ String responseBody = EntityUtils.toString(response.getEntity());
 </pre>
 </section>
 
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
+
 <section aria-labelledby="app-restricted">
     <h2 class="govuk-heading-m" id="app-restricted">Accessing an application-restricted endpoint</h2>
     <p class="govuk-body">In this example, you will request an OAuth 2.0 <code class="code--slim">access_token</code> and
@@ -188,7 +174,7 @@ OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 
 // construct OAuth 2.0 Token request for the authorization code
 OAuthClientRequest request = OAuthClientRequest
-.tokenLocation("https://test-api.service.hmrc.gov.uk/oauth/token")
+.tokenLocation("@{applicationConfig.sandboxApiBaseUrl}/oauth/token")
 .setGrantType(GrantType.CLIENT_CREDENTIALS)
 .setClientId(clientId)
 .setClientSecret(clientSecret)
@@ -207,7 +193,7 @@ Long expiresIn = response.getExpiresIn();
     <p class="govuk-body">
         Send a GET request to:
         <br />
-        <span class="bold">https://test-api.service.hmrc.gov.uk/hello/application</span>.
+        <span class="bold">@{applicationConfig.sandboxApiBaseUrl}/hello/application</span>.
         <br />
         Include your newly issued <code class="code--slim">access_token</code> in the <code class="code--slim">Authorization</code> header
         with the type <code class="code--slim">Bearer</code>.
@@ -215,7 +201,7 @@ Long expiresIn = response.getExpiresIn();
 <pre class="code--block">
 // construct the GET request for our Hello User endpoint
 HttpClient client = HttpClientBuilder.create().build();
-HttpGet request = new HttpGet("https://test-api.service.hmrc.gov.uk/hello/application");
+HttpGet request = new HttpGet("@{applicationConfig.sandboxApiBaseUrl}/hello/application");
 request.addHeader("Accept", "application/vnd.hmrc.1.0+json");
 request.addHeader("Authorization", "Bearer "+accessToken);
 
@@ -229,6 +215,8 @@ String responseBody = EntityUtils.toString(response.getEntity());
     <br />
     <p class="govuk-body">This should give you a "Hello Application" response.</p>
 </section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
 
 <section aria-labelledby="user-restricted">
     <h2 class="govuk-heading-m" id="user-restricted">Accessing a user-restricted endpoint</h2>
@@ -377,10 +365,6 @@ Long expiresIn = response.getExpiresIn();
 </pre>
 </section>
 
-<br/>
-
-<p class="govuk-body">You should now be ready to start integrating with
-    <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty,List.empty).url">our APIs</a>.
-</p>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
   }
 }
