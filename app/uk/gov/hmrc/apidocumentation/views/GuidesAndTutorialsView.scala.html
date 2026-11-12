@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.controllers
 @import uk.gov.hmrc.apidocumentation.models._
 @import uk.gov.hmrc.apidocumentation.views.html.templates._
 
@@ -41,7 +42,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
-            <a href="#" class="app-card">
+            <a href="@controllers.routes.DocumentationController.referenceGuidePage().url" class="app-card">
                 <h2 class="govuk-heading-s app-card__heading">Reference guide</h2>
                 <p class="govuk-body">Use this guide to find technical reference information for our REST APIs.</p>
             </a>

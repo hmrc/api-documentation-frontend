@@ -115,13 +115,17 @@ class DocumentationControllerSpec
     }
 
     "display the reference guide page" in new Setup {
-      when(underTest.appConfig.productionApiBaseUrl)
-        .thenReturn("https://api.service.hmrc.gov.uk")
       verifyPageRendered(
         pageTitle("Reference guide"),
+        breadcrumbs = List(homeBreadcrumb, Crumb("Guides and tutorials", controllers.routes.DocumentationController.guidesAndTutorialsPage().url)),
+        sideNavLinkRendered = false,
         bodyContains = Seq(
-          "The base URL for sandbox APIs is:",
-          "https://api.service.hmrc.gov.uk"
+          "<h2 class=\"govuk-heading-l\">Authentication and authorisation</h2>",
+          "<h2 class=\"govuk-heading-l\">Behaviour and standards</h2>",
+          "<h2 class=\"govuk-heading-l\">Platform constraints</h2>",
+          "<h2 class=\"govuk-heading-l\">Data standards</h2>",
+          "href=\"#redirect-uris\">Redirect URIs</a>",
+          "href=\"#versioning\">Versioning</a>"
         )
       )(underTest.referenceGuidePage()(request))
     }
