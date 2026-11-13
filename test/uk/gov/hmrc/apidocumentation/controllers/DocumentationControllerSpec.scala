@@ -53,6 +53,8 @@ class DocumentationControllerSpec
 
     private lazy val indexView = app.injector.instanceOf[IndexView]
 
+    private lazy val guidesAndTutorialsView = app.injector.instanceOf[GuidesAndTutorialsView]
+
     private lazy val tutorialsView = app.injector.instanceOf[TutorialsView]
 
     private lazy val developmentPracticesView =
@@ -79,6 +81,7 @@ class DocumentationControllerSpec
       partialsService,
       mcc,
       indexView,
+      guidesAndTutorialsView,
       tutorialsView,
       developmentPracticesView,
       namingGuidelinesView,
@@ -121,6 +124,24 @@ class DocumentationControllerSpec
           "https://api.service.hmrc.gov.uk"
         )
       )(underTest.referenceGuidePage()(request))
+    }
+
+    "display the guides and tutorials page" in new Setup {
+      verifyPageRendered(
+        pageTitle("Guides and tutorials"),
+        sideNavLinkRendered = false,
+        bodyContains = Seq(
+          "Guidance you need to build and support software using our APIs, from getting started to production use.",
+          "Reference guide",
+          "Use this guide to find technical reference information for our REST APIs.",
+          "Tutorials",
+          "Step-by-step guides to help you integrate and test your software.",
+          "Our API technologies",
+          "Learn about HMRC's API architecture, authorisation and supported standards.",
+          "Terms of use",
+          "Read the terms you must agree to before accessing HMRC's production environment."
+        )
+      )(underTest.guidesAndTutorialsPage()(request))
     }
 
     "display the API statuses page" in new Setup {

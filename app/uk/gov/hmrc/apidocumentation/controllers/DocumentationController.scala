@@ -36,6 +36,7 @@ class DocumentationController @Inject() (
     partialsService: PartialsService,
     mcc: MessagesControllerComponents,
     indexView: IndexView,
+    guidesAndTutorialsView: GuidesAndTutorialsView,
     tutorialsView: TutorialsView,
     developmentPracticesView: DevelopmentPracticesView,
     namingGuidelinesView: NamingGuidelinesView,
@@ -67,6 +68,17 @@ class DocumentationController @Inject() (
           userId    <- extractDeveloperIdentifier(loggedInUserService.fetchLoggedInUser())
           isLoggedIn = userId.isDefined
         } yield Ok(indexView(navLinks, isLoggedIn))
+  }
+
+  def guidesAndTutorialsPage(): Action[AnyContent] = headerNavigation {
+    implicit request => navLinks =>
+      Future.successful(
+        Ok(
+          guidesAndTutorialsView(
+            pageAttributes("Guides and tutorials", navLinks)
+          )
+        )
+      )
   }
 
   def tutorialsPage(): Action[AnyContent] = headerNavigation {

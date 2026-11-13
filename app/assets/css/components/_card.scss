@@ -1,0 +1,35 @@
+.app-card {
+  text-decoration: none;
+  background-color: #f8f8f8;
+  display: block;
+  padding: 20px;
+  margin-bottom: 20px;
+  @include govuk-media-query(desktop) {
+    min-height: 145px;
+  }
+}
+
+.app-card__heading {
+  color: govuk-functional-colour(link);
+}
+
+.app-card:hover {
+  background-color: govuk-functional-colour(link);
+  color: white;
+
+  & > * {
+    color: inherit;
+  }
+}
+
+.app-card:focus {
+  @include govuk-focused-text;
+
+  & > * {
+    color: inherit;
+  }
+}
+
+.app-card p:last-child {
+  margin-bottom: 0;
+}
