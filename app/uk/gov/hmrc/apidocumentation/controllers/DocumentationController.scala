@@ -53,6 +53,7 @@ class DocumentationController @Inject() (
     with PageAttributesHelper
     with BaseCrumbs
     with TermsCrumb
+    with GuidesAndTutorialsCrumb
     with ApplicationLogger {
 
   def indexPage(): Action[AnyContent] = headerNavigation {
@@ -158,7 +159,7 @@ class DocumentationController @Inject() (
       Future.successful(
         Ok(
           referenceView(
-            pageAttributes("Reference guide", navLinks, baseCrumbs)
+            pageAttributes("Reference guide", navLinks, Some(Breadcrumbs(guidesAndTutorialsCrumb, homeCrumb)))
           )
         )
       )
@@ -222,6 +223,10 @@ trait DocumentationCrumb {
 
 trait TermsCrumb {
   lazy val termsCrumb = Crumb("Terms of use", routes.DocumentationController.termsOfUsePage().url)
+}
+
+trait GuidesAndTutorialsCrumb {
+  lazy val guidesAndTutorialsCrumb = Crumb("Guides and tutorials", routes.DocumentationController.guidesAndTutorialsPage().url)
 }
 
 trait BaseCrumbs extends HomeCrumb with DocumentationCrumb {

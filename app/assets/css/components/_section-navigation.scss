@@ -1,0 +1,43 @@
+.app-subnav__section {
+  margin: 0 0 20px;
+  padding: 0;
+  list-style-type: none;
+}
+
+.app-subnav__link {
+  padding: 2px 0;
+}
+
+.app-subnav__section-item {
+  margin-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.app-subnav__section-item--current {
+  margin-left: -14px;
+  padding-left: 10px;
+  border-left: 4px solid govuk-colour("blue");
+  background-color: govuk-functional-colour(body-background);
+}
+
+.app-subnav__section-item--current .app-subnav__link[aria-current=page] {
+  font-weight: 700;
+}
+
+.app-subnav__section--nested {
+  margin-top: 10px;
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+
+.app-subnav__section--nested .app-subnav__section-item--anchor::before {
+  content: "—";
+  margin-left: -20px;
+  color: govuk-functional-colour(secondary-text);
+}
+
+.app-subnav__section--nested .app-subnav__link {
+  padding-left: 0;
+  font-weight: normal;
+}
