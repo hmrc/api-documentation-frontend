@@ -178,6 +178,24 @@ class DocumentationControllerSpec
       )
     }
 
+    "display the tutorials page" in new Setup {
+      when(underTest.appConfig.sandboxApiBaseUrl)
+        .thenReturn("https://sandbox.example.com")
+      verifyPageRendered(
+        pageTitle("Tutorials"),
+        breadcrumbs = List(homeBreadcrumb, Crumb("Guides and tutorials", controllers.routes.DocumentationController.guidesAndTutorialsPage().url)),
+        sideNavLinkRendered = false,
+        bodyContains = Seq(
+          "<h2 class=\"govuk-heading-m\" id=\"before-you-start\">Before you start</h2>",
+          "<h2 class=\"govuk-heading-m\" id=\"open-endpoint\">Accessing an open endpoint</h2>",
+          "<h2 class=\"govuk-heading-m\" id=\"app-restricted\">Accessing an application-restricted endpoint</h2>",
+          "<h2 class=\"govuk-heading-m\" id=\"user-restricted\">Accessing a user-restricted endpoint</h2>",
+          "/hello/world",
+          "https://sandbox.example.com"
+        )
+      )(underTest.tutorialsPage()(request))
+    }
+
     "display the getting started page" in new Setup {
       verifyPageRendered(pageTitle("Getting started"))(
         underTest.usingTheHubPage()(request)
