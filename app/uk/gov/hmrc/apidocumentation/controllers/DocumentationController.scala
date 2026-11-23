@@ -38,6 +38,7 @@ class DocumentationController @Inject() (
     indexView: IndexView,
     guidesAndTutorialsView: GuidesAndTutorialsView,
     tutorialsView: TutorialsView,
+    technologiesView: TechnologiesView,
     developmentPracticesView: DevelopmentPracticesView,
     namingGuidelinesView: NamingGuidelinesView,
     referenceView: ReferenceView,
@@ -88,6 +89,17 @@ class DocumentationController @Inject() (
         Ok(
           tutorialsView(
             pageAttributes("Tutorials", navLinks, Some(Breadcrumbs(guidesAndTutorialsCrumb, homeCrumb)))
+          )
+        )
+      )
+  }
+
+  def technologiesPage(): Action[AnyContent] = headerNavigation {
+    implicit request => navLinks =>
+      Future.successful(
+        Ok(
+          technologiesView(
+            pageAttributes("Our API technologies", navLinks, Some(Breadcrumbs(guidesAndTutorialsCrumb, homeCrumb)))
           )
         )
       )

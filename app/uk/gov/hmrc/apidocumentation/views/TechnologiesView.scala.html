@@ -1,0 +1,1086 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.apidocumentation.config._
+@import uk.gov.hmrc.apidocumentation.models._
+@import uk.gov.hmrc.apidocumentation.controllers
+@import uk.gov.hmrc.apidocumentation.views.html.partials
+@import uk.gov.hmrc.apidocumentation.views.html.templates._
+
+@this(govUkWrapper: GovUkWrapper)
+
+@(pageAttributes: PageAttributes)(implicit applicationConfig: ApplicationConfig, request: Request[AnyContent], messagesProvider: MessagesProvider)
+
+@govUkWrapper(
+    pageTitle = Some(pageAttributes.title),
+    leftNav = Some(partials.sectionNavigation("Our API technologies", Seq(
+        SidebarLink("Introduction", "#introduction"),
+        SidebarLink("Credentials", "#credentials"),
+        SidebarLink("Open access endpoints", "#open-access"),
+        SidebarLink("Application-restricted endpoints", "#application-restricted"),
+        SidebarLink("User-restricted endpoints", "#user-restricted"),
+        SidebarLink("2-step verification", "#two-step-verification")
+    ))),
+    breadcrumbs = Some(pageAttributes.breadcrumbs),
+    navLinks = pageAttributes.headerLinks
+){
+
+<h1 class="govuk-heading-l">Our API technologies</h1>
+
+<p class="govuk-body-l">Learn about HMRC's API architecture, authorisation and supported standards.</p>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
+
+<section aria-labelledby="introduction">
+
+        <h2 class="govuk-heading-m" id="introduction">Introduction</h2>
+
+        <p class="govuk-body">Our APIs use three types of endpoints. Each type has its own access level, authorisation token and authorisation process. The type you use depends on the data the endpoint provides.</p>
+
+        <h2 class="govuk-heading-m">Endpoint types and tokens</h2>
+
+        <p class="govuk-body">Use the table to identify the correct token for each endpoint access type.</p>
+
+        <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Endpoint types and their required tokens</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Endpoint access level</th>
+                    <th scope="col" class="govuk-table__header">Required authorisation token</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><a class="govuk-link" href="#open-access">Open access</a></td>
+                    <td class="govuk-table__cell">No token</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><a class="govuk-link" href="#application-restricted">Application-restricted</a></td>
+                    <td class="govuk-table__cell">
+                        OAuth 2.0 <code class="code--slim">access_token</code><br>
+                        Generated using <a class="govuk-link" href="https://oauth.net/2/grant-types/client-credentials/" target="_blank" rel="noreferrer noopener">OAuth 2.0 Client Credentials Grant (opens in a new tab)</a>
+                        <br>
+                        <br>
+                        Using <code class="code--slim">server_token</code> is now deprecated.
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><a class="govuk-link" href="#user-restricted">User-restricted</a></td>
+                    <td class="govuk-table__cell">
+                        OAuth 2.0 <code class="code--slim">access_token</code><br>
+                        Generated using <a class="govuk-link" href="https://oauth.net/2/grant-types/authorization-code/" target="_blank" rel="noreferrer noopener">OAuth 2.0 Authorization Code Grant (opens in a new tab)</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+ </section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
+
+<section aria-labelledby="credentials">
+
+    <h2 class="govuk-heading-m" id="credentials">Credentials</h2>
+
+    <p class="govuk-body">Your credentials are your client ID and your client secret.</p>
+    <p class="govuk-body">Credentials are used:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>
+            to identify and authorise your application during each step of an OAuth 2.0 journey
+        </li>
+        <li>
+            when you test your application with sandbox APIs
+        </li>
+    </ul>
+
+    <h3 class="govuk-heading-s">
+        Client ID
+    </h3>
+    <p class="govuk-body">Your client ID is a unique identifier we create when you add your application to the Developer Hub.</p>
+
+    <h3 class="govuk-heading-s">
+        Client secrets
+    </h3>
+    <p class="govuk-body">Client secrets are unique passphrases that you generate to authorise your application.
+        They are known only to your application and the authorising server.
+    </p>
+    <p class="govuk-body">The client secret is the equivalent of a password and should not be stored in plain text.
+        Only store an encrypted version of the client secret to reduce the chance of it being compromised.
+    </p>
+
+    <h4 class="govuk-heading-s" id="rotate-client-secret">
+        Rotate your client secret regularly
+    </h4>
+    <p class="govuk-body">Rotate your application’s client secret to shorten the period an access key is active, reducing the impact to your business if it is compromised.</p>
+    <p class="govuk-body">To rotate your client secret:</p>
+    <ol class="govuk-list govuk-list--number">
+        <li>
+            Generate a new client secret, in addition to the one used by your application
+        </li>
+        <li>
+            Update your application to use the new client secret
+        </li>
+        <li>
+            Check that your application is working with the new client secret
+        </li>
+        <li>
+            Delete the inactive client secret
+        </li>
+    </ol>
+    <p class="govuk-body">You can have up to 5 client secrets at any time.</p>
+</section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
+
+<section aria-labelledby="open-access">
+
+    <h2 class="govuk-heading-m" id="open-access">Open access endpoints</h2>
+
+    <p class="govuk-body">These endpoints are unrestricted and service general data held by us. They don't allow you to access secure taxpayer data.</p>
+
+    <h3 class="govuk-heading-s">Example</h3>
+
+<pre class="code--block">curl -H 'Accept: application/vnd.hmrc.1.0+json' \
+@{applicationConfig.sandboxApiBaseUrl}/hello/world
+</pre>
+
+    <div class="govuk-inset-text">
+        For a working example, see the <a class="govuk-link" href="@controllers.routes.DocumentationController.tutorialsPage().url#open-endpoint">open access endpoint tutorial</a>.
+    </div>
+
+</section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
+
+<section aria-labelledby="application-restricted">
+
+    <h2 class="govuk-heading-m" id="application-restricted">Application-restricted endpoints</h2>
+
+    <p class="govuk-body">Application-restricted endpoints do not require authorisation from the end user. They do not give access to sensitive personal data.</p>
+    <p class="govuk-body">We use the open standard <a class="govuk-link" href="https://oauth.net/2/" target="_blank" rel="noreferrer noopener">OAuth 2.0 (opens in a new tab)</a>
+        with the <a class="govuk-link" href="https://oauth.net/2/grant-types/client-credentials/" target="_blank" rel="noreferrer noopener">Client Credentials Grant (opens in a new tab)</a> to
+        generate an access token.
+    </p>
+    <p class="govuk-body">
+        If the endpoint requires a <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scope</a>,
+        your application must include this scope when creating the access token.
+    </p>
+    <p class="govuk-body">Read the <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url">API documentation</a> for authorisation rules for specific API endpoints.</p>
+
+    <div class="govuk-inset-text">
+        The access token lasts for 4 hours. When it expires you must generate a new token.
+    </div>
+    <p class="govuk-body">
+        See the <a class="govuk-link" href="@controllers.routes.DocumentationController.tutorialsPage().url#app-restricted">application-restricted endpoint tutorial</a> for a working example.
+    </p>
+    <p class="govuk-body">
+        The example URLs shown below are for the sandbox environment only.
+        In the production environment you should use @{applicationConfig.productionApiBaseUrl}
+    </p>
+
+    <div>
+        <h3 class="govuk-heading-s" id="getting-access-token" name="getting-access-token">Getting an OAuth 2.0 access token</h3>
+        <p class="govuk-body">The authorisation user journey is an important part of our security, and may be changed without notice.</p>
+        <div>
+            <h4 class="govuk-heading-s">1. Generate an access token</h4>
+
+            <p class="govuk-body">Do this via a POST to our token endpoint.</p>
+            <div class="govuk-inset-text">
+                Include the request parameters in the request body, not as request headers.
+            </div>
+
+            <p class="govuk-caption-m">Example request</p>
+            <pre class="code--block">curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
+"client_secret=[YOUR-CLIENT-SECRET]\
+&amp;client_id=[YOUR-CLIENT-ID]\
+&amp;grant_type=client_credentials\
+&amp;scope=[REQUESTED-SCOPE]" \
+@{applicationConfig.sandboxApiBaseUrl}/oauth/token</pre>
+
+            <br>
+
+            <table class="govuk-table">
+                <caption class="govuk-visually-hidden">Token endpoint request body parameters and descriptions</caption>
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Parameter</th>
+                    <th scope="col" class="govuk-table__header">Description</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">client_secret</code></td>
+                    <td class="govuk-table__cell">One of the client secrets for your application.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">client_id</code></td>
+                    <td class="govuk-table__cell">The Client ID for your application.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">grant_type</code></td>
+                    <td class="govuk-table__cell">The OAuth 2.0 grant type. For an application-restricted endpoint this must be
+                        <code class="code--slim">client_credentials</code>
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">scope</code></td>
+                    <td class="govuk-table__cell">A space-delimited list of
+                        <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>
+                        you want permission to access. A scope is optional for some
+                        endpoints. If a scope is required, check the API documentation for details.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="govuk-body">The response contains the access token used for calling the APIs.</p>
+            <p class="govuk-caption-m">Example response</p>
+            <pre class="code--block">{
+  "access_token": "QGbWG8KckncuwwD4uYXgWxF4HQvuPmrmUqKgkpQP",
+  "token_type": "bearer",
+  "expires_in": 14400,
+  "scope": "hello"
+}</pre>
+            <br>
+            <p class="govuk-caption-m">Error scenarios</p>
+            <p class="govuk-body">If there are issues with your call to our token endpoint, we return an HTTP error status.</p>
+            <p class="govuk-body">Any errors not listed are probably not from us. One possible cause is a network access issue, for example, your network might allow GET requests but not POST requests.</p>
+            <div class="panel panel-border-wide">
+                <p class="govuk-body">The error codes listed are fixed, but the associated error messages may change without notice.</p>
+            </div>
+            <table class="govuk-table">
+                <caption class="govuk-visually-hidden">Error scenarios</caption>
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header table__col--1-4">Error scenario</th>
+                    <th scope="col" class="govuk-table__header">HTTP status</th>
+                    <th scope="col" class="govuk-table__header">Error code</th>
+                    <th scope="col" class="govuk-table__header">Error message</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client ID is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">client_id is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client ID is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">401</code> (Unauthorized)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_client</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid client id or secret</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client Secret is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">client_secret is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client Secret is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">401</code> (Unauthorized)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_client</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid client id or secret</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Grant Type is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">grant_type is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Grant Type is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">unsupported grant_type</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Unexpected error occurred</td>
+                    <td class="govuk-table__cell"><code class="code--slim">500</code> (Internal Server Error)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">server_error</code></td>
+                    <td class="govuk-table__cell">Various</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Scope is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_scope</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">scope is invalid</code></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div>
+            <h4 class="govuk-heading-s">2. Call an API</h4>
+            <p class="govuk-body">You can now call an API using the <code class="code--slim">access_token</code> we issued. Do this with an
+                Authorization header containing this <code class="code--slim">access_token</code> as an OAuth 2.0 Bearer
+                Token with the correct API <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scope</a>.
+            </p>
+            <p class="govuk-caption-m">Example request</p>
+            <pre class="code--block">curl -X GET @{applicationConfig.sandboxApiBaseUrl}/hello/application \
+-H ‘Accept: application/vnd.hmrc.1.0+json’ \
+-H ‘Authorization: Bearer [ACCESS-TOKEN]’</pre>
+                <br>
+        </div>
+    </div>
+
+    <div>
+
+        <h3 class="govuk-heading-s">Managing your client secret</h3>
+        <div class="govuk-warning-text warning-icon-fix">
+            <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+              <span class="govuk-warning-text__assistive">Warning</span>
+              Your <code class="code--slim">client_secret</code> is embedded in the source code of your application and may be discoverable.
+            </strong>
+        </div>
+        <p class="govuk-body">
+            You should periodically rotate your <code class="code--slim">client_secret</code> to a new value.
+        </p>
+        <p class="govuk-body">
+            We support 5 <code class="code--slim">client_secret</code> values for a single application.
+        </p>
+
+    </div>
+
+</section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
+
+<section aria-labelledby="user-restricted">
+
+<h2 class="govuk-heading-m" id="user-restricted">User-restricted endpoints</h2>
+
+<p class="govuk-body">User-restricted endpoints give access to secure, personal data. To use them, your application must get permission from the end user.</p>
+<h3 class="govuk-heading-s">How authorisation works</h3>
+<p class="govuk-body">We use the open standard <a class="govuk-link" href="https://oauth.net/2/" target="_blank" rel="noreferrer noopener">OAuth 2.0 (opens in a new tab)</a>
+    with the <a class="govuk-link" href="https://oauth.net/2/grant-types/authorization-code/" target="_blank" rel="noreferrer noopener">Authorization Code
+    Grant (opens in a new tab)</a>. This standard lets you give your application permission to interact with us without sharing your password.
+</p>
+<p class="govuk-body">We also support <a class="govuk-link" href="https://oauth.net/2/pkce/" target="_blank" rel="noreferrer noopener">PKCE (opens in a new tab)</a>, but you do not have to use it.</p>
+<h3 class="govuk-heading-s">How you sign in</h3>
+<ol class="govuk-list govuk-list--number">
+    <li>Sign in with your <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">HMRC account.</a></li>
+    <li>Choose which <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a> your application can access. We issue an OAuth 2.0 <a class="govuk-link" href="https://tools.ietf.org/html/rfc6749#section-1.4" target="_blank" rel="noreferrer noopener">access token (opens in a new tab)</a></li>
+    <li>Your application sends this token when calling any user-restricted endpoint.</li>
+</ol>
+<h3 class="govuk-heading-s">Types of HMRC accounts</h3>
+<p class="govuk-body">HMRC has different sign-in accounts for:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>Individuals</li>
+    <li>Organisations</li>
+    <li>Agents</li>
+</ul>
+<p class="govuk-body">Access works as follows:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>Individuals and organisations can only access their own data.</li>
+    <li>Agents can access their clients’ data.</li>
+</ul>
+<p class="govuk-body">Each API lists the scopes and rules it requires in the <a class="govuk-link" href="@controllers.routes.FilteredDocumentationIndexController.apiListIndexPage(List.empty, List.empty).url">API documentation</a>.</p>
+<h3 class="govuk-heading-s">Token lifespan</h3>
+<ul class="govuk-list govuk-list--bullet">
+    <li>An access token lasts 4 hours.</li>
+    <li>When it expires, you can get a new one using a single-use refresh token.</li>
+    <li>After <strong>18 months</strong>, refresh tokens stop working. At this point, you must go through the authorisation process again.</li>
+</ul>
+
+<div class="govuk-inset-text">
+    For a working example, see the <a class="govuk-link" href="@controllers.routes.DocumentationController.tutorialsPage().url#user-restricted">user-restricted endpoint tutorial</a>.
+</div>
+
+<div id="get-access-token">
+    <h3 class="govuk-heading-s">Getting an OAuth 2.0 access token</h3>
+
+    <p class="govuk-body">The authorisation user journey is an important part of our security and may be changed without notice.</p>
+
+    <div class="govuk-warning-text warning-icon-fix">
+        <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+            You must not change or bypass this journey.
+        </strong>
+    </div>
+
+    <div>
+
+        <h4 class="govuk-heading-s">1. Request authorisation</h4>
+        <p class="govuk-body">We display a start page that explains the authorisation process.</p>
+        <ol class="govuk-list govuk-list--number">
+            <li>Send your user to our <a class="govuk-link" href="#auth-endpoint-syntax">authorisation endpoint<span class="govuk-visually-hidden"> in-page link</span></a>.</li>
+            <li>The user is taken through <a class="govuk-link" href="#two-step-verification">2-Step Verification (2SV)</a>.</li>
+            <li>You may be asked to confirm your identity. This depends on the user type; the specific API scopes being requested and whether you have previously confirmed your identity.</li>
+            <li>You’re asked to grant your application the authority to access certain <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a>.</li>
+        </ol>
+
+        <p class="govuk-body">The following diagram illustrates the process:</p>
+
+        <img srcset="@routes.Assets.versioned("content/images/api-user-auth-journey.svg")" src="@routes.Assets.versioned("content/images/api-user-auth-journey.svg")" alt="API user auth journey" width="50%">
+
+        <div class="govuk-inset-text">
+            The example URL shown below is for the sandbox environment only.
+            In the production environment you should use https://@{applicationConfig.productionWwwHost}
+        </div>
+
+        <h5 id="auth-endpoint-syntax" class="govuk-heading-s">Syntax</h5>
+
+        <pre class="code--block">curl -X GET "@{applicationConfig.sandboxWwwBaseUrl}/oauth/authorize?\
+response_type=code\
+&amp;client_id=[YOUR-CLIENT-ID]\
+&amp;scope=[REQUESTED-SCOPE]\
+&amp;state=[STATE]\
+&amp;redirect_uri=[YOUR-REDIRECT-URI]\
+&amp;code_challenge=[CODE-CHALLENGE]\
+&amp;code_challenge_method=[CODE-CHALLENGE-METHOD]"</pre>
+        <br>
+
+        <h5 id="auth-endpoint-example" class="govuk-heading-s">Example</h5>
+
+        <pre class="code--block">curl -X GET "@{applicationConfig.sandboxWwwBaseUrl}/oauth/authorize?\
+response_type=code\
+&amp;client_id=Hf8sfkiUkYp9I3_R10qSnZ2ZUvoa\
+&amp;scope=scope_1+scope_2+scope_3\
+&amp;state=30de877c-ee2f-15db-8314-0800200c9a66\
+&amp;redirect_uri=https://www.example.com/auth-redirect\
+&amp;code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM\
+&amp;code_challenge_method=S256"</pre>
+
+        <br>
+
+        <div class="govuk-warning-text warning-icon-fix">
+            <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+              <span class="govuk-warning-text__assistive">Warning</span>
+              Do not include your client secret in this request.
+            </strong>
+        </div>
+
+        <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Authorise endpoint query parameters and descriptions</caption>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Parameter</th>
+                <th scope="col" class="govuk-table__header">Description</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">response_type</code></td>
+                <td class="govuk-table__cell">The OAuth 2.0 response type. Currently the only acceptable value is <code class="code--slim">code</code>.</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">client_id</code></td>
+                <td class="govuk-table__cell">The Client ID for your application.</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">scope</code></td>
+                <td class="govuk-table__cell">A space-delimited list of <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#scopes">scopes</a> you  would like to have permission to access on behalf of your user. Must be URL-encoded, so spaces must be represented as either <code class="code--slim">%20</code> or <code class="code--slim">+</code>.</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">state</code> (optional)</td>
+                <td class="govuk-table__cell">An opaque value used to maintain state between the request and callback and to prevent tampering as described in the <a class="govuk-link" href="https://tools.ietf.org/html/rfc6749#section-10.12" target="_blank" rel="noreferrer noopener">OAuth 2.0 specification (opens in a new tab)</a>. This is passed back to your application via the <code class="code--slim">redirect_uri</code>.</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">redirect_uri</code></td>
+                <td class="govuk-table__cell">The URI that we use to send users back to your application after successful (or unsuccessful) authorisation.<br><br>
+                    This must match one of the redirect URIs you specified when you created your application.<br><br>
+                    For more details see our <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#redirect-uris">reference guide</a>.
+                </td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">code_challenge</code> (optional)</td>
+                <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/" target="_blank" rel="noreferrer noopener">PKCE (opens in a new tab)</a> <code class="code--slim">code_challenge</code> is used to ensure that the subsequently-issued access token is not intercepted. This is mandatory if <code class="code--slim">code_challenge_method</code> is provided.</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">code_challenge_method</code> (optional)</td>
+                <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/" target="_blank" rel="noreferrer noopener">PKCE (opens in a new tab)</a> <code class="code--slim">code_challenge_method</code> is used to transform the code_verifier to the code_challenge. This must have a value of <code class="code--slim">S256</code>. This is mandatory if <code class="code--slim">code_challenge</code> is provided.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h5 class="govuk-heading-s faded-text">Error scenarios</h5>
+
+        <p class="govuk-body">If there are any issues with your call to our authorisation endpoint, we return an HTTP error status to your user’s browser.</p>
+
+        <p class="govuk-body">Any errors not listed are probably not from us. One possible cause is a network access issue.</p>
+
+        <div class="govuk-inset-text">
+            The error codes listed are fixed, but the associated error messages may change without notice.
+        </div>
+
+        <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Error scenarios</caption>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Error scenario</th>
+                <th scope="col" class="govuk-table__header">HTTP status</th>
+                <th scope="col" class="govuk-table__header">Error code</th>
+                <th scope="col" class="govuk-table__header">Error message</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client ID is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">client_id is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client ID is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">client_id is invalid</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Redirect URI is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">redirect_uri is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Redirect URI is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">redirect_uri is invalid</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Response Type is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">response_type is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Response Type is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">unsupported_response_type</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">response_type must be 'code'</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Scope is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">scope is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Scope is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_scope</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">scope is invalid</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client secret was included in the request</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">client_secret should NOT be present</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">PKCE Code Challenge cannot be empty</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code_challenge if present, cannot be empty</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">PKCE Code Challenge Method, must be S256</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code_challenge_method, if present, must be S256</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">PKCE Code Challenge Method should be present when Code Challenge is present</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code_challenge_method should be present when code_challenge is present</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">PKCE Code Challenge should be present when Code Challenge Method is present</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code_challenge should be present when code_challenge_method is present</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Unexpected error occurred</td>
+                    <td class="govuk-table__cell"><code class="code--slim">500</code> (Internal Server Error)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">server_error</code></td>
+                    <td class="govuk-table__cell">Various</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 class="govuk-heading-s faded-text">Browser support</h5>
+
+        <p class="govuk-body">For details of which browsers we support for the authorisation journey see
+            <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#oauth-2.0-browser-support">
+                OAuth 2.0 browser support</a>, especially if you use an embedded browser.
+        </p>
+
+    </div>
+
+    <div>
+
+        <h4 class="govuk-heading-s">2. Receive authorisation results</h4>
+
+        <p class="govuk-body">You must create an endpoint in your application to receive the authorisation results. This endpoint must accept an HTTP GET request to the redirect URI you specified in step 1.</p>
+
+        <p class="govuk-body">Your browser will be redirected back to your endpoint once you’ve granted your application the requested authority.</p>
+
+        <p class="govuk-body">Your endpoint must support the following query parameters:</p>
+
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Parameter</th>
+                    <th scope="col" class="govuk-table__header">Description</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">code</code></td>
+                    <td class="govuk-table__cell">The authorisation code, if authorisation is successful.<br>
+                    This is a single-use token that will expire after 10 minutes.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">state</code></td>
+                    <td class="govuk-table__cell">The value of the state parameter you provided in the authorisation request, whether authorisation is successful or not.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">error</code></td>
+                    <td class="govuk-table__cell">Always <code class="code--slim">access_denied</code>, if authorisation failed.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">error_description</code></td>
+                    <td class="govuk-table__cell">Human readable description of the error, if authorisation failed, for example, “user denied the authorization”.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell"><code class="code--slim">error_code</code></td>
+                    <td class="govuk-table__cell">Error code, if authorisation failed, for example, <code class="code--slim">USER_DENIED_AUTHORIZATION</code>.<br>
+                    The full list of error codes can change over time, so we recommend you do not cater for specific error codes.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="govuk-body">Example of a redirect we issue after a successful authorisation:</p>
+
+        <pre class="code--block">https://www.example.com/auth-redirect?code=6589c5d9fc4b9872b1f9013583c2f39d&amp;state=30de877c-ee2f-15db-8314-0800200c9a66"</pre>
+        <br>
+        <p class="govuk-body">Example of a redirect we issue after an unsuccessful authorisation:</p>
+
+        <pre class="code--block">https://www.example.com/auth-redirect?error=access_denied&amp;error_description=user+denied+the+authorization&amp;error_code=USER_DENIED_AUTHORIZATION&amp;state=30de877c-ee2f-15db-8314-0800200c9a66</pre>
+        <br>
+    </div>
+
+    <div>
+
+        <h4 class="govuk-heading-s">3. Exchange authorisation code for access token</h4>
+
+        <p class="govuk-body">When you receive the authorisation code, you must exchange this for an access token <strong class="bold-small">within 10 minutes</strong>.</p>
+
+        <p class="govuk-body">Do this via a POST to our token endpoint.</p>
+
+        <div class="govuk-inset-text">
+            Include the request parameters in the request body, not as request headers.
+        </div>
+
+        <div class="govuk-inset-text">
+            The example URLs shown below are for the sandbox environment only.
+            In the production environment you should use @{applicationConfig.productionApiBaseUrl}
+        </div>
+
+        <h5 class="govuk-heading-s faded-text">Example request</h5>
+
+        <pre class="code--block">curl -X POST -H "content-type:application/x-www-form-urlencoded" --data \
+"client_secret=[YOUR-CLIENT-SECRET]\
+&amp;client_id=[YOUR-CLIENT-ID]\
+&amp;grant_type=authorization_code\
+&amp;redirect_uri=[YOUR-REDIRECT-URI]\
+&amp;code=[AUTHORIZATION-CODE]" \
+&amp;code_verifier=[CODE-VERIFIER]" \
+@{applicationConfig.sandboxApiBaseUrl}/oauth/token
+</pre>
+
+        <br>
+
+        <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Token endpoint request body parameters and descriptions</caption>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Parameter</th>
+                <th scope="col" class="govuk-table__header">Description</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">client_secret</code></td>
+                <td class="govuk-table__cell">One of the client secrets for your application.</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">client_id</code></td>
+                <td class="govuk-table__cell">The Client ID for your application.</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">grant_type</code></td>
+                <td class="govuk-table__cell">The OAuth 2.0 grant type. Currently the only acceptable value is <code class="code--slim">authorization_code</code></td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">redirect_uri</code></td>
+                <td class="govuk-table__cell">The same redirect URI you used to call the authorisation endpoint.<br><br>
+                    For more details see our <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url#redirect-uris">reference guide</a>.
+                </td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">code</code></td>
+                <td class="govuk-table__cell">The authorisation code you received from us in the previous step.</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><code class="code--slim">code_verifier</code> (optional)</td>
+                <td class="govuk-table__cell">The <a class="govuk-link" href="https://oauth.net/2/pkce/" target="_blank" rel="noreferrer noopener">PKCE (opens in a new tab)</a> <code class="code--slim">code_verifier</code> is mandatory if <code class="code--slim">code_challenge</code> was provided in the call to <code class="code--slim">/authorize</code>.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <p class="govuk-body">The response contains the access token used for calling the APIs and a refresh token used to obtain a new access token once the current one expires.</p>
+
+        <h5 class="govuk-heading-s faded-text">Example response</h5>
+
+        <pre class="code--block">{
+  "access_token": "QGbWG8KckncuwwD4uYXgWxF4HQvuPmrmUqKgkpQP",
+  "token_type": "bearer",
+  "expires_in": 14400,
+  "refresh_token": "unJkSs5cvs8CS9E4DLvTkNhcRBq9BwUPm23cr3pF",
+  "scope": "read:employment"
+}
+</pre>
+        <br>
+        <h5 class="govuk-heading-s faded-text">Error scenarios</h5>
+
+        <p class="govuk-body">If something goes wrong with your request to the token endpoint, we return an HTTP error.</p>
+
+        <p class="govuk-body">Errors not listed here are usually caused by something outside of our control. One possible cause is a network access issue, for example your network might allow GET requests but not POST requests.</p>
+
+        <div class="govuk-inset-text">
+            The error codes listed are fixed, but the associated error messages can change without notice.
+        </div>
+
+        <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Error scenarios</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Error scenario</th>
+                    <th scope="col" class="govuk-table__header">HTTP status</th>
+                    <th scope="col" class="govuk-table__header">Error code</th>
+                    <th scope="col" class="govuk-table__header">Error message</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client ID is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">client_id is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client ID is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">401</code> (Unauthorized)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_client</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid client id or secret</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client Secret is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">client_secret is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client Secret is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">401</code> (Unauthorized)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_client</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid client id or secret</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Grant Type is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">grant_type is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Grant Type is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">unsupported grant_type</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Redirect URI is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">redirect_uri is required</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Redirect URI is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">redirect_uri is invalid</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Code is missing (for example because authorisation failed in step 2)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code is required for given grant_type</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Code is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code is invalid</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">PKCE Code Verifier wasn't expected as no Code Challenge was provided when requesting an authorization code</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code_verifier is not expected</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">PKCE Code Verifier was expected but none was supplied</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code_verifier is expected when code_challenge was supplied</code></td>
+                </tr>
+                 <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">PKCE Code Verifier is made up of fewer than 43, more than 128, or invalid characters</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code_verifier must contain valid characters of length between 43 and 128</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">PKCE Code Verifier does not correlate to Code Challenge</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_grant</code></td>
+                    <td class="govuk-table__cell"><code class="code--slim">code_verifier is invalid</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Unexpected error occurred</td>
+                    <td class="govuk-table__cell"><code class="code--slim">500</code> (Internal Server Error)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">server_error</code></td>
+                    <td class="govuk-table__cell">Various</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div>
+
+        <h4 class="govuk-heading-s">4. Call an API</h4>
+
+        <p class="govuk-body">You can now call an API using the <code class="code--slim">access_token</code> we issued. Do this with an Authorization header containing this <code class="code--slim">access_token</code> as an OAuth 2.0 Bearer Token with the correct API <a class="govuk-link" href="@controllers.routes.DocumentationController.referenceGuidePage().url">scope</a>.</p>
+
+        <h5 class="govuk-heading-s faded-text">Example request</h5>
+
+        <pre class="code--block">curl -X GET @{applicationConfig.sandboxApiBaseUrl}/hello/user \
+-H "Accept: application/vnd.hmrc.1.0+json" \
+-H "Authorization: Bearer [ACCESS-TOKEN]"</pre>
+        <br>
+    </div>
+
+    <div>
+
+        <h4 class="govuk-heading-s">5. Refreshing an access token</h4>
+
+        <p class="govuk-body">Your access token expires after 4 hours.</p>
+
+        <p class="govuk-body">When the <code class="code--slim">access_token</code> has expired, any API call from your application will return HTTP <code class="code--slim">401 (Unauthorized)</code> and an error code of <code class="code--slim">INVALID_CREDENTIALS</code>.</p>
+
+        <p class="govuk-body">To refresh the <code class="code--slim">access_token</code>, submit the expired token’s corresponding <code class="code--slim">refresh_token</code> to our token endpoint using <code class="code--slim">grant_type</code> of <code class="code--slim">refresh_token</code>.</p>
+
+        <p class="govuk-body">You can only use a <code class="code--slim">refresh_token</code> once. When you refresh an <code class="code--slim">access_token</code>, it invalidates the original <code class="code--slim">access_token</code> immediately if it has not already expired. </p>
+
+        <p class="govuk-body">If your application makes several API calls at the same time, take care to avoid race conditions when refreshing tokens.</p>
+
+        <h5 class="govuk-heading-s faded-text">Example request</h5>
+
+        <pre class="code--block">curl -X POST -H "content-type: application/x-www-form-urlencoded" --data \
+"client_secret=[YOUR-CLIENT-SECRET]\
+&amp;client_id=[YOUR-CLIENT-ID]\
+&amp;grant_type=refresh_token\
+&amp;refresh_token=[REFRESH-TOKEN]" \
+@{applicationConfig.sandboxApiBaseUrl}/oauth/token
+</pre>
+        <br>
+        <h5 class="govuk-heading-s faded-text">Example response</h5>
+
+        <pre class="code--block">{
+  "access_token": "unJkSs5cvs8CS9E4DLvTkNhcRBq9BwUPm23cr3pF",
+  "token_type": "bearer",
+  "expires_in": 14400,
+  "refresh_token": "jPtmQuLtKmLhGURk8CmR2sWPmffBhDhPyFEEF4ay"
+}</pre>
+        <br>
+        <h5 class="govuk-heading-s faded-text">Error scenarios</h5>
+
+        <p class="govuk-body">If there are any issues with your call to our token endpoint, we return an HTTP error status.</p>
+
+        <p class="govuk-body">Errors not listed are probably not from us. One possible cause is a network access issue.</p>
+
+        <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Error scenarios</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Error scenario</th>
+                    <th scope="col" class="govuk-table__header">HTTP status</th>
+                    <th scope="col" class="govuk-table__header">Error code</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client ID is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client ID is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">401</code> (Unauthorized)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_client</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client Secret is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Client Secret is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">401</code> (Unauthorized)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_client</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Grant Type is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Grant Type is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Refresh Token is missing</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Refresh Token is invalid</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_grant</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Refresh operation is already in progress</td>
+                    <td class="govuk-table__cell"><code class="code--slim">400</code> (Bad Request)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">invalid_request</code></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Unexpected error occurred</td>
+                    <td class="govuk-table__cell"><code class="code--slim">500</code> (Internal Server Error)</td>
+                    <td class="govuk-table__cell"><code class="code--slim">server_error</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+
+    <h3 class="govuk-heading-s">Requesting a new token</h3>
+
+    <p class="govuk-body">Unless you revoke access or the token is tampered with, the authorisation you grant lasts for 18 months. After that, you can no longer refresh your access token.</p>
+
+    <p class="govuk-body">If the <code class="code--slim">refresh_token</code> has expired, any call from your application to the token endpoint will return a HTTP 400 (Bad Request) and an error code of <code class="code--slim">invalid_grant</code>.</p>
+
+    <p class="govuk-body">When this happens, your application must send the user back through the full process for <a class="govuk-link" href="#get-access-token">Getting an OAuth 2.0 access token<span class="govuk-visually-hidden"> in-page link</span></a>.</p>
+
+    <div class="govuk-inset-text">
+        For a working example, see the <a class="govuk-link" href="@controllers.routes.DocumentationController.tutorialsPage().url#user-restricted">user-restricted endpoint tutorial</a>.
+    </div>
+
+</div>
+
+<div>
+
+    <h3 class="govuk-heading-s">Revoking authority</h3>
+
+    <p class="govuk-body">You can revoke the authority granted to your application at any time using the <a class="govuk-link" href="https://www.tax.service.gov.uk/applications-manage-authority" target="_blank" rel="noreferrer noopener">Manage authorised applications online service (opens in a new tab)</a>.</p>
+
+</div>
+<div>
+
+    <h3 class="govuk-heading-s">Agents with multiple accounts</h3>
+
+    <p class="govuk-body">Some agent organisations have more than one set of HMRC sign in details, and their client relationships are spread across those accounts. There are a few ways to handle this:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li>If the accounts belong to the same organisation, the agent can manage client relationships themselves using the <a class="govuk-link" href="https://www.gov.uk/" target="_blank" rel="noreferrer noopener">HMRC online service (opens in a new tab)</a>.</li>
+        <li>If the accounts belong to different organisations (for example due to a merger), in some cases the agent can <a class="govuk-link" href="https://www.gov.uk/guidance/client-authorisation-an-overview" target="_blank" rel="noreferrer noopener">ask us to merge their accounts (opens in a new tab)</a>.</li>
+        <li>Your application may hold multiple OAuth 2.0 access tokens for the agent, but you must take care to use the correct token for each client when calling our APIs. Using the wrong access token results in an HTTP status code of 401 (Unauthorized).</li>
+    </ul>
+
+</div>
+
+    <h3 class="govuk-heading-s" id="installed-applications" name="installed-applications">OAuth 2.0 for installed applications</h3>
+
+    <p class="govuk-body">Our OAuth 2.0 implementation supports applications that are installed on a user's device, as long as it can access the system browser or an embedded browser.</p>
+
+    <p class="govuk-body">The Redirect URI determines how the <code class="code--slim">authorization_code</code> is returned to your application.</p>
+
+    <p class="govuk-body">If your application runs on a remote web server, the redirect URI sends the authorization_code back to that server, allowing you to manage authorisation tokens centrally.</p>
+
+    <p class="govuk-body">For distributed applications installed on your device, and where no central web server exists, you have the following options for a redirect URI:</p>
+
+    <h4 class="govuk-heading-s">http://localhost:[PORT]</h4>
+
+    <p class="govuk-body">The <code class="code--slim">authorization_code</code> is returned to a web server running on the client at the specified port.</p>
+
+    <p class="govuk-body">This may not always be suitable, for example where a firewall stops your client from listening on a HTTP port.</p>
+
+    <p class="govuk-body">We recommend this approach for any installed application that's supported by the client configuration.</p>
+
+    <h4 class="govuk-heading-s">urn:ietf:wg:oauth:2.0:oob</h4>
+
+    <p class="govuk-body">The <code class="code--slim">authorization_code</code> is shown in the title of an HTML page. Your application can parse the DOM to retrieve the code and then close the window before the user sees the rendered web page.</p>
+
+    <p class="govuk-body">If your application can't parse the DOM or close the window, the HTML page renders the <code class="code--slim">authorization_code</code> along with a message asking the user to copy the code and paste it into your application, before closing the window.</p>
+
+    <h4 class="govuk-heading-s">urn:ietf:wg:oauth:2.0:oob:auto</h4>
+
+    <p class="govuk-body">The authorisation code is shown in the title of an HTML page, and the user sees a message asking them to close the browser window.</p>
+
+    <p class="govuk-body">Use this option if your application can detect when the page has loaded and can parse the DOM to read the code from the title, but can't close the window itself.</p>
+
+</section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" aria-hidden="true">
+
+<section aria-labelledby="two-step-verification">
+        <h2 class="govuk-heading-m" id="two-step-verification">2-step verification</h2>
+        <p class="govuk-body">2-step verification (2SV) is an extra security step that takes place during the process for getting an <a class="govuk-link" href="#user-restricted">OAuth 2.0 access token</a> for user-restricted endpoints.</p>
+        <p class="govuk-body">It occurs immediately after the user has signed in, and requires them to have their mobile or landline phone to hand.</p>
+        <p class="govuk-body">First time through, the user must register for 2SV. The options are:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li><strong class="bold-small">mobile phone</strong> - 6-digit code via SMS</li>
+            <li><strong class="bold-small">landline</strong> - 6-digit code via voice message</li>
+            <li><strong class="bold-small">app</strong> - QR code displayed on-screen, to be scanned using a device running an authenticator app</li>
+        </ul>
+        <p class="govuk-body">Second and subsequent times through, the user must complete 2SV using their chosen method. Because 2SV is part of the API authorisation process, users do not need to complete it every time they use an API, only when their token expires (after 18 months) or if they are granting access to additional scopes.</p>
+        <p class="govuk-body">The following diagram illustrates the user journey:</p>
+
+        <img src="@routes.Assets.versioned("content/images/API-2SV-journey.png")" width="300" align="middle" alt="2 step verification user journey">
+</section>
+}
