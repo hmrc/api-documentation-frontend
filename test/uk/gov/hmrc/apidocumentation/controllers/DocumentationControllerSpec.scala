@@ -57,6 +57,8 @@ class DocumentationControllerSpec
 
     private lazy val tutorialsView = app.injector.instanceOf[TutorialsView]
 
+    private lazy val technologiesView = app.injector.instanceOf[TechnologiesView]
+
     private lazy val developmentPracticesView =
       app.injector.instanceOf[DevelopmentPracticesView]
 
@@ -83,6 +85,7 @@ class DocumentationControllerSpec
       indexView,
       guidesAndTutorialsView,
       tutorialsView,
+      technologiesView,
       developmentPracticesView,
       namingGuidelinesView,
       referenceView,
@@ -194,6 +197,26 @@ class DocumentationControllerSpec
           "https://sandbox.example.com"
         )
       )(underTest.tutorialsPage()(request))
+    }
+
+    "display the Our API technologies page" in new Setup {
+      when(underTest.appConfig.sandboxApiBaseUrl)
+        .thenReturn("https://sandbox.example.com")
+      verifyPageRendered(
+        pageTitle("Our API technologies"),
+        breadcrumbs = List(homeBreadcrumb, Crumb("Guides and tutorials", controllers.routes.DocumentationController.guidesAndTutorialsPage().url)),
+        sideNavLinkRendered = false,
+        bodyContains = Seq(
+          "<h2 class=\"govuk-heading-m\" id=\"introduction\">Introduction</h2>",
+          "<h2 class=\"govuk-heading-m\">Endpoint types and tokens</h2>",
+          "<h2 class=\"govuk-heading-m\" id=\"credentials\">Credentials</h2>",
+          "<h2 class=\"govuk-heading-m\" id=\"open-access\">Open access endpoints</h2>",
+          "<h2 class=\"govuk-heading-m\" id=\"application-restricted\">Application-restricted endpoints</h2>",
+          "<h2 class=\"govuk-heading-m\" id=\"user-restricted\">User-restricted endpoints</h2>",
+          "<h2 class=\"govuk-heading-m\" id=\"two-step-verification\">2-step verification</h2>",
+          "https://sandbox.example.com"
+        )
+      )(underTest.technologiesPage()(request))
     }
 
     "display the getting started page" in new Setup {
