@@ -107,14 +107,13 @@ class DocumentationController @Inject() (
 
   def termsOfUsePage(): Action[AnyContent] = headerNavigation {
     implicit request => navLinks =>
-      partialsService.termsOfUsePartial() map { termsOfUsePartial =>
+      Future.successful(
         Ok(
           termsOfUseView(
-            pageAttributes("Terms Of Use", navLinks, baseCrumbs),
-            termsOfUsePartial
+            pageAttributes("Terms of use", navLinks, Some(Breadcrumbs(guidesAndTutorialsCrumb, homeCrumb)))
           )
         )
-      }
+      )
   }
 
   def termsOfUseWhatYouCanExpectPage(): Action[AnyContent] = headerNavigation {

@@ -17,16 +17,15 @@
 package uk.gov.hmrc.apidocumentation.controllers
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.jdk.CollectionConverters.*
 
 import org.apache.pekko.stream.Materializer
+import org.jsoup.Jsoup
 
 import play.api.http.HeaderNames.LOCATION
 import play.api.http.Status.MOVED_PERMANENTLY
 import play.api.mvc.*
 import play.api.test.Helpers.*
-import play.twirl.api.Html
-import uk.gov.hmrc.play.partials.HtmlPartial
 
 import uk.gov.hmrc.apidocumentation.connectors.DeveloperFrontendConnector
 import uk.gov.hmrc.apidocumentation.mocks.config.*
@@ -102,19 +101,34 @@ class DocumentationControllerSpec
   }
 
   "DocumentationController" should {
-    "fetch the terms of use from third party developer and render them in the terms of use page" in new Setup {
-      when(
-        developerFrontendConnector.fetchTermsOfUsePartial()(using *)
-      ).thenReturn(
-        Future.successful(
-          HtmlPartial.Success(None, Html("<p>blah blah blah</p>"))
-        )
-      )
+    "display the terms of use page" in new Setup {
+      val result = underTest.termsOfUsePage()(request)
 
       verifyPageRendered(
-        pageTitle("Terms Of Use"),
-        bodyContains = Seq("blah blah blah")
-      )(underTest.termsOfUsePage()(request))
+        pageTitle("Terms of use"),
+        breadcrumbs = List(homeBreadcrumb, Crumb("Guides and tutorials", controllers.routes.DocumentationController.guidesAndTutorialsPage().url)),
+        sideNavLinkRendered = false
+      )(result)
+
+      val document = Jsoup.parse(contentAsString(result))
+
+      document.getElementsByTag("h2").asScala.map(_.text) should contain allElementsOf Seq(
+        "About your organisation",
+        "About your processes",
+        "About your software",
+        "What you can expect from us",
+        "If your software doesn’t meet our terms of use"
+      )
+      document.getElementsByTag("caption").asScala.map(_.text) should contain allElementsOf Seq(
+        "Organisation details",
+        "Marketing your software",
+        "Development practices",
+        "Service management practices",
+        "Handling personal data",
+        "Software security",
+        "Fraud prevention data",
+        "Customers authorising your software"
+      )
     }
 
     "display the reference guide page" in new Setup {
