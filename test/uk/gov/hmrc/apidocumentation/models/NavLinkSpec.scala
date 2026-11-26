@@ -29,6 +29,7 @@ class NavLinkSpec extends HmrcSpec {
         Seq(
           ServiceNavigationItem(Text("Getting started"), "/api-documentation/docs/using-the-hub", active = true),
           ServiceNavigationItem(Text("API documentation"), "/api-documentation/docs/api"),
+          ServiceNavigationItem(Text("Guides and tutorials"), "/api-documentation/docs/guides-and-tutorials"),
           ServiceNavigationItem(Text("Applications"), "/developer/applications"),
           ServiceNavigationItem(Text("Support"), "/devhub-support")
         )
@@ -38,6 +39,7 @@ class NavLinkSpec extends HmrcSpec {
         Seq(
           ServiceNavigationItem(Text("Getting started"), "/api-documentation/docs/using-the-hub"),
           ServiceNavigationItem(Text("API documentation"), "/api-documentation/docs/api"),
+          ServiceNavigationItem(Text("Guides and tutorials"), "/api-documentation/docs/guides-and-tutorials"),
           ServiceNavigationItem(Text("Applications"), "/developer/applications"),
           ServiceNavigationItem(Text("Support"), "/devhub-support")
         )
@@ -47,6 +49,17 @@ class NavLinkSpec extends HmrcSpec {
         Seq(
           ServiceNavigationItem(Text("Getting started"), "/api-documentation/docs/using-the-hub"),
           ServiceNavigationItem(Text("API documentation"), "/api-documentation/docs/api", active = true),
+          ServiceNavigationItem(Text("Guides and tutorials"), "/api-documentation/docs/guides-and-tutorials"),
+          ServiceNavigationItem(Text("Applications"), "/developer/applications"),
+          ServiceNavigationItem(Text("Support"), "/devhub-support")
+        )
+    }
+    "return static navlinks for devhub for the guides and tutorials page" in {
+      StaticNavLinks("/api-documentation/docs/guides-and-tutorials") shouldBe
+        Seq(
+          ServiceNavigationItem(Text("Getting started"), "/api-documentation/docs/using-the-hub"),
+          ServiceNavigationItem(Text("API documentation"), "/api-documentation/docs/api"),
+          ServiceNavigationItem(Text("Guides and tutorials"), "/api-documentation/docs/guides-and-tutorials", active = true),
           ServiceNavigationItem(Text("Applications"), "/developer/applications"),
           ServiceNavigationItem(Text("Support"), "/devhub-support")
         )
