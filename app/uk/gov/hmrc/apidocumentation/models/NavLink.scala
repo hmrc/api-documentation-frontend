@@ -26,11 +26,19 @@ case class SidebarLink(label: String, href: String, subLinks: Seq[SidebarLink] =
 case object StaticNavLinks {
 
   def apply(path: String) = {
-    val isGettingStarted = path.contains("/using-the-hub")
-    val isNotIndexPage   = !path.contains("index") && path != "/api-documentation"
+    val isGettingStarted     = path.contains("/using-the-hub")
+    val isNotIndexPage       = !path.contains("index") && path != "/api-documentation"
+    val isGuidesAndTutorials = Set(
+      "/api-documentation/docs/guides-and-tutorials",
+      "/api-documentation/docs/reference-guide",
+      "/api-documentation/docs/tutorials",
+      "/api-documentation/docs/technologies",
+      "/api-documentation/docs/terms-of-use"
+    ).contains(path)
     Seq(
       ServiceNavigationItem(Text("Getting started"), "/api-documentation/docs/using-the-hub", active = isGettingStarted),
-      ServiceNavigationItem(Text("API documentation"), "/api-documentation/docs/api", active = (!isGettingStarted && isNotIndexPage)),
+      ServiceNavigationItem(Text("API documentation"), "/api-documentation/docs/api", active = (!isGettingStarted && isNotIndexPage && !isGuidesAndTutorials)),
+      ServiceNavigationItem(Text("Guides and tutorials"), "/api-documentation/docs/guides-and-tutorials", active = isGuidesAndTutorials),
       ServiceNavigationItem(Text("Applications"), "/developer/applications"),
       ServiceNavigationItem(Text("Support"), "/devhub-support")
     )
